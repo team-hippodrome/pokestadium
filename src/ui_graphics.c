@@ -41,9 +41,9 @@ extern u8 D_1003C30[];
 extern u8 D_1003CF0[];
 extern u8 D_1003DB0[];
 extern u8 D_1003E50[];
-extern u8 D_1003EA0[];
-extern u8 D_1003EC8[];
-extern u8 D_1003EF0[];
+extern u8 gHpBarGreen[];
+extern u8 gHpBarYellow[];
+extern u8 gHpBarRed[];
 extern u8 D_2004000[];
 extern u8 D_2004320[];
 
@@ -514,11 +514,11 @@ void BattleHud_DrawHpBar16x5(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 sp14 = 0x30 - temp_lo;
 
     if ((arg2 * 0x30) < (arg3 * 0xA)) {
-        spCC = D_1003EF0;
+        spCC = gHpBarRed;
     } else if ((arg2 * 0x30) < (arg3 * 0x1B)) {
-        spCC = D_1003EC8;
+        spCC = gHpBarYellow;
     } else {
-        spCC = D_1003EA0;
+        spCC = gHpBarGreen;
     }
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
