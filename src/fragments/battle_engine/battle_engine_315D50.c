@@ -4186,19 +4186,19 @@ static u8* sMoveAnimEffectScripts[][5] = {
     },
 };
 
-void BattleAnim_PlaySoundEffect1(void) {
+void BattleAnim_PlayMenuScrollSoundEffect(void) {
     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
 }
 
-void BattleAnim_PlaySoundEffect2(void) {
+void BattleAnim_PlayMenuConfirmSoundEffect(void) {
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 }
 
-void BattleAnim_PlaySoundEffect3(void) {
+void BattleAnim_PlayMenuBackSoundEffect(void) {
     Audio_PlaySoundEffectById(SFX_MENU_BACK);
 }
 
-void BattleAnim_PlaySoundEffect8(void) {
+void BattleAnim_PlayMenuErrorSoundEffect(void) {
     Audio_PlaySoundEffectById(SFX_MENU_ERROR);
 }
 

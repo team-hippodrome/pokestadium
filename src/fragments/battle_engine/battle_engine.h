@@ -38,7 +38,7 @@ typedef struct ActivePokemonState {
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ u32 unk_18;
     /* 0x1C */ u8 unk_1C;
-    /* 0x1E */ u16 unk_1E;
+    /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
     /* 0x28 */ u16 unk_28;
     /* 0x2A */ u8 unk_2A;
@@ -1797,10 +1797,10 @@ void BattleAnim_ClearSleepStatusAnimation(ActivePokemon* active_pokemon);
 
 
 //@src/fragments/battle_engine/battle_engine_315D50.c
-void BattleAnim_PlaySoundEffect1(void);
-void BattleAnim_PlaySoundEffect2(void);
-void BattleAnim_PlaySoundEffect3(void);
-void BattleAnim_PlaySoundEffect8(void);
+void BattleAnim_PlayMenuScrollSoundEffect(void);
+void BattleAnim_PlayMenuConfirmSoundEffect(void);
+void BattleAnim_PlayMenuBackSoundEffect(void);
+void BattleAnim_PlayMenuErrorSoundEffect(void);
 void BattleAnim_PlayOwnerCry(ActivePokemon* active_pokemon, s16 species);
 void BattleAnim_PlaySpeciesSequence33(ActivePokemon* active_pokemon);
 void Battle_TriggerTrainerPresentationCue(ActivePokemon* active_pokemon);
