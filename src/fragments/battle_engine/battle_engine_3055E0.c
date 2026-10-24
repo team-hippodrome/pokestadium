@@ -931,7 +931,7 @@ void BattleScene_SetCameraPresetSmoothing(f32 arg0, f32 arg1) {
     gCameraPreset.unk_38 = arg1;
 }
 
-void BattleScene_LoadCameraPreset(unk_D_86B0C160* arg0, CameraNode* arg1, ActivePokemon* arg2) {
+void BattleScene_LoadCameraPreset(DioramaAnimData* arg0, CameraNode* arg1, ActivePokemon* arg2) {
     f32 sp34;
     f32 sp30;
     f32 sp2C;
@@ -965,7 +965,7 @@ void BattleScene_LoadCameraPreset(unk_D_86B0C160* arg0, CameraNode* arg1, Active
     BattleScene_SetCameraPresetSmoothing(arg0->unk_28, arg0->unk_2C);
 }
 
-void BattleScene_LoadCameraPresetUnscaled(unk_D_86B0C160* arg0, CameraNode* arg1) {
+void BattleScene_LoadCameraPresetUnscaled(DioramaAnimData* arg0, CameraNode* arg1) {
     f32 sp2C;
     f32 sp28;
     f32 sp24;

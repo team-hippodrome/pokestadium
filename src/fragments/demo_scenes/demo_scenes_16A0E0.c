@@ -31,7 +31,7 @@ typedef struct unk_D_86B10BE0 {
 } unk_D_86B10BE0; // size >= 0x14
 
 #if !defined(VERSION_JP)
-static u32 D_86B0E2B0[] = {
+static u32 sFirstClearBonusTextData[] = {
     0xA4AAA4E1, 0xA4C7A4C8, 0xA4A6A1AA, 0x20A5C9A1, 0xBCA5C9A1, 0xBCA4CE0A, 0xA5B2A1BC, 0xA5E0A5DC, 0xA1BCA5A4,
     0xA4F2A5B2, 0xA5C3A5C8, 0xA4C0A1AA, 0x00000000, 0x4742A5D3, 0xA5EBA4CE, 0xA5B2A1BC, 0xA5E0A5DC, 0xA1BCA5A4,
     0xA4AC0A20, 0x20A5B9A5, 0xD4A1BCA5, 0xC9A5A2A5, 0xC3A5D7A1, 0xAA000000, 0xA4B9A4B4, 0xA4A4A4BE, 0xA1AA20A5,
@@ -43,14 +43,14 @@ static u32 D_86B0E2B0[] = {
 // EUC-JP dialog lines. The Japanese FirstClearBonus_UpdateDialogSequence formats them directly;
 // the other builds read entries 0x91..0x94 of string table 0x1E instead and leave these unused.
 // Mode 0x16 (Doduo Game Boy):
-static char D_86B0E2B0[] = "おめでとう！ ドードーの\nゲームボーイをゲットだ！";
+static char sFirstClearBonusTextData[] = "おめでとう！ ドードーの\nゲームボーイをゲットだ！";
 static char D_86B0E2E4[] = "GBビルのゲームボーイが\n  スピードアップ！";
 // Other modes (Dodrio Game Boy):
 static char D_86B0E310[] = "すごいぞ！ ドードリオの\nゲームボーイをゲットだ！";
 static char D_86B0E344[] = "GBビルのゲームボーイが\nさらにスピードアップだ！";
 #endif
 
-static u32 D_86B0E374[] = {
+static u32 sFirstClearBonusGeoLayout[] = {
     0x0C00FFFF, 0x05000000, 0x0B00001E,  0x00000000, 0x014000F0, 0x00000000, 0x00000000, 0x00000118,
     0x05000000, 0x0D000000, 0x05000000,  0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003,
     0x05000000, 0x0A000000, &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
@@ -93,7 +93,7 @@ void FirstClearBonus_InitState(void) {
     D_86B10BE0.unk_10 = 0xA;
 }
 
-void func_86B0A81C(void) {
+void FirstClearBonus_EmptyFunc(void) {
 }
 
 void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
@@ -223,7 +223,7 @@ void FirstClearBonus_UpdateDialogSequence(void) {
         case 0x0:
 #if defined(VERSION_JP)
             if (gSessionContext.mode == 0x16) {
-                sprintf(D_86B109C8, D_86B0E2B0);
+                sprintf(D_86B109C8, sFirstClearBonusTextData);
             } else {
                 sprintf(D_86B109C8, D_86B0E310);
             }
@@ -326,7 +326,7 @@ void FirstClearBonus_ReadControllerInput(void) {
     Input_ResetRepeatState();
 }
 
-void func_86B0B4C8(void) {
+void FirstClearBonus_NoopStub2(void) {
 }
 
 void FirstClearBonus_DrawBackgroundTiles(u8* arg0) {
@@ -444,7 +444,7 @@ void FirstClearBonus_RunLoop(void) {
 void FirstClearBonus_InitScene(void) {
     MemoryBlock* temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
 
-    D_86B10848 = process_geo_layout(temp_v0, &D_86B0E374);
+    D_86B10848 = process_geo_layout(temp_v0, &sFirstClearBonusGeoLayout);
     MainPool_FinalizeAllocation(temp_v0);
 
     ModelRenderer_InitDisplayRoots();

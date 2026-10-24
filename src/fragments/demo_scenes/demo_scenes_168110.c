@@ -1,11 +1,11 @@
 #include "demo_scenes.h"
 #include "src/matrix.h"
 
-typedef struct unk_D_86B0DFC0 {
+typedef struct CameraFollowModelIds {
     u8 unk_00[1];
-} unk_D_86B0DFC0; // size = ??
+} CameraFollowModelIds; // size = ??
 
-static unk_D_86B0DFC0 D_86B0DFC0 = { 0x8E };
+static CameraFollowModelIds sCameraFollowModelIds = { 0x8E };
 
 s16 Intro_GetTrackedModelFacingOffset(void) {
     return D_86B0FA78->unk_004.rotation.y + 0x8000;
@@ -23,7 +23,7 @@ s32 Util_ByteInArray(u8 arg0, u8* arg1, s32 arg2) {
 
 void Intro_ComputeFollowPoint(unk_D_86B0FA78* arg0, Vec3f* arg1) {
     f32 sp24 = 0.0f;
-    unk_D_86B0DFC0 sp20 = D_86B0DFC0;
+    CameraFollowModelIds sp20 = sCameraFollowModelIds;
 
     if (Util_ByteInArray(D_86B0FA78->unk_174, sp20.unk_00, 1) != 0) {
         sp24 = D_86B10660.unk_04 / 1.5f;
@@ -94,7 +94,7 @@ void IntroCamKeyframe_SetTransitionSpeed(f32 arg0, f32 arg1) {
     D_86B0FA7C->unk_3C = arg1;
 }
 
-void Intro_LoadCameraKeyframe(unk_D_86B0C160* arg0, CameraNode* arg1) {
+void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1) {
     f32 sp34;
     f32 sp30;
     f32 sp2C;

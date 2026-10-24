@@ -41,7 +41,7 @@ void MtxF_ScaleUpperRows(MtxF* arg0, f32 arg1) {
     arg0->mf[2][2] *= arg1;
 }
 
-void func_86B09F64(MtxF* arg0, Vec3f arg1, Vec3s arg2) {
+void Matrix_SetTransformFromPosRot(MtxF* arg0, Vec3f arg1, Vec3s arg2) {
     UNUSED s32 pad[2];
     f32 temp_fa0;
     f32 temp_fa1;

@@ -54,7 +54,7 @@ typedef struct unk_D_86B0EBD8 {
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ char unk10[0x8];
     /* 0x18 */ s32 unk_18;
-    /* 0x30 */ unk_D_86B0DAE0 unk_1C;
+    /* 0x30 */ GfxTileParams unk_1C;
 } unk_D_86B0EBD8; // size = 0x4C
 
 typedef struct unk_D_86B0EBDC {
@@ -90,7 +90,7 @@ typedef struct unk_D_86B0EBE0 {
     /* 0x1C */ s16 unk_1C;
 } unk_D_86B0EBE0; // size = 0x20
 
-u32 D_86B0BD60[] = {
+u32 sTransitionGradientTex[] = {
     0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xC7FFC7FF,
     0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF,
     0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF,
@@ -121,7 +121,7 @@ u32 D_86B0BD60[] = {
     0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF,
     0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF,
 };
-unk_D_86B0C160 D_86B0C160[] = {
+DioramaAnimData sDioramaAnimData[] = {
     {
         0,
         16384,
@@ -218,7 +218,7 @@ unk_D_86B0C160 D_86B0C160[] = {
         255.0f,
     },
 };
-unk_D_86B0C264 D_86B0C264[] = {
+DioramaPresetData sDioramaPresetData[] = {
     {
         { 0.0f, 60.0f, 0.0f },
         -12743,
@@ -275,27 +275,27 @@ unk_D_86B0C264 D_86B0C264[] = {
         0,
     },
 };
-static unk_D_86B0C4C8 D_86B0C2F0[] = {
+static DioramaObjectDef sDioramaObjDef0[] = {
     { { 240.0f, 0.0f, 0.0f }, 9, 2, 0, 0 },    { { 160.0f, 0.0f, 0.0f }, 112, 2, 0, 0 },
     { { 80.0f, 0.0f, 0.0f }, 115, 2, 0, 0 },   { { 10.0f, 0.0f, 10.0f }, 67, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
-static unk_D_86B0C4C8 D_86B0C354[] = {
+static DioramaObjectDef sDioramaObjDef1[] = {
     { { -10.0f, 0.0f, 10.0f }, 34, 2, 0, 0 },     { { -60.0f, 0.0f, 20.0f }, 28, 2, 0, 0 },
     { { -120.0f, 10.0f, -30.0f }, 123, 2, 0, 0 }, { { -180.0f, 0.0f, 0.0f }, 141, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
-static unk_D_86B0C4C8 D_86B0C3B8[] = {
+static DioramaObjectDef sDioramaObjDefFlyingGroup[] = {
     { { 0.0f, -100.0f, -750.0f }, 18, 2, 0, 0 },  { { -35.0f, 40.0f, -350.0f }, 22, 2, 0, 0 },
     { { 78.0f, -50.0f, -150.0f }, 142, 2, 0, 0 }, { { -18.0f, -30.0f, 450.0f }, 6, 2, 10, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
-static unk_D_86B0C4C8 D_86B0C41C[] = {
+static DioramaObjectDef sDioramaObjDefWaterGroup[] = {
     { { 0.0f, 30.0f, -900.0f }, 119, 2, 0, 0 },   { { 15.0f, 10.0f, -250.0f }, 87, 2, 0, 0 },
     { { -38.0f, 20.0f, -550.0f }, 118, 2, 0, 0 }, { { 18.0f, 30.0f, 150.0f }, 73, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
-static unk_D_86B0C4C8 D_86B0C480[] = {
+static DioramaObjectDef sDioramaObjDefFinaleGroup[] = {
     {
         { 0.0f, 0.0f, 0.0f },
         0xD7,
@@ -321,11 +321,11 @@ static unk_D_86B0C4C8 D_86B0C480[] = {
 
 static s32 pad_D_86B0C4BC[3] = { 0, 0, 0 };
 
-unk_D_86B0C4C8* D_86B0C4C8[] = {
-    D_86B0C2F0, D_86B0C354, D_86B0C3B8, D_86B0C41C, D_86B0C480, NULL,
+DioramaObjectDef* sDioramaObjectDefs[] = {
+    sDioramaObjDef0, sDioramaObjDef1, sDioramaObjDefFlyingGroup, sDioramaObjDefWaterGroup, sDioramaObjDefFinaleGroup, NULL,
 };
 
-static u32 D_86B0C4E0[] = {
+static u32 sDioramaLandTileData[] = {
     0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF,
     0xE6FFEEFF, 0xF8FEFFFB, 0xFFD3FB4D, 0xF309E701, 0xD405C12D, 0xBAA1C5E9, 0xD7F9E2FF, 0xE4FFE4FF, 0xE4FFE4FF,
     0xE5FFE5FF, 0xE5FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE5FFE6FF, 0xEAFFF2FF, 0xFCFFFFFC,
@@ -385,11 +385,11 @@ static u32 D_86B0C4E0[] = {
     0xE4FFE4FF, 0xE5FFECFF, 0xF6FEFDFB, 0xFFDCFC6C, 0xF11DE50A, 0xD611C849, 0xC2A3C5DD, 0xCDF7D9FE,
 };
 
-static unk_D_86002F34_018 D_86B0CCE0 = {
-    0x03, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, D_86B0C4E0,
+static unk_D_86002F34_018 sDioramaLandGfxTileParams = {
+    0x03, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaLandTileData,
 };
 
-static Gfx D_86B0CCF0[] = {
+static Gfx sDioramaLandGfxSetupDL[] = {
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD,
                 G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -400,7 +400,7 @@ static Gfx D_86B0CCF0[] = {
     gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 0x007C, 0x007C),
     gsSPEndDisplayList(),
 };
-static Vtx D_86B0CD28[] = {
+static Vtx sDioramaLandTileVerts[] = {
     VTX(-3000, -9000, 0, 1024, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-3000, -3000, 0, 1024, -1024, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-9000, -3000, 0, 0, -1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -418,14 +418,14 @@ static Vtx D_86B0CD28[] = {
     VTX(3000, -9000, 0, 2048, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(9000, -9000, 0, 3072, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx D_86B0CE28[] = {
+static Gfx sDioramaLandTileDrawDL[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0,
                        COMBINED, 0, PRIMITIVE, 0),
     gsDPSetEnvColor(255, 255, 255, 125),
     gsDPSetFogColor(191, 248, 255, 255),
     gsSPFogPosition(995, 1000),
-    gsSPVertex(D_86B0CD28, 16, 0),
+    gsSPVertex(sDioramaLandTileVerts, 16, 0),
     gsSPSetGeometryMode(G_CULL_BACK | G_FOG),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(1, 4, 5, 0, 1, 5, 2, 0),
@@ -439,43 +439,43 @@ static Gfx D_86B0CE28[] = {
     gsSPSetGeometryMode(G_FOG | G_LIGHTING),
     gsSPEndDisplayList(),
 };
-static u8 D_86B0CEB8[] = {
+static u8 sDioramaTileAttr0[] = {
     0x00, 0x03, 0x00, 0x02, 0x00, 0x20, 0x00, 0x20, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x0F, 0x00, 0x0F,
 };
-static u8 D_86B0CECC[] = {
+static u8 sDioramaTileAttr1[] = {
     0x00, 0x03, 0x00, 0x02, 0x00, 0x20, 0x00, 0x20, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00,
 };
-static u8 D_86B0CEE0[] = {
+static u8 sDioramaTileMisc0[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFC, 0x00, 0x01, 0x00, 0x00,
 };
-static u8 D_86B0CEEC[] = {
+static u8 sDioramaTileMisc1[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFC, 0x00, 0x01, 0x00, 0x00,
 };
-static u8* D_86B0CEF8[] = {
-    D_86B0C4E0, D_86B0CEB8, D_86B0CEE0, NULL, NULL, NULL, NULL, NULL,
+static u8* sDioramaTileAttrTable0[] = {
+    sDioramaLandTileData, sDioramaTileAttr0, sDioramaTileMisc0, NULL, NULL, NULL, NULL, NULL,
 };
-static u8* D_86B0CF18[] = {
-    D_86B0C4E0, D_86B0CECC, D_86B0CEEC, NULL, NULL, NULL, NULL, NULL,
+static u8* sDioramaTileAttrTable1[] = {
+    sDioramaLandTileData, sDioramaTileAttr1, sDioramaTileMisc1, NULL, NULL, NULL, NULL, NULL,
 };
-static unk_D_86002F34_000_014 D_86B0CF38 = {
-    D_86B0CEF8,
-    D_86B0CF18,
+static unk_D_86002F34_000_014 sDioramaTileAttrSet = {
+    sDioramaTileAttrTable0,
+    sDioramaTileAttrTable1,
 };
 
-static u32 D_86B0CF40[] = {
+static u32 sDioramaLandTileLayout[] = {
     0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x13000005, 0x03E303E8,
-    0x2309FFFF, (u32)D_86B0CCF0, 0x0000FFFF, 0xFFFFFFFF, 0x22050000, 0x00000000, 0x08000000, 0x810001D0,
-    (u32)&D_86B0CF38, 0x22050000, (u32)D_86B0CE28, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
+    0x2309FFFF, (u32)sDioramaLandGfxSetupDL, 0x0000FFFF, 0xFFFFFFFF, 0x22050000, 0x00000000, 0x08000000, 0x810001D0,
+    (u32)&sDioramaTileAttrSet, 0x22050000, (u32)sDioramaLandTileDrawDL, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
 };
 
-u32 D_86B0CF9C[] = {
-    0x17000001, 0x00000010, &D_86B0CCE0, 0x00000000, D_86B0CD28, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
-    0x00008000, 0x05000000, 0x03000000,  D_86B0CF40, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+u32 sDioramaLandStageLayout[] = {
+    0x17000001, 0x00000010, &sDioramaLandGfxTileParams, 0x00000000, sDioramaLandTileVerts, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
+    0x00008000, 0x05000000, 0x03000000,  sDioramaLandTileLayout, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 
-static u32 D_86B0CFE0[] = {
+static u32 sDioramaSeaTileData[] = {
     0x322B3AB3, 0x63B77C77, 0x5B73322F, 0x21ED21ED, 0x21EB21AB, 0x21A919A9, 0x19A921A9, 0x19A51963, 0x29E93A71,
     0x42F16BF1, 0x84735B2B, 0x3A2729E5, 0x2161215F, 0x21A52A2D, 0x29E7191B, 0x191B29E1, 0x32335B79, 0x747963B7,
     0x2A2F116D, 0x19AD21AD, 0x21AB1167, 0x112508E3, 0x09231123, 0x08DF08DD, 0x196729ED, 0x3A29636B, 0x63AD4269,
@@ -534,10 +534,10 @@ static u32 D_86B0CFE0[] = {
     0x10D71919, 0x29E129ED, 0x32334AF5, 0x6BF763B3, 0x42AF29ED, 0x21AD21AB, 0x196721A7, 0x19A921A9, 0x21E929EB,
     0x29EB3A71, 0x4B357439, 0x6BF7532F, 0x532B4AA9, 0x3A273229, 0x326F3AB3, 0x2A2B195D, 0x1919299D,
 };
-static unk_D_86002F34_018 D_86B0D7E0 = {
-    0x00, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, D_86B0CFE0,
+static unk_D_86002F34_018 sDioramaSeaGfxTileParams = {
+    0x00, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaSeaTileData,
 };
-static Gfx D_86B0D7F0[] = {
+static Gfx sDioramaSeaGfxSetupDL[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD,
                 G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -548,7 +548,7 @@ static Gfx D_86B0D7F0[] = {
     gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 0x007C, 0x007C),
     gsSPEndDisplayList(),
 };
-static Vtx D_86B0D828[] = {
+static Vtx sDioramaSeaTileVerts[] = {
     VTX(-18000, 0, 9000, 0, 4710, 0xFF, 0xFF, 0xFF, 0xFF),    VTX(-18000, 0, 3000, 0, 3482, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-6000, 0, 3000, 2458, 3482, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(-6000, 0, 9000, 2458, 4710, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-18000, 0, -3000, 0, 2253, 0xFF, 0xFF, 0xFF, 0xFF),   VTX(-6000, 0, -3000, 2458, 2253, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -558,14 +558,14 @@ static Vtx D_86B0D828[] = {
     VTX(18000, 0, 3000, 7373, 3482, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(6000, 0, 3000, 4915, 3482, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(18000, 0, 9000, 7373, 4710, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(6000, 0, 9000, 4915, 4710, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx D_86B0D928[] = {
+static Gfx sDioramaSeaTileDrawDL[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0,
                        COMBINED, 0, PRIMITIVE, 0),
     gsDPSetEnvColor(255, 255, 255, 115),
     gsDPSetFogColor(0, 0, 0, 255),
     gsSPFogPosition(987, 1000),
-    gsSPVertex(D_86B0D828, 16, 0),
+    gsSPVertex(sDioramaSeaTileVerts, 16, 0),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(1, 4, 5, 0, 1, 5, 2, 0),
@@ -579,40 +579,40 @@ static Gfx D_86B0D928[] = {
     gsSPSetGeometryMode(G_LIGHTING),
     gsSPEndDisplayList(),
 };
-static u8 D_86B0D9B8[] = {
+static u8 sDioramaTileAttr2[] = {
     0x00, 0x00, 0x00, 0x02, 0x00, 0x20, 0x00, 0x20, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00,
 };
-static u8 D_86B0D9CC[] = {
+static u8 sDioramaTileAttr3[] = {
     0x00, 0x00, 0x00, 0x02, 0x00, 0x20, 0x00, 0x20, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x0F, 0x00, 0x0F,
 };
-static u8 D_86B0D9E0[] = {
+static u8 sDioramaTileMisc2[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x00, 0x01, 0x00, 0x00,
 };
-static u8 D_86B0D9EC[] = {
+static u8 sDioramaTileMisc3[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x00,
 };
-static u8* D_86B0D9F8[] = {
-    D_86B0CFE0, D_86B0D9B8, D_86B0D9E0, NULL, NULL, NULL, NULL, NULL,
+static u8* sDioramaTileAttrTable2[] = {
+    sDioramaSeaTileData, sDioramaTileAttr2, sDioramaTileMisc2, NULL, NULL, NULL, NULL, NULL,
 };
-static u8* D_86B0DA18[] = {
-    D_86B0CFE0, D_86B0D9CC, D_86B0D9EC, NULL, NULL, NULL, NULL, NULL,
+static u8* sDioramaTileAttrTable3[] = {
+    sDioramaSeaTileData, sDioramaTileAttr3, sDioramaTileMisc3, NULL, NULL, NULL, NULL, NULL,
 };
-static unk_D_86002F34_000_014 D_86B0DA38 = {
-    D_86B0D9F8,
-    D_86B0DA18,
+static unk_D_86002F34_000_014 sDioramaSeaTileAttrSet = {
+    sDioramaTileAttrTable2,
+    sDioramaTileAttrTable3,
 };
-static u32 D_86B0DA40[] = {
+static u32 sDioramaSeaTileLayout[] = {
     0x09000000,  0x05000000, 0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x13000005, 0x03E303E8,
-    0x2306FFFF,  D_86B0D7F0, 0x0000FFFF, 0xFFFFFFFF, 0x22010000, 0x00000000, 0x08000000, 0x810001D0,
-    &D_86B0DA38, 0x22010000, D_86B0D928, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
+    0x2306FFFF,  sDioramaSeaGfxSetupDL, 0x0000FFFF, 0xFFFFFFFF, 0x22010000, 0x00000000, 0x08000000, 0x810001D0,
+    &sDioramaSeaTileAttrSet, 0x22010000, sDioramaSeaTileDrawDL, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
 };
-u32 D_86B0DA9C[] = {
-    0x17000001, 0x00000010, &D_86B0D7E0, 0x00000000, D_86B0D828, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
-    0x00008000, 0x05000000, 0x03000000,  D_86B0DA40, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+u32 sDioramaSeaStageLayout[] = {
+    0x17000001, 0x00000010, &sDioramaSeaGfxTileParams, 0x00000000, sDioramaSeaTileVerts, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
+    0x00008000, 0x05000000, 0x03000000,  sDioramaSeaTileLayout, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
-static unk_D_86B0DAE0 D_86B0DAE0[] = {
+static GfxTileParams sDioramaTileParams[] = {
     { {
           0x00FF,
           0x00FF,
@@ -699,26 +699,26 @@ static unk_D_86B0DAE0 D_86B0DAE0[] = {
       } },
 };
 
-static u32 D_86B0DB70 = 0x95;
-static u32 D_86B0DB74 = 0x97;
-static u32 D_86B0DB78 = 0x98;
-static u32 D_86B0DB7C = 0x95;
-static u32 D_86B0DB80 = 0x99;
-static u32 D_86B0DB84 = 0x9A;
-static u32 D_86B0DB88 = 0x9B;
-static u32 D_86B0DB8C = 0x9C;
-static u32 D_86B0DB90 = 0x98;
-static u32 D_86B0DB94 = 0x9D;
+static u32 sCompletionMsgId_Intro = 0x95;
+static u32 sCompletionMsgId_Confirm = 0x97;
+static u32 sCompletionMsgId_Success = 0x98;
+static u32 sCompletionMsgId_IntroWithExisting = 0x95;
+static u32 sCompletionMsgId_ConfirmWithExisting = 0x99;
+static u32 sCompletionMsgId_SuccessWithExisting = 0x9A;
+static u32 sCompletionMsgId_Failure = 0x9B;
+static u32 sCompletionMsgId_Timeout = 0x9C;
+static u32 sCompletionMsgId_Complete = 0x98;
+static u32 sCompletionMsgId_Extra = 0x9D;
 
-static unk_D_86B0DB98 D_86B0DB98[] = {
+static unk_D_86B0DB98 sDioramaCursorIconAnimTable[] = {
     { D_300BAD0, 14 }, { D_300BED0, 2 }, { D_300C2D0, 6 }, { D_300BED0, 2 }, { NULL, 0 },
 };
 
-static u8 D_86B0DBC0[] = {
+static u8 sDioramaRandomTable[] = {
     0x01, 0x04, 0x07, 0x6A, 0x6B, 0x85, 0x8A, 0x8C, 0x36,
 };
 
-static unk_D_86B0DBCC D_86B0DBCC[] = {
+static unk_D_86B0DBCC sDioramaObjPresetTable[] = {
     { 1270.0f, 0.0f, 27.0f, 0.0f },
     { 1783.0f, 0.0f, 27.0f, 0.0f },
     { 2120.0f, 0.0f, 25.799999237060547f, 0.0f },
@@ -730,7 +730,7 @@ static unk_D_86B0DBCC D_86B0DBCC[] = {
     { 1200.0f, 0.0f, 27.0f, 0.0f },
 };
 
-static u32 D_86B0DC5C[] = {
+static u32 sCompletionGeoLayout[] = {
     0x0C00FFFF,  0x05000000, 0x0B00001E, 0x00000000,    0x014000F0, 0x0000000F, 0x00000000,    0x00000000, 0x05000000,
     0x0D000000,  0x05000000, 0x14000000, 0x002D0019,    0xFFFFFF28, 0x08000000, Completion_LightAngleCallbackA, 0x00000000, 0x14000000,
     0x002D0019,  0x80808028, 0x08000000, Completion_LightAngleCallbackB, 0x00000000, 0x16646464, 0x0F000003,    0x05000000, 0x0A000000,
@@ -803,13 +803,13 @@ void Completion_SelectBonusPokemon(void) {
 
     if (gSessionContext.mode == 0x1A) {
         D_86B0F9C8 = 8;
-        D_86B0EBDC->unk_2EC = D_86B0DBC0[D_86B0F9C8];
+        D_86B0EBDC->unk_2EC = sDioramaRandomTable[D_86B0F9C8];
     } else {
         D_86B0F9C8 = MathUtil_Random_ZeroOne() * 8.0f;
         if (D_86B0F9C8 >= 8) {
             D_86B0F9C8 = 1;
         }
-        D_86B0EBDC->unk_2EC = D_86B0DBC0[D_86B0F9C8];
+        D_86B0EBDC->unk_2EC = sDioramaRandomTable[D_86B0F9C8];
     }
 }
 
@@ -835,12 +835,12 @@ void Completion_LoadModels(void) {
     ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, 0);
     D_86B0EBDC->unk_170.node.renderFlags &= ~0x40;
 
-    D_86B0EBDC->unk_170.scale.x = D_86B0EBDC->unk_2F4 = D_86B0DBCC[D_86B0F9C8].unk_00 / 1000.0f;
-    D_86B0EBDC->unk_170.scale.y = D_86B0EBDC->unk_2F4 = D_86B0DBCC[D_86B0F9C8].unk_00 / 1000.0f;
-    D_86B0EBDC->unk_170.scale.z = D_86B0EBDC->unk_2F4 = D_86B0DBCC[D_86B0F9C8].unk_00 / 1000.0f;
+    D_86B0EBDC->unk_170.scale.x = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
+    D_86B0EBDC->unk_170.scale.y = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
+    D_86B0EBDC->unk_170.scale.z = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
 
-    D_86B0EBDC->unk_2FC = D_86B0DBCC[D_86B0F9C8].unk_08;
-    D_86B0EBDC->unk_300 = D_86B0DBCC[D_86B0F9C8].unk_0C;
+    D_86B0EBDC->unk_2FC = sDioramaObjPresetTable[D_86B0F9C8].unk_08;
+    D_86B0EBDC->unk_300 = sDioramaObjPresetTable[D_86B0F9C8].unk_0C;
     D_86B0EBDC->unk_170.position.y = -100.0f;
     D_86B0EBDC->unk_008.node.renderFlags &= ~0x20;
     D_86B0EBDC->unk_170.node.flags &= ~1;
@@ -871,18 +871,18 @@ void Completion_PositionBonusModel(void) {
 }
 
 void Completion_InitDialogBoxParams(void) {
-    D_86B0EBD8->unk_1C.unk_00.unk_00 = D_86B0DAE0[0].unk_00.unk_00;
-    D_86B0EBD8->unk_1C.unk_00.unk_02 = D_86B0DAE0[0].unk_00.unk_02;
-    D_86B0EBD8->unk_1C.unk_00.unk_04 = D_86B0DAE0[0].unk_00.unk_04;
-    D_86B0EBD8->unk_1C.unk_00.unk_06 = D_86B0DAE0[0].unk_00.unk_06;
-    D_86B0EBD8->unk_1C.unk_00.unk_08 = D_86B0DAE0[0].unk_00.unk_08;
-    D_86B0EBD8->unk_1C.unk_00.unk_0A = D_86B0DAE0[0].unk_00.unk_0A;
-    D_86B0EBD8->unk_1C.unk_00.unk_0C = D_86B0DAE0[0].unk_00.unk_0C;
-    D_86B0EBD8->unk_1C.unk_00.unk_0E = D_86B0DAE0[0].unk_00.unk_0E;
-    D_86B0EBD8->unk_1C.unk_00.unk_10 = D_86B0DAE0[0].unk_00.unk_10;
-    D_86B0EBD8->unk_1C.unk_00.unk_12 = D_86B0DAE0[0].unk_00.unk_12;
-    D_86B0EBD8->unk_1C.unk_00.unk_14 = D_86B0DAE0[0].unk_00.unk_14;
-    D_86B0EBD8->unk_1C.unk_00.unk_16 = D_86B0DAE0[0].unk_00.unk_16;
+    D_86B0EBD8->unk_1C.unk_00.unk_00 = sDioramaTileParams[0].unk_00.unk_00;
+    D_86B0EBD8->unk_1C.unk_00.unk_02 = sDioramaTileParams[0].unk_00.unk_02;
+    D_86B0EBD8->unk_1C.unk_00.unk_04 = sDioramaTileParams[0].unk_00.unk_04;
+    D_86B0EBD8->unk_1C.unk_00.unk_06 = sDioramaTileParams[0].unk_00.unk_06;
+    D_86B0EBD8->unk_1C.unk_00.unk_08 = sDioramaTileParams[0].unk_00.unk_08;
+    D_86B0EBD8->unk_1C.unk_00.unk_0A = sDioramaTileParams[0].unk_00.unk_0A;
+    D_86B0EBD8->unk_1C.unk_00.unk_0C = sDioramaTileParams[0].unk_00.unk_0C;
+    D_86B0EBD8->unk_1C.unk_00.unk_0E = sDioramaTileParams[0].unk_00.unk_0E;
+    D_86B0EBD8->unk_1C.unk_00.unk_10 = sDioramaTileParams[0].unk_00.unk_10;
+    D_86B0EBD8->unk_1C.unk_00.unk_12 = sDioramaTileParams[0].unk_00.unk_12;
+    D_86B0EBD8->unk_1C.unk_00.unk_14 = sDioramaTileParams[0].unk_00.unk_14;
+    D_86B0EBD8->unk_1C.unk_00.unk_16 = sDioramaTileParams[0].unk_00.unk_16;
 
     D_86B0EBD8->unk_00 = 0x50;
     D_86B0EBD8->unk_04 = -0x32;
@@ -932,7 +932,7 @@ s32 Completion_WrapDialogText(void) {
     if (D_86B0F7C8[D_86B0EBE0->unk_04] == 0) {
         D_86B0EBE0->unk_18 = 1;
         D_86B0EBE0->unk_1C = 0;
-        D_86B0EBE0->unk_1A = D_86B0DB98[D_86B0EBE0->unk_1C].unk_04;
+        D_86B0EBE0->unk_1A = sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_04;
     }
 
     return 0;
@@ -996,7 +996,7 @@ void Completion_UpdateGiftDialogFirstTime(void) {
                 sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, 0x96));
             } else {
                 Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB70);
+                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Intro);
             }
 
             D_86B0EBE0->unk_04 = 0;
@@ -1036,7 +1036,7 @@ void Completion_UpdateGiftDialogFirstTime(void) {
                     // clang-format on
 
                     Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB74);
+                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Confirm);
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1054,7 +1054,7 @@ void Completion_UpdateGiftDialogFirstTime(void) {
                 for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                 // clang-format on
 
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, D_86B0DB78));
+                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_Success));
                 Cry_Play(D_86B0EBDC->unk_2EC, 2);
                 ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
                 D_86B0EBE0->unk_00++;
@@ -1086,7 +1086,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                 sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, 0x96));
             } else {
                 Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB7C);
+                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_IntroWithExisting);
             }
             D_86B0EBE0->unk_04 = 0;
             D_86B0EBE0->unk_08 = 0xB4;
@@ -1124,7 +1124,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, D_86B0DB80));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_ConfirmWithExisting));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1142,7 +1142,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, D_86B0DB84));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_SuccessWithExisting));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1162,7 +1162,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
 
                     Text_SetStringToken(0x20, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2E8 - 1));
                     Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB88);
+                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Failure);
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1197,7 +1197,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, D_86B0DB90));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_Complete));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1239,42 +1239,42 @@ void Completion_DrawLogoBanner(void) {
 
 s32 Completion_AnimateLogoBannerColor(void) {
     D_86B0EBD8->unk_1C.unk_00.unk_00 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_00, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_00,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_00, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_00);
+        D_86B0EBD8->unk_1C.unk_00.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00);
     D_86B0EBD8->unk_1C.unk_00.unk_02 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_02, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_02,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_02, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_02);
+        D_86B0EBD8->unk_1C.unk_00.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02);
     D_86B0EBD8->unk_1C.unk_00.unk_04 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_04, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_04,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_04, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_04);
+        D_86B0EBD8->unk_1C.unk_00.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04);
     D_86B0EBD8->unk_1C.unk_00.unk_06 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_06, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_06,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_06, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_06);
+        D_86B0EBD8->unk_1C.unk_00.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06);
     D_86B0EBD8->unk_1C.unk_00.unk_08 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_08, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_08,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_08, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_08);
+        D_86B0EBD8->unk_1C.unk_00.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08);
     D_86B0EBD8->unk_1C.unk_00.unk_0A = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0A, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A);
+        D_86B0EBD8->unk_1C.unk_00.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A);
     D_86B0EBD8->unk_1C.unk_00.unk_0C = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0C, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C);
+        D_86B0EBD8->unk_1C.unk_00.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C);
     D_86B0EBD8->unk_1C.unk_00.unk_0E = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0E, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E);
+        D_86B0EBD8->unk_1C.unk_00.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E);
     D_86B0EBD8->unk_1C.unk_00.unk_10 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_10, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_10,
-        D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_10, D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_18.unk_10);
+        D_86B0EBD8->unk_1C.unk_00.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10,
+        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10);
 
-    if ((D_86B0EBD8->unk_1C.unk_00.unk_00 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_00) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_02 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_02) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_04 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_04) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_06 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_06) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_08 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_08) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0A == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0C == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0E == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_10 == D_86B0DAE0[D_86B0EBD8->unk_18 + 1].unk_00.unk_10)) {
+    if ((D_86B0EBD8->unk_1C.unk_00.unk_00 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_02 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_04 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_06 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_08 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_0A == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_0C == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_0E == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E) &&
+        (D_86B0EBD8->unk_1C.unk_00.unk_10 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10)) {
         D_86B0EBD8->unk_18++;
         if (D_86B0EBD8->unk_18 == 2) {
             return 1;
@@ -1288,16 +1288,16 @@ Gfx* Completion_DrawBlinkingCursorIcon(void) {
     if (D_86B0EBE0->unk_18 == 1) {
         if (!D_86B0EBE0->unk_1A--) {
             D_86B0EBE0->unk_1C++;
-            if (D_86B0DB98[D_86B0EBE0->unk_1C].unk_00 == 0) {
+            if (sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00 == 0) {
                 D_86B0EBE0->unk_1C = 0;
             }
-            D_86B0EBE0->unk_1A = D_86B0DB98[D_86B0EBE0->unk_1C].unk_04;
+            D_86B0EBE0->unk_1A = sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_04;
         }
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
         Gfx_DrawTextureRgba32(D_86B0EBE0->unk_16 + 0x9E, D_86B0EBE0->unk_14 + 9, 0x10, 0x10,
-                      D_86B0DB98[D_86B0EBE0->unk_1C].unk_00, 0x10, 0);
+                      sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00, 0x10, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
@@ -1384,7 +1384,7 @@ void Completion_HandleAcceptDeclineInput(void) {
             Completion_ResetDialogText();
             Text_SetStringToken(0x20, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2E8 - 1));
             Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB8C);
+            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Timeout);
             ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
             Cry_Play(D_86B0EBDC->unk_2EC, 2);
         }
@@ -1394,7 +1394,7 @@ void Completion_HandleAcceptDeclineInput(void) {
             D_86B0EBE0->unk_00 = 7;
             Completion_ResetDialogText();
             Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, D_86B0DB94);
+            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Extra);
             ModelAnim_SetSpeed(&D_86B0EBDC->unk_008, -1);
         }
     }
@@ -1612,7 +1612,7 @@ void Completion_InitScene(void) {
     MemoryBlock* sp1C;
 
     sp1C = MainPool_AllocState(main_pool_get_available(), 0);
-    D_86B0EBC0 = process_geo_layout(sp1C, &D_86B0DC5C);
+    D_86B0EBC0 = process_geo_layout(sp1C, &sCompletionGeoLayout);
     MainPool_FinalizeAllocation(sp1C);
     ModelRenderer_InitDisplayRoots();
 

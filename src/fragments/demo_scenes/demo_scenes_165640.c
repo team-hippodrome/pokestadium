@@ -45,7 +45,7 @@ typedef struct unk_D_86B0DD58 {
     /* 0x08 */ f32 unk_08;
 } unk_D_86B0DD58; // size = 0xC
 
-static unk_D_86B0DAE0_000 D_86B0DCE0[4] = {
+static SpriteColorParams sUIElementColors[4] = {
     {
         0x00FF,
         0x00E1,
@@ -103,11 +103,11 @@ static unk_D_86B0DAE0_000 D_86B0DCE0[4] = {
         0x0032,
     },
 };
-static u8 D_86B0DD40[] = {
+static u8 sUIElementColorFlat[] = {
     0, 0xFF, 0, 0xE1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xFF, 0, 3, 0, 0x11, 0, 0x11, 0, 0x11, 0, 7,
 };
 
-static unk_D_86B0DD58 D_86B0DD58[20] = {
+static unk_D_86B0DD58 sMonsterSpawnInfo[20] = {
     { 0xA7, 47.5f, 30.0f }, { 0xA8, 47.5f, 30.0f }, { 0xA9, 47.5f, 30.0f }, { 0xAA, 47.5f, 30.0f },
 #if defined(VERSION_US_REV2)
     { 0xA5, 66.5f, 85.0f }, { 0xA6, 50.0f, 55.0f }, { 0xA7, 0.0f, 0.0f },   { 0xA7, 0.0f, 0.0f },
@@ -155,7 +155,7 @@ static unk_D_70B10 D_86B10670;
 static TeamRoster* D_86B10690;
 static BattleSessionTeams* D_86B10694;
 
-static u32 D_86B0DE5C[] = {
+static u32 sMiniCameraLayout[] = {
     0x0C00FFFF, 0x05000000,    0x0B00001E,  0x00000000,    0x014000F0,  0x0000000F,  0x00000000, 0x00000000,
     0x05000000, 0x0D000000,    0x05000000,  0x07000000,    &D_86B0F9D0, 0x14000000,  0x002D0019, 0xFFFFFF28,
     0x08000000, Intro_LightAngleCallbackA, 0x00000000,  0x14000000,    0x002D0019,  0x80808028,  0x08000000, Intro_LightAngleCallbackB,
@@ -274,7 +274,7 @@ void Intro_SetupOrbitCamera(void) {
     D_86B0FA7C->unk_00->perspective.nearPlane = 30.0f;
     D_86B0FA7C->unk_00->perspective.farPlane = 6400.0f;
     Intro_ComputeFollowPoint(D_86B0FA78, &D_86B0FA7C->unk_04);
-    Intro_LoadCameraKeyframe(&D_86B0E040[D_86B0FA78->unk_17C], D_86B0FA7C->unk_00);
+    Intro_LoadCameraKeyframe(&sIntroCameraKeyframes[D_86B0FA78->unk_17C], D_86B0FA7C->unk_00);
     Intro_UpdateOrbitCamera();
 }
 
@@ -285,7 +285,7 @@ void Intro_LoadStageModel(void) {
 
     main_pool_push_state('MONS');
 
-    D_86B0FA78->unk_174 = D_86B0DD58[D_86B0FA44].unk_00;
+    D_86B0FA78->unk_174 = sMonsterSpawnInfo[D_86B0FA44].unk_00;
     ModelRenderer_AttachDisplayObject(&D_86B0FA78->unk_004);
     PokeIcon_OpenModelArchives();
     D_86B0FA78->unk_000 = Model_LoadByArchiveIndex(D_86B0FA78->unk_174);
@@ -302,7 +302,7 @@ void Intro_SetupStaticCamera(void) {
     D_86B0FA7C->unk_00->perspective.farPlane = 6400.0f;
 
     Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA78->unk_004.position.x,
-                  D_86B0DD58[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
+                  sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
 
     if ((D_86B0FA44 == 4) || (D_86B0FA44 == 5)) {
         Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.eyePosition, 0, 100.0f, 328.0f);
@@ -363,7 +363,7 @@ s32 Intro_UpdateModelLanding(void) {
     }
 
     Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA78->unk_004.position.x,
-                  D_86B0DD58[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
+                  sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
 
     if (D_86B0FA78->unk_004.position.y <= 0.5f) {
         return 1;
@@ -381,24 +381,24 @@ void Intro_EmitLandingParticles(void) {
 
     if (D_86B0FA78->unk_178 & 1) {
         Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                      D_86B0DD58[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
+                      sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
         Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
 
         if ((D_86B0FA78->unk_178 >= 0xA) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          D_86B0DD58[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
+                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
             Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
         }
 
         if ((D_86B0FA78->unk_178 >= 0x14) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          D_86B0DD58[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
+                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
             Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
         }
 
         if ((D_86B0FA78->unk_178 >= 0x1E) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          D_86B0DD58[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
+                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
             Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
         }
     }
@@ -434,12 +434,12 @@ void Intro_SetupTextPanel(unk_D_86B0FA50* arg0, u8* arg1, f32 arg2, s16 arg3, s1
     arg0->unk_A4 = 0;
     arg0->unk_AC = 0.0f;
 
-    arg0->unk_B0.unk_00 = D_86B0DCE0->unk_00;
-    arg0->unk_B0.unk_02 = D_86B0DCE0->unk_02;
-    arg0->unk_B0.unk_04 = D_86B0DCE0->unk_04;
-    arg0->unk_B0.unk_06 = D_86B0DCE0->unk_06;
-    arg0->unk_B0.unk_08 = D_86B0DCE0->unk_08;
-    arg0->unk_B0.unk_0A = D_86B0DCE0->unk_0A;
+    arg0->unk_B0.unk_00 = sUIElementColors->unk_00;
+    arg0->unk_B0.unk_02 = sUIElementColors->unk_02;
+    arg0->unk_B0.unk_04 = sUIElementColors->unk_04;
+    arg0->unk_B0.unk_06 = sUIElementColors->unk_06;
+    arg0->unk_B0.unk_08 = sUIElementColors->unk_08;
+    arg0->unk_B0.unk_0A = sUIElementColors->unk_0A;
 }
 
 void Intro_ConfigureTextPanels(void) {
@@ -738,29 +738,29 @@ void Intro_DrawTextPanels(void) {
 
                 if (D_86B0FA58->unk_84 != 0) {
                     D_86B0FA54->unk_B0.unk_00 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_00, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_00,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0C, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0C);
+                        D_86B0FA54->unk_B0.unk_00, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_00,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C);
                     D_86B0FA54->unk_B0.unk_02 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_02, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_02,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0E, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0E);
+                        D_86B0FA54->unk_B0.unk_02, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_02,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E);
                     D_86B0FA54->unk_B0.unk_04 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_04, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_04,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_10, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_10);
+                        D_86B0FA54->unk_B0.unk_04, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_04,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10);
                     D_86B0FA54->unk_B0.unk_06 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_06, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_06,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_12, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_12);
+                        D_86B0FA54->unk_B0.unk_06, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_06,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12);
                     D_86B0FA54->unk_B0.unk_08 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_08, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_08,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_14, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_14);
+                        D_86B0FA54->unk_B0.unk_08, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_08,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14);
                     D_86B0FA54->unk_B0.unk_0A = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_0A, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0A,
-                        D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_16, D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_16);
-                    if ((D_86B0FA54->unk_B0.unk_00 == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_00) &&
-                        (D_86B0FA54->unk_B0.unk_02 == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_02) &&
-                        (D_86B0FA54->unk_B0.unk_04 == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_04) &&
-                        (D_86B0FA54->unk_B0.unk_06 == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_06) &&
-                        (D_86B0FA54->unk_B0.unk_08 == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_08) &&
-                        (D_86B0FA54->unk_B0.unk_0A == D_86B0DCE0[D_86B0FA54->unk_88 + 1].unk_0A)) {
+                        D_86B0FA54->unk_B0.unk_0A, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0A,
+                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16);
+                    if ((D_86B0FA54->unk_B0.unk_00 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_00) &&
+                        (D_86B0FA54->unk_B0.unk_02 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_02) &&
+                        (D_86B0FA54->unk_B0.unk_04 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_04) &&
+                        (D_86B0FA54->unk_B0.unk_06 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_06) &&
+                        (D_86B0FA54->unk_B0.unk_08 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_08) &&
+                        (D_86B0FA54->unk_B0.unk_0A == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0A)) {
 
                         D_86B0FA54->unk_88++;
                         if (D_86B0FA54->unk_88 == 4) {
@@ -772,9 +772,9 @@ void Intro_DrawTextPanels(void) {
 
             case 2:
                 UI_DrawGradientTexture(D_86B0FA54->unk_80, D_86B0FA54->unk_98, D_86B0FA54->unk_9C, D_86B0FA54->unk_9E,
-                              D_86B0FA54->unk_A0, D_86B0DD40);
+                              D_86B0FA54->unk_A0, sUIElementColorFlat);
                 UI_DrawGradientTexture(D_86B0FA58->unk_80, D_86B0FA58->unk_98, D_86B0FA58->unk_9C, D_86B0FA58->unk_9E,
-                              D_86B0FA58->unk_A0, D_86B0DD40);
+                              D_86B0FA58->unk_A0, sUIElementColorFlat);
 
                 if (gSessionContext.inRound2 == 1) {
                     UI_DrawTextureRgba16(D_86B0FA60->unk_80, (s16)D_86B0FA58->unk_98 + D_86B0FA58->unk_9E,
@@ -783,7 +783,7 @@ void Intro_DrawTextPanels(void) {
 
                 if ((D_86B0FA44 != 4) && (D_86B0FA44 != 5)) {
                     UI_DrawGradientTexture(D_86B0FA5C->unk_80, D_86B0FA5C->unk_98, D_86B0FA5C->unk_9C, D_86B0FA5C->unk_9E,
-                                  D_86B0FA5C->unk_A0, D_86B0DD40);
+                                  D_86B0FA5C->unk_A0, sUIElementColorFlat);
                 }
                 break;
         }
@@ -992,7 +992,7 @@ void Stage_LoadModels(void) {
     GeoNode_CreateContainer(NULL, &D_86B0FA08);
     GeoNode_CreateContainer(NULL, &D_86B0FA20);
     sp34 = MainPool_AllocState(main_pool_get_available(), 0);
-    D_87906050 = process_geo_layout(sp34, D_86B0DE5C);
+    D_87906050 = process_geo_layout(sp34, sMiniCameraLayout);
 
     temp_v0_3 = sp2C(0, 0);
     if (temp_v0_3 != NULL) {

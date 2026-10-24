@@ -76,7 +76,7 @@ void DioramaCamKeyframe_SetTransitionSpeed(unk_D_86B0E5D4_04* arg0, f32 arg1, f3
     arg0->unk_38 = arg2;
 }
 
-void Diorama_LoadCameraKeyframe(unk_D_86B0C160* arg0, unk_D_86B0E5D4* arg1) {
+void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1) {
     unk_D_86B0E5D4_04* ptr = &arg1->unk_04;
     CameraNode* ptr2 = arg1->unk_00;
     f32 sp34;
