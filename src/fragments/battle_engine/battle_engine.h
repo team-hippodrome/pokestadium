@@ -1345,28 +1345,28 @@ void BattleAnim_UpdateOwnerSecondaryStatusAnimation(s32 arg0);
 
 
 //@src/fragments/battle_engine/battle_engine_2F6930.c
-void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16* arg3, s16* arg4);
-Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0);
-Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* arg0, Vec3f* arg1, f32 arg2, s16 arg3);
-void BattleAnim_Vec3fSetPolarXZ(Vec3f* dest_vector, f32 magnitude, s16 theta);
+void BattleAnim_CalculateDistanceAngles(Vec3f* from, Vec3f* to, f32* euclidean_distance, s16* elevation, s16* azimuth);
+Vec3f* BattleAnim_Vec3fSetZero(Vec3f* dest);
+Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* dest, Vec3f* origin, f32 radius, s16 theta);
+void BattleAnim_Vec3fSetPolarXZ(Vec3f* dest, f32 magnitude, s16 theta);
 Vec3f* BattleAnim_Vec3fCopy(Vec3f* dest, Vec3f* src);
-Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1);
-Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* arg0, f32 arg1, f32 arg2, f32 arg3);
-s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3);
-f32 BattleAnim_Vec3fDistance(Vec3f arg0, Vec3f arg1);
-f32 BattleAnim_Distance2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3);
-s32 BattleAnim_RandomIntWithWarmup(f32 arg0);
+Vec3s* BattleAnim_Vec3sCopy(Vec3s* dest, Vec3s* src);
+Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* dest, f32 scale_x, f32 scale_y, f32 scale_z);
+s16 BattleAnim_Atan2sFromPoints(f32 y0, f32 x0, f32 y1, f32 x1);
+f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b);
+f32 BattleAnim_Distance2D(f32 x0, f32 y0, f32 x1, f32 y1);
+s32 BattleAnim_RandomIntWithWarmup(f32 count);
 u16 BattleAnim_RandomRange(s32 range);
 s32 BattleAnim_StepToS16(s16* dest, s16 finish, s16 rate);
-s32 BattleAnim_StepToS16VariableRate(s16* arg0, s16 arg1, f32 arg2);
+s32 BattleAnim_StepToS16VariableRate(s16* dest, s16 finish, f32 rate);
 void BattleAnim_ApproachF(f32* dest, f32 value, f32 speed);
 void BattleAnim_ApproachS16(s16* dest, s16 value, s16 speed);
 void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed);
-void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1);
-void Battle_ComputeSplineWeightsVariantB(f32* arg0, f32 arg1);
-void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1);
-void Battle_ComputeSplineWeightsVariantD(f32* arg0, f32 arg1);
-void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1);
+void BattleAnim_BSplineWeightsUniform(f32* dest, f32 t);
+void BattleAnim_BSplineWeightsClampedFirst(f32* dest, f32 t);
+void BattleAnim_BSplineWeightsClampedSecond(f32* dest, f32 t);
+void BattleAnim_BSplineWeightsClampedPenultimate(f32* dest, f32 t);
+void BattleAnim_BSplineWeightsClampedLast(f32* dest, f32 t);
 
 
 //@src/fragments/battle_engine/battle_engine_2F74E0.c
