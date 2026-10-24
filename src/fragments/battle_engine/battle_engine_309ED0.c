@@ -484,7 +484,7 @@ void BattleScene_BeginBattlePhase(void) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
 
-    if ((BattleScene_IsPresentationCountdownComplete() == 0) && (D_84390134 != 1)) {
+    if ((BattleScene_IsBattleCountdownComplete() == 0) && (D_84390134 != 1)) {
         AudioFrameUpdate(1);
     }
 

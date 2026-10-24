@@ -50,7 +50,7 @@ s32 BattleScene_TickBattleTimer(void) {
     return 0;
 }
 
-s32 BattleScene_IsPresentationCountdownComplete(void) {
+s32 BattleScene_IsBattleCountdownComplete(void) {
     if (gSessionContext.timeLimitsEnabled == 0) {
         return 0;
     }
@@ -139,7 +139,7 @@ s32 BattleScene_UpdateResultPresentation(void) {
         return 0;
     }
 
-    if (BattleScene_IsPresentationCountdownComplete() != 0) {
+    if (BattleScene_IsBattleCountdownComplete() != 0) {
         switch (D_84390134) {
             case 1:
                 BattleBox_Open(0xD);
@@ -1289,7 +1289,7 @@ void BattleScene_CollectActions(void) {
     }
 
     if ((sp24->unk_10 == 3) && (sp20->unk_10 == 3)) {
-        if (BattleScene_IsPresentationCountdownComplete() != 0) {
+        if (BattleScene_IsBattleCountdownComplete() != 0) {
             D_84390134 = 1;
         }
 

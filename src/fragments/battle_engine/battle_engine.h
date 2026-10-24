@@ -1373,7 +1373,7 @@ void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1);
 void BattleScene_InitializeBattleTimers(void);
 void BattleScene_QuantizeBattleTimer(void);
 s32 BattleScene_TickBattleTimer(void);
-s32 BattleScene_IsPresentationCountdownComplete(void);
+s32 BattleScene_IsBattleCountdownComplete(void);
 s32 Battle_ClassifyHpTier(s32 arg0, s32 arg1);
 s32 BattleScene_DetermineWinner(void);
 s32 BattleScene_UpdateResultPresentation(void);
