@@ -41,12 +41,12 @@ typedef struct ActivePokemonState {
     /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
     /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u8 moveSelectionForced;
+    /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
     /* 0x2D */ u8 unk_2D;
     /* 0x2E */ u8 alpha;
-    /* 0x2F */ u8 unk_2F;
+    /* 0x2F */ u8 forfeitCursorHover;
     /* 0x30 */ u16 unk_30;
     /* 0x32 */ char unk32[0x2];
     /* 0x34 */ u16 flags;

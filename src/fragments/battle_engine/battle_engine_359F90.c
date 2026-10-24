@@ -1817,8 +1817,8 @@ void Battle_ResolveMonAction(void) {
     ActivePokemonState* ptr1 = &sActivePokemon[0]->state;
     ActivePokemonState* ptr2 = &sActivePokemon[1]->state;
 
-    ptr1->moveSelectionForced = 0;
-    ptr2->moveSelectionForced = 0;
+    ptr1->moveSelectionLocked = 0;
+    ptr2->moveSelectionLocked = 0;
 
     sConfused = 1;
     sStatCanBeChangedFurther = 1;
@@ -1860,8 +1860,8 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
 
     ptr2 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state.runtime;
 
-    sp24->moveSelectionForced = 0;
-    sp20->moveSelectionForced = 0;
+    sp24->moveSelectionLocked = 0;
+    sp20->moveSelectionLocked = 0;
     ptr1->unk_12 = 0xFFFF;
     ptr2->unk_12 = 0xFFFF;
 
