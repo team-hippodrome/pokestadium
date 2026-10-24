@@ -4,6 +4,7 @@
 #include "src/audio_sfx.h"
 #include "src/audio_loop_point.h"
 #include "controller.h"
+#include "moves.h"
 
 static f32 sElapsedOrderSelectionTime;
 f32 sOrderTimer;
