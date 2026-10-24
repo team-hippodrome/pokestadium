@@ -5,7 +5,7 @@
 #include "src/audio_loop_point.h"
 #include "controller.h"
 
-static f32 D_84390120;
+static f32 sElapsedOrderSelectionTime;
 f32 sOrderTimer;
 f32 sBattleTimer;
 static f32 sInitialOrderTimer;
@@ -153,11 +153,11 @@ s32 BattleScene_UpdateResultPresentation(void) {
                 sp1C = 1;
 
                 var_v0 = 0;
-                if (D_84390120 >= 120.0f) {
+                if (sElapsedOrderSelectionTime >= 120.0f) {
                     var_v0 = 1;
                 }
 
-                D_84390120 += 1.0f;
+                sElapsedOrderSelectionTime += 1.0f;
 
                 if (var_v0 != 0) {
                     sBattleScene.scene->winner = BattleScene_DetermineWinner();
@@ -200,7 +200,7 @@ s32 BattleScene_IsActionSelectionTimerExpired(void) {
     return 0;
 }
 
-void BattleScene_ResetActionSelectionTimer(void) {
+void BattleScene_ResetActionSelectionTimerHelper(void) {
     sOrderTimer = gSessionContext.orderLimitSeconds * 30;
 }
 
@@ -209,17 +209,17 @@ s32 BattleScene_TickActionSelectionTimers(void) {
         sOrderTimer -= 1.0f;
     }
 
-    if (D_84390120 >= 150.0f) {
+    if (sElapsedOrderSelectionTime >= 150.0f) {
         return 1;
     }
 
-    D_84390120 += 1.0f;
+    sElapsedOrderSelectionTime += 1.0f;
     return 0;
 }
 
-void BattleScene_ResetActionSelectionTimers(void) {
-    D_84390120 = 0.0f;
-    BattleScene_ResetActionSelectionTimer();
+void BattleScene_ResetActionSelectionTimer(void) {
+    sElapsedOrderSelectionTime = 0.0f;
+    BattleScene_ResetActionSelectionTimerHelper();
 }
 
 s32 BattleScene_ApplyForcedActionDelay(ActivePokemon* arg0) {
@@ -428,7 +428,7 @@ s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
         sp1C->unk_04 = 2;
         sp1C->unk_10 = 2;
 
-        if (D_84390120 == 20.0f) {
+        if (sElapsedOrderSelectionTime == 20.0f) {
             BattleAnim_PlaySoundEffect2();
             D_84390138 = BattleAI_ChooseAction(0);
             sp1C->unk_1C = 0;
@@ -446,7 +446,7 @@ s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
         temp_v0->unk_10 = 3;
         temp_v0->unk_04 = 1;
 
-        if (D_84390120 == 20.0f) {
+        if (sElapsedOrderSelectionTime == 20.0f) {
             BattleAnim_PlaySoundEffect2();
             D_84390138 = BattleAI_ChooseAction(0);
             sp1C->unk_1C = 0;
@@ -478,16 +478,16 @@ void BattleScene_CompleteCpuMoveAction(ActivePokemon* arg0, ActivePokemon* arg1)
     BattleScene_ApplyForcedActionDelay(arg0);
     sp1C->unk_2A = 1;
 
-    if ((D_84390120 == 30.0f) && (D_84390138 < 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 < 4)) {
         BattleAnim_PlaySoundEffect2();
     }
 
-    if ((D_84390138 < 4) && (D_84390120 >= 30.0f)) {
+    if ((D_84390138 < 4) && (sElapsedOrderSelectionTime >= 30.0f)) {
         sp1C->unk_10 = 1;
         sp1C->unk_04 = 1;
     }
 
-    if (((D_84390120 >= 90.0f) || ((sp20->unk_10 == 3) && (D_84390120 >= 10.0f))) && (D_84390138 < 4)) {
+    if (((sElapsedOrderSelectionTime >= 90.0f) || ((sp20->unk_10 == 3) && (sElapsedOrderSelectionTime >= 10.0f))) && (D_84390138 < 4)) {
         BattleAnim_PlaySoundEffect2();
         sp1C->unk_04 = 1;
         sp1C->unk_10 = 3;
@@ -503,18 +503,18 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     sp18 = &arg0->state;
     sp14 = &arg1->state;
 
-    if ((D_84390120 == 30.0f) && (D_84390138 < 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 < 4)) {
         BattleAnim_PlaySoundEffect2();
     }
 
     if (D_84390138 < 4) {
-        if (D_84390120 >= 30.0f) {
+        if (sElapsedOrderSelectionTime >= 30.0f) {
             sp18->unk_10 = 1;
             sp18->unk_04 = 1;
         }
     }
 
-    if ((D_84390120 >= 90.0f) || ((sp14->unk_10 == 3) && (D_84390120 >= 10.0f))) {
+    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp14->unk_10 == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
         if (D_84390138 < 4) {
             BattleAnim_PlaySoundEffect2();
             sp18->unk_04 = 1;
@@ -535,18 +535,18 @@ s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp1C = &arg0->state;
     ActivePokemonState* sp18 = &arg1->state;
 
-    if ((D_84390120 == 30.0f) && (D_84390138 >= 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 >= 4)) {
         BattleAnim_PlaySoundEffect2();
     }
 
-    if (D_84390120 >= 30.0f) {
+    if (sElapsedOrderSelectionTime >= 30.0f) {
         if (D_84390138 >= 4) {
             sp1C->unk_10 = 2;
             sp1C->unk_04 = 2;
         }
     }
 
-    if ((D_84390120 >= 90.0f) || ((sp18->unk_10 == 3) && (D_84390120 >= 10.0f))) {
+    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp18->unk_10 == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
         if (D_84390138 >= 4) {
             BattleAnim_PlaySoundEffect2();
             sp1C->unk_1C = 0;
@@ -565,7 +565,7 @@ s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
 
 void BattleScene_TriggerCpuChoice(UNUSED BattleMonRuntime* arg0, UNUSED BattleMonRuntime* arg1, UNUSED ActivePokemonState* arg2,
                    UNUSED ActivePokemonState* arg3, UNUSED ActivePokemon* arg4) {
-    if ((D_84390120 == 1.0f) && (D_8439013C == 0)) {
+    if ((sElapsedOrderSelectionTime == 1.0f) && (D_8439013C == 0)) {
         D_8439013C = 1;
         D_84390138 = BattleAI_ChooseAction(0);
     }
@@ -590,7 +590,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
                 return 0;
             }
 
-            if (D_84390120 == 0.0f) {
+            if (sElapsedOrderSelectionTime == 0.0f) {
                 D_8439013C = 0;
                 return 0;
             }
@@ -609,7 +609,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
                     } else if (BattleScene_ApplyForcedActionDelay(arg0) != 0) {
                         return 0;
                     } else {
-                        if (D_84390120 == 0.0f) {
+                        if (sElapsedOrderSelectionTime == 0.0f) {
                             D_8439013C = 0;
                             return 0;
                         }
