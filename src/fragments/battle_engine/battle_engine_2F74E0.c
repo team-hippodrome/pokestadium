@@ -903,7 +903,7 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* pokemon) {
             }
             BattleScene_ClearParticipantMessageBuffer(pokemon);
             BattleScene_BuildParticipantMessage(pokemon, 0);
-        } else if (controller->buttonPressed & BTN_CLEFT) {
+        } else if (controller->buttonPressed & BTN_L) {
             BattleScene_ClearParticipantMessageBuffer(pokemon);
             state->selectedCommandOption = 0;
             BattleAnim_PlayMenuBackSoundEffect();
@@ -980,7 +980,8 @@ void BattleScene_SelectMoveFromButtons(ActivePokemon* pokemon) {
         }
     }
 
-    if (BTN_IS_PRESSED(controller, BTN_CUP | BTN_CRIGHT | BTN_CDOWN | BTN_CLEFT)) {
+    if (BTN_IS_PRESSED(controller, BTN_CUP) || BTN_IS_PRESSED(controller, BTN_CRIGHT) || BTN_IS_PRESSED(controller, BTN_CDOWN) ||
+        BTN_IS_PRESSED(controller, BTN_CLEFT)) {
         BattleAnim_PlayMenuErrorSoundEffect();
     }
 }

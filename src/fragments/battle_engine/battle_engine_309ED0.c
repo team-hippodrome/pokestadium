@@ -280,11 +280,11 @@ void BattleScene_ClearInactiveOwnerAnimationFlags(void) {
     BattleMonRuntime* temp_v1 = &sActivePokemon[1]->state.runtime;
 
     if (temp_v0->unk_4F == 0) {
-        temp_v0->unk_4C &= ~0x20;
+        temp_v0->immobilizedReason &= ~0x20;
     }
 
     if (temp_v1->unk_4F == 0) {
-        temp_v1->unk_4C &= ~0x20;
+        temp_v1->immobilizedReason &= ~0x20;
     }
 }
 
@@ -489,8 +489,8 @@ void BattleScene_BeginBattlePhase(void) {
     }
 
     BattleScene_ClearInactiveOwnerAnimationFlags();
-    sp1C->selectedCommand = 0;
-    sp18->selectedCommand = 0;
+    sp1C->selectedCommandOption = 0;
+    sp18->selectedCommandOption = 0;
 
     if ((sp1C->unk_2D == 0x10) || (sp18->unk_2D == 0x10) || (sBattleScene.scene->unk_2E == 2)) {
         BattleScene_SetCameraSubstate(1, 0);

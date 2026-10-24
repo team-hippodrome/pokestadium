@@ -735,11 +735,11 @@ void BattleScene_TickHudTimers(void) {
         (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17)) {
         BattleHud_DrawBattleTimer(0x101, 0x64);
         if (D_84390134 == 0) {
-            if (sp1C->selectedCommand != 3) {
+            if (sp1C->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0x46, 0x4D);
             }
 
-            if (sp18->selectedCommand != 3) {
+            if (sp18->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0xE8, 0x96);
             }
         }

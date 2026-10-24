@@ -1780,7 +1780,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) 
     s32 var_v1;
 
     if (gSessionContext.mode != 0x10) {
-        if (arg1->selectedCommand == 3) {
+        if (arg1->selectedCommandOption == 3) {
             BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer,
                           1);
         } else {
@@ -1788,8 +1788,8 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) 
                           0);
         }
 
-        if ((arg1->selectedCommand != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
-            switch (arg1->selectedCommand) {
+        if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
+            switch (arg1->selectedCommandOption) {
                 case 2:
                     if (arg1->showingCommandOptions == 1) {
                         if (arg0->sessionTeams->tagTeamSize == 2) {
@@ -1839,7 +1839,7 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* a
     s32 sp20;
 
     if (gSessionContext.mode != 0x10) {
-        if (arg1->selectedCommand == 3) {
+        if (arg1->selectedCommandOption == 3) {
             BattleHud_DrawMonStatusBoxOpponent(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer,
                           1);
         } else {
@@ -1847,8 +1847,8 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* a
                           0);
         }
 
-        if ((arg1->selectedCommand != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
-            switch (arg1->selectedCommand) {
+        if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
+            switch (arg1->selectedCommandOption) {
                 case 2:
                     if (arg1->showingCommandOptions == 1) {
                         if (arg0->sessionTeams->tagTeamSize == 2) {

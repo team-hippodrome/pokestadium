@@ -109,7 +109,7 @@ void BattleScene_IntroRevealFirstMon(CameraNode* arg0) {
     sBattleScene.scene->unk_2C = 0;
 #if defined(VERSION_JP)
     Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21, D_84386D84_jp,
-                        sp28->pokemonPicked[sp2C->unk_18].unk_30);
+                        sp28->pokemonPicked[sp2C->actionChosen].unk_30);
 #else
     Text_SetStringToken(0x19, (u32)sp28->pokemonPicked[sp2C->actionChosen].unk_30);
     Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21);
@@ -152,7 +152,7 @@ void BattleScene_IntroRevealSecondMon(CameraNode* arg0) {
     sBattleScene.scene->unk_2C = 1;
 #if defined(VERSION_JP)
     Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21, D_84386D84_jp,
-                        sp28->pokemonPicked[sp2C->unk_18].unk_30);
+                        sp28->pokemonPicked[sp2C->actionChosen].unk_30);
 #else
     Text_SetStringToken(0x19, (u32)sp28->pokemonPicked[sp2C->actionChosen].unk_30);
     Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21);
