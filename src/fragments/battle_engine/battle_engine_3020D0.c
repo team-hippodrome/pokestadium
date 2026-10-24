@@ -690,7 +690,7 @@ void BattleBox_Update(s16 arg0, s16 arg1) {
 }
 
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
-    active_pokemon->captionState.unk_00 = 0;
+    active_pokemon->captionState.active = 0;
     active_pokemon->captionState.unk_04 = 0;
     active_pokemon->captionState.unk_48[0] = 0;
     active_pokemon->captionState.unk_08[0] = 0;
@@ -698,7 +698,7 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
 
 void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1) {
     gBattleMessageQueues->unk_000 = arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->controllerPort;
-    arg0->captionState.unk_00 = 1;
+    arg0->captionState.active = 1;
     Text_SetStringToken(0x19, arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex].unk_30);
     Text_GetString(arg0->captionState.unk_48, 0x40, sBattleMessagesTable, arg1);
 }
@@ -735,11 +735,11 @@ void BattleScene_TickHudTimers(void) {
         (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17)) {
         BattleHud_DrawBattleTimer(0x101, 0x64);
         if (D_84390134 == 0) {
-            if (sp1C->unk_10 != 3) {
+            if (sp1C->selectedCommand != 3) {
                 BattleHud_DrawParticipantTimer(0x46, 0x4D);
             }
 
-            if (sp18->unk_10 != 3) {
+            if (sp18->selectedCommand != 3) {
                 BattleHud_DrawParticipantTimer(0xE8, 0x96);
             }
         }

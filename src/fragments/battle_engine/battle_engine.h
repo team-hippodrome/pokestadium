@@ -31,13 +31,13 @@ typedef struct unk_D_84390010_168 {
 
 typedef struct ActivePokemonState {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 unk_04;
+    /* 0x04 */ u32 canPickMove;
     /* 0x08 */ s32 rosterIndex;
     /* 0x0C */ s32 selectedMoveIndex;
-    /* 0x10 */ u32 unk_10;
+    /* 0x10 */ u32 selectedCommand;
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ u32 unk_18;
-    /* 0x1C */ u8 unk_1C;
+    /* 0x1C */ u8 showingCommandOptions;
     /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
     /* 0x28 */ u16 unk_28;
@@ -80,7 +80,7 @@ typedef struct ThumbnailState {
 } ThumbnailState; // size = 0x19C
 
 typedef struct MonCaptionState {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 active;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s8 unk_08[4];
     /* 0x0C */ char unk0C[0x3C];

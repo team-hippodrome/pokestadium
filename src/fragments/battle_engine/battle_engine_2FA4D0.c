@@ -1780,7 +1780,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) 
     s32 var_v1;
 
     if (gSessionContext.mode != 0x10) {
-        if (arg1->unk_10 == 3) {
+        if (arg1->selectedCommand == 3) {
             BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer,
                           1);
         } else {
@@ -1788,10 +1788,10 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) 
                           0);
         }
 
-        if ((arg1->unk_10 != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
-            switch (arg1->unk_10) {
+        if ((arg1->selectedCommand != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
+            switch (arg1->selectedCommand) {
                 case 2:
-                    if (arg1->unk_1C == 1) {
+                    if (arg1->showingCommandOptions == 1) {
                         if (arg0->sessionTeams->tagTeamSize == 2) {
                             if (arg0->sessionTeams->teamMember[1]->controllerPort < arg0->sessionTeams->teamMember[0]->controllerPort) {
                                 var_v1 = 0;
@@ -1815,7 +1815,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) 
                     break;
 
                 case 1:
-                    if (arg1->unk_1C == 1) {
+                    if (arg1->showingCommandOptions == 1) {
                         BattleHud_DrawMoveSelectMenu(arg0, 0x60, 0xF, sp34->controllerPort);
                     } else {
                         BattleHud_DrawTwoOptionLabelBar(arg0, 0x60, 0xF, sp34->controllerPort);
@@ -1839,7 +1839,7 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* a
     s32 sp20;
 
     if (gSessionContext.mode != 0x10) {
-        if (arg1->unk_10 == 3) {
+        if (arg1->selectedCommand == 3) {
             BattleHud_DrawMonStatusBoxOpponent(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer,
                           1);
         } else {
@@ -1847,10 +1847,10 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* a
                           0);
         }
 
-        if ((arg1->unk_10 != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
-            switch (arg1->unk_10) {
+        if ((arg1->selectedCommand != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
+            switch (arg1->selectedCommand) {
                 case 2:
-                    if (arg1->unk_1C == 1) {
+                    if (arg1->showingCommandOptions == 1) {
                         if (arg0->sessionTeams->tagTeamSize == 2) {
                             if (arg0->sessionTeams->teamMember[1]->controllerPort < arg0->sessionTeams->teamMember[0]->controllerPort) {
                                 sp20 = 0;
@@ -1874,7 +1874,7 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* a
                     break;
 
                 case 1:
-                    if (arg1->unk_1C == 1) {
+                    if (arg1->showingCommandOptions == 1) {
                         BattleHud_DrawMoveSelectMenu(arg0, 0x19, 0xA6, sp24->controllerPort);
                     } else {
                         BattleHud_DrawTwoOptionLabelBar(arg0, 0x62, 0xCE, sp24->controllerPort);

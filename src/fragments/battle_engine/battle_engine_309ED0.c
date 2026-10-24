@@ -489,8 +489,8 @@ void BattleScene_BeginBattlePhase(void) {
     }
 
     BattleScene_ClearInactiveOwnerAnimationFlags();
-    sp1C->unk_10 = 0;
-    sp18->unk_10 = 0;
+    sp1C->selectedCommand = 0;
+    sp18->selectedCommand = 0;
 
     if ((sp1C->unk_2D == 0x10) || (sp18->unk_2D == 0x10) || (sBattleScene.scene->unk_2E == 2)) {
         BattleScene_SetCameraSubstate(1, 0);
