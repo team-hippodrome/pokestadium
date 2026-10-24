@@ -28,12 +28,12 @@ typedef struct unk_D_86B0E5D8 {
     /* 0x0A */ s16 unk_0A;
 } unk_D_86B0E5D8; // size = 0xC
 
-extern u32 D_86B0BD60[];
-extern unk_D_86B0C4C8* D_86B0C4C8[];
-extern unk_D_86B0C160 D_86B0C160[];
-extern unk_D_86B0C264 D_86B0C264[];
-extern u32 D_86B0CF9C[];
-extern u32 D_86B0DA9C[];
+extern u32 sTransitionGradientTex[];
+extern DioramaObjectDef* sDioramaObjectDefs[];
+extern DioramaAnimData sDioramaAnimData[];
+extern DioramaPresetData sDioramaPresetData[];
+extern u32 sDioramaLandStageLayout[];
+extern u32 sDioramaSeaStageLayout[];
 
 s32 Diorama_LogoRotateColorCallback(s32, GraphNode*);
 s32 Diorama_ScaleRotateCallbackA(s32, GraphNode*);
@@ -43,14 +43,14 @@ s32 Diorama_GroupStateCallback(s32, GraphNode*);
 static s16 D_86B0BBF0 = -0x3C6E;
 static s16 D_86B0BBF4 = 0x38E;
 
-static u32 D_86B0BBF8[] = {
+static u32 sCompletionGeoLayoutCommands[] = {
     0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x014000F0,  0x0000000F,    0x00000000,    0x00000000,
     0x05000000, 0x0D000000, 0x05000000, 0x1A050000, 0x08000000,  Diorama_GroupStateCallback, 0x00000000,    0x05000000,
     0x0F000002, 0x05000000, 0x06000000, 0x0F000002, 0x05000000,  0x06000000,    0x0F000002,    0x05000000,
     0x1F00FFFF, 0xC3920000, 0x00000000, 0xFC400000, 0x00640064,  0x00640000,    0x08000000,    Diorama_ScaleRotateCallbackA,
-    0x00000000, 0x05000000, 0x00000000, D_86B0CF9C, 0x06000000,  0x06000000,    0x0F000002,    0x05000000,
+    0x00000000, 0x05000000, 0x00000000, sDioramaLandStageLayout, 0x06000000,  0x06000000,    0x0F000002,    0x05000000,
     0x1F00FFFF, 0x00000000, 0x00000000, 0x0514F79A, 0x00640064,  0x00640000,    0x08000000,    Diorama_ScaleRotateCallbackB,
-    0x00000000, 0x05000000, 0x00000000, D_86B0DA9C, 0x06000000,  0x06000000,    0x0F000002,    0x05000000,
+    0x00000000, 0x05000000, 0x00000000, sDioramaSeaStageLayout, 0x06000000,  0x06000000,    0x0F000002,    0x05000000,
     0x06000000, 0x06000000, 0x14000000, 0xF8E40000, 0xFFC89BFF,  0x08000000,    Diorama_LogoRotateColorCallback, 0x00000000,
     0x16FFFFFF, 0x0F000003, 0x05000000, 0x0A000000, &D_800AC840, 0x06000000,    0x06000000,    0x06000000,
     0x06000000, 0x01000000,
@@ -145,7 +145,7 @@ void Diorama_PushModelPool(void) {
     main_pool_push_state('MONS');
 }
 
-void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1) {
+void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, DioramaObjectDef* arg1) {
     ModelRenderer_AttachDisplayObject(&arg0->unk_004);
 
     arg0->unk_000 = Model_LoadByArchiveIndex(arg1->unk_0C);
@@ -163,25 +163,25 @@ void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1) {
     arg0->unk_004.node.renderFlags &= ~0x40;
 }
 
-void Diorama_SetModelSlotPosition(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1) {
+void Diorama_SetModelSlotPosition(unk_D_86B0E5F0* arg0, DioramaObjectDef* arg1) {
     arg0->unk_004.position.x = arg1->unk_00.x;
     arg0->unk_004.position.y = arg1->unk_00.y;
     arg0->unk_004.position.z = arg1->unk_00.z;
 }
 
 void Diorama_SetGlowFromGroup(s32 arg0) {
-    D_86B0E5D8->unk_00 = D_86B0C264[arg0].unk_0C;
-    D_86B0E5D8->unk_02 = D_86B0C264[arg0].unk_0E;
-    D_86B0E5D8->unk_08 = D_86B0C264[arg0].unk_18;
-    D_86B0E5D8->unk_0A = D_86B0C264[arg0].unk_1A;
-    D_86B0E5D8->unk_05 = D_86B0C264[arg0].unk_10;
-    D_86B0E5D8->unk_06 = D_86B0C264[arg0].unk_12;
-    D_86B0E5D8->unk_07 = D_86B0C264[arg0].unk_14;
-    D_86B0E5D8->unk_04 = D_86B0C264[arg0].unk_16;
+    D_86B0E5D8->unk_00 = sDioramaPresetData[arg0].unk_0C;
+    D_86B0E5D8->unk_02 = sDioramaPresetData[arg0].unk_0E;
+    D_86B0E5D8->unk_08 = sDioramaPresetData[arg0].unk_18;
+    D_86B0E5D8->unk_0A = sDioramaPresetData[arg0].unk_1A;
+    D_86B0E5D8->unk_05 = sDioramaPresetData[arg0].unk_10;
+    D_86B0E5D8->unk_06 = sDioramaPresetData[arg0].unk_12;
+    D_86B0E5D8->unk_07 = sDioramaPresetData[arg0].unk_14;
+    D_86B0E5D8->unk_04 = sDioramaPresetData[arg0].unk_16;
 }
 
 void Diorama_LoadModelGroup(s32 arg0) {
-    unk_D_86B0C4C8* var_s0 = D_86B0C4C8[arg0];
+    DioramaObjectDef* var_s0 = sDioramaObjectDefs[arg0];
     unk_D_86B0E5F0* var_s1 = D_86B0E5F0;
 
     Diorama_ClearModelSlots();
@@ -200,7 +200,7 @@ void Diorama_LoadModelGroup(s32 arg0) {
 }
 
 void Diorama_SwitchModelGroup(s32 arg0) {
-    unk_D_86B0C4C8* sp2C = D_86B0C4C8[arg0];
+    DioramaObjectDef* sp2C = sDioramaObjectDefs[arg0];
     unk_D_86B0E5F0* var_s1 = D_86B0E5F0;
 
     Diorama_FreeModelSlots(D_86B0E5F0);
@@ -233,11 +233,11 @@ void Diorama_SetGroupCamera(s32 arg0) {
         D_86B0E5D4->unk_00->view.eyePosition.z = 177.41f;
         D_86B0E5D4->unk_00->perspective.verticalFieldOfView = 25.0f;
     } else {
-        D_86B0E5D4->unk_04.unk_00.x = D_86B0C264[arg0].unk_00.x;
-        D_86B0E5D4->unk_04.unk_00.y = D_86B0C264[arg0].unk_00.y;
-        D_86B0E5D4->unk_04.unk_00.z = D_86B0C264[arg0].unk_00.z;
+        D_86B0E5D4->unk_04.unk_00.x = sDioramaPresetData[arg0].unk_00.x;
+        D_86B0E5D4->unk_04.unk_00.y = sDioramaPresetData[arg0].unk_00.y;
+        D_86B0E5D4->unk_04.unk_00.z = sDioramaPresetData[arg0].unk_00.z;
 
-        Diorama_LoadCameraKeyframe(&D_86B0C160[arg0], D_86B0E5D4);
+        Diorama_LoadCameraKeyframe(&sDioramaAnimData[arg0], D_86B0E5D4);
         Diorama_SetCameraToKeyframeStart(&D_86B0E5D4->unk_04, D_86B0E5D4);
     }
 }
@@ -251,7 +251,7 @@ void Diorama_LoopIdleAnimations(void) {
     if ((D_86B0E5D4->unk_04.unk_4C != 5) && (D_86B0E5D4->unk_04.unk_4C != 6) && (D_86B0E5D4->unk_04.unk_4C != 7) &&
         (D_86B0E5D4->unk_04.unk_4C != 8)) {
         if (D_86B0E5D4->unk_04.unk_44 != 4) {
-            while (D_86B0C4C8[D_86B0E5D4->unk_04.unk_44][i].unk_0C != 0x98) {
+            while (sDioramaObjectDefs[D_86B0E5D4->unk_04.unk_44][i].unk_0C != 0x98) {
                 if (ModelAnim_IsAnimationDone(&D_86B0E5F0[i].unk_004) != 0) {
                     ModelAnim_SetFrame(&D_86B0E5F0[i].unk_004, 0);
                 }
@@ -269,13 +269,13 @@ void Diorama_DrawFadeOverlay(void) {
 
 void Diorama_DrawGroupTransitionOverlay(void) {
     if (D_86B0E5D4->unk_04.unk_44 == 2) {
-        Diorama_DrawFullscreenTexture(&D_86B0BD60, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 4, 0x80);
+        Diorama_DrawFullscreenTexture(&sTransitionGradientTex, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 4, 0x80);
     }
 }
 
 s32 Diorama_SlideModelsForward(s32 arg0) {
     unk_D_86B0E5F0* var_v0 = D_86B0E5F0;
-    unk_D_86B0C4C8* var_v1 = D_86B0C4C8[arg0];
+    DioramaObjectDef* var_v1 = sDioramaObjectDefs[arg0];
     s32 var_a1 = 1;
 
     while (var_v1->unk_0C != 0x98) {
@@ -304,7 +304,7 @@ void Diorama_FinishSequence(void) {
 }
 
 void Diorama_UpdateProximityHighlight(s32 arg0) {
-    unk_D_86B0C4C8* ptr1 = D_86B0C4C8[arg0];
+    DioramaObjectDef* ptr1 = sDioramaObjectDefs[arg0];
     unk_D_86B0E5F0* ptr2 = &D_86B0E5F0[0];
     s16 sp88[] = {
         // D_86B0BD20
@@ -527,7 +527,7 @@ void Diorama_InitScene(void) {
     MemoryBlock* sp1C;
 
     sp1C = MainPool_AllocState(main_pool_get_available(), 0);
-    D_86B0E5D0 = process_geo_layout(sp1C, &D_86B0BBF8);
+    D_86B0E5D0 = process_geo_layout(sp1C, &sCompletionGeoLayoutCommands);
 
     MainPool_FinalizeAllocation(sp1C);
     ModelRenderer_InitDisplayRoots();

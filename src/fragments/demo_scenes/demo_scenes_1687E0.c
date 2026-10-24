@@ -2,7 +2,7 @@
 #include "src/graphics_textures.h"
 #include "src/gfx_rect.h"
 
-static Gfx D_86B0DFD0[] = {
+static Gfx sGfxSetup_BrickWipe[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),
     gsSPClearGeometryMode(G_ZBUFFER | G_CULL_BACK | G_LIGHTING),
@@ -14,7 +14,7 @@ static Gfx D_86B0DFD0[] = {
     gsSPEndDisplayList(),
 };
 
-static Gfx D_86B0E018[] = {
+static Gfx sGfxRestore_BrickWipe[] = {
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF),
     gsDPSetTexturePersp(G_TP_PERSP),
@@ -22,7 +22,7 @@ static Gfx D_86B0E018[] = {
     gsSPEndDisplayList(),
 };
 
-unk_D_86B0C160 D_86B0E040[] = {
+DioramaAnimData sIntroCameraKeyframes[] = {
     {
         0,
         0,
@@ -269,7 +269,7 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
     s16 xl;
     s16 yl;
 
-    gSPDisplayList(gfx++, D_86B0DFD0);
+    gSPDisplayList(gfx++, sGfxSetup_BrickWipe);
 
     gDPLoadTextureBlock_4b(gfx++, D_3000000, G_IM_FMT_I, 12, 48, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -295,7 +295,7 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
                                 -(1 << 6), 1 << 10);
     }
 
-    gSPDisplayList(gfx++, D_86B0E018);
+    gSPDisplayList(gfx++, sGfxRestore_BrickWipe);
 
     return gfx;
 }
@@ -343,7 +343,7 @@ void UI_DrawTiledTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, UNUSE
     UI_DrawClippedTextureRect(arg0, arg1, arg2, arg3, 0, 0, 0x400, 0x400);
 }
 
-void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, unk_D_86B0DAE0_000* arg5) {
+void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, SpriteColorParams* arg5) {
     gDPPipeSync(gDisplayListHead++);
 
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);

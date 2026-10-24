@@ -39,7 +39,7 @@ typedef struct unk_D_86B0E5D4 {
     /* 0x04 */ unk_D_86B0E5D4_04 unk_04;
 } unk_D_86B0E5D4; // size = 0x7C
 
-typedef struct unk_D_86B0C160 {
+typedef struct DioramaAnimData {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
@@ -57,7 +57,7 @@ typedef struct unk_D_86B0C160 {
     /* 0x28 */ f32 unk_28;
     /* 0x2C */ f32 unk_2C;
     /* 0x30 */ f32 unk_30;
-} unk_D_86B0C160; // size = 0x34
+} DioramaAnimData; // size = 0x34
 
 typedef struct unk_D_86B0E5F0 {
     /* 0x000 */ unk_D_86002F30* unk_000;
@@ -65,15 +65,15 @@ typedef struct unk_D_86B0E5F0 {
     /* 0x16C */ s32 unk_16C;
 } unk_D_86B0E5F0; // size = 0x170
 
-typedef struct unk_D_86B0C4C8 {
+typedef struct DioramaObjectDef {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ u8 unk_0C;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ u16 unk_10;
     /* 0x12 */ char unk12[0x2];
-} unk_D_86B0C4C8; // size = 0x14
+} DioramaObjectDef; // size = 0x14
 
-typedef struct unk_D_86B0DAE0_000 {
+typedef struct SpriteColorParams {
     /* 0x00 */ u16 unk_00;
     /* 0x02 */ u16 unk_02;
     /* 0x04 */ u16 unk_04;
@@ -86,12 +86,12 @@ typedef struct unk_D_86B0DAE0_000 {
     /* 0x12 */ u16 unk_12;
     /* 0x14 */ u16 unk_14;
     /* 0x16 */ u16 unk_16;
-} unk_D_86B0DAE0_000; // size = 0x18
+} SpriteColorParams; // size = 0x18
 
-typedef struct unk_D_86B0DAE0 {
-    /* 0x00 */ unk_D_86B0DAE0_000 unk_00;
-    /* 0x18 */ unk_D_86B0DAE0_000 unk_18;
-} unk_D_86B0DAE0; // size = 0x30
+typedef struct GfxTileParams {
+    /* 0x00 */ SpriteColorParams unk_00;
+    /* 0x18 */ SpriteColorParams unk_18;
+} GfxTileParams; // size = 0x30
 
 typedef struct unk_D_86B0FA78 {
     /* 0x000 */ unk_D_86002F30* unk_000;
@@ -119,7 +119,7 @@ typedef struct unk_D_86B0FA50 {
     /* 0xA4 */ f32 unk_A4;
     /* 0xA8 */ f32 unk_A8;
     /* 0xAC */ f32 unk_AC;
-    /* 0xB0 */ unk_D_86B0DAE0_000 unk_B0;
+    /* 0xB0 */ SpriteColorParams unk_B0;
 } unk_D_86B0FA50; // size = 0xC8
 
 typedef struct unk_D_86B0FA7C {
@@ -146,7 +146,7 @@ typedef struct unk_D_86B0FA7C {
     /* 0x48 */ char unk48[0x34];
 } unk_D_86B0FA7C; // size = 0x7C
 
-typedef struct unk_D_86B0C264 {
+typedef struct DioramaPresetData {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E;
@@ -156,9 +156,9 @@ typedef struct unk_D_86B0C264 {
     /* 0x14 */ u16 unk_16;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
-} unk_D_86B0C264; // size = 0x1C
+} DioramaPresetData; // size = 0x1C
 
-extern unk_D_86B0C160 D_86B0E040[];
+extern DioramaAnimData sIntroCameraKeyframes[];
 extern s32 D_86B0E5DC;
 extern char** D_86B0E5E0;
 extern unk_D_86B0FA78* D_86B0FA78;
@@ -174,8 +174,8 @@ s32 Diorama_GroupStateCallback(s32 arg0, GraphNode* arg1);
 void Diorama_ClearModelSlots(void);
 void Diorama_FreeModelSlots(unk_D_86B0E5F0* arg0);
 void Diorama_PushModelPool(void);
-void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1);
-void Diorama_SetModelSlotPosition(unk_D_86B0E5F0* arg0, unk_D_86B0C4C8* arg1);
+void Diorama_InitModelSlot(unk_D_86B0E5F0* arg0, DioramaObjectDef* arg1);
+void Diorama_SetModelSlotPosition(unk_D_86B0E5F0* arg0, DioramaObjectDef* arg1);
 void Diorama_SetGlowFromGroup(s32 arg0);
 void Diorama_LoadModelGroup(s32 arg0);
 void Diorama_SwitchModelGroup(s32 arg0);
@@ -208,7 +208,7 @@ void DioramaCamKeyframe_SetDistance(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2)
 void DioramaCamKeyframe_SetAtAngles(unk_D_86B0E5D4_04* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void DioramaCamKeyframe_SetAtDistance(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2);
 void DioramaCamKeyframe_SetTransitionSpeed(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2);
-void Diorama_LoadCameraKeyframe(unk_D_86B0C160* arg0, unk_D_86B0E5D4* arg1);
+void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1);
 void Diorama_SetCameraToKeyframeStart(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1);
 s32 Diorama_UpdateCameraKeyframe(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1);
 
@@ -255,7 +255,7 @@ void Completion_FadeOutAndSave(void);
 void Completion_InitScene(void);
 s32 Stage_ShowCompletionScene(void);
 
-void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 width, u8 height, u8 uls, u8 ult, u8 lrs, u8 lrt, u8 argB, u8 argC, unk_D_86B0DAE0* argD, s32 argE);
+void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 width, u8 height, u8 uls, u8 ult, u8 lrs, u8 lrt, u8 argB, u8 argC, GfxTileParams* argD, s32 argE);
 void UI_DrawAlphaQuad(s32, s32, s32, s32, s32);
 
 s32 Intro_LightAngleCallbackA(s32 arg0, GraphNode* arg1);
@@ -304,7 +304,7 @@ void IntroCamKeyframe_SetDistance(f32 arg0, f32 arg1);
 void IntroCamKeyframe_SetAtAngles(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
 void IntroCamKeyframe_SetAtDistance(f32 arg0, f32 arg1);
 void IntroCamKeyframe_SetTransitionSpeed(f32 arg0, f32 arg1);
-void Intro_LoadCameraKeyframe(unk_D_86B0C160* arg0, CameraNode* arg1);
+void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1);
 s32 Intro_UpdateCameraKeyframe(CameraNode* arg0);
 
 void WipeTransition_Start(s32 arg0, s32 arg1);
@@ -314,7 +314,7 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1);
 void WipeTransition_Draw(void);
 void UI_DrawClippedTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7);
 void UI_DrawTiledTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, UNUSED s32 arg5);
-void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, unk_D_86B0DAE0_000* arg5);
+void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, SpriteColorParams* arg5);
 void UI_DrawTextureRgba16(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 
 void MewtwoIntro_DrawOverlay(void);
@@ -329,7 +329,7 @@ s32 Stage_ShowMewtwoIntro(void);
 
 void FirstClearBonus_InitCamera(void);
 void FirstClearBonus_InitState(void);
-void func_86B0A81C(void);
+void FirstClearBonus_EmptyFunc(void);
 void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7);
 void FirstClearBonus_ShowDialogBox(void);
 void FirstClearBonus_HideDialogBox(void);
@@ -338,7 +338,7 @@ void FirstClearBonus_DrawDialogBox(void);
 void FirstClearBonus_DrawDialogText(void);
 void FirstClearBonus_UpdateDialogSequence(void);
 void FirstClearBonus_ReadControllerInput(void);
-void func_86B0B4C8(void);
+void FirstClearBonus_NoopStub2(void);
 void FirstClearBonus_DrawBackgroundTiles(u8* arg0);
 void FirstClearBonus_RenderFrame(void);
 s32 FirstClearBonus_UpdateScene(void);

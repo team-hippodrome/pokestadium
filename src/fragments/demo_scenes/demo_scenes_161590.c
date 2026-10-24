@@ -84,14 +84,14 @@ void Diorama_DrawFullscreenTexture(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
 // Diorama_DrawFullscreenTexture (ROM 0x179F70-0x17A6C0).
 #if !defined(VERSION_JP)
 void Diorama_DrawEndCaption(void) {
-    static s32 D_86B0BD50 = 0;
+    static s32 sDioramaCaptionYOffset = 0;
 
     s32 sp24;
     s16 temp_s0;
 
     if (!(Cont_GetControllerBits() & 1)) {
         sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, D_86B0E5E0, 0));
-        temp_s0 = 0x50 - D_86B0BD50;
+        temp_s0 = 0x50 - sDioramaCaptionYOffset;
         if (D_86B0E5DC != 1) {
             gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
 
@@ -108,9 +108,9 @@ void Diorama_DrawEndCaption(void) {
 
             gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
 
-            D_86B0BD50++;
-            if (D_86B0BD50 >= (sp24 + 0x50)) {
-                D_86B0BD50 = 0x32;
+            sDioramaCaptionYOffset++;
+            if (sDioramaCaptionYOffset >= (sp24 + 0x50)) {
+                sDioramaCaptionYOffset = 0x32;
             }
         }
     }

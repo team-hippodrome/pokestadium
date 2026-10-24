@@ -16,7 +16,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-static u32 D_86B0E250[] = {
+static u32 sStageGeoLayoutCommands[] = {
     0x0C00FFFF, 0x05000000, 0x0B00001E,  0x00000000, 0x014000F0, 0x00000032, 0x00000000, 0x00000118,
     0x05000000, 0x0D000000, 0x05000000,  0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003,
     0x05000000, 0x0A000000, &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
@@ -121,7 +121,7 @@ void MewtwoIntro_RunLoop(void) {
 void MewtwoIntro_InitScene(void) {
     MemoryBlock* sp1C = MainPool_AllocState(main_pool_get_available(), 0);
 
-    D_86B106B4 = process_geo_layout(sp1C, &D_86B0E250);
+    D_86B106B4 = process_geo_layout(sp1C, &sStageGeoLayoutCommands);
 
     MainPool_FinalizeAllocation(sp1C);
     ModelRenderer_InitDisplayRoots();

@@ -4,7 +4,7 @@
 #include "src/gfx_rect.h"
 
 void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 width, u8 height, u8 uls, u8 ult, u8 lrs,
-                   u8 lrt, u8 argB, u8 argC, unk_D_86B0DAE0* argD, s32 argE) {
+                   u8 lrt, u8 argB, u8 argC, GfxTileParams* argD, s32 argE) {
     DepthBuffer* temp_s1 = GfxImage_GetCurrent();
     Vtx* temp_s6 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
     Mtx* spD4 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
