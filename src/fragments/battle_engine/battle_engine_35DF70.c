@@ -176,8 +176,8 @@ void Battle_Effect_DrainHP(void) {
         sBattleDamage = 1;
     }
 
-    if (sBattleUser->unk_28 < sBattleUser->unk_0C + sBattleDamage) {
-        sBattleUser->unk_0C = sBattleUser->unk_28;
+    if (sBattleUser->hp < sBattleUser->unk_0C + sBattleDamage) {
+        sBattleUser->unk_0C = sBattleUser->hp;
     } else {
         sBattleUser->unk_0C += sBattleDamage;
     }
@@ -836,7 +836,7 @@ void Battle_Effect_Substitute(void) {
         return;
     }
 
-    temp_v1 = sBattleUser->unk_28 >> 2;
+    temp_v1 = sBattleUser->hp >> 2;
     if (temp_v1 >= sBattleUser->unk_0C) {
         Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x29);
         return;
@@ -1001,7 +1001,7 @@ void Battle_Effect_Heal(void) {
     temp_a2 = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
 
     sBattleScene.scene->unk_48 = 0x15;
-    if (sBattleUser->unk_0C != sBattleUser->unk_28) {
+    if (sBattleUser->unk_0C != sBattleUser->hp) {
         if (sBattleUser->moveCache.lastMove == REST) {
             temp_v0 = sBattleUser->unk_15;
 
@@ -1020,13 +1020,13 @@ void Battle_Effect_Heal(void) {
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
                 Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x34);
             }
-            sBattleUser->unk_0C += sBattleUser->unk_28;
+            sBattleUser->unk_0C += sBattleUser->hp;
         } else {
-            sBattleUser->unk_0C += sBattleUser->unk_28 / 2;
+            sBattleUser->unk_0C += sBattleUser->hp / 2;
         }
 
-        if (sBattleUser->unk_28 < sBattleUser->unk_0C) {
-            sBattleUser->unk_0C = sBattleUser->unk_28;
+        if (sBattleUser->hp < sBattleUser->unk_0C) {
+            sBattleUser->unk_0C = sBattleUser->hp;
         }
 
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
@@ -1086,7 +1086,7 @@ void Battle_Effect_Transform(void) {
             if (sBattleTarget->moves[i] == 0) {
                 break;
             }
-            sBattleUser->unk_32[i] = 5;
+            sBattleUser->moveUsability[i] = 5;
         }
 
         sBattleUser->unk_38 = sBattleTarget->unk_38;

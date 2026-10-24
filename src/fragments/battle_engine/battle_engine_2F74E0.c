@@ -3,6 +3,7 @@
 #include "src/3D140.h"
 #include "src/audio_sfx.h"
 #include "src/audio_loop_point.h"
+#include "controller.h"
 
 static f32 D_84390120;
 f32 sOrderTimer;
@@ -20,23 +21,27 @@ static Controller D_84390150;
 s32 D_84390174;
 unk_D_84390178 D_84390178;
 
-static u8 D_84385750[] = {
+static u8 sPowersOfTwo[] = {
     0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80,
 };
 
-void BattleScene_InitializePresentationTimers(void) {
+void BattleScene_InitializeBattleTimers(void) {
     sInitialOrderTimer = gSessionContext.orderLimitSeconds * 30;
     sInitalBattleTimer = gSessionContext.battleLimitMinutes * 1800;
     sBattleTimer = gSessionContext.battleLimitMinutes * 1800;
 }
 
-void BattleScene_QuantizePresentationTimer(void) {
+void BattleScene_QuantizeBattleTimer(void) {
     s32 tmp = (s32)(sBattleTimer / 30.0f) * 30;
 
     sBattleTimer = tmp;
 }
 
-s32 BattleScene_TickPresentationTimer(void) {
+/*
+    Battle timer for event battle (Mode where two plays fight with their transfer pak party pokemon)
+    Of note, this keeps ticking even as move animations happen
+*/
+s32 BattleScene_TickBattleTimer(void) {
     if (sBattleTimer == 0.0f) {
         return 1;
     }
@@ -228,71 +233,71 @@ s32 BattleScene_ApplyForcedActionDelay(ActivePokemon* arg0) {
 }
 
 void BattleScene_SyncActiveHpToPartyState(void) {
-    BattleMonRuntime* temp_a2;
-    BattleMonRuntime* temp_a3;
-    ActivePokemonState* ptr1;
-    ActivePokemonState* ptr2;
-    BattleMon* ptr3;
-    BattleMon* ptr4;
+    BattleMonRuntime* runtime1;
+    BattleMonRuntime* runtime2;
+    ActivePokemonState* state1;
+    ActivePokemonState* state2;
+    BattleMon* pokemon1;
+    BattleMon* pokemon2;
 
-    ptr1 = &sActivePokemon[0]->state;
-    ptr2 = &sActivePokemon[1]->state;
-    temp_a2 = &sActivePokemon[0]->state.runtime;
-    temp_a3 = &sActivePokemon[1]->state.runtime;
+    state1 = &sActivePokemon[0]->state;
+    state2 = &sActivePokemon[1]->state;
+    runtime1 = &sActivePokemon[0]->state.runtime;
+    runtime2 = &sActivePokemon[1]->state.runtime;
 
-    ptr3 = &sActivePokemon[0]->teamRoster->pokemonPicked[ptr1->rosterIndex];
-    ptr4 = &sActivePokemon[1]->teamRoster->pokemonPicked[ptr2->rosterIndex];
+    pokemon1 = &sActivePokemon[0]->teamRoster->pokemonPicked[state1->rosterIndex];
+    pokemon2 = &sActivePokemon[1]->teamRoster->pokemonPicked[state2->rosterIndex];
 
     if (D_84390288 != 0) {
-        D_843900A8[0] = temp_a2->unk_0C = temp_a2->unk_28;
-        D_843900A8[1] = temp_a3->unk_0C = temp_a3->unk_28;
+        D_843900A8[0] = runtime1->unk_0C = runtime1->hp;
+        D_843900A8[1] = runtime2->unk_0C = runtime2->hp;
 
-        ptr3->hp = temp_a2->unk_28;
-        ptr4->hp = temp_a3->unk_28;
+        pokemon1->hp = runtime1->hp;
+        pokemon2->hp = runtime2->hp;
     }
 }
 
-s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* arg0) {
+s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
     s32 i;
     s32 var_v1;
-    ActivePokemonState* temp_v1;
-    BattleMonRuntime* temp_v0;
+    ActivePokemonState* state;
+    BattleMonRuntime* runtime;
 
-    temp_v1 = &arg0->state;
-    temp_v0 = &arg0->state.runtime;
+    state = &pokemon->state;
+    runtime = &pokemon->state.runtime;
     var_v1 = 0;
 
-    if (arg0->state.runtime.unk_52 != 0) {
+    if (pokemon->state.runtime.unk_52 != 0) {
         for (i = 0; i < 4; i++) {
-            if (((temp_v0->unk_52 >> 4) != i) && (temp_v0->moves[i] != 0)) {
-                var_v1 |= temp_v0->unk_32[i] & 0x3F;
+            if (((runtime->unk_52 >> 4) != i) && (runtime->moves[i] != 0)) {
+                var_v1 |= runtime->moveUsability[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
-            if (temp_v0->moves[i] != 0) {
-                var_v1 |= temp_v0->unk_32[i] & 0x3F;
+            if (runtime->moves[i] != 0) {
+                var_v1 |= runtime->moveUsability[i] & 0x3F;
             }
         }
     }
 
     if (var_v1 == 0) {
-        temp_v1->unk_1E = 0;
-        temp_v1->unk_10 = 3;
-        temp_v1->unk_14 = 4;
+        state->unk_1E = 0;
+        state->unk_10 = 3;
+        state->unk_14 = 4;
         return 1;
     }
     return 0;
 }
 
-s32 BattleScene_IsMoveUnavailable(ActivePokemon* arg0, s32 arg1) {
-    BattleMonRuntime* ptr = &arg0->state.runtime;
+s32 BattleScene_IsMoveUnavailable(ActivePokemon* pokemon, s32 arg1) {
+    BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (!(ptr->unk_32[arg1] & 0x3F)) {
+    if (!(runtime->moveUsability[arg1] & 0x3F)) {
         return 1;
     }
 
-    if ((ptr->unk_52 & 0xF) && (arg1 == (ptr->unk_52 >> 4))) {
+    if ((runtime->unk_52 & 0xF) && (arg1 == (runtime->unk_52 >> 4))) {
         return 1;
     }
 
@@ -334,11 +339,11 @@ void BattleScene_AutoSelectReplacementMon(ActivePokemon* arg0) {
     BattleScene_AutoSelectAvailableMove(arg0);
 }
 
-void BattleScene_SelectActiveController(ActivePokemon* arg0) {
-    ActivePokemonState* ptr = &arg0->state;
+void BattleScene_SelectActiveController(ActivePokemon* pokemon) {
+    ActivePokemonState* state = &pokemon->state;
 
-    ptr->ownerTeamMemberIndex = ptr->teamMemberIndex;
-    ptr->controller = &gControllers[arg0->sessionTeams->teamMember[ptr->ownerTeamMemberIndex]->controllerPort];
+    state->ownerTeamMemberIndex = state->teamMemberIndex;
+    state->controller = &gControllers[pokemon->sessionTeams->teamMember[state->ownerTeamMemberIndex]->controllerPort];
 }
 
 void BattleScene_HandleActionSelectionCancel(s32 arg0) {
@@ -351,7 +356,7 @@ void BattleScene_HandleActionSelectionCancel(s32 arg0) {
     sp28 = &sActivePokemon[arg0 == 0]->state;
     cont = sp2C->controller;
 
-    if ((sp2C->unk_10 != 3) || !(cont->buttonPressed & 0x20)) {
+    if ((sp2C->unk_10 != 3) || !(cont->buttonPressed & BTN_L)) {
         return;
     }
 
@@ -373,7 +378,7 @@ void BattleScene_HandleActionSelectionCancel(s32 arg0) {
 }
 
 void Battle_InitializeActiveRuntimeState(void) {
-    BattleScene_InitializePresentationTimers();
+    BattleScene_InitializeBattleTimers();
     Battle_InitPokemonRuntimeState(sActivePokemon[0]);
     Battle_InitPokemonRuntimeState(sActivePokemon[1]);
 
@@ -392,13 +397,13 @@ s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* arg0) {
     if (temp_v0->unk_52 != 0) {
         for (i = 0; i < 4; i++) {
             if (((temp_v0->unk_52 >> 4) != i) && (temp_v0->moves[i] != 0)) {
-                var_v1 |= temp_v0->unk_32[i] & 0x3F;
+                var_v1 |= temp_v0->moveUsability[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (temp_v0->moves[i] != 0) {
-                var_v1 |= temp_v0->unk_32[i] & 0x3F;
+                var_v1 |= temp_v0->moveUsability[i] & 0x3F;
             }
         }
     }
@@ -872,13 +877,13 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* arg0) {
         temp_a1 = temp_a0->unk_52 >> 4;
         for (i = 0; i < 4; i++) {
             if ((temp_a1 != i) && (temp_a0->moves[i] != 0)) {
-                var_v1 |= temp_a0->unk_32[i] & 0x3F;
+                var_v1 |= temp_a0->moveUsability[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (temp_a0->moves[i] != 0) {
-                var_v1 |= temp_a0->unk_32[i] & 0x3F;
+                var_v1 |= temp_a0->moveUsability[i] & 0x3F;
             }
         }
     }
@@ -910,7 +915,7 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* arg0) {
     ActivePokemonState* sp24 = &arg0->state;
     BattleMonRuntime* ptr = &arg0->state.runtime;
 
-    if (!(ptr->unk_32[sp24->unk_14] & 0x3F)) {
+    if (!(ptr->moveUsability[sp24->unk_14] & 0x3F)) {
         BattleAnim_PlaySoundEffect8();
         BattleScene_ClearParticipantMessageBuffer(arg0);
         BattleScene_BuildParticipantMessage(arg0, 1);
@@ -1342,7 +1347,7 @@ void BattleScene_UpdateActionSelectPhase(void) {
         }
 
         BattleScene_UpdateActionCollection();
-        BattleScene_TickPresentationTimer();
+        BattleScene_TickBattleTimer();
         BattleScene_TickActionSelectionTimers();
     }
 }

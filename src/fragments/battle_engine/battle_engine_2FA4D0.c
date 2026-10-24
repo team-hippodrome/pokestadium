@@ -1013,7 +1013,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 a
             if (sp60[i] >= 8) {
                 sp60[i] = 7;
             }
-            sp60[i] = gMoveData[temp_s0->moves[i] - 1].unk_05 + (((temp_s0->unk_32[i] & 0xC0) >> 6) * sp60[i]);
+            sp60[i] = gMoveData[temp_s0->moves[i] - 1].unk_05 + (((temp_s0->moveUsability[i] & 0xC0) >> 6) * sp60[i]);
         } else {
             sp60[i] = gMoveData[sp58->unk_09[i] - 1].unk_05 / 5;
             if (sp60[i] >= 8) {
@@ -1025,19 +1025,19 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 a
 
     if (temp_s0->unk_4E & 8) {
         if ((temp_s0->moves[0] != 0) && (temp_s0->moves[0] < 0xA6)) {
-            sp64[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, temp_s0->unk_32[0], sp60[0]);
+            sp64[0] = BattleHud_DrawMovePpTextRTL(arg1 + 0x52, arg2 + 0xF, temp_s0->moveUsability[0], sp60[0]);
         }
 
         if ((temp_s0->moves[1] != 0) && (temp_s0->moves[1] < 0xA6)) {
-            sp64[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, temp_s0->unk_32[1], sp60[1]);
+            sp64[1] = BattleHud_DrawMovePpTextLTR(arg1 + 0x7C, arg2 + 0x1C, temp_s0->moveUsability[1], sp60[1]);
         }
 
         if ((temp_s0->moves[2] != 0) && (temp_s0->moves[2] < 0xA6)) {
-            sp64[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, temp_s0->unk_32[2], sp60[2]);
+            sp64[2] = BattleHud_DrawMovePpTextLTR(arg1 + 0x70, arg2 + 0x30, temp_s0->moveUsability[2], sp60[2]);
         }
 
         if ((temp_s0->moves[3] != 0) && (temp_s0->moves[3] < 0xA6)) {
-            sp64[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, temp_s0->unk_32[3], sp60[3]);
+            sp64[3] = BattleHud_DrawMovePpTextRTL(arg1 + 0x44, arg2 + 0x23, temp_s0->moveUsability[3], sp60[3]);
         }
     } else {
         if ((sp58->unk_09[0] != 0) && (sp58->unk_09[0] < 0xA6)) {

@@ -306,7 +306,7 @@ s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* arg0) {
         return 1;
     }
 
-    temp_fs0 = temp_s1->unk_28 / 90.0f;
+    temp_fs0 = temp_s1->hp / 90.0f;
     sp30 = BattleScene_GetParticipantSideIndex(arg0);
     D_843900A8[sp30] = Math_StepToF(D_843900A8[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
     temp_s2->hp = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)];

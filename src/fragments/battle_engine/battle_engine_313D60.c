@@ -128,7 +128,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->unk_2A]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
-                    BattleScene_QuantizePresentationTimer();
+                    BattleScene_QuantizeBattleTimer();
                 }
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[0]);
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[1]);
@@ -212,7 +212,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
             if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->unk_2A]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
-                    BattleScene_QuantizePresentationTimer();
+                    BattleScene_QuantizeBattleTimer();
                 }
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[0]);
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[1]);
@@ -700,7 +700,7 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
 
         case 2:
-            BattleScene_TickPresentationTimer();
+            BattleScene_TickBattleTimer();
             BattleScene_UpdatePhase(arg0);
             break;
 

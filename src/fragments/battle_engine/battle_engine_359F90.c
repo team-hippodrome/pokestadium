@@ -204,7 +204,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
     }
 
     temp_v1->unk_28 = temp_a2_2->unk_0C;
-    sp18 = (temp_a2_2->unk_0C * 0x19) / (temp_a2_2->unk_28 >> 2);
+    sp18 = (temp_a2_2->unk_0C * 0x19) / (temp_a2_2->hp >> 2);
 
     Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->unk_18].unk_30);
 
@@ -249,9 +249,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->unk_0C) * 0x19) / (temp_a2->unk_28 >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->unk_0C) * 0x19) / (temp_a2->hp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->unk_0C) * 0x19) / (temp_a1->unk_28 >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->unk_0C) * 0x19) / (temp_a1->hp >> 2);
     }
 
     if (var_v0 == 0) {
@@ -587,7 +587,7 @@ void Battle_DecrementPP(s32 arg0) {
     temp_a2 = &sActivePokemon[arg0]->teamRoster->pokemonPicked[temp_a1->rosterIndex];
 
     if ((temp_v0->usedMove != 0xA5) && !(temp_v0->unk_4C & 7) && !(temp_v0->unk_4D & 0x40)) {
-        temp_v0->unk_32[temp_a1->unk_0C]--;
+        temp_v0->moveUsability[temp_a1->unk_0C]--;
         if (!(temp_v0->unk_4E & 8)) {
             temp_a2->unk_20[temp_a1->unk_0C] -= 1;
         }
@@ -738,31 +738,31 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->moves[3] = sp34->unk_09[3];
     sp24->unk_24 = sp34->unk_1E;
 
-    sp24->unk_32[0] = sp34->unk_20[0];
-    sp24->unk_32[1] = sp34->unk_20[1];
-    sp24->unk_32[2] = sp34->unk_20[2];
-    sp24->unk_32[3] = sp34->unk_20[3];
+    sp24->moveUsability[0] = sp34->unk_20[0];
+    sp24->moveUsability[1] = sp34->unk_20[1];
+    sp24->moveUsability[2] = sp34->unk_20[2];
+    sp24->moveUsability[3] = sp34->unk_20[3];
 
     if ((sp34->unk_09[0] == 0) || (sp34->unk_09[0] >= 0xA6)) {
-        sp24->unk_32[0] = 0;
+        sp24->moveUsability[0] = 0;
     }
 
     if ((sp34->unk_09[1] == 0) || (sp34->unk_09[1] >= 0xA6)) {
-        sp24->unk_32[1] = 0;
+        sp24->moveUsability[1] = 0;
     }
 
     if ((sp34->unk_09[2] == 0) || (sp34->unk_09[2] >= 0xA6)) {
-        sp24->unk_32[2] = 0;
+        sp24->moveUsability[2] = 0;
     }
 
     if ((sp34->unk_09[3] == 0) || (sp34->unk_09[3] >= 0xA6)) {
-        sp24->unk_32[3] = 0;
+        sp24->moveUsability[3] = 0;
     }
 
     for (i = 0; i < 4; i++) {
         if (sp34->unk_09[i] == 0) {
             for (j = i; j < 4; j++) {
-                sp24->unk_32[j] = 0;
+                sp24->moveUsability[j] = 0;
                 sp24->moves[j] = sp34->unk_09[j] = 0;
             }
             break;
@@ -770,7 +770,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     }
 
     sp24->unk_26 = sp34->unk_24;
-    sp24->unk_28 = sp34->maxHp;
+    sp24->hp = sp34->maxHp;
     sp24->unk_2A = sp34->unk_28;
     sp24->unk_2C = sp34->unk_2A;
     sp24->speed = sp34->unk_2C;
@@ -968,7 +968,7 @@ void Battle_IncrementMoveUsage(void) {
         &sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->pokemonPicked[sActivePokemon[sBattleScene.scene->unk_2C]->state.rosterIndex];
     temp_a1 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
 
-    sBattleUser->unk_32[temp_a1->unk_0C]++;
+    sBattleUser->moveUsability[temp_a1->unk_0C]++;
     if (!(ptr->unk_4E & 8)) {
         temp_a0->unk_20[temp_a1->unk_0C]++;
     }
@@ -997,7 +997,7 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         sBattleUser->unk_0E = sBattleUser->unk_0C;
     }
 
-    var_a0 = (sBattleUser->unk_28 >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->hp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1027,7 +1027,7 @@ void Battle_ApplyLeechSeedDamage(void) {
         }
     }
 
-    var_a0 = (sBattleUser->unk_28 >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->hp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1047,8 +1047,8 @@ void Battle_ApplyLeechSeedDamage(void) {
     sBattleTarget->unk_10 = sBattleTarget->unk_0C;
     sBattleTarget->unk_10 += var_a0;
 
-    if (sBattleTarget->unk_28 < sBattleTarget->unk_10) {
-        sBattleTarget->unk_10 = sBattleTarget->unk_28;
+    if (sBattleTarget->hp < sBattleTarget->unk_10) {
+        sBattleTarget->unk_10 = sBattleTarget->hp;
     }
 }
 

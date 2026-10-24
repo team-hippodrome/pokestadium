@@ -1370,9 +1370,9 @@ void Battle_ComputeSplineWeightsVariantE(f32* arg0, f32 arg1);
 
 
 //@src/fragments/battle_engine/battle_engine_2F74E0.c
-void BattleScene_InitializePresentationTimers(void);
-void BattleScene_QuantizePresentationTimer(void);
-s32 BattleScene_TickPresentationTimer(void);
+void BattleScene_InitializeBattleTimers(void);
+void BattleScene_QuantizeBattleTimer(void);
+s32 BattleScene_TickBattleTimer(void);
 s32 BattleScene_IsPresentationCountdownComplete(void);
 s32 Battle_ClassifyHpTier(s32 arg0, s32 arg1);
 s32 BattleScene_DetermineWinner(void);
