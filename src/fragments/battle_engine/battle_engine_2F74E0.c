@@ -21,7 +21,7 @@ u8 D_84390134;
 static s32 sActionChosen;
 static s32 sFallbackToAiChoice;
 static s32 pad_D_84390140;
-static u16 D_84390144;
+static u16 sBattleDamageFake;
 static Controller* sTeammate1Controller;
 static Controller* sTeammate2Controller;
 static Controller sAttractScreenController;
@@ -1191,143 +1191,143 @@ void BattleScene_CheckForcedActionCondition(ActivePokemon* pokemon1, ActivePokem
 }
 
 void BattleScene_TickAttractModeInput(void) {
-    ActivePokemonState* sp24 = &sActivePokemon[0]->state;
-    ActivePokemonState* sp20 = &sActivePokemon[1]->state;
-    BattleMonRuntime* sp1C = &sActivePokemon[0]->state.runtime;
-    BattleMonRuntime* sp18 = &sActivePokemon[1]->state.runtime;
+    ActivePokemonState* pokemon1 = &sActivePokemon[0]->state;
+    ActivePokemonState* pokemon2 = &sActivePokemon[1]->state;
+    BattleMonRuntime* runtime1 = &sActivePokemon[0]->state.runtime;
+    BattleMonRuntime* runtime2 = &sActivePokemon[1]->state.runtime;
     Controller* cont = &sAttractScreenController;
 
     BattleScene_AdvanceAttractInputScript();
     BattleScene_CheckForcedActionCondition(sActivePokemon[0], sActivePokemon[1]);
     BattleScene_CheckForcedActionCondition(sActivePokemon[1], sActivePokemon[0]);
 
-    if (cont->buttonPressed & 0x20) {
+    if (cont->buttonPressed & BTN_L) {
         BattleScene_ShowParticipantOwnerAndSecondaryModels();
         BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[0]);
         BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[1]);
     }
 
-    if (cont->buttonPressed & 0x10) {
+    if (cont->buttonPressed & BTN_R) {
         BattleScene_HideParticipantOwnerAndSecondaryModels();
     }
 
-    if (cont->buttonPressed & 0x1000) {
-        sp24->selectedCommand = SELECTED_COMMAND_NONE;
-        sp20->selectedCommand = SELECTED_COMMAND_NONE;
+    if (cont->buttonPressed & BTN_START) {
+        pokemon1->selectedCommand = SELECTED_COMMAND_NONE;
+        pokemon2->selectedCommand = SELECTED_COMMAND_NONE;
 
-        if (sp24->moveSelectionLocked == 0) {
-            sp1C->usedMove = BattleAI_ResolveRandomMove(0, 0);
+        if (pokemon1->moveSelectionLocked == 0) {
+            runtime1->usedMove = BattleAI_ResolveRandomMove(0, 0);
         }
 
-        if (sp20->moveSelectionLocked == 0) {
-            sp18->usedMove = BattleAI_ResolveRandomMove(1, 0);
+        if (pokemon2->moveSelectionLocked == 0) {
+            runtime2->usedMove = BattleAI_ResolveRandomMove(1, 0);
         }
 
-        sp24->selectedCommandOption = 3;
-        sp20->selectedCommandOption = 3;
+        pokemon1->selectedCommandOption = 3;
+        pokemon2->selectedCommandOption = 3;
 
-        if ((sp24->selectedCommandOption == 3) && (sp20->selectedCommandOption == 3)) {
+        if ((pokemon1->selectedCommandOption == 3) && (pokemon2->selectedCommandOption == 3)) {
             Battle_StartTurn();
         }
     }
 
     BattleScene_SyncActiveHpToPartyState();
 
-    if (cont->buttonPressed & 0x2000) {
+    if (cont->buttonPressed & BTN_Z) {
         sAttractInputIndex = 0;
         sAttractScreenTimer.timeLeft = 0;
     }
 
-    if (cont->buttonPressed & 0x8000) {
+    if (cont->buttonPressed & BTN_A) {
         sBattleScene.scene->winner = 3;
     }
 }
 
-void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
+void BattleScene_CollectPlayerAction(ActivePokemon* pokemon1, ActivePokemon* pokemon2) {
     UNUSED s32 pad;
-    BattleMonRuntime* sp20 = &arg0->state.runtime;
-    BattleMonRuntime* sp1C = &arg1->state.runtime;
+    BattleMonRuntime* runtime1 = &pokemon1->state.runtime;
+    BattleMonRuntime* runtime2 = &pokemon2->state.runtime;
 
-    if (BattleScene_HandlePlayerForcedActionState(arg0, arg1) == 0) {
-        if (!(sp20->unk_4D & 0x60)) {
-            sp20->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
-            sp1C->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
-            if (!(sp20->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
-                if (BattleScene_HandlePlayerActionInput(arg0) == 0) {
-                    if (!(sp20->unk_15 & 0x27)) {
-                        if (!(sp20->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
-                            if (sp1C->immobilizedReason & IMMOBILIZED_TRAPPING) {
-                                BattleScene_HandlePlayerMoveSelectionLocked(arg0, arg0->state.controller);
-                                sp20->usedMove = 0xFF;
+    if (BattleScene_HandlePlayerForcedActionState(pokemon1, pokemon2) == 0) {
+        if (!(runtime1->unk_4D & 0x60)) {
+            runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
+            runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
+            if (!(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+                if (BattleScene_HandlePlayerActionInput(pokemon1) == 0) {
+                    if (!(runtime1->unk_15 & 0x27)) {
+                        if (!(runtime1->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
+                            if (runtime2->immobilizedReason & IMMOBILIZED_TRAPPING) {
+                                BattleScene_HandlePlayerMoveSelectionLocked(pokemon1, pokemon1->state.controller);
+                                runtime1->usedMove = 0xFF;
                             } else {
-                                BattleScene_HandlePlayerMoveSelection(arg0);
+                                BattleScene_HandlePlayerMoveSelection(pokemon1);
                             }
                         } else {
-                            BattleScene_HandlePlayerMoveSelectionLocked(arg0, arg0->state.controller);
+                            BattleScene_HandlePlayerMoveSelectionLocked(pokemon1, pokemon1->state.controller);
                         }
                     } else {
-                        BattleScene_HandlePlayerMoveSelectionLocked(arg0, arg0->state.controller);
+                        BattleScene_HandlePlayerMoveSelectionLocked(pokemon1, pokemon1->state.controller);
                     }
                 }
             } else {
-                BattleScene_ConfirmForcedMoveRepeat(arg0);
+                BattleScene_ConfirmForcedMoveRepeat(pokemon1);
             }
         } else {
-            BattleScene_ConfirmForcedMoveRepeat(arg0);
+            BattleScene_ConfirmForcedMoveRepeat(pokemon1);
         }
     }
 }
 
 void BattleScene_CollectActions(void) {
-    ActivePokemonState* sp24 = &sActivePokemon[0]->state;
-    ActivePokemonState* sp20 = &sActivePokemon[1]->state;
-    BattleMonRuntime* sp1C = &sActivePokemon[0]->state.runtime;
-    BattleMonRuntime* sp18 = &sActivePokemon[1]->state.runtime;
+    ActivePokemonState* state1 = &sActivePokemon[0]->state;
+    ActivePokemonState* state2 = &sActivePokemon[1]->state;
+    BattleMonRuntime* runtime1 = &sActivePokemon[0]->state.runtime;
+    BattleMonRuntime* runtime2 = &sActivePokemon[1]->state.runtime;
 
     if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
-        D_84390144 = sBattleDamage;
+        sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[0], sActivePokemon[1]);
-        sBattleDamage = D_84390144;
+        sBattleDamage = sBattleDamageFake; // FAKE
     } else {
         BattleScene_CollectPlayerAction(sActivePokemon[0], sActivePokemon[1]);
     }
 
     if (sActivePokemon[1]->teamRoster->unk_000 & 2) {
-        D_84390144 = sBattleDamage;
+        sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[1], sActivePokemon[0]);
-        sBattleDamage = D_84390144;
+        sBattleDamage = sBattleDamageFake; // FAKE
     } else {
         BattleScene_CollectPlayerAction(sActivePokemon[1], sActivePokemon[0]);
     }
 
-    if ((sp24->selectedCommandOption == 3) && (sp20->selectedCommandOption == 3)) {
+    if ((state1->selectedCommandOption == 3) && (state2->selectedCommandOption == 3)) {
         if (BattleScene_IsBattleCountdownComplete() != 0) {
             D_84390134 = 1;
         }
 
-        if (sp24->selectedCommand == SELECTED_COMMAND_SWITCH) {
+        if (state1->selectedCommand == SELECTED_COMMAND_SWITCH) {
             BattleScene_CommitPlayerSwitchAction(sActivePokemon[0]);
         } else {
             BattleScene_CommitSelectedMoveAction(sActivePokemon[0]);
         }
 
-        if (sp20->selectedCommand == SELECTED_COMMAND_SWITCH) {
+        if (state2->selectedCommand == SELECTED_COMMAND_SWITCH) {
             BattleScene_CommitPlayerSwitchAction(sActivePokemon[1]);
         } else {
             BattleScene_CommitSelectedMoveAction(sActivePokemon[1]);
         }
 
-        if ((sp24->selectedCommand == SELECTED_COMMAND_SWITCH) || (sp20->selectedCommand == SELECTED_COMMAND_SWITCH)) {
+        if ((state1->selectedCommand == SELECTED_COMMAND_SWITCH) || (state2->selectedCommand == SELECTED_COMMAND_SWITCH)) {
             BattleScene_InitializeSwitchActions();
         } else {
             Battle_StartTurn();
         }
     } else {
-        if (!(sActivePokemon[0]->teamRoster->unk_000 & 2) && !(sp1C->unk_4D & 0x60) && !(sp1C->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[0]->teamRoster->unk_000 & 2) && !(runtime1->unk_4D & 0x60) && !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(0);
         }
 
-        if (!(sActivePokemon[1]->teamRoster->unk_000 & 2) && !(sp18->unk_4D & 0x60) && !(sp18->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[1]->teamRoster->unk_000 & 2) && !(runtime2->unk_4D & 0x60) && !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(1);
         }
     }
