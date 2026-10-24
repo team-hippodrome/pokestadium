@@ -33,7 +33,7 @@ typedef struct ActivePokemonState {
     /* 0x00 */ char unk00[0x4];
     /* 0x04 */ u32 unk_04;
     /* 0x08 */ s32 rosterIndex;
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ s32 selectedMoveIndex;
     /* 0x10 */ u32 unk_10;
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ u32 unk_18;

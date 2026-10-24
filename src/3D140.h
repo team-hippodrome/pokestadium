@@ -46,7 +46,7 @@ typedef struct BattleMonRuntime {
     /* 0x44 */ CachedMoveData moveCache;
     /* 0x4A */ u8 unk_4A;
     /* 0x4B */ u8 unk_4B;
-    /* 0x4C */ u8 unk_4C;
+    /* 0x4C */ u8 immobilizedReason;
     /* 0x4D */ u8 unk_4D;
     /* 0x4E */ u8 unk_4E;
     /* 0x4F */ u8 unk_4F;

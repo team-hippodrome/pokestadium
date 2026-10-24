@@ -1396,7 +1396,7 @@ void BattleScene_EnterRow9SetEventTrack(ActivePokemon* active_pokemon) {
 void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->state.runtime;
 
-    if (runtime->unk_4C & 0x20) {
+    if (runtime->immobilizedReason & 0x20) {
         if ((runtime->usedMove == BIND) || (runtime->usedMove == WRAP) || (runtime->usedMove == STRING_SHOT)) {
             BattleAnim_QueueEffectList6(2, active_pokemon);
             BattleScene_SetParticipantModelTransform(active_pokemon, 16, 0);
@@ -1597,7 +1597,7 @@ void BattleScene_TickRow14PlayMoveEffectEnd(ActivePokemon* active_pokemon) {
 
     if ((sActivePokemon[side == 0]->animationTimer == (sCurrentAnimation->endFrame + 1)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
         BattleAnim_CleanupEffects(1);
-        if (((runtime_temp->usedMove == SUPERSONIC) || (runtime_temp->usedMove == CONFUSE_RAY)) && (runtime->unk_4C & 0x80) && (sBattleMoveFailed == 0) &&
+        if (((runtime_temp->usedMove == SUPERSONIC) || (runtime_temp->usedMove == CONFUSE_RAY)) && (runtime->immobilizedReason & 0x80) && (sBattleMoveFailed == 0) &&
             (sConfused == 1)) {
             BattleAnim_PlayBattleSequenceById(sActivePokemon[side == 0], 18);
         }
