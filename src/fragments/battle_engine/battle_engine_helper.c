@@ -385,7 +385,7 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
 
     BattleScene_BindParticipantTeamRoster(pokemon, team_member_index);
     BattleScene_SetParticipantTeamMember(pokemon, team_member_index);
-    state->rosterIndex = state->unk_18;
+    state->rosterIndex = state->actionChosen;
     pokemon->thumbnail.tagTeam = state->teamMemberIndex;
 }
 

@@ -209,10 +209,10 @@ void Battle_Effect_SecondaryStatusChance(void) {
     if (sBattleTarget->unk_15 != 0) {
         if ((sBattleTarget->unk_15 & 0x20) && (sBattleUser->moveCache.unk_03 == 0x14)) {
             sBattleTarget->unk_15 = 0;
-            if (temp_a0->unk_14 != 4) {
+            if (temp_a0->moveIndex != 4) {
                 temp_a2->usedMove = temp_a2->moves[temp_a0->unk_0C];
             } else {
-                temp_a0->unk_14 = 0;
+                temp_a0->moveIndex = 0;
                 temp_a0->unk_0C = 0;
                 temp_a2->usedMove = 0xA5;
             }
@@ -915,12 +915,12 @@ void Battle_Effect_Disable(void) {
 
     if (sBattleMoveFailed == 0) {
         sBattleScene.scene->unk_48 = 0x20;
-        if (sBattleTarget->unk_52 == 0) {
+        if (sBattleTarget->movesDisabled == 0) {
             do {
                 sp24 = Battle_Random() & 3;
             } while (sBattleTarget->moves[sp24] == 0);
             temp_v1 = (Battle_Random() & 7) + 1;
-            sBattleTarget->unk_52 = (sp24 * 0x10) + temp_v1;
+            sBattleTarget->movesDisabled = (sp24 * 0x10) + temp_v1;
             sBattleTarget->unk_57 = sBattleTarget->moves[sp24];
             Text_SetStringToken(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->unk_57 - 1));
             Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x3B);
@@ -978,7 +978,7 @@ void Battle_Effect_Haze(void) {
     if (D_8438AC60[0] == 1) { sBattleUser->unk_15 = 0; }
     // clang-format on
 
-    temp_t0->unk_52 = temp_a3->unk_52 = 0;
+    temp_t0->movesDisabled = temp_a3->movesDisabled = 0;
     temp_t0->unk_57 = temp_a3->unk_57 = 0;
     temp_t0->unk_4C &= ~0x80;
     temp_t0->unk_4D &= 0x78;

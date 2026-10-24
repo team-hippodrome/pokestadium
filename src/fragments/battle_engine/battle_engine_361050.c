@@ -5258,7 +5258,7 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
         temp_s0->unk_4F = temp_s2->unk_4F;
         temp_s0->unk_50 = temp_s2->unk_50;
         temp_s0->unk_51 = temp_s2->unk_51;
-        temp_s0->unk_52 = temp_s2->unk_52;
+        temp_s0->movesDisabled = temp_s2->movesDisabled;
         temp_s0->unk_54 = temp_s2->unk_54;
         temp_s0->unk_57 = temp_s2->unk_57;
         temp_s0->unk_58 = temp_s2->unk_58;

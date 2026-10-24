@@ -496,7 +496,7 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
     side_index = BattleScene_GetParticipantSideIndex(pokemon);
     species = pokemon->displayObject.objectType - 1;
 
-    battle_mon = &pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->pokemonPicked[pokemon->state.unk_18];
+    battle_mon = &pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->pokemonPicked[pokemon->state.actionChosen];
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[species] & 0xFFFFFF);
     if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_52 & 0x80)) {
@@ -1263,7 +1263,7 @@ void BattleScene_TickAssetLoadQueueRowEffectList3(ActivePokemon* active_pokemon)
         active_pokemon->animationTimer = 0;
         BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[animation_state].mode);
         Audio_PlayCommand(3, 0, 0);
-        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->teamMember[pokemon_state->teamMemberIndex]->pokemonPicked[pokemon_state->unk_18];
+        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->teamMember[pokemon_state->teamMemberIndex]->pokemonPicked[pokemon_state->actionChosen];
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
 }

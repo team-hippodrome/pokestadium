@@ -198,7 +198,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
     temp_a3 = sActivePokemon[arg0]->sessionTeams->teamMember[temp_v1->ownerTeamMemberIndex];
 
     if (temp_a2_2->unk_0C == 0) {
-        Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->unk_18].unk_30);
+        Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->actionChosen].unk_30);
         Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21);
         return;
     }
@@ -206,7 +206,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
     temp_v1->unk_28 = temp_a2_2->unk_0C;
     sp18 = (temp_a2_2->unk_0C * 0x19) / (temp_a2_2->hp >> 2);
 
-    Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->unk_18].unk_30);
+    Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->actionChosen].unk_30);
 
     if (sp18 >= 0x46) {
         Battle_QueueMessage(gBattleMessageQueues->unk_088, 0x21);
@@ -234,7 +234,7 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     sp1C->unk_4C = 0;
     sp1C->unk_4D = 0;
     sp1C->unk_4E = 0;
-    sp1C->unk_52 = 0;
+    sp1C->movesDisabled = 0;
     sp1C->unk_57 = 0;
     sp1C->scaleResize = 0;
     sp18->unk_4C &= ~0x20;
@@ -722,7 +722,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp28 = &arg0->state;
     sp24 = &arg0->state.runtime;
-    sp34 = &arg0->sessionTeams->teamMember[sp28->ownerTeamMemberIndex]->pokemonPicked[sp28->unk_18];
+    sp34 = &arg0->sessionTeams->teamMember[sp28->ownerTeamMemberIndex]->pokemonPicked[sp28->actionChosen];
 
     sp24->unk_14 = sp28->rosterIndex;
     sp24->id = sp34->unk_00.unk_00;
@@ -791,7 +791,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 }
 
 s32 Battle_IsPartyMemberAlive(ActivePokemon* arg0) {
-    if (arg0->teamRoster->pokemonPicked[arg0->state.unk_18 - 1].hp != 0) {
+    if (arg0->teamRoster->pokemonPicked[arg0->state.actionChosen - 1].hp != 0) {
         return 1;
     }
     return 0;
@@ -1323,10 +1323,10 @@ s32 Battle_CheckMonCanAct(void) {
         return 0;
     }
 
-    if (sBattleUser->unk_52 != 0) {
-        sBattleUser->unk_52--;
-        if (!(sBattleUser->unk_52 & 0xF)) {
-            sBattleUser->unk_52 = 0;
+    if (sBattleUser->movesDisabled != 0) {
+        sBattleUser->movesDisabled--;
+        if (!(sBattleUser->movesDisabled & 0xF)) {
+            sBattleUser->movesDisabled = 0;
             sBattleUser->unk_57 = 0;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
             Battle_QueueMessage(gBattleMessageQueues->unk_388, 0xB);
@@ -1622,7 +1622,7 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
     temp_a11->unk_4C = 0;
     temp_a11->unk_4D &= 0x80;
     temp_a11->unk_4E = 0;
-    temp_a11->unk_52 = 0;
+    temp_a11->movesDisabled = 0;
     temp_a11->unk_57 = 0;
     temp_a11->scaleResize = 0;
     temp_a11->unk_58 = 0;
@@ -1817,8 +1817,8 @@ void Battle_ResolveMonAction(void) {
     ActivePokemonState* ptr1 = &sActivePokemon[0]->state;
     ActivePokemonState* ptr2 = &sActivePokemon[1]->state;
 
-    ptr1->unk_2A = 0;
-    ptr2->unk_2A = 0;
+    ptr1->moveSelectionForced = 0;
+    ptr2->moveSelectionForced = 0;
 
     sConfused = 1;
     sStatCanBeChangedFurther = 1;
@@ -1860,8 +1860,8 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
 
     ptr2 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state.runtime;
 
-    sp24->unk_2A = 0;
-    sp20->unk_2A = 0;
+    sp24->moveSelectionForced = 0;
+    sp20->moveSelectionForced = 0;
     ptr1->unk_12 = 0xFFFF;
     ptr2->unk_12 = 0xFFFF;
 

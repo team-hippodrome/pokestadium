@@ -52,7 +52,7 @@ typedef struct BattleMonRuntime {
     /* 0x4F */ u8 unk_4F;
     /* 0x50 */ u8 unk_50;
     /* 0x51 */ u8 unk_51;
-    /* 0x52 */ u8 unk_52;
+    /* 0x52 */ u8 movesDisabled;
     /* 0x53 */ u8 unk_53;
     /* 0x54 */ u16 unk_54;
     /* 0x56 */ u8 scaleResize;

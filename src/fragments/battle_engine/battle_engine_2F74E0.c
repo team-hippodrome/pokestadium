@@ -12,12 +12,12 @@ f32 sBattleTimer;
 static f32 sInitialOrderTimer;
 static f32 sInitalBattleTimer;
 u8 D_84390134;
-static s32 D_84390138;
+static s32 sActionChosen;
 static s32 D_8439013C;
 static s32 pad_D_84390140;
 static u16 D_84390144;
-static Controller* D_84390148;
-static Controller* D_8439014C;
+static Controller* teammate1_controller;
+static Controller* teammate2_controller;
 static Controller D_84390150;
 s32 D_84390174;
 unk_D_84390178 D_84390178;
@@ -226,7 +226,7 @@ void BattleScene_ResetActionSelectionTimer(void) {
 s32 BattleScene_ApplyForcedActionDelay(ActivePokemon* arg0) {
     ActivePokemonState* temp_v1 = &arg0->state;
 
-    if (arg0->state.selectedCommand == 3) {
+    if (arg0->state.selectedCommandOption == 3) {
         temp_v1->actionDelayTimer += 0x38E;
         return 1;
     }
@@ -268,9 +268,9 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
     runtime = &pokemon->state.runtime;
     var_v1 = 0;
 
-    if (pokemon->state.runtime.unk_52 != 0) {
+    if (pokemon->state.runtime.movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
-            if (((runtime->unk_52 >> 4) != i) && (runtime->moves[i] != 0)) {
+            if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
                 var_v1 |= runtime->moveUsability[i] & 0x3F;
             }
         }
@@ -284,8 +284,8 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
 
     if (var_v1 == 0) {
         state->actionDelayTimer = 0;
-        state->selectedCommand = 3;
-        state->unk_14 = 4;
+        state->selectedCommandOption = 3;
+        state->moveIndex = 4;
         return 1;
     }
     return 0;
@@ -298,7 +298,7 @@ s32 BattleScene_IsMoveUnavailable(ActivePokemon* pokemon, s32 arg1) {
         return 1;
     }
 
-    if ((runtime->unk_52 & 0xF) && (arg1 == (runtime->unk_52 >> 4))) {
+    if ((runtime->movesDisabled & 0xF) && (arg1 == (runtime->movesDisabled >> 4))) {
         return 1;
     }
 
@@ -312,9 +312,9 @@ void BattleScene_AutoSelectAvailableMove(ActivePokemon* arg0) {
     if (BattleScene_SelectFallbackWhenNoUsableMoves(arg0) == 0) {
         for (i = 0; i < 4; i++) {
             if (BattleScene_IsMoveUnavailable(arg0, i) == 0) {
-                temp_v0->canPickMove = 1;
-                temp_v0->selectedCommand = 3;
-                temp_v0->unk_14 = i;
+                temp_v0->selectedCommand = 1;
+                temp_v0->selectedCommandOption = 3;
+                temp_v0->moveIndex = i;
                 temp_v0->selectedMoveIndex = i;
                 break;
             }
@@ -331,8 +331,8 @@ void BattleScene_AutoSelectReplacementMon(ActivePokemon* arg0) {
             BattleAnim_PlayMenuConfirmSoundEffect();
             sp1C->showingCommandOptions = 0;
             sp1C->actionDelayTimer = 0;
-            sp1C->selectedCommand = 3;
-            sp1C->unk_18 = i;
+            sp1C->selectedCommandOption = 3;
+            sp1C->actionChosen = i;
             return;
         }
     }
@@ -357,24 +357,24 @@ void BattleScene_HandleActionSelectionCancel(s32 arg0) {
     sp28 = &sActivePokemon[arg0 == 0]->state;
     cont = sp2C->controller;
 
-    if ((sp2C->selectedCommand != 3) || !(cont->buttonPressed & BTN_L)) {
+    if ((sp2C->selectedCommandOption != 3) || !(cont->buttonPressed & BTN_L)) {
         return;
     }
 
     if (sp2C->unk_2D == 0x10) {
-        if (sp2C->canPickMove == 2) {
+        if (sp2C->selectedCommand == 2) {
             BattleScene_SelectActiveController(sActivePokemon[arg0]);
         }
         BattleAnim_PlayMenuBackSoundEffect();
-        sp2C->selectedCommand = 2;
+        sp2C->selectedCommandOption = 2;
     }
 
     if (sp28->unk_2D != 0x10) {
-        if (sp2C->canPickMove == 2) {
+        if (sp2C->selectedCommand == 2) {
             BattleScene_SelectActiveController(sActivePokemon[arg0]);
         }
         BattleAnim_PlayMenuBackSoundEffect();
-        sp2C->selectedCommand = 0;
+        sp2C->selectedCommandOption = 0;
     }
 }
 
@@ -390,71 +390,71 @@ void Battle_InitializeActiveRuntimeState(void) {
     Battle_ResetTransientRuntimeState(1, 0);
 }
 
-s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* arg0) {
-    BattleMonRuntime* temp_v0 = &arg0->state.runtime;
+s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* pokemon) {
+    BattleMonRuntime* runtime = &pokemon->state.runtime;
     s32 i;
-    s32 var_v1 = 0;
+    s32 has_usable_moves = 0;
 
-    if (temp_v0->unk_52 != 0) {
+    if (runtime->movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
-            if (((temp_v0->unk_52 >> 4) != i) && (temp_v0->moves[i] != 0)) {
-                var_v1 |= temp_v0->moveUsability[i] & 0x3F;
+            if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
+                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
-            if (temp_v0->moves[i] != 0) {
-                var_v1 |= temp_v0->moveUsability[i] & 0x3F;
+            if (runtime->moves[i] != 0) {
+                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
             }
         }
     }
 
-    if (var_v1 == 0) {
+    if (has_usable_moves == 0) {
         return 1;
     }
     return 0;
 }
 
-s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
+s32 BattleScene_WaitForCpuChoice(ActivePokemon* pokemon1, ActivePokemon* pokemon2) {
     UNUSED s32 pad[2];
-    ActivePokemonState* sp1C = &arg0->state;
-    ActivePokemonState* temp_v0 = &arg1->state;
+    ActivePokemonState* state1 = &pokemon1->state;
+    ActivePokemonState* state2 = &pokemon2->state;
 
-    if ((arg0->state.unk_2D == 0x10) && (arg1->state.unk_2D == 0x10)) {
-        if (sp1C->selectedCommand == 3) {
-            BattleScene_ApplyForcedActionDelay(arg0);
+    if ((pokemon1->state.unk_2D == 0x10) && (pokemon2->state.unk_2D == 0x10)) {
+        if (state1->selectedCommandOption == 3) {
+            BattleScene_ApplyForcedActionDelay(pokemon1);
             return 1;
         }
 
-        sp1C->canPickMove = 2;
-        sp1C->selectedCommand = 2;
+        state1->selectedCommand = 2;
+        state1->selectedCommandOption = 2;
 
         if (sElapsedOrderSelectionTime == 20.0f) {
             BattleAnim_PlayMenuConfirmSoundEffect();
-            D_84390138 = BattleAI_ChooseAction(0);
-            sp1C->showingCommandOptions = 0;
-            sp1C->unk_18 = D_84390138 - 4;
-            sp1C->actionDelayTimer = 0;
-            sp1C->selectedCommand = 3;
-            sp1C->canPickMove = 2;
+            sActionChosen = BattleAI_ChooseAction(0);
+            state1->showingCommandOptions = 0;
+            state1->actionChosen = sActionChosen - 4;
+            state1->actionDelayTimer = 0;
+            state1->selectedCommandOption = 3;
+            state1->selectedCommand = 2;
         }
         return 1;
     }
 
-    if (sp1C->unk_2D == 0x10) {
-        sp1C->canPickMove = 2;
-        sp1C->selectedCommand = 2;
-        temp_v0->selectedCommand = 3;
-        temp_v0->canPickMove = 1;
+    if (state1->unk_2D == 0x10) {
+        state1->selectedCommand = 2;
+        state1->selectedCommandOption = 2;
+        state2->selectedCommandOption = 3;
+        state2->selectedCommand = 1;
 
         if (sElapsedOrderSelectionTime == 20.0f) {
             BattleAnim_PlayMenuConfirmSoundEffect();
-            D_84390138 = BattleAI_ChooseAction(0);
-            sp1C->showingCommandOptions = 0;
-            sp1C->unk_18 = D_84390138 - 4;
-            sp1C->actionDelayTimer = 0;
-            sp1C->selectedCommand = 3;
-            sp1C->canPickMove = 2;
+            sActionChosen = BattleAI_ChooseAction(0);
+            state1->showingCommandOptions = 0;
+            state1->actionChosen = sActionChosen - 4;
+            state1->actionDelayTimer = 0;
+            state1->selectedCommandOption = 3;
+            state1->selectedCommand = 2;
         }
         return 1;
     }
@@ -462,37 +462,37 @@ s32 BattleScene_WaitForCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     return 0;
 }
 
-void BattleScene_CompleteCpuForcedAction(ActivePokemon* arg0, UNUSED ActivePokemon* arg1) {
-    ActivePokemonState* ptr = &arg0->state;
+void BattleScene_CompleteCpuForcedAction(ActivePokemon* pokemon, UNUSED ActivePokemon* arg1) {
+    ActivePokemonState* state = &pokemon->state;
 
-    BattleScene_ApplyForcedActionDelay(arg0);
-    ptr->unk_2A = 1;
-    ptr->canPickMove = 1;
-    ptr->selectedMoveIndex = ptr->unk_14;
-    ptr->selectedCommand = 3;
+    BattleScene_ApplyForcedActionDelay(pokemon);
+    state->moveSelectionForced = 1;
+    state->selectedCommand = 1;
+    state->selectedMoveIndex = state->moveIndex;
+    state->selectedCommandOption = 3;
 }
 
-void BattleScene_CompleteCpuMoveAction(ActivePokemon* arg0, ActivePokemon* arg1) {
-    ActivePokemonState* sp20 = &arg1->state;
-    ActivePokemonState* sp1C = &arg0->state;
+void BattleScene_CompleteCpuMoveAction(ActivePokemon* pokemon1, ActivePokemon* pokemon2) {
+    ActivePokemonState* state2 = &pokemon2->state;
+    ActivePokemonState* state1 = &pokemon1->state;
 
-    BattleScene_ApplyForcedActionDelay(arg0);
-    sp1C->unk_2A = 1;
+    BattleScene_ApplyForcedActionDelay(pokemon1);
+    state1->moveSelectionForced = 1;
 
-    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 < 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (sActionChosen < 4)) {
         BattleAnim_PlayMenuConfirmSoundEffect();
     }
 
-    if ((D_84390138 < 4) && (sElapsedOrderSelectionTime >= 30.0f)) {
-        sp1C->selectedCommand = 1;
-        sp1C->canPickMove = 1;
+    if ((sActionChosen < 4) && (sElapsedOrderSelectionTime >= 30.0f)) {
+        state1->selectedCommandOption = 1;
+        state1->selectedCommand = 1;
     }
 
-    if (((sElapsedOrderSelectionTime >= 90.0f) || ((sp20->selectedCommand == 3) && (sElapsedOrderSelectionTime >= 10.0f))) && (D_84390138 < 4)) {
+    if (((sElapsedOrderSelectionTime >= 90.0f) || ((state2->selectedCommandOption == 3) && (sElapsedOrderSelectionTime >= 10.0f))) && (sActionChosen < 4)) {
         BattleAnim_PlayMenuConfirmSoundEffect();
-        sp1C->canPickMove = 1;
-        sp1C->selectedCommand = 3;
-        sp1C->selectedMoveIndex = sp1C->unk_14;
+        state1->selectedCommand = 1;
+        state1->selectedCommandOption = 3;
+        state1->selectedMoveIndex = state1->moveIndex;
     }
 }
 
@@ -504,28 +504,28 @@ void BattleScene_ApplyCpuChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     sp18 = &arg0->state;
     sp14 = &arg1->state;
 
-    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 < 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (sActionChosen < 4)) {
         BattleAnim_PlayMenuConfirmSoundEffect();
     }
 
-    if (D_84390138 < 4) {
+    if (sActionChosen < 4) {
         if (sElapsedOrderSelectionTime >= 30.0f) {
+            sp18->selectedCommandOption = 1;
             sp18->selectedCommand = 1;
-            sp18->canPickMove = 1;
         }
     }
 
-    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp14->selectedCommand == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
-        if (D_84390138 < 4) {
+    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp14->selectedCommandOption == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
+        if (sActionChosen < 4) {
             BattleAnim_PlayMenuConfirmSoundEffect();
-            sp18->canPickMove = 1;
-            sp18->selectedCommand = 3;
+            sp18->selectedCommand = 1;
+            sp18->selectedCommandOption = 3;
             if (BattleScene_CpuHasNoUsableMoves(arg0) != 0) {
-                sp18->unk_14 = 4;
+                sp18->moveIndex = 4;
                 sp18->selectedMoveIndex = 4;
             } else {
-                var_v0 = D_84390138;
-                sp18->unk_14 = var_v0;
+                var_v0 = sActionChosen;
+                sp18->moveIndex = var_v0;
                 sp18->selectedMoveIndex = var_v0;
             }
         }
@@ -536,29 +536,29 @@ s32 BattleScene_ApplyCpuSwitchChoice(ActivePokemon* arg0, ActivePokemon* arg1) {
     ActivePokemonState* sp1C = &arg0->state;
     ActivePokemonState* sp18 = &arg1->state;
 
-    if ((sElapsedOrderSelectionTime == 30.0f) && (D_84390138 >= 4)) {
+    if ((sElapsedOrderSelectionTime == 30.0f) && (sActionChosen >= 4)) {
         BattleAnim_PlayMenuConfirmSoundEffect();
     }
 
     if (sElapsedOrderSelectionTime >= 30.0f) {
-        if (D_84390138 >= 4) {
+        if (sActionChosen >= 4) {
+            sp1C->selectedCommandOption = 2;
             sp1C->selectedCommand = 2;
-            sp1C->canPickMove = 2;
         }
     }
 
-    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp18->selectedCommand == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
-        if (D_84390138 >= 4) {
+    if ((sElapsedOrderSelectionTime >= 90.0f) || ((sp18->selectedCommandOption == 3) && (sElapsedOrderSelectionTime >= 10.0f))) {
+        if (sActionChosen >= 4) {
             BattleAnim_PlayMenuConfirmSoundEffect();
             sp1C->showingCommandOptions = 0;
-            sp1C->unk_18 = D_84390138 - 4;
+            sp1C->actionChosen = sActionChosen - 4;
             sp1C->actionDelayTimer = 0;
-            sp1C->selectedCommand = 3;
-            sp1C->canPickMove = 2;
+            sp1C->selectedCommandOption = 3;
+            sp1C->selectedCommand = 2;
         }
     }
 
-    if (D_84390138 >= 4) {
+    if (sActionChosen >= 4) {
         return 1;
     }
     return 0;
@@ -568,7 +568,7 @@ void BattleScene_TriggerCpuChoice(UNUSED BattleMonRuntime* arg0, UNUSED BattleMo
                    UNUSED ActivePokemonState* arg3, UNUSED ActivePokemon* arg4) {
     if ((sElapsedOrderSelectionTime == 1.0f) && (D_8439013C == 0)) {
         D_8439013C = 1;
-        D_84390138 = BattleAI_ChooseAction(0);
+        sActionChosen = BattleAI_ChooseAction(0);
     }
 }
 
@@ -638,45 +638,45 @@ void BattleScene_ForfeitPrompt(ActivePokemon* arg0) {
     ActivePokemonState* temp_a0 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
     if (arg0->sessionTeams->tagTeamSize == 1) {
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
     } else {
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
     }
 
-    if (temp_a0->selectedCommand == 4) {
+    if (temp_a0->selectedCommandOption == 4) {
+        sp18->selectedCommandOption = 0;
         sp18->selectedCommand = 0;
-        sp18->canPickMove = 0;
         return;
     }
 
-    if (sp18->selectedCommand != 4) {
+    if (sp18->selectedCommandOption != 4) {
         sp18->unk_2F = 0;
     }
 
-    sp18->selectedCommand = 4;
+    sp18->selectedCommandOption = 4;
 
     if ((sBattleScene.scene->winner == 0) &&
-        (BTN_IS_PRESSED(D_84390148, BTN_DLEFT) || BTN_IS_PRESSED(D_8439014C, BTN_DLEFT))) {
+        (BTN_IS_PRESSED(teammate1_controller, BTN_DLEFT) || BTN_IS_PRESSED(teammate2_controller, BTN_DLEFT))) {
         sp18->unk_2F = 0;
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     }
 
     if ((sBattleScene.scene->winner == 0) &&
-        (BTN_IS_PRESSED(D_84390148, BTN_DRIGHT) || BTN_IS_PRESSED(D_8439014C, BTN_DRIGHT))) {
+        (BTN_IS_PRESSED(teammate1_controller, BTN_DRIGHT) || BTN_IS_PRESSED(teammate2_controller, BTN_DRIGHT))) {
         sp18->unk_2F = 1;
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     }
 
-    if ((sp18->unk_2F == 1) && (BTN_IS_PRESSED(D_84390148, BTN_A) || BTN_IS_PRESSED(D_8439014C, BTN_A)) &&
+    if ((sp18->unk_2F == 1) && (BTN_IS_PRESSED(teammate1_controller, BTN_A) || BTN_IS_PRESSED(teammate2_controller, BTN_A)) &&
         (sBattleScene.scene->winner == 0)) {
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
         sBattleScene.scene->winner = (BattleScene_GetParticipantSideIndex(arg0) == 0) + 1;
         Audio_FadeOutAll(0x14);
-    } else if ((sp18->unk_2F == 0) && (BTN_IS_PRESSED(D_84390148, BTN_A) || BTN_IS_PRESSED(D_8439014C, BTN_A))) {
+    } else if ((sp18->unk_2F == 0) && (BTN_IS_PRESSED(teammate1_controller, BTN_A) || BTN_IS_PRESSED(teammate2_controller, BTN_A))) {
+        sp18->selectedCommandOption = 0;
         sp18->selectedCommand = 0;
-        sp18->canPickMove = 0;
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     }
 }
@@ -698,7 +698,7 @@ void BattleScene_CommitPlayerSwitchAction(ActivePokemon* arg0) {
 }
 
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
-    if (arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->pokemonPicked[arg0->state.unk_18].hp != 0) {
+    if (arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
         return 1;
     }
 
@@ -715,26 +715,26 @@ void BattleScene_QueuePartySelectionConfirmMessage(ActivePokemon* arg0) {
 
 void BattleScene_AssignActiveCoopController(ActivePokemon* arg0, s32 arg1) {
     if (arg1 == 1) {
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
     } else {
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
     }
 
     if (arg1 == 1) {
-        if (BTN_IS_PRESSED(D_84390148, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
+        if (BTN_IS_PRESSED(teammate1_controller, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
             arg0->state.ownerTeamMemberIndex = 0;
-            BattleScene_SetParticipantController(arg0, D_84390148);
-        } else if (BTN_IS_PRESSED(D_8439014C, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-            BattleScene_SetParticipantController(arg0, D_8439014C);
+            BattleScene_SetParticipantController(arg0, teammate1_controller);
+        } else if (BTN_IS_PRESSED(teammate2_controller, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
+            BattleScene_SetParticipantController(arg0, teammate2_controller);
             arg0->state.ownerTeamMemberIndex = 0;
         }
-    } else if (BTN_IS_PRESSED(D_84390148, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-        BattleScene_SetParticipantController(arg0, D_84390148);
+    } else if (BTN_IS_PRESSED(teammate1_controller, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
+        BattleScene_SetParticipantController(arg0, teammate1_controller);
         arg0->state.ownerTeamMemberIndex = 0;
-    } else if (BTN_IS_PRESSED(D_8439014C, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-        BattleScene_SetParticipantController(arg0, D_8439014C);
+    } else if (BTN_IS_PRESSED(teammate2_controller, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
+        BattleScene_SetParticipantController(arg0, teammate2_controller);
         arg0->state.ownerTeamMemberIndex = 1;
     }
 }
@@ -751,51 +751,51 @@ void BattleScene_HandlePartySlotCursorInput(ActivePokemon* arg0, Controller* arg
 
     if (temp_a1->numberOfPokemonBrought < 4) {
         if (BTN_IS_PRESSED(arg1, BTN_CUP)) {
-            sp1C->unk_18 = 0;
+            sp1C->actionChosen = 0;
         } else if (BTN_IS_PRESSED(arg1, BTN_CRIGHT)) {
-            sp1C->unk_18 = 1;
+            sp1C->actionChosen = 1;
         } else if (BTN_IS_PRESSED(arg1, BTN_CDOWN)) {
-            sp1C->unk_18 = 2;
+            sp1C->actionChosen = 2;
         } else {
             return;
         }
     } else {
         if (BTN_IS_PRESSED(arg1, BTN_CUP)) {
-            sp1C->unk_18 = 0;
+            sp1C->actionChosen = 0;
         }
 
         if (BTN_IS_PRESSED(arg1, BTN_CLEFT)) {
-            sp1C->unk_18 = 1;
+            sp1C->actionChosen = 1;
         }
 
         if (BTN_IS_PRESSED(arg1, BTN_B)) {
-            sp1C->unk_18 = 2;
+            sp1C->actionChosen = 2;
         }
 
         if (BTN_IS_PRESSED(arg1, BTN_CRIGHT)) {
-            sp1C->unk_18 = 3;
+            sp1C->actionChosen = 3;
         }
 
         if (BTN_IS_PRESSED(arg1, BTN_CDOWN)) {
-            sp1C->unk_18 = 4;
+            sp1C->actionChosen = 4;
         }
 
         if (BTN_IS_PRESSED(arg1, BTN_A)) {
-            sp1C->unk_18 = 5;
+            sp1C->actionChosen = 5;
         }
     }
 
     if (BTN_IS_PRESSED(arg1, BTN_A | BTN_B | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
-        if ((sp1C->rosterIndex == sp1C->unk_18) && (sp1C->ownerTeamMemberIndex == sp1C->teamMemberIndex)) {
+        if ((sp1C->rosterIndex == sp1C->actionChosen) && (sp1C->ownerTeamMemberIndex == sp1C->teamMemberIndex)) {
             if (BattleScene_ValidateSelectedPartyMember(arg0) != 0) {
                 BattleAnim_PlayMenuErrorSoundEffect();
                 BattleScene_QueuePartySelectionConfirmMessage(arg0);
             }
-        } else if (((temp_a1->numberOfPokemonBrought - 1) >= sp1C->unk_18) && (BattleScene_ValidateSelectedPartyMember(arg0) != 0)) {
+        } else if (((temp_a1->numberOfPokemonBrought - 1) >= sp1C->actionChosen) && (BattleScene_ValidateSelectedPartyMember(arg0) != 0)) {
             BattleAnim_PlayMenuConfirmSoundEffect();
             sp1C->showingCommandOptions = 0;
             sp1C->actionDelayTimer = 0;
-            sp1C->selectedCommand = 3;
+            sp1C->selectedCommandOption = 3;
         }
     }
 }
@@ -806,30 +806,30 @@ void BattleScene_HandlePlayerPartySelection(ActivePokemon* arg0) {
     ActivePokemonState* sp18 = &arg0->state;
 
     if (arg0->sessionTeams->tagTeamSize == 1) {
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
     } else {
 
-        D_84390148 = &gControllers[arg0->sessionTeams->teamMember[sp18->ownerTeamMemberIndex]->controllerPort];
+        teammate1_controller = &gControllers[arg0->sessionTeams->teamMember[sp18->ownerTeamMemberIndex]->controllerPort];
         idx = sp18->ownerTeamMemberIndex == 0;
-        D_8439014C = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
+        teammate2_controller = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
     }
 
     if (arg0->captionState.active != 0) {
         if (sp18->controller->buttonPressed & 0xE03F) {
             BattleScene_ClearParticipantMessageBuffer(arg0);
         }
-    } else if (sp18->selectedCommand == 0) {
-        sp18->selectedCommand = 2;
-    } else if (((D_84390148->buttonPressed & 0x20) || (D_8439014C->buttonPressed & 0x20)) && (sp18->unk_2D != 0x10) &&
-               !(D_84390148->buttonDown & 0x10) && !(D_8439014C->buttonDown & 0x10)) {
+    } else if (sp18->selectedCommandOption == 0) {
+        sp18->selectedCommandOption = 2;
+    } else if (((teammate1_controller->buttonPressed & 0x20) || (teammate2_controller->buttonPressed & 0x20)) && (sp18->unk_2D != 0x10) &&
+               !(teammate1_controller->buttonDown & 0x10) && !(teammate2_controller->buttonDown & 0x10)) {
         BattleScene_SelectActiveController(arg0);
         BattleAnim_PlayMenuBackSoundEffect();
-        sp18->selectedCommand = 0;
+        sp18->selectedCommandOption = 0;
     } else {
         sp18->showingCommandOptions = 0;
-        if ((D_84390148->buttonDown & 0x10) || (D_8439014C->buttonDown & 0x10)) {
-            if ((D_84390148->buttonPressed & 0x10) || (D_8439014C->buttonPressed & 0x10)) {
+        if ((teammate1_controller->buttonDown & 0x10) || (teammate2_controller->buttonDown & 0x10)) {
+            if ((teammate1_controller->buttonPressed & 0x10) || (teammate2_controller->buttonPressed & 0x10)) {
                 BattleAnim_PlayMenuScrollSoundEffect();
             }
             sp18->showingCommandOptions = 1;
@@ -842,16 +842,16 @@ void BattleScene_CommitSelectedMoveAction(ActivePokemon* pokemon) {
     ActivePokemonState* state = &pokemon->state;
     BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (pokemon->state.unk_14 != 4) {
-        state->selectedMoveIndex = state->unk_14;
-        if (state->unk_2A == 0) {
+    if (pokemon->state.moveIndex != 4) {
+        state->selectedMoveIndex = state->moveIndex;
+        if (state->moveSelectionForced == 0) {
             runtime->usedMove = runtime->moves[state->selectedMoveIndex];
         }
     } else {
         if (runtime->immobilizedReason & 0x20) {
-            state->selectedMoveIndex = state->unk_14;
+            state->selectedMoveIndex = state->moveIndex;
         } else {
-            state->unk_14 = 0;
+            state->moveIndex = 0;
             state->selectedMoveIndex = 0;
             runtime->usedMove = 0xA5;
         }
@@ -874,8 +874,8 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* arg0) {
     cont = arg0->state.controller;
     var_v1 = 0;
 
-    if (temp_a0->unk_52 != 0) {
-        temp_a1 = temp_a0->unk_52 >> 4;
+    if (temp_a0->movesDisabled != 0) {
+        temp_a1 = temp_a0->movesDisabled >> 4;
         for (i = 0; i < 4; i++) {
             if ((temp_a1 != i) && (temp_a0->moves[i] != 0)) {
                 var_v1 |= temp_a0->moveUsability[i] & 0x3F;
@@ -891,20 +891,20 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* arg0) {
 
     if (var_v1 == 0) {
         if (arg0->captionState.active == 0) {
-            if (temp_v0->selectedCommand == 0) {
-                temp_v0->selectedCommand = 1;
+            if (temp_v0->selectedCommandOption == 0) {
+                temp_v0->selectedCommandOption = 1;
             }
             BattleScene_ClearParticipantMessageBuffer(arg0);
             BattleScene_BuildParticipantMessage(arg0, 0);
         } else if (cont->buttonPressed & 0x20) {
             BattleScene_ClearParticipantMessageBuffer(arg0);
-            temp_v0->selectedCommand = 0;
+            temp_v0->selectedCommandOption = 0;
             BattleAnim_PlayMenuBackSoundEffect();
         } else if (cont->buttonPressed & 0x8000) {
             BattleScene_ClearParticipantMessageBuffer(arg0);
             temp_v0->actionDelayTimer = 0;
-            temp_v0->selectedCommand = 3;
-            temp_v0->unk_14 = 4;
+            temp_v0->selectedCommandOption = 3;
+            temp_v0->moveIndex = 4;
         }
         return 1;
     }
@@ -916,14 +916,14 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* arg0) {
     ActivePokemonState* sp24 = &arg0->state;
     BattleMonRuntime* ptr = &arg0->state.runtime;
 
-    if (!(ptr->moveUsability[sp24->unk_14] & 0x3F)) {
+    if (!(ptr->moveUsability[sp24->moveIndex] & 0x3F)) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(arg0);
         BattleScene_BuildParticipantMessage(arg0, 1);
         return 1;
     }
 
-    if ((ptr->unk_52 & 0xF) && (sp24->unk_14 == (ptr->unk_52 >> 4))) {
+    if ((ptr->movesDisabled & 0xF) && (sp24->moveIndex == (ptr->movesDisabled >> 4))) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(arg0);
         BattleScene_BuildParticipantMessage(arg0, 2);
@@ -932,7 +932,7 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* arg0) {
 
     BattleAnim_PlayMenuConfirmSoundEffect();
     sp24->actionDelayTimer = 0;
-    sp24->selectedCommand = 3;
+    sp24->selectedCommandOption = 3;
     sp24->showingCommandOptions = 0;
     return 0;
 }
@@ -942,7 +942,7 @@ void BattleScene_SelectMoveFromButtons(ActivePokemon* arg0) {
 
     if ((cont->buttonPressed & 8) != 0) {
         if ((arg0->state.runtime.moves[0] != 0) && (arg0->state.runtime.moves[0] < 0xA6)) {
-            arg0->state.unk_14 = 0;
+            arg0->state.moveIndex = 0;
             BattleScene_ValidateSelectedMove(arg0);
             return;
         }
@@ -950,7 +950,7 @@ void BattleScene_SelectMoveFromButtons(ActivePokemon* arg0) {
 
     if ((cont->buttonPressed & 1) != 0) {
         if ((arg0->state.runtime.moves[1] != 0) && (arg0->state.runtime.moves[1] < 0xA6)) {
-            arg0->state.unk_14 = 1;
+            arg0->state.moveIndex = 1;
             BattleScene_ValidateSelectedMove(arg0);
             return;
         }
@@ -958,7 +958,7 @@ void BattleScene_SelectMoveFromButtons(ActivePokemon* arg0) {
 
     if ((cont->buttonPressed & 4) != 0) {
         if ((arg0->state.runtime.moves[2] != 0) && (arg0->state.runtime.moves[2] < 0xA6)) {
-            arg0->state.unk_14 = 2;
+            arg0->state.moveIndex = 2;
             BattleScene_ValidateSelectedMove(arg0);
             return;
         }
@@ -966,7 +966,7 @@ void BattleScene_SelectMoveFromButtons(ActivePokemon* arg0) {
 
     if ((cont->buttonPressed & 2) != 0) {
         if ((arg0->state.runtime.moves[3] != 0) && (arg0->state.runtime.moves[3] < 0xA6)) {
-            arg0->state.unk_14 = 3;
+            arg0->state.moveIndex = 3;
             BattleScene_ValidateSelectedMove(arg0);
             return;
         }
@@ -983,17 +983,17 @@ void BattleScene_HandlePlayerMoveSelection(ActivePokemon* pokemon) {
     Controller* controller = pokemon->state.controller;
     ActivePokemonState* state = &pokemon->state;
 
-    if ((state->canPickMove == 1) && (BattleScene_HandleNoUsableMoveSelection(pokemon) == 0)) {
+    if ((state->selectedCommand == 1) && (BattleScene_HandleNoUsableMoveSelection(pokemon) == 0)) {
         if (pokemon->captionState.active != 0) {
             if (BTN_IS_PRESSED(controller,
                                BTN_A | BTN_B | BTN_Z | BTN_L | BTN_R | BTN_CUP | BTN_CDOWN | BTN_CLEFT | BTN_CRIGHT)) {
                 BattleScene_ClearParticipantMessageBuffer(pokemon);
             }
         } else {
-            if (state->selectedCommand == 0) {
-                state->selectedCommand = 1;
+            if (state->selectedCommandOption == 0) {
+                state->selectedCommandOption = 1;
             } else if (BTN_IS_PRESSED(controller, BTN_L) && !BTN_IS_DOWN(controller, BTN_R)) {
-                state->selectedCommand = 0;
+                state->selectedCommandOption = 0;
                 BattleAnim_PlayMenuBackSoundEffect();
             } else {
                 state->showingCommandOptions = 0;
@@ -1011,48 +1011,52 @@ void BattleScene_HandlePlayerMoveSelection(ActivePokemon* pokemon) {
     }
 }
 
-s32 BattleScene_HandlePlayerMoveSelectionLocked(ActivePokemon* arg0, UNUSED Controller* arg1) {
-    arg0->state.unk_2A = 1;
-    BattleScene_HandlePlayerMoveSelection(arg0);
-    arg0->state.unk_2A = 1;
+s32 BattleScene_HandlePlayerMoveSelectionLocked(ActivePokemon* pokemon, UNUSED Controller* arg1) {
+    pokemon->state.moveSelectionForced = 1;
+    BattleScene_HandlePlayerMoveSelection(pokemon);
+    pokemon->state.moveSelectionForced = 1;
     return 0;
 }
 
 void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {
-    ActivePokemonState* ptr = &arg0->state;
+    ActivePokemonState* state = &arg0->state;
 
     BattleScene_ApplyForcedActionDelay(arg0);
-    ptr->unk_2A = 1;
-    ptr->selectedCommand = 3;
-    ptr->selectedMoveIndex = ptr->unk_14;
+    state->moveSelectionForced = 1;
+    state->selectedCommandOption = 3;
+    state->selectedMoveIndex = state->moveIndex;
 }
 
-void BattleScene_PollActionMenuRequestButtons(ActivePokemon* arg0) {
-    ActivePokemonState* temp_v1 = &arg0->state;
-    ActivePokemonState* temp_t0 = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
+void BattleScene_PollActionMenuRequestButtons(ActivePokemon* pokemon) {
+    ActivePokemonState* state = &pokemon->state;
+    ActivePokemonState* temp_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(pokemon) == 0]->state;
 
-    if (temp_v1->selectedCommand == 0) {
-        if (arg0->sessionTeams->tagTeamSize == 1) {
-            D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-            D_8439014C = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    if (state->selectedCommandOption == 0) {
+        if (pokemon->sessionTeams->tagTeamSize == 1) {
+            teammate1_controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
+            teammate2_controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
         } else {
-            D_84390148 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-            D_8439014C = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+            teammate1_controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
+            teammate2_controller = &gControllers[pokemon->sessionTeams->teamMember[1]->controllerPort];
         }
 
-        if (temp_v1->controller->buttonPressed & 0x8000) {
-            temp_v1->canPickMove = 1;
-        } else if ((D_84390148->buttonPressed | D_8439014C->buttonPressed) & 0x4000) {
-            temp_v1->canPickMove = 2;
-        } else if ((D_84390148->buttonPressed | D_8439014C->buttonPressed) & 0x1000) {
-            temp_v1->canPickMove = 3;
+        if (state->controller->buttonPressed & A_BUTTON) {
+            // FIGHT
+            state->selectedCommand = 1;
+        } else if ((teammate1_controller->buttonPressed | teammate2_controller->buttonPressed) & B_BUTTON) {
+            // SWITCH
+            state->selectedCommand = 2;
+        } else if ((teammate1_controller->buttonPressed | teammate2_controller->buttonPressed) & START_BUTTON) {
+            // FORFEIT
+            state->selectedCommand = 3;
         } else {
-            temp_v1->canPickMove = 0;
+            // NOT CHOSEN
+            state->selectedCommand = 0;
         }
 
-        if ((temp_v1->controller->buttonPressed & 0x8000) ||
-            (((D_84390148->buttonPressed | D_8439014C->buttonPressed) & 0x4000) != 0) ||
-            (((D_84390148->buttonPressed | D_8439014C->buttonPressed) & 0x1000) && (temp_t0->selectedCommand != 4))) {
+        if ((state->controller->buttonPressed & A_BUTTON) ||
+            (((teammate1_controller->buttonPressed | teammate2_controller->buttonPressed) & B_BUTTON) != 0) ||
+            (((teammate1_controller->buttonPressed | teammate2_controller->buttonPressed) & START_BUTTON) && (temp_state->selectedCommandOption != 4))) {
             BattleAnim_PlayMenuConfirmSoundEffect();
         }
     }
@@ -1066,7 +1070,7 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     }
 
     if (BattleScene_IsActionSelectionTimerExpired() != 0) {
-        if (arg0->state.canPickMove == 2) {
+        if (arg0->state.selectedCommand == 2) {
             BattleScene_AutoSelectReplacementMon(arg0);
         } else {
             BattleScene_AutoSelectAvailableMove(arg0);
@@ -1076,7 +1080,7 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
 
     BattleScene_PollActionMenuRequestButtons(arg0);
 
-    switch (arg0->state.canPickMove) {
+    switch (arg0->state.selectedCommand) {
         case 2:
             BattleScene_HandlePlayerPartySelection(arg0);
             return 1;
@@ -1096,7 +1100,7 @@ s32 BattleScene_HandlePlayerForcedActionState(ActivePokemon* arg0, ActivePokemon
     ActivePokemonState* temp_v0 = &arg1->state;
 
     if ((sp1C->unk_2D == 0x10) && (temp_v0->unk_2D == 0x10)) {
-        if (sp1C->selectedCommand == 3) {
+        if (sp1C->selectedCommandOption == 3) {
             BattleScene_ApplyForcedActionDelay(arg0);
             return 1;
         }
@@ -1106,8 +1110,8 @@ s32 BattleScene_HandlePlayerForcedActionState(ActivePokemon* arg0, ActivePokemon
             return 1;
         }
 
-        sp1C->canPickMove = 2;
         sp1C->selectedCommand = 2;
+        sp1C->selectedCommandOption = 2;
         BattleScene_HandlePlayerPartySelection(arg0);
         return 1;
     }
@@ -1117,10 +1121,10 @@ s32 BattleScene_HandlePlayerForcedActionState(ActivePokemon* arg0, ActivePokemon
             BattleScene_AutoSelectReplacementMon(arg0);
             return 1;
         }
-        sp1C->canPickMove = 2;
-        temp_v0->canPickMove = 1;
         sp1C->selectedCommand = 2;
-        temp_v0->selectedCommand = 3;
+        temp_v0->selectedCommand = 1;
+        sp1C->selectedCommandOption = 2;
+        temp_v0->selectedCommandOption = 3;
         BattleScene_HandlePlayerPartySelection(arg0);
         return 1;
     }
@@ -1172,10 +1176,10 @@ void BattleScene_CheckForcedActionCondition(ActivePokemon* arg0, ActivePokemon* 
         temp_v0->immobilizedReason &= ~8;
         temp_v1->immobilizedReason &= ~8;
         if (temp_v0->immobilizedReason & 0x12) {
-            arg0->state.unk_2A = 1;
+            arg0->state.moveSelectionForced = 1;
         }
     } else {
-        arg0->state.unk_2A = 1;
+        arg0->state.moveSelectionForced = 1;
     }
 }
 
@@ -1201,21 +1205,21 @@ void BattleScene_TickAttractModeInput(void) {
     }
 
     if (cont->buttonPressed & 0x1000) {
-        sp24->canPickMove = 0;
-        sp20->canPickMove = 0;
+        sp24->selectedCommand = 0;
+        sp20->selectedCommand = 0;
 
-        if (sp24->unk_2A == 0) {
+        if (sp24->moveSelectionForced == 0) {
             sp1C->usedMove = BattleAI_ResolveRandomMove(0, 0);
         }
 
-        if (sp20->unk_2A == 0) {
+        if (sp20->moveSelectionForced == 0) {
             sp18->usedMove = BattleAI_ResolveRandomMove(1, 0);
         }
 
-        sp24->selectedCommand = 3;
-        sp20->selectedCommand = 3;
+        sp24->selectedCommandOption = 3;
+        sp20->selectedCommandOption = 3;
 
-        if ((sp24->selectedCommand == 3) && (sp20->selectedCommand == 3)) {
+        if ((sp24->selectedCommandOption == 3) && (sp20->selectedCommandOption == 3)) {
             Battle_StartTurn();
         }
     }
@@ -1289,24 +1293,24 @@ void BattleScene_CollectActions(void) {
         BattleScene_CollectPlayerAction(sActivePokemon[1], sActivePokemon[0]);
     }
 
-    if ((sp24->selectedCommand == 3) && (sp20->selectedCommand == 3)) {
+    if ((sp24->selectedCommandOption == 3) && (sp20->selectedCommandOption == 3)) {
         if (BattleScene_IsBattleCountdownComplete() != 0) {
             D_84390134 = 1;
         }
 
-        if (sp24->canPickMove == 2) {
+        if (sp24->selectedCommand == 2) {
             BattleScene_CommitPlayerSwitchAction(sActivePokemon[0]);
         } else {
             BattleScene_CommitSelectedMoveAction(sActivePokemon[0]);
         }
 
-        if (sp20->canPickMove == 2) {
+        if (sp20->selectedCommand == 2) {
             BattleScene_CommitPlayerSwitchAction(sActivePokemon[1]);
         } else {
             BattleScene_CommitSelectedMoveAction(sActivePokemon[1]);
         }
 
-        if ((sp24->canPickMove == 2) || (sp20->canPickMove == 2)) {
+        if ((sp24->selectedCommand == 2) || (sp20->selectedCommand == 2)) {
             BattleScene_InitializeSwitchActions();
         } else {
             Battle_StartTurn();
@@ -1339,12 +1343,12 @@ void BattleScene_UpdateActionSelectPhase(void) {
         sActivePokemon[0]->unk_4C8 = 0;
         sActivePokemon[1]->unk_4C8 = 0;
 
-        if (sp1C->unk_2A != 1) {
-            sp1C->unk_2A = 0;
+        if (sp1C->moveSelectionForced != 1) {
+            sp1C->moveSelectionForced = 0;
         }
 
-        if (sp18->unk_2A != 1) {
-            sp18->unk_2A = 0;
+        if (sp18->moveSelectionForced != 1) {
+            sp18->moveSelectionForced = 0;
         }
 
         BattleScene_UpdateActionCollection();

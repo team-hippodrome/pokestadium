@@ -3307,7 +3307,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 
         case 4:
             temp_s0->pokeBall.node.flags &= ~1;
-            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp34->ownerTeamMemberIndex]->pokemonPicked[sp34->unk_18];
+            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp34->ownerTeamMemberIndex]->pokemonPicked[sp34->actionChosen];
             temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
             sBattleScene.scene->unk_20 += 1;
             break;
@@ -3407,7 +3407,7 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* arg0) {
         case 3:
             temp_s0->pokeBall.node.flags &= ~1;
             temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
-            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp3C->ownerTeamMemberIndex]->pokemonPicked[sp3C->unk_18];
+            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp3C->ownerTeamMemberIndex]->pokemonPicked[sp3C->actionChosen];
             sBattleScene.scene->unk_20 += 1;
             break;
 

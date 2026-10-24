@@ -31,17 +31,17 @@ typedef struct unk_D_84390010_168 {
 
 typedef struct ActivePokemonState {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 canPickMove;
+    /* 0x04 */ u32 selectedCommand;
     /* 0x08 */ s32 rosterIndex;
     /* 0x0C */ s32 selectedMoveIndex;
-    /* 0x10 */ u32 selectedCommand;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ u32 unk_18;
+    /* 0x10 */ u32 selectedCommandOption;
+    /* 0x14 */ s32 moveIndex;
+    /* 0x18 */ u32 actionChosen;
     /* 0x1C */ u8 showingCommandOptions;
     /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
     /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u8 unk_2A;
+    /* 0x2A */ u8 moveSelectionForced;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
     /* 0x2D */ u8 unk_2D;
