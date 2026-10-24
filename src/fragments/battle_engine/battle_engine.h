@@ -285,7 +285,7 @@ typedef struct TagTeamPartners {
 } TagTeamPartners; // size = 0x10
 
 typedef struct unk_D_84390178 {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 timeLeft;
     /* 0x04 */ char unk04[0x14];
 } unk_D_84390178; // size >= 0x18
 
@@ -982,8 +982,8 @@ extern char** sBattleControllerDisconnectedMessage;
 extern f32 sOrderTimer;
 extern f32 sBattleTimer;
 extern u8 D_84390134;
-extern s32 D_84390174;
-extern unk_D_84390178 D_84390178;
+extern s32 sAttractInputIndex;
+extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f D_84390190;
 extern unk_D_843901A0* gBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;

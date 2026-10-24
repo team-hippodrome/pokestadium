@@ -2484,8 +2484,8 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
  * session mode, message buffers and audio channel groups.
  */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
-    D_84390174 = 0;
-    D_84390178.unk_00 = 0;
+    sAttractInputIndex = 0;
+    sAttractScreenTimer.timeLeft = 0;
 
     BattleScene_InitializeParticipantController(sActivePokemon[0]);
     BattleScene_InitializeParticipantController(sActivePokemon[1]);
