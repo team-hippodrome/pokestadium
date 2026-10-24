@@ -695,8 +695,8 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     BattleMenu_DrawBorderedPanel(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf((sp26 - (Font_MeasureTextExtent(8, 0, arg0->unk_001C->unk_008) / 2)) + 0x3B, sp24 + 5,
-                  arg0->unk_001C->unk_008);
+    Font_Printf((sp26 - (Font_MeasureTextExtent(8, 0, arg0->unk_001C->trainerName) / 2)) + 0x3B, sp24 + 5,
+                  arg0->unk_001C->trainerName);
     Font_EndTexturedTextRendering();
 }
 

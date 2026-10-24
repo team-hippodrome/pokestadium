@@ -256,8 +256,8 @@ void BattleScene_SyncActiveHpToPartyState(void) {
     pokemon2 = &sActivePokemon[1]->teamRoster->pokemonPicked[state2->rosterIndex];
 
     if (D_84390288 != 0) {
-        D_843900A8[0] = runtime1->unk_0C = runtime1->hp;
-        D_843900A8[1] = runtime2->unk_0C = runtime2->hp;
+        sCurrentPokemonHp[0] = runtime1->unk_0C = runtime1->hp;
+        sCurrentPokemonHp[1] = runtime2->unk_0C = runtime2->hp;
 
         pokemon1->hp = runtime1->hp;
         pokemon2->hp = runtime2->hp;
@@ -389,8 +389,8 @@ void Battle_InitializeActiveRuntimeState(void) {
     Battle_InitPokemonRuntimeState(sActivePokemon[0]);
     Battle_InitPokemonRuntimeState(sActivePokemon[1]);
 
-    D_843900A8[0] = sActivePokemon[0]->state.runtime.unk_0C;
-    D_843900A8[1] = sActivePokemon[1]->state.runtime.unk_0C;
+    sCurrentPokemonHp[0] = sActivePokemon[0]->state.runtime.unk_0C;
+    sCurrentPokemonHp[1] = sActivePokemon[1]->state.runtime.unk_0C;
 
     Battle_ResetTransientRuntimeState(0, 1);
     Battle_ResetTransientRuntimeState(1, 0);

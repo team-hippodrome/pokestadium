@@ -308,11 +308,11 @@ s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* arg0) {
 
     temp_fs0 = temp_s1->hp / 90.0f;
     sp30 = BattleScene_GetParticipantSideIndex(arg0);
-    D_843900A8[sp30] = Math_StepToF(D_843900A8[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
-    temp_s2->hp = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)];
+    sCurrentPokemonHp[sp30] = Math_StepToF(sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
+    temp_s2->hp = sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)];
     if (temp_s2->hp == temp_s1->unk_0C) {
-        temp_fs0 = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)] - temp_s2->hp;
-        D_843900A8[BattleScene_GetParticipantSideIndex(arg0)] -= temp_fs0;
+        temp_fs0 = sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)] - temp_s2->hp;
+        sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)] -= temp_fs0;
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }
@@ -3317,7 +3317,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
                 temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
-                D_843900A8[sBattleScene.scene->unk_2C] = temp_s0->state.runtime.unk_0C;
+                sCurrentPokemonHp[sBattleScene.scene->unk_2C] = temp_s0->state.runtime.unk_0C;
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
                 Audio_PlayCommand(2, 0, 0);
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp34->ownerTeamMemberIndex);
@@ -3416,7 +3416,7 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* arg0) {
                 temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
-                D_843900A8[BattleScene_GetParticipantSideIndex(temp_s0)] = temp_s0->state.runtime.unk_0C;
+                sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(temp_s0)] = temp_s0->state.runtime.unk_0C;
                 Audio_PlayCommand(2, 0, 0);
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->ownerTeamMemberIndex);
                 BattleScene_ResetCameraFrameCounter();

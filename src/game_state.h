@@ -101,8 +101,8 @@ typedef struct TeamRoster {
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char unk_008[4];
-    /* 0x00C */ char unk00C[0xC];
+    /* 0x008 */ char trainerName[4];
+    /* 0x00C */ char unk00C[12];
     /* 0x018 */ s32 unk_018;
     /* 0x01C */ BattleMon pokemonPicked[6];
 #if defined(VERSION_JP)

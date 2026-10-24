@@ -105,7 +105,7 @@ TeamRoster* Trainer_Create(s32 arg0, s16 arg1, char* arg2, char* arg3) {
         sp20->numberOfPokemonCanBePicked = 0;
         sp20->unk_003 = 1;
 
-        HAL_Strcpy(sp1C->unk_008, arg2);
+        HAL_Strcpy(sp1C->trainerName, arg2);
         HAL_Strcpy(sp20->unk_014, arg2);
         HAL_Strcpy(sp20->unk_220, arg3);
     }
@@ -405,7 +405,7 @@ void Team_LoadPresetTrainer(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
         Trainer_AddPokemon(temp_s3, &temp_s2->unk_38[i]);
     }
 
-    HAL_Strcpy(temp_s3->unk_008, temp_s2->unk_00);
+    HAL_Strcpy(temp_s3->trainerName, temp_s2->unk_00);
     HAL_Strcpy(temp_s3->rosterInfo->unk_014, temp_s2->unk_00);
     HAL_Strcpy(temp_s3->rosterInfo->unk_220, temp_s2->unk_0C);
 
@@ -536,7 +536,7 @@ void Session_SaveContinueData(void) {
     sp20.unk_0E = gSessionContext.battleSides[0].teamMember[0]->unk_018;
 
     _bcopy(gSessionContext.opponentHistory[0], &sp20.unk_05, 8);
-    Text_TranscodeNameWrapper(&sp20.unk_10, &gSessionContext.battleSides[0].teamMember[0]->unk_008);
+    Text_TranscodeNameWrapper(&sp20.unk_10, &gSessionContext.battleSides[0].teamMember[0]->trainerName);
     Session_SaveContinueRecord(&sp20, sp1C->unk_028, sp1C->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }

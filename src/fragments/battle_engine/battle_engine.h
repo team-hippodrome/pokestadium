@@ -380,9 +380,9 @@ typedef struct unk_D_843901A0 {
 } unk_D_843901A0; // size = 0x4F4
 
 typedef struct unk_D_84385790 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ Color_RGBA8 unk_04;
-} unk_D_84385790; // size = 0x8
+    /* 0x00 */ s32 string_file;
+    /* 0x04 */ Color_RGBA8 color;
+} StatusConditionLabel; // size = 0x8
 
 typedef struct arg1_func_84344CE8 {
     /* 0x00 */ char unk00[0x14];
@@ -973,7 +973,7 @@ extern ActivePokemon* sActivePokemon[2];
 extern ActivePokemon* sSide1ActivePokemon;
 extern ActivePokemon* sSide2ActivePokemon;
 extern ModelDimensions sPokemonModelDimensions[2];
-extern f32 D_843900A8[];
+extern f32 sCurrentPokemonHp[];
 extern char** sBattleMessagesTable;
 extern char** sPokemonNameTable;
 extern char** sMoveNameTable;
@@ -1438,7 +1438,7 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, char* arg3, s32 arg4);
 void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
-void BattleHud_DrawMonInfoPanel(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
+void BattleHud_DrawMonInfoPanel(ActivePokemon* arg0, BattleMon* arg1, StatusConditionLabel* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
 s32 BattleHud_DrawBorderTile(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 void func_84311420(void);
 void BattleHud_DrawBoxBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
