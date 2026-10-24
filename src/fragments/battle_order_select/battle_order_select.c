@@ -636,7 +636,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(temp_fp + 0x8C, sp7C + 7, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
                   arg0->unk_0018[temp_s1].unk_24);
-    Font_Printf(temp_fp + 0x52, sp7C + 0x1B, "%3d", sp78->unk_26);
+    Font_Printf(temp_fp + 0x52, sp7C + 0x1B, "%3d", sp78->maxHp);
     Font_Printf(temp_fp + 0xFA, sp7C + 7, "%3d", sp78->unk_28);
     Font_Printf(temp_fp + 0xFA, sp7C + 0x1B, "%3d", sp78->unk_2A);
     Font_Printf(temp_fp + 0xFA, sp7C + 0x2F, "%3d", sp78->unk_2C);

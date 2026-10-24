@@ -42,7 +42,7 @@ void BattleScene_FinalPresentationFrameOwner0(CameraNode* arg0) {
 }
 
 void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* arg1, UNUSED ActivePokemon* arg2) {
-    sBattleScene.scene->unk_40 = 0;
+    sBattleScene.scene->winner = 0;
     sBattleScene.scene->unk_60 = 30.0f;
     sBattleScene.scene->unk_6C = 10.0f;
 
@@ -128,7 +128,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->unk_2A]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
-                    BattleScene_QuantizePresentationTimer();
+                    BattleScene_QuantizeBattleTimer();
                 }
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[0]);
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[1]);
@@ -212,7 +212,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
             if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->unk_2A]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
-                    BattleScene_QuantizePresentationTimer();
+                    BattleScene_QuantizeBattleTimer();
                 }
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[0]);
                 Battle_StopBeingGoldAfterHarden(sActivePokemon[1]);
@@ -700,7 +700,7 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
 
         case 2:
-            BattleScene_TickPresentationTimer();
+            BattleScene_TickBattleTimer();
             BattleScene_UpdatePhase(arg0);
             break;
 
@@ -713,7 +713,7 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
 
         default:
-            sBattleScene.scene->unk_40 = 3;
+            sBattleScene.scene->winner = 3;
             break;
     }
 
@@ -742,5 +742,5 @@ s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1) {
             BattleScene_RunFinalPresentation(arg1, sActivePokemon[0], sActivePokemon[1]);
             break;
     }
-    return sBattleScene.scene->unk_40;
+    return sBattleScene.scene->winner;
 }

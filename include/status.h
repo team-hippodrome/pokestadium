@@ -45,4 +45,25 @@
 
 /* 0x80: unassigned. */
 
+/*
+ * BattleMonRuntime.immobilizedReason (offset 0x4C)
+ *
+ * Volatile per-turn battle state. Despite the field name, only some bits block
+ * the Pokemon from acting. Setters are the Battle_Effect_* functions in
+ * battle_engine_35DF70.c; consumers are in battle_engine_359F90.c
+ * (Battle_CheckMonCanAct and the move-effect turn handler).
+ * Keep the struct member u8.
+ */
+#define IMMOBILIZED_BIDING            0x01 /* Set by Battle_Effect_Bide; stored damage in unk_54, turns left in unk_4F. */
+#define IMMOBILIZED_THRASHING         0x02 /* Set by Battle_Effect_Thrash; clears into IMMOBILIZED_CONFUSED. */
+#define IMMOBILIZED_MULTI_HIT         0x04 /* Set by Battle_Effect_MultiHit; cleared when the hits finish. */
+#define IMMOBILIZED_FLINCHED          0x08 /* Set on the target by Battle_Effect_Flinch; cleared at turn start and when it costs the action. */
+#define IMMOBILIZED_CHARGING          0x10 /* Set by Battle_Effect_TwoTurnMove; cleared after the attack executes. */
+#define IMMOBILIZED_TRAPPING          0x20 /* Set on the user by Battle_Effect_Trap (Bind, Wrap, String Shot); locks the opponent's action. */
+#define IMMOBILIZED_SEMI_INVULNERABLE 0x40 /* Set with IMMOBILIZED_CHARGING for Dig and the 0x2B two-turn effect; cleared with it. */
+#define IMMOBILIZED_CONFUSED          0x80 /* Set by the confusion effects; turns left in unk_50. */
+
+/* Actions locked in: Thrash or two-turn charge. */
+#define IMMOBILIZED_ACTION_LOCKED     (IMMOBILIZED_THRASHING | IMMOBILIZED_CHARGING)
+
 #endif /* BATTLE_STATE_FLAGS_H */

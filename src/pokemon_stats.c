@@ -176,7 +176,7 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
 
     Pokemon_RecalcStats(arg0);
     arg0->statusCondition = 0;
-    arg0->hp = arg0->unk_26;
+    arg0->hp = arg0->maxHp;
 
     for (i = 0; i < 4; i++) {
         if (arg0->unk_09[i] != 0) {

@@ -496,7 +496,7 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
     side_index = BattleScene_GetParticipantSideIndex(pokemon);
     species = pokemon->displayObject.objectType - 1;
 
-    battle_mon = &pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->pokemonPicked[pokemon->state.unk_18];
+    battle_mon = &pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->pokemonPicked[pokemon->state.actionChosen];
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[species] & 0xFFFFFF);
     if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_52 & 0x80)) {
@@ -1263,7 +1263,7 @@ void BattleScene_TickAssetLoadQueueRowEffectList3(ActivePokemon* active_pokemon)
         active_pokemon->animationTimer = 0;
         BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[animation_state].mode);
         Audio_PlayCommand(3, 0, 0);
-        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->teamMember[pokemon_state->teamMemberIndex]->pokemonPicked[pokemon_state->unk_18];
+        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->teamMember[pokemon_state->teamMemberIndex]->pokemonPicked[pokemon_state->actionChosen];
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
 }
@@ -1396,7 +1396,7 @@ void BattleScene_EnterRow9SetEventTrack(ActivePokemon* active_pokemon) {
 void BattleScene_EnterRow9QueueEffectList6(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->state.runtime;
 
-    if (runtime->unk_4C & 0x20) {
+    if (runtime->immobilizedReason & 0x20) {
         if ((runtime->usedMove == BIND) || (runtime->usedMove == WRAP) || (runtime->usedMove == STRING_SHOT)) {
             BattleAnim_QueueEffectList6(2, active_pokemon);
             BattleScene_SetParticipantModelTransform(active_pokemon, 16, 0);
@@ -1597,7 +1597,7 @@ void BattleScene_TickRow14PlayMoveEffectEnd(ActivePokemon* active_pokemon) {
 
     if ((sActivePokemon[side == 0]->animationTimer == (sCurrentAnimation->endFrame + 1)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
         BattleAnim_CleanupEffects(1);
-        if (((runtime_temp->usedMove == SUPERSONIC) || (runtime_temp->usedMove == CONFUSE_RAY)) && (runtime->unk_4C & 0x80) && (sBattleMoveFailed == 0) &&
+        if (((runtime_temp->usedMove == SUPERSONIC) || (runtime_temp->usedMove == CONFUSE_RAY)) && (runtime->immobilizedReason & 0x80) && (sBattleMoveFailed == 0) &&
             (sConfused == 1)) {
             BattleAnim_PlayBattleSequenceById(sActivePokemon[side == 0], 18);
         }
@@ -2484,8 +2484,8 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
  * session mode, message buffers and audio channel groups.
  */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
-    D_84390174 = 0;
-    D_84390178.unk_00 = 0;
+    sAttractInputIndex = 0;
+    sAttractScreenTimer.timeLeft = 0;
 
     BattleScene_InitializeParticipantController(sActivePokemon[0]);
     BattleScene_InitializeParticipantController(sActivePokemon[1]);

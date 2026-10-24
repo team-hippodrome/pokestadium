@@ -520,13 +520,13 @@ void BattlePrepTeamIcons_DrawHpBarsSingle(unk_D_84B25A58* arg0, s32 arg1) {
         temp_s5 = gSessionContext.battleSides[i].teamMember[0];
 
         for (j = 0; j < temp_s5->numberOfPokemonBrought; j++) {
-            temp_lo = temp_s5->pokemonPicked[j].unk_26 * arg1;
+            temp_lo = temp_s5->pokemonPicked[j].maxHp * arg1;
             var_s0 = temp_s5->pokemonPicked[j].hp * 0x64;
             if (var_s0 < temp_lo) {
                 var_s0 = temp_lo;
             }
             GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_1C->unk_08[i * 3 + j].unk_0C);
-            BattleHud_DrawHpBarTexture(4, 0xB4, 0x78, var_s0, temp_s5->pokemonPicked[j].unk_26 * 0x64);
+            BattleHud_DrawHpBarTexture(4, 0xB4, 0x78, var_s0, temp_s5->pokemonPicked[j].maxHp * 0x64);
         }
     }
 }
@@ -545,13 +545,13 @@ void BattlePrepTeamIcons_DrawHpBarsDouble(unk_D_84B25A58* arg0, s32 arg1) {
 
             if (temp_s5 != NULL) {
                 for (x = 0; x < temp_s5->numberOfPokemonBrought; x++) {
-                    temp_lo = temp_s5->pokemonPicked[x].unk_26 * arg1;
+                    temp_lo = temp_s5->pokemonPicked[x].maxHp * arg1;
                     var_s0 = temp_s5->pokemonPicked[x].hp * 0x64;
                     if (var_s0 < temp_lo) {
                         var_s0 = temp_lo;
                     }
                     GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_1C->unk_08[(i * 6) + (j * 3) + x].unk_0C);
-                    BattleHud_DrawHpBarTexture(4, 0x54, 0x78, var_s0, temp_s5->pokemonPicked[x].unk_26 * 0x64);
+                    BattleHud_DrawHpBarTexture(4, 0x54, 0x78, var_s0, temp_s5->pokemonPicked[x].maxHp * 0x64);
                 }
             }
         }

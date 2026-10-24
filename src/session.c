@@ -39,7 +39,7 @@ void Session_SetMode(s32 arg0, s32 arg1, s32 arg2) {
 
     gSessionContext.timeLimitsEnabled = 0;
     gSessionContext.battleLimitMinutes = 0;
-    gSessionContext.moveLimitSeconds = 0;
+    gSessionContext.orderLimitSeconds = 0;
     gSessionContext.unk_11F4 = 0;
     gSessionContext.sessionFlags = 0;
     gSessionContext.continueCount = 0;
@@ -170,7 +170,7 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
 
     Pokemon_RecalcStats(arg0);
 
-    arg0->hp = arg0->unk_26;
+    arg0->hp = arg0->maxHp;
 
     Text_CopySpeciesName(arg0->unk_30, arg1);
     HAL_Strcpy(arg0->unk_3B, Text_GetPlayerLabel(0));
@@ -354,7 +354,7 @@ void Team_ScaleOpponentToLevel(s16 arg0) {
         var_s0->unk_24 = arg0;
         var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->unk_00.unk_00, arg0);
         Pokemon_RecalcStats(var_s0);
-        var_s0->hp = var_s0->unk_26;
+        var_s0->hp = var_s0->maxHp;
 
         *var_s1 = *var_s0;
     }

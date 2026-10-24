@@ -1396,7 +1396,7 @@ void EventBattle_StartBattle(unk_D_82305A28* arg0) {
     if (D_82305A40.unk_01 == 1) {
         gSessionContext.timeLimitsEnabled = D_82305A40.unk_01;
         gSessionContext.battleLimitMinutes = D_82305A40.unk_02;
-        gSessionContext.moveLimitSeconds = D_82305A40.unk_04;
+        gSessionContext.orderLimitSeconds = D_82305A40.unk_04;
     }
     D_82305AF8[0].unk_0000 = 3;
     D_82305AF8[1].unk_0000 = 3;

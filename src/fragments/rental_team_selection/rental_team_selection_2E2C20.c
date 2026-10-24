@@ -314,7 +314,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0x76, temp_s5 + 0x5A, "%s", TeamSelection_GetInstructionText(8));
             Font_SetActive(8, 0);
-            Font_Printf(temp_s4 + 0xA4, temp_s5 + 0x5A, "%3d", temp_s6->unk_26);
+            Font_Printf(temp_s4 + 0xA4, temp_s5 + 0x5A, "%3d", temp_s6->maxHp);
             Font_SetActive(4, 0);
             Font_Printf(temp_s4 + 0x116, temp_s5 + 0x25, TeamSelection_GetLabelText(5));
             Font_Printf(temp_s4 + 0x116, temp_s5 + 0x38, TeamSelection_GetLabelText(6));

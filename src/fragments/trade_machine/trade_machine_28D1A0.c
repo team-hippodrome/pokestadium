@@ -251,7 +251,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         }
 
         Trade_DrawFilledFrame(arg0->unk_04, arg0->unk_06 + 0x124, 0x210, 0x24, 0x28, 0x28, 0x64);
-        BattleHud_DrawHpBarTexture(arg0->unk_04 + 0x140, arg0->unk_06 + 0x5A, 0x94, sp11C->hp, sp11C->unk_26);
+        BattleHud_DrawHpBarTexture(arg0->unk_04 + 0x140, arg0->unk_06 + 0x5A, 0x94, sp11C->hp, sp11C->maxHp);
 
         gSPDisplayList(gDisplayListHead++, D_8006F4E0);
 
@@ -331,7 +331,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         Font_SetActive(8, 0);
         Font_Printf(arg0->unk_04 + 0x144, arg0->unk_06 + 0x44, Text_GetString(NULL, 0, D_82F13B74, 8));
         Font_SetActive(8, 0);
-        sprintf(sp94, "%d", sp11C->unk_26);
+        sprintf(sp94, "%d", sp11C->maxHp);
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0x44, sp94);
         temp_s1_3 = 0x1D0 - Font_MeasureTextExtent(0, 0, "999");
         sprintf(sp94, "/");

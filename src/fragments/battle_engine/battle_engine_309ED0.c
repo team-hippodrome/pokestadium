@@ -280,11 +280,11 @@ void BattleScene_ClearInactiveOwnerAnimationFlags(void) {
     BattleMonRuntime* temp_v1 = &sActivePokemon[1]->state.runtime;
 
     if (temp_v0->unk_4F == 0) {
-        temp_v0->unk_4C &= ~0x20;
+        temp_v0->immobilizedReason &= ~0x20;
     }
 
     if (temp_v1->unk_4F == 0) {
-        temp_v1->unk_4C &= ~0x20;
+        temp_v1->immobilizedReason &= ~0x20;
     }
 }
 
@@ -306,7 +306,7 @@ s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* arg0) {
         return 1;
     }
 
-    temp_fs0 = temp_s1->unk_28 / 90.0f;
+    temp_fs0 = temp_s1->hp / 90.0f;
     sp30 = BattleScene_GetParticipantSideIndex(arg0);
     D_843900A8[sp30] = Math_StepToF(D_843900A8[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
     temp_s2->hp = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)];
@@ -484,13 +484,13 @@ void BattleScene_BeginBattlePhase(void) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
 
-    if ((BattleScene_IsPresentationCountdownComplete() == 0) && (D_84390134 != 1)) {
+    if ((BattleScene_IsBattleCountdownComplete() == 0) && (D_84390134 != 1)) {
         AudioFrameUpdate(1);
     }
 
     BattleScene_ClearInactiveOwnerAnimationFlags();
-    sp1C->unk_10 = 0;
-    sp18->unk_10 = 0;
+    sp1C->selectedCommandOption = 0;
+    sp18->selectedCommandOption = 0;
 
     if ((sp1C->unk_2D == 0x10) || (sp18->unk_2D == 0x10) || (sBattleScene.scene->unk_2E == 2)) {
         BattleScene_SetCameraSubstate(1, 0);
@@ -1044,7 +1044,7 @@ void BattleScene_SetupSendOutOwnerShot(CameraNode* arg0) {
 
 void BattleScene_CompleteSendOutCameraFade(UNUSED CameraNode* arg0) {
     if (BattleScene_AdvanceCameraFrameCounter(0x50) != 0) {
-        sBattleScene.scene->unk_40 = sBattleScene.scene->unk_2C + 1;
+        sBattleScene.scene->winner = sBattleScene.scene->unk_2C + 1;
         BattleBox_Close();
         Audio_FadeOutAll(0x14);
     }
@@ -1052,7 +1052,7 @@ void BattleScene_CompleteSendOutCameraFade(UNUSED CameraNode* arg0) {
 
 void BattleScene_CompleteSendOutExtendedFade(UNUSED CameraNode* arg0) {
     if (BattleScene_AdvanceCameraFrameCounter(0x7D) != 0) {
-        sBattleScene.scene->unk_40 = sBattleScene.scene->unk_2C + 1;
+        sBattleScene.scene->winner = sBattleScene.scene->unk_2C + 1;
         Audio_FadeOutAll(0x14);
     }
 }
@@ -1144,7 +1144,7 @@ void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0) {
             sBattleScene.scene->unk_20 = 0;
             sBattleScene.scene->unk_38 = 4;
         } else {
-            sBattleScene.scene->unk_40 = sBattleScene.scene->unk_2C + 1;
+            sBattleScene.scene->winner = sBattleScene.scene->unk_2C + 1;
         }
         Audio_FadeAndClearStoredSounds();
     }
@@ -3307,7 +3307,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 
         case 4:
             temp_s0->pokeBall.node.flags &= ~1;
-            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp34->ownerTeamMemberIndex]->pokemonPicked[sp34->unk_18];
+            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp34->ownerTeamMemberIndex]->pokemonPicked[sp34->actionChosen];
             temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
             sBattleScene.scene->unk_20 += 1;
             break;
@@ -3407,7 +3407,7 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* arg0) {
         case 3:
             temp_s0->pokeBall.node.flags &= ~1;
             temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
-            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp3C->ownerTeamMemberIndex]->pokemonPicked[sp3C->unk_18];
+            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp3C->ownerTeamMemberIndex]->pokemonPicked[sp3C->actionChosen];
             sBattleScene.scene->unk_20 += 1;
             break;
 

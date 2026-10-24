@@ -1337,7 +1337,7 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
         Font_Printf(arg1 + 8, arg2 + 8,
                       Text_GetString(NULL, 0, D_88224FB8, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
 
-        Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].unk_26);
+        Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].maxHp);
         Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_28);
         Font_Printf(arg1 + 0xD1, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2A);
         Font_Printf(arg1 + 0x15C, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2C);

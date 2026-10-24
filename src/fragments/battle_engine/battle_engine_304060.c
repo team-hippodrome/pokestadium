@@ -562,7 +562,7 @@ void BattleScene_UpdateIntroCameraSequence(CameraNode* arg0) {
             BattleScene_UpdateActionSelectPhase();
         } else if ((sBattleScene.scene->unk_30 == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x < 0xE) &&
                    (sActivePokemon[1]->thumbnail.camera->viewport.x >= 0x10D)) {
-            BattleScene_ResetActionSelectionTimers();
+            BattleScene_ResetActionSelectionTimer();
         }
     }
 

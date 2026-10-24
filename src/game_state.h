@@ -47,7 +47,7 @@ typedef struct BattleMon {
     /* 0x20 */ u8 unk_20[4];
     /* 0x24 */ u8 unk_24;
     /* 0x25 */ u8 unk_25;
-    /* 0x26 */ u16 unk_26;
+    /* 0x26 */ u16 maxHp;
     /* 0x28 */ u16 unk_28;
     /* 0x2A */ u16 unk_2A;
     /* 0x2C */ u16 unk_2C;
@@ -145,7 +145,7 @@ typedef struct SessionContext {
     /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
     /* 0x11ED */ u8 timeLimitsEnabled;
     /* 0x11EE */ u8 battleLimitMinutes;
-    /* 0x11EF */ u8 moveLimitSeconds;
+    /* 0x11EF */ u8 orderLimitSeconds;
     /* 0x11F0 */ u8 gbStarterChoice;
     /* 0x11F1 */ char unk11F1[0x1];
     /* 0x11F2 */ u8 inRound2;

@@ -335,7 +335,7 @@ void BattleAI_ResetTeamState(BattleAiMonState* arg0) {
         temp_v0->unk_5C[i] = 7;
     }
 
-    temp_v0->unk_4C = 0;
+    temp_v0->immobilizedReason = 0;
     temp_v0->unk_4D = 0;
     temp_v0->unk_4E = 0;
 }
@@ -1292,7 +1292,7 @@ s32 BattleAI_ScoreAllCandidateMoves(BattleAiMonState* arg0, BattleAiMonState* ar
     temp_s2 = &arg0->unk_12;
     spDE = BattleAI_FindSpeciesIndex(temp_s2->id);
 
-    if (temp_s2->unk_4C & 1) {
+    if (temp_s2->immobilizedReason & 1) {
         *arg2 = 0x75;
 
         switch (arg3) {
@@ -1318,18 +1318,18 @@ s32 BattleAI_ScoreAllCandidateMoves(BattleAiMonState* arg0, BattleAiMonState* ar
                 spD6 = BattleAI_ScoreMove(temp_s2, &arg1->unk_12, 0x75);
                 break;
         }
-    } else if (temp_s2->unk_4C & 2) {
+    } else if (temp_s2->immobilizedReason & 2) {
         i = (arg0 == D_843C60AC) ? gBattleAI_ActivePokemon->unk_000 : 1 - gBattleAI_ActivePokemon->unk_000;
         *arg2 = sActivePokemon[i]->state.runtime.usedMove;
         spD6 = BattleAI_ScoreMove(temp_s2, &arg1->unk_12, *arg2);
-    } else if ((temp_s2->unk_4C & 0x10) || (temp_s2->unk_4C & 0x20) || (temp_s2->unk_4C & 0x40)) {
+    } else if ((temp_s2->immobilizedReason & 0x10) || (temp_s2->immobilizedReason & 0x20) || (temp_s2->immobilizedReason & 0x40)) {
         i = (arg0 == D_843C60AC) ? gBattleAI_ActivePokemon->unk_000 : 1 - gBattleAI_ActivePokemon->unk_000;
         *arg2 = sActivePokemon[i]->state.runtime.usedMove;
         spD6 = BattleAI_ScoreMove(temp_s2, &arg1->unk_12, *arg2);
 
         if (arg3 == 0xC) {
             _bcopy(arg0, &sp60, sizeof(BattleAiMonState));
-            sp60.unk_12.unk_4C &= ~0x30;
+            sp60.unk_12.immobilizedReason &= ~0x30;
             spD6 += BattleAI_ScoreAllCandidateMoves(&sp60, arg1, arg2, 0xB);
         }
     } else if (temp_s2->unk_4D & 0x20) {
@@ -1398,7 +1398,7 @@ s32 BattleAI_ScoreAllCandidateMoves(BattleAiMonState* arg0, BattleAiMonState* ar
     } else {
         tmp = temp_s2->moves[0];
         for (i = 0; i < 4 && (tmp = temp_s2->moves[i]); i++) {
-            if (temp_s2->unk_32[i] > 0) {
+            if (temp_s2->moveUsability[i] > 0) {
                 BattleAI_PickBestMove(temp_s2, &arg1->unk_12, &spD6, arg2, tmp, arg3);
             }
         }
@@ -1407,7 +1407,7 @@ s32 BattleAI_ScoreAllCandidateMoves(BattleAiMonState* arg0, BattleAiMonState* ar
 }
 
 s32 BattleAI_ScoreAllCandidateMovesRatioToMaxHp(BattleAiMonState* arg0, BattleAiMonState* arg1, u8* arg2, u8 arg3) {
-    return BattleAI_ScaleSignedRatio(BattleAI_ScoreAllCandidateMoves(arg0, arg1, arg2, arg3), arg1->unk_12.unk_28);
+    return BattleAI_ScaleSignedRatio(BattleAI_ScoreAllCandidateMoves(arg0, arg1, arg2, arg3), arg1->unk_12.hp);
 }
 
 s32 BattleAI_ScoreAllCandidateMovesRatioToCurrentHp(BattleAiMonState* arg0, BattleAiMonState* arg1, u8* arg2, u8 arg3) {
@@ -1458,7 +1458,7 @@ u8 BattleAI_CalcStagedMovePower(BattleMonRuntime* arg0, BattleMonRuntime* arg1, 
         var_t0 /= 4;
     }
 
-    if (arg0->unk_4C & 0x80) {
+    if (arg0->immobilizedReason & 0x80) {
         var_t0 /= 2;
     }
 
@@ -1528,7 +1528,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
     _bcopy(arg1, &sp74, sizeof(BattleAiMonState));
 
     if (arg2 != 0) {
-        var_s3->unk_4C &= 0xFF8F;
+        var_s3->immobilizedReason &= 0xFF8F;
         var_s3->unk_4D &= 0xFFDF;
     }
 
@@ -1536,7 +1536,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
         if ((var_s0->unk_15 & 7) && (BattleAI_RandomBelowInclusive(2) != 0)) {
             var_s0->unk_15 = 0;
         }
-        var_s0->unk_4C &= 0xFF8F;
+        var_s0->immobilizedReason &= 0xFF8F;
         var_s0->unk_4D &= 0xFFDF;
     }
 
@@ -1585,13 +1585,13 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
             }
         }
 
-        if ((var_s3->unk_4C & 0x40) && (var_s0->speed >= var_s3->speed) && (var_s2->unk_03 != 0x27) &&
+        if ((var_s3->immobilizedReason & 0x40) && (var_s0->speed >= var_s3->speed) && (var_s2->unk_03 != 0x27) &&
             (var_s2->unk_03 != 0x2B) && (var_s2->unk_03 != 0x11)) {
             var_s1 = 0;
         }
 
         if (((D_843C60BC != 0) && (arg2 == 0)) || ((var_s3->unk_15 & 7) != 0) ||
-            ((var_s0->unk_4C & 0x20) && (var_s0->unk_4F != 0)) ||
+            ((var_s0->immobilizedReason & 0x20) && (var_s0->unk_4F != 0)) ||
             ((var_s3->unk_15 & 0x20) && (gMoveData[var_s2->unk_00 - 1].unk_01 != 4) &&
              (gMoveData[var_s2->unk_00 - 1].unk_01 != 0x22))) {
             var_s4 = 0;
@@ -1630,7 +1630,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                         break;
 
                     case 0x62:
-                        if (var_s3->unk_4C & 0x40) {
+                        if (var_s3->immobilizedReason & 0x40) {
                             var_s1 = 0;
                         }
                         if (var_s1 >= var_s3->unk_0C) {
@@ -1664,8 +1664,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                         BattleAI_ApplyInverseWeightScale(spFB, &spFA);
                     } else {
                         var_s7 = var_s1 >> 1;
-                        if (var_s0->unk_28 < (var_s0->unk_0C + var_s7)) {
-                            var_s7 = var_s0->unk_28 - var_s0->unk_0C;
+                        if (var_s0->hp < (var_s0->unk_0C + var_s7)) {
+                            var_s7 = var_s0->hp - var_s0->unk_0C;
                         }
                     }
                 } else if (var_s4 >= var_s0->unk_0C) {
@@ -1675,8 +1675,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                         var_s7 = var_s1 >> 1;
                     }
 
-                    if (var_s0->unk_28 < (var_s0->unk_0C + var_s7)) {
-                        var_s7 = var_s0->unk_28 - var_s0->unk_0C;
+                    if (var_s0->hp < (var_s0->unk_0C + var_s7)) {
+                        var_s7 = var_s0->hp - var_s0->unk_0C;
                     }
                 }
                 break;
@@ -1695,7 +1695,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                     spFB *= 0.75;
                 }
 
-                if (var_s0->unk_4C & 0x80) {
+                if (var_s0->immobilizedReason & 0x80) {
                     spFB /= 2;
                 }
 
@@ -1705,7 +1705,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
 
                 if ((var_s2->unk_00 != 0x5B) && (var_s2->unk_00 != 0x13)) {
                     if (var_s0->speed >= var_s3->speed) {
-                        if ((BattleAI_FindHeuristicMove(arg0, arg1, 3, &sp10E) == 2) && !(var_s3->unk_4C & 0x50)) {
+                        if ((BattleAI_FindHeuristicMove(arg0, arg1, 3, &sp10E) == 2) && !(var_s3->immobilizedReason & 0x50)) {
                             var_s1 = 0;
                         }
 
@@ -1795,8 +1795,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                     var_s7 = var_s1 >> 1;
                 }
 
-                if (var_s0->unk_28 < (var_s0->unk_0C + var_s7)) {
-                    var_s7 = var_s0->unk_28 - var_s0->unk_0C;
+                if (var_s0->hp < (var_s0->unk_0C + var_s7)) {
+                    var_s7 = var_s0->hp - var_s0->unk_0C;
                 }
 
                 if (var_s0->speed >= var_s3->speed) {
@@ -1922,7 +1922,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                     spFB = 0xBF;
                 }
 
-                if (var_s0->unk_4C & 0x80) {
+                if (var_s0->immobilizedReason & 0x80) {
                     spFB /= 2;
                 }
 
@@ -1960,7 +1960,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                     spFB = 0xBF;
                 }
 
-                if (var_s0->unk_4C & 0x80) {
+                if (var_s0->immobilizedReason & 0x80) {
                     spFB /= 2;
                 }
 
@@ -1993,7 +1993,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                 if (var_s0->unk_4D & 0x10) {
                     spFB = 0;
                 } else {
-                    if (var_s0->unk_0C < (var_s0->unk_28 >> 2)) {
+                    if (var_s0->unk_0C < (var_s0->hp >> 2)) {
                         spFB = 0;
                     } else {
                         spFB = 0xFF;
@@ -2003,7 +2003,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                         spFB = (spFB * 3) / 4;
                     }
 
-                    if (var_s0->unk_4C & 0x80) {
+                    if (var_s0->immobilizedReason & 0x80) {
                         spFB /= 2;
                     }
 
@@ -2019,9 +2019,9 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                         BattleAI_ApplyInverseWeightScale(spFA, &spFB);
                     }
 
-                    if ((var_s4 >= (var_s0->unk_28 >> 2)) && (var_s0->unk_0C >= (var_s0->unk_28 >> 2)) &&
+                    if ((var_s4 >= (var_s0->hp >> 2)) && (var_s0->unk_0C >= (var_s0->hp >> 2)) &&
                         (var_s3->speed < var_s0->speed)) {
-                        var_s4 = var_s0->unk_28 / 4;
+                        var_s4 = var_s0->hp / 4;
                     }
                 }
                 break;
@@ -2029,8 +2029,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
 
     switch_end:
         if (var_s0->unk_15 & 0x18) {
-            if ((var_s0->unk_28 >> 4) != 0) {
-                var_v1 = var_s0->unk_28 >> 4;
+            if ((var_s0->hp >> 4) != 0) {
+                var_v1 = var_s0->hp >> 4;
             } else {
                 var_v1 = 1;
             }
@@ -2042,8 +2042,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
         }
 
         if (var_s3->unk_15 & 0x18) {
-            if ((var_s0->unk_28 >> 4) != 0) {
-                var_v0 = var_s3->unk_28 >> 4;
+            if ((var_s0->hp >> 4) != 0) {
+                var_v0 = var_s3->hp >> 4;
             } else {
                 var_v0 = 1;
             }
@@ -2055,10 +2055,10 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
         }
 
         if (var_s0->unk_4D & 0x80) {
-            if ((var_s0->unk_28 >> 4) <= 0) {
+            if ((var_s0->hp >> 4) <= 0) {
                 var_v1 = 1;
             } else {
-                var_v1 = var_s0->unk_28 >> 4;
+                var_v1 = var_s0->hp >> 4;
             }
 
             if (var_s0->unk_4E & 1) {
@@ -2067,15 +2067,15 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
 
             var_s2->unk_16 += var_v1;
             var_s2->unk_0E -= (var_s2->unk_00 != 0x9C)       ? var_v1
-                              : ((var_s0->unk_28 >> 4) <= 0) ? 1
-                                                             : var_s0->unk_28 >> 4;
+                              : ((var_s0->hp >> 4) <= 0) ? 1
+                                                             : var_s0->hp >> 4;
         }
 
         if (var_s3->unk_4D & 0x80) {
-            if ((var_s3->unk_28 >> 4) <= 0) {
+            if ((var_s3->hp >> 4) <= 0) {
                 var_v0 = 1;
             } else {
-                var_v0 = var_s3->unk_28 >> 4;
+                var_v0 = var_s3->hp >> 4;
             }
 
             if (var_s3->unk_4E & 1) {
@@ -2242,7 +2242,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                 if (arg4) {
                     switch (temp_s7->unk_00) {
                         case 0x44:
-                            if (temp_s3->unk_4C & 0x80) {
+                            if (temp_s3->immobilizedReason & 0x80) {
                                 var_s1 += spBA * 2;
                             }
                             if (BattleAI_HasOtherCandidateAtLeastScore(arg3, i, arg2, temp_s7->unk_0C * 2) != 0) {
@@ -2251,7 +2251,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                             break;
 
                         case 0x62:
-                            if (temp_s3->unk_4C & 0x40) {
+                            if (temp_s3->immobilizedReason & 0x40) {
                                 spF8 = 1;
                             }
                             break;
@@ -2714,7 +2714,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                 if (arg4) {
                     if ((temp_s3->unk_5C[1] >= 2) && (temp_s3->unk_2C >= 2)) {
                         var_s1 += spB7 * 5;
-                        if (temp_s3->unk_4C & 0x80) {
+                        if (temp_s3->immobilizedReason & 0x80) {
                             var_s1 += spBA * 5;
                         }
                         if ((temp_s7->unk_14 >= 0x9A) && (BattleAI_HasExactlyOneUsableCandidate(arg0) != 0)) {
@@ -2978,7 +2978,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
             case 0x1A:
                 temp_s3 = oppMon;
                 if (arg4) {
-                    if (temp_s3->unk_4C & 0x80) {
+                    if (temp_s3->immobilizedReason & 0x80) {
                         var_s1 += spBA * 3;
                         if (BattleAI_IsCandidateScoreBelowPeers(arg3, i, arg2, 0x99) != 0) {
                             var_s1 -= temp_t0 * 3;
@@ -3002,7 +3002,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                             }
                         }
 
-                        if (!((((f32)temp_s6->unk_0C) / temp_s6->unk_28) < ((D_843C5564->unk_08 + 0x33) / 255.0f))) {
+                        if (!((((f32)temp_s6->unk_0C) / temp_s6->hp) < ((D_843C5564->unk_08 + 0x33) / 255.0f))) {
                             var_s1 += spB6 * 2;
                             if ((BattleAI_HasExactlyOneUsableCandidate(arg1) != 0) && (temp_s4->unk_12.unk_15 & 0x20)) {
                                 var_s1 = 1;
@@ -3040,7 +3040,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
             case 0x31:
                 temp_s3 = oppMon;
                 if (arg4) {
-                    if ((!(temp_s3->unk_4C & 0x80)) && (!(temp_s3->unk_4D & 0x10))) {
+                    if ((!(temp_s3->immobilizedReason & 0x80)) && (!(temp_s3->unk_4D & 0x10))) {
                         var_s1 += spB7 * 4;
                         if (((BattleAI_ClassifyMoveAvailability(temp_fp, temp_fp, 0x75) != 0) ||
                              (BattleAI_ClassifyMoveAvailability(temp_fp, temp_fp, 0x44) != 0)) ||
@@ -3066,7 +3066,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x38:
                 if (arg4) {
-                    if (temp_s6->unk_0C != temp_s6->unk_28) {
+                    if (temp_s6->unk_0C != temp_s6->hp) {
                         var_s1 = 1;
                         switch (temp_s7->unk_00) {
                             case 0x69:
@@ -3075,7 +3075,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                                 temp_s3 = oppMon;
                                 if ((temp_s3->speed < temp_s6->speed) ||
                                     ((temp_s6->speed == temp_s3->speed) && (BattleAI_RandomBelowInclusive(1) != 0))) {
-                                    if (BattleAI_ScaleSignedRatio(temp_s6->unk_0C - temp_s7->unk_16, temp_s6->unk_28) >=
+                                    if (BattleAI_ScaleSignedRatio(temp_s6->unk_0C - temp_s7->unk_16, temp_s6->hp) >=
                                         (D_843C5564->unk_08 + 0x33)) {
                                         if (((((temp_s6->unk_0C - temp_s7->unk_16) - temp_s7->unk_12) -
                                               (((BattleAI_ClassifyMoveAvailability(temp_fp, temp_s4, 0x62) != 0) &&
@@ -3088,7 +3088,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                                     }
                                     var_s1 = (spB6 * 7) + 1;
                                 } else if (BattleAI_ScaleSignedRatio(
-                                               (temp_s6->unk_0C - temp_s7->unk_12) - temp_s7->unk_16, temp_s6->unk_28) <
+                                               (temp_s6->unk_0C - temp_s7->unk_12) - temp_s7->unk_16, temp_s6->hp) <
                                            (D_843C5564->unk_08 + 0x33)) {
                                     var_s1 = (spB6 * 7) + 1;
                                 }
@@ -3098,7 +3098,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                                 temp_s3 = oppMon;
                                 if ((temp_s3->speed < temp_s6->speed) ||
                                     ((temp_s6->speed == temp_s3->speed) && (BattleAI_RandomBelowInclusive(1) != 0))) {
-                                    if ((BattleAI_ScaleSignedRatio(temp_s6->unk_0C - temp_s7->unk_16, temp_s6->unk_28) <
+                                    if ((BattleAI_ScaleSignedRatio(temp_s6->unk_0C - temp_s7->unk_16, temp_s6->hp) <
                                          (D_843C5564->unk_08 - 0x33)) ||
                                         (((((temp_s6->unk_0C - temp_s7->unk_16) - temp_s7->unk_12) -
                                            (((BattleAI_ClassifyMoveAvailability(temp_fp, temp_s4, 0x62) != 0) &&
@@ -3110,7 +3110,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                                     }
                                 } else {
                                     if (BattleAI_ScaleSignedRatio((temp_s6->unk_0C - temp_s7->unk_12) - temp_s7->unk_16,
-                                                                  temp_s6->unk_28) < (D_843C5564->unk_08 - 0x33)) {
+                                                                  temp_s6->hp) < (D_843C5564->unk_08 - 0x33)) {
                                         var_s1 = (spB6 * 7) + 1;
                                     }
                                     if ((BattleAI_FindHeuristicMove(temp_fp, temp_s4, 1, &sp104) == 2) &&
@@ -3232,7 +3232,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                 break;
 
             case 0x4F:
-                if (((temp_s6->unk_28 >> 2) < temp_s6->unk_0C) && (!(temp_s6->unk_4D & 0x10))) {
+                if (((temp_s6->hp >> 2) < temp_s6->unk_0C) && (!(temp_s6->unk_4D & 0x10))) {
                     if ((BattleAI_HasExactlyOneUsableCandidate(arg0) != 0) &&
                         (BattleAI_ClassifyMoveAvailability(temp_fp, temp_s4, 0x90) == 0)) {
                         if ((((D_843C60BC == 0) ||
@@ -3246,7 +3246,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                                 var_s1 += spB6 * 7;
                             }
                         }
-                        if (BattleAI_ScaleSignedRatio(temp_s7->unk_12, temp_s6->unk_28) < 0x3F) {
+                        if (BattleAI_ScaleSignedRatio(temp_s7->unk_12, temp_s6->hp) < 0x3F) {
                             var_s1 += spB6 * 7;
                             if (BattleAI_FindHeuristicMove(temp_fp, temp_fp, 2, &sp104) == 2) {
                                 var_s1 += spB6 * 7;
@@ -3338,7 +3338,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
         if (((temp_s4->unk_03 != 0) && (sp9C->unk_03 < 2)) && (temp_s7->unk_0C < 0xFF)) {
             var_s0_4 *= (BattleAI_RandomBelowInclusive(3) * 0x55) / 255.0f;
         }
-        if (((temp_s7->unk_00 == 0x44) && (temp_fp->unk_03 != 0)) && (!(temp_s4->unk_12.unk_4C & 0x80))) {
+        if (((temp_s7->unk_00 == 0x44) && (temp_fp->unk_03 != 0)) && (!(temp_s4->unk_12.immobilizedReason & 0x80))) {
             var_s0_4 = (BattleAI_RandomBelowInclusive(2) * var_s0_4) / 2;
         }
         temp_s7->unk_01 = var_s0_4;
@@ -3390,7 +3390,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                         temp_s7->unk_28 = -1;
                     }
                 }
-            } else if ((((spFC != 0) || (temp_s6->unk_32[i] <= 0)) ||
+            } else if ((((spFC != 0) || (temp_s6->moveUsability[i] <= 0)) ||
                         ((spF8 != 0) && ((sp9C->unk_02 == 0) || (temp_s7->unk_0A == 0)))) ||
                        ((sp9C->unk_02 != 0) && (Battle_GetTypeEffectiveness(sp9C->unk_03, oppMon) == 0.0f))) {
                 temp_s7->unk_28 = -0x06666666;
@@ -3434,7 +3434,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
     s32 tmp;
 
     sp5B = D_843C5564->unk_06;
-    if ((D_843C5564->unk_00 & 0x200000) && (arg0->unk_04 != 1) && (arg0->unk_12.unk_32[0] > 0)) {
+    if ((D_843C5564->unk_00 & 0x200000) && (arg0->unk_04 != 1) && (arg0->unk_12.moveUsability[0] > 0)) {
         return 0;
     }
 
@@ -3451,7 +3451,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
     for (i = 0; i < arg2; i++) {
         D_843C60C0[D_843C60E8].unk_04[i] = arg3[i].unk_28;
 
-        if ((ptr->unk_32[i] > 0) && (arg3[i].unk_00 != ptr->unk_57)) {
+        if ((ptr->moveUsability[i] > 0) && (arg3[i].unk_00 != ptr->unk_57)) {
             if (BattleAI_IsScoreBetter(arg3[i].unk_28, var_s5, arg3[i].unk_0A, var_s3) != 0) {
                 var_s4 = var_s5;
                 var_s2 = var_s3;
@@ -3471,7 +3471,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
         ptr = &arg0->unk_12;
         var_v1 = 0;
         for (i = 0; i < arg2; i++) {
-            if ((ptr->unk_32[i] > 0) && (arg3[i].unk_03 != 0x38)) {
+            if ((ptr->moveUsability[i] > 0) && (arg3[i].unk_03 != 0x38)) {
                 var_v1 = 1;
             }
         }
@@ -3487,7 +3487,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
             do {
                 if (D_843C5564->unk_06) {}
                 i = BattleAI_RandomBelowInclusive(arg2 - 1);
-            } while (arg3[i].unk_03 == 0x38 || ptr->unk_32[0, i] <= 0);
+            } while (arg3[i].unk_03 == 0x38 || ptr->moveUsability[0, i] <= 0);
 
             if (sp6C == i) {
                 sp6C = sp70;
@@ -3497,7 +3497,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
     }
 
     if (BattleAI_RandomBelowInclusive(0xFE) < sp5B) {
-        tmp = arg0->unk_12.unk_32[sp6C];
+        tmp = arg0->unk_12.moveUsability[sp6C];
 
         if ((tmp != 0) && (tmp > 0) && ((arg3[sp6C].unk_24 >= 2) || (arg3[sp6C].unk_0A != 0))) {
             return sp6C;
@@ -3571,10 +3571,10 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
 
             for (k = 0; k < 4; k++) {
                 if (arg3) {
-                    arg2->unk_14[j + var_v1].unk_12.unk_32[k] =
+                    arg2->unk_14[j + var_v1].unk_12.moveUsability[k] =
                         BattleAI_GetPpWeight(arg2->unk_14[j + var_v1].unk_12.moves[k]);
                 } else {
-                    arg2->unk_14[j + var_v1].unk_12.unk_32[k] = temp_s7[j].unk_20[k] & 0x3F;
+                    arg2->unk_14[j + var_v1].unk_12.moveUsability[k] = temp_s7[j].unk_20[k] & 0x3F;
                 }
             }
 
@@ -3589,9 +3589,9 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
             }
 
             if (arg3) {
-                arg2->unk_14[j + var_v1].unk_12.unk_28 = BattleAI_ComputeDifficultyThreshold(sp6C->baseHitPoints, sp73) + sp73 + 5;
+                arg2->unk_14[j + var_v1].unk_12.hp = BattleAI_ComputeDifficultyThreshold(sp6C->baseHitPoints, sp73) + sp73 + 5;
             } else {
-                arg2->unk_14[j + var_v1].unk_12.unk_28 = temp_s7[j].unk_26;
+                arg2->unk_14[j + var_v1].unk_12.hp = temp_s7[j].maxHp;
             }
 
             if (arg3) {
@@ -3618,7 +3618,7 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
                 arg2->unk_14[j + var_v1].unk_12.unk_30 = temp_s7[j].unk_2E;
             }
 
-            arg2->unk_14[j + var_v1].unk_12.unk_0C = arg2->unk_14[j + var_v1].unk_12.unk_28;
+            arg2->unk_14[j + var_v1].unk_12.unk_0C = arg2->unk_14[j + var_v1].unk_12.hp;
             arg2->unk_14[j + var_v1].unk_12.unk_38 = arg2->unk_14[j + var_v1].unk_12.unk_2A;
             arg2->unk_14[j + var_v1].unk_12.unk_3A = arg2->unk_14[j + var_v1].unk_12.unk_2C;
             arg2->unk_14[j + var_v1].unk_12.unk_3C = arg2->unk_14[j + var_v1].unk_12.speed;
@@ -4062,7 +4062,7 @@ s32 BattleAI_SelectRandomUsableMoveSlot(BattleMonRuntime* arg0) {
     for (i = 0; i < 4; i++) {
         if (arg0->moves[i] != 0) {
             var_a1++;
-            if (arg0->unk_32[i] > 0) {
+            if (arg0->moveUsability[i] > 0) {
                 var_a3 = 1;
             }
         }
@@ -4071,7 +4071,7 @@ s32 BattleAI_SelectRandomUsableMoveSlot(BattleMonRuntime* arg0) {
     if (var_a3 != 0) {
         do {
             var_a2 = BattleAI_RandomBelowInclusive(var_a1 - 1);
-        } while (arg0->moves[var_a2] == 0 || arg0->unk_32[var_a2] <= 0);
+        } while (arg0->moves[var_a2] == 0 || arg0->moveUsability[var_a2] <= 0);
     }
     return var_a2;
 }
@@ -4593,10 +4593,10 @@ s32 BattleAI_ComputeAttackTargetScore(unk_func_8438220C* arg0) {
     s32 sp40 = temp_s0->unk_0C * temp_v0;
     s32 sp3C = temp_s0->unk_10 * temp_v0;
     s32 sp38 = temp_s0->unk_04 * temp_s0->unk_24;
-    s32 sp34 = BattleAI_ScaleSignedRatio(temp_s0->unk_12, D_843C60B4->unk_28) * temp_s1;
-    s32 sp30 = BattleAI_ScaleSignedRatio(temp_s0->unk_16, D_843C60B4->unk_28) * temp_s1;
-    s32 sp2C = BattleAI_ScaleSignedRatio(temp_s0->unk_1A, D_843C60B4->unk_28) * temp_s1;
-    s32 temp_v0_2 = BattleAI_ScaleSignedRatio(temp_s0->unk_1E, D_843C60B4->unk_28);
+    s32 sp34 = BattleAI_ScaleSignedRatio(temp_s0->unk_12, D_843C60B4->hp) * temp_s1;
+    s32 sp30 = BattleAI_ScaleSignedRatio(temp_s0->unk_16, D_843C60B4->hp) * temp_s1;
+    s32 sp2C = BattleAI_ScaleSignedRatio(temp_s0->unk_1A, D_843C60B4->hp) * temp_s1;
+    s32 temp_v0_2 = BattleAI_ScaleSignedRatio(temp_s0->unk_1E, D_843C60B4->hp);
     s32 temp_ft4;
 
     temp_ft4 =
@@ -4724,7 +4724,7 @@ u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, 
         return 0;
     }
 
-    if ((sp40->unk_4C & 0x52) || (sp40->unk_4D & 0x28)) {
+    if ((sp40->immobilizedReason & 0x52) || (sp40->unk_4D & 0x28)) {
         *arg4 = 0;
         return 0;
     }
@@ -4747,18 +4747,18 @@ u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, 
                 sp6C += BattleAI_ScoreCategorySetLowPP(arg0, arg1) * 0x64;
                 sp6C += 0x1A;
             } else {
-                if ((BattleAI_ScaleSignedRatio(sp40->unk_0C, sp40->unk_28) < D_843C5564->unk_08) &&
+                if ((BattleAI_ScaleSignedRatio(sp40->unk_0C, sp40->hp) < D_843C5564->unk_08) &&
                     (!(D_843C5564->unk_00 & 0x400000) ||
                      ((arg5 != NULL) && (arg5[*arg4].unk_04[arg5[*arg4].unk_B4].unk_1E == 0)))) {
                     if (D_843C5564->unk_00 & 0x200) {
                         sp4C = 1;
                     } else if (D_843C5564->unk_08 <
-                               BattleAI_ScaleSignedRatio(arg2->unk_14[*arg4].unk_12.unk_0C, arg2->unk_14[*arg4].unk_12.unk_28)) {
+                               BattleAI_ScaleSignedRatio(arg2->unk_14[*arg4].unk_12.unk_0C, arg2->unk_14[*arg4].unk_12.hp)) {
                         sp6C += 0x64;
                     }
                 }
 
-                if ((sp3C->unk_4C & 0x20) && (sp40->speed < sp3C->speed)) {
+                if ((sp3C->immobilizedReason & 0x20) && (sp40->speed < sp3C->speed)) {
                     sp6C += 0x80;
                 } else {
                     if ((D_843C5564->unk_00 & 0x400000) && (arg5 != NULL)) {
@@ -4769,7 +4769,7 @@ u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, 
                         sp6C -= 0xFF;
                     }
 
-                    if (sp40->unk_4C & 1) {
+                    if (sp40->immobilizedReason & 1) {
                         sp6C = (sp6C - (((4 - sp40->unk_4F) / 2) * 0x4D)) - 0x4D;
                     }
                 }
@@ -5036,7 +5036,7 @@ s32 BattleAI_ResolveTiedActionChoice(s32 arg0) {
             var_s0 = (temp_v1 * ((f32)arg0 / 255.0)) + (temp_a0 * ((f32)var_s6 / 255.0));
         }
 
-        if ((D_843C60B4->unk_32[i] > 0) && ((var_s2 < var_s0) || ((var_s0 == var_s2) && (BattleAI_RandomBelowInclusive(1) != 0)))) {
+        if ((D_843C60B4->moveUsability[i] > 0) && ((var_s2 < var_s0) || ((var_s0 == var_s2) && (BattleAI_RandomBelowInclusive(1) != 0)))) {
             var_s2 = var_s0;
             var_fp = i;
         }
@@ -5138,7 +5138,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
 
     switch (sp1C->unk_01) {
         case 0x0:
-            if ((arg2 == 0x62) && (arg1->unk_4C & 0x40)) {
+            if ((arg2 == 0x62) && (arg1->immobilizedReason & 0x40)) {
                 sp24 = 1;
             }
             break;
@@ -5174,7 +5174,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
             break;
 
         case 0x7:
-            if (arg1->unk_4C & 0x40) {
+            if (arg1->immobilizedReason & 0x40) {
                 sp24 = 1;
             }
             break;
@@ -5192,13 +5192,13 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
             break;
 
         case 0x31:
-            if ((arg1->unk_4C & 0x80) || (arg1->unk_4D & 0x10)) {
+            if ((arg1->immobilizedReason & 0x80) || (arg1->unk_4D & 0x10)) {
                 sp24 = 1;
             }
             break;
 
         case 0x38:
-            if (arg0->unk_0C == arg0->unk_28) {
+            if (arg0->unk_0C == arg0->hp) {
                 sp24 = 1;
             }
             break;
@@ -5210,7 +5210,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
             break;
 
         case 0x4F:
-            if (arg0->unk_0C < (arg0->unk_28 >> 2)) {
+            if (arg0->unk_0C < (arg0->hp >> 2)) {
                 sp24 = 1;
             }
             break;
@@ -5248,17 +5248,17 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
         temp_s0 = &var_s3->unk_016[var_s3->unk_012].unk_12;
 
         temp_s0->unk_0C = temp_s2->unk_0C;
-        temp_s0->unk_28 = temp_s2->unk_28;
+        temp_s0->hp = temp_s2->hp;
         temp_s0->unk_15 = temp_s2->unk_15;
         temp_s0->roster[6] = temp_s2->roster[6];
         temp_s0->roster[7] = temp_s2->roster[7];
-        temp_s0->unk_4C = temp_s2->unk_4C;
+        temp_s0->immobilizedReason = temp_s2->immobilizedReason;
         temp_s0->unk_4D = temp_s2->unk_4D;
         temp_s0->unk_4E = temp_s2->unk_4E;
         temp_s0->unk_4F = temp_s2->unk_4F;
         temp_s0->unk_50 = temp_s2->unk_50;
         temp_s0->unk_51 = temp_s2->unk_51;
-        temp_s0->unk_52 = temp_s2->unk_52;
+        temp_s0->movesDisabled = temp_s2->movesDisabled;
         temp_s0->unk_54 = temp_s2->unk_54;
         temp_s0->unk_57 = temp_s2->unk_57;
         temp_s0->unk_58 = temp_s2->unk_58;
@@ -5299,7 +5299,7 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
 
         if (i == gBattleAI_ActivePokemon[0].unk_000) {
             for (j = 0; j < 4; j++) {
-                temp_s0->unk_32[j] = temp_s2->unk_32[j] & 0x3F;
+                temp_s0->moveUsability[j] = temp_s2->moveUsability[j] & 0x3F;
             }
         }
 
@@ -5493,16 +5493,16 @@ void BattleAI_RecordUsedMove(UNUSED s32 arg0, UNUSED s32 arg1, s32 arg2) {
     for (i = 0; i < 4; i++) {
         if (D_843C60B0->unk_02 == D_843C60B8->moves[i]) {
             D_843C60B0->unk_01 |= 1 << i;
-            D_843C60B8->unk_32[i]--;
-            if (D_843C60B8->unk_32[i] < 0) {
-                D_843C60B8->unk_32[i] = 0;
+            D_843C60B8->moveUsability[i]--;
+            if (D_843C60B8->moveUsability[i] < 0) {
+                D_843C60B8->moveUsability[i] = 0;
             }
         }
     }
 
     if (D_843C60B0->unk_02 == 0xA5) {
         for (i = 0; i < 4; i++) {
-            D_843C60B8->unk_32[i] = 0;
+            D_843C60B8->moveUsability[i] = 0;
         }
     }
 
@@ -5620,7 +5620,7 @@ label1:
 
     D_843C60BC = 0;
     if ((D_843C60B8->unk_0C != 0) && (D_843C5564->unk_00 & 4)) {
-        if ((D_843C5564->unk_08 + 0x33) < BattleAI_ScaleSignedRatio(D_843C60B4->unk_0C, D_843C60B4->unk_28)) {
+        if ((D_843C5564->unk_08 + 0x33) < BattleAI_ScaleSignedRatio(D_843C60B4->unk_0C, D_843C60B4->hp)) {
             sp42 = BattleAI_ScoreAttackVsSwitch(D_843C60B0, D_843C60AC, D_843C60A8, D_843C60A4, &sp40, 0) >> D_8438AFB0;
             if (BattleAI_RandomBelowInclusive(0xFE) < sp42) {
                 D_843C60A8->unk_10 = sp40;
@@ -5656,7 +5656,7 @@ label1:
         sp44 = BattleAI_SelectRandomUsableCandidate(D_843C60A4) + 4;
     }
 
-    if ((sp44 >= 0) && ((sp44 >= 4) || ((D_843C60B4->moves[sp44] != 0) && (D_843C60B4->unk_32[sp44] != 0)))) {
+    if ((sp44 >= 0) && ((sp44 >= 4) || ((D_843C60B4->moves[sp44] != 0) && (D_843C60B4->moveUsability[sp44] != 0)))) {
         if ((D_843C60B4->unk_0C != 0) && (sp44 >= 4)) {
             if (BattleAI_HasExactlyOneUsableCandidate(D_843C60A4) != 0) {
                 goto block_44;
