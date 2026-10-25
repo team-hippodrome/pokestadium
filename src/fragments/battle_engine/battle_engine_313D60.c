@@ -17,14 +17,14 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     f32 sp3C;
 
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 12800.0f);
-    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_84390284], &sBattleScene.scene->unk_D0);
+    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_84390284], &sBattleScene.scene->cameraStartingPosition);
     sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[D_84390284], 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(sActivePokemon[D_84390284], arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_84390284]),
+    BattleScene_SetCameraAtFromAnchor(sActivePokemon[D_84390284], arg0, sBattleScene.scene->cameraStartingPosition, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_84390284]),
                   0.0f, 0.0f);
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_84390284]), sp3C, 0.0f);
 
     if (sActivePokemon[0]) {}
-    sBattleScene.scene->unk_20 += 1;
+    sBattleScene.scene->cameraCounter += 1;
     if (D_84390284) {}
 }
 
@@ -32,13 +32,13 @@ void BattleScene_FinalPresentationFrameOwner0(CameraNode* arg0) {
     f32 sp3C;
 
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 12800.0f);
-    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[0], &sBattleScene.scene->unk_D0);
+    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[0], &sBattleScene.scene->cameraStartingPosition);
     sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[0], 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(sActivePokemon[0], arg0, sBattleScene.scene->unk_D0, 0, BattleScene_GetParticipantFacingAngle(*sActivePokemon), 0.0f, 0.0f);
+    BattleScene_SetCameraAtFromAnchor(sActivePokemon[0], arg0, sBattleScene.scene->cameraStartingPosition, 0, BattleScene_GetParticipantFacingAngle(*sActivePokemon), 0.0f, 0.0f);
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(*sActivePokemon), sp3C, 0.0f);
 
     if (sActivePokemon[0]) {}
-    sBattleScene.scene->unk_20 += 1;
+    sBattleScene.scene->cameraCounter += 1;
 }
 
 void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* arg1, UNUSED ActivePokemon* arg2) {
@@ -52,7 +52,7 @@ void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* ar
             break;
 
         case 1:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextBRollCameraShot(arg0);
             break;
 
         case 2:
@@ -412,7 +412,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
         case 1:
             BattleScene_ShowBothOwners();
 
-            switch (sBattleScene.scene->unk_20) {
+            switch (sBattleScene.scene->cameraCounter) {
                 case 12:
                 case 13:
                 case 14:
@@ -440,7 +440,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
             switch (sBattleScene.scene->unk_38) {
                 case 2:
                 case 3:
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                             if ((sp40->unk_2D == 0xF) && (sBattleScene.scene->unk_34 == 1)) {
                                 BattleScene_HideActiveOwner();
@@ -517,7 +517,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                     sBattleScene.scene->unk_08 = 4;
                     if (sBattleScene.scene->unk_34 == 1) {
                         BattleScene_HideOpponentOwner();
-                    } else if (sBattleScene.scene->unk_20 == 0) {
+                    } else if (sBattleScene.scene->cameraCounter == 0) {
                         BattleScene_UpdateBothOwnersVisibilityCulling(arg0);
                     } else {
                         BattleScene_HideOpponentOwner();
@@ -526,7 +526,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
 
                 case 18:
                     sBattleScene.scene->unk_08 = 3;
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                             BattleScene_UpdateBothOwnersVisibilityCulling(arg0);
                             break;
@@ -539,7 +539,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
 
                 case 12:
                     sBattleScene.scene->unk_08 = 0;
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 2:
                         case 3:
                         case 4:
@@ -595,7 +595,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                 case 30:
                     sBattleScene.scene->unk_08 = 0;
 
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                         case 1:
                         case 2:
@@ -611,7 +611,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                 case 5:
                 case 34:
                     sBattleScene.scene->unk_08 = 0;
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                         case 1:
                             sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
@@ -629,7 +629,7 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
         case 1:
             BattleScene_ShowBothOwners();
 
-            switch (sBattleScene.scene->unk_20) {
+            switch (sBattleScene.scene->cameraCounter) {
                 case 12:
                 case 13:
                 case 14:
@@ -654,7 +654,7 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
         case 2:
             switch (sBattleScene.scene->unk_38) {
                 case 30:
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                         case 1:
                         case 2:
@@ -671,7 +671,7 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
 
                 case 5:
                 case 34:
-                    switch (sBattleScene.scene->unk_20) {
+                    switch (sBattleScene.scene->cameraCounter) {
                         case 0:
                         case 1:
                             sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
@@ -696,7 +696,7 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
 
         case 1:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
 
         case 2:
