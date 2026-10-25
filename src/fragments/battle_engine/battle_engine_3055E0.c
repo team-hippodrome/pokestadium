@@ -190,7 +190,11 @@ s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
     return 0;
 }
 
-s32 BattleScene_ApproachCameraRoll(CameraNode* camera, s16 delta_theta, s16 final_angle_y) {
+/**
+ * Subtracts delta_theta from the scene's rotationY each call and recomputes the camera eye from the scene's
+ * distance and rotationX/rotationY around the target. Returns 1 once rotationY reaches final_angle_y.
+ */
+s32 BattleScene_ApproachCameraRotationY(CameraNode* camera, s16 delta_theta, s16 final_angle_y) {
     if (delta_theta > 0) {
         sBattleScene.scene->rotationY -= delta_theta;
         if ((sBattleScene.scene->rotationY < final_angle_y) && ((final_angle_y - delta_theta) < sBattleScene.scene->rotationY)) {
@@ -210,7 +214,10 @@ s32 BattleScene_ApproachCameraRoll(CameraNode* camera, s16 delta_theta, s16 fina
     return 0;
 }
 
-s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
+/**
+ * Same rotationY stepping as BattleScene_ApproachCameraRotationY, without recomputing the camera eye.
+ */
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
     sBattleScene.scene->rotationY -= arg1;
 
     if (arg1 > 0) {

@@ -52,7 +52,7 @@ void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* ar
             break;
 
         case 1:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextBRollCameraShot(arg0);
             break;
 
         case 2:
@@ -696,7 +696,7 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
 
         case 1:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
 
         case 2:

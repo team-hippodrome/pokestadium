@@ -165,11 +165,15 @@ s32 BattleScene_AreBothParticipantModelsCompact(void) {
     return 0;
 }
 
-s32 BattleScene_SkipIntroIfUnderground(UNUSED ActivePokemon* arg0, CameraNode* camera) {
+/**
+ * If the Pokemon on the current side is underground, selects the next b-roll shot and returns 1.
+ * Returns 0 otherwise.
+ */
+s32 BattleScene_SkipBRollCameraShotIfUnderground(UNUSED ActivePokemon* arg0, CameraNode* camera) {
     ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->side]->state;
 
     if ((state->unk_2D == 0x10) || ((state->flags & ACTIVE_UNDERGROUND) != 0)) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
         return 1;
     }
     return 0;
@@ -186,8 +190,11 @@ s32 BattleScene_IsEitherActivePokemonUnderground(UNUSED ActivePokemon* arg0, UNU
     return 0;
 }
 
-// rotation at height of combatants
-void BattleScene_IntroCameraStep0(CameraNode* camera) {
+/**
+ * B-roll shot 0, arena orbit: a wide shot at the height of the combatants (50 degree field of view)
+ * that BattleScene_BRollCameraUpdateArenaOrbit rotates around the arena.
+ */
+void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* camera) {
     BattleScene_ResetCameraFrameCounter();
     camera->perspective.verticalFieldOfView = 50.0f;
     if (BattleScene_AreBothParticipantModelsCompact() != 0) {
@@ -201,8 +208,11 @@ void BattleScene_IntroCameraStep0(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
-// rotating arena overview
-void BattleScene_IntroCameraStep2(CameraNode* camera) {
+/**
+ * B-roll shot 2, rotating arena overview: an elevated shot of the arena (30 degree field of view)
+ * that BattleScene_BRollCameraUpdateRotatingArenaOverview rotates around the arena.
+ */
+void BattleScene_BRollCameraSetupRotatingArenaOverview(CameraNode* camera) {
     BattleScene_ResetCameraFrameCounter();
     camera->perspective.verticalFieldOfView = 30.0f;
     if (BattleScene_AreBothParticipantModelsCompact() != 0) {
@@ -215,8 +225,11 @@ void BattleScene_IntroCameraStep2(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
-// back shot of pokemon
-void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
+/**
+ * B-roll shots 4 (side 0) and 6 (side 1), static zoomed out shot: a fixed camera behind the Pokemon
+ * on the given side, at a random distance and height. Skipped if that Pokemon is underground.
+ */
+void BattleScene_BRollCameraSetupStaticZoomedOutShot(CameraNode* camera, s32 side) {
     UNUSED s32 pad;
     f32 pokemon_radius;
     f32 pokemon_height;
@@ -231,7 +244,7 @@ void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
     BattleScene_SetActivePokemonIndex(side);
     pokemon = sActivePokemon[sBattleScene.scene->side];
 
-    if (BattleScene_SkipIntroIfUnderground(pokemon, camera) == 0) {
+    if (BattleScene_SkipBRollCameraShotIfUnderground(pokemon, camera) == 0) {
         BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->cameraStartingPosition);
         if (!(state->flags & 2)) {
             BattleScene_EnterStateRow(pokemon, 1);
@@ -267,8 +280,11 @@ void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
     }
 }
 
-// zoom in
-void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side) {
+/**
+ * B-roll shots 8 (side 0) and 10 (side 1), zoom shot: loads a camera preset for the Pokemon on the given
+ * side that BattleScene_BRollCameraUpdateZoomShot animates. Skipped if that Pokemon is underground.
+ */
+void BattleScene_BRollCameraSetupZoomShot(CameraNode* camera, s32 side) {
     UNUSED s32 pad[2];
     DioramaAnimData* camera_preset;
     s32 rng;
@@ -278,7 +294,7 @@ void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side) {
     BattleScene_SetActivePokemonIndex(side);
     pokemon = sActivePokemon[sBattleScene.scene->side];
 
-    if (BattleScene_SkipIntroIfUnderground(pokemon, camera) == 0) {
+    if (BattleScene_SkipBRollCameraShotIfUnderground(pokemon, camera) == 0) {
         if (pokemon->state.flags & ACTIVE_AIRBORNE) {
             camera_preset = &D_84384888[0];
         } else {
@@ -297,39 +313,55 @@ void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side) {
     }
 }
 
-void BattleScene_IntroCameraStep12Or14(CameraNode* camera, s32 arg1) {
+/**
+ * B-roll shots 12 (side 0) and 14 (side 1), send-out shot: positions the camera with
+ * BattleScene_SetCameraSendOutShot for the given side. Skipped if that Pokemon is underground.
+ */
+void BattleScene_BRollCameraSetupSendOutShot(CameraNode* camera, s32 side) {
     camera->perspective.verticalFieldOfView = 30.0f;
-    BattleScene_SetActivePokemonIndex(arg1);
-    if (BattleScene_SkipIntroIfUnderground(sActivePokemon[arg1], camera) == 0) {
-        BattleScene_SetCameraSendOutShot(camera, arg1);
+    BattleScene_SetActivePokemonIndex(side);
+    if (BattleScene_SkipBRollCameraShotIfUnderground(sActivePokemon[side], camera) == 0) {
+        BattleScene_SetCameraSendOutShot(camera, side);
         sBattleScene.scene->cameraCounter++;
     }
 }
 
-void BattleScene_IntroCameraStep16(CameraNode* camera) {
+/**
+ * B-roll shot 16, height shot on the first side: used when the two Pokemon are at different heights.
+ * The side is unk_54 - 1; BattleScene_BRollCameraUpdateHeightShotFirstSide then continues with the other side.
+ * Skipped if either Pokemon is underground.
+ */
+void BattleScene_BRollCameraSetupHeightShotFirstSide(CameraNode* camera) {
     BattleScene_SetActivePokemonIndex(sBattleScene.scene->unk_54 - 1);
     if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->side], camera) != 0) {
         sBattleScene.scene->unk_54 = 0;
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     } else {
         BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->side);
         sBattleScene.scene->cameraCounter++;
     }
 }
 
-void BattleScene_IntroCameraStep18(CameraNode* camera) {
+/**
+ * B-roll shot 18, height shot on the second side: the side swapped in by
+ * BattleScene_BRollCameraUpdateHeightShotFirstSide. Skipped if either Pokemon is underground.
+ */
+void BattleScene_BRollCameraSetupHeightShotSecondSide(CameraNode* camera) {
     BattleScene_SetActivePokemonIndex(sBattleScene.scene->side);
     sBattleScene.scene->unk_54 = 0;
     if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->side], camera) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     } else {
         BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->side);
         sBattleScene.scene->cameraCounter++;
     }
 }
 
-// static arena overview
-void BattleScene_IntroCameraStep20(CameraNode* camera) {
+/**
+ * B-roll shot 20, static arena overview: a fixed shot of the arena chosen by session mode
+ * (or rule category in the attract demo), using sArenaConfig.
+ */
+void BattleScene_BRollCameraSetupStaticArenaOverview(CameraNode* camera) {
     s16 arena_index;
 
     BattleScene_ResetCameraFrameCounter();
@@ -351,8 +383,11 @@ void BattleScene_IntroCameraStep20(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
-// close-up
-void BattleScene_IntroCameraStep22Or24(CameraNode* camera, s32 side) {
+/**
+ * B-roll shots 22 (side 0) and 24 (side 1), static close up: a fixed 60 degree field of view shot of the
+ * Pokemon on the given side. Skipped if that Pokemon is underground, a Substitute doll, or frozen.
+ */
+void BattleScene_BRollCameraSetupStaticCloseUp(CameraNode* camera, s32 side) {
     UNUSED s32 pad[5];
     s32 camera_adjustment_index;
     ActivePokemon* pokemon;
@@ -366,9 +401,9 @@ void BattleScene_IntroCameraStep22Or24(CameraNode* camera, s32 side) {
     BattleScene_SetActivePokemonIndex(side);
     pokemon = sActivePokemon[side];
 
-    if (BattleScene_SkipIntroIfUnderground(pokemon, camera) == 0) {
+    if (BattleScene_SkipBRollCameraShotIfUnderground(pokemon, camera) == 0) {
         if ((pokemon->displayObject.objectType == SUBSTITUTE_DOLL) || (pokemon->state.flags & ACTIVE_FREEZE)) {
-            BattleScene_SelectNextIntroCameraShot(camera);
+            BattleScene_SelectNextBRollCameraShot(camera);
             return;
         }
 
@@ -392,7 +427,13 @@ void BattleScene_IntroCameraStep22Or24(CameraNode* camera, s32 side) {
     }
 }
 
-void BattleScene_SelectNextIntroCameraShot(CameraNode* camera) {
+/**
+ * Selects the next b-roll shot and runs its setup function. Shots follow the order in the table below,
+ * except that shot 16 is chosen when unk_54 is set and the Pokemon are at different heights. Even
+ * cameraCounter values are shot setups and odd values are the matching per-frame updates in
+ * BattleScene_UpdateBRollCameraSequence.
+ */
+void BattleScene_SelectNextBRollCameraShot(CameraNode* camera) {
     UNUSED s32 pad[2];
     s32 sp20[] = {
         // D_84385B20
@@ -420,89 +461,102 @@ void BattleScene_SelectNextIntroCameraShot(CameraNode* camera) {
     switch (sBattleScene.scene->cameraCounter) {
         case 0:
             // Rotation around Arena circle
-            BattleScene_IntroCameraStep0(camera);
+            BattleScene_BRollCameraSetupArenaOrbit(camera);
             break;
 
         case 2:
             // rotating arena overview
-            BattleScene_IntroCameraStep2(camera);
+            BattleScene_BRollCameraSetupRotatingArenaOverview(camera);
             break;
 
         case 4:
             // static zoomed out shot on side 1
-            BattleScene_IntroCameraStep4Or6(camera, 0);
+            BattleScene_BRollCameraSetupStaticZoomedOutShot(camera, 0);
             break;
 
         case 6:
             // static zoomed out shot on side 2
-            BattleScene_IntroCameraStep4Or6(camera, 1);
+            BattleScene_BRollCameraSetupStaticZoomedOutShot(camera, 1);
             break;
 
         case 8:
             // zoom in/out on pokemon on side 1
-            BattleScene_IntroCameraStep8Or10(camera, 0);
+            BattleScene_BRollCameraSetupZoomShot(camera, 0);
             break;
 
         case 10:
-        // zoom in/out on pokemon on side 2
-            BattleScene_IntroCameraStep8Or10(camera, 1);
+            // zoom in/out on pokemon on side 2
+            BattleScene_BRollCameraSetupZoomShot(camera, 1);
             break;
 
-            // shots 12, 14, 16, and 18 appear to not be 
+        // Shots 12, 14, 16, and 18 are not entries of the shot-order table above. This function selects
+        // 16 directly; 18 is entered from BattleScene_BRollCameraUpdateHeightShotFirstSide.
+        // Nothing in this function selects 12 or 14.
         case 12:
-            BattleScene_IntroCameraStep12Or14(camera, 0);
+            BattleScene_BRollCameraSetupSendOutShot(camera, 0);
             break;
 
         case 14:
-            BattleScene_IntroCameraStep12Or14(camera, 1);
+            BattleScene_BRollCameraSetupSendOutShot(camera, 1);
             break;
 
         case 16:
-            BattleScene_IntroCameraStep16(camera);
+            BattleScene_BRollCameraSetupHeightShotFirstSide(camera);
             break;
 
         case 18:
-            BattleScene_IntroCameraStep18(camera);
+            BattleScene_BRollCameraSetupHeightShotSecondSide(camera);
             break;
 
         case 20:
             // static arena overview
-            BattleScene_IntroCameraStep20(camera);
+            BattleScene_BRollCameraSetupStaticArenaOverview(camera);
             break;
 
         case 22:
-            // static close up on side1
-            BattleScene_IntroCameraStep22Or24(camera, 0);
+            // static close up on side 1
+            BattleScene_BRollCameraSetupStaticCloseUp(camera, 0);
             break;
 
         case 24:
-            // static close up on side1
-            BattleScene_IntroCameraStep22Or24(camera, 1);
+            // static close up on side 2
+            BattleScene_BRollCameraSetupStaticCloseUp(camera, 1);
             break;
     }
 }
 
-void BattleScene_IntroCameraRollStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shot 0 (arena orbit): rotates the camera around the arena, then selects the next shot.
+ */
+void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode* camera) {
     camera->perspective.verticalFieldOfView = 50.0f;
-    if (BattleScene_ApproachCameraRoll(camera, 0xB6, 0x78DC) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+    if (BattleScene_ApproachCameraRotationY(camera, 0xB6, 0x78DC) != 0) {
+        BattleScene_SelectNextBRollCameraShot(camera);
     } else {
         camera->view.eyePosition.z *= 0.6;
     }
 }
 
-void BattleScene_IntroCameraRollStepNoFov(CameraNode* camera) {
-    if (BattleScene_ApproachCameraRoll(camera, 0xB6, 0x78DC) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+/**
+ * Per-frame update for b-roll shot 2 (rotating arena overview): rotates the camera around the arena,
+ * keeping the field of view set by the setup, then selects the next shot.
+ */
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* camera) {
+    if (BattleScene_ApproachCameraRotationY(camera, 0xB6, 0x78DC) != 0) {
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraAnimationHoldStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shots 4 and 6 (static zoomed out shot): holds until the Pokemon's animation
+ * finishes, or for 90 frames if it is asleep, frozen, or a Substitute doll.
+ */
+void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
     UNUSED s32 pad;
     ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->side]->state;
 
     if ((state->unk_2D == 0x10) || ((state->flags & ACTIVE_UNDERGROUND) != 0)) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
         return;
     }
 
@@ -512,67 +566,92 @@ void BattleScene_IntroCameraAnimationHoldStep(CameraNode* camera) {
 
     if ((state->flags & ACTIVE_SLEEP) || (state->flags & ACTIVE_FREEZE) || (sActivePokemon[sBattleScene.scene->side]->displayObject.objectType == SUBSTITUTE_DOLL)) {
         if (BattleScene_AdvanceCameraFrameCounter(90) != 0) {
-            BattleScene_SelectNextIntroCameraShot(camera);
+            BattleScene_SelectNextBRollCameraShot(camera);
         }
     } else if (ModelAnim_IsAnimationDone(&sActivePokemon[sBattleScene.scene->side]->displayObject) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraPresetHoldStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shots 8 and 10 (zoom shot): animates the camera preset for at most 90 frames,
+ * then selects the next shot.
+ */
+void BattleScene_BRollCameraUpdateZoomShot(CameraNode* camera) {
     ActivePokemon* state = sActivePokemon[sBattleScene.scene->side];
 
     if ((state->state.unk_2D == 0x10) || (state->state.flags & ACTIVE_UNDERGROUND)) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     } else if ((BattleScene_AdvanceCameraFrameCounter(90) != 0) || (BattleScene_AnimateCameraPreset(camera, state, 1, 0) != 0)) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraWideHoldStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shots 12 and 14 (send-out shot): holds at a 60 degree field of view for 60 frames.
+ */
+void BattleScene_BRollCameraUpdateSendOutShot(CameraNode* camera) {
     ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->side]->state;
 
     if ((ptr->unk_2D == 0x10) || (ptr->flags & ACTIVE_UNDERGROUND)) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     } else {
         camera->perspective.verticalFieldOfView = 60.0f;
         if (BattleScene_AdvanceCameraFrameCounter(60) != 0) {
-            BattleScene_SelectNextIntroCameraShot(camera);
+            BattleScene_SelectNextBRollCameraShot(camera);
         }
     }
 }
 
-void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shot 16 (height shot, first side): once the camera has approached the Pokemon,
+ * swaps to the other side and starts shot 18.
+ */
+void BattleScene_BRollCameraUpdateHeightShotFirstSide(CameraNode* camera) {
     if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->side) != 0) {
         s32 idx = sBattleScene.scene->side == 0;
 
         sBattleScene.scene->side = idx;
         sBattleScene.scene->cameraCounter = 0x12;
-        BattleScene_IntroCameraStep18(camera);
+        BattleScene_BRollCameraSetupHeightShotSecondSide(camera);
     }
 }
 
-void BattleScene_IntroCameraHeightShotStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shot 18 (height shot, second side): selects the next shot once the camera
+ * has approached the Pokemon.
+ */
+void BattleScene_BRollCameraUpdateHeightShotSecondSide(CameraNode* camera) {
     if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->side) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraTimedHoldStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shot 20 (static arena overview): holds for 120 frames.
+ */
+void BattleScene_BRollCameraUpdateStaticArenaOverview(CameraNode* camera) {
     if (BattleScene_AdvanceCameraFrameCounter(0x78) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraFinalHoldStep(CameraNode* camera) {
+/**
+ * Per-frame update for b-roll shots 22 and 24 (static close up): holds for 60 frames at a 60 degree field of view.
+ */
+void BattleScene_BRollCameraUpdateStaticCloseUp(CameraNode* camera) {
     BattleScene_SetCameraClipPlanes(camera, 10.0f, 12800.0f);
     camera->perspective.verticalFieldOfView = 60.0f;
     if (BattleScene_AdvanceCameraFrameCounter(0x3C) != 0) {
-        BattleScene_SelectNextIntroCameraShot(camera);
+        BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
 
-void BattleScene_UpdateIntroCameraSequence(CameraNode* camera) {
+/**
+ * Per-frame update while unk_1C is 1 (b-roll camera mode): runs the action selection phase and
+ * dispatches to the update function of the current b-roll shot (odd cameraCounter values).
+ */
+void BattleScene_UpdateBRollCameraSequence(CameraNode* camera) {
     if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->unk_1C == 1)) {
         BattleScene_UpdateActionSelectPhase();
     } else if (sBattleScene.scene->unk_1C == 1) {
@@ -587,59 +666,59 @@ void BattleScene_UpdateIntroCameraSequence(CameraNode* camera) {
 
     switch (sBattleScene.scene->cameraCounter) {
         case 1:
-            BattleScene_IntroCameraRollStep(camera);
+            BattleScene_BRollCameraUpdateArenaOrbit(camera);
             break;
 
         case 3:
-            BattleScene_IntroCameraRollStepNoFov(camera);
+            BattleScene_BRollCameraUpdateRotatingArenaOverview(camera);
             break;
 
         case 5:
-            BattleScene_IntroCameraAnimationHoldStep(camera);
+            BattleScene_BRollCameraUpdateStaticZoomedOutShot(camera);
             break;
 
         case 7:
-            BattleScene_IntroCameraAnimationHoldStep(camera);
+            BattleScene_BRollCameraUpdateStaticZoomedOutShot(camera);
             break;
 
         case 9:
-            BattleScene_IntroCameraPresetHoldStep(camera);
+            BattleScene_BRollCameraUpdateZoomShot(camera);
             break;
 
         case 11:
-            BattleScene_IntroCameraPresetHoldStep(camera);
+            BattleScene_BRollCameraUpdateZoomShot(camera);
             break;
 
         case 13:
-            BattleScene_IntroCameraWideHoldStep(camera);
+            BattleScene_BRollCameraUpdateSendOutShot(camera);
             break;
 
         case 15:
-            BattleScene_IntroCameraWideHoldStep(camera);
+            BattleScene_BRollCameraUpdateSendOutShot(camera);
             break;
 
         case 17:
-            BattleScene_IntroCameraHeightShotSwapStep(camera);
+            BattleScene_BRollCameraUpdateHeightShotFirstSide(camera);
             break;
 
         case 19:
-            BattleScene_IntroCameraHeightShotStep(camera);
+            BattleScene_BRollCameraUpdateHeightShotSecondSide(camera);
             break;
 
         case 21:
-            BattleScene_IntroCameraTimedHoldStep(camera);
+            BattleScene_BRollCameraUpdateStaticArenaOverview(camera);
             break;
 
         case 23:
-            BattleScene_IntroCameraFinalHoldStep(camera);
+            BattleScene_BRollCameraUpdateStaticCloseUp(camera);
             break;
 
         case 25:
-            BattleScene_IntroCameraFinalHoldStep(camera);
+            BattleScene_BRollCameraUpdateStaticCloseUp(camera);
             break;
 
         case 50:
-            BattleScene_SelectNextIntroCameraShot(camera);
+            BattleScene_SelectNextBRollCameraShot(camera);
             break;
     }
 }
