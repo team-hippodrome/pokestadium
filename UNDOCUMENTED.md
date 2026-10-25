@@ -55,7 +55,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_3223B0.c` | 91 | 91 | 0 | 0 | 4 | 67 | 0 |
 | `src/fragments/clefairy_game/clefairy_game.c` | 58 | 58 | 1 | 78 | 14 | 10 | 0 |
 | `src/fragments/sandshrew_game/sandshrew_game.c` | 41 | 41 | 0 | 99 | 5 | 10 | 0 |
-| `src/fragments/battle_engine/battle_engine_2FA4D0.c` | 56 | 56 | 5 | 22 | 23 | 46 | 0 |
+| `src/fragments/battle_engine/battle_engine_hud.c` | 56 | 56 | 5 | 22 | 23 | 46 | 0 |
 | `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 | 41 | 2 | 50 | 22 | 36 | 0 |
 | `src/fragments/battle_engine/battle_engine_359F90.c` | 54 | 54 | 4 | 51 | 23 | 17 | 0 |
 | `src/fragments/battle_engine/battle_engine_31D9F0.c` | 77 | 77 | 3 | 1 | 3 | 62 | 0 |
@@ -71,7 +71,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/widget_toolkit/widget_toolkit_2.c` | 17 | 16 | 4 | 96 | 6 | 9 | 0 |
 | `src/fragments/battle_engine/battle_engine_315D50.c` | 69 | 69 | 2 | 13 | 9 | 35 | 0 |
 | `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 | 41 | 0 | 19 | 28 | 40 | 0 |
-| `src/fragments/battle_engine/battle_engine_2F74E0.c` | 54 | 54 | 0 | 18 | 19 | 35 | 0 |
+| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 | 54 | 0 | 18 | 19 | 35 | 0 |
 | `src/audio_commands_category2.c` | 28 | 28 | 0 | 57 | 14 | 26 | 0 |
 | `src/33FE0.c` | 44 | 44 | 20 | 28 | 20 | 11 | 0 |
 | `src/fragments/gallery_album/gallery_album.c` | 30 | 30 | 2 | 50 | 15 | 25 | 0 |
@@ -133,7 +133,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/trade_machine/trade_machine_287ED0.c` | 31 | 31 | 1 | 20 | 4 | 10 | 0 |
 | `src/table_view.c` | 25 | 25 | 0 | 2 | 14 | 22 | 0 |
 | `src/fragments/trade_machine/trade_machine_291D60.c` | 24 | 24 | 1 | 8 | 8 | 18 | 0 |
-| `src/fragments/battle_engine/battle_engine_2F6930.c` | 22 | 22 | 0 | 19 | 2 | 15 | 0 |
+| `src/fragments/battle_engine/battle_engine_math.c` | 22 | 22 | 0 | 19 | 2 | 15 | 0 |
 | `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 | 23 | 3 | 19 | 2 | 11 | 0 |
 | `src/fragments/battle_engine/battle_engine_304060.c` | 23 | 23 | 0 | 8 | 4 | 22 | 0 |
 | `src/fragments/battle_prep/battle_prep_39ED60.c` | 14 | 14 | 1 | 21 | 8 | 13 | 0 |
@@ -151,7 +151,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/scheduler.c` | 24 | 24 | 1 | 1 | 7 | 15 | 0 |
 | `src/fragments/battle_engine/battle_engine_34A420.c` | 14 | 14 | 0 | 12 | 11 | 10 | 0 |
 | `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 | 22 | 0 | 6 | 1 | 18 | 0 |
-| `src/fragments/battle_engine/battle_engine_3020D0.c` | 23 | 23 | 1 | 7 | 5 | 10 | 0 |
+| `src/fragments/battle_engine/battle_engine_messages.c` | 23 | 23 | 1 | 7 | 5 | 10 | 0 |
 | `src/fragments/battle_engine/battle_engine_313D60.c` | 23 | 23 | 1 | 4 | 1 | 17 | 0 |
 | `src/fragments/demo_scenes/demo_scenes_16A0E0.c` | 19 | 19 | 2 | 20 | 3 | 2 | 0 |
 | `src/fragments/battle_engine/battle_engine_359F80.c` | 1 | 1 | 1 | 42 | 0 | 0 | 0 |
