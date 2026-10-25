@@ -1644,6 +1644,9 @@ void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* textu
     Battle_DrawScrollingTextureRect(x, y, width, height, 0, 0, 0x400, 0);
 }
 
+/*
+    Draws the pokemon Stadium logo in attact mode
+*/
 void Battle_DrawDemoStadiumLogo(void) {
     s32 i;
 

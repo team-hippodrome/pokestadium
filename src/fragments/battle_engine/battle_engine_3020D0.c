@@ -17,15 +17,15 @@
 BattleMessageQueue* sBattleMessageQueues;
 
 static u8 D_84385990[] = { SWORDS_DANCE, GROWTH };
-static u8 D_84385994[] = { AGILITY, HARDEN, METRONOME, EGG_BOMB, KINESIS };
-static u8 D_8438599C[] = { QUICK_ATTACK, NIGHT_SHADE, SCREECH, RECOVER, SOFTBOILED };
+static u8 D_84385994[] = { MEDITATE, RECOVER, BIDE, SELFDESTRUCT, AMNESIA };
+static u8 D_8438599C[] = { AGILITY, TELEPORT, MIMIC, DOUBLE_TEAM, BARRAGE };
 static u8 D_843859A4[] = {
-    POUND,       SCRATCH,       VICEGRIP,     WING_ATTACK,   FLY,          BIND,        SLAM,          HORN_ATTACK,
-    BODY_SLAM,   WRAP,          THRASH,        POISON_STING,  BITE,         GROWL,       ROAR,          SING,
-    SUPERSONIC,  DRILL_PECK,    SEISMIC_TOSS,  ABSORB,        MEGA_DRAIN,   DRAGON_RAGE, FISSURE,       DIG,
-    TOXIC,       CONFUSION,     DOUBLE_TEAM,   MINIMIZE,      SMOKESCREEN, DEFENSE_CURL, BARRIER,      MIRROR_MOVE,
-    SMOG,        SWIFT,         AMNESIA,       BARRAGE,       LOVELY_KISS,  DIZZY_PUNCH, PSYWAVE,       ACID_ARMOR,
-    CRABHAMMER,  BONEMERANG,    ROCK_SLIDE,    CONVERSION,    SUBSTITUTE,  STRUGGLE,
+    POUND,        SCRATCH,    VICEGRIP,     WING_ATTACK, FLY,          BIND,         SLAM,       HORN_ATTACK,
+    BODY_SLAM,    WRAP,       THRASH,       TAIL_WHIP,   LEER,         BITE,         GROWL,      ROAR,
+    SING,         PECK,       COUNTER,      STRENGTH,    ABSORB,       STRING_SHOT,  EARTHQUAKE, FISSURE,
+    DIG,          TOXIC,      SCREECH,      HARDEN,      MINIMIZE,     WITHDRAW,     DEFENSE_CURL, METRONOME,
+    LICK,         CLAMP,      CONSTRICT,    POISON_GAS,  LEECH_LIFE,   BUBBLE,       FLASH,      SPLASH,
+    ACID_ARMOR,   FURY_SWIPES, REST,        SHARPEN,     SLASH,        SUBSTITUTE,
 };
 
 void Battle_ClearAllMessageQueues(void) {
@@ -361,7 +361,7 @@ void BattleBox_Open(s32 arg0) {
     BattleBox* text_box = &sBattleMessageQueues->textBox;
 
     text_box->visibility = 0;
-    text_box->unk_04 = arg0;
+    text_box->openingProgress = arg0;
 }
 
 void BattleBox_Close(void) {
@@ -370,45 +370,51 @@ void BattleBox_Close(void) {
     battle_box->visibility = 0xFF;
 }
 
-void BattleBox_PlayTextBlip(s8* arg0) {
-    s32 temp_v0;
+/**
+ * Queues the sound for a message buffer written by Battle_QueueMessage (byte 0 is the
+ * message index, the string follows). Empty strings are silent. Indices below 128 are
+ * used as the sound ID directly; Transform, Reflect, Light Screen and Substitute
+ * messages have dedicated sounds, and every other index plays (index & 127) + 100.
+ */
+void BattleBox_PlayTextBlip(s8* message) {
+    s32 message_index;
 
-    if (arg0[1] == '\x00') {
+    if (message[1] == '\x00') {
         return;
     }
 
-    temp_v0 = arg0[0] & 0x7F;
+    message_index = message[0] & 0x7F;
 
-    if ((arg0[0] & 0x80) == '\x00') {
-        Audio_QueuePendingSoundId(arg0[0]);
-    } else if (temp_v0 == 'Q') {
+    if ((message[0] & 0x80) == '\x00') {
+        Audio_QueuePendingSoundId(message[0]);
+    } else if (message_index == (BATTLE_MSG_TRANSFORM_DITTO_BLOCKED & 0x7F)) {
         Audio_QueuePendingSoundId(0xBC);
-    } else if (temp_v0 == 'R') {
+    } else if (message_index == (BATTLE_MSG_LIGHT_SCREEN_SET & 0x7F)) {
         Audio_QueuePendingSoundId(0xB5);
-    } else if (temp_v0 == 'S') {
+    } else if (message_index == (BATTLE_MSG_LIGHT_SCREEN_FAILED & 0x7F)) {
         Audio_QueuePendingSoundId(0xB6);
-    } else if (temp_v0 == 'T') {
+    } else if (message_index == (BATTLE_MSG_REFLECT_SET & 0x7F)) {
         Audio_QueuePendingSoundId(0xB7);
-    } else if (temp_v0 == 'U') {
+    } else if (message_index == (BATTLE_MSG_REFLECT_FAILED & 0x7F)) {
         Audio_QueuePendingSoundId(0xB8);
-    } else if (temp_v0 == 'V') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_EXISTS & 0x7F)) {
         Audio_QueuePendingSoundId(0xB9);
-    } else if (temp_v0 == 'W') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_LOW_HP & 0x7F)) {
         Audio_QueuePendingSoundId(0xBA);
-    } else if (temp_v0 == 'X') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_CREATED & 0x7F)) {
         Audio_QueuePendingSoundId(0xBB);
     } else {
-        Audio_QueuePendingSoundId(temp_v0 + 0x64);
+        Audio_QueuePendingSoundId(message_index + 100);
     }
 }
 
 void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
     UNUSED s32 pad;
-    s32 temp_s1;
+    s32 time_limit_text_length;
 
     if (1) {}// karodo
 
-    switch (box->unk_04) {
+    switch (box->openingProgress) {
         case 0:
             if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
@@ -505,8 +511,8 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
             break;
 
         case 13:
-            temp_s1 = Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
-            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 0xA1 - temp_s1, 0x71);
+            time_limit_text_length = Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
+            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 161 - time_limit_text_length, 113);
             break;
 
         case 14:
@@ -527,7 +533,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
     box->lineCount = 0;
 
-    switch (box->unk_04) {
+    switch (box->openingProgress) {
         case 0:
             if ((sBattleMessageQueues->buffer[2][1] == 0) && (sBattleMessageQueues->buffer[13][1] == 0) && (sBattleMessageQueues->buffer[5][1] == 0)) {
                 box->visibility = 0xFF;
@@ -629,63 +635,63 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 }
 
 void BattleBox_Update(s16 arg0, s16 arg1) {
-    BattleBox* temp_s0 = &sBattleMessageQueues->textBox;
+    BattleBox* box = &sBattleMessageQueues->textBox;
 
-    if (gSessionContext.mode == 0x10) {
+    if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         return;
     }
 
-    switch (temp_s0->visibility) {
+    switch (box->visibility) {
         case 0:
-            temp_s0->displayTimer = 0;
-            if (temp_s0->unk_04 == 0xD) {
-                BattleHud_InitCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78);
-                temp_s0->visibility++;
-            } else if (temp_s0->unk_04 == 0xE) {
-                BattleBox_SelectMessage(temp_s0);
-            } else if (BattleBox_SelectMessage(temp_s0) == 0) {
-                BattleHud_InitCaptionBoxPopup(temp_s0, arg0, arg1);
+            box->displayTimer = 0;
+            if (box->openingProgress == 0xD) {
+                BattleHud_InitCaptionBoxPopupBlack(box, 160, 120);
+                box->visibility++;
+            } else if (box->openingProgress == 0xE) {
+                BattleBox_SelectMessage(box);
+            } else if (BattleBox_SelectMessage(box) == 0) {
+                BattleHud_InitCaptionBoxPopup(box, arg0, arg1);
             }
             break;
 
         case 1:
-            if (temp_s0->unk_04 == 0xD) {
-                if (BattleHud_UpdateCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78) != 0) {
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->visibility++;
+            if (box->openingProgress == 0xD) {
+                if (BattleHud_UpdateCaptionBoxPopupBlack(box, 0xA0, 0x78) != 0) {
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
                 }
             } else {
-                if (temp_s0->unk_04 == 0xE) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->visibility++;
-                } else if (BattleHud_UpdateCaptionBoxPopup(temp_s0, arg0, arg1) != 0) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->visibility++;
+                if (box->openingProgress == 0xE) {
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
+                } else if (BattleHud_UpdateCaptionBoxPopup(box, arg0, arg1) != 0) {
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
                 }
             }
             break;
 
         case 2:
-            if (temp_s0->unk_04 == 0xD) {
-                BattleHud_UpdateCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78);
-                BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+            if (box->openingProgress == 0xD) {
+                BattleHud_UpdateCaptionBoxPopupBlack(box, 0xA0, 0x78);
+                BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
-                temp_s0->displayTimer++;
-                if (temp_s0->displayTimer == 0x46) {
-                    temp_s0->visibility++;
+                box->displayTimer++;
+                if (box->displayTimer == 0x46) {
+                    box->visibility++;
                 }
             } else {
-                if (temp_s0->unk_04 == 0xE) {
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+                if (box->openingProgress == 0xE) {
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                 } else {
-                    BattleHud_UpdateCaptionBoxPopup(temp_s0, arg0, arg1);
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+                    BattleHud_UpdateCaptionBoxPopup(box, arg0, arg1);
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
-                    temp_s0->displayTimer++;
-                    if (temp_s0->displayTimer == 0x2D) {
-                        temp_s0->visibility++;
+                    box->displayTimer++;
+                    if (box->displayTimer == 45) {
+                        box->visibility++;
                     }
                 }
             }

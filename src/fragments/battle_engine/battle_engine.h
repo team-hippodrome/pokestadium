@@ -198,6 +198,20 @@ typedef struct unk_D_8438E7B0 {
 #define TYPE_EFFECTIVENESS_NEUTRAL 10
 #define TYPE_EFFECTIVENESS_SUPER 20
 
+// Message indices passed to Battle_QueueMessage. Values of 128 and above skip
+// sBattleMessagesTableFileNumbers and select string table 30 entry (index - 72);
+// strings quoted below are the US text for that entry (the table is loaded by
+// Text_GetStringTable(30) in //@src/fragments/battle_engine/battle_engine_move_animation.c).
+#define BATTLE_MSG_TRANSFORM_FAILED 208        // "But, it failed!"
+#define BATTLE_MSG_TRANSFORM_DITTO_BLOCKED 209 // "It couldn't transform into DITTO!"
+#define BATTLE_MSG_LIGHT_SCREEN_SET 210        // "It's protected from SPECIAL attacks!"
+#define BATTLE_MSG_LIGHT_SCREEN_FAILED 211     // "But, it failed!"
+#define BATTLE_MSG_REFLECT_SET 212             // "It gained armor!"
+#define BATTLE_MSG_REFLECT_FAILED 213          // "But, it failed!"
+#define BATTLE_MSG_SUBSTITUTE_EXISTS 214       // "It has a SUBSTITUTE!"
+#define BATTLE_MSG_SUBSTITUTE_LOW_HP 215       // "Not enough HP!"
+#define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
+
 typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s8 unk_08;
@@ -343,7 +357,7 @@ typedef struct unk_D_843901B0 {
 
 typedef struct BattleBox {
     /* 0x00 */ s32 visibility;
-    /* 0x04 */ s32 unk_04;
+    /* 0x04 */ s32 openingProgress;
     /* 0x08 */ s32 displayTimer;
     /* 0x0C */ s32 side;
     /* 0x10 */ s32 lineCount;
