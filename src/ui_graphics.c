@@ -39,8 +39,8 @@ extern u8 D_1003AB0[];
 extern u8 D_1003B70[];
 extern u8 D_1003C30[];
 extern u8 D_1003CF0[];
-extern u8 D_1003DB0[];
-extern u8 D_1003E50[];
+extern u8 gHpBarLabel[];
+extern u8 gHpBarEndCap[];
 extern u8 gHpBarGreen[];
 extern u8 gHpBarYellow[];
 extern u8 gHpBarRed[];
@@ -105,7 +105,7 @@ Gfx D_8006F558[] = {
     gsSPEndDisplayList(),
 };
 
-Gfx D_8006F5A0[] = {
+Gfx gUiMaskedTextureDL[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_2CYCLE),
     gsDPSetTexturePersp(G_TP_NONE),
@@ -426,7 +426,7 @@ void Ui_DrawTextureMarker(s32 x, s32 y) {
         gSPDisplayList(gDisplayListHead++, D_8006F4E0);
         Gfx_DrawTextureRgba16(x, y, 0x20, 0x16, D_10031D0, 0x20, 0x200000);
     } else {
-        gSPDisplayList(gDisplayListHead++, D_8006F5A0);
+        gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
         Gfx_DrawTextureRgba16Ia8(x, y, 0xC, 0xA, D_1003750, D_1003890, 0x10, 0x100000);
     }
 
@@ -523,12 +523,12 @@ void BattleHud_DrawHpBar16x5(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    gDPLoadTextureBlock(gDisplayListHead++, D_1003DB0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 5, 0,
+    gDPLoadTextureBlock(gDisplayListHead++, gHpBarLabel, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 5, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     gSPTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg0 + 0x10) << 2, (arg1 + 5) << 2, G_TX_RENDERTILE,
                         0, 0, 0x0400, 0x0400);
-    gDPLoadTextureBlock(gDisplayListHead++, D_1003E50, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+    gDPLoadTextureBlock(gDisplayListHead++, gHpBarEndCap, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPTextureRectangle(gDisplayListHead++, (arg0 + 0x40) << 2, arg1 << 2, (arg0 + 0x41) << 2, (arg1 + 5) << 2,
                         G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
@@ -541,7 +541,7 @@ void BattleHud_DrawHpBar16x5(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 
     if (temp_lo > 0) {
-        gDPLoadTextureBlock(gDisplayListHead++, D_1003E78, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0,
+        gDPLoadTextureBlock(gDisplayListHead++, gHpBarEmpty, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gDisplayListHead++, ((arg0 + sp14) + 0x10) << 2, arg1 << 2,

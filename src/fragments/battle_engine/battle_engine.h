@@ -47,7 +47,7 @@ typedef struct ActivePokemonState {
     /* 0x2D */ u8 unk_2D;
     /* 0x2E */ u8 alpha;
     /* 0x2F */ u8 forfeitCursorHover;
-    /* 0x30 */ u16 unk_30;
+    /* 0x30 */ u16 flashTimer;
     /* 0x32 */ char unk32[0x2];
     /* 0x34 */ u16 flags;
     /* 0x36 */ u16 unk_36;
@@ -341,18 +341,18 @@ typedef struct unk_D_843901B0 {
     /* 0x3C */f32 unk_3C;
 } unk_D_843901B0; // size >= 0x40
 
-typedef struct unk_D_843901A0_4C8 {
+typedef struct BattleBox {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
+    /* 0x08 */ s32 displayTimer;
     /* 0x0C */ s32 side;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ f32 euclidean;
-    /* 0x24 */ f32 unk_24;
+    /* 0x10 */ s32 lineCount;
+    /* 0x14 */ Vec3f textOrigin;
+    /* 0x20 */ f32 cornerDistance;
+    /* 0x24 */ f32 currentDistance;
     /* 0x28 */ s16 rotationX;
     /* 0x2A */ s16 rotationY;
-} unk_D_843901A0_4C8; // size = 0x2C
+} BattleBox; // size = 0x2C
 
 typedef struct unk_D_843901A0 {
     /* 0x000 */ u8 unk_000;
@@ -376,11 +376,11 @@ typedef struct unk_D_843901A0 {
     /* 0x3C8 */ s8 unk_3C8[64];
     /* 0x408 */ s8 unk_408[64];
     /* 0x448 */ s8 unk_448[2][64];
-    /* 0x4C8 */ unk_D_843901A0_4C8 unk_4C8;
+    /* 0x4C8 */ BattleBox unk_4C8;
 } unk_D_843901A0; // size = 0x4F4
 
-typedef struct unk_D_84385790 {
-    /* 0x00 */ s32 string_file;
+typedef struct StatusConditionLabel {
+    /* 0x00 */ s32 stringIndex;
     /* 0x04 */ Color_RGBA8 color;
 } StatusConditionLabel; // size = 0x8
 
@@ -984,7 +984,7 @@ extern f32 sBattleTimer;
 extern u8 D_84390134;
 extern s32 sAttractInputIndex;
 extern unk_D_84390178 sAttractScreenTimer;
-extern Vec3f D_84390190;
+extern Vec3f sEndBattleBannerPos;
 extern unk_D_843901A0* gBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
 extern ActivePokemon* D_84390200;
@@ -1427,25 +1427,25 @@ void BattleScene_UpdateActionSelectPhase(void);
 
 //@src/fragments/battle_engine/battle_engine_2FA4D0.c
 void func_8430FC10(void);
-void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void BattleHud_DrawGradientRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
-void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
+void BattleHud_DrawTranslucentShadowRect(s32 x, s32 y, s32 width, s32 height, s32 alpha);
+void BattleHud_DrawGradientRect(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color, Color_RGB8* end_color);
+void Battle_DrawGradientRectWrapper(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color, Color_RGB8* end_color);
 void func_84310360(void);
-void BattleHud_DrawHpBar(s32 arg0, s32 arg1, f32 arg2, s32 arg3);
+void BattleHud_DrawHpBar(s32 x, s32 y, f32 current_hp, s32 max_hp);
 void BattleHud_Noop(void);
-void BattleHud_DrawLevelNumber(s32 arg0, s32 arg1, s32 arg2);
-void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void BattleHud_DrawLevelNumber(s32 x, s32 y, s32 level);
+void BattleHud_DrawHpFractionText(s32 x, s32 y, s32 current_hp, s32 max_hp);
 void BattleHud_DrawTrainerNameLabel(s16 x, s16 y, s32 port, char* name, s32 has_illegal_move);
-void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
-void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
-void BattleHud_DrawMonInfoPanel(ActivePokemon* arg0, BattleMon* arg1, StatusConditionLabel* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
-s32 BattleHud_DrawBorderTile(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
+void BattleHud_DrawTrainerNameLabelBlink(s16 x, s16 y, s32 port, u8* name, s32 blink_phase, s32 has_illegal_move);
+void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* pokemon, TeamRoster* pokemon_team, s16 x, s16 y, s32 port, u16 blink_phase, s32 selected_move);
+void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemon_info, StatusConditionLabel* status_label, s32 x, s32 y, s32 width, s32 length, s32 r, s32 g, s32 b, s32 alpha);
+s32 BattleHud_DrawBorderTile(s32 x, s32 y, s32 width, s32 height, u8* texture);
 void func_84311420(void);
-void BattleHud_DrawBoxBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
+void BattleHud_DrawBoxBorder(s16 x, s16 y, s16 width, s16 height);
 void BattleHud_DrawParticipantTimer(s16 x, s16 y);
 void BattleHud_DrawBattleTimer(s16 x, s16 y);
-void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2);
-void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4);
+void BattleHud_DrawPartyBallRow(ActivePokemon* pokemon, s16 x, s16 y);
+void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* active_pokemon, s16 x, s16 y, u16 blink_phase, s32 selected_move);
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* active_pokemon, s16 x, s16 y, u16 blink_phase, s32 selected_move);
 void BattleHud_DrawThreeOptionLabelBar(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawTwoOptionLabelBar(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
@@ -1455,30 +1455,30 @@ s32 BattleHud_DrawMovePpTextLTR(s32 x, s32 y, s32 current_pp, s32 max_pp);
 s32 BattleHud_DrawMovePpTextRTL(s32 x, s32 y, s32 current_pp, s32 max_pp);
 void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawForfeitConfirmDialog(s16 x, s16 y, s16 port, s32 arg3);
-void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2);
-void BattleHud_DrawDoublesRosterRow(ActivePokemon* arg0, TeamRoster* arg1, BattleMon* arg2, s32 arg3, s32 arg4, s32 arg5);
-void BattleHud_DrawPartyRosterRow(ActivePokemon* arg0, TeamRoster* arg1, BattleMon* arg2, s32 arg3, s32 arg4, s32 arg5);
-void BattleHud_DrawTeamStatusList(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4);
-void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3);
-void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3);
-void BattleHud_DrawMessageBox(s32 arg0, s16 arg1, s16 arg2, char* arg3);
-s32 Battle_DrawTextIfNonEmpty(char* arg0, s16 arg1, s16 arg2);
-void BattleHud_DrawExpandingCaptionBox(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2, Vec3f arg3);
-void BattleHud_InitCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2);
-s32 BattleHud_UpdateCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2);
-void BattleHud_DrawExpandingCaptionBoxBlack(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2, Vec3f arg3);
-void BattleHud_InitCaptionBoxPopupBlack(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2);
-s32 BattleHud_UpdateCaptionBoxPopupBlack(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2);
-void BattleHud_DrawTextBox(s32 arg0, s16 arg1, s16 arg2, char* arg3);
-void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3);
+void BattleHud_DrawPlainText(s16 x, s16 y, char* fmt);
+void BattleHud_DrawDoublesRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x, s32 y, s32 party_slot);
+void BattleHud_DrawPartyRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x, s32 y, s32 party_slot);
+void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roster, s16 x, s16 y, s32 port);
+void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
+void BattleHud_DrawCompactMonStatusBox(ActivePokemon* active_pokemon, s16 x, s16 y, s32 port);
+void BattleHud_DrawMessageBox(s32 port, s16 x, s16 y, char* text);
+s32 Battle_DrawTextIfNonEmpty(char* text, s16 x, s16 y);
+void BattleHud_DrawExpandingCaptionBox(BattleBox* battle_box, s16 center_x, s16 center_y, Vec3f corner);
+void BattleHud_InitCaptionBoxPopup(BattleBox* battle_box, s16 center_x, s16 center_y);
+s32 BattleHud_UpdateCaptionBoxPopup(BattleBox* battle_box, s16 center_x, s16 center_y);
+void BattleHud_DrawExpandingCaptionBoxBlack(BattleBox* battle_box, s16 center_x, s16 center_y, Vec3f corner);
+void BattleHud_InitCaptionBoxPopupBlack(BattleBox* battle_box, s16 center_x, s16 center_y);
+s32 BattleHud_UpdateCaptionBoxPopupBlack(BattleBox* battle_box, s16 center_x, s16 center_y);
+void BattleHud_DrawTextBox(s32 port, s16 x, s16 y, char* text);
+void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleScene_DrawStripWipeIfActive(void);
-void Battle_DrawScrollingTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7);
-void Battle_DrawTiledStripSegment(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5);
-void Battle_DrawSpectatorModeBackgroundPanel(void);
-void Battle_DrawSpectatorModeIndicator(void);
-void Battle_DrawSpectatorModeScrollingText(void);
-void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1);
-void BattleHud_DrawOpponentSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1);
+void Battle_DrawScrollingTextureRect(s16 x, s16 y, s16 width, s16 height, s16 texture_x, s16 texture_y, s16 texture_spread_x, s16 texture_spread_y);
+void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* texture, s32 load_width);
+void Battle_DrawDemoStadiumLogo(void);
+void Battle_DrawEndBattleBanner(void);
+void Battle_DrawDemoControllerWarning(void);
+void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state);
+void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state);
 
 
 //@src/fragments/battle_engine/battle_engine_3020D0.c
@@ -1500,8 +1500,8 @@ void Battle_QueueMetronomeMoveMessage(void);
 void BattleBox_Open(s32 arg0);
 void BattleBox_Close(void);
 void BattleBox_PlayTextBlip(s8* arg0);
-void BattleBox_DrawMessage(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2);
-s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0);
+void BattleBox_DrawMessage(BattleBox* arg0, s16 arg1, s16 arg2);
+s32 BattleBox_SelectMessage(BattleBox* arg0);
 void BattleBox_Update(s16 arg0, s16 arg1);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
 void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1);

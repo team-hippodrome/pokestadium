@@ -797,7 +797,7 @@ void Intro_DrawTextPanels(void) {
                 D_86B0FA50->unk_9C = 0xB4;
                 D_86B0FA50->unk_A4 = 0.0f;
                 D_86B0FA50->unk_AC = 0.0f;
-                sprintf(D_86B0FA50->unk00, "%s", D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].unk_30);
+                sprintf(D_86B0FA50->unk00, "%s", D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].nickname);
                 D_86B0FA50->unk_90++;
                 break;
 

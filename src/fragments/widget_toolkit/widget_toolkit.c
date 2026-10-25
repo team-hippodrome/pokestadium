@@ -176,7 +176,7 @@ void Widget_DrawMeterBar(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 
     if (temp_lo > 0) {
-        gDPLoadTextureBlock(gDisplayListHead++, D_1003E78, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0,
+        gDPLoadTextureBlock(gDisplayListHead++, gHpBarEmpty, G_IM_FMT_RGBA, G_IM_SIZ_16b, 4, 5, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(gDisplayListHead++, ((arg0 + sp14) + 0x10) << 2, arg1 << 2,

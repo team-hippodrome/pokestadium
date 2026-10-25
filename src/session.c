@@ -159,10 +159,10 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
     arg0->unk_0E = 0x7CF;
     arg0->unk_1E = 0xFFFF;
 
-    arg0->unk_20[0] = 5;
-    arg0->unk_20[1] = 5;
-    arg0->unk_20[2] = 5;
-    arg0->unk_20[3] = 5;
+    arg0->pp[0] = 5;
+    arg0->pp[1] = 5;
+    arg0->pp[2] = 5;
+    arg0->pp[3] = 5;
 
     arg0->unk_52 = 0;
     arg0->unk_53 = 0;
@@ -172,7 +172,7 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
 
     arg0->hp = arg0->maxHp;
 
-    Text_CopySpeciesName(arg0->unk_30, arg1);
+    Text_CopySpeciesName(arg0->nickname, arg1);
     HAL_Strcpy(arg0->unk_3B, Text_GetPlayerLabel(0));
     return arg0;
 }

@@ -170,7 +170,7 @@ void func_88206110(BattleMon* arg0) {
 
     arg0->unk_04 = arg0->level;
 
-    HAL_Strcpy(arg0->unk_30, Text_GetString(NULL, 0, D_88224FB8, arg0->unk_00.unk_00 - 1));
+    HAL_Strcpy(arg0->nickname, Text_GetString(NULL, 0, D_88224FB8, arg0->unk_00.unk_00 - 1));
     HAL_Strcpy(arg0->unk_3B, Text_GetString(NULL, 0, D_88224FB4, 0x17));
 
     Pokemon_SetDisplayNameFromOt(arg0);
@@ -539,7 +539,7 @@ void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s3
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88217E10.r, D_88217E10.g, D_88217E10.b, D_88217E10.a);
     Font_SetActive(8, 0);
-    Font_Printf(arg1 + 0x14, arg2 + 4, arg0->unk_000[0].unk_30);
+    Font_Printf(arg1 + 0x14, arg2 + 4, arg0->unk_000[0].nickname);
     Font_SetActive(4, 0);
 
     temp_v1 = Font_MeasureTextExtent(0, 0, "L100");

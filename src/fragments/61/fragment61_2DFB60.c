@@ -243,7 +243,7 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
                 Gfx_SetEnvColor(0x32, 0x32, 0xC8, 0x80);
             }
             Font_SetActive(4, 0);
-            Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.unk_30);
+            Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.nickname);
             Font_SetActive(4, 0);
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 0x17, "%s%d", TeamSelection_GetInstructionText(0x15),
                           arg3->unk_0000[i].unk_004.level);

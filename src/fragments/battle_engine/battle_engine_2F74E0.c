@@ -277,13 +277,13 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
     if (pokemon->state.runtime.movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
             if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -300,7 +300,7 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
 s32 BattleScene_IsMoveUnavailable(ActivePokemon* pokemon, s32 move) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (!(runtime->moveUsability[move] & 0x3F)) {
+    if (!(runtime->pp[move] & 0x3F)) {
         return 1;
     }
 
@@ -404,13 +404,13 @@ s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* pokemon) {
     if (runtime->movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
             if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
-                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                has_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                has_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -885,13 +885,13 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* pokemon) {
         temp_a1 = runtime->movesDisabled >> 4;
         for (i = 0; i < 4; i++) {
             if ((temp_a1 != i) && (runtime->moves[i] != 0)) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -923,7 +923,7 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* pokemon) {
     ActivePokemonState* state = &pokemon->state;
     BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (!(runtime->moveUsability[state->moveIndex] & 0x3F)) {
+    if (!(runtime->pp[state->moveIndex] & 0x3F)) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(pokemon);
         BattleScene_BuildParticipantMessage(pokemon, 1);

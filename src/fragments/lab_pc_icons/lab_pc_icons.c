@@ -79,9 +79,9 @@ void LabPC_SwapMonMoves(BattleMon* arg0, s32 arg1, s32 arg2) {
     arg0->moves[arg1] = arg0->moves[arg2];
     arg0->moves[arg2] = temp_v0;
 
-    temp_t0 = arg0->unk_20[arg1];
-    arg0->unk_20[arg1] = arg0->unk_20[arg2];
-    arg0->unk_20[arg2] = temp_t0;
+    temp_t0 = arg0->pp[arg1];
+    arg0->pp[arg1] = arg0->pp[arg2];
+    arg0->pp[arg2] = temp_t0;
 }
 
 void func_88600240(void) {
@@ -452,7 +452,7 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(D_88605AF0.r, D_88605AF0.g, D_88605AF0.b, D_88605AF0.a);
-    Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->unk_30);
+    Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->nickname);
     if ((arg0->unk_2C->unk_00.unk_00 <= 0) || (arg0->unk_2C->unk_00.unk_00 >= 0x98)) {
         Font_SetActive(0x10, 0);
         Font_Printf(arg1 + 0x9B, arg2 + 6, "%s?", sp34);
@@ -747,7 +747,7 @@ void LabPC_SetMovesPanelMon(unk_func_88205880_0098_008_040* arg0, BattleMon* arg
     for (i = 0; i < 4; i++) {
         if (i < temp_s3) {
             LabPC_SetMoveNameId(arg0->unk_3C[i], arg1->moves[i]);
-            LabPC_SetPpWidgetMove(arg0->unk_5C[i], arg1->moves[i], arg1->unk_20[i]);
+            LabPC_SetPpWidgetMove(arg0->unk_5C[i], arg1->moves[i], arg1->pp[i]);
         } else {
             LabPC_SetMoveNameId(arg0->unk_3C[i], 0);
             LabPC_SetPpWidgetMove(arg0->unk_5C[i], 0, 0);

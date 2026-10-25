@@ -263,7 +263,6 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer*
 }
 
 // called every frame: bug boy in GLC
-// Rectangle's legacy field order is left/right/bottom/top (x1/y1/x2/y2).
 // Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
 //@src/gfx_rect.c
 void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2) {
@@ -276,14 +275,14 @@ void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2) {
     if (GfxRect_ClipToScissor(&destination) != 0) {
         if (!x2) {}
 
-        texture_spread_x = ((destination.x1 - x1) << 5);
-        texture_spread_y = ((destination.y2 - y1) << 5);
+        texture_spread_x = ((destination.left - x1) << 5);
+        texture_spread_y = ((destination.top - y1) << 5);
 
         texture_spread_x += 0x10;
         texture_spread_y += 0x10;
 
-        gSPTextureRectangle(gDisplayListHead++, destination.x1 << 2, destination.y2 << 2, ((destination.y1 + 1) ^ 0) << 2,
-                            ((destination.x2 + 1) ^ 0) << 2, G_TX_RENDERTILE, texture_spread_x, texture_spread_y, 0x0800, 0x0800);
+        gSPTextureRectangle(gDisplayListHead++, destination.left << 2, destination.top << 2, ((destination.right + 1) ^ 0) << 2,
+                            ((destination.bottom + 1) ^ 0) << 2, G_TX_RENDERTILE, texture_spread_x, texture_spread_y, 0x0800, 0x0800);
 
         if ((x2 && x2) ^ 0) {} // karodo
     }

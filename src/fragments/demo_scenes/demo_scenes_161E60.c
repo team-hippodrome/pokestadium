@@ -949,7 +949,7 @@ void Completion_DrawSpeciesRewardText(s16 arg0, s16 arg1) {
     Font_Printf(arg0 + 0x69, arg1 + 0x19, Text_GetString(NULL, 0, D_86B0EBD0, 0xA3));
     Font_EndTexturedTextRendering();
 
-    gSPDisplayList(gDisplayListHead++, D_8006F5A0);
+    gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
 
     if (D_86B0EBDC->unk_2F0 == 1) {
         Gfx_DrawTextureRgba16Ia8(arg0 + 0x14, arg1 + 0x19, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);

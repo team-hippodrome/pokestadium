@@ -590,7 +590,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp1 = D_823059B0[i] + sp58 + 0x2C;
             tmp2 = D_823059BC[i] + sp56 + 5;
-            Font_Printf(tmp1, tmp2, arg0->unk_0020[i].unk_30);
+            Font_Printf(tmp1, tmp2, arg0->unk_0020[i].nickname);
         }
 
         Font_SetActive(4, 0);

@@ -414,8 +414,8 @@ void Battle_StartTurn(void) {
 
     sBattleScene.scene->unk_2A = sBattleScene.scene->unk_2C;
     sBattleScene.scene->unk_38 = 0;
-    temp_s0->unk_30 = 0;
-    temp_s1->unk_30 = 0;
+    temp_s0->flashTimer = 0;
+    temp_s1->flashTimer = 0;
     sBattleScene.scene->unk_44 = 2;
     Battle_ResolveMonAction();
     sBattleScene.scene->unk_2C = sp2C;
@@ -1245,7 +1245,7 @@ void BattleScene_PhaseIntro(CameraNode* arg0) {
 }
 
 void BattleScene_SetMonMoveResourceFlag(ActivePokemon* arg0) {
-    arg0->state.unk_30 = 0x800;
+    arg0->state.flashTimer = 0x800;
 }
 
 void BattleScene_PrepareMoveResourcePresentation(UNUSED CameraNode* arg0) {
@@ -2446,14 +2446,14 @@ void BattleScene_Phase15(CameraNode* arg0) {
             BattleScene_SelectActionCameraPresetFromTiming(arg0, 0);
             BattleScene_RecenterCameraOnOwner(arg0, D_84390204);
             if (sp30->unk_4D & 0x10) {
-                if (sp2C->unk_4E & 8) {
+                if (sp2C->battleStatus3 & 8) {
                     sp28->model = D_84390204->sessionTeams->displayModel = sp24->unk_BE;
                 } else if (D_84390200->sessionTeams->displayModel == 0x98) {
                     sp28->model = D_84390204->sessionTeams->displayModel = sp2C->id;
                 } else {
                     sp28->model = D_84390204->sessionTeams->displayModel = D_84390200->sessionTeams->displayModel;
                 }
-            } else if (sp2C->unk_4E & 8) {
+            } else if (sp2C->battleStatus3 & 8) {
                 D_84390204->sessionTeams->displayModel = sp24->unk_BE;
             } else if (D_84390200->sessionTeams->displayModel == 0x98) {
                 D_84390204->sessionTeams->displayModel = sp2C->id;

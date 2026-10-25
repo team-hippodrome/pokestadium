@@ -147,12 +147,12 @@ arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon
 
     Text_CopySpeciesName(sp38, arg1->unk_00.unk_00);
 
-    if (HAL_Strcmp(arg1->unk_30, sp38) != 0) {
+    if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
 
         if (1) {}
 
-        var_v1 = arg1->unk_30;
+        var_v1 = arg1->nickname;
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
             var_a0 += 0;
@@ -177,7 +177,7 @@ void Model_ComputeSizeVariantFromRecord(arg1_func_80010CA8* arg0, unk_func_8001C
     stack.unk_00.unk_00 = arg2;
     stack.unk_0E = arg1->unk_02;
 
-    _bcopy(arg1->unk_04, stack.unk_30, 0x10);
+    _bcopy(arg1->unk_04, stack.nickname, 0x10);
     _bcopy(arg1->unk_14, stack.unk_3B, 0x10);
     Model_ComputeSizeVariant(arg0, &stack);
 }
@@ -193,7 +193,7 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
         temp_a1 = arg0->unk_04;
         if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->isHuman)) {
             Model_ComputeSizeVariant(&sp2C, (BattleMon*)arg0->unk_04);
-            if ((sp2A == 0x19) && (arg0->unk_04->pokemonPicked[0].unk_30[6] & 0x80)) {
+            if ((sp2A == 0x19) && (arg0->unk_04->pokemonPicked[0].nickname[6] & 0x80)) {
                 sp2A = 0x99;
             }
         }

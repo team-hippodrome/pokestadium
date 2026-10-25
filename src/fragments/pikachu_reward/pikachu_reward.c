@@ -694,11 +694,11 @@ void PikachuReward_TeachSurfToPikachu(s32 arg0) {
 
     for (i = PikachuReward_CountKnownMoves(); i < 4; i++) {
         D_832027C8.unk_04.moves[i] = 0;
-        D_832027C8.unk_04.unk_20[i] = 0;
+        D_832027C8.unk_04.pp[i] = 0;
     }
 
     D_832027C8.unk_04.moves[arg0] = 0x39;
-    D_832027C8.unk_04.unk_20[arg0] = gMoveData[0x38].pp;
+    D_832027C8.unk_04.pp[arg0] = gMoveData[0x38].pp;
 
     PikachuReward_SaveToCartridge();
     PikachuReward_ShowTextWaitForA(Text_GetString(NULL, 0, D_83202020, 0xE), 1);

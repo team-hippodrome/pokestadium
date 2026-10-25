@@ -304,7 +304,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             TeamSelection_Preview_DrawHeader(temp_s4, temp_s5, arg0->unk_01, arg0->unk_02);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
-            Font_Printf(temp_s4 + 0xC, temp_s5 + 8, temp_s6->unk_30);
+            Font_Printf(temp_s4 + 0xC, temp_s5 + 8, temp_s6->nickname);
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->level);
             Font_SetActive(4, 0);
@@ -404,16 +404,16 @@ void TeamSelection_Preview_HandleInput(unk_D_8423D3A8* arg0) {
         arg0->unk_02 ^= 1;
     }
 
-    arg0->unk_06 = arg0->unk_0E.x1;
-    arg0->unk_08 = arg0->unk_0E.y2;
+    arg0->unk_06 = arg0->unk_0E.left;
+    arg0->unk_08 = arg0->unk_0E.top;
     arg0->unk_0A = 0x228;
     arg0->unk_0C = 0xCC;
     arg0->unk_20 = PokeIcon_RenderPreview(arg0->unk_28);
 }
 
 void TeamSelection_Preview_Open(unk_D_8423D3A8* arg0) {
-    arg0->unk_06 = arg0->unk_0E.x1;
-    arg0->unk_08 = arg0->unk_0E.y2;
+    arg0->unk_06 = arg0->unk_0E.left;
+    arg0->unk_08 = arg0->unk_0E.top;
     arg0->unk_0A = 0x228;
     arg0->unk_0C = 0xCC;
     arg0->unk_00 = 1;
@@ -421,8 +421,8 @@ void TeamSelection_Preview_Open(unk_D_8423D3A8* arg0) {
 }
 
 void TeamSelection_Preview_Close(unk_D_8423D3A8* arg0) {
-    arg0->unk_06 = arg0->unk_16.x1;
-    arg0->unk_08 = arg0->unk_16.y2;
+    arg0->unk_06 = arg0->unk_16.left;
+    arg0->unk_08 = arg0->unk_16.top;
     arg0->unk_0A = 0x8C;
     arg0->unk_0C = 0x34;
     arg0->unk_00 = 0;

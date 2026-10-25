@@ -314,23 +314,23 @@ void WipeTransition_Draw(void) {
 }
 
 void UI_DrawClippedTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
-    unk_D_800A7440 sp30;
+    Rectangle sp30;
 
     GfxRect_SetBounds(&sp30, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
 
     if (GfxRect_ClipToScissor(&sp30) != 0) {
         if (arg6 != 0) {
-            arg4 += ((sp30.x1 - arg0) * arg6) >> 5;
+            arg4 += ((sp30.left - arg0) * arg6) >> 5;
         }
 
         if (arg7 != 0) {
-            arg5 += ((sp30.y2 - arg1) * arg7) >> 5;
+            arg5 += ((sp30.top - arg1) * arg7) >> 5;
         }
 
-        sp30.y1 += 1;
-        sp30.x2 += 1;
+        sp30.right += 1;
+        sp30.bottom += 1;
 
-        gSPTextureRectangle(gDisplayListHead++, sp30.x1 << 2, sp30.y2 << 2, sp30.y1 << 2, sp30.x2 << 2, G_TX_RENDERTILE,
+        gSPTextureRectangle(gDisplayListHead++, sp30.left << 2, sp30.top << 2, sp30.right << 2, sp30.bottom << 2, G_TX_RENDERTILE,
                             arg4, arg5, arg6, arg7);
     }
 }

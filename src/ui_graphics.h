@@ -9,7 +9,7 @@ extern Gfx D_8006F4C0[];
 extern Gfx D_8006F4E0[];
 extern Gfx gUiEnvTintTextureDL[];
 extern Gfx D_8006F558[];
-extern Gfx D_8006F5A0[];
+extern Gfx gUiMaskedTextureDL[];
 extern Gfx D_8006F608[];
 extern Gfx gUiRestoreTextureDL[];
 extern Gfx D_8006F710[];

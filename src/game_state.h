@@ -44,7 +44,7 @@ typedef struct BattleMon {
     /* 0x1A */ u16 unk_1A;
     /* 0x1C */ u16 unk_1C;
     /* 0x1E */ u16 unk_1E;
-    /* 0x20 */ u8 unk_20[4];
+    /* 0x20 */ u8 pp[4];
     /* 0x24 */ u8 level;
     /* 0x25 */ u8 unk_25;
     /* 0x26 */ u16 maxHp;
@@ -59,7 +59,7 @@ typedef struct BattleMon {
     // pokemonPicked + 0x30 as the name.
     //@src/save_data.c
     //@src/fragments/battle_engine/battle_engine_313250.c
-    /* 0x30 */ u8 unk_30[12];
+    /* 0x30 */ u8 nickname[12];
     /* 0x3C */ u8 unk_3C;
     /* 0x3D */ u8 unk_3D[3];
     /* 0x40 */ u8 unk_40[12];
@@ -67,7 +67,7 @@ typedef struct BattleMon {
     /* 0x4D */ u8 unk_4D[3];
 } BattleMon; // size = 0x50
 #else
-    /* 0x30 */ u8 unk_30[11];
+    /* 0x30 */ u8 nickname[11];
     /* 0x3B */ u8 unk_3B[11];
     /* 0x46 */ u8 unk_46[11];
     /* 0x51 */ u8 pad51;

@@ -277,7 +277,7 @@ char* Battle_GetActiveMoveName(ActivePokemon* active_pokemon) {
 }
 
 u8* Battle_GetActiveMonNickname(ActivePokemon* active_pokemon) {
-    return active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex].unk_30;
+    return active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex].nickname;
 }
 
 void BattleScene_SetParticipantModelTransform(ActivePokemon* active_pokemon, s32 transform_id, s32 transform_timer) {

@@ -393,7 +393,7 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0) {
         }
         temp_s1_2 = temp_s7 + ((i % 3) * 0x9A) + 0x4C;
         temp_s2_3 = temp_fp + ((i / 3) * 0x2A) + 8;
-        Font_Printf(temp_s1_2, temp_s2_3, arg0->unk_0018[i].unk_30);
+        Font_Printf(temp_s1_2, temp_s2_3, arg0->unk_0018[i].nickname);
         if ((arg0->unk_0009 != 0) && (temp_v0_4 != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         }
@@ -610,7 +610,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
-    Font_Printf(temp_fp + 0x32, sp7C + 7, arg0->unk_0018[temp_s1].unk_30);
+    Font_Printf(temp_fp + 0x32, sp7C + 7, arg0->unk_0018[temp_s1].nickname);
     Font_Printf(temp_fp + 0x32, sp7C + 0x1B, "%s", Text_GetString(NULL, 0, D_84803794, 8));
     Font_Printf(temp_fp + 0xBE, sp7C + 7, Text_GetString(NULL, 0, D_84803790, 9));
     Font_Printf(temp_fp + 0xBE, sp7C + 0x1B, Text_GetString(NULL, 0, D_84803790, 0xA));
@@ -652,7 +652,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
         Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, D_84803788, sp78->moves[i] - 1));
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->unk_20[i] & 0x3F);
+        Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->pp[i] & 0x3F);
     }
 
     Font_EndTexturedTextRendering();

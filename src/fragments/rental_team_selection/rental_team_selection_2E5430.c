@@ -153,7 +153,7 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
             s16 tmp1 = D_84211870[var_s1] + arg1 + 0x2C;
             s16 tmp2 = D_8421187C[var_s1] + arg2 + 5;
 
-            Font_Printf(tmp1, tmp2, arg3->unk_0000[var_s1].unk_004.unk_30);
+            Font_Printf(tmp1, tmp2, arg3->unk_0000[var_s1].unk_004.nickname);
         }
     }
 

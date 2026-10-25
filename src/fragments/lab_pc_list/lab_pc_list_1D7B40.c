@@ -120,7 +120,7 @@ void BattleMoveListWidget_SetMoves(unk_func_8830867C_04C_078* arg0, BattleMon* a
 
     for (i = 0; i < temp_v0; i++) {
         arg0->unk_44[i].unk_00 = arg1->moves[i];
-        arg0->unk_44[i].unk_04 = arg1->unk_20[i];
+        arg0->unk_44[i].unk_04 = arg1->pp[i];
     }
 
     TableView_Initialize(&arg0->unk_34, arg0->unk_44, 8, 4, temp_v0);

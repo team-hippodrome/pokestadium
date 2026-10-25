@@ -288,18 +288,18 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                     var_t0 = 7;
                 }
 
-                sp80 = ((sp11C->unk_20[i] >> 6) * var_t0) + ptr->pp;
+                sp80 = ((sp11C->pp[i] >> 6) * var_t0) + ptr->pp;
                 Gfx_DrawTextureIa8(D_82F13C54[i] + arg0->unk_04 + 0xB6, D_82F13C5C[i] + arg0->unk_06 + 6, 8, 0xC, D_302F528,
                               8, 0);
                 Trade_DrawNumberTwoDigits(D_82F13C54[i] + arg0->unk_04 + 0xA4, D_82F13C5C[i] + arg0->unk_06 + 6,
-                              sp11C->unk_20[i] & 0x3F);
+                              sp11C->pp[i] & 0x3F);
                 Trade_DrawNumberTwoDigits(D_82F13C54[i] + arg0->unk_04 + 0xC0, D_82F13C5C[i] + arg0->unk_06 + 6, sp80);
             }
         }
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 6, sp11C->unk_30);
+        Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 6, sp11C->nickname);
         Font_SetActive(0x10, 0);
         Font_Printf(arg0->unk_04 + 0xA0, arg0->unk_06 + 6, "%s%d", Text_GetString(NULL, 0, D_82F13B74, 0x15),
                       sp11C->level);

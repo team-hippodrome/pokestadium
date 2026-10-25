@@ -4,47 +4,47 @@
 
 static DepthBuffer* D_80068BB0 = NULL;
 
-unk_D_800A7440* GfxRect_SetBounds(unk_D_800A7440* arg0, s16 x1, s16 y1, s16 x2, s16 y2) {
+Rectangle* GfxRect_SetBounds(Rectangle* arg0, s16 x1, s16 y1, s16 x2, s16 y2) {
     if (x2 >= x1) {
-        arg0->x1 = x1;
-        arg0->y1 = x2;
+        arg0->left = x1;
+        arg0->right = x2;
     } else {
-        arg0->x1 = x2;
-        arg0->y1 = x1;
+        arg0->left = x2;
+        arg0->right = x1;
     }
 
     if (y2 >= y1) {
-        arg0->x2 = y2;
-        arg0->y2 = y1;
+        arg0->bottom = y2;
+        arg0->top = y1;
     } else {
-        arg0->y2 = y2;
-        arg0->x2 = y1;
+        arg0->top = y2;
+        arg0->bottom = y1;
     }
 
     return arg0;
 }
 
-s32 GfxRect_ClipToScissor(unk_D_800A7440* arg0) {
+s32 GfxRect_ClipToScissor(Rectangle* arg0) {
     s32 ret = 0;
 
     if (D_80068BB0 != NULL) {
-        if (arg0->x1 < D_800A7440.x1) {
-            arg0->x1 = D_800A7440.x1;
+        if (arg0->left < D_800A7440.left) {
+            arg0->left = D_800A7440.left;
         }
 
-        if (D_800A7440.y1 < arg0->y1) {
-            arg0->y1 = D_800A7440.y1;
+        if (D_800A7440.right < arg0->right) {
+            arg0->right = D_800A7440.right;
         }
 
-        if (arg0->y2 < D_800A7440.y2) {
-            arg0->y2 = D_800A7440.y2;
+        if (arg0->top < D_800A7440.top) {
+            arg0->top = D_800A7440.top;
         }
 
-        if (D_800A7440.x2 < arg0->x2) {
-            arg0->x2 = D_800A7440.x2;
+        if (D_800A7440.bottom < arg0->bottom) {
+            arg0->bottom = D_800A7440.bottom;
         }
 
-        ret = arg0->y1 >= arg0->x1 && arg0->x2 >= arg0->y2;
+        ret = arg0->right >= arg0->left && arg0->bottom >= arg0->top;
     }
 
     return ret;
@@ -68,8 +68,8 @@ void Gfx_ApplyScissorRect(Gfx** gfx_p) {
         Gfx* gfx = *gfx_p;
 
         gDPPipeSync(gfx++);
-        gDPSetScissorFrac(gfx++, G_SC_NON_INTERLACE, D_800A7440.x1 * 4.0f, D_800A7440.y2 * 4.0f,
-                          (D_800A7440.y1 + 1) * 4.0f, (D_800A7440.x2 + 1) * 4.0f);
+        gDPSetScissorFrac(gfx++, G_SC_NON_INTERLACE, D_800A7440.left * 4.0f, D_800A7440.top * 4.0f,
+                          (D_800A7440.right + 1) * 4.0f, (D_800A7440.bottom + 1) * 4.0f);
 
         *gfx_p = gfx;
     }

@@ -144,7 +144,7 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
                 s16 tmp1 = D_842115B0[i] + arg0->unk_0018 + 0x2C;
                 s16 tmp2 = D_842115BC[i] + arg0->unk_001A + 5;
 
-                Font_Printf(tmp1, tmp2, arg0->unk_0030[i].unk_004.unk_30);
+                Font_Printf(tmp1, tmp2, arg0->unk_0030[i].unk_004.nickname);
             }
         }
 
