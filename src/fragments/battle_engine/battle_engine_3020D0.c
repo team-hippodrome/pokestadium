@@ -14,7 +14,7 @@
 #include "stdarg.h"
 #include "moves.h"
 
-BattleMessageQueue* sBattleMessageQueues;
+BattleMessageQueue* gBattleMessageQueues;
 
 static u8 D_84385990[] = { SWORDS_DANCE, GROWTH };
 static u8 D_84385994[] = { MEDITATE, RECOVER, BIDE, SELFDESTRUCT, AMNESIA };
@@ -29,44 +29,44 @@ static u8 D_843859A4[] = {
 };
 
 void Battle_ClearAllMessageQueues(void) {
-    sBattleMessageQueues->buffer[1][0] = 0;
-    sBattleMessageQueues->buffer[1][1] = 0;
-    sBattleMessageQueues->buffer[2][0] = 0;
-    sBattleMessageQueues->buffer[2][1] = 0;
-    sBattleMessageQueues->buffer[3][0] = 0;
-    sBattleMessageQueues->buffer[3][1] = 0;
-    sBattleMessageQueues->buffer[4][0] = 0;
-    sBattleMessageQueues->buffer[4][1] = 0;
-    sBattleMessageQueues->buffer[5][0] = 0;
-    sBattleMessageQueues->buffer[5][1] = 0;
-    sBattleMessageQueues->buffer[6][0] = 0;
-    sBattleMessageQueues->buffer[6][1] = 0;
-    sBattleMessageQueues->buffer[16][0] = 0;
-    sBattleMessageQueues->buffer[16][1] = 0;
-    sBattleMessageQueues->buffer[17][0] = 0;
-    sBattleMessageQueues->buffer[17][1] = 0;
-    sBattleMessageQueues->buffer[7][0] = 0;
-    sBattleMessageQueues->buffer[7][1] = 0;
-    sBattleMessageQueues->buffer[11][0] = 0;
-    sBattleMessageQueues->buffer[11][1] = 0;
-    sBattleMessageQueues->buffer[10][0] = 0;
-    sBattleMessageQueues->buffer[10][1] = 0;
-    sBattleMessageQueues->buffer[12][0] = 0;
-    sBattleMessageQueues->buffer[12][1] = 0;
-    sBattleMessageQueues->buffer[13][0] = 0;
-    sBattleMessageQueues->buffer[13][1] = 0;
-    sBattleMessageQueues->buffer[14][0] = 0;
-    sBattleMessageQueues->buffer[14][1] = 0;
-    sBattleMessageQueues->buffer[15][0] = 0;
-    sBattleMessageQueues->buffer[15][1] = 0;
+    gBattleMessageQueues->buffer[1][0] = 0;
+    gBattleMessageQueues->buffer[1][1] = 0;
+    gBattleMessageQueues->buffer[2][0] = 0;
+    gBattleMessageQueues->buffer[2][1] = 0;
+    gBattleMessageQueues->buffer[3][0] = 0;
+    gBattleMessageQueues->buffer[3][1] = 0;
+    gBattleMessageQueues->buffer[4][0] = 0;
+    gBattleMessageQueues->buffer[4][1] = 0;
+    gBattleMessageQueues->buffer[5][0] = 0;
+    gBattleMessageQueues->buffer[5][1] = 0;
+    gBattleMessageQueues->buffer[6][0] = 0;
+    gBattleMessageQueues->buffer[6][1] = 0;
+    gBattleMessageQueues->buffer[16][0] = 0;
+    gBattleMessageQueues->buffer[16][1] = 0;
+    gBattleMessageQueues->buffer[17][0] = 0;
+    gBattleMessageQueues->buffer[17][1] = 0;
+    gBattleMessageQueues->buffer[7][0] = 0;
+    gBattleMessageQueues->buffer[7][1] = 0;
+    gBattleMessageQueues->buffer[11][0] = 0;
+    gBattleMessageQueues->buffer[11][1] = 0;
+    gBattleMessageQueues->buffer[10][0] = 0;
+    gBattleMessageQueues->buffer[10][1] = 0;
+    gBattleMessageQueues->buffer[12][0] = 0;
+    gBattleMessageQueues->buffer[12][1] = 0;
+    gBattleMessageQueues->buffer[13][0] = 0;
+    gBattleMessageQueues->buffer[13][1] = 0;
+    gBattleMessageQueues->buffer[14][0] = 0;
+    gBattleMessageQueues->buffer[14][1] = 0;
+    gBattleMessageQueues->buffer[15][0] = 0;
+    gBattleMessageQueues->buffer[15][1] = 0;
 }
 
 void Battle_ClearMessageCursor(void) {
-    sBattleMessageQueues->unk_004 = 0;
-    sBattleMessageQueues->buffer[0][0] = 0;
-    sBattleMessageQueues->buffer[0][1] = 0;
-    sBattleMessageQueues->unk_008[0] = 0;
-    sBattleMessageQueues->unk_008[1] = 0;
+    gBattleMessageQueues->unk_004 = 0;
+    gBattleMessageQueues->buffer[0][0] = 0;
+    gBattleMessageQueues->buffer[0][1] = 0;
+    gBattleMessageQueues->unk_008[0] = 0;
+    gBattleMessageQueues->unk_008[1] = 0;
 }
 
 void Battle_SimpleStringFormat(s8* buffer, s8* format, ...) {
@@ -119,8 +119,8 @@ void Battle_QueueStatusText(char* text, s32 side) {
     UNUSED s32 pad2[2];
 
     Battle_ClearMessageCursor();
-    sBattleMessageQueues->controllerPort = sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
-    Battle_SimpleStringFormat(sBattleMessageQueues->buffer[0], text + 1);
+    gBattleMessageQueues->controllerPort = sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
+    Battle_SimpleStringFormat(gBattleMessageQueues->buffer[0], text + 1);
     *text = 0;
 }
 
@@ -162,23 +162,23 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
 
         switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x18);
                 break;
         }
     } else {
@@ -187,23 +187,23 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
 
         switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
     }
@@ -231,23 +231,23 @@ void Battle_QueueMoveCategoryMessage(void) {
 
     switch (file_number_offset) {
         case 0:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+            Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x14);
             break;
 
         case 1:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+            Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x15);
             break;
 
         case 2:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+            Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x16);
             break;
 
         case 3:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+            Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x17);
             break;
 
         case 4:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+            Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x18);
             break;
     }
 }
@@ -283,23 +283,23 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
 
@@ -310,23 +310,23 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[13], 0x18);
                 break;
         }
     } else {
@@ -335,37 +335,37 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                Battle_QueueMessage(gBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
     }
 }
 
 void BattleBox_Open(s32 opening_progress) {
-    BattleBox* text_box = &sBattleMessageQueues->textBox;
+    BattleBox* text_box = &gBattleMessageQueues->textBox;
 
     text_box->visibility = 0;
     text_box->openingProgress = opening_progress;
 }
 
 void BattleBox_Close(void) {
-    BattleBox* battle_box = &sBattleMessageQueues->textBox;
+    BattleBox* battle_box = &gBattleMessageQueues->textBox;
 
     battle_box->visibility = 0xFF;
 }
@@ -416,98 +416,98 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
 
     switch (box->openingProgress) {
         case 0:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 3:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 1:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
             if ((box->lineCount < 3) &&
-                (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0)) {
+                (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0)) {
                 box->lineCount += 1;
             }
             break;
 
         case 2:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 4:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[8][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[8][1], x + 4, y + 3);
             break;
 
         case 5:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[9][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[9][1], x + 4, y + 3);
             break;
 
         case 6:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[15][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[15][1], x + 4, y + 3);
             break;
 
         case 7:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[12][1], x + 4, y + 3);
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[10][1], x + 4, y + 0x10);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[12][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[10][1], x + 4, y + 0x10);
             break;
 
         case 8:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[16 + box->side][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[16 + box->side][1], x + 4, y + 3);
             break;
 
         case 9:
         case 10:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[6][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[6][1], x + 4, y + 3);
             break;
 
         case 11:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + 3);
             break;
 
         case 12:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + 3);
             break;
 
         case 13:
@@ -520,7 +520,7 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
             break;
 
         case 15:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 0xC) + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 0xC) + 3);
             break;
     }
 
@@ -535,22 +535,22 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
     switch (box->openingProgress) {
         case 0:
-            if ((sBattleMessageQueues->buffer[2][1] == 0) && (sBattleMessageQueues->buffer[13][1] == 0) && (sBattleMessageQueues->buffer[5][1] == 0)) {
+            if ((gBattleMessageQueues->buffer[2][1] == 0) && (gBattleMessageQueues->buffer[13][1] == 0) && (gBattleMessageQueues->buffer[5][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
 
             box->side = sBattleScene.scene->side;
-            if (sBattleMessageQueues->buffer[2][1] != 0) {
-                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[2]);
+            if (gBattleMessageQueues->buffer[2][1] != 0) {
+                BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[2]);
             }
 
-            if (sBattleMessageQueues->buffer[13][1] != 0) {
-                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[13]);
+            if (gBattleMessageQueues->buffer[13][1] != 0) {
+                BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[13]);
             }
 
-            if (sBattleMessageQueues->buffer[5][1] != 0) {
-                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[5]);
+            if (gBattleMessageQueues->buffer[5][1] != 0) {
+                BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[5]);
             }
             box->visibility += 1;
             break;
@@ -558,13 +558,13 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
         case 1:
         case 3:
             box->side = sBattleScene.scene->side;
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[14]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[11]);
-            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0) &&
-                (sBattleMessageQueues->buffer[14][1] == 0) && (sBattleMessageQueues->buffer[11][1] == 0)) {
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[1]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[4]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[7]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[14]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[11]);
+            if ((gBattleMessageQueues->buffer[1][1] == 0) && (gBattleMessageQueues->buffer[4][1] == 0) && (gBattleMessageQueues->buffer[7][1] == 0) &&
+                (gBattleMessageQueues->buffer[14][1] == 0) && (gBattleMessageQueues->buffer[11][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -573,10 +573,10 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
         case 2:
             box->side = sBattleScene.scene->side;
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
-            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0)) {
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[1]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[4]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[7]);
+            if ((gBattleMessageQueues->buffer[1][1] == 0) && (gBattleMessageQueues->buffer[4][1] == 0) && (gBattleMessageQueues->buffer[7][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -585,8 +585,8 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
         case 15:
             box->side = sBattleScene.scene->side;
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
-            if (sBattleMessageQueues->buffer[1][1] == 0) {
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[1]);
+            if (gBattleMessageQueues->buffer[1][1] == 0) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -594,7 +594,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             break;
 
         case 8:
-            if (sBattleMessageQueues->buffer[16 + box->side][1] == 0) {
+            if (gBattleMessageQueues->buffer[16 + box->side][1] == 0) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -612,9 +612,9 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
         case 4:
         case 5:
         case 6:
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[8]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[9]);
-            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[15]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[8]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[9]);
+            BattleBox_PlayTextBlip(gBattleMessageQueues->buffer[15]);
             box->visibility += 1;
             break;
 
@@ -635,7 +635,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 }
 
 void BattleBox_Update(s16 x, s16 y) {
-    BattleBox* box = &sBattleMessageQueues->textBox;
+    BattleBox* box = &gBattleMessageQueues->textBox;
 
     if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         return;
@@ -707,7 +707,7 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
 }
 
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
-    sBattleMessageQueues->controllerPort = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    gBattleMessageQueues->controllerPort = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
     pokemon->captionState.active = 1;
     Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
     Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
@@ -757,13 +757,13 @@ void BattleScene_TickHudTimers(void) {
 }
 
 void Battle_InitMessageQueues(void) {
-    sBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueue), 0);
-    bzero(sBattleMessageQueues, sizeof(BattleMessageQueue));
+    gBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueue), 0);
+    bzero(gBattleMessageQueues, sizeof(BattleMessageQueue));
 }
 
 void BattleScene_ResetMessageQueue(void) {
-    sBattleMessageQueues->unk_004 = 0;
-    sBattleMessageQueues->unk_008[sBattleMessageQueues->unk_004] = 0;
+    gBattleMessageQueues->unk_004 = 0;
+    gBattleMessageQueues->unk_008[gBattleMessageQueues->unk_004] = 0;
     Battle_ClearMessageCursor();
 }
 
