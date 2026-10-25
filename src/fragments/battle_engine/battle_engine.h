@@ -345,13 +345,13 @@ typedef struct unk_D_843901A0_4C8 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ s32 side;
     /* 0x10 */ s32 unk_10;
     /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ f32 unk_20;
+    /* 0x20 */ f32 euclidean;
     /* 0x24 */ f32 unk_24;
-    /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s16 unk_2A;
+    /* 0x28 */ s16 rotationX;
+    /* 0x2A */ s16 rotationY;
 } unk_D_843901A0_4C8; // size = 0x2C
 
 typedef struct unk_D_843901A0 {

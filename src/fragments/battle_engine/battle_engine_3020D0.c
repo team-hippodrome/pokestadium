@@ -484,7 +484,7 @@ void BattleBox_DrawMessage(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2) {
             break;
 
         case 8:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_448[arg0->unk_0C][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_448[arg0->side][1], arg1 + 4, arg2 + 3);
             break;
 
         case 9:
@@ -530,7 +530,7 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
                 return 1;
             }
 
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             if (gBattleMessageQueues->unk_0C8[1] != 0) {
                 BattleBox_PlayTextBlip(gBattleMessageQueues->unk_0C8);
             }
@@ -547,7 +547,7 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
 
         case 1:
         case 3:
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_088);
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_148);
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_208);
@@ -562,7 +562,7 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
             break;
 
         case 2:
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_088);
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_148);
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_208);
@@ -574,7 +574,7 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
             break;
 
         case 15:
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             BattleBox_PlayTextBlip(gBattleMessageQueues->unk_088);
             if (gBattleMessageQueues->unk_088[1] == 0) {
                 arg0->unk_00 = 0xFF;
@@ -584,19 +584,19 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
             break;
 
         case 8:
-            if (gBattleMessageQueues->unk_448[arg0->unk_0C][1] == 0) {
+            if (gBattleMessageQueues->unk_448[arg0->side][1] == 0) {
                 arg0->unk_00 = 0xFF;
                 return 1;
             }
             tmp = sBattleScene.scene->unk_2C == 0;
             arg0->unk_00 += 1;
-            arg0->unk_0C = tmp;
+            arg0->side = tmp;
             break;
 
         case 9:
             tmp = sBattleScene.scene->unk_2C == 0;
             arg0->unk_00 += 1;
-            arg0->unk_0C = tmp;
+            arg0->side = tmp;
             break;
 
         case 4:
@@ -612,12 +612,12 @@ s32 BattleBox_SelectMessage(unk_D_843901A0_4C8* arg0) {
             D_84390190.z = 0.0f;
             D_84390190.x = 321.0f;
             D_84390190.y = 160.0f;
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             arg0->unk_00 += 1;
             break;
 
         default:
-            arg0->unk_0C = sBattleScene.scene->unk_2C;
+            arg0->side = sBattleScene.scene->unk_2C;
             arg0->unk_00 += 1;
             break;
     }
@@ -652,11 +652,11 @@ void BattleBox_Update(s16 arg0, s16 arg1) {
                 }
             } else {
                 if (temp_s0->unk_04 == 0xE) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->unk_0C]));
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
                     BattleBox_DrawMessage(temp_s0, temp_s0->unk_14.x, temp_s0->unk_14.y);
                     temp_s0->unk_00++;
                 } else if (BattleHud_UpdateCaptionBoxPopup(temp_s0, arg0, arg1) != 0) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->unk_0C]));
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
                     BattleBox_DrawMessage(temp_s0, temp_s0->unk_14.x, temp_s0->unk_14.y);
                     temp_s0->unk_00++;
                 }

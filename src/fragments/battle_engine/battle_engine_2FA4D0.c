@@ -113,49 +113,49 @@ static Color_RGB8 D_8438587C[] = {
     { 0xCC, 0x51, 0x28 }, // #CC5128 orange-red
     { 0xCC, 0x8F, 0 },    // #CC8F00 amber
 };
-static Color_RGB8 D_84385888[] = {
+static Color_RGB8 sPlayer1DarkColor[] = {
     { 0x00, 0x00, 0x8B }, // #00008B dark blue
     { 0x00, 0x00, 0x8B }, // #00008B dark blue
     { 0x00, 0x00, 0x8B }, // #00008B dark blue
     { 0x00, 0x00, 0x8B }, // #00008B dark blue
 };
-static Color_RGB8 D_84385894[] = {
+static Color_RGB8 sPlayer1LightColor[] = {
     { 0x00, 0x00, 0xEE }, // #0000EE blue
     { 0x00, 0x00, 0xEE }, // #0000EE blue
     { 0x00, 0x00, 0xEE }, // #0000EE blue
     { 0x00, 0x00, 0xEE }, // #0000EE blue
 };
-static Color_RGB8 D_843858A0[] = {
+static Color_RGB8 sPlayer2DarkColor[] = {
     { 0x00, 0x32, 0x00 }, // #003200 dark green
     { 0x00, 0x32, 0x00 }, // #003200 dark green
     { 0x00, 0x32, 0x00 }, // #003200 dark green
     { 0x00, 0x32, 0x00 }, // #003200 dark green
 };
-static Color_RGB8 D_843858AC[] = {
+static Color_RGB8 sPlayer2LightColor[] = {
     { 0x00, 0x79, 0x00 }, // #007900 green
     { 0x00, 0x79, 0x00 }, // #007900 green
     { 0x00, 0x79, 0x00 }, // #007900 green
     { 0x00, 0x79, 0x00 }, // #007900 green
 };
-static Color_RGB8 D_843858B8[] = {
+static Color_RGB8 sPlayer3DarkColor[] = {
     { 0x1E, 0x00, 0x00 }, // #1E0000 dark red
     { 0x1E, 0x00, 0x00 }, // #1E0000 dark red
     { 0x1E, 0x00, 0x00 }, // #1E0000 dark red
     { 0x1E, 0x00, 0x00 }, // #1E0000 dark red
 };
-static Color_RGB8 D_843858C4[] = {
+static Color_RGB8 sPlayer3LightColor[] = {
     { 0x82, 0x00, 0x00 }, // #820000 red
     { 0x82, 0x00, 0x00 }, // #820000 red
     { 0x82, 0x00, 0x00 }, // #820000 red
     { 0x82, 0x00, 0x00 }, // #820000 red
 };
-static Color_RGB8 D_843858D0[] = {
+static Color_RGB8 sPlayer4DarkColor[] = {
     { 0x65, 0x49, 0x11 }, // #654911 dark gold
     { 0x65, 0x49, 0x11 }, // #654911 dark gold
     { 0x65, 0x49, 0x11 }, // #654911 dark gold
     { 0x65, 0x49, 0x11 }, // #654911 dark gold
 };
-static Color_RGB8 D_843858DC[] = {
+static Color_RGB8 sPlayer4LightColor[] = {
     { 0x97, 0x89, 0x13 }, // #978913 gold
     { 0x97, 0x89, 0x13 }, // #978913 gold
     { 0x97, 0x89, 0x13 }, // #978913 gold
@@ -1243,6 +1243,7 @@ void BattleHud_DrawForfeitConfirmDialog(s16 x, s16 y, s16 port, UNUSED s32 arg3)
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     // Of note: even the US version has this in Japanese
+    // Western Version likely use BattleHud_DrawTwoOptionCursorMenu below
     Font_Printf(x + 46, y + 6, "こうさんしますか?"); // Do you surrender?
     Font_Printf(x + 56, y + 24, "いいえ"); // No
     Font_Printf(x + 129, y + 24, "はい"); // Yes
@@ -1258,10 +1259,10 @@ void BattleHud_DrawForfeitConfirmDialog(s16 x, s16 y, s16 port, UNUSED s32 arg3)
     BattleHud_DrawTranslucentShadowRect(x - 3, y - 2, 204, 45, 0);
 }
 
-void BattleHud_DrawPlainText(s16 arg0, s16 arg1, char* arg2) {
+void BattleHud_DrawPlainText(s16 x, s16 y, char* fmt) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(arg0, arg1, arg2);
+    Font_Printf(x, y, fmt);
     Font_EndTexturedTextRendering();
 }
 
@@ -1364,213 +1365,213 @@ void BattleHud_DrawPartyRosterRow(ActivePokemon* arg0, TeamRoster* arg1, BattleM
     }
 }
 
-void BattleHud_DrawTeamStatusList(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4) {
+void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roster, s16 x, s16 y, s32 port) {
     UNUSED s32 pad[2];
-    Color_RGB8* sp88[] = {
-        D_84385888,
-        D_843858A0,
-        D_843858B8,
-        D_843858D0,
+    Color_RGB8* dark_colors[] = {
+        sPlayer1DarkColor,
+        sPlayer2DarkColor,
+        sPlayer3DarkColor,
+        sPlayer4DarkColor,
     };
-    Color_RGB8* sp78[] = {
-        D_84385894,
-        D_843858AC,
-        D_843858C4,
-        D_843858DC,
+    Color_RGB8* light_colors[] = {
+        sPlayer1LightColor,
+        sPlayer2LightColor,
+        sPlayer3LightColor,
+        sPlayer4LightColor,
     };
     UNUSED s32 pad2[4];
 
-    Battle_DrawGradientRectWrapper(arg2 + 1, arg3 + 1, 0x63, 0xF, &sp88[arg4][0], &sp78[arg4][0]);
-    Battle_DrawGradientRectWrapper(arg2 + 1, arg3 + 0x10, 0x63, 0x1D, &sp88[arg4][1], &sp78[arg4][1]);
-    Battle_DrawGradientRectWrapper(arg2 + 1, arg3 + 0x2D, 0x63, 0x1D, &sp88[arg4][2], &sp78[arg4][2]);
-    Battle_DrawGradientRectWrapper(arg2 + 1, arg3 + 0x4A, 0x63, 0x1D, &sp88[arg4][3], &sp78[arg4][3]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 1, 99, 15, &dark_colors[port][0], &light_colors[port][0]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 16, 99, 29, &dark_colors[port][1], &light_colors[port][1]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 45, 99, 29, &dark_colors[port][2], &light_colors[port][2]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 74, 99, 29, &dark_colors[port][3], &light_colors[port][3]);
 
-    BattleHud_DrawPlainText((arg2 - (Font_MeasureTextExtent(1, 0, arg1->trainerName) / 2)) + 0x32, arg3 + 3, arg1->trainerName);
+    BattleHud_DrawPlainText((x - (Font_MeasureTextExtent(1, 0, team_roster->trainerName) / 2)) + 50, y + 3, team_roster->trainerName);
 
-    if (arg1->numberOfPokemonBrought > 0) {
-        BattleHud_DrawPartyRosterRow(arg0, arg1, &arg1->pokemonPicked[0], arg2 + 1, arg3 + 0x10, 0);
+    if (team_roster->numberOfPokemonBrought > 0) {
+        BattleHud_DrawPartyRosterRow(pokemon, team_roster, &team_roster->pokemonPicked[0], x + 1, y + 16, 0);
     }
 
-    if (arg1->numberOfPokemonBrought >= 2) {
-        BattleHud_DrawPartyRosterRow(arg0, arg1, &arg1->pokemonPicked[1], arg2 + 1, arg3 + 0x2D, 1);
+    if (team_roster->numberOfPokemonBrought >= 2) {
+        BattleHud_DrawPartyRosterRow(pokemon, team_roster, &team_roster->pokemonPicked[1], x + 1, y + 45, 1);
     }
 
-    if (arg1->numberOfPokemonBrought >= 3) {
-        BattleHud_DrawPartyRosterRow(arg0, arg1, &arg1->pokemonPicked[2], arg2 + 1, arg3 + 0x4A, 2);
+    if (team_roster->numberOfPokemonBrought >= 3) {
+        BattleHud_DrawPartyRosterRow(pokemon, team_roster, &team_roster->pokemonPicked[2], x + 1, y + 74, 2);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg2 + 1, arg3, 0x18, 0x10, D_84385850[arg4], 0x18, 0);
+    Gfx_DrawTextureRgba16(x + 1, y, 24, 16, D_84385850[port], 0x18, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    BattleHud_DrawBoxBorder(arg2, arg3, 0x63, 0x66);
-    BattleHud_DrawTranslucentShadowRect(arg2 - 2, arg3 - 2, 0x69, 0x6A, 0);
+    BattleHud_DrawBoxBorder(x, y, 99, 102);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 105, 106, 0);
 }
 
-void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
-    TeamRoster* temp_s0;
-    TeamRoster* temp_s1;
-    BattleMon* ptr = &arg0->teamRoster->pokemonPicked[0];
+void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s32 port) {
+    TeamRoster* teammate_roster;
+    TeamRoster* self_roster;
+    BattleMon* ptr = &pokemon->teamRoster->pokemonPicked[0];
     s32 i;
-    Color_RGB8* sp88[] = {
-        D_84385888,
-        D_843858A0,
-        D_843858B8,
-        D_843858D0,
+    Color_RGB8* dark_colors[] = {
+        sPlayer1DarkColor,
+        sPlayer2DarkColor,
+        sPlayer3DarkColor,
+        sPlayer4DarkColor,
     };
-    Color_RGB8* sp78[] = {
-        D_84385894,
-        D_843858AC,
-        D_843858C4,
-        D_843858DC,
+    Color_RGB8* light_colors[] = {
+        sPlayer1LightColor,
+        sPlayer2LightColor,
+        sPlayer3LightColor,
+        sPlayer4LightColor,
     };
-    s32 tmp;
-    BattleMon* sp5C[6];
+    s32 trainer_name_text_width;
+    BattleMon* pokemon_in_battle[6];
 
-    temp_s0 = arg0->sessionTeams->teamMember[arg0->thumbnail.tagTeam];
-    temp_s1 = arg0->teamRoster;
+    teammate_roster = pokemon->sessionTeams->teamMember[pokemon->thumbnail.tagTeam];
+    self_roster = pokemon->teamRoster;
 
-    sp5C[5] = &temp_s1->pokemonPicked[0];
-    sp5C[5] = &temp_s1->pokemonPicked[0];
-    sp5C[4] = &temp_s1->pokemonPicked[1];
-    sp5C[3] = &temp_s1->pokemonPicked[2];
-    sp5C[2] = &temp_s1->pokemonPicked[3];
-    sp5C[1] = &temp_s1->pokemonPicked[4];
-    sp5C[0] = &temp_s1->pokemonPicked[5];
+    pokemon_in_battle[5] = &self_roster->pokemonPicked[0];
+    pokemon_in_battle[5] = &self_roster->pokemonPicked[0];
+    pokemon_in_battle[4] = &self_roster->pokemonPicked[1];
+    pokemon_in_battle[3] = &self_roster->pokemonPicked[2];
+    pokemon_in_battle[2] = &self_roster->pokemonPicked[3];
+    pokemon_in_battle[1] = &self_roster->pokemonPicked[4];
+    pokemon_in_battle[0] = &self_roster->pokemonPicked[5];
 
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0xF, &sp88[arg3][0], &sp78[arg3][0]);
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 0x10, 0xC8, 0x1D, &sp88[arg3][1], &sp78[arg3][1]);
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 0x2D, 0xC8, 0x1D, &sp88[arg3][2], &sp78[arg3][2]);
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 0x4A, 0xC8, 0x1D, &sp88[arg3][3], &sp78[arg3][3]);
-    tmp = Font_MeasureTextExtent(1, 0, temp_s0->trainerName) / 2;
-    BattleHud_DrawPlainText((arg1 - tmp) + 0x32, arg2 + 3, temp_s0->trainerName);
+    Battle_DrawGradientRectWrapper(x + 1, y + 1, 200, 15, &dark_colors[port][0], &light_colors[port][0]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 16, 200, 29, &dark_colors[port][1], &light_colors[port][1]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 45, 200, 29, &dark_colors[port][2], &light_colors[port][2]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 74, 200, 29, &dark_colors[port][3], &light_colors[port][3]);
+    trainer_name_text_width = Font_MeasureTextExtent(1, 0, teammate_roster->trainerName) / 2;
+    BattleHud_DrawPlainText((x - trainer_name_text_width) + 50, y + 3, teammate_roster->trainerName);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg1 + 1, arg2, 0x18, 0x10, *(D_84385850 + arg3), 0x18, 0);
+    Gfx_DrawTextureRgba16(x + 1, y, 24, 16, *(D_84385850 + port), 0x18, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    if (temp_s0->numberOfPokemonBrought > 0) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[5], arg1 + 1, arg2 + 0x10, 0);
+    if (teammate_roster->numberOfPokemonBrought > 0) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[5], x + 1, y + 16, 0);
     }
 
-    if (temp_s0->numberOfPokemonBrought >= 2) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[4], arg1 + 1, arg2 + 0x2D, 1);
+    if (teammate_roster->numberOfPokemonBrought >= 2) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[4], x + 1, y + 45, 1);
     }
 
-    if (temp_s0->numberOfPokemonBrought >= 3) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[3], arg1 + 1, arg2 + 0x4A, 2);
+    if (teammate_roster->numberOfPokemonBrought >= 3) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[3], x + 1, y + 74, 2);
     }
 
-    if (temp_s0->numberOfPokemonBrought >= 4) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[2], arg1 + 0x66, arg2 + 0x10, 3);
+    if (teammate_roster->numberOfPokemonBrought >= 4) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[2], x + 102, y + 16, 3);
     }
 
-    if (temp_s0->numberOfPokemonBrought >= 5) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[1], arg1 + 0x66, arg2 + 0x2D, 4);
+    if (teammate_roster->numberOfPokemonBrought >= 5) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[1], x + 102, y + 45, 4);
     }
 
-    if (temp_s0->numberOfPokemonBrought >= 6) {
-        BattleHud_DrawDoublesRosterRow(arg0, temp_s0, sp5C[0], arg1 + 0x66, arg2 + 0x4A, 5);
+    if (teammate_roster->numberOfPokemonBrought >= 6) {
+        BattleHud_DrawDoublesRosterRow(pokemon, teammate_roster, pokemon_in_battle[0], x + 102, y + 74, 5);
     }
 
-    BattleHud_DrawBoxBorder(arg1, arg2, 0xC8, 0x66);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCE, 0x6A, 0);
+    BattleHud_DrawBoxBorder(x, y, 200, 102);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 206, 106, 0);
 }
 
-void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+void BattleHud_DrawCompactMonStatusBox(ActivePokemon* active_pokemon, s16 x, s16 y, s32 port) {
     UNUSED s32 pad;
-    Color_RGB8* var_v0;
-    u32 var_t0;
-    ActivePokemonState* temp_v0;
+    Color_RGB8* player_color;
+    u32 is_fainted;
+    ActivePokemonState* state;
     u16 tmp;
-    BattleMon* sp40;
+    BattleMon* party_pokemon;
 
-    sp40 = &arg0->sessionTeams->teamMember[arg0->thumbnail.tagTeam]->pokemonPicked[arg0->state.rosterIndex];
-    temp_v0 = &arg0->state;
+    party_pokemon = &active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam]->pokemonPicked[active_pokemon->state.rosterIndex];
+    state = &active_pokemon->state;
 
-    if (sp40->hp == 0) {
-        var_t0 = 1;
+    if (party_pokemon->hp == 0) {
+        is_fainted = 1;
     } else {
-        var_t0 = Status_ToDisplayIconIndex(sp40->statusCondition);
+        is_fainted = Status_ToDisplayIconIndex(party_pokemon->statusCondition);
     }
 
-    if (temp_v0->unk_30 < 0xFF00) {
-        temp_v0->unk_30 -= 0x30;
+    if (state->unk_30 < 0xFF00) {
+        state->unk_30 -= 0x30;
     }
 
-    tmp = temp_v0->unk_30;
+    tmp = state->unk_30;
     if ((tmp >> 8) & 1) {
-        var_v0 = &sPlayerNameTagStartColor[arg3];
+        player_color = &sPlayerNameTagStartColor[port];
     } else {
-        var_v0 = &D_8438587C[arg3];
+        player_color = &D_8438587C[port];
     }
 
-    BattleHud_DrawMonInfoPanel(arg0, sp40, &sStatusLabelConfigs[var_t0], arg1 + 1, arg2 + 1, 0x46, 0x28, var_v0->r, var_v0->g, var_v0->b,
+    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, &sStatusLabelConfigs[is_fainted], x + 1, y + 1, 70, 40, player_color->r, player_color->g, player_color->b,
                   0xB2);
-    BattleHud_DrawBoxBorder(arg1, arg2, 0x46, 0x28);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4C, 0x2D, 0);
+    BattleHud_DrawBoxBorder(x, y, 70, 40);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 76, 45, 0);
 }
 
-void BattleHud_DrawMessageBox(s32 arg0, s16 arg1, s16 arg2, char* arg3) {
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xEE, 0x24, &sPlayerNameTagStartColor[arg0], &sPlayerNameTagEndColor[arg0]);
+void BattleHud_DrawMessageBox(s32 port, s16 x, s16 y, char* text) {
+    Battle_DrawGradientRectWrapper(x + 1, y + 1, 238, 36, &sPlayerNameTagStartColor[port], &sPlayerNameTagEndColor[port]);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    Font_SetLineHeight(0x10);
-    Font_Printf(arg1 + 0xA, arg2 + 5, arg3);
+    Font_SetLineHeight(16);
+    Font_Printf(x + 0xA, y + 5, text);
     Font_EndTexturedTextRendering();
-    BattleHud_DrawBoxBorder(arg1, arg2, 0xEE, 0x24);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xF4, 0x29, 0);
+    BattleHud_DrawBoxBorder(x, y, 238, 36);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 1, 244, 41, 0);
 }
 
-s32 Battle_DrawTextIfNonEmpty(char* arg0, s16 arg1, s16 arg2) {
-    if (*(s8*)arg0 == 0) {
+s32 Battle_DrawTextIfNonEmpty(char* text, s16 x, s16 y) {
+    if (*(s8*)text == 0) {
         return 0;
     }
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(arg1, arg2, arg0);
+    Font_Printf(x, y, text);
     Font_EndTexturedTextRendering();
     return 1;
 }
 
-void BattleHud_DrawExpandingCaptionBox(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2, Vec3f arg3) {
-    s16 sp2C;
-    s16 sp28;
-    Color_RGB8* temp_v0;
-    ActivePokemon* temp_v1;
-    TeamRoster* tmp;
+void BattleHud_DrawExpandingCaptionBox(unk_D_843901A0_4C8* arg0, s16 x_progress, s16 y_progress, Vec3f target_position) {
+    s16 current_width;
+    s16 current_height;
+    Color_RGB8* color;
+    ActivePokemon* active_pokemon;
+    TeamRoster* roster;
 
-    temp_v1 = sActivePokemon[arg0->unk_0C];
-    tmp = temp_v1->sessionTeams->teamMember[temp_v1->thumbnail.tagTeam];
-    temp_v0 = &sPlayerNameTagStartColor[tmp->controllerPort];
+    active_pokemon = sActivePokemon[arg0->side];
+    roster = active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam];
+    color = &sPlayerNameTagStartColor[roster->controllerPort];
 
-    sp2C = (arg1 - arg3.x) * 2;
-    sp28 = (arg2 - arg3.y) * 2;
+    current_width = (x_progress - target_position.x) * 2;
+    current_height = (y_progress - target_position.y) * 2;
 
-    Gfx_FillRectWithDisplayState(arg3.x, arg3.y, sp2C, sp28, temp_v0->r, temp_v0->g, temp_v0->b, 0x96);
-    BattleHud_DrawBoxBorder(arg3.x, arg3.y, sp2C, sp28);
-    BattleHud_DrawTranslucentShadowRect(arg0->unk_14.x - 2.0f, arg0->unk_14.y - 1.0f, 0xE0, 0x2B, 0);
+    Gfx_FillRectWithDisplayState(target_position.x, target_position.y, current_width, current_height, color->r, color->g, color->b, 0x96);
+    BattleHud_DrawBoxBorder(target_position.x, target_position.y, current_width, current_height);
+    BattleHud_DrawTranslucentShadowRect(arg0->unk_14.x - 2.0f, arg0->unk_14.y - 1.0f, 224, 43, 0);
 }
 
-void BattleHud_InitCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2) {
-    Vec3f sp4C;
+void BattleHud_InitCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 x, s16 y) {
+    Vec3f target_position;
     Vec3f sp40;
     Vec3f sp34;
     UNUSED s32 pad;
 
     arg0->unk_08 = 0;
     arg0->unk_10 = 0;
-    Vec3f_SetComponentsDuplicate(&sp40, arg1, arg2, 0.0f);
-    Vec3f_SetComponentsDuplicate(&sp34, arg1 - 110.0f, arg2 - 19.0f, 0.0f);
-    Vec3f_CalculateDistanceAngles(&sp40, &sp34, &arg0->unk_20, &arg0->unk_28, &arg0->unk_2A);
-    Camera_ComputeEyeFromAngles(&sp40, &arg0->unk_14, arg0->unk_20, arg0->unk_28, arg0->unk_2A);
-    arg0->unk_24 = arg0->unk_20 * 0.3f;
-    Camera_ComputeEyeFromAngles(&sp40, &sp4C, arg0->unk_24, arg0->unk_28, arg0->unk_2A);
-    BattleHud_DrawExpandingCaptionBox(arg0, arg1, arg2, sp4C);
+    Vec3f_SetComponentsDuplicate(&sp40, x, y, 0.0f);
+    Vec3f_SetComponentsDuplicate(&sp34, x - 110.0f, y - 19.0f, 0.0f);
+    Vec3f_CalculateDistanceAngles(&sp40, &sp34, &arg0->euclidean, &arg0->rotationX, &arg0->rotationY);
+    Camera_ComputeEyeFromAngles(&sp40, &arg0->unk_14, arg0->euclidean, arg0->rotationX, arg0->rotationY);
+    arg0->unk_24 = arg0->euclidean * 0.3f;
+    Camera_ComputeEyeFromAngles(&sp40, &target_position, arg0->unk_24, arg0->rotationX, arg0->rotationY);
+    BattleHud_DrawExpandingCaptionBox(arg0, x, y, target_position);
 }
 
 s32 BattleHud_UpdateCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2) {
@@ -1578,11 +1579,11 @@ s32 BattleHud_UpdateCaptionBoxPopup(unk_D_843901A0_4C8* arg0, s16 arg1, s16 arg2
     Vec3f sp28;
 
     Vec3f_SetComponentsDuplicate(&sp28, arg1, arg2, 0.0f);
-    arg0->unk_24 = Math_StepToF(arg0->unk_24, arg0->unk_20, 15.0f, 15.0f);
-    Camera_ComputeEyeFromAngles(&sp28, &sp34, arg0->unk_24, arg0->unk_28, arg0->unk_2A);
+    arg0->unk_24 = Math_StepToF(arg0->unk_24, arg0->euclidean, 15.0f, 15.0f);
+    Camera_ComputeEyeFromAngles(&sp28, &sp34, arg0->unk_24, arg0->rotationX, arg0->rotationY);
     BattleHud_DrawExpandingCaptionBox(arg0, arg1, arg2, sp34);
 
-    if (arg0->unk_24 == arg0->unk_20) {
+    if (arg0->unk_24 == arg0->euclidean) {
         return 1;
     }
     return 0;
@@ -1604,10 +1605,10 @@ void BattleHud_InitCaptionBoxPopupBlack(unk_D_843901A0_4C8* arg0, s16 arg1, s16 
     arg0->unk_10 = 0;
     Vec3f_SetComponentsDuplicate(&sp40, arg1, arg2, 0.0f);
     Vec3f_SetComponentsDuplicate(&sp34, arg1 - 50.0f, arg2 - 10.0f, 0.0f);
-    Vec3f_CalculateDistanceAngles(&sp40, &sp34, &arg0->unk_20, &arg0->unk_28, &arg0->unk_2A);
-    Camera_ComputeEyeFromAngles(&sp40, &arg0->unk_14, arg0->unk_20, arg0->unk_28, arg0->unk_2A);
-    arg0->unk_24 = arg0->unk_20 * 0.3f;
-    Camera_ComputeEyeFromAngles(&sp40, &sp4C, arg0->unk_24, arg0->unk_28, arg0->unk_2A);
+    Vec3f_CalculateDistanceAngles(&sp40, &sp34, &arg0->euclidean, &arg0->rotationX, &arg0->rotationY);
+    Camera_ComputeEyeFromAngles(&sp40, &arg0->unk_14, arg0->euclidean, arg0->rotationX, arg0->rotationY);
+    arg0->unk_24 = arg0->euclidean * 0.3f;
+    Camera_ComputeEyeFromAngles(&sp40, &sp4C, arg0->unk_24, arg0->rotationX, arg0->rotationY);
     BattleHud_DrawExpandingCaptionBoxBlack(arg0, arg1, arg2, sp4C);
 }
 
@@ -1616,50 +1617,51 @@ s32 BattleHud_UpdateCaptionBoxPopupBlack(unk_D_843901A0_4C8* arg0, s16 arg1, s16
     Vec3f sp28;
 
     Vec3f_SetComponentsDuplicate(&sp28, arg1, arg2, 0.0f);
-    arg0->unk_24 = Math_StepToF(arg0->unk_24, arg0->unk_20, 15.0f, 15.0f);
-    Camera_ComputeEyeFromAngles(&sp28, &sp34, arg0->unk_24, arg0->unk_28, arg0->unk_2A);
+    arg0->unk_24 = Math_StepToF(arg0->unk_24, arg0->euclidean, 15.0f, 15.0f);
+    Camera_ComputeEyeFromAngles(&sp28, &sp34, arg0->unk_24, arg0->rotationX, arg0->rotationY);
     BattleHud_DrawExpandingCaptionBoxBlack(arg0, arg1, arg2, sp34);
 
-    if (arg0->unk_24 == arg0->unk_20) {
+    if (arg0->unk_24 == arg0->euclidean) {
         return 1;
     }
     return 0;
 }
 
-void BattleHud_DrawTextBox(s32 arg0, s16 arg1, s16 arg2, char* arg3) {
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, &sPlayerNameTagStartColor[arg0], &sPlayerNameTagEndColor[arg0]);
+void BattleHud_DrawTextBox(s32 port, s16 x, s16 y, char* text) {
+    Battle_DrawGradientRectWrapper(x + 1, y + 1, 200, 36, &sPlayerNameTagStartColor[port], &sPlayerNameTagEndColor[port]);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    Font_SetLineHeight(0x10);
-    Font_Printf(arg1 + 0xA, arg2 + 5, arg3);
+    Font_SetLineHeight(16);
+    Font_Printf(x + 10, y + 5, text);
     Font_EndTexturedTextRendering();
-    BattleHud_DrawBoxBorder(arg1, arg2, 0xC8, 0x25);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
+    BattleHud_DrawBoxBorder(x, y, 200, 37);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 1, 205, 40, 0);
 }
 
-void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3) {
+// International forfeit box
+void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* pokemon, s16 x, s16 y, s32 port) {
     UNUSED s32 pad;
-    s32 sp48;
+    s32 text_length;
     UNUSED s32 pad2[2];
 
-    Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, &sPlayerNameTagStartColor[arg3], &sPlayerNameTagEndColor[arg3]);
+    Battle_DrawGradientRectWrapper(x + 1, y + 1, 200, 36, &sPlayerNameTagStartColor[port], &sPlayerNameTagEndColor[port]);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    sp48 = Font_MeasureTextExtent(2, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1)) / 2;
-    Font_Printf((arg1 - sp48) + 0x61, arg2 + 5, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1));
-    Font_Printf(arg1 + 0x32, arg2 + 0x14, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA3));
-    Font_Printf(arg1 + 0x7A, arg2 + 0x14, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA2));
+    text_length = Font_MeasureTextExtent(2, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1)) / 2;
+    Font_Printf((x - text_length) + 97, y + 5, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1));
+    Font_Printf(x + 50, y + 20, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA3));
+    Font_Printf(x + 122, y + 20, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA2));
     Font_EndTexturedTextRendering();
 
     gSPDisplayList(gDisplayListHead++, D_8006F5A0);
 
-    Gfx_DrawTextureRgba16Ia8(arg1 + (arg0->state.forfeitCursorHover * 0x49) + 0x1B, arg2 + 0x14, 0x18, 0xE, &D_30092C0, &D_3009560, 0x18,
+    Gfx_DrawTextureRgba16Ia8(x + (pokemon->state.forfeitCursorHover * 73) + 27, y + 20, 24, 14, &D_30092C0, &D_3009560, 0x18,
                   0x100000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    BattleHud_DrawBoxBorder(arg1, arg2, 0xC8, 0x25);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 1, 0xCD, 0x28, 0);
+    BattleHud_DrawBoxBorder(x, y, 200, 37);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 1, 205, 40, 0);
 }
 
 void BattleScene_DrawStripWipeIfActive(void) {
@@ -1668,34 +1670,34 @@ void BattleScene_DrawStripWipeIfActive(void) {
     }
 }
 
-void Battle_DrawScrollingTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
-    unk_D_800A7440 sp30;
+void Battle_DrawScrollingTextureRect(s16 x, s16 y, s16 width, s16 height, s16 texture_x, s16 texture_y, s16 texture_spread_x, s16 texture_spread_y) {
+    unk_D_800A7440 text_box;
 
-    GfxRect_SetBounds(&sp30, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
+    GfxRect_SetBounds(&text_box, x, y, (x + width) - 1, (y + height) - 1);
 
-    if (GfxRect_ClipToScissor(&sp30) != 0) {
-        if (arg6 != 0) {
-            arg4 += ((sp30.x1 - arg0) * arg6) >> 5;
+    if (GfxRect_ClipToScissor(&text_box) != 0) {
+        if (texture_spread_x != 0) {
+            texture_x += ((text_box.x1 - x) * texture_spread_x) >> 5;
         }
 
-        if (arg7 != 0) {
-            arg5 += ((sp30.y2 - arg1) * arg7) >> 5;
+        if (texture_spread_y != 0) {
+            texture_y += ((text_box.y2 - y) * texture_spread_y) >> 5;
         }
 
-        sp30.y1 += 1;
-        sp30.x2 += 1;
+        text_box.y1 += 1;
+        text_box.x2 += 1;
 
-        gSPTextureRectangle(gDisplayListHead++, sp30.x1 << 2, sp30.y2 << 2, sp30.y1 << 2, sp30.x2 << 2, G_TX_RENDERTILE,
-                            arg4, arg5, arg6, arg7);
+        gSPTextureRectangle(gDisplayListHead++, text_box.x1 << 2, text_box.y2 << 2, text_box.y1 << 2, text_box.x2 << 2, G_TX_RENDERTILE,
+                            texture_x, texture_y, texture_spread_x, texture_spread_y);
     }
 }
 
-void Battle_DrawTiledStripSegment(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, s32 arg5) {
-    gDPLoadTextureTile(gDisplayListHead++, arg4, G_IM_FMT_RGBA, G_IM_SIZ_32b, arg2, 0, 0, 0, arg2 - 1, arg3 - 1, 0,
+void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* texture, UNUSED s32 arg5) {
+    gDPLoadTextureTile(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, 0, 0, 0, width - 1, height - 1, 0,
                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                        G_TX_NOLOD);
 
-    Battle_DrawScrollingTextureRect(arg0, arg1, arg2, arg3, 0, 0, 0x400, 0);
+    Battle_DrawScrollingTextureRect(x, y, width, height, 0, 0, 0x400, 0);
 }
 
 void Battle_DrawSpectatorModeBackgroundPanel(void) {
@@ -1703,16 +1705,16 @@ void Battle_DrawSpectatorModeBackgroundPanel(void) {
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    for (i = 0; i < 0x30; i++) {
-        Battle_DrawTiledStripSegment(0x1E, i + 0x17, 0x58, 1, &D_3001F70[i * 0x160], 0x58);
+    for (i = 0; i < 48; i++) {
+        Battle_DrawTiledStripSegment(30, i + 23, 88, 1, &D_3001F70[i * 352], 88);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    BattleHud_DrawTranslucentShadowRect(0x1C, 0x16, 0x5E, 0x34, 0);
+    BattleHud_DrawTranslucentShadowRect(28, 22, 94, 52, 0);
 }
 
-void Battle_DrawGradientTextureRect(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void Battle_DrawGradientTextureRect(u8* arg0, s32 x, s32 y, s32 arg3, s32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC) {
     UNUSED s32 pad;
     DepthBuffer* temp_s1 = GfxImage_GetCurrent();
@@ -1726,10 +1728,10 @@ void Battle_DrawGradientTextureRect(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 
 
     guOrtho(spC0, 0.5f, temp_s1->width - 0.5f, temp_s1->height - 0.5f, 0.5f, -2.0f, 2.0f, 1.0f);
 
-    Gfx_SetVertexAttributes(&temp_s2[0], arg1, arg2, -1, argC << 5, 0, 0xFF, 0xF0, 0, 0xFF);
-    Gfx_SetVertexAttributes(&temp_s2[1], arg1 + arg3, arg2, -1, argB << 5, 0, 0xFF, 0xF0, 0, 0xFF);
-    Gfx_SetVertexAttributes(&temp_s2[2], arg1, arg2 + arg4, -1, argC << 5, arg6 << 5, 0xFF, 0, 0x64, 0xFF);
-    Gfx_SetVertexAttributes(&temp_s2[3], arg1 + arg3, arg2 + arg4, -1, argB << 5, arg6 << 5, 0xFF, 0, 0x64, 0xFF);
+    Gfx_SetVertexAttributes(&temp_s2[0], x, y, -1, argC << 5, 0, 0xFF, 0xF0, 0, 0xFF);
+    Gfx_SetVertexAttributes(&temp_s2[1], x + arg3, y, -1, argB << 5, 0, 0xFF, 0xF0, 0, 0xFF);
+    Gfx_SetVertexAttributes(&temp_s2[2], x, y + arg4, -1, argC << 5, arg6 << 5, 0xFF, 0, 0x64, 0xFF);
+    Gfx_SetVertexAttributes(&temp_s2[3], x + arg3, y + arg4, -1, argB << 5, arg6 << 5, 0xFF, 0, 0x64, 0xFF);
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
@@ -1794,60 +1796,60 @@ void Battle_DrawSpectatorModeScrollingText(void) {
     }
 }
 
-void BattleHud_DrawOwnSideStatus(ActivePokemon* arg0, ActivePokemonState* arg1) {
-    TeamRoster* sp34 = arg0->sessionTeams->teamMember[arg0->thumbnail.tagTeam];
+void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state) {
+    TeamRoster* roster = active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam];
     UNUSED s32 pad;
-    s32 var_v1;
+    s32 is_on_other_team_members_roster;
 
     if (gSessionContext.mode != 0x10) {
-        if (arg1->selectedCommandOption == 3) {
-            BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer,
+        if (state->selectedCommandOption == 3) {
+            BattleHud_DrawMonStatusBoxPlayer(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 2, active_pokemon->thumbnail.camera->viewport.y - 0x3A, state->actionDelayTimer,
                           1);
         } else {
-            BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer,
+            BattleHud_DrawMonStatusBoxPlayer(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 2, active_pokemon->thumbnail.camera->viewport.y - 0x3A, state->actionDelayTimer,
                           0);
         }
 
-        if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x17)) {
-            switch (arg1->selectedCommandOption) {
+        if ((state->selectedCommandOption != 3) && (active_pokemon->thumbnail.camera->viewport.x == 0x17)) {
+            switch (state->selectedCommandOption) {
                 case 2:
-                    if (arg1->showingCommandOptions == 1) {
-                        if (arg0->sessionTeams->tagTeamSize == 2) {
-                            if (arg0->sessionTeams->teamMember[1]->controllerPort < arg0->sessionTeams->teamMember[0]->controllerPort) {
-                                var_v1 = 0;
+                    if (state->showingCommandOptions == 1) {
+                        if (active_pokemon->sessionTeams->tagTeamSize == 2) {
+                            if (active_pokemon->sessionTeams->teamMember[1]->controllerPort < active_pokemon->sessionTeams->teamMember[0]->controllerPort) {
+                                is_on_other_team_members_roster = 0;
                             } else {
-                                var_v1 = 1;
+                                is_on_other_team_members_roster = 1;
                             }
-                            BattleHud_DrawTeamStatusList(arg0, arg0->sessionTeams->teamMember[var_v1], 0x60, 0xF,
-                                          arg0->sessionTeams->teamMember[var_v1]->controllerPort);
-                            BattleHud_DrawTeamStatusList(arg0, arg0->sessionTeams->teamMember[var_v1 == 0], 0xC6, 0xF,
-                                          arg0->sessionTeams->teamMember[var_v1 == 0]->controllerPort);
-                        } else if (arg0->teamRoster->numberOfPokemonBrought < 4) {
-                            BattleHud_DrawTeamStatusList(arg0, arg0->sessionTeams->teamMember[0], 0x60, 0xF, sp34->controllerPort);
+                            BattleHud_DrawTeamStatusList(active_pokemon, active_pokemon->sessionTeams->teamMember[is_on_other_team_members_roster], 96, 0xF,
+                                          active_pokemon->sessionTeams->teamMember[is_on_other_team_members_roster]->controllerPort);
+                            BattleHud_DrawTeamStatusList(active_pokemon, active_pokemon->sessionTeams->teamMember[is_on_other_team_members_roster == 0], 198, 0xF,
+                                          active_pokemon->sessionTeams->teamMember[is_on_other_team_members_roster == 0]->controllerPort);
+                        } else if (active_pokemon->teamRoster->numberOfPokemonBrought < 4) {
+                            BattleHud_DrawTeamStatusList(active_pokemon, active_pokemon->sessionTeams->teamMember[0], 96, 0xF, roster->controllerPort);
                         } else {
-                            BattleHud_DrawDoublesTeamStatusList(arg0, 0x60, 0xF, sp34->controllerPort);
+                            BattleHud_DrawDoublesTeamStatusList(active_pokemon, 96, 0xF, roster->controllerPort);
                         }
-                    } else if (arg1->unk_2D == 0x10) {
-                        BattleHud_DrawOneOptionLabelBar(arg0, 0x60, 0xF, sp34->controllerPort);
+                    } else if (state->unk_2D == 0x10) {
+                        BattleHud_DrawOneOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
                     } else {
-                        BattleHud_DrawTwoOptionLabelBar(arg0, 0x60, 0xF, sp34->controllerPort);
+                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
                     }
                     break;
 
                 case 1:
-                    if (arg1->showingCommandOptions == 1) {
-                        BattleHud_DrawMoveSelectMenu(arg0, 0x60, 0xF, sp34->controllerPort);
+                    if (state->showingCommandOptions == 1) {
+                        BattleHud_DrawMoveSelectMenu(active_pokemon, 96, 0xF, roster->controllerPort);
                     } else {
-                        BattleHud_DrawTwoOptionLabelBar(arg0, 0x60, 0xF, sp34->controllerPort);
+                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
                     }
                     break;
 
                 case 4:
-                    BattleHud_DrawTwoOptionCursorMenu(arg0, 0x5F, 0xE, sp34->controllerPort);
+                    BattleHud_DrawTwoOptionCursorMenu(active_pokemon, 0x5F, 14, roster->controllerPort);
                     break;
 
                 default:
-                    BattleHud_DrawThreeOptionLabelBar(arg0, 0x60, 0xF, sp34->controllerPort);
+                    BattleHud_DrawThreeOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
                     break;
             }
         }
