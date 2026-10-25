@@ -28,8 +28,8 @@ typedef struct unk_D_80068BB0 {
 	/* 0x0C */ struct unk_D_80068BB0* depth_p;
 } DepthBuffer; // size = 0x10
 
-unk_D_800A7440* GfxRect_SetBounds(unk_D_800A7440* arg0, s16 x1, s16 y1, s16 x2, s16 y2);
-s32 GfxRect_ClipToScissor(unk_D_800A7440* rectangle);
+Rectangle* GfxRect_SetBounds(Rectangle* arg0, s16 x1, s16 y1, s16 x2, s16 y2);
+s32 GfxRect_ClipToScissor(Rectangle* rectangle);
 void Gfx_SetScissorRect(Gfx** gfx_p, s16 x, s16 y, s16 width, s16 height);
 void Gfx_ApplyScissorRect(Gfx** gfx_p);
 void GfxImage_Initialize(DepthBuffer* arg0, s32 fmt, s32 size, s32 width, s32 height, u32 img_p);

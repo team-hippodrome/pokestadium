@@ -613,8 +613,8 @@ void TeamSelection_InitializeSlots(void) {
     }
 
     for (i = 0; i < 4; i++, var_v0++) {
-        if (var_v0->unk_000 & 1) {
-            if (!(var_v0->unk_000 & 2)) {
+        if (var_v0->isHuman & 1) {
+            if (!(var_v0->isHuman & 2)) {
                 D_8423D3D8[var_v0->controllerPort].unk_00 = 1;
                 D_8423D3D8[var_v0->controllerPort].unk_04 = var_v0;
             } else if (gSessionContext.mode == 0) {
@@ -663,7 +663,7 @@ s32 Team_CommitSelectionToTrainer(unk_D_8423D3D8* arg0, s16 arg1) {
         if (sp34 != NULL) {
             arg0->unk_04->unk_018 = sp34->unk_4D10;
             if (gSessionContext.mode != 0) {
-                HAL_Strcpy(arg0->unk_04->unk_008, sp34->unk_4D12);
+                HAL_Strcpy(arg0->unk_04->trainerName, sp34->unk_4D12);
             }
             HAL_Strcpy(arg0->unk_04->rosterInfo->unk_014, sp34->unk_4D12);
 
@@ -675,7 +675,7 @@ s32 Team_CommitSelectionToTrainer(unk_D_8423D3D8* arg0, s16 arg1) {
     } else {
         arg0->unk_04->unk_018 = D_84211B50.unk_001C;
         if (gSessionContext.mode != 0) {
-            HAL_Strcpy(arg0->unk_04->unk_008, D_84211B50.unk_001E);
+            HAL_Strcpy(arg0->unk_04->trainerName, D_84211B50.unk_001E);
         }
         HAL_Strcpy(arg0->unk_04->rosterInfo->unk_014, D_84211B50.unk_001E);
 

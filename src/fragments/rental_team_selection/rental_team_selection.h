@@ -19,8 +19,8 @@ typedef struct unk_D_8423D3A8 {
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ unk_D_800A7440 unk_0E;
-    /* 0x16 */ unk_D_800A7440 unk_16;
+    /* 0x0E */ Rectangle unk_0E;
+    /* 0x16 */ Rectangle unk_16;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ ModelLoadContext* unk_24;
     /* 0x28 */ unk_func_8001B1FC* unk_28;

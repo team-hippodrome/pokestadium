@@ -11,7 +11,7 @@ typedef struct UnkStruct800A7428 {
 
 Gfx* gDisplayListHead;
 UnkStruct800A7428 D_800A7428;
-unk_D_800A7440 D_800A7440;
+Rectangle D_800A7440;
 
 void Gfx_SwapDisplayListBuffer(void);
 

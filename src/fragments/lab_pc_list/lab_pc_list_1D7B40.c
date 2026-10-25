@@ -59,12 +59,12 @@ void BattleMoveListWidget_DrawMove(s32 arg0, s32 arg1, unk_func_88309160_arg2* a
         if (sp34 != NULL) {
             temp_v0_2 = Move_GetData(arg2->unk_00);
 
-            var_v1 = temp_v0_2->unk_05 / 5;
+            var_v1 = temp_v0_2->pp / 5;
             if (var_v1 >= 7) {
                 var_v1 = 7;
             }
 
-            new_var = temp_v0_2->unk_05 + (var_v1 * (arg2->unk_04 >> 6));
+            new_var = temp_v0_2->pp + (var_v1 * (arg2->unk_04 >> 6));
             Gfx_DrawNumberFixedWidth((arg5->unk_00.unk_14.unk_00 + arg0) - 0x19, arg1 + 0xC, new_var, 2);
         }
     }
@@ -119,8 +119,8 @@ void BattleMoveListWidget_SetMoves(unk_func_8830867C_04C_078* arg0, BattleMon* a
     }
 
     for (i = 0; i < temp_v0; i++) {
-        arg0->unk_44[i].unk_00 = arg1->unk_09[i];
-        arg0->unk_44[i].unk_04 = arg1->unk_20[i];
+        arg0->unk_44[i].unk_00 = arg1->moves[i];
+        arg0->unk_44[i].unk_04 = arg1->pp[i];
     }
 
     TableView_Initialize(&arg0->unk_34, arg0->unk_44, 8, 4, temp_v0);

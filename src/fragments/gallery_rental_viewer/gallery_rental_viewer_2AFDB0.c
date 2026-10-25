@@ -689,9 +689,9 @@ void Gallery_RentalViewerDrawMonRow(s32 arg0, s32 arg1, unk_D_838067F0_0168* arg
         if (arg2->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(4, 0);
-            Font_Printf(arg0 + (i * 0x84) + 0x2C, arg1 + 5, arg2->unk_0000[i].unk_004.unk_30);
+            Font_Printf(arg0 + (i * 0x84) + 0x2C, arg1 + 5, arg2->unk_0000[i].unk_004.nickname);
             Font_SetActive(4, 0);
-            Font_Printf(arg0 + (i * 0x84) + 0x2C, arg1 + 0x17, "L%d", arg2->unk_0000[i].unk_004.unk_24);
+            Font_Printf(arg0 + (i * 0x84) + 0x2C, arg1 + 0x17, "L%d", arg2->unk_0000[i].unk_004.level);
         }
     }
 

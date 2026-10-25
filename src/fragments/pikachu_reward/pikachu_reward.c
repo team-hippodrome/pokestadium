@@ -56,11 +56,11 @@ s32 PikachuReward_CheckNoSpecialMove(BattleMon* arg0) {
     s32 var_v1 = 1;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] == 0) {
+        if (arg0->moves[i] == 0) {
             break;
         }
 
-        if (arg0->unk_09[i] >= 0xA6) {
+        if (arg0->moves[i] >= 0xA6) {
             var_v1 = 0;
         }
     }
@@ -73,7 +73,7 @@ s32 PikachuReward_CheckEligibleForSurf(BattleMon* arg0, s16 arg1, s16 arg2, s16 
 
     if ((arg0->unk_00.unk_00 > 0) && (arg0->unk_00.unk_00 < 0x98)) {
         if ((PikachuReward_CheckNoSpecialMove(arg0) != 0) && (D_8006FF00[arg0->unk_00.unk_00 - 1].unk_0C & arg3)) {
-            if ((arg0->unk_24 >= arg1) && (arg2 >= arg0->unk_24)) {
+            if ((arg0->level >= arg1) && (arg2 >= arg0->level)) {
                 sp1C = 1;
             }
         }
@@ -147,7 +147,7 @@ s32 PikachuReward_CountKnownMoves(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (D_832027C8.unk_04.unk_09[i] == 0) {
+        if (D_832027C8.unk_04.moves[i] == 0) {
             break;
         }
     }
@@ -412,8 +412,8 @@ s32 PikachuReward_SelectMoveToForget(char* arg0) {
                 var_s0 = 0;
             }
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-            if ((D_832027C8.unk_04.unk_09[var_s0] == 0xF) || (D_832027C8.unk_04.unk_09[var_s0] == 0x13) ||
-                (D_832027C8.unk_04.unk_09[var_s0] == 0x46) || (D_832027C8.unk_04.unk_09[var_s0] == 0x94)) {
+            if ((D_832027C8.unk_04.moves[var_s0] == 0xF) || (D_832027C8.unk_04.moves[var_s0] == 0x13) ||
+                (D_832027C8.unk_04.moves[var_s0] == 0x46) || (D_832027C8.unk_04.moves[var_s0] == 0x94)) {
                 Audio_PlaySoundEffectById(SFX_MENU_ERROR);
             } else {
                 var_s4 = 0;
@@ -445,7 +445,7 @@ s32 PikachuReward_SelectMoveToForget(char* arg0) {
         }
 
         Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x28, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.unk_09[0] - 1));
+        Font_Printf(0xB6, 0x28, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.moves[0] - 1));
 
         if (var_s0 == 1) {
             var_a2 = 0;
@@ -454,7 +454,7 @@ s32 PikachuReward_SelectMoveToForget(char* arg0) {
         }
 
         Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x38, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.unk_09[1] - 1));
+        Font_Printf(0xB6, 0x38, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.moves[1] - 1));
 
         if (var_s0 == 2) {
             var_a2 = 0;
@@ -463,7 +463,7 @@ s32 PikachuReward_SelectMoveToForget(char* arg0) {
         }
 
         Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x48, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.unk_09[2] - 1));
+        Font_Printf(0xB6, 0x48, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.moves[2] - 1));
 
         if (var_s0 == 3) {
             var_a2 = 0;
@@ -472,7 +472,7 @@ s32 PikachuReward_SelectMoveToForget(char* arg0) {
         }
 
         Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x58, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.unk_09[3] - 1));
+        Font_Printf(0xB6, 0x58, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.moves[3] - 1));
 
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
@@ -579,7 +579,7 @@ s32 PikachuReward_ResolveMoveSlot(void) {
                     D_83201F54 = 0;
                     Effect_TriggerMoveVisual(0x85, 0x19, 0);
                     PikachuReward_ShowTextWaitForA(Text_GetString(NULL, 0, D_83202020, 0xB), 1);
-                    Text_SetStringToken(0x1D, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.unk_09[spAC] - 1));
+                    Text_SetStringToken(0x1D, Text_GetString(NULL, 0, D_8320201C, D_832027C8.unk_04.moves[spAC] - 1));
                     Text_GetString(sp2C, sizeof(sp2C), D_83202020, 0xC);
                     Audio_StopMusic(0x3C);
                     PikachuReward_ScrollTextIn(sp2C);
@@ -693,12 +693,12 @@ void PikachuReward_TeachSurfToPikachu(s32 arg0) {
     PikachuReward_ShowTextForFrames(Text_GetString(NULL, 0, D_83202020, 0xE), 1);
 
     for (i = PikachuReward_CountKnownMoves(); i < 4; i++) {
-        D_832027C8.unk_04.unk_09[i] = 0;
-        D_832027C8.unk_04.unk_20[i] = 0;
+        D_832027C8.unk_04.moves[i] = 0;
+        D_832027C8.unk_04.pp[i] = 0;
     }
 
-    D_832027C8.unk_04.unk_09[arg0] = 0x39;
-    D_832027C8.unk_04.unk_20[arg0] = gMoveData[0x38].unk_05;
+    D_832027C8.unk_04.moves[arg0] = 0x39;
+    D_832027C8.unk_04.pp[arg0] = gMoveData[0x38].pp;
 
     PikachuReward_SaveToCartridge();
     PikachuReward_ShowTextWaitForA(Text_GetString(NULL, 0, D_83202020, 0xE), 1);

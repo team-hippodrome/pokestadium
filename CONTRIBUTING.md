@@ -38,14 +38,9 @@ For VS Code, install the recommended **clangd** extension and run:
 python3 tools/clangd_config.py
 ```
 
-Then restart the clangd language server and let background indexing finish before
-using F2 on shared symbols. The workspace task can keep the database current
-automatically, including source-file additions and moves; ordinary identifier
-renames do not require regenerating it. No ROM, IDO compiler, or custom VS Code
-extension is needed for this editor setup.
+Then restart the clangd language server and let background indexing finish before using F2 on shared symbols. The workspace task can keep the database current automatically, including source-file additions and moves; ordinary identifier renames do not require regenerating it. No ROM, IDO compiler, or custom VS Code extension is needed for this editor setup.
 
-See [docs/clangd.md](docs/clangd.md) for automatic-task permissions, regional
-analysis views, verification, and the limits of C-aware rename.
+See [docs/clangd.md](docs/clangd.md) for automatic-task permissions, regional analysis views, verification, and the limits of C-aware rename.
 
 # Team Hippodrome Decomp Style Guide
 
@@ -162,6 +157,9 @@ Karodo may be left in with a `// karodo` comment if there appears to be no other
 
 ### Bugs
 Bugs in the original game code should be labeled `//!bug`.
+
+### Colors
+Next to any color, add a comment in the format `// #{hex}` above or right next to the color to allow the color to be shown in vs code.
 
 ### Cross References
 Reference other files with `//@{path}`

@@ -256,8 +256,8 @@ void BattleScene_SyncActiveHpToPartyState(void) {
     pokemon2 = &sActivePokemon[1]->teamRoster->pokemonPicked[state2->rosterIndex];
 
     if (D_84390288 != 0) {
-        D_843900A8[0] = runtime1->unk_0C = runtime1->hp;
-        D_843900A8[1] = runtime2->unk_0C = runtime2->hp;
+        sCurrentPokemonHp[0] = runtime1->unk_0C = runtime1->hp;
+        sCurrentPokemonHp[1] = runtime2->unk_0C = runtime2->hp;
 
         pokemon1->hp = runtime1->hp;
         pokemon2->hp = runtime2->hp;
@@ -277,13 +277,13 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
     if (pokemon->state.runtime.movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
             if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -300,7 +300,7 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
 s32 BattleScene_IsMoveUnavailable(ActivePokemon* pokemon, s32 move) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (!(runtime->moveUsability[move] & 0x3F)) {
+    if (!(runtime->pp[move] & 0x3F)) {
         return 1;
     }
 
@@ -389,8 +389,8 @@ void Battle_InitializeActiveRuntimeState(void) {
     Battle_InitPokemonRuntimeState(sActivePokemon[0]);
     Battle_InitPokemonRuntimeState(sActivePokemon[1]);
 
-    D_843900A8[0] = sActivePokemon[0]->state.runtime.unk_0C;
-    D_843900A8[1] = sActivePokemon[1]->state.runtime.unk_0C;
+    sCurrentPokemonHp[0] = sActivePokemon[0]->state.runtime.unk_0C;
+    sCurrentPokemonHp[1] = sActivePokemon[1]->state.runtime.unk_0C;
 
     Battle_ResetTransientRuntimeState(0, 1);
     Battle_ResetTransientRuntimeState(1, 0);
@@ -404,13 +404,13 @@ s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* pokemon) {
     if (runtime->movesDisabled != 0) {
         for (i = 0; i < 4; i++) {
             if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
-                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                has_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                has_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                has_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -885,13 +885,13 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* pokemon) {
         temp_a1 = runtime->movesDisabled >> 4;
         for (i = 0; i < 4; i++) {
             if ((temp_a1 != i) && (runtime->moves[i] != 0)) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     } else {
         for (i = 0; i < 4; i++) {
             if (runtime->moves[i] != 0) {
-                num_usable_moves |= runtime->moveUsability[i] & 0x3F;
+                num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
     }
@@ -923,7 +923,7 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* pokemon) {
     ActivePokemonState* state = &pokemon->state;
     BattleMonRuntime* runtime = &pokemon->state.runtime;
 
-    if (!(runtime->moveUsability[state->moveIndex] & 0x3F)) {
+    if (!(runtime->pp[state->moveIndex] & 0x3F)) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(pokemon);
         BattleScene_BuildParticipantMessage(pokemon, 1);
@@ -1285,7 +1285,7 @@ void BattleScene_CollectActions(void) {
     BattleMonRuntime* runtime1 = &sActivePokemon[0]->state.runtime;
     BattleMonRuntime* runtime2 = &sActivePokemon[1]->state.runtime;
 
-    if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[0]->teamRoster->isHuman & 2) {
         sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[0], sActivePokemon[1]);
         sBattleDamage = sBattleDamageFake; // FAKE
@@ -1293,7 +1293,7 @@ void BattleScene_CollectActions(void) {
         BattleScene_CollectPlayerAction(sActivePokemon[0], sActivePokemon[1]);
     }
 
-    if (sActivePokemon[1]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[1]->teamRoster->isHuman & 2) {
         sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[1], sActivePokemon[0]);
         sBattleDamage = sBattleDamageFake; // FAKE
@@ -1324,11 +1324,11 @@ void BattleScene_CollectActions(void) {
             Battle_StartTurn();
         }
     } else {
-        if (!(sActivePokemon[0]->teamRoster->unk_000 & 2) && !(runtime1->unk_4D & 0x60) && !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->unk_4D & 0x60) && !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(0);
         }
 
-        if (!(sActivePokemon[1]->teamRoster->unk_000 & 2) && !(runtime2->unk_4D & 0x60) && !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->unk_4D & 0x60) && !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(1);
         }
     }

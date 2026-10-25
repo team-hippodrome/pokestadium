@@ -34,7 +34,7 @@ static SwayLayoutConfig sDefaultSwayLayout;
 static BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 static s32 sBattleSceneStateTickSlotIndex;
 static s32 D_843900A4;
-f32 D_843900A8[2];
+f32 sCurrentPokemonHp[2];
 
 PokemonBattleCues* sSideBattleCues[] = { &sSide1BattleCues, &sSide2BattleCues };
 SpeciesModelTransform* sSidePresentationTransform[] = {

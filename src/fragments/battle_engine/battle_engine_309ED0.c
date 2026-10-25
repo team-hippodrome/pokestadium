@@ -308,11 +308,11 @@ s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* arg0) {
 
     temp_fs0 = temp_s1->hp / 90.0f;
     sp30 = BattleScene_GetParticipantSideIndex(arg0);
-    D_843900A8[sp30] = Math_StepToF(D_843900A8[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
-    temp_s2->hp = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)];
+    sCurrentPokemonHp[sp30] = Math_StepToF(sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)], temp_s1->unk_0C, temp_fs0, temp_fs0);
+    temp_s2->hp = sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)];
     if (temp_s2->hp == temp_s1->unk_0C) {
-        temp_fs0 = D_843900A8[BattleScene_GetParticipantSideIndex(arg0)] - temp_s2->hp;
-        D_843900A8[BattleScene_GetParticipantSideIndex(arg0)] -= temp_fs0;
+        temp_fs0 = sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)] - temp_s2->hp;
+        sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(arg0)] -= temp_fs0;
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }
@@ -398,13 +398,13 @@ void Battle_StartTurn(void) {
         sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
     }
 
-    if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[0]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->unk_2C == 0) {
             BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 0);
         } else {
             BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 1);
         }
-    } else if (sActivePokemon[1]->teamRoster->unk_000 & 2) {
+    } else if (sActivePokemon[1]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->unk_2C == 1) {
             BattleAI_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 0);
         } else {
@@ -414,8 +414,8 @@ void Battle_StartTurn(void) {
 
     sBattleScene.scene->unk_2A = sBattleScene.scene->unk_2C;
     sBattleScene.scene->unk_38 = 0;
-    temp_s0->unk_30 = 0;
-    temp_s1->unk_30 = 0;
+    temp_s0->flashTimer = 0;
+    temp_s1->flashTimer = 0;
     sBattleScene.scene->unk_44 = 2;
     Battle_ResolveMonAction();
     sBattleScene.scene->unk_2C = sp2C;
@@ -433,7 +433,7 @@ void BattleScene_InitializeSwitchActions(void) {
     sp2C = sBattleScene.scene->unk_2C;
 
     if ((sp28->unk_2D == 0xF) || (sp28->unk_2D == 0x10)) {
-        if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[0]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(sp28->rosterIndex, sp24->rosterIndex, 2);
         }
         sBattleScene.scene->unk_2C = 0;
@@ -443,7 +443,7 @@ void BattleScene_InitializeSwitchActions(void) {
         BeginBattleForEntity(sActivePokemon[0]);
         sBattleScene.scene->unk_2C = sp2C;
     } else {
-        if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[0]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(sp24->rosterIndex, sp28->rosterIndex, 2);
         }
         sBattleScene.scene->unk_2C = 1;
@@ -461,7 +461,7 @@ s32 BattleScene_PrepareReplacementTransition(void) {
     ActivePokemonState* sp20 = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
 
     if ((sActivePokemon[sBattleScene.scene->unk_2C]->state.unk_2D == 0xF) || (sp24->unk_2D == 0x10)) {
-        if (sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(temp_a3->rosterIndex, sp20->rosterIndex, 2);
         }
         Battle_ClearRuntimeFlags(sActivePokemon[sBattleScene.scene->unk_2C], 0x1800);
@@ -1245,7 +1245,7 @@ void BattleScene_PhaseIntro(CameraNode* arg0) {
 }
 
 void BattleScene_SetMonMoveResourceFlag(ActivePokemon* arg0) {
-    arg0->state.unk_30 = 0x800;
+    arg0->state.flashTimer = 0x800;
 }
 
 void BattleScene_PrepareMoveResourcePresentation(UNUSED CameraNode* arg0) {
@@ -2446,14 +2446,14 @@ void BattleScene_Phase15(CameraNode* arg0) {
             BattleScene_SelectActionCameraPresetFromTiming(arg0, 0);
             BattleScene_RecenterCameraOnOwner(arg0, D_84390204);
             if (sp30->unk_4D & 0x10) {
-                if (sp2C->unk_4E & 8) {
+                if (sp2C->battleStatus3 & 8) {
                     sp28->model = D_84390204->sessionTeams->displayModel = sp24->unk_BE;
                 } else if (D_84390200->sessionTeams->displayModel == 0x98) {
                     sp28->model = D_84390204->sessionTeams->displayModel = sp2C->id;
                 } else {
                     sp28->model = D_84390204->sessionTeams->displayModel = D_84390200->sessionTeams->displayModel;
                 }
-            } else if (sp2C->unk_4E & 8) {
+            } else if (sp2C->battleStatus3 & 8) {
                 D_84390204->sessionTeams->displayModel = sp24->unk_BE;
             } else if (D_84390200->sessionTeams->displayModel == 0x98) {
                 D_84390204->sessionTeams->displayModel = sp2C->id;
@@ -3317,7 +3317,7 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
                 temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
-                D_843900A8[sBattleScene.scene->unk_2C] = temp_s0->state.runtime.unk_0C;
+                sCurrentPokemonHp[sBattleScene.scene->unk_2C] = temp_s0->state.runtime.unk_0C;
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
                 Audio_PlayCommand(2, 0, 0);
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp34->ownerTeamMemberIndex);
@@ -3416,7 +3416,7 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* arg0) {
                 temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
-                D_843900A8[BattleScene_GetParticipantSideIndex(temp_s0)] = temp_s0->state.runtime.unk_0C;
+                sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(temp_s0)] = temp_s0->state.runtime.unk_0C;
                 Audio_PlayCommand(2, 0, 0);
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->ownerTeamMemberIndex);
                 BattleScene_ResetCameraFrameCounter();

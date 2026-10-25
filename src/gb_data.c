@@ -859,13 +859,13 @@ void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
     arg0->unk_1C = GbData_ReadU16BE(arg1->unk_19);
     arg0->unk_1E = GbData_ReadU16BE(arg1->unk_1B);
 
-    memcpy(arg0->unk_09, arg1->unk_08, 4);
-    memcpy(arg0->unk_20, arg1->unk_1D, 4);
+    memcpy(arg0->moves, arg1->unk_08, 4);
+    memcpy(arg0->pp, arg1->unk_1D, 4);
 }
 
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_FromGbRecord(arg0, &arg1->unk_00);
-    arg0->unk_24 = arg1->unk_21;
+    arg0->level = arg1->unk_21;
     arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
     arg0->unk_28 = GbData_ReadU16BE(arg1->unk_24);
     arg0->unk_2A = GbData_ReadU16BE(arg1->unk_26);
@@ -897,13 +897,13 @@ void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
     GbData_WriteU16BE(arg1->unk_19, arg0->unk_1C);
     GbData_WriteU16BE(arg1->unk_1B, arg0->unk_1E);
 
-    memcpy(arg1->unk_08, arg0->unk_09, 4);
-    memcpy(arg1->unk_1D, arg0->unk_20, 4);
+    memcpy(arg1->unk_08, arg0->moves, 4);
+    memcpy(arg1->unk_1D, arg0->pp, 4);
 }
 
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_ToGbRecord(arg0->unk_000, arg1);
-    arg1->unk_21 = arg0->unk_000[0].unk_24;
+    arg1->unk_21 = arg0->unk_000[0].level;
     GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
     GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].unk_28);
     GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].unk_2A);
@@ -1001,12 +1001,12 @@ u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u
 }
 
 void Pokemon_RecalcStats(BattleMon* arg0) {
-    arg0->unk_24 = Pokemon_LevelFromExp(arg0->unk_00.unk_00, arg0->unk_10);
-    arg0->maxHp = CalculateStatValue(1, arg0->unk_00.unk_00, arg0->unk_14, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_28 = CalculateStatValue(2, arg0->unk_00.unk_00, arg0->unk_16, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2A = CalculateStatValue(3, arg0->unk_00.unk_00, arg0->unk_18, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2C = CalculateStatValue(4, arg0->unk_00.unk_00, arg0->unk_1A, arg0->unk_24, arg0->unk_1E);
-    arg0->unk_2E = CalculateStatValue(5, arg0->unk_00.unk_00, arg0->unk_1C, arg0->unk_24, arg0->unk_1E);
+    arg0->level = Pokemon_LevelFromExp(arg0->unk_00.unk_00, arg0->unk_10);
+    arg0->maxHp = CalculateStatValue(1, arg0->unk_00.unk_00, arg0->unk_14, arg0->level, arg0->unk_1E);
+    arg0->unk_28 = CalculateStatValue(2, arg0->unk_00.unk_00, arg0->unk_16, arg0->level, arg0->unk_1E);
+    arg0->unk_2A = CalculateStatValue(3, arg0->unk_00.unk_00, arg0->unk_18, arg0->level, arg0->unk_1E);
+    arg0->unk_2C = CalculateStatValue(4, arg0->unk_00.unk_00, arg0->unk_1A, arg0->level, arg0->unk_1E);
+    arg0->unk_2E = CalculateStatValue(5, arg0->unk_00.unk_00, arg0->unk_1C, arg0->level, arg0->unk_1E);
 }
 
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {

@@ -432,8 +432,8 @@ void Trade_ApplyEvolution(s16 arg0, BattleMon* arg1) {
     }
 
     if (sp2E != 0) {
-        if (Trade_NicknameIsSpeciesDefault(sp2E, arg1->unk_30) != 0) {
-            Text_CopyString(arg1->unk_30, Trade_GetSpeciesName(arg1->unk_00.unk_00));
+        if (Trade_NicknameIsSpeciesDefault(sp2E, arg1->nickname) != 0) {
+            Text_CopyString(arg1->nickname, Trade_GetSpeciesName(arg1->unk_00.unk_00));
         }
         Pokemon_RecalcStats(arg1);
         GbSave_SetSeenOwnedBits(arg0, arg1->unk_00.unk_00, 3);

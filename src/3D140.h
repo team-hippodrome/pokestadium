@@ -36,7 +36,7 @@ typedef struct BattleMonRuntime {
     /* 0x2C */ u16 unk_2C;
     /* 0x2E */ u16 speed;
     /* 0x30 */ u16 unk_30;
-    /* 0x32 */ u8 moveUsability[4];
+    /* 0x32 */ u8 pp[4];
     /* 0x36 */ u16 unk_36;
     /* 0x38 */ u16 unk_38;
     /* 0x3A */ u16 unk_3A;
@@ -48,7 +48,7 @@ typedef struct BattleMonRuntime {
     /* 0x4B */ u8 unk_4B;
     /* 0x4C */ u8 immobilizedReason;
     /* 0x4D */ u8 unk_4D;
-    /* 0x4E */ u8 unk_4E;
+    /* 0x4E */ u8 battleStatus3;
     /* 0x4F */ u8 unk_4F;
     /* 0x50 */ u8 unk_50;
     /* 0x51 */ u8 unk_51;

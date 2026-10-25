@@ -243,10 +243,10 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
                 Gfx_SetEnvColor(0x32, 0x32, 0xC8, 0x80);
             }
             Font_SetActive(4, 0);
-            Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.unk_30);
+            Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.nickname);
             Font_SetActive(4, 0);
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 0x17, "%s%d", TeamSelection_GetInstructionText(0x15),
-                          arg3->unk_0000[i].unk_004.unk_24);
+                          arg3->unk_0000[i].unk_004.level);
         }
     }
 
@@ -761,11 +761,11 @@ s32 Rental_MonHasLegalMoveset(BattleMon* arg0) {
     s32 var_v1 = 1;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] == 0) {
+        if (arg0->moves[i] == 0) {
             break;
         }
 
-        if (arg0->unk_09[i] >= 0xA6) {
+        if (arg0->moves[i] >= 0xA6) {
             var_v1 = 0;
         }
     }
@@ -778,7 +778,7 @@ s32 Rental_MonMeetsCategoryFilter(BattleMon* arg0, s16 arg1, s16 arg2, s16 arg3)
 
     if ((arg0->unk_00.unk_00 > 0) && (arg0->unk_00.unk_00 < 0x98)) {
         if ((Rental_MonHasLegalMoveset(arg0) != 0) && (D_8006FEE8[arg0->unk_00.unk_00][8] & arg3)) {
-            if ((arg0->unk_24 >= arg1) && (arg2 >= arg0->unk_24)) {
+            if ((arg0->level >= arg1) && (arg2 >= arg0->level)) {
                 sp1C = 1;
             }
         }

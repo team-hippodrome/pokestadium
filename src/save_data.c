@@ -190,15 +190,15 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     arg0->unk_25 = 0;
 
     _bcopy(arg1->unk_2C, arg0->unk_46, 0xB);
-    Text_UntranscodeFixedName(arg0->unk_30, arg1->unk_21);
+    Text_UntranscodeFixedName(arg0->nickname, arg1->unk_21);
     Text_UntranscodeFixedName(arg0->unk_3B, arg1->unk_2C);
 }
 
 void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
-    arg0->unk_04 = arg0->unk_24;
+    arg0->unk_04 = arg0->level;
 
     Pokemon_ToGbRecord(arg0, &arg1->unk_00);
-    Text_TranscodeName(arg1->unk_21, arg0->unk_30);
+    Text_TranscodeName(arg1->unk_21, arg0->nickname);
 
     _bcopy(arg0->unk_46, arg1->unk_2C, 0xB);
 }

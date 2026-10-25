@@ -151,7 +151,7 @@ void Battle_Effect_Poison(void) {
 
         sBattleTarget->unk_15 |= 8;
         if (sBattleUser->moveCache.lastMove == TOXIC) {
-            sBattleTarget->unk_4E |= 1;
+            sBattleTarget->battleStatus3 |= 1;
             sBattleTarget->unk_51 = 0;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->unk_2C]));
             Battle_QueueMessage(sp1C, -0x7C);
@@ -982,10 +982,10 @@ void Battle_Effect_Haze(void) {
     temp_t0->unk_57 = temp_a3->unk_57 = 0;
     temp_t0->immobilizedReason &= ~0x80;
     temp_t0->unk_4D &= 0x78;
-    temp_t0->unk_4E &= 8;
+    temp_t0->battleStatus3 &= 8;
     temp_a3->immobilizedReason &= ~0x80;
     temp_a3->unk_4D &= 0x78;
-    temp_a3->unk_4E &= 8;
+    temp_a3->battleStatus3 &= 8;
     sBattleUser->scaleResize = 0;
     sBattleTarget->scaleResize = 0;
 
@@ -1010,7 +1010,7 @@ void Battle_Effect_Heal(void) {
 
             if (temp_v0 != 0) {
                 if (D_8438AC60[0] == 1) {
-                    sBattleUser->unk_4E &= ~1;
+                    sBattleUser->battleStatus3 &= ~1;
                     Battle_ApplyStatStageMultiplier(&sBattleUser->unk_2A, sBattleUser->unk_38, sBattleUser->unk_5C[0]);
                     Battle_ApplyStatStageMultiplier(&sBattleUser->speed, sBattleUser->unk_3C, sBattleUser->unk_5C[2]);
                 }
@@ -1048,8 +1048,8 @@ void Battle_Effect_Transform(void) {
     sp20 = &sActivePokemon[sBattleScene.scene->unk_2C]->state;
     sp1C = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
 
-    if ((D_8438AC60[0] == 1) && ((((sBattleTarget->unk_4E & 8) == 0) && (sBattleTarget->id == 0x84)) ||
-                                 (((sBattleTarget->unk_4E & 8) != 0) && (sp1C->unk_BE == 0x84)))) {
+    if ((D_8438AC60[0] == 1) && ((((sBattleTarget->battleStatus3 & 8) == 0) && (sBattleTarget->id == 0x84)) ||
+                                 (((sBattleTarget->battleStatus3 & 8) != 0) && (sp1C->unk_BE == 0x84)))) {
         sBattleScene.scene->unk_48 = 0x1C;
         Text_SetStringToken(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->unk_2C]));
         Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x2F);
@@ -1062,9 +1062,9 @@ void Battle_Effect_Transform(void) {
         sBattleScene.scene->unk_48 = 0xF;
         Text_SetStringToken(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->unk_2C]));
         Battle_QueueMessage(gBattleMessageQueues->unk_148, -0x31);
-        sBattleUser->unk_4E |= 8;
+        sBattleUser->battleStatus3 |= 8;
 
-        if (sBattleTarget->unk_4E & 8) {
+        if (sBattleTarget->battleStatus3 & 8) {
             sp20->unk_BE = sp1C->unk_BE;
         } else {
             sp20->unk_BE = sBattleTarget->id;
@@ -1086,7 +1086,7 @@ void Battle_Effect_Transform(void) {
             if (sBattleTarget->moves[i] == 0) {
                 break;
             }
-            sBattleUser->moveUsability[i] = 5;
+            sBattleUser->pp[i] = 5;
         }
 
         sBattleUser->unk_38 = sBattleTarget->unk_38;
@@ -1107,15 +1107,15 @@ void Battle_Effect_Transform(void) {
 void Battle_Effect_ReflectLightScreen(void) {
     sBattleScene.scene->unk_48 = 7;
     if (sBattleUser->moveCache.unk_01 == 0x40) {
-        if (!(sBattleUser->unk_4E & 2)) {
-            sBattleUser->unk_4E |= 2;
+        if (!(sBattleUser->battleStatus3 & 2)) {
+            sBattleUser->battleStatus3 |= 2;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
             Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x2E);
         } else {
             Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x2D);
         }
-    } else if (!(sBattleUser->unk_4E & 4)) {
-        sBattleUser->unk_4E |= 4;
+    } else if (!(sBattleUser->battleStatus3 & 4)) {
+        sBattleUser->battleStatus3 |= 4;
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
         Battle_QueueMessage(gBattleMessageQueues->unk_088, -0x2C);
     } else {

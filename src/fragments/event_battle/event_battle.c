@@ -590,7 +590,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp1 = D_823059B0[i] + sp58 + 0x2C;
             tmp2 = D_823059BC[i] + sp56 + 5;
-            Font_Printf(tmp1, tmp2, arg0->unk_0020[i].unk_30);
+            Font_Printf(tmp1, tmp2, arg0->unk_0020[i].nickname);
         }
 
         Font_SetActive(4, 0);
@@ -598,7 +598,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp3 = D_823059B0[i] + sp58 + 0x2C;
             tmp4 = D_823059BC[i] + sp56 + 0x17;
-            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, D_82305A24, 0x15), arg0->unk_0020[i].unk_24);
+            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, D_82305A24, 0x15), arg0->unk_0020[i].level);
         }
 
         Font_EndTexturedTextRendering();
@@ -660,11 +660,11 @@ s32 EventBattle_HasLegalMoves(BattleMon* arg0) {
     s32 var_v1 = 1;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] == 0) {
+        if (arg0->moves[i] == 0) {
             break;
         }
 
-        if (arg0->unk_09[i] >= 0xA6) {
+        if (arg0->moves[i] >= 0xA6) {
             var_v1 = 0;
         }
     }
@@ -692,7 +692,7 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
                 ptr1 = &D_8230597C[(arg1 - 1) & 0xFFFFFFFF];
 
                 if (D_8006FF00[var_s1->unk_00.unk_00 - 1].unk_0C & ptr1->unk_06) {
-                    if ((var_s1->unk_24 >= ptr1->unk_00) && (ptr1->unk_02 >= var_s1->unk_24)) {
+                    if ((var_s1->level >= ptr1->unk_00) && (ptr1->unk_02 >= var_s1->level)) {
                         var_s1->unk_25 = 0;
                     }
                 }
@@ -706,18 +706,18 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
             }
         }
 
-        if (sp54[2] >= var_s1->unk_24) {
-            sp54[2] = var_s1->unk_24;
+        if (sp54[2] >= var_s1->level) {
+            sp54[2] = var_s1->level;
         }
 
-        if (sp54[1] >= var_s1->unk_24) {
+        if (sp54[1] >= var_s1->level) {
             sp54[2] = sp54[1];
-            sp54[1] = var_s1->unk_24;
+            sp54[1] = var_s1->level;
         }
 
-        if (sp54[0] >= var_s1->unk_24) {
+        if (sp54[0] >= var_s1->level) {
             sp54[1] = sp54[0];
-            sp54[0] = var_s1->unk_24;
+            sp54[0] = var_s1->level;
         }
     }
 

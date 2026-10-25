@@ -191,7 +191,7 @@ void BattleMenu_InitTeamOrderState(unk_D_84803760* arg0, BattleSessionTeams* arg
     if (arg1->tagTeamSize == 1) {
         arg0->unk_0E = arg1->teamMember[0]->controllerPort;
         arg0->unk_0F = -1;
-        arg0->unk_01 = (arg1->teamMember[0]->unk_000 & 2) != 0;
+        arg0->unk_01 = (arg1->teamMember[0]->isHuman & 2) != 0;
     } else if (arg1->teamMember[0]->controllerPort < arg1->teamMember[1]->controllerPort) {
         arg0->unk_0E = arg1->teamMember[0]->controllerPort;
         arg0->unk_0F = arg1->teamMember[1]->controllerPort;
@@ -393,12 +393,12 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0) {
         }
         temp_s1_2 = temp_s7 + ((i % 3) * 0x9A) + 0x4C;
         temp_s2_3 = temp_fp + ((i / 3) * 0x2A) + 8;
-        Font_Printf(temp_s1_2, temp_s2_3, arg0->unk_0018[i].unk_30);
+        Font_Printf(temp_s1_2, temp_s2_3, arg0->unk_0018[i].nickname);
         if ((arg0->unk_0009 != 0) && (temp_v0_4 != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         }
         Font_Printf(temp_s1_2, temp_s2_3 + 0x14, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
-                      arg0->unk_0018[i].unk_24);
+                      arg0->unk_0018[i].level);
     }
 
     Font_EndTexturedTextRendering();
@@ -610,7 +610,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
-    Font_Printf(temp_fp + 0x32, sp7C + 7, arg0->unk_0018[temp_s1].unk_30);
+    Font_Printf(temp_fp + 0x32, sp7C + 7, arg0->unk_0018[temp_s1].nickname);
     Font_Printf(temp_fp + 0x32, sp7C + 0x1B, "%s", Text_GetString(NULL, 0, D_84803794, 8));
     Font_Printf(temp_fp + 0xBE, sp7C + 7, Text_GetString(NULL, 0, D_84803790, 9));
     Font_Printf(temp_fp + 0xBE, sp7C + 0x1B, Text_GetString(NULL, 0, D_84803790, 0xA));
@@ -635,7 +635,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(temp_fp + 0x8C, sp7C + 7, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
-                  arg0->unk_0018[temp_s1].unk_24);
+                  arg0->unk_0018[temp_s1].level);
     Font_Printf(temp_fp + 0x52, sp7C + 0x1B, "%3d", sp78->maxHp);
     Font_Printf(temp_fp + 0xFA, sp7C + 7, "%3d", sp78->unk_28);
     Font_Printf(temp_fp + 0xFA, sp7C + 0x1B, "%3d", sp78->unk_2A);
@@ -643,16 +643,16 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
     Font_Printf(temp_fp + 0xFA, sp7C + 0x43, "%3d", sp78->unk_2E);
 
     for (i = 0; i < 4; i++) {
-        if (sp78->unk_09[i] == 0) {
+        if (sp78->moves[i] == 0) {
             break;
         }
-        temp_v1 = &D_848035FC[gMoveDisplayInfo[sp78->unk_09[i] - 1].unk_01];
+        temp_v1 = &D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01];
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(temp_v1->unk_00.r, temp_v1->unk_00.g, temp_v1->unk_00.b, 0xFF);
-        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, D_84803788, sp78->unk_09[i] - 1));
+        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, D_84803788, sp78->moves[i] - 1));
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->unk_20[i] & 0x3F);
+        Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->pp[i] & 0x3F);
     }
 
     Font_EndTexturedTextRendering();
@@ -660,11 +660,11 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     for (i = 0; i < 4; i++) {
-        if (sp78->unk_09[i] == 0) {
+        if (sp78->moves[i] == 0) {
             break;
         }
         Gfx_DrawTextureRgba16(temp_fp + 0x136, (i * 0x14) + sp7C + 7, 0x14, 0x14,
-                      D_848035FC[gMoveDisplayInfo[sp78->unk_09[i] - 1].unk_01].unk_04, 0x14, 0);
+                      D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01].unk_04, 0x14, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -695,8 +695,8 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     BattleMenu_DrawBorderedPanel(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf((sp26 - (Font_MeasureTextExtent(8, 0, arg0->unk_001C->unk_008) / 2)) + 0x3B, sp24 + 5,
-                  arg0->unk_001C->unk_008);
+    Font_Printf((sp26 - (Font_MeasureTextExtent(8, 0, arg0->unk_001C->trainerName) / 2)) + 0x3B, sp24 + 5,
+                  arg0->unk_001C->trainerName);
     Font_EndTexturedTextRendering();
 }
 
@@ -742,7 +742,7 @@ void BattleMenu_UpdateComPanelAutoInput(void) {
     unk_D_84803548* ptr;
 
     for (i = 0; i < 4; i++) {
-        if ((D_848037A0[i].unk_001C != NULL) && (D_848037A0[i].unk_001C->unk_000 & 2)) {
+        if ((D_848037A0[i].unk_001C != NULL) && (D_848037A0[i].unk_001C->isHuman & 2)) {
             break;
         }
     }
@@ -788,9 +788,9 @@ s32 BattleMenu_PicksExceedLevelCap(unk_D_848037A0* arg0) {
     s32 i;
     s32 var_v0 = 0;
 
-    if (!(arg0->unk_001C->unk_000 & 2)) {
+    if (!(arg0->unk_001C->isHuman & 2)) {
         for (i = 0; i < arg0->unk_000B; i++) {
-            var_v0 += arg0->unk_0018[arg0->unk_000C[i]].unk_24;
+            var_v0 += arg0->unk_0018[arg0->unk_000C[i]].level;
         }
 
         if (D_84816420->ruleCategory == 3) {
@@ -828,7 +828,7 @@ s32 BattleMenu_IsOrderSelectionComplete(unk_D_848037A0* arg0) {
 
     if ((D_84816420->ruleCategory != 0) && (D_84816420->ruleCategory != 8)) {
         var_v1 = 3;
-    } else if (arg0->unk_001C->unk_000 & 2) {
+    } else if (arg0->unk_001C->isHuman & 2) {
         var_v1 = arg0->unk_0017;
     } else {
         var_v1 = arg0->unk_0017;
@@ -1043,7 +1043,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
 
-    if (arg1->unk_001C->unk_000 & 2) {
+    if (arg1->unk_001C->isHuman & 2) {
         var_a0 = &D_84816428;
     } else {
         var_a0 = &gControllers[arg1->unk_0001];
@@ -1163,7 +1163,7 @@ void BattleMenu_CommitOrderSelection(void) {
 
     while (var_s4-- > 0) {
         temp_s1 = var_s2->unk_001C;
-        if (temp_s1->unk_000 & 2) {
+        if (temp_s1->isHuman & 2) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
             _bcopy(temp_s1->rosterInfo->unk_028, temp_s1->pokemonPicked, 0x1F8);
         } else {

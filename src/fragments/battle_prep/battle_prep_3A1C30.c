@@ -298,7 +298,7 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     if (arg2->tagTeamSize == 1) {
-        if (arg2->teamMember[0]->unk_000 & 2) {
+        if (arg2->teamMember[0]->isHuman & 2) {
             Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_3025200, 0x24, 0);
             if (0) {}
         } else {

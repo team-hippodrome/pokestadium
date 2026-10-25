@@ -75,13 +75,13 @@ void LabPC_SwapMonMoves(BattleMon* arg0, s32 arg1, s32 arg2) {
     u8 temp_t0;
     u8 temp_v0;
 
-    temp_v0 = arg0->unk_09[arg1];
-    arg0->unk_09[arg1] = arg0->unk_09[arg2];
-    arg0->unk_09[arg2] = temp_v0;
+    temp_v0 = arg0->moves[arg1];
+    arg0->moves[arg1] = arg0->moves[arg2];
+    arg0->moves[arg2] = temp_v0;
 
-    temp_t0 = arg0->unk_20[arg1];
-    arg0->unk_20[arg1] = arg0->unk_20[arg2];
-    arg0->unk_20[arg2] = temp_t0;
+    temp_t0 = arg0->pp[arg1];
+    arg0->pp[arg1] = arg0->pp[arg2];
+    arg0->pp[arg2] = temp_t0;
 }
 
 void func_88600240(void) {
@@ -335,11 +335,11 @@ s32 LabPC_DrawPpWidget(unk_func_88205880_0098_008_040_05C* arg0, s32 arg1, s32 a
     s32 var_v1;
 
     if (temp_v0 != NULL) {
-        var_v1 = temp_v0->unk_05 / 5;
+        var_v1 = temp_v0->pp / 5;
         if (var_v1 >= 7) {
             var_v1 = 7;
         }
-        sp18 = temp_v0->unk_05 + (var_v1 * (arg0->unk_30 >> 6));
+        sp18 = temp_v0->pp + (var_v1 * (arg0->unk_30 >> 6));
         Gfx_DrawNumberFixedWidth(arg1, arg2, arg0->unk_30 & 0x3F, 2);
         Gfx_DrawNumberFixedWidth(arg1 + 0x1B, arg2, sp18, 2);
 
@@ -452,7 +452,7 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(D_88605AF0.r, D_88605AF0.g, D_88605AF0.b, D_88605AF0.a);
-    Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->unk_30);
+    Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->nickname);
     if ((arg0->unk_2C->unk_00.unk_00 <= 0) || (arg0->unk_2C->unk_00.unk_00 >= 0x98)) {
         Font_SetActive(0x10, 0);
         Font_Printf(arg1 + 0x9B, arg2 + 6, "%s?", sp34);
@@ -461,7 +461,7 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
         Font_Printf(arg1 + 0x1A0, arg2 + 0xA, "?????");
     } else {
         Font_SetActive(0x10, 0);
-        Font_Printf(arg1 + 0x9B, arg2 + 6, "%s%d", sp34, arg0->unk_2C->unk_24);
+        Font_Printf(arg1 + 0x9B, arg2 + 6, "%s%d", sp34, arg0->unk_2C->level);
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 0x11E, arg2 + 0xA, "%s%03d", sp30, arg0->unk_2C->unk_00.unk_00);
         Font_Printf(arg1 + 0x1A0, arg2 + 0xA, Text_GetString(NULL, 0, D_8861C514, arg0->unk_2C->unk_00.unk_00 - 1));
@@ -746,8 +746,8 @@ void LabPC_SetMovesPanelMon(unk_func_88205880_0098_008_040* arg0, BattleMon* arg
 
     for (i = 0; i < 4; i++) {
         if (i < temp_s3) {
-            LabPC_SetMoveNameId(arg0->unk_3C[i], arg1->unk_09[i]);
-            LabPC_SetPpWidgetMove(arg0->unk_5C[i], arg1->unk_09[i], arg1->unk_20[i]);
+            LabPC_SetMoveNameId(arg0->unk_3C[i], arg1->moves[i]);
+            LabPC_SetPpWidgetMove(arg0->unk_5C[i], arg1->moves[i], arg1->pp[i]);
         } else {
             LabPC_SetMoveNameId(arg0->unk_3C[i], 0);
             LabPC_SetPpWidgetMove(arg0->unk_5C[i], 0, 0);
@@ -830,7 +830,7 @@ s32 LabPC_DrawTrainerInfoWidget(unk_func_88205880_0098_008_054* arg0, s32 arg1, 
     Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0xE8, arg2 + 0x2C, "%d", arg0->unk_2C->unk_10);
 
     if ((arg0->unk_2C->unk_00.unk_00 > 0) && (arg0->unk_2C->unk_00.unk_00 < 0x98)) {
-        s32 sp6C = (arg0->unk_2C->unk_24 == 0x64) ? 0x64 : arg0->unk_2C->unk_24 + 1;
+        s32 sp6C = (arg0->unk_2C->level == 0x64) ? 0x64 : arg0->unk_2C->level + 1;
         UNUSED s32 pad;
         char sp48[32];
         s32 sp44;
@@ -888,7 +888,7 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
 
     sp130 = Move_GetData(arg0->unk_2C);
     sp134 = Move_GetDisplayInfo(arg0->unk_2C);
-    sp12C = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))((sp130 == NULL) ? 0 : sp130->unk_03);
+    sp12C = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))((sp130 == NULL) ? 0 : sp130->type);
 
     gDPPipeSync(gDisplayListHead++);
 
@@ -1253,7 +1253,7 @@ s32 LabPC_GetDetailPanelMode(unk_func_88205880_0098_008* arg0) {
 void LabPC_ShowMoveDetailPage(unk_func_88205880_0098_008* arg0, s32 arg1) {
     arg0->unk_34->unk_2C = 0;
     ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_5C, 1);
-    LabPC_SetMoveDetailId(arg0->unk_58, arg0->unk_78->unk_09[arg1]);
+    LabPC_SetMoveDetailId(arg0->unk_58, arg0->unk_78->moves[arg1]);
 }
 
 void LabPC_SelectDetailPanelPage(unk_func_88205880_0098_008* arg0, s32 arg1) {

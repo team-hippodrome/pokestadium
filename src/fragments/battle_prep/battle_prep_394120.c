@@ -241,7 +241,7 @@ void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8*
     Gfx_DrawTextureRgba16(4, 0x40, 0x38, 0x1C, arg2 + 0x1008, 0x40, 0x200000);
 
     if (gSessionContext.mode == 0 || gSessionContext.mode == 9) {
-        if (temp_v1->teamMember[0]->unk_000 & 2) {
+        if (temp_v1->teamMember[0]->isHuman & 2) {
             Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, &D_3016900, 0x30, 0x200000);
         } else if (temp_v1->tagTeamSize == 1) {
             Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30, 0x200000);
@@ -482,9 +482,9 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
 
             if (ptr->unk_00.unk_00 == 0x19) {
                 for (j = 0; j < 4; j++) {
-                    if (ptr->unk_09[j] == 0) {
+                    if (ptr->moves[j] == 0) {
                         break;
-                    } else if (ptr->unk_09[j] == 0x39) {
+                    } else if (ptr->moves[j] == 0x39) {
                         return;
                     }
                 }
@@ -539,7 +539,7 @@ void BattlePrep_RunNormalRoundIntro(void) {
         BattlePrep_UpdateRoundIntroScene();
     }
 
-    if (gSessionContext.battleSides[1].teamMember[0]->unk_000 & 2) {
+    if (gSessionContext.battleSides[1].teamMember[0]->isHuman & 2) {
         if (gSessionContext.battleSides[0].unk_1C == 1) {
             Audio_PlayMusicIfChanged(0x32);
         } else {

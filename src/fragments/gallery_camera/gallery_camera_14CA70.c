@@ -999,7 +999,7 @@ void Gallery_CameraDraw(void) {
     Gallery_DrawPhotoCounterReel();
     Gallery_DrawPhotoCounterReelExit();
     Gallery_DrawTutorialTextBox();
-    Gallery_DrawNicknameBanner(D_8690A6A0.unk_30);
+    Gallery_DrawNicknameBanner(D_8690A6A0.nickname);
     Gallery_DrawBackgroundSelectMenu(D_8690A710->unk_00C);
     BgStage_AdvanceFrame();
 }

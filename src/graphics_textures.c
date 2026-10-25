@@ -19,21 +19,21 @@ void Gfx_DrawTexturedRectClipped(s16 x1, s16 y1, s16 width, s16 height, s16 text
 
     if (GfxRect_ClipToScissor(&rectangle) != 0) {
         if (texture_step_x != 0) {
-            texture_start_x += ((rectangle.x1 - x1) * texture_step_x) >> 5;
+            texture_start_x += ((rectangle.left - x1) * texture_step_x) >> 5;
         }
 
         if (texture_step_y != 0) {
-            texture_start_y += ((rectangle.y2 - y1) * texture_step_y) >> 5;
+            texture_start_y += ((rectangle.top - y1) * texture_step_y) >> 5;
         }
 
         if (texture_spread_x_mode == 0x200000) {
             texture_step_x *= 4;
         } else {
-            rectangle.y1 += 1;
-            rectangle.x2 += 1;
+            rectangle.right += 1;
+            rectangle.bottom += 1;
         }
 
-        gSPTextureRectangle(gDisplayListHead++, rectangle.x1 * 4, rectangle.y2 * 4, rectangle.y1 * 4, rectangle.x2 * 4, G_TX_RENDERTILE,
+        gSPTextureRectangle(gDisplayListHead++, rectangle.left * 4, rectangle.top * 4, rectangle.right * 4, rectangle.bottom * 4, G_TX_RENDERTILE,
                             texture_start_x, texture_start_y, texture_step_x, texture_step_y);
     }
 }
