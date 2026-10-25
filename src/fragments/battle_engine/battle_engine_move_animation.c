@@ -21,8 +21,8 @@ static PokemonBattleCues sSide1BattleCues;
 static PokemonBattleCues sSide2BattleCues;
 static SpeciesModelTransform sSide1PresentationTransform;
 static SpeciesModelTransform sSide2PresentationTransform;
-static SpeciesModelTransform D_8438FFB0;
-static SpeciesModelTransform D_8438FFD0;
+static SpeciesModelTransform sSide1CameraTransform;
+static SpeciesModelTransform sSide2CameraTransform;
 static TagTeamPartners D_8438FFF0;
 static TagTeamPartners D_84390000;
 ActivePokemon* sActivePokemon[2];
@@ -41,9 +41,9 @@ SpeciesModelTransform* sSidePresentationTransform[] = {
     &sSide1PresentationTransform,
     &sSide2PresentationTransform,
 };
-SpeciesModelTransform* D_84384580[] = {
-    &D_8438FFB0,
-    &D_8438FFD0,
+SpeciesModelTransform* sSideCameraTransform[] = {
+    &sSide1CameraTransform,
+    &sSide2CameraTransform,
 };
 TagTeamPartners* sPlayerTagTeam[] = { &D_8438FFF0, &D_84390000 };
 u8 sPokemonWithAlternateSleepIdle[] = { PRIMEAPE, EXEGGUTOR, VOLTORB, KOFFING, WIGGLYTUFF, WEEZING, GOLBAT, VICTREEBEL };
@@ -506,7 +506,7 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
     Dma_WriteChunks(sSideBattleCues[side_index], rom_address, rom_address + 0xBC0, 0);
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)(D_6E910 + (species << 5)) & 0xFFFFFF);
-    Dma_WriteChunks(D_84384580[side_index], rom_address, transform_end, 0);
+    Dma_WriteChunks(sSideCameraTransform[side_index], rom_address, transform_end, 0);
 
     if (side_index == 1) {
         rom_address = (u32)_70D3A0_ROM_START + ((u32)(D_6E910 + (species << 5)) & 0xFFFFFF);
