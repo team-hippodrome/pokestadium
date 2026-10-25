@@ -983,7 +983,7 @@ extern u8 D_84390134;
 extern s32 sAttractInputIndex;
 extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f sEndBattleBannerPos;
-extern BattleMessageQueue* gBattleMessageQueues;
+extern BattleMessageQueue* sBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
 extern ActivePokemon* D_84390200;
 extern ActivePokemon* D_84390204;
