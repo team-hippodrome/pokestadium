@@ -201,6 +201,7 @@ void BattleScene_IntroCameraStep0(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
+// rotating arena overview
 void BattleScene_IntroCameraStep2(CameraNode* camera) {
     BattleScene_ResetCameraFrameCounter();
     camera->perspective.verticalFieldOfView = 30.0f;
@@ -214,6 +215,7 @@ void BattleScene_IntroCameraStep2(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
+// back shot of pokemon
 void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
     UNUSED s32 pad;
     f32 pokemon_radius;
@@ -244,7 +246,6 @@ void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
         }
 
         height_rng = BattleAnim_RandomRange(4);
-        // Implies pokemon are of variable height? strange
         pokemon_height = BattleAnim_GetOwnerModelHeight(pokemon) * height_rng;
         rotation_y_rng = BattleAnim_RandomRange(180);
 
@@ -266,6 +267,7 @@ void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
     }
 }
 
+// zoom in
 void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side) {
     UNUSED s32 pad[2];
     DioramaAnimData* camera_preset;
@@ -326,7 +328,7 @@ void BattleScene_IntroCameraStep18(CameraNode* camera) {
     }
 }
 
-// high-angle wide two-shot
+// static arena overview
 void BattleScene_IntroCameraStep20(CameraNode* camera) {
     s16 arena_index;
 
@@ -349,6 +351,7 @@ void BattleScene_IntroCameraStep20(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
+// close-up
 void BattleScene_IntroCameraStep22Or24(CameraNode* camera, s32 side) {
     UNUSED s32 pad[5];
     s32 camera_adjustment_index;
@@ -416,29 +419,36 @@ void BattleScene_SelectNextIntroCameraShot(CameraNode* camera) {
 
     switch (sBattleScene.scene->cameraCounter) {
         case 0:
+            // Rotation around Arena circle
             BattleScene_IntroCameraStep0(camera);
             break;
 
         case 2:
+            // rotating arena overview
             BattleScene_IntroCameraStep2(camera);
             break;
 
         case 4:
+            // static zoomed out shot on side 1
             BattleScene_IntroCameraStep4Or6(camera, 0);
             break;
 
         case 6:
+            // static zoomed out shot on side 2
             BattleScene_IntroCameraStep4Or6(camera, 1);
             break;
 
         case 8:
+            // zoom in/out on pokemon on side 1
             BattleScene_IntroCameraStep8Or10(camera, 0);
             break;
 
         case 10:
+        // zoom in/out on pokemon on side 2
             BattleScene_IntroCameraStep8Or10(camera, 1);
             break;
 
+            // shots 12, 14, 16, and 18 appear to not be 
         case 12:
             BattleScene_IntroCameraStep12Or14(camera, 0);
             break;
@@ -456,14 +466,17 @@ void BattleScene_SelectNextIntroCameraShot(CameraNode* camera) {
             break;
 
         case 20:
+            // static arena overview
             BattleScene_IntroCameraStep20(camera);
             break;
 
         case 22:
+            // static close up on side1
             BattleScene_IntroCameraStep22Or24(camera, 0);
             break;
 
         case 24:
+            // static close up on side1
             BattleScene_IntroCameraStep22Or24(camera, 1);
             break;
     }
