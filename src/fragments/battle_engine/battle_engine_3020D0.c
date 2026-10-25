@@ -14,77 +14,80 @@
 #include "stdarg.h"
 #include "moves.h"
 
-unk_D_843901A0* gBattleMessageQueues;
+BattleMessageQueue* sBattleMessageQueues;
 
-static u8 D_84385990[] = { 0xE, 0x4A };
-static u8 D_84385994[] = { 0x60, 0x69, 0x75, 0x78, 0x85 };
-static u8 D_8438599C[] = { 0x61, 0x64, 0x66, 0x68, 0x8C };
+static u8 D_84385990[] = { SWORDS_DANCE, GROWTH };
+static u8 D_84385994[] = { MEDITATE, RECOVER, BIDE, SELFDESTRUCT, AMNESIA };
+static u8 D_8438599C[] = { AGILITY, TELEPORT, MIMIC, DOUBLE_TEAM, BARRAGE };
 static u8 D_843859A4[] = {
-    1,    0xA,  0xB,  0x11, 0x13, 0x14, 0x15, 0x1E, 0x22, 0x23, 0x25, 0x27, 0x2B, 0x2C, 0x2D, 0x2E,
-    0x2F, 0x40, 0x44, 0x46, 0x47, 0x51, 0x59, 0x5A, 0x5B, 0x5C, 0x67, 0x6A, 0x6B, 0x6E, 0x6F, 0x76,
-    0x7A, 0x80, 0x84, 0x8B, 0x8D, 0x91, 0x94, 0x96, 0x97, 0x9A, 0x9C, 0x9F, 0xA3, 0xA4,
+    POUND,        SCRATCH,    VICEGRIP,     WING_ATTACK, FLY,          BIND,         SLAM,       HORN_ATTACK,
+    BODY_SLAM,    WRAP,       THRASH,       TAIL_WHIP,   LEER,         BITE,         GROWL,      ROAR,
+    SING,         PECK,       COUNTER,      STRENGTH,    ABSORB,       STRING_SHOT,  EARTHQUAKE, FISSURE,
+    DIG,          TOXIC,      SCREECH,      HARDEN,      MINIMIZE,     WITHDRAW,     DEFENSE_CURL, METRONOME,
+    LICK,         CLAMP,      CONSTRICT,    POISON_GAS,  LEECH_LIFE,   BUBBLE,       FLASH,      SPLASH,
+    ACID_ARMOR,   FURY_SWIPES, REST,        SHARPEN,     SLASH,        SUBSTITUTE,
 };
 
 void Battle_ClearAllMessageQueues(void) {
-    gBattleMessageQueues->unk_048[1][0] = 0;
-    gBattleMessageQueues->unk_048[1][1] = 0;
-    gBattleMessageQueues->unk_048[2][0] = 0;
-    gBattleMessageQueues->unk_048[2][1] = 0;
-    gBattleMessageQueues->unk_048[3][0] = 0;
-    gBattleMessageQueues->unk_048[3][1] = 0;
-    gBattleMessageQueues->unk_048[4][0] = 0;
-    gBattleMessageQueues->unk_048[4][1] = 0;
-    gBattleMessageQueues->unk_048[5][0] = 0;
-    gBattleMessageQueues->unk_048[5][1] = 0;
-    gBattleMessageQueues->unk_048[6][0] = 0;
-    gBattleMessageQueues->unk_048[6][1] = 0;
-    gBattleMessageQueues->unk_048[16][0] = 0;
-    gBattleMessageQueues->unk_048[16][1] = 0;
-    gBattleMessageQueues->unk_048[17][0] = 0;
-    gBattleMessageQueues->unk_048[17][1] = 0;
-    gBattleMessageQueues->unk_048[7][0] = 0;
-    gBattleMessageQueues->unk_048[7][1] = 0;
-    gBattleMessageQueues->unk_048[11][0] = 0;
-    gBattleMessageQueues->unk_048[11][1] = 0;
-    gBattleMessageQueues->unk_048[10][0] = 0;
-    gBattleMessageQueues->unk_048[10][1] = 0;
-    gBattleMessageQueues->unk_048[12][0] = 0;
-    gBattleMessageQueues->unk_048[12][1] = 0;
-    gBattleMessageQueues->unk_048[13][0] = 0;
-    gBattleMessageQueues->unk_048[13][1] = 0;
-    gBattleMessageQueues->unk_048[14][0] = 0;
-    gBattleMessageQueues->unk_048[14][1] = 0;
-    gBattleMessageQueues->unk_048[15][0] = 0;
-    gBattleMessageQueues->unk_048[15][1] = 0;
+    sBattleMessageQueues->buffer[1][0] = 0;
+    sBattleMessageQueues->buffer[1][1] = 0;
+    sBattleMessageQueues->buffer[2][0] = 0;
+    sBattleMessageQueues->buffer[2][1] = 0;
+    sBattleMessageQueues->buffer[3][0] = 0;
+    sBattleMessageQueues->buffer[3][1] = 0;
+    sBattleMessageQueues->buffer[4][0] = 0;
+    sBattleMessageQueues->buffer[4][1] = 0;
+    sBattleMessageQueues->buffer[5][0] = 0;
+    sBattleMessageQueues->buffer[5][1] = 0;
+    sBattleMessageQueues->buffer[6][0] = 0;
+    sBattleMessageQueues->buffer[6][1] = 0;
+    sBattleMessageQueues->buffer[16][0] = 0;
+    sBattleMessageQueues->buffer[16][1] = 0;
+    sBattleMessageQueues->buffer[17][0] = 0;
+    sBattleMessageQueues->buffer[17][1] = 0;
+    sBattleMessageQueues->buffer[7][0] = 0;
+    sBattleMessageQueues->buffer[7][1] = 0;
+    sBattleMessageQueues->buffer[11][0] = 0;
+    sBattleMessageQueues->buffer[11][1] = 0;
+    sBattleMessageQueues->buffer[10][0] = 0;
+    sBattleMessageQueues->buffer[10][1] = 0;
+    sBattleMessageQueues->buffer[12][0] = 0;
+    sBattleMessageQueues->buffer[12][1] = 0;
+    sBattleMessageQueues->buffer[13][0] = 0;
+    sBattleMessageQueues->buffer[13][1] = 0;
+    sBattleMessageQueues->buffer[14][0] = 0;
+    sBattleMessageQueues->buffer[14][1] = 0;
+    sBattleMessageQueues->buffer[15][0] = 0;
+    sBattleMessageQueues->buffer[15][1] = 0;
 }
 
 void Battle_ClearMessageCursor(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_048[0][0] = 0;
-    gBattleMessageQueues->unk_048[0][1] = 0;
-    gBattleMessageQueues->unk_008[0] = 0;
-    gBattleMessageQueues->unk_008[1] = 0;
+    sBattleMessageQueues->unk_004 = 0;
+    sBattleMessageQueues->buffer[0][0] = 0;
+    sBattleMessageQueues->buffer[0][1] = 0;
+    sBattleMessageQueues->unk_008[0] = 0;
+    sBattleMessageQueues->unk_008[1] = 0;
 }
 
-void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
+void Battle_SimpleStringFormat(s8* buffer, s8* format, ...) {
     va_list args;
     s8* src;
     s8* fmt;
     s32 len;
 
     len = 0;
-    va_start(args, arg1);
-    fmt = arg1;
+    va_start(args, format);
+    fmt = format;
 
     while (*fmt != 0) {
-        if (*fmt != 0x25) {
-            arg0[len++] = *fmt;
+        if (*fmt != '%') {
+            buffer[len++] = *fmt;
         } else {
             fmt++;
-            if (*fmt == 0x73) {
+            if (*fmt == 's') {
                 src = va_arg(args, s8*);
                 while (*src != 0) {
-                    arg0[len] = *src;
+                    buffer[len] = *src;
                     src++;
                     len++;
                 }
@@ -92,417 +95,424 @@ void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...) {
         }
         fmt++;
     }
-    arg0[len] = 0;
+    buffer[len] = 0;
 }
 
-void Battle_QueueMessage(s8* arg0, s8 arg1) {
-    u8 tmp = arg1;
-    *arg0 = arg1;
+void Battle_QueueMessage(s8* text, s8 file_number_index) {
+    u8 overflow_helper = file_number_index;
+    *text = file_number_index;
 
-    if (tmp >= 0x80) {
-        if ((tmp - 0x80) >= 0xB) {
-            Text_GetString(arg0 + 1, 0x40, sBattleMessagesTable, tmp - 0x48);
+    if (overflow_helper >= 128) {
+        if ((overflow_helper - 128) >= 11) {
+            Text_GetString(text + 1, 0x40, sBattleMessagesTable, overflow_helper - 0x48);
         } else {
-            Text_GetString(arg0 + 1, 0x40, sBattleMessagesTable, tmp - 0x49);
+            Text_GetString(text + 1, 0x40, sBattleMessagesTable, overflow_helper - 0x49);
         }
     } else {
-        Text_GetString(arg0 + 1, 0x40, sBattleMessagesTable, D_84385BC0[arg1]);
+        Text_GetString(text + 1, 0x40, sBattleMessagesTable, sBattleMessagesTableFileNumbers[file_number_index]);
     }
 }
 
-void Battle_QueueStatusText(char* arg0, s32 arg1) {
+void Battle_QueueStatusText(char* text, s32 side) {
     UNUSED s32 pad[3];
-    ActivePokemonState* sp28 = &sActivePokemon[arg1]->state;
+    ActivePokemonState* state = &sActivePokemon[side]->state;
     UNUSED s32 pad2[2];
 
     Battle_ClearMessageCursor();
-    gBattleMessageQueues->unk_000 = sActivePokemon[arg1]->sessionTeams->teamMember[sp28->teamMemberIndex]->controllerPort;
-    Battle_SimpleStringFormat(gBattleMessageQueues->unk_048[0], arg0 + 1);
-    *arg0 = 0;
+    sBattleMessageQueues->controllerPort = sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
+    Battle_SimpleStringFormat(sBattleMessageQueues->buffer[0], text + 1);
+    *text = 0;
 }
 
 void func_84317B38(void) {
 }
 
 void Battle_DrawCompactStatusBoxesIfVisible(void) {
-    ActivePokemon* ptr1 = sActivePokemon[0];
-    ActivePokemon* ptr2 = sActivePokemon[1];
+    ActivePokemon* pokemon1 = sActivePokemon[0];
+    ActivePokemon* pokemon2 = sActivePokemon[1];
 
-    if ((gSessionContext.mode != 0x10) && (sBattleScene.scene->unk_30 == 0)) {
-        BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[ptr1->thumbnail.tagTeam]->controllerPort);
-        BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[ptr2->thumbnail.tagTeam]->controllerPort);
+    if ((gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->unk_30 == 0)) {
+        BattleHud_DrawCompactMonStatusBox(pokemon1, 21, 15, pokemon1->sessionTeams->teamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(pokemon2, 225, 15, pokemon2->sessionTeams->teamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
     }
 }
 
 void Battle_QueueMoveCategoryUsedMessage(void) {
-    u32 sp1C;
-    BattleMonRuntime* sp18 = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    u32 file_number_offset;
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->side]->state.runtime;
 
-    sp18->unk_58 = sp18->moveCache.lastMove;
+    runtime->lastMove = runtime->moveCache.lastMove;
 
-    if (BattleScene_ByteArrayContains(sp18->moveCache.lastMove, D_84385990, 2) != 0) {
-        sp1C = 0;
-    } else if (BattleScene_ByteArrayContains(sp18->moveCache.lastMove, D_84385994, 5) != 0) {
-        sp1C = 1;
-    } else if (BattleScene_ByteArrayContains(sp18->moveCache.lastMove, D_8438599C, 5) != 0) {
-        sp1C = 2;
-    } else if (BattleScene_ByteArrayContains(sp18->moveCache.lastMove, D_843859A4, 0x2E) != 0) {
-        sp1C = 3;
+    // TODO: find out what makes these attack require special handling
+    if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_84385990, 2) != 0) {
+        file_number_offset = 0;
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_84385994, 5) != 0) {
+        file_number_offset = 1;
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_8438599C, 5) != 0) {
+        file_number_offset = 2;
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_843859A4, 46) != 0) {
+        file_number_offset = 3;
     } else {
-        sp1C = 4;
+        file_number_offset = 4;
     }
 
-    if ((sp18->moveCache.lastMove == 0x76) || (sp18->moveCache.lastMove == 0x77)) {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+    if ((runtime->moveCache.lastMove == METRONOME) || (runtime->moveCache.lastMove == MIRROR_MOVE)) {
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-        switch (sp1C) {
+        switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x14);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x15);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x16);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x17);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x18);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
                 break;
         }
     } else {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-        switch (sp1C) {
+        switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x14);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x15);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x16);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x17);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x18);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
     }
 }
 
 void Battle_QueueMoveCategoryMessage(void) {
-    u32 sp24;
+    u32 file_number_offset;
     UNUSED s32 pad;
-    BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->side]->state.runtime;
 
-    if (BattleScene_ByteArrayContains(sp1C->usedMove, D_84385990, 2) != 0) {
-        sp24 = 0;
-    } else if (BattleScene_ByteArrayContains(sp1C->usedMove, D_84385994, 5) != 0) {
-        sp24 = 1;
-    } else if (BattleScene_ByteArrayContains(sp1C->usedMove, D_8438599C, 5) != 0) {
-        sp24 = 2;
-    } else if (BattleScene_ByteArrayContains(sp1C->usedMove, D_843859A4, 0x2E) != 0) {
-        sp24 = 3;
+    if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385990, 2) != 0) {
+        file_number_offset = 0;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385994, 5) != 0) {
+        file_number_offset = 1;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_8438599C, 5) != 0) {
+        file_number_offset = 2;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_843859A4, 46) != 0) {
+        file_number_offset = 3;
     } else {
-        sp24 = 4;
+        file_number_offset = 4;
     }
 
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-    Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+    Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-    switch (sp24) {
+    switch (file_number_offset) {
         case 0:
-            Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x14);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
             break;
 
         case 1:
-            Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x15);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
             break;
 
         case 2:
-            Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x16);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
             break;
 
         case 3:
-            Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x17);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
             break;
 
         case 4:
-            Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x18);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
             break;
     }
 }
 
 void Battle_QueueMetronomeMoveMessage(void) {
-    s32 sp2C;
-    s32 tmp;
-    BattleMonRuntime* sp24;
+    s32 file_name_offset;
+    s32 metronome_selected_move;
+    BattleMonRuntime* runtime;
 
-    sp24 = &sActivePokemon[sBattleScene.scene->unk_2C]->state.runtime;
+    runtime = &sActivePokemon[sBattleScene.scene->side]->state.runtime;
 
-    if (BattleScene_ByteArrayContains(sp24->usedMove, D_84385990, 2) != 0) {
-        sp2C = 0;
-    } else if (BattleScene_ByteArrayContains(sp24->usedMove, D_84385994, 5) != 0) {
-        sp2C = 1;
-    } else if (BattleScene_ByteArrayContains(sp24->usedMove, D_8438599C, 5) != 0) {
-        sp2C = 2;
-    } else if (BattleScene_ByteArrayContains(sp24->usedMove, D_843859A4, 0x2E) != 0) {
-        sp2C = 3;
+    if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385990, 2) != 0) {
+        file_name_offset = 0;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385994, 5) != 0) {
+        file_name_offset = 1;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_8438599C, 5) != 0) {
+        file_name_offset = 2;
+    } else if (BattleScene_ByteArrayContains(runtime->usedMove, D_843859A4, 0x2E) != 0) {
+        file_name_offset = 3;
     } else {
-        sp2C = 4;
+        file_name_offset = 4;
     }
 
-    if (sp24->usedMove == METRONOME) {
+    if (runtime->usedMove == METRONOME) {
         do {
-            tmp = Battle_Random();
-        } while ((tmp == 0) || (tmp >= 0xA5) || tmp == 0x76);
+            metronome_selected_move = Battle_Random();
+        } while ((metronome_selected_move == 0) || (metronome_selected_move >= STRUGGLE) || metronome_selected_move == METRONOME);
 
-        sp24->usedMove = tmp;
+        runtime->usedMove = metronome_selected_move;
 
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-        switch (sp2C) {
+        switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x14);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x15);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x16);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x17);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x18);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
 
-        sp24->usedMove = METRONOME;
+        runtime->usedMove = METRONOME;
 
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-        switch (sp2C) {
+        switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x14);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x15);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x16);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x17);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[13], 0x18);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
                 break;
         }
     } else {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->unk_2C]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->unk_2C]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->side]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->side]));
 
-        switch (sp2C) {
+        switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x14);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
                 break;
 
             case 1:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x15);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
                 break;
 
             case 2:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x16);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
                 break;
 
             case 3:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x17);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
                 break;
 
             case 4:
-                Battle_QueueMessage(gBattleMessageQueues->unk_048[2], 0x18);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
                 break;
         }
     }
 }
 
-void BattleBox_Open(s32 arg0) {
-    BattleBox* ptr = &gBattleMessageQueues->unk_4C8;
+void BattleBox_Open(s32 opening_progress) {
+    BattleBox* text_box = &sBattleMessageQueues->textBox;
 
-    ptr->unk_00 = 0;
-    ptr->unk_04 = arg0;
+    text_box->visibility = 0;
+    text_box->openingProgress = opening_progress;
 }
 
 void BattleBox_Close(void) {
-    BattleBox* battle_box = &gBattleMessageQueues->unk_4C8;
+    BattleBox* battle_box = &sBattleMessageQueues->textBox;
 
-    battle_box->unk_00 = 0xFF;
+    battle_box->visibility = 0xFF;
 }
 
-void BattleBox_PlayTextBlip(s8* arg0) {
-    s32 temp_v0;
+/**
+ * Queues the sound for a message buffer written by Battle_QueueMessage (byte 0 is the
+ * message index, the string follows). Empty strings are silent. Indices below 128 are
+ * used as the sound ID directly; Transform, Reflect, Light Screen and Substitute
+ * messages have dedicated sounds, and every other index plays (index & 127) + 100.
+ */
+void BattleBox_PlayTextBlip(s8* message) {
+    s32 message_index;
 
-    if (arg0[1] == '\x00') {
+    if (message[1] == '\x00') {
         return;
     }
 
-    temp_v0 = arg0[0] & 0x7F;
+    message_index = message[0] & 0x7F;
 
-    if ((arg0[0] & 0x80) == '\x00') {
-        Audio_QueuePendingSoundId(arg0[0]);
-    } else if (temp_v0 == 'Q') {
+    if ((message[0] & 0x80) == '\x00') {
+        Audio_QueuePendingSoundId(message[0]);
+    } else if (message_index == (BATTLE_MSG_TRANSFORM_DITTO_BLOCKED & 0x7F)) {
         Audio_QueuePendingSoundId(0xBC);
-    } else if (temp_v0 == 'R') {
+    } else if (message_index == (BATTLE_MSG_LIGHT_SCREEN_SET & 0x7F)) {
         Audio_QueuePendingSoundId(0xB5);
-    } else if (temp_v0 == 'S') {
+    } else if (message_index == (BATTLE_MSG_LIGHT_SCREEN_FAILED & 0x7F)) {
         Audio_QueuePendingSoundId(0xB6);
-    } else if (temp_v0 == 'T') {
+    } else if (message_index == (BATTLE_MSG_REFLECT_SET & 0x7F)) {
         Audio_QueuePendingSoundId(0xB7);
-    } else if (temp_v0 == 'U') {
+    } else if (message_index == (BATTLE_MSG_REFLECT_FAILED & 0x7F)) {
         Audio_QueuePendingSoundId(0xB8);
-    } else if (temp_v0 == 'V') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_EXISTS & 0x7F)) {
         Audio_QueuePendingSoundId(0xB9);
-    } else if (temp_v0 == 'W') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_LOW_HP & 0x7F)) {
         Audio_QueuePendingSoundId(0xBA);
-    } else if (temp_v0 == 'X') {
+    } else if (message_index == (BATTLE_MSG_SUBSTITUTE_CREATED & 0x7F)) {
         Audio_QueuePendingSoundId(0xBB);
     } else {
-        Audio_QueuePendingSoundId(temp_v0 + 0x64);
+        Audio_QueuePendingSoundId(message_index + 100);
     }
 }
 
-void BattleBox_DrawMessage(BattleBox* arg0, s16 arg1, s16 arg2) {
+void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
     UNUSED s32 pad;
-    s32 temp_s1;
+    s32 time_limit_text_length;
 
-    if (1) {}
+    if (1) {}// karodo
 
-    switch (arg0->unk_04) {
+    switch (box->openingProgress) {
         case 0:
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[13][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[2][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[5][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
             break;
 
         case 3:
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[4][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[7][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
             break;
 
         case 1:
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[14][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[4][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if ((arg0->lineCount < 3) &&
-                (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[7][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0)) {
-                arg0->lineCount += 1;
+            if ((box->lineCount < 3) &&
+                (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0)) {
+                box->lineCount += 1;
             }
             break;
 
         case 2:
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[4][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[7][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3) != 0) {
-                arg0->lineCount += 1;
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+                box->lineCount += 1;
             }
             break;
 
         case 4:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[8][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[8][1], x + 4, y + 3);
             break;
 
         case 5:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[9][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[9][1], x + 4, y + 3);
             break;
 
         case 6:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[15][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[15][1], x + 4, y + 3);
             break;
 
         case 7:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[12][1], arg1 + 4, arg2 + 3);
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[10][1], arg1 + 4, arg2 + 0x10);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[12][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[10][1], x + 4, y + 0x10);
             break;
 
         case 8:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[16 + arg0->side][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[16 + box->side][1], x + 4, y + 3);
             break;
 
         case 9:
         case 10:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[6][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[6][1], x + 4, y + 3);
             break;
 
         case 11:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
             break;
 
         case 12:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
             break;
 
         case 13:
-            temp_s1 = Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
-            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 0xA1 - temp_s1, 0x71);
+            time_limit_text_length = Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
+            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 161 - time_limit_text_length, 113);
             break;
 
         case 14:
@@ -510,178 +520,178 @@ void BattleBox_DrawMessage(BattleBox* arg0, s16 arg1, s16 arg2) {
             break;
 
         case 15:
-            Battle_DrawTextIfNonEmpty(&gBattleMessageQueues->unk_048[1][1], arg1 + 4, arg2 + (arg0->lineCount * 0xC) + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 0xC) + 3);
             break;
     }
 
-    arg0->lineCount = 0;
+    box->lineCount = 0;
 }
 
-s32 BattleBox_SelectMessage(BattleBox* arg0) {
-    unk_D_843901A0* temp_v0;
-    s32 tmp;
+s32 BattleBox_SelectMessage(BattleBox* box) {
+    BattleMessageQueue* temp_v0;
+    s32 on_side1;
 
-    arg0->lineCount = 0;
+    box->lineCount = 0;
 
-    switch (arg0->unk_04) {
+    switch (box->openingProgress) {
         case 0:
-            if ((gBattleMessageQueues->unk_048[2][1] == 0) && (gBattleMessageQueues->unk_048[13][1] == 0) && (gBattleMessageQueues->unk_048[5][1] == 0)) {
-                arg0->unk_00 = 0xFF;
+            if ((sBattleMessageQueues->buffer[2][1] == 0) && (sBattleMessageQueues->buffer[13][1] == 0) && (sBattleMessageQueues->buffer[5][1] == 0)) {
+                box->visibility = 0xFF;
                 return 1;
             }
 
-            arg0->side = sBattleScene.scene->unk_2C;
-            if (gBattleMessageQueues->unk_048[2][1] != 0) {
-                BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[2]);
+            box->side = sBattleScene.scene->side;
+            if (sBattleMessageQueues->buffer[2][1] != 0) {
+                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[2]);
             }
 
-            if (gBattleMessageQueues->unk_048[13][1] != 0) {
-                BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[13]);
+            if (sBattleMessageQueues->buffer[13][1] != 0) {
+                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[13]);
             }
 
-            if (gBattleMessageQueues->unk_048[5][1] != 0) {
-                BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[5]);
+            if (sBattleMessageQueues->buffer[5][1] != 0) {
+                BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[5]);
             }
-            arg0->unk_00 += 1;
+            box->visibility += 1;
             break;
 
         case 1:
         case 3:
-            arg0->side = sBattleScene.scene->unk_2C;
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[1]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[4]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[7]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[14]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[11]);
-            if ((gBattleMessageQueues->unk_048[1][1] == 0) && (gBattleMessageQueues->unk_048[4][1] == 0) && (gBattleMessageQueues->unk_048[7][1] == 0) &&
-                (gBattleMessageQueues->unk_048[14][1] == 0) && (gBattleMessageQueues->unk_048[11][1] == 0)) {
-                arg0->unk_00 = 0xFF;
+            box->side = sBattleScene.scene->side;
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[14]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[11]);
+            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0) &&
+                (sBattleMessageQueues->buffer[14][1] == 0) && (sBattleMessageQueues->buffer[11][1] == 0)) {
+                box->visibility = 0xFF;
                 return 1;
             }
-            arg0->unk_00 += 1;
+            box->visibility += 1;
             break;
 
         case 2:
-            arg0->side = sBattleScene.scene->unk_2C;
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[1]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[4]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[7]);
-            if ((gBattleMessageQueues->unk_048[1][1] == 0) && (gBattleMessageQueues->unk_048[4][1] == 0) && (gBattleMessageQueues->unk_048[7][1] == 0)) {
-                arg0->unk_00 = 0xFF;
+            box->side = sBattleScene.scene->side;
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
+            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0)) {
+                box->visibility = 0xFF;
                 return 1;
             }
-            arg0->unk_00 += 1;
+            box->visibility += 1;
             break;
 
         case 15:
-            arg0->side = sBattleScene.scene->unk_2C;
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[1]);
-            if (gBattleMessageQueues->unk_048[1][1] == 0) {
-                arg0->unk_00 = 0xFF;
+            box->side = sBattleScene.scene->side;
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
+            if (sBattleMessageQueues->buffer[1][1] == 0) {
+                box->visibility = 0xFF;
                 return 1;
             }
-            arg0->unk_00 += 1;
+            box->visibility += 1;
             break;
 
         case 8:
-            if (gBattleMessageQueues->unk_048[16 + arg0->side][1] == 0) {
-                arg0->unk_00 = 0xFF;
+            if (sBattleMessageQueues->buffer[16 + box->side][1] == 0) {
+                box->visibility = 0xFF;
                 return 1;
             }
-            tmp = sBattleScene.scene->unk_2C == 0;
-            arg0->unk_00 += 1;
-            arg0->side = tmp;
+            on_side1 = sBattleScene.scene->side == 0;
+            box->visibility += 1;
+            box->side = on_side1;
             break;
 
         case 9:
-            tmp = sBattleScene.scene->unk_2C == 0;
-            arg0->unk_00 += 1;
-            arg0->side = tmp;
+            on_side1 = sBattleScene.scene->side == 0;
+            box->visibility += 1;
+            box->side = on_side1;
             break;
 
         case 4:
         case 5:
         case 6:
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[8]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[9]);
-            BattleBox_PlayTextBlip(gBattleMessageQueues->unk_048[15]);
-            arg0->unk_00 += 1;
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[8]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[9]);
+            BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[15]);
+            box->visibility += 1;
             break;
 
         case 14:
             sEndBattleBannerPos.z = 0.0f;
             sEndBattleBannerPos.x = 321.0f;
             sEndBattleBannerPos.y = 160.0f;
-            arg0->side = sBattleScene.scene->unk_2C;
-            arg0->unk_00 += 1;
+            box->side = sBattleScene.scene->side;
+            box->visibility += 1;
             break;
 
         default:
-            arg0->side = sBattleScene.scene->unk_2C;
-            arg0->unk_00 += 1;
+            box->side = sBattleScene.scene->side;
+            box->visibility += 1;
             break;
     }
     return 0;
 }
 
-void BattleBox_Update(s16 arg0, s16 arg1) {
-    BattleBox* temp_s0 = &gBattleMessageQueues->unk_4C8;
+void BattleBox_Update(s16 x, s16 y) {
+    BattleBox* box = &sBattleMessageQueues->textBox;
 
-    if (gSessionContext.mode == 0x10) {
+    if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         return;
     }
 
-    switch (temp_s0->unk_00) {
+    switch (box->visibility) {
         case 0:
-            temp_s0->displayTimer = 0;
-            if (temp_s0->unk_04 == 0xD) {
-                BattleHud_InitCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78);
-                temp_s0->unk_00++;
-            } else if (temp_s0->unk_04 == 0xE) {
-                BattleBox_SelectMessage(temp_s0);
-            } else if (BattleBox_SelectMessage(temp_s0) == 0) {
-                BattleHud_InitCaptionBoxPopup(temp_s0, arg0, arg1);
+            box->displayTimer = 0;
+            if (box->openingProgress == 13) {
+                BattleHud_InitCaptionBoxPopupBlack(box, 160, 120);
+                box->visibility++;
+            } else if (box->openingProgress == 14) {
+                BattleBox_SelectMessage(box);
+            } else if (BattleBox_SelectMessage(box) == 0) {
+                BattleHud_InitCaptionBoxPopup(box, x, y);
             }
             break;
 
         case 1:
-            if (temp_s0->unk_04 == 0xD) {
-                if (BattleHud_UpdateCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78) != 0) {
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->unk_00++;
+            if (box->openingProgress == 13) {
+                if (BattleHud_UpdateCaptionBoxPopupBlack(box, 0xA0, 0x78) != 0) {
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
                 }
             } else {
-                if (temp_s0->unk_04 == 0xE) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->unk_00++;
-                } else if (BattleHud_UpdateCaptionBoxPopup(temp_s0, arg0, arg1) != 0) {
-                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[temp_s0->side]));
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
-                    temp_s0->unk_00++;
+                if (box->openingProgress == 14) {
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
+                } else if (BattleHud_UpdateCaptionBoxPopup(box, x, y) != 0) {
+                    ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
+                    box->visibility++;
                 }
             }
             break;
 
         case 2:
-            if (temp_s0->unk_04 == 0xD) {
-                BattleHud_UpdateCaptionBoxPopupBlack(temp_s0, 0xA0, 0x78);
-                BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+            if (box->openingProgress == 13) {
+                BattleHud_UpdateCaptionBoxPopupBlack(box, 160, 120);
+                BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
-                temp_s0->displayTimer++;
-                if (temp_s0->displayTimer == 0x46) {
-                    temp_s0->unk_00++;
+                box->displayTimer++;
+                if (box->displayTimer == 70) {
+                    box->visibility++;
                 }
             } else {
-                if (temp_s0->unk_04 == 0xE) {
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+                if (box->openingProgress == 14) {
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                 } else {
-                    BattleHud_UpdateCaptionBoxPopup(temp_s0, arg0, arg1);
-                    BattleBox_DrawMessage(temp_s0, temp_s0->textOrigin.x, temp_s0->textOrigin.y);
+                    BattleHud_UpdateCaptionBoxPopup(box, x, y);
+                    BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
-                    temp_s0->displayTimer++;
-                    if (temp_s0->displayTimer == 0x2D) {
-                        temp_s0->unk_00++;
+                    box->displayTimer++;
+                    if (box->displayTimer == 45) {
+                        box->visibility++;
                     }
                 }
             }
@@ -696,50 +706,50 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
     active_pokemon->captionState.unk_08[0] = 0;
 }
 
-void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1) {
-    gBattleMessageQueues->unk_000 = arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->controllerPort;
-    arg0->captionState.active = 1;
-    Text_SetStringToken(0x19, arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex].nickname);
-    Text_GetString(arg0->captionState.unk_48, 0x40, sBattleMessagesTable, arg1);
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
+    sBattleMessageQueues->controllerPort = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    pokemon->captionState.active = 1;
+    Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
+    Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
 }
 
-void BattleScene_RevealParticipantMessageChars(ActivePokemon* arg0) {
-    TeamRoster* temp_t0 = arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex];
+void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
+    TeamRoster* team_member_index = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex];
 
-    if (arg0->captionState.unk_48[arg0->captionState.unk_04] != '\x00') {
-        arg0->captionState.unk_08[arg0->captionState.unk_04] = arg0->captionState.unk_48[arg0->captionState.unk_04];
-        arg0->captionState.unk_04++;
+    if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_04++;
     }
 
-    if (arg0->captionState.unk_48[arg0->captionState.unk_04] != '\x00') {
-        arg0->captionState.unk_08[arg0->captionState.unk_04] = arg0->captionState.unk_48[arg0->captionState.unk_04];
-        arg0->captionState.unk_04++;
+    if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_04++;
     }
 
-    arg0->captionState.unk_08[arg0->captionState.unk_04] = '\x00';
+    pokemon->captionState.unk_08[pokemon->captionState.unk_04] = '\x00';
 
-    if (arg0->captionState.unk_48[0] != 0) {
-        if (arg0 == sSide1ActivePokemon) {
-            BattleHud_DrawTextBox(temp_t0->controllerPort, 0x5F, 0xE, &arg0->captionState.unk_08);
+    if (pokemon->captionState.unk_48[0] != 0) {
+        if (pokemon == sSide1ActivePokemon) {
+            BattleHud_DrawTextBox(team_member_index->controllerPort, 95, 14, &pokemon->captionState.unk_08);
         } else {
-            BattleHud_DrawTextBox(temp_t0->controllerPort, 0x17, 0xBB, &arg0->captionState.unk_08);
+            BattleHud_DrawTextBox(team_member_index->controllerPort, 23, 187, &pokemon->captionState.unk_08);
         }
     }
 }
 
 void BattleScene_TickHudTimers(void) {
-    ActivePokemonState* sp1C = &sActivePokemon[0]->state;
-    ActivePokemonState* sp18 = &sActivePokemon[1]->state;
+    ActivePokemonState* pokemon1 = &sActivePokemon[0]->state;
+    ActivePokemonState* pokemon2 = &sActivePokemon[1]->state;
 
-    if ((gSessionContext.timeLimitsEnabled != 0) && (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103) &&
-        (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17)) {
+    if ((gSessionContext.timeLimitsEnabled != 0) && (sActivePokemon[1]->thumbnail.camera->viewport.x == 259) &&
+        (sActivePokemon[0]->thumbnail.camera->viewport.x == 23)) {
         BattleHud_DrawBattleTimer(0x101, 0x64);
         if (D_84390134 == 0) {
-            if (sp1C->selectedCommandOption != 3) {
+            if (pokemon1->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0x46, 0x4D);
             }
 
-            if (sp18->selectedCommandOption != 3) {
+            if (pokemon2->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0xE8, 0x96);
             }
         }
@@ -747,13 +757,13 @@ void BattleScene_TickHudTimers(void) {
 }
 
 void Battle_InitMessageQueues(void) {
-    gBattleMessageQueues = main_pool_alloc(sizeof(unk_D_843901A0), 0);
-    bzero(gBattleMessageQueues, sizeof(unk_D_843901A0));
+    sBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueue), 0);
+    bzero(sBattleMessageQueues, sizeof(BattleMessageQueue));
 }
 
 void BattleScene_ResetMessageQueue(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_008[gBattleMessageQueues->unk_004] = 0;
+    sBattleMessageQueues->unk_004 = 0;
+    sBattleMessageQueues->unk_008[sBattleMessageQueues->unk_004] = 0;
     Battle_ClearMessageCursor();
 }
 
@@ -763,7 +773,7 @@ void Battle_RenderHud(void) {
 
     if (1) {}
 
-    BattleBox_Update(0xA0, 0xC8);
+    BattleBox_Update(160, 200);
 
     if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         Battle_DrawDemoControllerWarning();

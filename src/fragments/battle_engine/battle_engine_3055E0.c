@@ -53,7 +53,7 @@ s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
 }
 
 void BattleScene_SetActivePokemonIndex(s32 arg0) {
-    sBattleScene.scene->unk_2C = arg0;
+    sBattleScene.scene->side = arg0;
 }
 
 void BattleScene_ResetCameraFrameCounter(void) {
@@ -112,7 +112,7 @@ void BattleScene_ApplyCameraPhaseDefaults(void) {
         }
 
         if (sBattleScene.scene->unk_44 == 2) {
-            sBattleScene.scene->unk_2C = sBattleScene.scene->unk_2A;
+            sBattleScene.scene->side = sBattleScene.scene->unk_2A;
             BattleScene_SetCameraModeAndStep(2, 0);
         }
     }
@@ -245,7 +245,7 @@ void BattleScene_SetCameraSendOutShot(CameraNode* arg0, s32 arg1) {
     u8 sp50;
     UNUSED u16 pad4;
     u16 sp4C;
-    s32 idx = sBattleScene.scene->unk_2C == 0;
+    s32 idx = sBattleScene.scene->side == 0;
 
     sp6C = &sActivePokemon[idx]->state;
     sp50 = D_84385B60;

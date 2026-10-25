@@ -355,7 +355,7 @@ void BattleScene_UpdateBothOwnersVisibilityCulling(CameraNode* arg0) {
 }
 
 void BattleScene_UpdateOpponentVisibilityCulling(CameraNode* arg0) {
-    ActivePokemon* sp24 = sActivePokemon[!sBattleScene.scene->unk_2C];
+    ActivePokemon* sp24 = sActivePokemon[!sBattleScene.scene->side];
 
     if (BattleScene_IsOwnerInViewWedgeAlt(sp24, arg0, sp24, 0x2AA8, 2500.0f) != 0) {
         sp24->displayObject.node.flags |= 1;
@@ -373,13 +373,13 @@ void BattleScene_ShowBothOwners(void) {
 }
 
 void BattleScene_HideOpponentOwner(void) {
-    Battle_ResetModelToIdleAnim(sActivePokemon[!sBattleScene.scene->unk_2C]);
-    sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+    Battle_ResetModelToIdleAnim(sActivePokemon[!sBattleScene.scene->side]);
+    sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
 }
 
 void BattleScene_HideActiveOwner(void) {
-    sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
-    Battle_ResetModelToIdleAnim(sActivePokemon[sBattleScene.scene->unk_2C]);
+    sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
+    Battle_ResetModelToIdleAnim(sActivePokemon[sBattleScene.scene->side]);
 }
 
 void BattleScene_HideFaintedOwners(void) {
@@ -425,7 +425,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                 case 17:
                 case 18:
                 case 19:
-                    sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                    sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     break;
 
                 default:
@@ -493,11 +493,11 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                     if (sBattleScene.scene->unk_08 == 1) {
                         BattleScene_HideOpponentOwner();
                     } else if (sBattleScene.scene->unk_08 == 2) {
-                        sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     } else if (sBattleScene.scene->unk_08 == 3) {
-                        sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     } else if (sBattleScene.scene->unk_08 == 4) {
-                        sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     }
                     break;
 
@@ -505,11 +505,11 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                     if (sBattleScene.scene->unk_08 == 1) {
                         BattleScene_HideActiveOwner();
                     } else if (sBattleScene.scene->unk_08 == 2) {
-                        sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     } else if (sBattleScene.scene->unk_08 == 3) {
-                        sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     } else if (sBattleScene.scene->unk_08 == 4) {
-                        sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                        sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     }
                     break;
 
@@ -614,7 +614,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0) {
                     switch (sBattleScene.scene->unk_20) {
                         case 0:
                         case 1:
-                            sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                            sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                             break;
                     }
                     break;
@@ -642,7 +642,7 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
                 case 17:
                 case 18:
                 case 19:
-                    sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
+                    sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
                     break;
 
                 default:
@@ -659,13 +659,13 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
                         case 1:
                         case 2:
                         case 5:
-                            sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
-                            sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags |= 1;
+                            sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags &= ~1;
+                            sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags |= 1;
                             break;
 
                         default:
-                            sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
-                            sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags |= 1;
+                            sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
+                            sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags |= 1;
                     }
                     break;
 
@@ -674,8 +674,8 @@ void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0) {
                     switch (sBattleScene.scene->unk_20) {
                         case 0:
                         case 1:
-                            sActivePokemon[sBattleScene.scene->unk_2C]->displayObject.node.flags &= ~1;
-                            sActivePokemon[!sBattleScene.scene->unk_2C]->displayObject.node.flags |= 1;
+                            sActivePokemon[sBattleScene.scene->side]->displayObject.node.flags &= ~1;
+                            sActivePokemon[!sBattleScene.scene->side]->displayObject.node.flags |= 1;
                             break;
                     }
                     break;

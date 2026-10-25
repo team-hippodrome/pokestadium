@@ -83,9 +83,9 @@ typedef struct MonCaptionState {
     /* 0x00 */ s32 active;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s8 unk_08[4];
-    /* 0x0C */ char unk0C[0x3C];
+    /* 0x0C */ char unk0C[60];
     /* 0x48 */ s8 unk_48[4];
-    /* 0x4C */ char unk4C[0x3C];
+    /* 0x4C */ char unk4C[60];
 } MonCaptionState; // size = 0x88
 
 typedef struct SpeciesLearnsetBuffer {
@@ -198,6 +198,20 @@ typedef struct unk_D_8438E7B0 {
 #define TYPE_EFFECTIVENESS_NEUTRAL 10
 #define TYPE_EFFECTIVENESS_SUPER 20
 
+// Message indices passed to Battle_QueueMessage. Values of 128 and above skip
+// sBattleMessagesTableFileNumbers and select string table 30 entry (index - 72);
+// strings quoted below are the US text for that entry (the table is loaded by
+// Text_GetStringTable(30) in //@src/fragments/battle_engine/battle_engine_move_animation.c).
+#define BATTLE_MSG_TRANSFORM_FAILED 208        // "But, it failed!"
+#define BATTLE_MSG_TRANSFORM_DITTO_BLOCKED 209 // "It couldn't transform into DITTO!"
+#define BATTLE_MSG_LIGHT_SCREEN_SET 210        // "It's protected from SPECIAL attacks!"
+#define BATTLE_MSG_LIGHT_SCREEN_FAILED 211     // "But, it failed!"
+#define BATTLE_MSG_REFLECT_SET 212             // "It gained armor!"
+#define BATTLE_MSG_REFLECT_FAILED 213          // "But, it failed!"
+#define BATTLE_MSG_SUBSTITUTE_EXISTS 214       // "It has a SUBSTITUTE!"
+#define BATTLE_MSG_SUBSTITUTE_LOW_HP 215       // "Not enough HP!"
+#define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
+
 typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s8 unk_08;
@@ -211,7 +225,7 @@ typedef struct BattleScene {
     /* 0x24 */ s32 unk_24;
     /* 0x28 */ char unk28[0x2];
     /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
+    /* 0x2C */ u16 side;
     /* 0x2E */ u16 unk_2E;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ s32 unk_34;
@@ -342,8 +356,8 @@ typedef struct unk_D_843901B0 {
 } unk_D_843901B0; // size >= 0x40
 
 typedef struct BattleBox {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
+    /* 0x00 */ s32 visibility;
+    /* 0x04 */ s32 openingProgress;
     /* 0x08 */ s32 displayTimer;
     /* 0x0C */ s32 side;
     /* 0x10 */ s32 lineCount;
@@ -355,13 +369,13 @@ typedef struct BattleBox {
 } BattleBox; // size = 0x2C
 
 typedef struct unk_D_843901A0 {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 controllerPort;
     /* 0x004 */ s32 unk_004;
     /* 0x008 */ u8 unk_008[4];
     /* 0x00C */ char unk00C[0x3C];
-    /* 0x048 */ s8 unk_048[18][64];
-    /* 0x4C8 */ BattleBox unk_4C8;
-} unk_D_843901A0; // size = 0x4F4
+    /* 0x048 */ s8 buffer[18][64];
+    /* 0x4C8 */ BattleBox textBox;
+} BattleMessageQueue; // size = 0x4F4
 
 typedef struct StatusConditionLabel {
     /* 0x00 */ s32 stringIndex;
@@ -916,7 +930,7 @@ extern BattleSceneStateCallback sBattleSceneStateTickSentinel;
 extern BattleSceneStateRow sBattleSceneStateRowTable[];
 extern Vec3f D_84385B90;
 extern Vec3f D_84385B9C;
-extern u32 D_84385BC0[];
+extern u32 sBattleMessagesTableFileNumbers[];
 extern Vtx D_84385C80[];
 extern Vtx D_84385CC0[];
 extern Vtx D_84385D00[];
@@ -969,7 +983,7 @@ extern u8 D_84390134;
 extern s32 sAttractInputIndex;
 extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f sEndBattleBannerPos;
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueue* sBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
 extern ActivePokemon* D_84390200;
 extern ActivePokemon* D_84390204;
@@ -1468,32 +1482,33 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokem
 //@src/fragments/battle_engine/battle_engine_3020D0.c
 void Battle_ClearAllMessageQueues(void);
 void Battle_ClearMessageCursor(void);
-void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...);
+void Battle_SimpleStringFormat(s8* buffer, s8* format, ...);
 #if defined(VERSION_JP)
 // The Japanese build formats the message: %s in fmt copies the next char* argument.
 void Battle_QueueMessage(s8* arg0, s8 arg1, const char* fmt, ...);
 #else
-void Battle_QueueMessage(s8* arg0, s8 arg1);
+void Battle_QueueMessage(s8* text, s8 file_number_index);
 #endif
-void Battle_QueueStatusText(char* arg0, s32 arg1);
+void Battle_QueueStatusText(char* text, s32 side);
 void func_84317B38(void);
 void Battle_DrawCompactStatusBoxesIfVisible(void);
 void Battle_QueueMoveCategoryUsedMessage(void);
 void Battle_QueueMoveCategoryMessage(void);
 void Battle_QueueMetronomeMoveMessage(void);
-void BattleBox_Open(s32 arg0);
+void BattleBox_Open(s32 opening_progress);
 void BattleBox_Close(void);
-void BattleBox_PlayTextBlip(s8* arg0);
-void BattleBox_DrawMessage(BattleBox* arg0, s16 arg1, s16 arg2);
-s32 BattleBox_SelectMessage(BattleBox* arg0);
-void BattleBox_Update(s16 arg0, s16 arg1);
+void BattleBox_PlayTextBlip(s8* message);
+void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y);
+s32 BattleBox_SelectMessage(BattleBox* box);
+void BattleBox_Update(s16 x, s16 y);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
-void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1);
-void BattleScene_RevealParticipantMessageChars(ActivePokemon* active_pokemon);
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number);
+void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon);
 void BattleScene_TickHudTimers(void);
 void Battle_InitMessageQueues(void);
 void BattleScene_ResetMessageQueue(void);
 void Battle_RenderHud(void);
+
 
 
 //@src/fragments/battle_engine/battle_engine_304060.c

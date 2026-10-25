@@ -1644,6 +1644,9 @@ void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* textu
     Battle_DrawScrollingTextureRect(x, y, width, height, 0, 0, 0x400, 0);
 }
 
+/*
+    Draws the pokemon Stadium logo in attact mode
+*/
 void Battle_DrawDemoStadiumLogo(void) {
     s32 i;
 
@@ -1745,7 +1748,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonSta
     UNUSED s32 pad;
     s32 higher_port_member;
 
-    if (gSessionContext.mode != 0x10) {
+    if (gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         if (state->selectedCommandOption == 3) {
             BattleHud_DrawMonStatusBoxPlayer(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 2, active_pokemon->thumbnail.camera->viewport.y - 0x3A, state->actionDelayTimer,
                           1);
@@ -1804,7 +1807,7 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokem
     TeamRoster* roster = active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam];
     s32 higher_port_member;
 
-    if (gSessionContext.mode != 0x10) {
+    if (gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         if (state->selectedCommandOption == 3) {
             BattleHud_DrawMonStatusBoxOpponent(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 0x20, active_pokemon->thumbnail.camera->viewport.y - 2, state->actionDelayTimer,
                           1);
