@@ -1342,7 +1342,7 @@ void BattleAnim_SecondaryStatusDefault(UNUSED ActivePokemon* arg0, UNUSED Active
 void BattleAnim_UpdateOwnerSecondaryStatusAnimation(s32 arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_2F6930.c
+//@src/fragments/battle_engine/battle_engine_math.c
 void BattleAnim_CalculateDistanceAngles(Vec3f* from, Vec3f* to, f32* euclidean_distance, s16* elevation, s16* azimuth);
 Vec3f* BattleAnim_Vec3fSetZero(Vec3f* dest);
 Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* dest, Vec3f* origin, f32 radius, s16 theta);
@@ -1367,7 +1367,7 @@ void BattleAnim_BSplineWeightsClampedPenultimate(f32* dest, f32 t);
 void BattleAnim_BSplineWeightsClampedLast(f32* dest, f32 t);
 
 
-//@src/fragments/battle_engine/battle_engine_2F74E0.c
+//@src/fragments/battle_engine/battle_engine_action_selection.c
 void BattleScene_InitializeBattleTimers(void);
 void BattleScene_QuantizeBattleTimer(void);
 s32 BattleScene_TickBattleTimer(void);
@@ -1423,7 +1423,7 @@ void BattleScene_UpdateActionCollection(void);
 void BattleScene_UpdateActionSelectPhase(void);
 
 
-//@src/fragments/battle_engine/battle_engine_2FA4D0.c
+//@src/fragments/battle_engine/battle_engine_hud.c
 void func_8430FC10(void);
 void BattleHud_DrawTranslucentShadowRect(s32 x, s32 y, s32 width, s32 height, s32 alpha);
 void BattleHud_DrawGradientRect(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color, Color_RGB8* end_color);
@@ -1479,7 +1479,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonSta
 void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state);
 
 
-//@src/fragments/battle_engine/battle_engine_3020D0.c
+//@src/fragments/battle_engine/battle_engine_messages.c
 void Battle_ClearAllMessageQueues(void);
 void Battle_ClearMessageCursor(void);
 void Battle_SimpleStringFormat(s8* buffer, s8* format, ...);
