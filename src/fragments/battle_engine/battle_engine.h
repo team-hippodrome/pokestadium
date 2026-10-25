@@ -1513,28 +1513,28 @@ void Battle_RenderHud(void);
 
 //@src/fragments/battle_engine/battle_engine_304060.c
 s32 BattleScene_AreBothParticipantModelsCompact(void);
-s32 BattleScene_SkipIntroIfUnderground(UNUSED ActivePokemon* arg0, CameraNode* arg1);
+s32 BattleScene_SkipIntroIfUnderground(UNUSED ActivePokemon* arg0, CameraNode* camera);
 s32 BattleScene_IsEitherActivePokemonUnderground(UNUSED ActivePokemon* arg0, UNUSED CameraNode* arg1);
-void BattleScene_IntroCameraStep0(CameraNode* arg0);
-void BattleScene_IntroCameraStep2(CameraNode* arg0);
-void BattleScene_IntroCameraStep4Or6(CameraNode* arg0, s32 arg1);
-void BattleScene_IntroCameraStep8Or10(CameraNode* arg0, s32 arg1);
-void BattleScene_IntroCameraStep12Or14(CameraNode* arg0, s32 arg1);
-void BattleScene_IntroCameraStep16(CameraNode* arg0);
-void BattleScene_IntroCameraStep18(CameraNode* arg0);
-void BattleScene_IntroCameraStep20(CameraNode* arg0);
-void BattleScene_IntroCameraStep22Or24(CameraNode* arg0, s32 arg1);
-void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
-void BattleScene_IntroCameraRollStep(CameraNode* arg0);
-void BattleScene_IntroCameraRollStepNoFov(CameraNode* arg0);
-void BattleScene_IntroCameraAnimationHoldStep(CameraNode* arg0);
-void BattleScene_IntroCameraPresetHoldStep(CameraNode* arg0);
-void BattleScene_IntroCameraWideHoldStep(CameraNode* arg0);
-void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* arg0);
-void BattleScene_IntroCameraHeightShotStep(CameraNode* arg0);
-void BattleScene_IntroCameraTimedHoldStep(CameraNode* arg0);
-void BattleScene_IntroCameraFinalHoldStep(CameraNode* arg0);
-void BattleScene_UpdateIntroCameraSequence(CameraNode* arg0);
+void BattleScene_IntroCameraStep0(CameraNode* camera);
+void BattleScene_IntroCameraStep2(CameraNode* camera);
+void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side);
+void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side);
+void BattleScene_IntroCameraStep12Or14(CameraNode* camera, s32 arg1);
+void BattleScene_IntroCameraStep16(CameraNode* camera);
+void BattleScene_IntroCameraStep18(CameraNode* camera);
+void BattleScene_IntroCameraStep20(CameraNode* camera);
+void BattleScene_IntroCameraStep22Or24(CameraNode* camera, s32 side);
+void BattleScene_SelectNextIntroCameraShot(CameraNode* camera);
+void BattleScene_IntroCameraRollStep(CameraNode* camera);
+void BattleScene_IntroCameraRollStepNoFov(CameraNode* camera);
+void BattleScene_IntroCameraAnimationHoldStep(CameraNode* camera);
+void BattleScene_IntroCameraPresetHoldStep(CameraNode* camera);
+void BattleScene_IntroCameraWideHoldStep(CameraNode* camera);
+void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* camera);
+void BattleScene_IntroCameraHeightShotStep(CameraNode* camera);
+void BattleScene_IntroCameraTimedHoldStep(CameraNode* camera);
+void BattleScene_IntroCameraFinalHoldStep(CameraNode* camera);
+void BattleScene_UpdateIntroCameraSequence(CameraNode* camera);
 
 
 //@src/fragments/battle_engine/battle_engine_3055E0.c
