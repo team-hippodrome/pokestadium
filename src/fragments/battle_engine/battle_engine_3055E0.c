@@ -190,22 +190,22 @@ s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
     return 0;
 }
 
-s32 BattleScene_ApproachCameraRoll(CameraNode* arg0, s16 arg1, s16 arg2) {
-    if (arg1 > 0) {
-        sBattleScene.scene->rotationY -= arg1;
-        if ((sBattleScene.scene->rotationY < arg2) && ((arg2 - arg1) < sBattleScene.scene->rotationY)) {
-            sBattleScene.scene->rotationY = arg2;
+s32 BattleScene_ApproachCameraRoll(CameraNode* camera, s16 delta_theta, s16 final_angle_y) {
+    if (delta_theta > 0) {
+        sBattleScene.scene->rotationY -= delta_theta;
+        if ((sBattleScene.scene->rotationY < final_angle_y) && ((final_angle_y - delta_theta) < sBattleScene.scene->rotationY)) {
+            sBattleScene.scene->rotationY = final_angle_y;
             return 1;
         }
     } else {
-        sBattleScene.scene->rotationY -= arg1;
-        if ((arg2 < sBattleScene.scene->rotationY) && (sBattleScene.scene->rotationY < (arg2 - arg1))) {
-            sBattleScene.scene->rotationY = arg2;
+        sBattleScene.scene->rotationY -= delta_theta;
+        if ((final_angle_y < sBattleScene.scene->rotationY) && (sBattleScene.scene->rotationY < (final_angle_y - delta_theta))) {
+            sBattleScene.scene->rotationY = final_angle_y;
             return 1;
         }
     }
 
-    Camera_ComputeEyeFromAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->distance, sBattleScene.scene->rotationX,
+    Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, sBattleScene.scene->distance, sBattleScene.scene->rotationX,
                   sBattleScene.scene->rotationY);
     return 0;
 }

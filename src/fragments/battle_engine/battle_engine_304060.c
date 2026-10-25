@@ -11,9 +11,9 @@ typedef struct unk_D_843859E0 {
     /* 0x08 */ s16 rotationX;
     /* 0x0A */ s16 rotationY;
     /* 0x0C */ f32 verticalFieldOfView;
-} unk_D_843859E0; // size = 0x10
+} ArenaCameraConfig; // size = 0x10
 
-static unk_D_843859E0 sArenaConfig[] = {
+static ArenaCameraConfig sArenaConfig[] = {
     {
         0x00,
         2002.1199951171875f,
@@ -200,15 +200,15 @@ void BattleScene_IntroCameraStep0(CameraNode* camera) {
     sBattleScene.scene->cameraCounter++;
 }
 
-void BattleScene_IntroCameraStep2(CameraNode* arg0) {
+void BattleScene_IntroCameraStep2(CameraNode* camera) {
     BattleScene_ResetCameraFrameCounter();
-    arg0->perspective.verticalFieldOfView = 30.0f;
+    camera->perspective.verticalFieldOfView = 30.0f;
     if (BattleScene_AreBothParticipantModelsCompact() != 0) {
-        BattleScene_SetCameraAtFromPosition(arg0, s10UnitsUpFromCenter, 0, 0, 0.0f, 0.0f);
-        BattleScene_SetCameraEyeAndStoreAngles(arg0, s10UnitsUpFromCenter, 0x1A4E, 0, 1000.0f, 0.0f);
+        BattleScene_SetCameraAtFromPosition(camera, s10UnitsUpFromCenter, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(camera, s10UnitsUpFromCenter, 0x1A4E, 0, 1000.0f, 0.0f);
     } else {
-        BattleScene_SetCameraAtFromPosition(arg0, s100UnitsUpFromCenter, 0, 0, 0.0f, 0.0f);
-        BattleScene_SetCameraEyeAndStoreAngles(arg0, s100UnitsUpFromCenter, 0x1A4E, 0, 1000.0f, 0.0f);
+        BattleScene_SetCameraAtFromPosition(camera, s100UnitsUpFromCenter, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(camera, s100UnitsUpFromCenter, 0x1A4E, 0, 1000.0f, 0.0f);
     }
     sBattleScene.scene->cameraCounter++;
 }
@@ -265,51 +265,51 @@ void BattleScene_IntroCameraStep4Or6(CameraNode* camera, s32 side) {
     }
 }
 
-void BattleScene_IntroCameraStep8Or10(CameraNode* arg0, s32 arg1) {
+void BattleScene_IntroCameraStep8Or10(CameraNode* camera, s32 side) {
     UNUSED s32 pad[2];
-    DioramaAnimData* sp24;
+    DioramaAnimData* camera_preset;
     s32 rng;
-    ActivePokemon* temp_s0;
+    ActivePokemon* pokemon;
 
     BattleScene_ClearCameraOffsetVectors();
-    BattleScene_SetActivePokemonIndex(arg1);
-    temp_s0 = sActivePokemon[sBattleScene.scene->side];
+    BattleScene_SetActivePokemonIndex(side);
+    pokemon = sActivePokemon[sBattleScene.scene->side];
 
-    if (BattleScene_SkipIntroIfUnderground(temp_s0, arg0) == 0) {
-        if (temp_s0->state.flags & ACTIVE_AIRBORNE) {
-            sp24 = &D_84384888[0];
+    if (BattleScene_SkipIntroIfUnderground(pokemon, camera) == 0) {
+        if (pokemon->state.flags & ACTIVE_AIRBORNE) {
+            camera_preset = &D_84384888[0];
         } else {
             rng = BattleAnim_RandomRange(5);
             if (rng >= 5) {
                 rng = 0;
             }
-            sp24 = &D_843847EC[rng];
+            camera_preset = &D_843847EC[rng];
         }
-        arg0->perspective.verticalFieldOfView = sp24->unk_30;
-        BattleAnim_GetOwnerDefaultAnchorPosition(temp_s0, &gCameraPreset.unk_00);
-        BattleScene_LoadCameraPreset(sp24, arg0, temp_s0);
-        BattleScene_ApplyCameraPreset(arg0, temp_s0, 1);
-        BattleScene_CameraPresetNop(arg0);
+        camera->perspective.verticalFieldOfView = camera_preset->unk_30;
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &gCameraPreset.unk_00);
+        BattleScene_LoadCameraPreset(camera_preset, camera, pokemon);
+        BattleScene_ApplyCameraPreset(camera, pokemon, 1);
+        BattleScene_CameraPresetNop(camera);
         sBattleScene.scene->cameraCounter++;
     }
 }
 
-void BattleScene_IntroCameraStep12Or14(CameraNode* arg0, s32 arg1) {
-    arg0->perspective.verticalFieldOfView = 30.0f;
+void BattleScene_IntroCameraStep12Or14(CameraNode* camera, s32 arg1) {
+    camera->perspective.verticalFieldOfView = 30.0f;
     BattleScene_SetActivePokemonIndex(arg1);
-    if (BattleScene_SkipIntroIfUnderground(sActivePokemon[arg1], arg0) == 0) {
-        BattleScene_SetCameraSendOutShot(arg0, arg1);
+    if (BattleScene_SkipIntroIfUnderground(sActivePokemon[arg1], camera) == 0) {
+        BattleScene_SetCameraSendOutShot(camera, arg1);
         sBattleScene.scene->cameraCounter++;
     }
 }
 
-void BattleScene_IntroCameraStep16(CameraNode* arg0) {
+void BattleScene_IntroCameraStep16(CameraNode* camera) {
     BattleScene_SetActivePokemonIndex(sBattleScene.scene->unk_54 - 1);
-    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->side], arg0) != 0) {
+    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->side], camera) != 0) {
         sBattleScene.scene->unk_54 = 0;
-        BattleScene_SelectNextIntroCameraShot(arg0);
+        BattleScene_SelectNextIntroCameraShot(camera);
     } else {
-        BattleScene_SetCameraActivePokemonHeightShot(arg0, sBattleScene.scene->side);
+        BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->side);
         sBattleScene.scene->cameraCounter++;
     }
 }
@@ -504,61 +504,61 @@ void BattleScene_IntroCameraAnimationHoldStep(CameraNode* camera) {
     }
 }
 
-void BattleScene_IntroCameraPresetHoldStep(CameraNode* arg0) {
+void BattleScene_IntroCameraPresetHoldStep(CameraNode* camera) {
     ActivePokemon* state = sActivePokemon[sBattleScene.scene->side];
 
     if ((state->state.unk_2D == 0x10) || (state->state.flags & ACTIVE_UNDERGROUND)) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
-    } else if ((BattleScene_AdvanceCameraFrameCounter(90) != 0) || (BattleScene_AnimateCameraPreset(arg0, state, 1, 0) != 0)) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
+        BattleScene_SelectNextIntroCameraShot(camera);
+    } else if ((BattleScene_AdvanceCameraFrameCounter(90) != 0) || (BattleScene_AnimateCameraPreset(camera, state, 1, 0) != 0)) {
+        BattleScene_SelectNextIntroCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraWideHoldStep(CameraNode* arg0) {
+void BattleScene_IntroCameraWideHoldStep(CameraNode* camera) {
     ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->side]->state;
 
     if ((ptr->unk_2D == 0x10) || (ptr->flags & ACTIVE_UNDERGROUND)) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
+        BattleScene_SelectNextIntroCameraShot(camera);
     } else {
-        arg0->perspective.verticalFieldOfView = 60.0f;
+        camera->perspective.verticalFieldOfView = 60.0f;
         if (BattleScene_AdvanceCameraFrameCounter(60) != 0) {
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextIntroCameraShot(camera);
         }
     }
 }
 
-void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* arg0) {
-    if (BattleScene_ApproachCameraActivePokemonHeightShot(arg0, sBattleScene.scene->side) != 0) {
+void BattleScene_IntroCameraHeightShotSwapStep(CameraNode* camera) {
+    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->side) != 0) {
         s32 idx = sBattleScene.scene->side == 0;
 
         sBattleScene.scene->side = idx;
         sBattleScene.scene->cameraCounter = 0x12;
-        BattleScene_IntroCameraStep18(arg0);
+        BattleScene_IntroCameraStep18(camera);
     }
 }
 
-void BattleScene_IntroCameraHeightShotStep(CameraNode* arg0) {
-    if (BattleScene_ApproachCameraActivePokemonHeightShot(arg0, sBattleScene.scene->side) != 0) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
+void BattleScene_IntroCameraHeightShotStep(CameraNode* camera) {
+    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->side) != 0) {
+        BattleScene_SelectNextIntroCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraTimedHoldStep(CameraNode* arg0) {
+void BattleScene_IntroCameraTimedHoldStep(CameraNode* camera) {
     if (BattleScene_AdvanceCameraFrameCounter(0x78) != 0) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
+        BattleScene_SelectNextIntroCameraShot(camera);
     }
 }
 
-void BattleScene_IntroCameraFinalHoldStep(CameraNode* arg0) {
-    BattleScene_SetCameraClipPlanes(arg0, 10.0f, 12800.0f);
-    arg0->perspective.verticalFieldOfView = 60.0f;
+void BattleScene_IntroCameraFinalHoldStep(CameraNode* camera) {
+    BattleScene_SetCameraClipPlanes(camera, 10.0f, 12800.0f);
+    camera->perspective.verticalFieldOfView = 60.0f;
     if (BattleScene_AdvanceCameraFrameCounter(0x3C) != 0) {
-        BattleScene_SelectNextIntroCameraShot(arg0);
+        BattleScene_SelectNextIntroCameraShot(camera);
     }
 }
 
-void BattleScene_UpdateIntroCameraSequence(CameraNode* arg0) {
-    if ((gSessionContext.mode == 0x10) && (sBattleScene.scene->unk_1C == 1)) {
+void BattleScene_UpdateIntroCameraSequence(CameraNode* camera) {
+    if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->unk_1C == 1)) {
         BattleScene_UpdateActionSelectPhase();
     } else if (sBattleScene.scene->unk_1C == 1) {
         if ((sBattleScene.scene->unk_30 == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
@@ -572,59 +572,59 @@ void BattleScene_UpdateIntroCameraSequence(CameraNode* arg0) {
 
     switch (sBattleScene.scene->cameraCounter) {
         case 1:
-            BattleScene_IntroCameraRollStep(arg0);
+            BattleScene_IntroCameraRollStep(camera);
             break;
 
         case 3:
-            BattleScene_IntroCameraRollStepNoFov(arg0);
+            BattleScene_IntroCameraRollStepNoFov(camera);
             break;
 
         case 5:
-            BattleScene_IntroCameraAnimationHoldStep(arg0);
+            BattleScene_IntroCameraAnimationHoldStep(camera);
             break;
 
         case 7:
-            BattleScene_IntroCameraAnimationHoldStep(arg0);
+            BattleScene_IntroCameraAnimationHoldStep(camera);
             break;
 
         case 9:
-            BattleScene_IntroCameraPresetHoldStep(arg0);
+            BattleScene_IntroCameraPresetHoldStep(camera);
             break;
 
         case 11:
-            BattleScene_IntroCameraPresetHoldStep(arg0);
+            BattleScene_IntroCameraPresetHoldStep(camera);
             break;
 
         case 13:
-            BattleScene_IntroCameraWideHoldStep(arg0);
+            BattleScene_IntroCameraWideHoldStep(camera);
             break;
 
         case 15:
-            BattleScene_IntroCameraWideHoldStep(arg0);
+            BattleScene_IntroCameraWideHoldStep(camera);
             break;
 
         case 17:
-            BattleScene_IntroCameraHeightShotSwapStep(arg0);
+            BattleScene_IntroCameraHeightShotSwapStep(camera);
             break;
 
         case 19:
-            BattleScene_IntroCameraHeightShotStep(arg0);
+            BattleScene_IntroCameraHeightShotStep(camera);
             break;
 
         case 21:
-            BattleScene_IntroCameraTimedHoldStep(arg0);
+            BattleScene_IntroCameraTimedHoldStep(camera);
             break;
 
         case 23:
-            BattleScene_IntroCameraFinalHoldStep(arg0);
+            BattleScene_IntroCameraFinalHoldStep(camera);
             break;
 
         case 25:
-            BattleScene_IntroCameraFinalHoldStep(arg0);
+            BattleScene_IntroCameraFinalHoldStep(camera);
             break;
 
         case 50:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextIntroCameraShot(camera);
             break;
     }
 }

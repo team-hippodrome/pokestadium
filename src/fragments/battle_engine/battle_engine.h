@@ -1557,7 +1557,7 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0);
 void BattleScene_ApplyCameraShake(CameraNode* arg0);
 void BattleScene_StartCameraShake(UNUSED ActivePokemon* active_pokemon);
 s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1);
-s32 BattleScene_ApproachCameraRoll(CameraNode* arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRoll(CameraNode* camera, s16 delta_theta, s16 final_angle_y);
 s32 BattleScene_ApproachCameraRollNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
 void BattleScene_SetCameraAnglesAndDistance(s16 rotation_x, s16 rotation_y, f32 distance);
 void BattleScene_SetCameraSendOutShot(CameraNode* arg0, s32 arg1);
