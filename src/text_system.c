@@ -22,15 +22,15 @@ char** Text_GetStringTable(s32 file_number) {
     return (char**)BinArchive_GetFile(gTextArchive, file_number);
 }
 
-void Text_SetStringToken(u32 arg0, u32 arg1) {
-    if ((arg0 >= 0x14) && (arg0 < 0x2A)) {
-        gTextTokenTable[arg0] = (char*)arg1;
+void Text_SetStringToken(u32 token_index, u32 character) {
+    if ((token_index >= 0x14) && (token_index < 0x2A)) {
+        gTextTokenTable[token_index] = (char*)character;
     }
 }
 
-void Text_SetNumberToken(u32 arg0, u32 arg1) {
-    if ((arg0 != 0) && (arg0 < 0xA)) {
-        gTextTokenTable[arg0] = (char*)arg1;
+void Text_SetNumberToken(u32 token_index, u32 character) {
+    if ((token_index != 0) && (token_index < 0xA)) {
+        gTextTokenTable[token_index] = (char*)character;
     }
 }
 

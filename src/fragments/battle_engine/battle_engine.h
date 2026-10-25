@@ -211,7 +211,7 @@ typedef struct BattleScene {
     /* 0x24 */ s32 unk_24;
     /* 0x28 */ char unk28[0x2];
     /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
+    /* 0x2C */ u16 side;
     /* 0x2E */ u16 unk_2E;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ s32 unk_34;
@@ -342,7 +342,7 @@ typedef struct unk_D_843901B0 {
 } unk_D_843901B0; // size >= 0x40
 
 typedef struct BattleBox {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 visibility;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 displayTimer;
     /* 0x0C */ s32 side;
@@ -355,13 +355,13 @@ typedef struct BattleBox {
 } BattleBox; // size = 0x2C
 
 typedef struct unk_D_843901A0 {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 controllerPort;
     /* 0x004 */ s32 unk_004;
     /* 0x008 */ u8 unk_008[4];
     /* 0x00C */ char unk00C[0x3C];
-    /* 0x048 */ s8 unk_048[18][64];
-    /* 0x4C8 */ BattleBox unk_4C8;
-} unk_D_843901A0; // size = 0x4F4
+    /* 0x048 */ s8 messageBuffer[18][64];
+    /* 0x4C8 */ BattleBox textBox;
+} BattleMessageQueue; // size = 0x4F4
 
 typedef struct StatusConditionLabel {
     /* 0x00 */ s32 stringIndex;
@@ -916,7 +916,7 @@ extern BattleSceneStateCallback sBattleSceneStateTickSentinel;
 extern BattleSceneStateRow sBattleSceneStateRowTable[];
 extern Vec3f D_84385B90;
 extern Vec3f D_84385B9C;
-extern u32 D_84385BC0[];
+extern u32 sBattleMessagesTableFileNumbers[];
 extern Vtx D_84385C80[];
 extern Vtx D_84385CC0[];
 extern Vtx D_84385D00[];
@@ -969,7 +969,7 @@ extern u8 D_84390134;
 extern s32 sAttractInputIndex;
 extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f sEndBattleBannerPos;
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueue* sBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
 extern ActivePokemon* D_84390200;
 extern ActivePokemon* D_84390204;

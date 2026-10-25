@@ -1564,8 +1564,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
 
         var_s2->unk_05 = spF7;
         if ((var_s2->unk_00 == 0x77) && (var_s0->speed >= var_s3->speed)) {
-            if (var_s3->unk_58 != 0) {
-                var_s2->unk_00 = var_s3->unk_58;
+            if (var_s3->lastMove != 0) {
+                var_s2->unk_00 = var_s3->lastMove;
             }
         }
 
@@ -1810,7 +1810,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
 
             case 0x9:
                 if (var_s0->speed >= var_s3->speed) {
-                    if ((var_s3->unk_58 == 0) || (var_s3->unk_58 == 0x77)) {
+                    if ((var_s3->lastMove == 0) || (var_s3->lastMove == 0x77)) {
                         var_s1 = 0;
                         spFB = 0;
                     }
@@ -2461,7 +2461,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x9:
                 temp_s3 = oppMon;
-                if ((temp_s6->speed >= temp_s3->speed) && (temp_s3->unk_58 == 0)) {
+                if ((temp_s6->speed >= temp_s3->speed) && (temp_s3->lastMove == 0)) {
                     spF8 = 1;
                 }
                 break;
@@ -5186,7 +5186,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
             break;
 
         case 0x9:
-            if (arg1->unk_58 == 0) {
+            if (arg1->lastMove == 0) {
                 sp24 = 1;
             }
             break;
@@ -5261,7 +5261,7 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
         temp_s0->movesDisabled = temp_s2->movesDisabled;
         temp_s0->unk_54 = temp_s2->unk_54;
         temp_s0->unk_57 = temp_s2->unk_57;
-        temp_s0->unk_58 = temp_s2->unk_58;
+        temp_s0->lastMove = temp_s2->lastMove;
         temp_s0->unk_59 = temp_s2->unk_59;
 
         _bcopy(temp_s2->moves, temp_s0->moves, 4);
