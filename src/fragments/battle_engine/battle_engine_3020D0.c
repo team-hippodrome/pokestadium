@@ -357,11 +357,11 @@ void Battle_QueueMetronomeMoveMessage(void) {
     }
 }
 
-void BattleBox_Open(s32 arg0) {
+void BattleBox_Open(s32 opening_progress) {
     BattleBox* text_box = &sBattleMessageQueues->textBox;
 
     text_box->visibility = 0;
-    text_box->openingProgress = arg0;
+    text_box->openingProgress = opening_progress;
 }
 
 void BattleBox_Close(void) {
