@@ -406,7 +406,7 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
     UNUSED s32 pad;
     s32 temp_s1;
 
-    if (1) {}
+    if (1) {}// karodo
 
     switch (box->unk_04) {
         case 0:
