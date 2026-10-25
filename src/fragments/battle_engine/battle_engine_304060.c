@@ -186,6 +186,7 @@ s32 BattleScene_IsEitherActivePokemonUnderground(UNUSED ActivePokemon* arg0, UNU
     return 0;
 }
 
+// rotation at height of combatants
 void BattleScene_IntroCameraStep0(CameraNode* camera) {
     BattleScene_ResetCameraFrameCounter();
     camera->perspective.verticalFieldOfView = 50.0f;
@@ -325,6 +326,7 @@ void BattleScene_IntroCameraStep18(CameraNode* camera) {
     }
 }
 
+// high-angle wide two-shot
 void BattleScene_IntroCameraStep20(CameraNode* camera) {
     s16 arena_index;
 
