@@ -198,7 +198,7 @@ void func_84310360(void) {
 /*
     Draws the HP Bar and changes it color accordingly
     Of note, tiers are the same for deciding the winner 
-    see Battle_ClassifyHpTier @src/fragments/battle_engine/battle_engine_2F74E0.c
+    see Battle_ClassifyHpTier @src/fragments/battle_engine/battle_engine_action_selection.c
 */
 void BattleHud_DrawHpBar(s32 x, s32 y, f32 current_hp, s32 max_hp) {
     u8* color;
