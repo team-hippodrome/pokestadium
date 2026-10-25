@@ -154,7 +154,7 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
             if (arg0->unk_0030[i].unk_004.unk_00.unk_00 != 0) {
                 sp42 = D_842115B0[i] + arg0->unk_0018 + 0x2C;
                 sp40 = D_842115BC[i] + arg0->unk_001A + 0x17;
-                Font_Printf(sp42, sp40, "%s %d", TeamSelection_GetInstructionText(0x15), arg0->unk_0030[i].unk_004.unk_24);
+                Font_Printf(sp42, sp40, "%s %d", TeamSelection_GetInstructionText(0x15), arg0->unk_0030[i].unk_004.level);
             }
         }
 
@@ -224,7 +224,7 @@ s32 Rental_CheckTeamLevelCap(RentalTeamTray* arg0) {
     }
 
     for (i = 0; i < arg0->unk_0006; i++) {
-        temp_v1 = arg0->unk_0030[i].unk_004.unk_24;
+        temp_v1 = arg0->unk_0030[i].unk_004.level;
         if (sp8[2] >= temp_v1) {
             sp8[2] = temp_v1;
         }

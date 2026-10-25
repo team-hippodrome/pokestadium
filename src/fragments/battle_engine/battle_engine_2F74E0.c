@@ -1285,7 +1285,7 @@ void BattleScene_CollectActions(void) {
     BattleMonRuntime* runtime1 = &sActivePokemon[0]->state.runtime;
     BattleMonRuntime* runtime2 = &sActivePokemon[1]->state.runtime;
 
-    if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[0]->teamRoster->isHuman & 2) {
         sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[0], sActivePokemon[1]);
         sBattleDamage = sBattleDamageFake; // FAKE
@@ -1293,7 +1293,7 @@ void BattleScene_CollectActions(void) {
         BattleScene_CollectPlayerAction(sActivePokemon[0], sActivePokemon[1]);
     }
 
-    if (sActivePokemon[1]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[1]->teamRoster->isHuman & 2) {
         sBattleDamageFake = sBattleDamage; // FAKE
         BattleScene_CollectCpuAction(sActivePokemon[1], sActivePokemon[0]);
         sBattleDamage = sBattleDamageFake; // FAKE
@@ -1324,11 +1324,11 @@ void BattleScene_CollectActions(void) {
             Battle_StartTurn();
         }
     } else {
-        if (!(sActivePokemon[0]->teamRoster->unk_000 & 2) && !(runtime1->unk_4D & 0x60) && !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->unk_4D & 0x60) && !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(0);
         }
 
-        if (!(sActivePokemon[1]->teamRoster->unk_000 & 2) && !(runtime2->unk_4D & 0x60) && !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
+        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->unk_4D & 0x60) && !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(1);
         }
     }

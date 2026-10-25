@@ -613,8 +613,8 @@ void TeamSelection_InitializeSlots(void) {
     }
 
     for (i = 0; i < 4; i++, var_v0++) {
-        if (var_v0->unk_000 & 1) {
-            if (!(var_v0->unk_000 & 2)) {
+        if (var_v0->isHuman & 1) {
+            if (!(var_v0->isHuman & 2)) {
                 D_8423D3D8[var_v0->controllerPort].unk_00 = 1;
                 D_8423D3D8[var_v0->controllerPort].unk_04 = var_v0;
             } else if (gSessionContext.mode == 0) {

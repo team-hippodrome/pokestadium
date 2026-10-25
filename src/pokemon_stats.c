@@ -179,9 +179,9 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
     arg0->hp = arg0->maxHp;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] != 0) {
+        if (arg0->moves[i] != 0) {
             temp_a3 = (arg0->unk_20[i] >> 6) & 3;
-            var_v0 = gMoveData[arg0->unk_09[i] - 1].unk_05;
+            var_v0 = gMoveData[arg0->moves[i] - 1].pp;
 
             if (var_v0 >= 0x28) {
                 var_v0 = var_v0 + (temp_a3 * 7);
@@ -241,7 +241,7 @@ void VictoryPalace_SaveSpeciesRecord(BattleMon* arg0, s16 arg1, u8 arg2) {
     } else {
         sp24.unk_00 = arg1;
     }
-    sp24.unk_01 = arg0->unk_24;
+    sp24.unk_01 = arg0->level;
     sp24.unk_02 = arg0->unk_0E;
     Text_TranscodeName(sp24.unk_04, arg0->unk_30);
 #if defined(VERSION_JP)
@@ -1387,7 +1387,7 @@ void GbSave_SaveBoxPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s32
     GbSaveCurrentBox* sp2C = GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
-        arg0->unk_000[0].unk_04 = arg0->unk_000[0].unk_24;
+        arg0->unk_000[0].unk_04 = arg0->unk_000[0].level;
         Pokemon_ToGbRecord(arg0->unk_000, &sp2C->unk_020[arg3]);
         Text_TranscodeName(sp2C->unk_4B2[arg3], arg0->unk_000[0].unk_30);
         _bcopy(arg0->unk_000[0].unk_3D, sp2C->unk_3FE[arg3], 3);
@@ -1400,7 +1400,7 @@ void GbSave_SaveBoxPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s32
     GbSaveCurrentBox* sp2C = GbSave_GetBoxEntry(arg1, arg2);
 
     if (sp2C != NULL) {
-        arg0->unk_000[0].unk_04 = arg0->unk_000[0].unk_24;
+        arg0->unk_000[0].unk_04 = arg0->unk_000[0].level;
         Pokemon_ToGbRecord(arg0->unk_000, &sp2C->unk_016[arg3]);
         Text_TranscodeNameWrapper(sp2C->unk_386[arg3], arg0->unk_000[0].unk_30);
         _bcopy(arg0->unk_000[0].unk_46, sp2C->unk_2AA[arg3], 0xB);

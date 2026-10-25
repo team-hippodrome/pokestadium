@@ -424,7 +424,7 @@ s32 BattleMon_CountMoves(BattleMon* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->unk_09[i] == 0) {
+        if (arg0->moves[i] == 0) {
             break;
         }
     }

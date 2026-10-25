@@ -398,13 +398,13 @@ void Battle_StartTurn(void) {
         sBattleScene.scene->unk_2C = !sBattleScene.scene->unk_2C;
     }
 
-    if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+    if (sActivePokemon[0]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->unk_2C == 0) {
             BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 0);
         } else {
             BattleAI_RecordUsedMove(temp_s0->rosterIndex, temp_s1->rosterIndex, 1);
         }
-    } else if (sActivePokemon[1]->teamRoster->unk_000 & 2) {
+    } else if (sActivePokemon[1]->teamRoster->isHuman & 2) {
         if (sBattleScene.scene->unk_2C == 1) {
             BattleAI_RecordUsedMove(temp_s1->rosterIndex, temp_s0->rosterIndex, 0);
         } else {
@@ -433,7 +433,7 @@ void BattleScene_InitializeSwitchActions(void) {
     sp2C = sBattleScene.scene->unk_2C;
 
     if ((sp28->unk_2D == 0xF) || (sp28->unk_2D == 0x10)) {
-        if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[0]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(sp28->rosterIndex, sp24->rosterIndex, 2);
         }
         sBattleScene.scene->unk_2C = 0;
@@ -443,7 +443,7 @@ void BattleScene_InitializeSwitchActions(void) {
         BeginBattleForEntity(sActivePokemon[0]);
         sBattleScene.scene->unk_2C = sp2C;
     } else {
-        if (sActivePokemon[0]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[0]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(sp24->rosterIndex, sp28->rosterIndex, 2);
         }
         sBattleScene.scene->unk_2C = 1;
@@ -461,7 +461,7 @@ s32 BattleScene_PrepareReplacementTransition(void) {
     ActivePokemonState* sp20 = &sActivePokemon[!sBattleScene.scene->unk_2C]->state;
 
     if ((sActivePokemon[sBattleScene.scene->unk_2C]->state.unk_2D == 0xF) || (sp24->unk_2D == 0x10)) {
-        if (sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->unk_000 & 2) {
+        if (sActivePokemon[sBattleScene.scene->unk_2C]->teamRoster->isHuman & 2) {
             BattleAI_RecordUsedMove(temp_a3->rosterIndex, sp20->rosterIndex, 2);
         }
         Battle_ClearRuntimeFlags(sActivePokemon[sBattleScene.scene->unk_2C], 0x1800);

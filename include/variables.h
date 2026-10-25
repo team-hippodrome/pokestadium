@@ -984,9 +984,9 @@ typedef struct MoveData {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
+    /* 0x03 */ u8 type;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x05 */ u8 pp;
 } MoveData; // size = 0x6
 extern MoveData gMoveData[];
 

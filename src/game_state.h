@@ -34,7 +34,7 @@ typedef struct BattleMon {
     /* 0x06 */ u8 unk_06;
     /* 0x07 */ u8 unk_07;
     /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09[4];
+    /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u32 unk_10;
@@ -45,7 +45,7 @@ typedef struct BattleMon {
     /* 0x1C */ u16 unk_1C;
     /* 0x1E */ u16 unk_1E;
     /* 0x20 */ u8 unk_20[4];
-    /* 0x24 */ u8 unk_24;
+    /* 0x24 */ u8 level;
     /* 0x25 */ u8 unk_25;
     /* 0x26 */ u16 maxHp;
     /* 0x28 */ u16 unk_28;
@@ -97,7 +97,7 @@ typedef struct ExtendedRosterInfo {
 #endif
 
 typedef struct TeamRoster {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 isHuman;
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;

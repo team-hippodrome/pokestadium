@@ -612,11 +612,11 @@ s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4)
     return result;
 }
 
-void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
+void Fragment_QueueCall(s32 fragment_id, u8* rom_start, u8* rom_end, s32 arg3, s32 arg4) {
     D_800AE520.unk_00 = 1;
-    D_800AE520.fragment_id = arg0;
-    D_800AE520.rom_start = arg1;
-    D_800AE520.rom_end = arg2;
+    D_800AE520.fragment_id = fragment_id;
+    D_800AE520.rom_start = rom_start;
+    D_800AE520.rom_end = rom_end;
     D_800AE520.arg0 = arg3;
     D_800AE520.arg1 = arg4;
 }

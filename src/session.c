@@ -47,7 +47,7 @@ void Session_SetMode(s32 arg0, s32 arg1, s32 arg2) {
     gSessionContext.aiDifficulty = 0;
 
     for (i = 0; i < 4; i++) {
-        gSessionContext.trainerSlots[i].unk_000 = 0;
+        gSessionContext.trainerSlots[i].isHuman = 0;
     }
 
     for (i = 0; i < 2; i++) {
@@ -79,7 +79,7 @@ TeamRoster* Trainer_Create(s32 arg0, s16 arg1, char* arg2, char* arg3) {
     TeamRoster* sp1C = NULL;
 
     for (i = 0; i < 4; i++) {
-        if ((gSessionContext.trainerSlots + i)->unk_000 == 0) {
+        if ((gSessionContext.trainerSlots + i)->isHuman == 0) {
             sp1C = &gSessionContext.trainerSlots[i];
             sp20 = &gSessionContext.rosterInfo[i];
             break;
@@ -88,11 +88,11 @@ TeamRoster* Trainer_Create(s32 arg0, s16 arg1, char* arg2, char* arg3) {
 
     if (sp1C != NULL) {
         if (arg0 == -1) {
-            sp1C->unk_000 = 3;
+            sp1C->isHuman = 3;
             sp1C->controllerPort = 1;
             sp1C->controller = &gControllers[0];
         } else {
-            sp1C->unk_000 = 1;
+            sp1C->isHuman = 1;
             sp1C->controllerPort = arg0;
             sp1C->controller = &gControllers[arg0];
         }
@@ -151,10 +151,10 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
 
     arg0->unk_08 = 0;
 
-    arg0->unk_09[0] = 0;
-    arg0->unk_09[1] = 0;
-    arg0->unk_09[2] = 0;
-    arg0->unk_09[3] = 0;
+    arg0->moves[0] = 0;
+    arg0->moves[1] = 0;
+    arg0->moves[2] = 0;
+    arg0->moves[3] = 0;
 
     arg0->unk_0E = 0x7CF;
     arg0->unk_1E = 0xFFFF;
@@ -330,8 +330,8 @@ s16 Team_GetHighestPartyLevel(void) {
     var_v0 = &gSessionContext.battleSides[0].teamMember[0]->rosterInfo->unk_028[0];
 
     for (i = 0; i < gSessionContext.battleSides[0].teamMember[0]->rosterInfo->numberOfPokemonCanBePicked; i++, var_v0++) {
-        if (var_v1 < var_v0->unk_24) {
-            var_v1 = var_v0->unk_24;
+        if (var_v1 < var_v0->level) {
+            var_v1 = var_v0->level;
         }
     }
 
@@ -351,7 +351,7 @@ void Team_ScaleOpponentToLevel(s16 arg0) {
     var_s1 = gSessionContext.battleSides[1].teamMember[0]->rosterInfo->unk_028;
 
     for (i = 0; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; i++, var_s1++, var_s0++) {
-        var_s0->unk_24 = arg0;
+        var_s0->level = arg0;
         var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->unk_00.unk_00, arg0);
         Pokemon_RecalcStats(var_s0);
         var_s0->hp = var_s0->maxHp;

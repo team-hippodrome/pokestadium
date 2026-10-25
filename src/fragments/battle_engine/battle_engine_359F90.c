@@ -349,27 +349,27 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
 
     switch (arg0) {
         case 1:
-            spA = gSpeciesData[arg1->unk_24].baseHitPoints;
+            spA = gSpeciesData[arg1->level].baseHitPoints;
             spC = arg1->unk_14;
             break;
 
         case 2:
-            spA = gSpeciesData[arg1->unk_24].baseAttack;
+            spA = gSpeciesData[arg1->level].baseAttack;
             spC = arg1->unk_16;
             break;
 
         case 3:
-            spA = gSpeciesData[arg1->unk_24].baseDefense;
+            spA = gSpeciesData[arg1->level].baseDefense;
             spC = arg1->unk_18;
             break;
 
         case 4:
-            spA = gSpeciesData[arg1->unk_24].baseSpeed;
+            spA = gSpeciesData[arg1->level].baseSpeed;
             spC = arg1->unk_1A;
             break;
 
         case 5:
-            spA = gSpeciesData[arg1->unk_24].baseSpecial;
+            spA = gSpeciesData[arg1->level].baseSpecial;
             spC = arg1->unk_1C;
             break;
     }
@@ -404,9 +404,9 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
             break;
     }
 
-    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->unk_24) / 100;
+    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->level) / 100;
     if (arg0 == 1) {
-        temp_a0 += arg1->unk_24 + 0xA;
+        temp_a0 += arg1->level + 0xA;
     } else {
         temp_a0 += 5;
     }
@@ -732,10 +732,10 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->roster[7] = sp34->unk_07;
     sp24->roster[8] = sp34->unk_08;
 
-    sp24->moves[0] = sp34->unk_09[0];
-    sp24->moves[1] = sp34->unk_09[1];
-    sp24->moves[2] = sp34->unk_09[2];
-    sp24->moves[3] = sp34->unk_09[3];
+    sp24->moves[0] = sp34->moves[0];
+    sp24->moves[1] = sp34->moves[1];
+    sp24->moves[2] = sp34->moves[2];
+    sp24->moves[3] = sp34->moves[3];
     sp24->unk_24 = sp34->unk_1E;
 
     sp24->moveUsability[0] = sp34->unk_20[0];
@@ -743,33 +743,33 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->moveUsability[2] = sp34->unk_20[2];
     sp24->moveUsability[3] = sp34->unk_20[3];
 
-    if ((sp34->unk_09[0] == 0) || (sp34->unk_09[0] >= 0xA6)) {
+    if ((sp34->moves[0] == 0) || (sp34->moves[0] >= 0xA6)) {
         sp24->moveUsability[0] = 0;
     }
 
-    if ((sp34->unk_09[1] == 0) || (sp34->unk_09[1] >= 0xA6)) {
+    if ((sp34->moves[1] == 0) || (sp34->moves[1] >= 0xA6)) {
         sp24->moveUsability[1] = 0;
     }
 
-    if ((sp34->unk_09[2] == 0) || (sp34->unk_09[2] >= 0xA6)) {
+    if ((sp34->moves[2] == 0) || (sp34->moves[2] >= 0xA6)) {
         sp24->moveUsability[2] = 0;
     }
 
-    if ((sp34->unk_09[3] == 0) || (sp34->unk_09[3] >= 0xA6)) {
+    if ((sp34->moves[3] == 0) || (sp34->moves[3] >= 0xA6)) {
         sp24->moveUsability[3] = 0;
     }
 
     for (i = 0; i < 4; i++) {
-        if (sp34->unk_09[i] == 0) {
+        if (sp34->moves[i] == 0) {
             for (j = i; j < 4; j++) {
                 sp24->moveUsability[j] = 0;
-                sp24->moves[j] = sp34->unk_09[j] = 0;
+                sp24->moves[j] = sp34->moves[j] = 0;
             }
             break;
         }
     }
 
-    sp24->unk_26 = sp34->unk_24;
+    sp24->unk_26 = sp34->level;
     sp24->hp = sp34->maxHp;
     sp24->unk_2A = sp34->unk_28;
     sp24->unk_2C = sp34->unk_2A;
@@ -807,9 +807,9 @@ void Battle_ExecuteMoveAnimation(void) {
     sBattleUser->moveCache.lastMove = gMoveData[sBattleUser->usedMove - 1].unk_00;
     sBattleUser->moveCache.unk_01 = gMoveData[sBattleUser->usedMove - 1].unk_01;
     sBattleUser->moveCache.unk_02 = gMoveData[sBattleUser->usedMove - 1].unk_02;
-    sBattleUser->moveCache.unk_03 = gMoveData[sBattleUser->usedMove - 1].unk_03;
+    sBattleUser->moveCache.unk_03 = gMoveData[sBattleUser->usedMove - 1].type;
     sBattleUser->moveCache.unk_04 = gMoveData[sBattleUser->usedMove - 1].unk_04;
-    sBattleUser->moveCache.unk_05 = gMoveData[sBattleUser->usedMove - 1].unk_05;
+    sBattleUser->moveCache.unk_05 = gMoveData[sBattleUser->usedMove - 1].pp;
 }
 
 void Battle_ApplyRageContinuation(void) {

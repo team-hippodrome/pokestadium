@@ -306,7 +306,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0xC, temp_s5 + 8, temp_s6->unk_30);
             Font_SetActive(8, 0);
-            Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->unk_24);
+            Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->level);
             Font_SetActive(4, 0);
             Font_Printf(temp_s4 + 0xE8, temp_s5 + 0xC, "%s%03d", TeamSelection_GetInstructionText(0x16), temp_s6->unk_00.unk_00);
             Font_SetActive(4, 0);
@@ -346,14 +346,14 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                 u8 temp_a0;
 
                 for (i = 0; i < 4; i++) {
-                    temp_a0 = temp_s6->unk_09[i];
+                    temp_a0 = temp_s6->moves[i];
                     if (temp_a0 == 0) {
                         break;
                     }
                     color = &D_842115F0[gMoveDisplayInfo[temp_a0 - 1].unk_01].unk_00[2];
                     sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_a0));
                     Gfx_SetEnvColor(color->r, color->g, color->b, 0xFF);
-                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5, TeamSelection_GetTextFromSetB(temp_s6->unk_09[i]));
+                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5, TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
                 }
 
                 Font_EndTexturedTextRendering();
@@ -361,13 +361,13 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                 gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
                 for (i = 0; i < 4; i++) {
-                    if (temp_s6->unk_09[i] == 0) {
+                    if (temp_s6->moves[i] == 0) {
                         break;
                     }
 
-                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_s6->unk_09[i]));
+                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
                     Gfx_DrawTextureRgba16((temp_s4 + sp80) - 0x18, D_842116F8[i] + temp_s5, 0x14, 0x14,
-                                  D_842115F0[gMoveDisplayInfo[temp_s6->unk_09[i] - 1].unk_01].unk_0C, 0x14, 0);
+                                  D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].unk_01].unk_0C, 0x14, 0);
                 }
             }
 

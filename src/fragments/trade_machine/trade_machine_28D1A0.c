@@ -261,13 +261,13 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         Gfx_DrawTextureRgba16(arg0->unk_04 + 0xF8, arg0->unk_06 + 0x104, 0x1C, 0x1A, D_302E418, 0x1C, 0x200000);
 
         for (i = 0; i < 4; i++) {
-            if (sp11C->unk_09[i] == 0) {
+            if (sp11C->moves[i] == 0) {
                 break;
             }
 
-            if (Trade_IsMoveInvalid(sp11C->unk_09[i]) == 0) {
+            if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
                 Gfx_DrawTextureRgba16(D_82F13C54[i] + arg0->unk_04, D_82F13C5C[i] + arg0->unk_06, 0x14, 0x14,
-                              D_82F13C68[gMoveDisplayInfo[sp11C->unk_09[i] - 1].unk_01], 0x14, 0x200000);
+                              D_82F13C68[gMoveDisplayInfo[sp11C->moves[i] - 1].unk_01], 0x14, 0x200000);
             }
         }
 
@@ -276,19 +276,19 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
         for (i = 0; i < 4; i++) {
-            if (sp11C->unk_09[i] == 0) {
+            if (sp11C->moves[i] == 0) {
                 break;
             }
 
-            if (Trade_IsMoveInvalid(sp11C->unk_09[i]) == 0) {
-                ptr = &gMoveData[sp11C->unk_09[i] - 1];
+            if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
+                ptr = &gMoveData[sp11C->moves[i] - 1];
 
-                var_t0 = ptr->unk_05 / 5;
+                var_t0 = ptr->pp / 5;
                 if (var_t0 >= 7) {
                     var_t0 = 7;
                 }
 
-                sp80 = ((sp11C->unk_20[i] >> 6) * var_t0) + ptr->unk_05;
+                sp80 = ((sp11C->unk_20[i] >> 6) * var_t0) + ptr->pp;
                 Gfx_DrawTextureIa8(D_82F13C54[i] + arg0->unk_04 + 0xB6, D_82F13C5C[i] + arg0->unk_06 + 6, 8, 0xC, D_302F528,
                               8, 0);
                 Trade_DrawNumberTwoDigits(D_82F13C54[i] + arg0->unk_04 + 0xA4, D_82F13C5C[i] + arg0->unk_06 + 6,
@@ -302,7 +302,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 6, sp11C->unk_30);
         Font_SetActive(0x10, 0);
         Font_Printf(arg0->unk_04 + 0xA0, arg0->unk_06 + 6, "%s%d", Text_GetString(NULL, 0, D_82F13B74, 0x15),
-                      sp11C->unk_24);
+                      sp11C->level);
         Font_SetActive(8, 0);
         Font_Printf(arg0->unk_04 + 0x12E, arg0->unk_06 + 8, "%s%03d", Text_GetString(NULL, 0, D_82F13B74, 0x16),
                       sp11C->unk_00.unk_00);
@@ -366,13 +366,13 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
             for (i = 0; i < 4; i++) {
                 sp6C = D_82F13C48;
 
-                if (sp11C->unk_09[i] == 0) {
+                if (sp11C->moves[i] == 0) {
                     break;
                 }
 
-                if (Trade_IsMoveInvalid(sp11C->unk_09[i]) == 0) {
-                    sp70 = &D_80071D88[gMoveDisplayInfo[sp11C->unk_09[i] - 1].unk_01].color;
-                    sp74 = Trade_GetMoveName(sp11C->unk_09[i]);
+                if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
+                    sp70 = &D_80071D88[gMoveDisplayInfo[sp11C->moves[i] - 1].unk_01].color;
+                    sp74 = Trade_GetMoveName(sp11C->moves[i]);
                 } else {
                     // "？？？？？？？"
                     static const char D_29C080[] = { 0xA1, 0xA9, 0xA1, 0xA9, 0xA1, 0xA9, 0xA1,

@@ -545,7 +545,7 @@ void Battle_SelectComRoster(void) {
     player_teammate_roster = gSessionContext.battleSides[0].teamMember[1];
     com_roster = gSessionContext.battleSides[1].teamMember[0];
 
-    if (com_roster->unk_000 & 2) {
+    if (com_roster->isHuman & 2) {
         // Free Battle can consider both allied trainers; other modes pass only one.
         if (gSessionContext.mode == SESSION_MODE_ANYTHING_GOES) {
             if (gSessionContext.ruleCategory == RULE_CATEGORY_ANYTHING_GOES) {

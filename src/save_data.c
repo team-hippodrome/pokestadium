@@ -195,7 +195,7 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
 }
 
 void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
-    arg0->unk_04 = arg0->unk_24;
+    arg0->unk_04 = arg0->level;
 
     Pokemon_ToGbRecord(arg0, &arg1->unk_00);
     Text_TranscodeName(arg1->unk_21, arg0->unk_30);

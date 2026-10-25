@@ -163,7 +163,7 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
         if (arg3->unk_0000[var_s1].unk_004.unk_00.unk_00 != 0) {
             temp_s2 = D_84211870[var_s1] + arg1 + 0x2C;
             temp_s3 = D_8421187C[var_s1] + arg2 + 0x17;
-            Font_Printf(temp_s2, temp_s3, "%s%d", TeamSelection_GetInstructionText(0x15), arg3->unk_0000[var_s1].unk_004.unk_24);
+            Font_Printf(temp_s2, temp_s3, "%s%d", TeamSelection_GetInstructionText(0x15), arg3->unk_0000[var_s1].unk_004.level);
         }
     }
 

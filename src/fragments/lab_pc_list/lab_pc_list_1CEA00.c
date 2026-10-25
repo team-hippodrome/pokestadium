@@ -1731,12 +1731,12 @@ void LabPCList_ApplyPpUpItem(unk_func_8830867C_02C_0CC_000* arg0, unk_func_88308
 
     temp_v0 = Move_GetData(ptr->unk_09[arg2]);
 
-    var_v1 = temp_v0->unk_05 / 5;
+    var_v1 = temp_v0->pp / 5;
     if (var_v1 >= 7) {
         var_v1 = 7;
     }
 
-    *arg3 = ((ptr->unk_20[arg2] >> 6) * var_v1) + temp_v0->unk_05;
+    *arg3 = ((ptr->unk_20[arg2] >> 6) * var_v1) + temp_v0->pp;
     *arg4 = *arg3 + var_v1;
 
     ptr->unk_20[arg2] += var_v1 + 0x40;
@@ -1765,7 +1765,7 @@ void LabPCList_TeachTmMove(unk_func_8830867C_02C_0CC_000* arg0, unk_func_8830867
     }
 
     ptr->unk_09[arg2] = Move_GetIdFromTableIndex(var_a0);
-    ptr->unk_20[arg2] = Move_GetData(ptr->unk_09[arg2])->unk_05;
+    ptr->unk_20[arg2] = Move_GetData(ptr->unk_09[arg2])->pp;
 
     if (arg1->unk_00[0]->unk_00 >= 0xC9) {
         LabPCList_ConsumeUsedTmItem(arg1);

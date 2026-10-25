@@ -191,7 +191,7 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
     sp2C.raw = 0;
     if (!(arg0->uniqueStatusFlags & 0x40) && (arg0->uniqueStatusFlags & 0x80)) {
         temp_a1 = arg0->unk_04;
-        if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->unk_000)) {
+        if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->isHuman)) {
             Model_ComputeSizeVariant(&sp2C, (BattleMon*)arg0->unk_04);
             if ((sp2A == 0x19) && (arg0->unk_04->pokemonPicked[0].unk_30[6] & 0x80)) {
                 sp2A = 0x99;
