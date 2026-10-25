@@ -634,7 +634,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
     return 0;
 }
 
-void BattleBox_Update(s16 arg0, s16 arg1) {
+void BattleBox_Update(s16 x, s16 y) {
     BattleBox* box = &sBattleMessageQueues->textBox;
 
     if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
@@ -644,28 +644,28 @@ void BattleBox_Update(s16 arg0, s16 arg1) {
     switch (box->visibility) {
         case 0:
             box->displayTimer = 0;
-            if (box->openingProgress == 0xD) {
+            if (box->openingProgress == 13) {
                 BattleHud_InitCaptionBoxPopupBlack(box, 160, 120);
                 box->visibility++;
-            } else if (box->openingProgress == 0xE) {
+            } else if (box->openingProgress == 14) {
                 BattleBox_SelectMessage(box);
             } else if (BattleBox_SelectMessage(box) == 0) {
-                BattleHud_InitCaptionBoxPopup(box, arg0, arg1);
+                BattleHud_InitCaptionBoxPopup(box, x, y);
             }
             break;
 
         case 1:
-            if (box->openingProgress == 0xD) {
+            if (box->openingProgress == 13) {
                 if (BattleHud_UpdateCaptionBoxPopupBlack(box, 0xA0, 0x78) != 0) {
                     BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                     box->visibility++;
                 }
             } else {
-                if (box->openingProgress == 0xE) {
+                if (box->openingProgress == 14) {
                     ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
                     BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                     box->visibility++;
-                } else if (BattleHud_UpdateCaptionBoxPopup(box, arg0, arg1) != 0) {
+                } else if (BattleHud_UpdateCaptionBoxPopup(box, x, y) != 0) {
                     ProcessAudioCommandQueue(BattleScene_GetParticipantDisplayPlayerNumber(sActivePokemon[box->side]));
                     BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                     box->visibility++;
@@ -674,19 +674,19 @@ void BattleBox_Update(s16 arg0, s16 arg1) {
             break;
 
         case 2:
-            if (box->openingProgress == 0xD) {
-                BattleHud_UpdateCaptionBoxPopupBlack(box, 0xA0, 0x78);
+            if (box->openingProgress == 13) {
+                BattleHud_UpdateCaptionBoxPopupBlack(box, 160, 120);
                 BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
                 box->displayTimer++;
-                if (box->displayTimer == 0x46) {
+                if (box->displayTimer == 70) {
                     box->visibility++;
                 }
             } else {
-                if (box->openingProgress == 0xE) {
+                if (box->openingProgress == 14) {
                     BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
                 } else {
-                    BattleHud_UpdateCaptionBoxPopup(box, arg0, arg1);
+                    BattleHud_UpdateCaptionBoxPopup(box, x, y);
                     BattleBox_DrawMessage(box, box->textOrigin.x, box->textOrigin.y);
 
                     box->displayTimer++;
@@ -706,50 +706,50 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
     active_pokemon->captionState.unk_08[0] = 0;
 }
 
-void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1) {
-    sBattleMessageQueues->controllerPort = arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->controllerPort;
-    arg0->captionState.active = 1;
-    Text_SetStringToken(0x19, arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex].nickname);
-    Text_GetString(arg0->captionState.unk_48, 0x40, sBattleMessagesTable, arg1);
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
+    sBattleMessageQueues->controllerPort = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    pokemon->captionState.active = 1;
+    Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
+    Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
 }
 
-void BattleScene_RevealParticipantMessageChars(ActivePokemon* arg0) {
-    TeamRoster* temp_t0 = arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex];
+void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
+    TeamRoster* team_member_index = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex];
 
-    if (arg0->captionState.unk_48[arg0->captionState.unk_04] != '\x00') {
-        arg0->captionState.unk_08[arg0->captionState.unk_04] = arg0->captionState.unk_48[arg0->captionState.unk_04];
-        arg0->captionState.unk_04++;
+    if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_04++;
     }
 
-    if (arg0->captionState.unk_48[arg0->captionState.unk_04] != '\x00') {
-        arg0->captionState.unk_08[arg0->captionState.unk_04] = arg0->captionState.unk_48[arg0->captionState.unk_04];
-        arg0->captionState.unk_04++;
+    if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_04++;
     }
 
-    arg0->captionState.unk_08[arg0->captionState.unk_04] = '\x00';
+    pokemon->captionState.unk_08[pokemon->captionState.unk_04] = '\x00';
 
-    if (arg0->captionState.unk_48[0] != 0) {
-        if (arg0 == sSide1ActivePokemon) {
-            BattleHud_DrawTextBox(temp_t0->controllerPort, 0x5F, 0xE, &arg0->captionState.unk_08);
+    if (pokemon->captionState.unk_48[0] != 0) {
+        if (pokemon == sSide1ActivePokemon) {
+            BattleHud_DrawTextBox(team_member_index->controllerPort, 95, 14, &pokemon->captionState.unk_08);
         } else {
-            BattleHud_DrawTextBox(temp_t0->controllerPort, 0x17, 0xBB, &arg0->captionState.unk_08);
+            BattleHud_DrawTextBox(team_member_index->controllerPort, 23, 187, &pokemon->captionState.unk_08);
         }
     }
 }
 
 void BattleScene_TickHudTimers(void) {
-    ActivePokemonState* sp1C = &sActivePokemon[0]->state;
-    ActivePokemonState* sp18 = &sActivePokemon[1]->state;
+    ActivePokemonState* pokemon1 = &sActivePokemon[0]->state;
+    ActivePokemonState* pokemon2 = &sActivePokemon[1]->state;
 
-    if ((gSessionContext.timeLimitsEnabled != 0) && (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103) &&
-        (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17)) {
+    if ((gSessionContext.timeLimitsEnabled != 0) && (sActivePokemon[1]->thumbnail.camera->viewport.x == 259) &&
+        (sActivePokemon[0]->thumbnail.camera->viewport.x == 23)) {
         BattleHud_DrawBattleTimer(0x101, 0x64);
         if (D_84390134 == 0) {
-            if (sp1C->selectedCommandOption != 3) {
+            if (pokemon1->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0x46, 0x4D);
             }
 
-            if (sp18->selectedCommandOption != 3) {
+            if (pokemon2->selectedCommandOption != 3) {
                 BattleHud_DrawParticipantTimer(0xE8, 0x96);
             }
         }
@@ -773,7 +773,7 @@ void Battle_RenderHud(void) {
 
     if (1) {}
 
-    BattleBox_Update(0xA0, 0xC8);
+    BattleBox_Update(160, 200);
 
     if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         Battle_DrawDemoControllerWarning();

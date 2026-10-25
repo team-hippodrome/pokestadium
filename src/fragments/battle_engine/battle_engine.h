@@ -83,9 +83,9 @@ typedef struct MonCaptionState {
     /* 0x00 */ s32 active;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s8 unk_08[4];
-    /* 0x0C */ char unk0C[0x3C];
+    /* 0x0C */ char unk0C[60];
     /* 0x48 */ s8 unk_48[4];
-    /* 0x4C */ char unk4C[0x3C];
+    /* 0x4C */ char unk4C[60];
 } MonCaptionState; // size = 0x88
 
 typedef struct SpeciesLearnsetBuffer {
@@ -1482,14 +1482,14 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokem
 //@src/fragments/battle_engine/battle_engine_3020D0.c
 void Battle_ClearAllMessageQueues(void);
 void Battle_ClearMessageCursor(void);
-void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...);
+void Battle_SimpleStringFormat(s8* buffer, s8* format, ...);
 #if defined(VERSION_JP)
 // The Japanese build formats the message: %s in fmt copies the next char* argument.
 void Battle_QueueMessage(s8* arg0, s8 arg1, const char* fmt, ...);
 #else
-void Battle_QueueMessage(s8* arg0, s8 arg1);
+void Battle_QueueMessage(s8* text, s8 file_number_index);
 #endif
-void Battle_QueueStatusText(char* arg0, s32 arg1);
+void Battle_QueueStatusText(char* text, s32 side);
 void func_84317B38(void);
 void Battle_DrawCompactStatusBoxesIfVisible(void);
 void Battle_QueueMoveCategoryUsedMessage(void);
@@ -1497,17 +1497,18 @@ void Battle_QueueMoveCategoryMessage(void);
 void Battle_QueueMetronomeMoveMessage(void);
 void BattleBox_Open(s32 arg0);
 void BattleBox_Close(void);
-void BattleBox_PlayTextBlip(s8* arg0);
-void BattleBox_DrawMessage(BattleBox* arg0, s16 arg1, s16 arg2);
-s32 BattleBox_SelectMessage(BattleBox* arg0);
-void BattleBox_Update(s16 arg0, s16 arg1);
+void BattleBox_PlayTextBlip(s8* message);
+void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y);
+s32 BattleBox_SelectMessage(BattleBox* box);
+void BattleBox_Update(s16 x, s16 y);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
 void BattleScene_BuildParticipantMessage(ActivePokemon* arg0, s32 arg1);
-void BattleScene_RevealParticipantMessageChars(ActivePokemon* active_pokemon);
+void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon);
 void BattleScene_TickHudTimers(void);
 void Battle_InitMessageQueues(void);
 void BattleScene_ResetMessageQueue(void);
 void Battle_RenderHud(void);
+
 
 
 //@src/fragments/battle_engine/battle_engine_304060.c
