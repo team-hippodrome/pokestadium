@@ -359,7 +359,7 @@ typedef struct unk_D_843901A0 {
     /* 0x004 */ s32 unk_004;
     /* 0x008 */ u8 unk_008[4];
     /* 0x00C */ char unk00C[0x3C];
-    /* 0x048 */ s8 messageBuffer[18][64];
+    /* 0x048 */ s8 buffer[18][64];
     /* 0x4C8 */ BattleBox textBox;
 } BattleMessageQueue; // size = 0x4F4
 
