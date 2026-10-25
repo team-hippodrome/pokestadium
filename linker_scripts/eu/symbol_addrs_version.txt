@@ -903,7 +903,6 @@ D_8438498C = 0x8438499C; // type:func
 D_843849C0 = 0x843849D0; // type:func
 D_84384AF8 = 0x84384B08; // type:func
 D_84384B2C = 0x84384B3C; // type:func
-D_84384C30 = 0x84384C40; // type:func
 sModelCameraAdjustments = 0x84384C40; // type:func
 sBattleSceneStateTickSentinel = 0x84385390; // type:func
 sBattleSceneStateRowTable = 0x84385394; // type:func
