@@ -171,5 +171,6 @@ Use hexadecimal only for:
 - Colors
 - Addresses
 - Masks
+- Angles
 
 Otherwise, keep numbers in decimal.

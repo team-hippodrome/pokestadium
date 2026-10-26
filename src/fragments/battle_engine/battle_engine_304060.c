@@ -305,7 +305,7 @@ void BattleScene_BRollCameraSetupZoomShot(CameraNode* camera, s32 side) {
             camera_preset = &D_843847EC[rng];
         }
         camera->perspective.verticalFieldOfView = camera_preset->unk_30;
-        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &gCameraPreset.unk_00);
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &gCameraPreset.starting_position);
         BattleScene_LoadCameraPreset(camera_preset, camera, pokemon);
         BattleScene_ApplyCameraPreset(camera, pokemon, 1);
         BattleScene_CameraPresetNop(camera);

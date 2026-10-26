@@ -107,18 +107,18 @@ typedef struct SwayLayoutConfig {
 typedef struct SwayState {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f rotation;
-    /* 0x18 */ Vec3f unk_18;
+    /* 0x18 */ Vec3f anchorAdjustment;
     /* 0x24 */ SwayLayoutConfig layoutConfig;
-    /* 0x44 */ s16 unk_44;
-    /* 0x46 */ s16 unk_46;
+    /* 0x44 */ s16 rotationX;
+    /* 0x46 */ s16 rotationY;
     /* 0x48 */ char unk48[0x4];
-    /* 0x4C */ f32 unk_4C;
-} SwayState; // size >= 0x50
+    /* 0x4C */ f32 distance;
+} ModelTransform; // size >= 0x50
 
 typedef struct ActivePokemon {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ PokemonAfterimage afterimages[2];
-    /* 0x448 */ SwayState modelTransform;
+    /* 0x448 */ ModelTransform modelTransform;
     /* 0x498 */ f32 y;
     /* 0x49C */ f32 rotationZ;
     /* 0x4A0 */ f32 oscillationAmplitude;
@@ -245,14 +245,14 @@ typedef struct BattleScene {
     /* 0x64 */ char unk64[0x4];
     /* 0x68 */ f32 unk_68;
     /* 0x6C */ f32 unk_6C;
-    /* 0x70 */ f32 unk_70;
+    /* 0x70 */ f32 targetDistance;
     /* 0x74 */ f32 unk_74;
     /* 0x78 */ u8 unk_78;
     /* 0x7A */ s16 unk_7A;
     /* 0x7C */ char unk7C[0x8];
     /* 0x84 */ f32 unk_84;
     /* 0x88 */ char unk88[0xC];
-    /* 0x94 */ Vec3f unk_94;
+    /* 0x94 */ Vec3f targetPosition;
     /* 0xA0 */ Vec3f unk_A0;
     /* 0xAC */ char unkAC[0xC];
     /* 0xB8 */ Vec3f unk_B8;
@@ -335,24 +335,24 @@ typedef struct unk_D_843847BC {
 } ThumbnailSettings; // size = 0x18
 
 typedef struct unk_D_843901B0 {
-    /* 0x00 */Vec3f unk_00;
-    /* 0x0C */s16 unk_0C;
-    /* 0x0E */s16 unk_0E;
+    /* 0x00 */Vec3f startingPosition;
+    /* 0x0C */s16 startingRotationX;
+    /* 0x0E */s16 startingRotationY;
     /* 0x10 */char unk10[0x2];
-    /* 0x12 */s16 unk_12;
-    /* 0x14 */s16 unk_14;
-    /* 0x18 */f32 unk_18;
-    /* 0x1C */f32 unk_1C;
-    /* 0x20 */s16 unk_20;
-    /* 0x22 */s16 unk_22;
+    /* 0x12 */s16 eyeRotationX;
+    /* 0x14 */s16 eyeRotationY;
+    /* 0x18 */f32 startingDistance;
+    /* 0x1C */f32 eyeDistance;
+    /* 0x20 */s16 rotationXOffset;
+    /* 0x22 */s16 rotationYOffset;
     /* 0x24 */char unk24[0x2];
-    /* 0x26 */s16 unk_26;
-    /* 0x28 */s16 unk_28;
-    /* 0x2C */f32 unk_2C;
-    /* 0x30 */f32 unk_30;
-    /* 0x34 */f32 unk_34;
-    /* 0x38 */f32 unk_38;
-    /* 0x3C */f32 unk_3C;
+    /* 0x26 */s16 rotationX;
+    /* 0x28 */s16 rotationY;
+    /* 0x2C */f32 distanceOffset;
+    /* 0x30 */f32 distance;
+    /* 0x34 */f32 targetZ;
+    /* 0x38 */f32 speed;
+    /* 0x3C */f32 verticalFieldOfView;
 } unk_D_843901B0; // size >= 0x40
 
 typedef struct BattleBox {
@@ -905,6 +905,8 @@ typedef struct unk_func_8437F85C_arg3 {
     /* 0x00 */ u8 unk_00[3][3];
 } unk_func_8437F85C_arg3; // size = 0x3
 
+#define NINETY_DEGREES 0x4000
+
 extern PokemonBattleCues* sSideBattleCues[];
 extern SpeciesModelTransform* sSidePresentationTransform[];
 extern SpeciesModelTransform* sSideCameraTransform[];
@@ -1232,7 +1234,7 @@ s32 BattleAnim_GetSpeciesBySideIndex(s32 arg0);
 s32 BattleAnim_GetOwnerSpecies(ActivePokemon* active_pokemon);
 u8 BattleScene_IsParticipantModelVisible(ActivePokemon* active_pokemon);
 void BattleScene_GetParticipantModelPosition(ActivePokemon* arg0, Vec3f* arg1);
-void BattleAnim_GetOwnerDefaultAnchorPosition(ActivePokemon* arg0, Vec3f* arg1);
+void BattleAnim_GetOwnerDefaultAnchorPosition(ActivePokemon* pokemon, Vec3f* anchor_position);
 void BattleScene_GetParticipantRestingPosition(ActivePokemon* arg0, Vec3f* arg1);
 void BattleScene_GetParticipantPokeBallPosition(ActivePokemon* arg0, Vec3f* arg1);
 f32 BattleAnim_GetOwnerModelHeight(ActivePokemon* active_pokemon);
