@@ -17,7 +17,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-typedef struct unk_D_84102450 {
+typedef struct MenuItemInfo {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
@@ -26,16 +26,16 @@ typedef struct unk_D_84102450 {
     /* 0x09 */ s8 unk_09;
     /* 0x0A */ s8 unk_0A;
     /* 0x0B */ s8 unk_0B;
-} unk_D_84102450; // size = 0xC
+} MenuItemInfo; // size = 0xC
 
-typedef struct unk_D_84102498 {
+typedef struct MenuRectAnim {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
-} unk_D_84102498; // size = 0xC
+} MenuRectAnim; // size = 0xC
 
 static char** D_84103440;
 static BinArchive* D_84103444;
@@ -50,12 +50,12 @@ static GraphNode* D_84103CE8;
 static GraphNode* D_84103CEC;
 static ModeSettings D_84103CF0;
 
-static u8 D_84102430[] = {
+static u8 sBackgroundFileIds[] = {
     0x09, 0x07, 0x08, 0x0C, 0x0A, 0x0B,
 };
 static s16 gStadiumCupSessionModes[] = { 3, 1, 2, 6, 4, 5 };
 static s16 gStadiumCupModeCategories[] = { 3, 1, 2, 6, 4, 5 };
-static unk_D_84102450 D_84102450[] = {
+static MenuItemInfo sMenuItemInfo[] = {
     {
         244,
         70,
@@ -117,7 +117,7 @@ static unk_D_84102450 D_84102450[] = {
         -1,
     },
 };
-static unk_D_84102498 D_84102498[] = {
+static MenuRectAnim sMenuRectAnimations[] = {
     {
         0,
         260,
@@ -199,9 +199,9 @@ static unk_D_84102498 D_84102498[] = {
         0,
     },
 };
-static s16 D_84102510[] = { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 };
-static s16 D_8410251C[] = { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 };
-static u8 D_84102528[][2] = {
+static s16 sMenuAnimFlag0[] = { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 };
+static s16 sMenuAnimFlag1[] = { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 };
+static u8 sMenuOptionRanges[][2] = {
     {
         0x32,
         0x37,
@@ -224,305 +224,305 @@ static u8 D_84102528[][2] = {
     },
     { 0xF, 0x14 },
 };
-static u8* D_84102534[] = { D_03028EC0, D_03029C40, D_0302A9C0, D_0302B740, D_0302C4C0, D_0302D480 };
-static u32 D_8410254C[] = {
+static u8* sMenuOptionTexturePointers[] = { D_03028EC0, D_03029C40, D_0302A9C0, D_0302B740, D_0302C4C0, D_0302D480 };
+static u32 sMenuGeoLayoutRoot[] = {
     0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243, 0x05000000,
     0x0D000000,  0x05000000, 0x14000000, 0x00000000, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002, 0x05000000, 0x0A000000,
     &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
-static Vtx D_841025B0[] = {
+static Vtx sMenuBarVtx0[] = {
     VTX(0, 63, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, 43, 0, 0, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 43, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 63, 0, 3200, 0, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841025F0[] = {
+static Vtx sMenuBarVtx1[] = {
     VTX(0, 43, 0, 0, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, 23, 0, 0, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 23, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 43, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102630[] = {
+static Vtx sMenuBarVtx2[] = {
     VTX(0, 23, 0, 0, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, 3, 0, 0, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 3, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 22, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102670[] = {
+static Vtx sMenuBarVtx3[] = {
     VTX(0, 3, 0, 0, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -17, 0, 0, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -17, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 3, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841026B0[] = {
+static Vtx sMenuBarVtx4[] = {
     VTX(0, -17, 0, 0, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -37, 0, 0, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -37, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -17, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841026F0[] = {
+static Vtx sMenuBarVtx5[] = {
     VTX(0, -37, 0, 0, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -57, 0, 0, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -57, 0, 3200, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -37, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102730[] = {
+static Vtx sMenuBarVtx6[] = {
     VTX(0, -57, 0, 0, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -63, 0, 0, 4032, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -63, 0, 3200, 4032, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -57, 0, 3200, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102770[] = {
+static Vtx sMenuBarRightVtx0[] = {
     VTX(100, 63, 0, 3200, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 43, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 43, 0, 5248, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 63, 0, 5248, 0, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841027B0[] = {
+static Vtx sMenuBarRightVtx1[] = {
     VTX(100, 43, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 23, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 23, 0, 5248, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 43, 0, 5248, 640, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841027F0[] = {
+static Vtx sMenuBarRightVtx2[] = {
     VTX(100, 23, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 3, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 3, 0, 5248, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 23, 0, 5248, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102830[] = {
+static Vtx sMenuBarRightVtx3[] = {
     VTX(100, 3, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -17, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -17, 0, 5248, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, 3, 0, 5248, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102870[] = {
+static Vtx sMenuBarRightVtx4[] = {
     VTX(100, -17, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -37, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -37, 0, 5248, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -17, 0, 5248, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841028B0[] = {
+static Vtx sMenuBarRightVtx5[] = {
     VTX(100, -37, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -57, 0, 3200, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -57, 0, 5248, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -37, 0, 5248, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_841028F0[] = {
+static Vtx sMenuBarRightVtx6[] = {
     VTX(100, -57, 0, 3200, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -63, 0, 3200, 4032, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -63, 0, 5248, 4032, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(164, -57, 0, 5248, 3840, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx D_84102930[] = {
+static Gfx sMenuBarBackgroundDL[] = {
     gsSPSetGeometryMode(G_CULL_BACK),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 0, 99, 19, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_841025B0, 4, 0),
+    gsSPVertex(sMenuBarVtx0, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 20, 99, 39, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_841025F0, 4, 0),
+    gsSPVertex(sMenuBarVtx1, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 40, 99, 59, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102630, 4, 0),
+    gsSPVertex(sMenuBarVtx2, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 60, 99, 79, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102670, 4, 0),
+    gsSPVertex(sMenuBarVtx3, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 80, 99, 99, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_841026B0, 4, 0),
+    gsSPVertex(sMenuBarVtx4, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 100, 99, 119, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_841026F0, 4, 0),
+    gsSPVertex(sMenuBarVtx5, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 0, 120, 99, 125, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102730, 4, 0),
+    gsSPVertex(sMenuBarVtx6, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 0, 163, 19, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102770, 4, 0),
+    gsSPVertex(sMenuBarRightVtx0, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 20, 163, 39, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_841027B0, 4, 0),
+    gsSPVertex(sMenuBarRightVtx1, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 40, 163, 59, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_841027F0, 4, 0),
+    gsSPVertex(sMenuBarRightVtx2, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 60, 163, 79, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102830, 4, 0),
+    gsSPVertex(sMenuBarRightVtx3, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 80, 163, 99, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102870, 4, 0),
+    gsSPVertex(sMenuBarRightVtx4, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 100, 163, 119, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_841028B0, 4, 0),
+    gsSPVertex(sMenuBarRightVtx5, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 164, 0, 100, 120, 163, 125, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_841028F0, 4, 0),
+    gsSPVertex(sMenuBarRightVtx6, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSPEndDisplayList(),
 };
-static u32 D_84102D40[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_841025B0, 0x05000000, 0x22040000,
+static u32 sMenuBarGeoLayout[] = {
+    0x17000000, 0x00000000, 0x00000000,    0x00000000, sMenuBarVtx0, 0x05000000, 0x22040000,
     0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
-static Vtx D_84102D78[] = {
+static Vtx sMenuOptionVtx0[] = {
     VTX(0, 54, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, 34, 0, 0, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 34, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 54, 0, 3200, 0, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102DB8[] = {
+static Vtx sMenuOptionVtx1[] = {
     VTX(0, 34, 0, 0, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, 14, 0, 0, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 14, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 34, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102DF8[] = {
+static Vtx sMenuOptionVtx2[] = {
     VTX(0, 14, 0, 0, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -6, 0, 0, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -6, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 14, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102E38[] = {
+static Vtx sMenuOptionVtx3[] = {
     VTX(0, -6, 0, 0, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -26, 0, 0, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -26, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -6, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102E78[] = {
+static Vtx sMenuOptionVtx4[] = {
     VTX(0, -26, 0, 0, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -46, 0, 0, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -46, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -26, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102EB8[] = {
+static Vtx sMenuOptionVtx5[] = {
     VTX(0, -46, 0, 0, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(0, -54, 0, 0, 3456, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -54, 0, 3200, 3456, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -46, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102EF8[] = {
+static Vtx sMenuOptionRightVtx0[] = {
     VTX(100, 54, 0, 3200, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 34, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, 34, 0, 4480, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, 54, 0, 4480, 0, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102F38[] = {
+static Vtx sMenuOptionRightVtx1[] = {
     VTX(100, 34, 0, 3200, 640, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, 14, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, 14, 0, 4480, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, 34, 0, 4480, 640, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102F78[] = {
+static Vtx sMenuOptionRightVtx2[] = {
     VTX(100, 14, 0, 3200, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -6, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -6, 0, 4480, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, 14, 0, 4480, 1280, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102FB8[] = {
+static Vtx sMenuOptionRightVtx3[] = {
     VTX(100, -6, 0, 3200, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -26, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -26, 0, 4480, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -6, 0, 4480, 1920, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84102FF8[] = {
+static Vtx sMenuOptionRightVtx4[] = {
     VTX(100, -26, 0, 3200, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -46, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -46, 0, 4480, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -26, 0, 4480, 2560, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Vtx D_84103038[] = {
+static Vtx sMenuOptionRightVtx5[] = {
     VTX(100, -46, 0, 3200, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(100, -54, 0, 3200, 3456, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -54, 0, 4480, 3456, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(140, -46, 0, 4480, 3200, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx D_84103078[] = {
+static Gfx sMenuOptionBackgroundDL[] = {
     gsSPSetGeometryMode(G_CULL_BACK),
     gsDPSetCombineMode(G_CC_DECALRGBA, G_CC_PASS2),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 0, 99, 19, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102D78, 4, 0),
+    gsSPVertex(sMenuOptionVtx0, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 20, 99, 39, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102DB8, 4, 0),
+    gsSPVertex(sMenuOptionVtx1, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 40, 99, 59, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102DF8, 4, 0),
+    gsSPVertex(sMenuOptionVtx2, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 60, 99, 79, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102E38, 4, 0),
+    gsSPVertex(sMenuOptionVtx3, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 80, 99, 99, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102E78, 4, 0),
+    gsSPVertex(sMenuOptionVtx4, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 0, 100, 99, 107, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102EB8, 4, 0),
+    gsSPVertex(sMenuOptionVtx5, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 0, 139, 19, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
-    gsSPVertex(D_84102EF8, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx0, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 20, 139, 39, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102F38, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx1, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 40, 139, 59, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102F78, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx2, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 60, 139, 79, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102FB8, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx3, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 80, 139, 99, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84102FF8, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx4, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsDPLoadTextureTile(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 140, 0, 100, 100, 139, 107, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD),
-    gsSPVertex(D_84103038, 4, 0),
+    gsSPVertex(sMenuOptionRightVtx5, 4, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSPEndDisplayList(),
 };
-static u32 D_841033F8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84102D78, 0x05000000, 0x22040000,
+static u32 sMenuOptionGeoLayout[] = {
+    0x17000000, 0x00000000, 0x00000000,    0x00000000, sMenuOptionVtx0, 0x05000000, 0x22040000,
     0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback, 0x00000000, 0x06000000, 0x01000000,
 };
 
-void func_84100020(s16 arg0, s16 arg1, s16 arg2) {
+void StadiumSelect_AnimateRectangle(s16 arg0, s16 arg1, s16 arg2) {
     s16 sp4;
     s16 sp8;
     s16 spC;
@@ -549,7 +549,7 @@ void func_84100020(s16 arg0, s16 arg1, s16 arg2) {
 
 void StadiumSelect_UpdateSparkles(s16 arg0) {
     s32 i;
-    unk_D_84102498* var_s0 = &D_84102498[0];
+    MenuRectAnim* var_s0 = &sMenuRectAnimations[0];
 
     if (arg0 != 0xA) {
         return;
@@ -565,7 +565,7 @@ void StadiumSelect_UpdateSparkles(s16 arg0) {
                 switch (var_s0->unk_00) {
                     case 1:
                         var_s0->unk_06 = (s32)(COSS(var_s0->unk_08) * 16.0f) + 0x10;
-                        func_84100020(var_s0->unk_02, var_s0->unk_04, var_s0->unk_06);
+                        StadiumSelect_AnimateRectangle(var_s0->unk_02, var_s0->unk_04, var_s0->unk_06);
                         var_s0->unk_08 += 0x1000;
                         if ((u16)var_s0->unk_08 == 0x8000) {
                             var_s0->unk_00 = 2;
@@ -588,19 +588,19 @@ void StadiumSelect_InitSparkleFlags(void) {
     s32 i;
 
     for (i = 0; i < D_84103CF0.nintendoCupClears; i++) {
-        D_84102498[i].unk_00 = 1;
+        sMenuRectAnimations[i].unk_00 = 1;
     }
 
     for (i = 0; i < D_84103CF0.primeCupClears; i++) {
-        D_84102498[i + 6].unk_00 = 1;
+        sMenuRectAnimations[i + 6].unk_00 = 1;
     }
 
     if (D_84103CF0.clearedModes & 0x10) {
-        D_84102510[0] = 1;
+        sMenuAnimFlag0[0] = 1;
     }
 
     if (D_84103CF0.clearedModes & 0x20) {
-        D_8410251C[0] = 1;
+        sMenuAnimFlag1[0] = 1;
     }
 }
 
@@ -710,9 +710,9 @@ s32 StadiumSelect_IconGeoPostCallback(s32 arg0, unk_func_80011B94* arg1) {
         gSPSegment(gDisplayListHead++, 0x0F, (u32)D_84103CD0[idx]->img_p & 0x1FFFFFFF);
 
         if ((idx == 0) || (idx == 3)) {
-            gSPDisplayList(gDisplayListHead++, D_84102930);
+            gSPDisplayList(gDisplayListHead++, sMenuBarBackgroundDL);
         } else {
-            gSPDisplayList(gDisplayListHead++, D_84103078);
+            gSPDisplayList(gDisplayListHead++, sMenuOptionBackgroundDL);
         }
         GeoRender_ApplyMaterialState();
     }
@@ -743,7 +743,7 @@ void StadiumSelect_DrawCupInfoPanel(s16 arg0) {
         Font_Printf(0x48, 0x160, Text_GetString(NULL, 0, D_84103440, D_84103CC8));
         Font_Printf(0x18C, 0x160, Text_GetString(NULL, 0, D_84103440, 0xC));
         Font_Printf(Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_84103440, 0xC)) + 0x190, 0x160, "%d~%d",
-                      D_84102528[D_84103CC8][0], D_84102528[D_84103CC8][1]);
+                      sMenuOptionRanges[D_84103CC8][0], sMenuOptionRanges[D_84103CC8][1]);
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetLineHeight(0x18);
@@ -798,7 +798,7 @@ void StadiumSelect_RenderFrame(s32 arg0, s32 arg1, f32 arg2) {
     Geo_RenderRootNode(D_84103454);
 
     if (arg2 != 0.0f) {
-        unk_D_84102450* ptr = &D_84102450[D_84103CC8];
+        MenuItemInfo* ptr = &sMenuItemInfo[D_84103CC8];
 
         temp_v1 = (ptr->unk_04 / 2) + ptr->unk_00;
         temp_t1 = (ptr->unk_06 / 2) + ptr->unk_02;
@@ -808,7 +808,7 @@ void StadiumSelect_RenderFrame(s32 arg0, s32 arg1, f32 arg2) {
     }
 
     if (arg1 != 0) {
-        unk_D_84102450* ptr = &D_84102450[D_84103CC8];
+        MenuItemInfo* ptr = &sMenuItemInfo[D_84103CC8];
 
         StadiumSelect_DrawSelectionCorners(ptr->unk_00, ptr->unk_02, ptr->unk_04, ptr->unk_06, 0xFF, 0xF0, 0x64, 0xFF);
     }
@@ -839,7 +839,7 @@ DepthBuffer* StadiumSelect_BuildDivisionCupIcon(u8* arg0, s16 arg1) {
     Gfx_DrawTextureRgba16(4, (i * 0xC) + 4, 0x98, 6, (i * 0xE40) + arg0, 0x98, 0);
 
     for (i = 0; i < var_s3; i++) {
-        Gfx_DrawTextureRgba16((i * 0x26) + 5, 0x46, 0x24, 0x30, D_84102534[i], 0x24, 0);
+        Gfx_DrawTextureRgba16((i * 0x26) + 5, 0x46, 0x24, 0x30, sMenuOptionTexturePointers[i], 0x24, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -866,7 +866,7 @@ DepthBuffer* StadiumSelect_BuildSimpleCupIcon(u8* arg0, s16 arg1) {
         } else {
             var_v0 = 4;
         }
-        Gfx_DrawTextureRgba16(0x54, 0x3A, 0x30, 0x2A, D_84102534[var_v0], 0x30, 0);
+        Gfx_DrawTextureRgba16(0x54, 0x3A, 0x30, 0x2A, sMenuOptionTexturePointers[var_v0], 0x30, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -905,13 +905,13 @@ s16 StadiumSelect_HandleInput(void) {
         var_v1 = -1;
         var_a1 = 6;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
-        var_v1 = D_84102450[D_84103CC8].unk_08;
+        var_v1 = sMenuItemInfo[D_84103CC8].unk_08;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
-        var_v1 = D_84102450[D_84103CC8].unk_09;
+        var_v1 = sMenuItemInfo[D_84103CC8].unk_09;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DLEFT)) {
-        var_v1 = D_84102450[D_84103CC8].unk_0A;
+        var_v1 = sMenuItemInfo[D_84103CC8].unk_0A;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DRIGHT)) {
-        var_v1 = D_84102450[D_84103CC8].unk_0B;
+        var_v1 = sMenuItemInfo[D_84103CC8].unk_0B;
     }
 
     if (var_v1 != -1) {
@@ -947,7 +947,7 @@ void StadiumSelect_Loop(void) {
     D_84103CC8 = temp_v0;
 
     if (D_84103CC8 < 6) {
-        D_8410344C = BinArchive_GetFile(D_84103444, D_84102430[D_84103CC8]);
+        D_8410344C = BinArchive_GetFile(D_84103444, sBackgroundFileIds[D_84103CC8]);
 
         for (i = 11; i < 21; i++) {
             Controller_PollInputs();
@@ -983,9 +983,9 @@ void StadiumSelect_InitGeoLayouts(void) {
     DisplayObject* ptr2;
     MemoryBlock* temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
 
-    D_84103454 = process_geo_layout(temp_v0, D_8410254C);
-    D_84103CE8 = process_geo_layout(temp_v0, D_84102D40);
-    D_84103CEC = process_geo_layout(temp_v0, D_841033F8);
+    D_84103454 = process_geo_layout(temp_v0, sMenuGeoLayoutRoot);
+    D_84103CE8 = process_geo_layout(temp_v0, sMenuBarGeoLayout);
+    D_84103CEC = process_geo_layout(temp_v0, sMenuOptionGeoLayout);
 
     MainPool_FinalizeAllocation(temp_v0);
     ModelRenderer_InitDisplayRoots();

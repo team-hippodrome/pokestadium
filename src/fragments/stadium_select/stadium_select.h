@@ -5,7 +5,7 @@
 #include "src/gfx_rect.h"
 #include "src/geo_node.h"
 
-void func_84100020(s16 arg0, s16 arg1, s16 arg2);
+void StadiumSelect_AnimateRectangle(s16 arg0, s16 arg1, s16 arg2);
 void StadiumSelect_UpdateSparkles(s16 arg0);
 void StadiumSelect_InitSparkleFlags(void);
 void StadiumSelect_DrawIconFrame(DepthBuffer* arg0, s16 arg1, s16 arg2);
