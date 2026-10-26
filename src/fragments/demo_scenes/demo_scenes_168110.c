@@ -101,23 +101,23 @@ void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1) {
     f32 sp28;
 
     D_86B0FA7C->unk_44 = 0.0f;
-    if (arg0->unk_30 != 200.0f) {
-        arg1->perspective.verticalFieldOfView = D_86B0FA7C->unk_40 = arg0->unk_30;
+    if (arg0->verticalFieldOfView != 200.0f) {
+        arg1->perspective.verticalFieldOfView = D_86B0FA7C->unk_40 = arg0->verticalFieldOfView;
     } else {
-        D_86B0FA7C->unk_40 = arg0->unk_30;
+        D_86B0FA7C->unk_40 = arg0->verticalFieldOfView;
     }
 
-    sp34 = Intro_ClampOrbitDistance(arg0->unk_0C, 500.0f);
-    sp30 = Intro_ClampOrbitDistance(arg0->unk_20, 500.0f);
-    sp2C = Intro_ClampOrbitDistance(arg0->unk_10, 500.0f);
-    sp28 = Intro_ClampOrbitDistance(arg0->unk_24, 500.0f);
+    sp34 = Intro_ClampOrbitDistance(arg0->startingDistance, 500.0f);
+    sp30 = Intro_ClampOrbitDistance(arg0->distanceOffset, 500.0f);
+    sp2C = Intro_ClampOrbitDistance(arg0->eyeDistance, 500.0f);
+    sp28 = Intro_ClampOrbitDistance(arg0->distance, 500.0f);
 
-    IntroCamKeyframe_SetAngles(arg0->unk_00, Intro_GetTrackedModelFacingOffset() + arg0->unk_02, arg0->unk_14, Intro_GetTrackedModelFacingOffset() + arg0->unk_16);
+    IntroCamKeyframe_SetAngles(arg0->startingRotationX, Intro_GetTrackedModelFacingOffset() + arg0->startingRotationY, arg0->rotationXOffset, Intro_GetTrackedModelFacingOffset() + arg0->rotationYOffset);
     IntroCamKeyframe_SetDistance(sp34, sp30);
 
-    IntroCamKeyframe_SetAtAngles(arg0->unk_06, Intro_GetTrackedModelFacingOffset() + arg0->unk_08, arg0->unk_1A, Intro_GetTrackedModelFacingOffset() + arg0->unk_1C);
+    IntroCamKeyframe_SetAtAngles(arg0->eyeRotationX, Intro_GetTrackedModelFacingOffset() + arg0->eyeRotationY, arg0->rotationX, Intro_GetTrackedModelFacingOffset() + arg0->rotationY);
     IntroCamKeyframe_SetAtDistance(sp2C, sp28);
-    IntroCamKeyframe_SetTransitionSpeed(arg0->unk_28, arg0->unk_2C);
+    IntroCamKeyframe_SetTransitionSpeed(arg0->targetZ, arg0->speed);
 }
 
 s32 Intro_UpdateCameraKeyframe(CameraNode* arg0) {
