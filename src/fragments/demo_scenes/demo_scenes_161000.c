@@ -87,22 +87,22 @@ void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1) {
     ptr->unk_74 = 0.0f;
     ptr->unk_68 = 0;
 
-    if (arg0->unk_30 != 255.0f) {
-        ptr2->perspective.verticalFieldOfView = ptr->unk_3C = arg0->unk_30;
+    if (arg0->verticalFieldOfView != 255.0f) {
+        ptr2->perspective.verticalFieldOfView = ptr->unk_3C = arg0->verticalFieldOfView;
     } else {
-        ptr->unk_3C = arg0->unk_30;
+        ptr->unk_3C = arg0->verticalFieldOfView;
     }
 
-    sp34 = arg0->unk_0C;
-    sp30 = arg0->unk_20;
-    sp2C = arg0->unk_10;
-    sp28 = arg0->unk_24;
+    sp34 = arg0->startingDistance;
+    sp30 = arg0->distanceOffset;
+    sp2C = arg0->eyeDistance;
+    sp28 = arg0->distance;
 
-    DioramaCamKeyframe_SetAngles(ptr, arg0->unk_00, arg0->unk_02, arg0->unk_14, arg0->unk_16);
+    DioramaCamKeyframe_SetAngles(ptr, arg0->startingRotationX, arg0->startingRotationY, arg0->rotationXOffset, arg0->rotationYOffset);
     DioramaCamKeyframe_SetDistance(ptr, sp34, sp30);
-    DioramaCamKeyframe_SetAtAngles(ptr, arg0->unk_06, arg0->unk_08, arg0->unk_1A, arg0->unk_1C);
+    DioramaCamKeyframe_SetAtAngles(ptr, arg0->eyeRotationX, arg0->eyeRotationY, arg0->rotationX, arg0->rotationY);
     DioramaCamKeyframe_SetAtDistance(ptr, sp2C, sp28);
-    DioramaCamKeyframe_SetTransitionSpeed(ptr, arg0->unk_28, arg0->unk_2C);
+    DioramaCamKeyframe_SetTransitionSpeed(ptr, arg0->targetZ, arg0->speed);
 }
 
 void Diorama_SetCameraToKeyframeStart(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) {
