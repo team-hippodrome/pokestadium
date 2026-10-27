@@ -40,23 +40,23 @@ typedef struct unk_D_86B0E5D4 {
 } unk_D_86B0E5D4; // size = 0x7C
 
 typedef struct DioramaAnimData {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
+    /* 0x00 */ s16 startingRotationX;
+    /* 0x02 */ s16 startingRotationY;
     /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
+    /* 0x06 */ s16 eyeRotationX;
+    /* 0x08 */ s16 eyeRotationY;
+    /* 0x0C */ f32 startingDistance;
+    /* 0x10 */ f32 eyeDistance;
+    /* 0x14 */ s16 rotationXOffset;
+    /* 0x16 */ s16 rotationYOffset;
     /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ f32 unk_30;
+    /* 0x1A */ s16 rotationX;
+    /* 0x1C */ s16 rotationY;
+    /* 0x20 */ f32 distanceOffset;
+    /* 0x24 */ f32 distance;
+    /* 0x28 */ f32 targetZ;
+    /* 0x2C */ f32 speed;
+    /* 0x30 */ f32 verticalFieldOfView;
 } DioramaAnimData; // size = 0x34
 
 typedef struct unk_D_86B0E5F0 {

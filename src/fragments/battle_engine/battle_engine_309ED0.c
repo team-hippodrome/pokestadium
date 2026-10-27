@@ -470,7 +470,7 @@ s32 BattleScene_PrepareReplacementTransition(void) {
         if (sp24->unk_2D == 0x10) {
             sBattleScene.scene->unk_38 = 0x12;
         } else {
-            BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[sBattleScene.scene->side], &gCameraPreset.unk_00);
+            BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[sBattleScene.scene->side], &gCameraPreset.startingPosition);
             BattleScene_LoadCameraPreset(&D_843848F0, sBattleScene.scene->camera, sActivePokemon[sBattleScene.scene->side]);
             sBattleScene.scene->unk_38 = 0xB;
         }
@@ -843,7 +843,7 @@ void BattleScene_SendOutPresentationFinalize(CameraNode* arg0) {
     Battle_ResetModelToIdleAnim(sActivePokemon[sBattleScene.scene->side]);
     Vec3f_SetComponentsDuplicate(&sActivePokemon[sBattleScene.scene->side]->displayObject.scale, 1.0f, 1.0f, 1.0f);
     sActivePokemon[sBattleScene.scene->side]->displayObject.position.y = BattleScene_GetParticipantModelRestingHeight(sActivePokemon[sBattleScene.scene->side]);
-    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[sBattleScene.scene->side], &gCameraPreset.unk_00);
+    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[sBattleScene.scene->side], &gCameraPreset.startingPosition);
     BattleScene_LoadCameraPreset(&D_84384AF8, arg0, sActivePokemon[sBattleScene.scene->side]);
     BattleScene_ApplyCameraPreset(arg0, sActivePokemon[sBattleScene.scene->side], 1);
     Audio_StartBattleMusicSequence();
@@ -1220,7 +1220,7 @@ void BattleScene_InitializeIntroCamera(CameraNode* arg0) {
         sp24 = 2;
     }
 
-    BattleAnim_Vec3fCopy(&gCameraPreset.unk_00, &s100UnitsUpFromCenter);
+    BattleAnim_Vec3fCopy(&gCameraPreset.startingPosition, &s100UnitsUpFromCenter);
     BattleScene_LoadCameraPresetUnscaled(&D_84384B2C[sp24], arg0);
     BattleScene_ApplyCameraPreset(arg0, D_84390204, 0);
     sBattleScene.scene->cameraCounter++;
@@ -1355,10 +1355,10 @@ void BattleScene_ActionSetupCameraStep(CameraNode* arg0) {
                     BattleScene_ResetOwnerPresentationFlags(D_84390200);
                 }
 
-                BattleAnim_GetOwnerDefaultAnchorPosition(D_84390204, &gCameraPreset.unk_00);
+                BattleAnim_GetOwnerDefaultAnchorPosition(D_84390204, &gCameraPreset.startingPosition);
 
                 if (sp1C->flags & 0x4000) {
-                    gCameraPreset.unk_00.y = 15.000001f;
+                    gCameraPreset.startingPosition.y = 15.000001f;
                 }
 
                 if (sBattleScene.scene->unk_34 == 1) {
@@ -1676,7 +1676,7 @@ void BattleScene_ActionSetupAnimationVariantC(CameraNode* arg0) {
         case 0:
             BattleScene_ResetCameraFrameCounter();
             BattleScene_SetPhaseFlag();
-            Vec3f_SetComponentsDuplicate(&gCameraPreset.unk_00, D_84390204->facingDirection * -175.0f, 25.0f, 0.0f);
+            Vec3f_SetComponentsDuplicate(&gCameraPreset.startingPosition, D_84390204->facingDirection * -175.0f, 25.0f, 0.0f);
             BattleScene_LoadCameraPreset(&D_84384958, arg0, D_84390204);
             if ((D_84390204->displayObject.objectType != 0x33) && (D_84390204->displayObject.objectType != 0x32)) {
                 BattleAnim_PlayMoveEffectScript(D_84390204, sp18->usedMove);
@@ -1698,7 +1698,7 @@ void BattleScene_ActionSetupAnimationVariantD(CameraNode* arg0) {
         case 0:
             BattleScene_ResetCameraFrameCounter();
             BattleScene_SetPhaseFlag();
-            BattleAnim_GetOwnerDefaultAnchorPosition(D_84390204, &gCameraPreset.unk_00);
+            BattleAnim_GetOwnerDefaultAnchorPosition(D_84390204, &gCameraPreset.startingPosition);
             BattleScene_LoadCameraPreset(&D_84384924, arg0, D_84390204);
             break;
 
