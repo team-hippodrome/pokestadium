@@ -1776,7 +1776,7 @@ void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonSta
                         } else {
                             BattleHud_DrawDoublesTeamStatusList(active_pokemon, 96, 0xF, roster->controllerPort);
                         }
-                    } else if (state->unk_2D == 0x10) {
+                    } else if (state->replacementState == 0x10) {
                         BattleHud_DrawOneOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
                     } else {
                         BattleHud_DrawTwoOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
@@ -1835,7 +1835,7 @@ void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokem
                         } else {
                             BattleHud_DrawDoublesTeamStatusList(active_pokemon, 0x18, 0x79, roster->controllerPort);
                         }
-                    } else if (state->unk_2D == 0x10) {
+                    } else if (state->replacementState == 0x10) {
                         BattleHud_DrawOneOptionLabelBar(active_pokemon, 0x98, 0xCE, roster->controllerPort);
                     } else {
                         BattleHud_DrawTwoOptionLabelBar(active_pokemon, 0x62, 0xCE, roster->controllerPort);

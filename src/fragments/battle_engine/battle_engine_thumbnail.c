@@ -84,7 +84,7 @@ void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokem
     Sets up the camera framing for both pokemons's thumbnails.
 */
 void BattleThumbnail_SetupOwnerCameraFraming(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon) {
-    if (sBattleScene.scene->unk_1C == 1) {
+    if (sBattleScene.scene->mode == 1) {
         BattleThumbnail_SetBothOwnerIdleFlags();
     } else {
         BattleThumbnail_ClearBothOwnerIdleFlags();

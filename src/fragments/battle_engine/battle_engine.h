@@ -44,7 +44,7 @@ typedef struct ActivePokemonState {
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
-    /* 0x2D */ u8 unk_2D;
+    /* 0x2D */ u8 replacementState;
     /* 0x2E */ u8 alpha;
     /* 0x2F */ u8 forfeitCursorHover;
     /* 0x30 */ u16 flashTimer;
@@ -215,27 +215,27 @@ typedef struct unk_D_8438E7B0 {
 typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s8 unk_08;
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ s32 bRollShotIndex;
     /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
+    /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 unk_18;
     /* 0x1A */ u8 unk_1A;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 cameraCounter;
+    /* 0x1C */ s32 mode;
+    /* 0x20 */ s32 phaseStep;
     /* 0x24 */ s32 updateCounter;
     /* 0x28 */ char unk28[0x2];
     /* 0x2A */ u16 sideCurrentlySwitching;
-    /* 0x2C */ u16 sideBeingAnimated;
+    /* 0x2C */ u16 actingSide;
     /* 0x2E */ u16 unk_2E;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ s32 unk_34;
     /* 0x38 */ s32 phase;
-    /* 0x3C */ s32 unk_3C;
+    /* 0x3C */ s32 phaseSubstep;
     /* 0x40 */ s32 winner;
     /* 0x44 */ s32 unk_44;
-    /* 0x48 */ s32 unk_48;
+    /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 unk_4C;
-    /* 0x50 */ s32 unk_50;
+    /* 0x50 */ s32 cameraPresetId;
     /* 0x54 */ u8 unk_54;
     /* 0x56 */ s16 rotationX;
     /* 0x58 */ s16 rotationY;
@@ -255,9 +255,9 @@ typedef struct BattleScene {
     /* 0x94 */ Vec3f targetPosition;
     /* 0xA0 */ Vec3f unk_A0;
     /* 0xAC */ char unkAC[0xC];
-    /* 0xB8 */ Vec3f unk_B8;
-    /* 0xC4 */ Vec3f unk_C4;
-    /* 0xD0 */ Vec3f cameraStartingPosition;
+    /* 0xB8 */ Vec3f savedCameraTarget;
+    /* 0xC4 */ Vec3f savedCameraEye;
+    /* 0xD0 */ Vec3f cameraAnchor;
     /* 0xDC */ CameraNode* camera;
 } BattleScene; // size = 0xE0
 

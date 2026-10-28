@@ -585,7 +585,7 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, model_id);
     BattleScene_ReinitParticipantAfterimages(active_pokemon, model_id);
     Battle_ResetEventTrack(active_pokemon);
-    pokemon_state->unk_2D = 0;
+    pokemon_state->replacementState = 0;
     pokemon_state->flags &= (ACTIVE_SUBSTITUTE | ACTIVE_SUB_BREAK);
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }

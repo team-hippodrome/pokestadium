@@ -74,7 +74,7 @@ void BattleAnim_UpdateSleepStatusAnimation(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &pokemon_state->runtime;
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
-    if ((sBattleScene.scene->phase != 0xB) || (sBattleScene.scene->cameraCounter >= 6)) {
+    if ((sBattleScene.scene->phase != 0xB) || (sBattleScene.scene->phaseStep >= 6)) {
         if ((party_pokemon->statusCondition & 7) && (runtime->unk_15 & 7) && !(active_pokemon->state.flags & 1)) {
             BattleAnim_SetModelEventTrackAndState(active_pokemon, BATTLE_CUE_SLEEP_IDLE, 2);
             BattleAnim_QueueEffectList(3, active_pokemon);
