@@ -216,7 +216,7 @@ typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s8 unk_08;
     /* 0x0C */ s32 bRollShotIndex;
-    /* 0x10 */ s32 unk_10;
+    /* 0x10 */ s32 substepFrameCounter;
     /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 unk_18;
     /* 0x1A */ u8 unk_1A;

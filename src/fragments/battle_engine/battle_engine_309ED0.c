@@ -3359,11 +3359,11 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* arg0) {
 }
 
 void BattleScene_PhaseWithdrawSwitch(CameraNode* camera) {
-    ActivePokemonState* sp3C = &sActivePokemon[sBattleScene.scene->actingSide]->state;
-    ActivePokemonState* sp38 = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
+    ActivePokemonState* acting_pokemon_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    ActivePokemonState* other_pokemon_state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     UNUSED s32 pad;
-    ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->actingSide];
-    BattleMonRuntime* sp2C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
+    ActivePokemon* acting_pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    BattleMonRuntime* acting_pokemon_runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -3371,88 +3371,88 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* camera) {
                 BattleScene_ResetCameraFov(camera);
                 BattleScene_ResetCameraFrameCounter();
                 BattleBox_Open(0xB);
-                BattleAnim_LoadModeResourceList(temp_s0->sessionTeams, 3);
-                Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, temp_s0->facingDirection * -150.0f, 0.0, 0.0f);
-                Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, temp_s0->facingDirection * -50.0f, 5.0f, 0.0f);
-                Vec3f_SetComponentsDuplicate(&temp_s0->displayObject.position, temp_s0->facingDirection * -150.0f, 25.0f, 0.0f);
+                BattleAnim_LoadModeResourceList(acting_pokemon->sessionTeams, 3);
+                Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, acting_pokemon->facingDirection * -150.0f, 0.0, 0.0f);
+                Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, acting_pokemon->facingDirection * -50.0f, 5.0f, 0.0f);
+                Vec3f_SetComponentsDuplicate(&acting_pokemon->displayObject.position, acting_pokemon->facingDirection * -150.0f, 25.0f, 0.0f);
                 sBattleScene.scene->phaseStep += 1;
             } else {
                 BattleAnim_ApproachF(&camera->perspective.verticalFieldOfView, 30.0f, 0.05f);
-                if (BattleScene_AnimateCameraIntro(camera, temp_s0) != 0) {
+                if (BattleScene_AnimateCameraIntro(camera, acting_pokemon) != 0) {
                     BattleScene_ResetCameraFov(camera);
                     BattleScene_ResetCameraFrameCounter();
                     BattleBox_Open(0xB);
-                    BattleAnim_LoadModeResourceList(temp_s0->sessionTeams, 3);
+                    BattleAnim_LoadModeResourceList(acting_pokemon->sessionTeams, 3);
                     sBattleScene.scene->phaseStep += 1;
                 }
             }
             break;
 
         case 1:
-            if (BattleAnim_TryRegisterAssetTables(temp_s0) != 0) {
-                temp_s0->sessionTeams->displayModel = sp2C->id;
-                BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
-                BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);
+            if (BattleAnim_TryRegisterAssetTables(acting_pokemon) != 0) {
+                acting_pokemon->sessionTeams->displayModel = acting_pokemon_runtime->id;
+                BattleScene_SetParticipantModelTransform(acting_pokemon, 2, 0);
+                BattleAnim_QueueEffectList3(0xD, acting_pokemon, acting_pokemon, 0xFF, 0xFF);
                 sBattleScene.scene->phaseStep += 1;
             }
             break;
 
         case 2:
-            if (temp_s0->pokeBall.position.y == 2.5f) {
-                temp_s0->pokeBall.node.renderFlags |= 0x20;
+            if (acting_pokemon->pokeBall.position.y == 2.5f) {
+                acting_pokemon->pokeBall.node.renderFlags |= 0x20;
             }
 
-            if (ModelAnim_IsAnimationDone(&temp_s0->pokeBall) == 1) {
+            if (ModelAnim_IsAnimationDone(&acting_pokemon->pokeBall) == 1) {
                 sBattleScene.scene->phaseStep += 1;
             }
             break;
 
         case 3:
-            temp_s0->pokeBall.node.flags &= ~1;
-            temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
-            temp_s0->sessionTeams->unk_04 = &temp_s0->sessionTeams->teamMember[sp3C->ownerTeamMemberIndex]->pokemonPicked[sp3C->actionChosen];
+            acting_pokemon->pokeBall.node.flags &= ~1;
+            acting_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
+            acting_pokemon->sessionTeams->unk_04 = &acting_pokemon->sessionTeams->teamMember[acting_pokemon_state->ownerTeamMemberIndex]->pokemonPicked[acting_pokemon_state->actionChosen];
             sBattleScene.scene->phaseStep += 1;
             break;
 
         case 4:
-            if (temp_s0->sessionTeams->uniqueStatusFlags & 0x10) {
-                temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
-                Battle_LoadOwnerModelForSwitchIn(temp_s0);
-                BattleThumbnail_TickOwnerCameraFraming(temp_s0);
-                sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(temp_s0)] = temp_s0->state.runtime.displayHp;
+            if (acting_pokemon->sessionTeams->uniqueStatusFlags & 0x10) {
+                acting_pokemon->sessionTeams->uniqueStatusFlags &= ~0x90;
+                Battle_LoadOwnerModelForSwitchIn(acting_pokemon);
+                BattleThumbnail_TickOwnerCameraFraming(acting_pokemon);
+                sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(acting_pokemon)] = acting_pokemon->state.runtime.displayHp;
                 Audio_PlayCommand(2, 0, 0);
-                BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->ownerTeamMemberIndex);
+                BattleScene_RebindParticipantTeamMember(acting_pokemon, acting_pokemon_state->ownerTeamMemberIndex);
                 BattleScene_ResetCameraFrameCounter();
-                BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
+                BattleAnim_QueueEffectList3(3, acting_pokemon, acting_pokemon, 0xFF, 0xFF);
                 camera->perspective.verticalFieldOfView = 40.0f;
-                Battle_TriggerTrainerPresentationCue(temp_s0);
+                Battle_TriggerTrainerPresentationCue(acting_pokemon);
                 sBattleDamage = 0;
                 sBattleScene.scene->phaseStep += 1;
             }
             break;
 
         case 5:
-            BattleScene_EnterStateRow(temp_s0, 0x12);
-            BattleScene_SelectCameraFollowPreset(temp_s0, camera, 3);
+            BattleScene_EnterStateRow(acting_pokemon, 0x12);
+            BattleScene_SelectCameraFollowPreset(acting_pokemon, camera, 3);
             sBattleScene.scene->phaseStep += 1;
             break;
 
         case 6:
-            BattleScene_ReframeAndRecomputeDistanceForSwitch(camera, temp_s0);
-            if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 0x3C) != 0) {
-                if ((sp2C->usedMove & 0xF0) == 0xF0) {
-                    sp2C->usedMove = STRUGGLE;
+            BattleScene_ReframeAndRecomputeDistanceForSwitch(camera, acting_pokemon);
+            if (BattleScene_IsRowWaitCompleteWithEventCount(acting_pokemon, 0x3C) != 0) {
+                if ((acting_pokemon_runtime->usedMove & 0xF0) == 0xF0) {
+                    acting_pokemon_runtime->usedMove = STRUGGLE;
                 }
                 Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(2);
                 BattleScene_ResetCameraFrameCounter();
-                Vec3f_SetComponentsDuplicate(&temp_s0->displayObject.scale, 1.0f, 1.0f, 1.0f);
-                if (sp38->replacementState != 0x10) {
+                Vec3f_SetComponentsDuplicate(&acting_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
+                if (other_pokemon_state->replacementState != 0x10) {
                     sBattleScene.scene->unk_34 = 3;
                 }
                 sBattleScene.scene->unk_2E = 2;
                 BattleScene_CleanupActionAndAdvance();
-                sp3C->flags &= 0xE7FF;
+                acting_pokemon_state->flags &= 0xE7FF;
                 sBattleScene.scene->unk_54 = !sBattleScene.scene->actingSide + 1;
             }
             break;

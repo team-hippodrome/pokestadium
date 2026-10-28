@@ -6,26 +6,27 @@
 #include "src/matrix.h"
 #include "src/memory.h"
 #include "src/util.h"
+#include "status.h"
 
 unk_D_84390240 sBattleScene;
 static s32 pad_D_84390280;
-static s32 D_84390284;
+static s32 sActiveSide;
 s32 D_84390288;
 static s32 pad_D_84390290[4];
 
-void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
+void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* camera) {
     f32 sp3C;
 
-    BattleScene_SetCameraClipPlanes(arg0, 20.0f, 12800.0f);
-    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_84390284], &sBattleScene.scene->cameraAnchor);
-    sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[D_84390284], 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(sActivePokemon[D_84390284], arg0, sBattleScene.scene->cameraAnchor, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_84390284]),
+    BattleScene_SetCameraClipPlanes(camera, 20.0f, 12800.0f);
+    BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[sActiveSide], &sBattleScene.scene->cameraAnchor);
+    sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[sActiveSide], 3.5f, 300.0f);
+    BattleScene_SetCameraAtFromAnchor(sActivePokemon[sActiveSide], camera, sBattleScene.scene->cameraAnchor, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[sActiveSide]),
                   0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_84390284]), sp3C, 0.0f);
+    BattleScene_SetCameraEyeFromAt(camera, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[sActiveSide]), sp3C, 0.0f);
 
-    if (sActivePokemon[0]) {}
+    if (sActivePokemon[0]) {} // karodo
     sBattleScene.scene->phaseStep += 1;
-    if (D_84390284) {}
+    if (sActiveSide) {}
 }
 
 void BattleScene_FinalPresentationFrameOwner0(CameraNode* arg0) {
@@ -37,7 +38,7 @@ void BattleScene_FinalPresentationFrameOwner0(CameraNode* arg0) {
     BattleScene_SetCameraAtFromAnchor(sActivePokemon[0], arg0, sBattleScene.scene->cameraAnchor, 0, BattleScene_GetParticipantFacingAngle(*sActivePokemon), 0.0f, 0.0f);
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(*sActivePokemon), sp3C, 0.0f);
 
-    if (sActivePokemon[0]) {}
+    if (sActivePokemon[0]) {} // karodo
     sBattleScene.scene->phaseStep += 1;
 }
 

@@ -21,9 +21,9 @@ f32 BattleScene_ScaleCameraDistance(ActivePokemon* pokemon, f32 scale, f32 max_a
 }
 
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 arg0) {
-    sBattleScene.scene->unk_10++;
-    if (sBattleScene.scene->unk_10 >= arg0) {
-        sBattleScene.scene->unk_10 = 0;
+    sBattleScene.scene->substepFrameCounter++;
+    if (sBattleScene.scene->substepFrameCounter >= arg0) {
+        sBattleScene.scene->substepFrameCounter = 0;
         return 1;
     }
     return 0;
@@ -62,7 +62,7 @@ void BattleScene_ResetCameraFrameCounter(void) {
 }
 
 void BattleScene_ResetCameraSubstepCounter(void) {
-    sBattleScene.scene->unk_10 = 0;
+    sBattleScene.scene->substepFrameCounter = 0;
 }
 
 void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x, s16 rotation_y) {
