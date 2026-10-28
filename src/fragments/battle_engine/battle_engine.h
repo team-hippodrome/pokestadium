@@ -222,14 +222,14 @@ typedef struct BattleScene {
     /* 0x1A */ u8 unk_1A;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 cameraCounter;
-    /* 0x24 */ s32 unk_24;
+    /* 0x24 */ s32 updateCounter;
     /* 0x28 */ char unk28[0x2];
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 side;
+    /* 0x2A */ u16 sideCurrentlySwitching;
+    /* 0x2C */ u16 sideBeingAnimated;
     /* 0x2E */ u16 unk_2E;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ s32 unk_34;
-    /* 0x38 */ s32 unk_38;
+    /* 0x38 */ s32 phase;
     /* 0x3C */ s32 unk_3C;
     /* 0x40 */ s32 winner;
     /* 0x44 */ s32 unk_44;
@@ -241,7 +241,7 @@ typedef struct BattleScene {
     /* 0x58 */ s16 rotationY;
     /* 0x5A */ char unk5A[0x2];
     /* 0x5C */ f32 distance;
-    /* 0x60 */ f32 unk_60;
+    /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ char unk64[0x4];
     /* 0x68 */ f32 unk_68;
     /* 0x6C */ f32 unk_6C;
@@ -305,8 +305,8 @@ typedef struct unk_D_84390178 {
 
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0C */ s16 rotationX;
+    /* 0x0E */ s16 rotationY;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ u16 idleTimer;
     /* 0x14 */ char unk14[0xC];
@@ -920,7 +920,7 @@ extern s16 sChargeMoveCues[];
 extern ThumbnailSettings sSideThumbnailSettings[2];
 extern DioramaAnimData D_843847EC[3];
 extern DioramaAnimData D_84384888[2];
-extern DioramaAnimData D_843848F0;
+extern DioramaAnimData sSwitchCameraPreset;
 extern DioramaAnimData D_84384924;
 extern DioramaAnimData D_84384958;
 extern DioramaAnimData D_8438498C;
@@ -987,8 +987,8 @@ extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f sEndBattleBannerPos;
 extern BattleMessageQueue* sBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
-extern ActivePokemon* D_84390200;
-extern ActivePokemon* D_84390204;
+extern ActivePokemon* sNonActingPokemon;
+extern ActivePokemon* sActingPokemon;
 extern s32 sMultihitCount;
 extern s32 sMultihitCountdown;
 extern s32 D_84390234;

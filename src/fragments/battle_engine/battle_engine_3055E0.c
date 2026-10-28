@@ -54,7 +54,7 @@ s32 BattleScene_IsCameraFrameCounterAtLeast(s32 arg0) {
 }
 
 void BattleScene_SetActivePokemonIndex(s32 arg0) {
-    sBattleScene.scene->side = arg0;
+    sBattleScene.scene->sideBeingAnimated = arg0;
 }
 
 void BattleScene_ResetCameraFrameCounter(void) {
@@ -113,7 +113,7 @@ void BattleScene_ApplyCameraPhaseDefaults(void) {
         }
 
         if (sBattleScene.scene->unk_44 == 2) {
-            sBattleScene.scene->side = sBattleScene.scene->unk_2A;
+            sBattleScene.scene->sideBeingAnimated = sBattleScene.scene->sideCurrentlySwitching;
             BattleScene_SetCameraModeAndStep(2, 0);
         }
     }
@@ -122,7 +122,7 @@ void BattleScene_ApplyCameraPhaseDefaults(void) {
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    sBattleScene.scene->unk_68 = ((ptr->hp - arg0->state.runtime.unk_0C) / 996.0f) * 1400.0f;
+    sBattleScene.scene->unk_68 = ((ptr->hp - arg0->state.runtime.displayHp) / 996.0f) * 1400.0f;
 
     if (sBattleScene.scene->unk_68 == 0.0f) {
         sBattleScene.scene->unk_68 = 0.0f;
@@ -253,7 +253,7 @@ void BattleScene_SetCameraSendOutShot(CameraNode* camera, s32 opposite_side) {
     u8 onix;
     UNUSED u16 pad4;
     u16 sp4C;
-    s32 idx = sBattleScene.scene->side == 0;
+    s32 idx = sBattleScene.scene->sideBeingAnimated == 0;
 
     state = &sActivePokemon[idx]->state;
     onix = sOnix;

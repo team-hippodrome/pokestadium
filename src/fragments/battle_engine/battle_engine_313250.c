@@ -106,7 +106,7 @@ void BattleScene_IntroRevealFirstMon(CameraNode* arg0) {
     sActivePokemon[0]->pokeBall.node.flags &= ~1;
     BattleScene_SelectCameraFollowPreset(sActivePokemon[0], arg0, 3);
     BattleScene_EnterStateRow(sActivePokemon[0], 0x10);
-    sBattleScene.scene->side = 0;
+    sBattleScene.scene->turnSideIndex = 0;
 #if defined(VERSION_JP)
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0x21, D_84386D84_jp,
                         sp28->pokemonPicked[sp2C->actionChosen].nickname);
@@ -149,7 +149,7 @@ void BattleScene_IntroRevealSecondMon(CameraNode* arg0) {
     BattleScene_SelectCameraFollowPreset(sActivePokemon[1], arg0, 3);
     BattleScene_EnterStateRow(sActivePokemon[1], 0x10);
     sBattleScene.scene->unk_10 = 0;
-    sBattleScene.scene->side = 1;
+    sBattleScene.scene->turnSideIndex = 1;
 #if defined(VERSION_JP)
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0x21, D_84386D84_jp,
                         sp28->pokemonPicked[sp2C->actionChosen].nickname);

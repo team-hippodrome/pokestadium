@@ -20,7 +20,7 @@ typedef struct BattleMonRuntime {
     /* 0x05 */ u8 unk_05;
     /* 0x06 */ char unk06[0x5];
     /* 0x0B */ u8 id;
-    /* 0x0C */ u16 unk_0C;
+    /* 0x0C */ u16 displayHp;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u16 unk_10;
     /* 0x12 */ u16 unk_12;
@@ -49,7 +49,7 @@ typedef struct BattleMonRuntime {
     /* 0x4C */ u8 immobilizedReason;
     /* 0x4D */ u8 unk_4D;
     /* 0x4E */ u8 battleStatus3;
-    /* 0x4F */ u8 unk_4F;
+    /* 0x4F */ u8 isTrapped;
     /* 0x50 */ u8 unk_50;
     /* 0x51 */ u8 unk_51;
     /* 0x52 */ u8 movesDisabled;
