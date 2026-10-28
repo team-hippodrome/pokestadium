@@ -170,7 +170,7 @@ s32 BattleScene_AreBothParticipantModelsCompact(void) {
  * Returns 0 otherwise.
  */
 s32 BattleScene_SkipBRollCameraShotIfUnderground(UNUSED ActivePokemon* arg0, CameraNode* camera) {
-    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state;
+    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state;
 
     if ((state->unk_2D == 0x10) || ((state->flags & ACTIVE_UNDERGROUND) != 0)) {
         BattleScene_SelectNextBRollCameraShot(camera);
@@ -180,8 +180,8 @@ s32 BattleScene_SkipBRollCameraShotIfUnderground(UNUSED ActivePokemon* arg0, Cam
 }
 
 s32 BattleScene_IsEitherActivePokemonUnderground(UNUSED ActivePokemon* arg0, UNUSED CameraNode* arg1) {
-    ActivePokemonState* state1 = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state;
-    s32 idx = sBattleScene.scene->turnSideIndex == 0;
+    ActivePokemonState* state1 = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state;
+    s32 idx = sBattleScene.scene->sideBeingAnimated == 0;
     ActivePokemonState* state2 = &sActivePokemon[idx]->state;
 
     if ((state1->flags & ACTIVE_UNDERGROUND) || (state2->flags & ACTIVE_UNDERGROUND)) {
@@ -242,7 +242,7 @@ void BattleScene_BRollCameraSetupStaticZoomedOutShot(CameraNode* camera, s32 sid
     state = &sActivePokemon[side]->state;
     BattleScene_ClearCameraOffsetVectors();
     BattleScene_SetActivePokemonIndex(side);
-    pokemon = sActivePokemon[sBattleScene.scene->turnSideIndex];
+    pokemon = sActivePokemon[sBattleScene.scene->sideBeingAnimated];
 
     if (BattleScene_SkipBRollCameraShotIfUnderground(pokemon, camera) == 0) {
         BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->cameraStartingPosition);
@@ -292,7 +292,7 @@ void BattleScene_BRollCameraSetupZoomShot(CameraNode* camera, s32 side) {
 
     BattleScene_ClearCameraOffsetVectors();
     BattleScene_SetActivePokemonIndex(side);
-    pokemon = sActivePokemon[sBattleScene.scene->turnSideIndex];
+    pokemon = sActivePokemon[sBattleScene.scene->sideBeingAnimated];
 
     if (BattleScene_SkipBRollCameraShotIfUnderground(pokemon, camera) == 0) {
         if (pokemon->state.flags & ACTIVE_AIRBORNE) {
@@ -333,11 +333,11 @@ void BattleScene_BRollCameraSetupSendOutShot(CameraNode* camera, s32 side) {
  */
 void BattleScene_BRollCameraSetupHeightShotFirstSide(CameraNode* camera) {
     BattleScene_SetActivePokemonIndex(sBattleScene.scene->unk_54 - 1);
-    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->turnSideIndex], camera) != 0) {
+    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->sideBeingAnimated], camera) != 0) {
         sBattleScene.scene->unk_54 = 0;
         BattleScene_SelectNextBRollCameraShot(camera);
     } else {
-        BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->turnSideIndex);
+        BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->sideBeingAnimated);
         sBattleScene.scene->cameraCounter++;
     }
 }
@@ -347,12 +347,12 @@ void BattleScene_BRollCameraSetupHeightShotFirstSide(CameraNode* camera) {
  * BattleScene_BRollCameraUpdateHeightShotFirstSide. Skipped if either Pokemon is underground.
  */
 void BattleScene_BRollCameraSetupHeightShotSecondSide(CameraNode* camera) {
-    BattleScene_SetActivePokemonIndex(sBattleScene.scene->turnSideIndex);
+    BattleScene_SetActivePokemonIndex(sBattleScene.scene->sideBeingAnimated);
     sBattleScene.scene->unk_54 = 0;
-    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->turnSideIndex], camera) != 0) {
+    if (BattleScene_IsEitherActivePokemonUnderground(sActivePokemon[sBattleScene.scene->sideBeingAnimated], camera) != 0) {
         BattleScene_SelectNextBRollCameraShot(camera);
     } else {
-        BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->turnSideIndex);
+        BattleScene_SetCameraActivePokemonHeightShot(camera, sBattleScene.scene->sideBeingAnimated);
         sBattleScene.scene->cameraCounter++;
     }
 }
@@ -418,9 +418,9 @@ void BattleScene_BRollCameraSetupStaticCloseUp(CameraNode* camera, s32 side) {
 
         Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, target_x, target_y, pokemon->displayObject.position.z);
 
-        target_x = sSideCameraTransform[sBattleScene.scene->turnSideIndex]->coordinates.x * sModelCameraAdjustments[camera_adjustment_index].x;
-        target_rotation_x = sSideCameraTransform[sBattleScene.scene->turnSideIndex]->unk_0C;
-        target_rotation_y = (pokemon->facingDirection * sSideCameraTransform[sBattleScene.scene->turnSideIndex]->unk_0E) + BattleScene_GetParticipantFacingAngle(pokemon);
+        target_x = sSideCameraTransform[sBattleScene.scene->sideBeingAnimated]->coordinates.x * sModelCameraAdjustments[camera_adjustment_index].x;
+        target_rotation_x = sSideCameraTransform[sBattleScene.scene->sideBeingAnimated]->rotationX;
+        target_rotation_y = (pokemon->facingDirection * sSideCameraTransform[sBattleScene.scene->sideBeingAnimated]->rotationY) + BattleScene_GetParticipantFacingAngle(pokemon);
 
         Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, target_x, target_rotation_x, target_rotation_y);
         sBattleScene.scene->cameraCounter++;
@@ -553,7 +553,7 @@ void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* camera) {
  */
 void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
     UNUSED s32 pad;
-    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state;
+    ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state;
 
     if ((state->unk_2D == 0x10) || ((state->flags & ACTIVE_UNDERGROUND) != 0)) {
         BattleScene_SelectNextBRollCameraShot(camera);
@@ -561,14 +561,14 @@ void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
     }
 
     if (!(state->flags & ACTIVE_AIRBORNE)) {
-        BattleScene_ApplyOwnerFramingOnly(camera, sActivePokemon[sBattleScene.scene->turnSideIndex]);
+        BattleScene_ApplyOwnerFramingOnly(camera, sActivePokemon[sBattleScene.scene->sideBeingAnimated]);
     }
 
-    if ((state->flags & ACTIVE_SLEEP) || (state->flags & ACTIVE_FREEZE) || (sActivePokemon[sBattleScene.scene->turnSideIndex]->displayObject.objectType == SUBSTITUTE_DOLL)) {
+    if ((state->flags & ACTIVE_SLEEP) || (state->flags & ACTIVE_FREEZE) || (sActivePokemon[sBattleScene.scene->sideBeingAnimated]->displayObject.objectType == SUBSTITUTE_DOLL)) {
         if (BattleScene_AdvanceCameraFrameCounter(90) != 0) {
             BattleScene_SelectNextBRollCameraShot(camera);
         }
-    } else if (ModelAnim_IsAnimationDone(&sActivePokemon[sBattleScene.scene->turnSideIndex]->displayObject) != 0) {
+    } else if (ModelAnim_IsAnimationDone(&sActivePokemon[sBattleScene.scene->sideBeingAnimated]->displayObject) != 0) {
         BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
@@ -578,7 +578,7 @@ void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
  * then selects the next shot.
  */
 void BattleScene_BRollCameraUpdateZoomShot(CameraNode* camera) {
-    ActivePokemon* state = sActivePokemon[sBattleScene.scene->turnSideIndex];
+    ActivePokemon* state = sActivePokemon[sBattleScene.scene->sideBeingAnimated];
 
     if ((state->state.unk_2D == 0x10) || (state->state.flags & ACTIVE_UNDERGROUND)) {
         BattleScene_SelectNextBRollCameraShot(camera);
@@ -591,7 +591,7 @@ void BattleScene_BRollCameraUpdateZoomShot(CameraNode* camera) {
  * Per-frame update for b-roll shots 12 and 14 (send-out shot): holds at a 60 degree field of view for 60 frames.
  */
 void BattleScene_BRollCameraUpdateSendOutShot(CameraNode* camera) {
-    ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state;
+    ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state;
 
     if ((ptr->unk_2D == 0x10) || (ptr->flags & ACTIVE_UNDERGROUND)) {
         BattleScene_SelectNextBRollCameraShot(camera);
@@ -608,10 +608,10 @@ void BattleScene_BRollCameraUpdateSendOutShot(CameraNode* camera) {
  * swaps to the other side and starts shot 18.
  */
 void BattleScene_BRollCameraUpdateHeightShotFirstSide(CameraNode* camera) {
-    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->turnSideIndex) != 0) {
-        s32 idx = sBattleScene.scene->turnSideIndex == 0;
+    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->sideBeingAnimated) != 0) {
+        s32 idx = sBattleScene.scene->sideBeingAnimated == 0;
 
-        sBattleScene.scene->turnSideIndex = idx;
+        sBattleScene.scene->sideBeingAnimated = idx;
         sBattleScene.scene->cameraCounter = 0x12;
         BattleScene_BRollCameraSetupHeightShotSecondSide(camera);
     }
@@ -622,7 +622,7 @@ void BattleScene_BRollCameraUpdateHeightShotFirstSide(CameraNode* camera) {
  * has approached the Pokemon.
  */
 void BattleScene_BRollCameraUpdateHeightShotSecondSide(CameraNode* camera) {
-    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->turnSideIndex) != 0) {
+    if (BattleScene_ApproachCameraActivePokemonHeightShot(camera, sBattleScene.scene->sideBeingAnimated) != 0) {
         BattleScene_SelectNextBRollCameraShot(camera);
     }
 }

@@ -139,7 +139,7 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
 
 void Battle_QueueMoveCategoryUsedMessage(void) {
     u32 file_number_offset;
-    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state.runtime;
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state.runtime;
 
     runtime->lastMove = runtime->moveCache.lastMove;
 
@@ -157,8 +157,8 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
     }
 
     if ((runtime->moveCache.lastMove == METRONOME) || (runtime->moveCache.lastMove == MIRROR_MOVE)) {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
         switch (file_number_offset) {
             case 0:
@@ -182,8 +182,8 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
                 break;
         }
     } else {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
         switch (file_number_offset) {
             case 0:
@@ -212,7 +212,7 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
 void Battle_QueueMoveCategoryMessage(void) {
     u32 file_number_offset;
     UNUSED s32 pad;
-    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state.runtime;
+    BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state.runtime;
 
     if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385990, 2) != 0) {
         file_number_offset = 0;
@@ -226,8 +226,8 @@ void Battle_QueueMoveCategoryMessage(void) {
         file_number_offset = 4;
     }
 
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-    Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+    Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
     switch (file_number_offset) {
         case 0:
@@ -257,7 +257,7 @@ void Battle_QueueMetronomeMoveMessage(void) {
     s32 metronome_selected_move;
     BattleMonRuntime* runtime;
 
-    runtime = &sActivePokemon[sBattleScene.scene->turnSideIndex]->state.runtime;
+    runtime = &sActivePokemon[sBattleScene.scene->sideBeingAnimated]->state.runtime;
 
     if (BattleScene_ByteArrayContains(runtime->usedMove, D_84385990, 2) != 0) {
         file_name_offset = 0;
@@ -278,8 +278,8 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         runtime->usedMove = metronome_selected_move;
 
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
         switch (file_name_offset) {
             case 0:
@@ -305,8 +305,8 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         runtime->usedMove = METRONOME;
 
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
         switch (file_name_offset) {
             case 0:
@@ -330,8 +330,8 @@ void Battle_QueueMetronomeMoveMessage(void) {
                 break;
         }
     } else {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->turnSideIndex]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->turnSideIndex]));
+        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
+        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->sideBeingAnimated]));
 
         switch (file_name_offset) {
             case 0:
@@ -540,7 +540,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
                 return 1;
             }
 
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             if (sBattleMessageQueues->buffer[2][1] != 0) {
                 BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[2]);
             }
@@ -557,7 +557,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
         case 1:
         case 3:
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
@@ -572,7 +572,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             break;
 
         case 2:
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
@@ -584,7 +584,7 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             break;
 
         case 15:
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
             if (sBattleMessageQueues->buffer[1][1] == 0) {
                 box->visibility = 0xFF;
@@ -598,13 +598,13 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
                 box->visibility = 0xFF;
                 return 1;
             }
-            on_side1 = sBattleScene.scene->turnSideIndex == 0;
+            on_side1 = sBattleScene.scene->sideBeingAnimated == 0;
             box->visibility += 1;
             box->side = on_side1;
             break;
 
         case 9:
-            on_side1 = sBattleScene.scene->turnSideIndex == 0;
+            on_side1 = sBattleScene.scene->sideBeingAnimated == 0;
             box->visibility += 1;
             box->side = on_side1;
             break;
@@ -622,12 +622,12 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             sEndBattleBannerPos.z = 0.0f;
             sEndBattleBannerPos.x = 321.0f;
             sEndBattleBannerPos.y = 160.0f;
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             box->visibility += 1;
             break;
 
         default:
-            box->side = sBattleScene.scene->turnSideIndex;
+            box->side = sBattleScene.scene->sideBeingAnimated;
             box->visibility += 1;
             break;
     }
