@@ -92,9 +92,9 @@ void BattleScene_IntroWaitFirstMonAnim(UNUSED CameraNode* arg0) {
     }
 }
 
-void BattleScene_IntroRevealFirstMon(CameraNode* arg0) {
+void BattleScene_IntroRevealFirstMon(CameraNode* camera) {
     ActivePokemonState* sp2C = &sActivePokemon[0]->state;
-    TeamRoster* sp28 = sActivePokemon[0]->sessionTeams->teamMember[sp2C->ownerTeamMemberIndex];
+    TeamRoster* roster = sActivePokemon[0]->sessionTeams->teamMember[sp2C->ownerTeamMemberIndex];
 
     sActivePokemon[0]->thumbnail.camera->node.flags |= 1;
     sActivePokemon[0]->thumbnail.displayObject.node.flags |= 1;
@@ -104,14 +104,14 @@ void BattleScene_IntroRevealFirstMon(CameraNode* arg0) {
     BattleAnim_QueueEffectList3(3, sActivePokemon[0], sActivePokemon[0], 0xFF, 0xFF);
     sActivePokemon[0]->displayObject.node.flags |= 1;
     sActivePokemon[0]->pokeBall.node.flags &= ~1;
-    BattleScene_SelectCameraFollowPreset(sActivePokemon[0], arg0, 3);
+    BattleScene_SelectCameraFollowPreset(sActivePokemon[0], camera, 3);
     BattleScene_EnterStateRow(sActivePokemon[0], 0x10);
     sBattleScene.scene->actingSide = 0;
 #if defined(VERSION_JP)
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0x21, D_84386D84_jp,
                         sp28->pokemonPicked[sp2C->actionChosen].nickname);
 #else
-    Text_SetStringToken(0x19, (u32)sp28->pokemonPicked[sp2C->actionChosen].nickname);
+    Text_SetStringToken(0x19, (u32)roster->pokemonPicked[sp2C->actionChosen].nickname);
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0x21);
 #endif
     BattleBox_Open(0xC);
