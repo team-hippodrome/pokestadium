@@ -559,7 +559,11 @@ void Battle_ActSecondAttacker(u8 next_phase) {
     sBattleScene.scene->nextPhase = next_phase;
 }
 
-void BattleScene_PhaseResumeSaved(void) {
+/**
+ * Phase 36. Waits for the acting Pokemon's animation to finish, then jumps to the phase that
+ * Battle_ActSecondAttacker stored in nextPhase.
+ */
+void BattleScene_PhaseEnterQueuedPhase(void) {
     if (BattleScene_AdvanceOwnerAnimation(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
         sBattleScene.scene->phase = sBattleScene.scene->nextPhase;
     }
@@ -1091,7 +1095,13 @@ void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseSendOut(CameraNode* camera) {
+/**
+ * Phase 5. Faint presentation for the Pokemon on the non-acting side: waits for its animation, plays the
+ * faint cue, closes in with the camera, then continues to the next action, the end of the turn, or (steps 6-8)
+ * the winner camera shots that set scene->winner. Entered when a displayed HP reaches 0, e.g. from
+ * BattleScene_SwitchActiveSideAndSetPhase and BattleScene_ResolveDisplayedHpCompletion.
+ */
+void BattleScene_PhaseFaint(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_AdvanceSendOutPreparation(camera);
@@ -1153,7 +1163,12 @@ void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseSendOutAfterFaint(CameraNode* camera) {
+/**
+ * Phase 34. Same faint sequence as BattleScene_PhaseFaint, entered from BattleScene_PhaseResidualDamageFaintCheck.
+ * After the faint it goes to BattleScene_PhaseEndTurn when the fainted side's replacementState is
+ * REPLACEMENT_INVOLUNTARY_SWITCH; otherwise it sets scene->winner.
+ */
+void BattleScene_PhaseFaintAfterResidualDamage(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_AdvanceSendOutPreparation(camera);
@@ -1235,7 +1250,11 @@ void BattleScene_AdvanceIntroCamera(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseIntro(CameraNode* camera) {
+/**
+ * Phase 1. Camera intro at the start of a turn: picks one of five intro presets (fixed choices when a
+ * Pokemon is underground, airborne, or being replaced after a faint), plays it, then enters phase 2.
+ */
+void BattleScene_PhaseTurnIntroCamera(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_InitializeIntroCamera(camera);
@@ -2107,7 +2126,11 @@ void BattleScene_ActionSetupFinalizeStep(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase2(CameraNode* camera) {
+/**
+ * Phase 2. The first attacker's action: action camera setup, move animation setup, then finalize.
+ * Steps are identical to BattleScene_PhaseSecondAttackerAction.
+ */
+void BattleScene_PhaseFirstAttackerAction(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_ActionSetupCameraStep(camera);
@@ -2123,7 +2146,11 @@ void BattleScene_Phase2(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase3(CameraNode* camera) {
+/**
+ * Phase 3. The second attacker's action; Battle_ActSecondAttacker(3) queues it through
+ * BattleScene_PhaseEnterQueuedPhase. Steps are identical to BattleScene_PhaseFirstAttackerAction.
+ */
+void BattleScene_PhaseSecondAttackerAction(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_ActionSetupCameraStep(camera);
@@ -2139,7 +2166,12 @@ void BattleScene_Phase3(CameraNode* camera) {
     }
 }
 
-s32 BattleScene_PhaseSelectMoveAnim(void) {
+/**
+ * Phase 37. Entered from BattleScene_ActionPresentationTransitionCheck for moves with a dedicated
+ * presentation. Holds the action camera for the move cue's shot duration, opens the move box, then switches
+ * to the phase that matches scene->moveEffectKind (7, 12-15, 17, 21, 25, 27-31, 38, 39). Returns 1 on a switch.
+ */
+s32 BattleScene_PhaseDispatchMoveEffect(void) {
     BattleScene_ApplyActionCameraMode(sBattleScene.scene->camera, 0);
 
     if (BattleScene_AdvanceCameraFrameCounter(BattleScene_GetCameraShotDuration(sActingPokemon)) == 0) {
@@ -2204,7 +2236,11 @@ s32 BattleScene_PhaseSelectMoveAnim(void) {
     return 0;
 }
 
-void BattleScene_Phase7(CameraNode* camera) {
+/**
+ * Phase 7 (moveEffectKind 7, 21, 39). Self-targeted move presentation: applies the animation state effects
+ * when the move cue's animationDuration is reached, waits for the row animation, then settles both HP bars.
+ */
+void BattleScene_PhaseSelfTargetMove(CameraNode* camera) {
     BattleMonRuntime* sp1C = &sActingPokemon->state.runtime;
     MovePresentationCue* sp18 = &sSideBattleCues[BattleScene_GetParticipantSideIndex(sActingPokemon)]->moveCues[sp1C->usedMove - 1];
 
@@ -2260,7 +2296,10 @@ void BattleScene_Phase7(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase38(CameraNode* camera) {
+/**
+ * Phase 38 (moveEffectKind 38). Withdraw move presentation: owner-shot camera, row animation, then HP settle.
+ */
+void BattleScene_PhaseWithdrawMove(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SaveCameraFov(camera);
@@ -2291,7 +2330,10 @@ void BattleScene_Phase38(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase27(CameraNode* camera) {
+/**
+ * Phase 27 (moveEffectKind 27). Bide presentation: holds the action camera for 40 frames, then settles HP.
+ */
+void BattleScene_PhaseBide(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SaveCameraFov(camera);
@@ -2322,7 +2364,11 @@ void BattleScene_Phase27(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase30(CameraNode* camera) {
+/**
+ * Phase 30 (moveEffectKind 30). Explosion and Self-Destruct: clears the user's substitute, plays the move,
+ * then cuts to the non-acting Pokemon for its damage and enters BattleScene_PhaseFaint if its display HP is 0.
+ */
+void BattleScene_PhaseExplosion(CameraNode* camera) {
     BattleMonRuntime* non_acting_pokemon_runtime = &sNonActingPokemon->state.runtime;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -2408,7 +2454,11 @@ void BattleScene_Phase30(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase28(CameraNode* camera) {
+/**
+ * Phase 28 (moveEffectKind 28). Flinch presentation; healing moves used at full HP also reach this phase.
+ * Follow camera for 40 frames, then settles HP.
+ */
+void BattleScene_PhaseFlinch(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SaveCameraFov(camera);
@@ -2437,7 +2487,12 @@ void BattleScene_Phase28(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase15(CameraNode* camera) {
+/**
+ * Phase 15 (moveEffectKind 15). The Transform move: sets the acting side's session-team display model from
+ * the opponent's (the opponent's unk_BE when its battleStatus3 bit 8 is set, its id when its display model
+ * is 0x98), loads that model, plays the move effect script, and waits on row 18.
+ */
+void BattleScene_PhaseTransform(CameraNode* camera) {
     UNUSED s32 pad[3];
     BattleMonRuntime* sp30 = &sActingPokemon->state.runtime;
     BattleMonRuntime* sp2C = &sNonActingPokemon->state.runtime;
@@ -2500,7 +2555,11 @@ void BattleScene_Phase15(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase25(CameraNode* camera) {
+/**
+ * Phase 25 (moveEffectKind 25). Substitute creation: plays the move effect script and calls
+ * Battle_MakeSubstitute unless ACTIVE_SUBSTITUTE is already set, then sets ACTIVE_SUBSTITUTE in step 3.
+ */
+void BattleScene_PhaseSubstitute(CameraNode* camera) {
     BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemonState* sp18 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
@@ -2558,7 +2617,11 @@ s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     Battle_ApplyAnimStateEffects(arg0);
 }
 
-void BattleScene_Phase29(CameraNode* camera) {
+/**
+ * Phase 29 (moveEffectKind 29). Haze presentation: after the row animation it ends the non-acting Pokemon's
+ * freeze and sleep animations, resets both models' scale to 1.0, then settles HP.
+ */
+void BattleScene_PhaseHaze(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SaveCameraFov(camera);
@@ -2593,7 +2656,11 @@ void BattleScene_Phase29(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase12(CameraNode* camera) {
+/**
+ * Phase 12 (moveEffectKind 12). Fly's launch: sets ACTIVE_AIRBORNE, follows the Pokemon up until its
+ * position.y reaches 200 with the flyingIdleCue animation and a 60-degree field of view, then settles HP.
+ */
+void BattleScene_PhaseFly(CameraNode* camera) {
     MovePresentationCue* sp4C = &sSideBattleCues[sBattleScene.scene->actingSide]->flyingIdleCue;
     UNUSED s32 pad;
     Vec3f sp3C;
@@ -2647,7 +2714,12 @@ void BattleScene_Phase12(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase13(CameraNode* camera) {
+/**
+ * Phase 13 (moveEffectKind 13). Dig's burrow: waits until the Pokemon sinks below the ground (position.y
+ * below a multiple of its model height; Diglett/Dugtrio wait on their row animation instead), sets
+ * ACTIVE_UNDERGROUND, then settles HP.
+ */
+void BattleScene_PhaseDig(CameraNode* camera) {
     UNUSED s32 pad;
     f32 sp28;
     UNUSED s16 pad2;
@@ -2703,7 +2775,11 @@ void BattleScene_Phase13(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase14(CameraNode* camera) {
+/**
+ * Phase 14 (moveEffectKind 14). Charge turn of a two-turn move: plays the animation using the timing field
+ * keyed by the move (BattleScene_IsMoveKeyedRowWaitComplete), then settles HP.
+ */
+void BattleScene_PhaseTwoTurnCharge(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SelectActionCameraPresetFromTiming(camera, 1);
@@ -2726,7 +2802,11 @@ void BattleScene_Phase14(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase17(CameraNode* camera) {
+/**
+ * Phase 17 (moveEffectKind 17). A Pokemon that cannot act because it is asleep or immobilized: applies
+ * the status animation, waits 60 frames, then settles HP.
+ */
+void BattleScene_PhaseSleepOrImmobilized(CameraNode* camera) {
     ActivePokemonState* acting_pokemon_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
     switch (sBattleScene.scene->phaseStep) {
@@ -2757,7 +2837,11 @@ void BattleScene_Phase17(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseFaint(CameraNode* camera) {
+/**
+ * Phase 20 (moveEffectKind 20). The acting Pokemon damages itself: opens box 2, plays row 15 (the same row
+ * as BattleScene_PhaseJumpKickCrash) with the damage shake, then updates HP. Matches confusion self-damage.
+ */
+void BattleScene_PhaseConfusionSelfHit(CameraNode* camera) {
     BattleScene_ResetCameraFov(camera);
 
     switch (sBattleScene.scene->phaseStep) {
@@ -2807,7 +2891,11 @@ void BattleScene_PhaseFaint(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase31(CameraNode* camera) {
+/**
+ * Phase 31 (moveEffectKind 31). Full paralysis: applies the status animation, sets unk_4C8, waits 60 frames,
+ * then settles HP.
+ */
+void BattleScene_PhaseFullParalysis(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_SaveCameraFov(camera);
@@ -2837,7 +2925,11 @@ void BattleScene_Phase31(CameraNode* camera) {
 void func_84326A70(void) {
 }
 
-void BattleScene_Phase4(UNUSED CameraNode* camera) {
+/**
+ * Phase 4. End of turn: BattleScene_BeginBattlePhase clears the selected commands and prepares the camera
+ * substate for the next action selection.
+ */
+void BattleScene_PhaseEndTurn(UNUSED CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_BeginBattlePhase();
@@ -2847,7 +2939,11 @@ void BattleScene_Phase4(UNUSED CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase16(CameraNode* camera) {
+/**
+ * Phase 16 (moveEffectKind 16). Hi Jump Kick crash: plays row 15 with the species' hitCue animation and the
+ * damage shake on the acting Pokemon, then updates HP.
+ */
+void BattleScene_PhaseJumpKickCrash(CameraNode* camera) {
     UNUSED s32 pad;
     s32 idx = sBattleScene.scene->actingSide;
     MovePresentationCue* sp1C = &sSideBattleCues[idx]->hitCue;
@@ -2898,6 +2994,10 @@ void BattleScene_Phase16(CameraNode* camera) {
     }
 }
 
+/**
+ * Phase 8 (moveEffectKind 8, or sBattleMoveFailed set). Move failed presentation: frames the non-acting
+ * Pokemon, enters row 12, calls BattleAnim_UpdateMoveFailedFlag, and holds 50 frames before the HP update.
+ */
 void BattleScene_PhaseMoveFailedMessage(CameraNode* camera) {
     ActivePokemonState* non_acting_pokemon_state = &sNonActingPokemon->state;
 
@@ -2944,7 +3044,13 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseAttackHit(CameraNode* camera) {
+/**
+ * Phase 6. Poison/burn-style residual damage after a move: BattleScene_UpdateDisplayedHpAndTransition enters it
+ * when the acting Pokemon has unk_15 bits 0x18 or unk_4D bit 0x80 set. Plays effect list 5 or 6 (unk_15 bits)
+ * and effect list 10 (unk_4D bit 0x80), then flips the acting side and enters BattleScene_PhaseFaint if the
+ * acting Pokemon reaches 0 HP.
+ */
+void BattleScene_PhaseResidualDamageAfterMove(CameraNode* camera) {
     BattleMonRuntime* sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     BattleMonRuntime* sp20 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
@@ -3039,7 +3145,11 @@ void BattleScene_PhaseAttackHit(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseDrainDamage(CameraNode* camera) {
+/**
+ * Phase 9 (moveEffectKind 9). The acting Pokemon takes damage from its own move: plays effect list 9, the
+ * hit cue animation, and the damage shake while displayHp moves toward unk_12, then updates HP.
+ */
+void BattleScene_PhaseRecoilDamage(CameraNode* camera) {
     BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     BattleMonRuntime* sp18 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
@@ -3095,7 +3205,11 @@ void BattleScene_PhaseDrainDamage(CameraNode* camera) {
     }
 }
 
-void BattleScene_Phase10(CameraNode* camera) {
+/**
+ * Phase 10 (selected when scene->unk_4C is 10). Rage attack increase: plays effect list 6 on the non-acting
+ * Pokemon with a standard shot, opens the box at index 7, and holds the shot before updating HP.
+ */
+void BattleScene_PhaseRage(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_CleanupParticipantEffectMode(sActingPokemon);
@@ -3125,7 +3239,11 @@ void BattleScene_Phase10(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseAttackHitRecoil(CameraNode* camera) {
+/**
+ * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
+ * has no move this turn (usedMove high nibble 0xF); entered by BattleScene_PrepareResidualStatusPresentation.
+ */
+void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* camera) {
     BattleMonRuntime* sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     BattleMonRuntime* sp20 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
@@ -3212,7 +3330,12 @@ void BattleScene_PhaseAttackHitRecoil(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseCheckFaintedEndTurn(CameraNode* camera) {
+/**
+ * Phase 33. Shows residual damage on the acting Pokemon only (the other HP bar is treated as settled). If
+ * it reaches 0 HP, flips the acting side and enters BattleScene_PhaseFaintAfterResidualDamage; otherwise
+ * continues with BattleScene_CleanupActionAndAdvance.
+ */
+void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* camera) {
     BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     BattleMonRuntime* sp18 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
@@ -3258,7 +3381,11 @@ void BattleScene_ClearMonStatusAnimations(ActivePokemon* arg0) {
     BattleAnim_ClearSleepStatusAnimation(arg0);
 }
 
-void BattleScene_PhaseWithdrawFainted(CameraNode* camera) {
+/**
+ * Phase 11. Voluntary switch (REPLACEMENT_VOLUNTARY_SWITCH, selected by BattleScene_PrepareReplacementTransition):
+ * withdraws the acting Pokemon (row 2), loads the chosen team member's model, and sends it out.
+ */
+void BattleScene_PhaseVoluntarySwitch(CameraNode* camera) {
     ActivePokemonState* sp34 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->actingSide];
     BattleMonRuntime* sp2C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
@@ -3358,7 +3485,12 @@ void BattleScene_PhaseWithdrawFainted(CameraNode* camera) {
     }
 }
 
-void BattleScene_PhaseWithdrawSwitch(CameraNode* camera) {
+/**
+ * Phase 18. Replacement after a faint (REPLACEMENT_INVOLUNTARY_SWITCH, selected by
+ * BattleScene_PrepareReplacementTransition): loads the chosen team member's model, opens its Poke Ball, and
+ * sends it out. Unlike BattleScene_PhaseVoluntarySwitch, there is no withdraw step.
+ */
+void BattleScene_PhaseSendOutAfterFaint(CameraNode* camera) {
     ActivePokemonState* acting_pokemon_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     ActivePokemonState* other_pokemon_state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     UNUSED s32 pad;
@@ -3459,6 +3591,10 @@ void BattleScene_PhaseWithdrawSwitch(CameraNode* camera) {
     }
 }
 
+/**
+ * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
+ * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
+ */
 void BattleScene_UpdatePhase(CameraNode* camera) {
     BattleScene_UpdateActiveOwnerPointers();
 
@@ -3469,80 +3605,76 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
 
         case 1:
             // battle orders finished, begin turn
-            BattleScene_PhaseIntro(camera);
+            BattleScene_PhaseTurnIntroCamera(camera);
             break;
         case 2:
             // first pokemon move
-            BattleScene_Phase2(camera);
+            BattleScene_PhaseFirstAttackerAction(camera);
             break;
         case 3:
             // second pokemon move
-            BattleScene_Phase3(camera);
+            BattleScene_PhaseSecondAttackerAction(camera);
             break;
         case 4:
             // end turn
-            BattleScene_Phase4(camera);
+            BattleScene_PhaseEndTurn(camera);
             break;
         case 7:
-            // double team
-            // minimize
-            // rest
-            // self-target moves?
-            BattleScene_Phase7(camera);
+            // Double Team, Minimize, Rest; moveEffectKind 7, 21, 39
+            BattleScene_PhaseSelfTargetMove(camera);
             break;
         case 38:
             // withdraw
-            BattleScene_Phase38(camera);
+            BattleScene_PhaseWithdrawMove(camera);
             break;
         case 27:
             // bide
-            // bide 27th move by alphabetical order, but that seems to be a coincidence
-            BattleScene_Phase27(camera);
+            BattleScene_PhaseBide(camera);
             break;
         case 30:
             // explosion and self-destruct
-            BattleScene_Phase30(camera);
+            BattleScene_PhaseExplosion(camera);
             break;
         case 29:
             // haze
-            BattleScene_Phase29(camera);
+            BattleScene_PhaseHaze(camera);
             break;
         case 28:
             // flinch
             // also healing moves when used at full hp
-            BattleScene_Phase28(camera);
+            BattleScene_PhaseFlinch(camera);
             break;
         case 25:
             // substitute creation
-            BattleScene_Phase25(camera);
+            BattleScene_PhaseSubstitute(camera);
             break;
         case 12:
             // fly
-            BattleScene_Phase12(camera);
+            BattleScene_PhaseFly(camera);
             break;
         case 13:
             // dig
-            BattleScene_Phase13(camera);
+            BattleScene_PhaseDig(camera);
             break;
         case 14:
             // 2 turn charge moves
-            BattleScene_Phase14(camera);
+            BattleScene_PhaseTwoTurnCharge(camera);
             break;
         case 15:
-            // transform (the moves)
-            BattleScene_Phase15(camera);
+            // Transform move
+            BattleScene_PhaseTransform(camera);
             break;
         case 17:
             // sleeping or immobilized
-            BattleScene_Phase17(camera);
+            BattleScene_PhaseSleepOrImmobilized(camera);
             break;
         case 31:
             // full paralysis
-            BattleScene_Phase31(camera);
+            BattleScene_PhaseFullParalysis(camera);
             break;
         case 20:
-            // causally self-damage by confusion
-            BattleScene_PhaseFaint(camera);
+            // self-damage (matches confusion)
+            BattleScene_PhaseConfusionSelfHit(camera);
             break;
         case 8:
             // move failed
@@ -3550,49 +3682,51 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             break;
         case 10:
             // rage attack increase
-            BattleScene_Phase10(camera);
+            BattleScene_PhaseRage(camera);
             break;
         case 6:
-            // mislabeled , case 2 and 3 already handle hit animation
-            // actually poison (and probably burn) damage
-            BattleScene_PhaseAttackHit(camera);
+            // poison/burn-style residual damage after a move
+            BattleScene_PhaseResidualDamageAfterMove(camera);
             break;
         case 33:
-            BattleScene_PhaseCheckFaintedEndTurn(camera);
+            // residual damage on the acting Pokemon only; faint goes to phase 34
+            BattleScene_PhaseResidualDamageFaintCheck(camera);
             break;
         case 35:
-            BattleScene_PhaseAttackHitRecoil(camera);
+            // residual damage for a Pokemon with no move this turn
+            BattleScene_PhaseResidualDamageWithoutMove(camera);
             break;
         case 9:
-            // actually being hit with recoil
-            BattleScene_PhaseDrainDamage(camera);
+            // the acting Pokemon takes damage from its own move (recoil)
+            BattleScene_PhaseRecoilDamage(camera);
             break;
         case 16:
             // hi jump kick crash
-            BattleScene_Phase16(camera);
+            BattleScene_PhaseJumpKickCrash(camera);
             break;
         case 11:
-            // this is switch out when not fainted
-            BattleScene_PhaseWithdrawFainted(camera);
+            // voluntary switch (withdraw, then send out)
+            BattleScene_PhaseVoluntarySwitch(camera);
             break;
         case 18:
-            // this is SendOutAfterFaint
-            BattleScene_PhaseWithdrawSwitch(camera);
-            break;
-        case 5:
-            // this is actuallyh phase faint
-            BattleScene_PhaseSendOut(camera);
-            break;
-        case 34:
+            // send out the replacement after a faint
             BattleScene_PhaseSendOutAfterFaint(camera);
             break;
+        case 5:
+            // faint presentation; also the winner camera when the last Pokemon faints
+            BattleScene_PhaseFaint(camera);
+            break;
+        case 34:
+            // faint after residual damage
+            BattleScene_PhaseFaintAfterResidualDamage(camera);
+            break;
         case 36:
-            // do next phase
-            BattleScene_PhaseResumeSaved();
+            // wait for the owner animation, then enter the phase queued in nextPhase
+            BattleScene_PhaseEnterQueuedPhase();
             break;
         case 37:
-            // charge moves start?
-            BattleScene_PhaseSelectMoveAnim();
+            // hold the action camera, then switch to the phase for the move effect kind
+            BattleScene_PhaseDispatchMoveEffect();
             break;
     }
 }
