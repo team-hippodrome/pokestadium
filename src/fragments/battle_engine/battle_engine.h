@@ -155,7 +155,7 @@ typedef struct MovePresentationCue {
     /* 0x03 */ u8 alternateAnchor;
     /* 0x04 */ u8 animationDuration;
     /* 0x05 */ u8 flags1;
-    /* 0x06 */ u8 unk_06;
+    /* 0x06 */ u8 currentFrame;
     /* 0x07 */ u8 endFrame;
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ u8 unk_09;

@@ -833,14 +833,14 @@ void BattleScene_EnterRow19StartMoveAnimMidFrame(ActivePokemon* active_pokemon) 
         return;
     }
 
-    active_pokemon->animationTimer = sCurrentAnimation->unk_06;
+    active_pokemon->animationTimer = sCurrentAnimation->currentFrame;
     if (!(pokemon_state->flags & ACTIVE_UNDERGROUND)) {
         BattleAnim_SetFlagForRockThrowingMoves(active_pokemon);
         ModelAnim_SetAnimation(&active_pokemon->displayObject, sCurrentAnimation->id);
-        ModelAnim_SetFrame(&active_pokemon->displayObject, sCurrentAnimation->unk_06);
+        ModelAnim_SetFrame(&active_pokemon->displayObject, sCurrentAnimation->currentFrame);
         if (sCurrentAnimation->unk_01 != 0xFF) {
             ModelAnim_SetEventTrack(&active_pokemon->displayObject, sCurrentAnimation->unk_01);
-            ModelAnim_SetEventFrame(&active_pokemon->displayObject, sCurrentAnimation->unk_06);
+            ModelAnim_SetEventFrame(&active_pokemon->displayObject, sCurrentAnimation->currentFrame);
             pokemon_state->unk_36 = 1;
         }
     }
