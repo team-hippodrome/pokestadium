@@ -3527,6 +3527,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_Phase14(camera);
             break;
         case 15:
+            // transform (the moves)
             BattleScene_Phase15(camera);
             break;
         case 17:
