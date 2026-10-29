@@ -8,7 +8,7 @@
 #include "src/util.h"
 #include "status.h"
 
-unk_D_84390240 sBattleScene;
+BattleSceneContext sBattleScene;
 static s32 pad_D_84390280;
 static s32 sActiveSide;
 s32 D_84390288;
@@ -116,7 +116,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* camera) {
 
         case 4:
             if (camera->overlay.stepIndex == 0xA) {
-                BattleScene_ResetAnimationStep();
+                BattleScene_ResetModelReloadStep();
                 BattleScene_ResetBothParticipantsAnimationState();
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[0]);
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[1]);
@@ -126,7 +126,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* camera) {
             break;
 
         case 5:
-            if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->sideCurrentlySwitching]) == 0)) {
+            if ((BattleScene_RestoreBothSubstitutes() == 0) && (BattleScene_RevealSubstituteForAction(sActivePokemon[sBattleScene.scene->sideCurrentlySwitching]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
                     BattleScene_QuantizeBattleTimer();
@@ -143,7 +143,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* camera) {
             break;
 
         case 6:
-            BattleScene_ResetAnimationStep();
+            BattleScene_ResetModelReloadStep();
             camera->perspective.verticalFieldOfView = 30.0f;
             sBattleScene.scene->verticalFieldOfView = 30.0f;
             sBattleScene.scene->unk_18 = 0;
@@ -185,7 +185,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* camera) {
         case 4:
             BattleScene_UpdateStripWipe();
             if (BattleScene_GetStripWipeState() == 1) {
-                BattleScene_ResetAnimationStep();
+                BattleScene_ResetModelReloadStep();
                 BattleScene_ResetBothParticipantsAnimationState();
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[0]);
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[1]);
@@ -210,7 +210,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* camera) {
             break;
 
         case 8:
-            if ((BattleScene_AdvanceBothOwnerAnimations() == 0) && (BattleScene_AdvanceDoublesOwnerAnimation(sActivePokemon[sBattleScene.scene->sideCurrentlySwitching]) == 0)) {
+            if ((BattleScene_RestoreBothSubstitutes() == 0) && (BattleScene_RevealSubstituteForAction(sActivePokemon[sBattleScene.scene->sideCurrentlySwitching]) == 0)) {
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleAnim_CleanupEffects(2);
                     BattleScene_QuantizeBattleTimer();
@@ -227,7 +227,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* camera) {
             break;
 
         case 9:
-            BattleScene_ResetAnimationStep();
+            BattleScene_ResetModelReloadStep();
             camera->perspective.verticalFieldOfView = 30.0f;
             sBattleScene.scene->verticalFieldOfView = 30.0f;
             sBattleScene.scene->unk_18 = 0;
@@ -443,13 +443,13 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* camera) {
                 case 3:
                     switch (sBattleScene.scene->phaseStep) {
                         case 0:
-                            if ((sp40->replacementState == 0xF) && (sBattleScene.scene->unk_34 == 1)) {
+                            if ((sp40->replacementState == 0xF) && (sBattleScene.scene->actionPass == BATTLE_ACTION_SECOND)) {
                                 BattleScene_HideActiveOwner();
                             } else {
                                 Vec3f_CalculateDistanceAngles(&sBattleScene.scene->savedCameraTarget, &sBattleScene.scene->savedCameraEye, &sp34, &sp32,
                                               &sp30);
                                 temp_lo = sp30 / 182;
-                                if (((temp_lo == 0x5A) || (temp_lo == -0x5A)) && (sBattleScene.scene->unk_34 == 1)) {
+                                if (((temp_lo == 0x5A) || (temp_lo == -0x5A)) && (sBattleScene.scene->actionPass == BATTLE_ACTION_SECOND)) {
                                     BattleScene_HideOpponentOwner();
                                 } else {
                                     BattleScene_UpdateOpponentVisibilityCulling(camera);
@@ -465,11 +465,11 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* camera) {
                             break;
 
                         case 2:
-                            if ((sBattleScene.scene->phaseSubstep == 0) && (sBattleScene.scene->updateCounter >= 0) &&
-                                (sBattleScene.scene->updateCounter < 2) && (sp38->flags & 0x800)) {
+                            if ((sBattleScene.scene->phaseSubstep == 0) && (sBattleScene.scene->modelReloadStep >= 0) &&
+                                (sBattleScene.scene->modelReloadStep < 2) && (sp38->flags & 0x800)) {
                                 BattleScene_HideOpponentOwner();
                             } else if (((sBattleScene.scene->phaseSubstep == 0) || (sBattleScene.scene->phaseSubstep == 1)) &&
-                                       (sBattleScene.scene->moveEffectKind == 0) && (sBattleScene.scene->unk_1A != 1)) {
+                                       (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_NORMAL) && (sBattleScene.scene->hitReactionKind != BATTLE_HIT_REACTION_MULTI_HIT)) {
                                 Battle_ResetModelToIdleAnim(sActingPokemon);
                                 sActingPokemon->displayObject.lodFraction = 0;
                             } else {
@@ -516,7 +516,7 @@ void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* camera) {
 
                 case 11:
                     sBattleScene.scene->unk_08 = 4;
-                    if (sBattleScene.scene->unk_34 == 1) {
+                    if (sBattleScene.scene->actionPass == BATTLE_ACTION_SECOND) {
                         BattleScene_HideOpponentOwner();
                     } else if (sBattleScene.scene->phaseStep == 0) {
                         BattleScene_UpdateBothOwnersVisibilityCulling(camera);

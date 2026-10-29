@@ -303,7 +303,7 @@ s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
  */
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
     // FAKE
-    if (sBattleScene.scene->moveEffectKind == 0xE) {
+    if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CHARGE) {
         BattleAnim_LoadMoveResourceList(active_pokemon->sessionTeams, BattleScene_GetParticipantUsedMove(active_pokemon));
     } else {
         BattleAnim_LoadMoveResourceList(active_pokemon->sessionTeams, BattleScene_GetParticipantUsedMove(active_pokemon));
@@ -659,7 +659,7 @@ void BattleScene_TickRow3PlayMoveEffectScript(ActivePokemon* active_pokemon) {
     if ((pokemon_runtime->usedMove == MEGA_KICK) && (species == ELECTRODE_OB1)) {
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     } else if ((active_pokemon->animationTimer == (sCurrentAnimation->animationDuration + 1)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
-        if (sBattleScene.scene->moveEffectKind == 20) {
+        if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CONFUSION_SELF_HIT) {
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         } else if (pokemon_runtime->moveCache.lastMove == DIG) {
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
@@ -709,9 +709,9 @@ void BattleScene_TickRow3PostEffectCamera(ActivePokemon* active_pokemon) {
 
     if (active_pokemon->animationTimer == (sCurrentAnimation->animationDuration + 1)) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
-            if (sBattleScene.scene->moveEffectKind == 24) {
-                D_84390234--;
-                if (D_84390234 < 0) {
+            if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_MULTI_HIT) {
+                sMultihitEffectCountdown--;
+                if (sMultihitEffectCountdown < 0) {
                     if (sBattleMoveFailed != 0) {
                         BattleAnim_PlaySpeciesReactionSound(active_pokemon, runtime, 2);
                     }
@@ -863,7 +863,7 @@ void BattleScene_TickRow19PlayMoveEffectScript(ActivePokemon* active_pokemon) {
     }
 
     if ((animation_duration == active_pokemon->animationTimer) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
-        if (sBattleScene.scene->moveEffectKind == 20) {
+        if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CONFUSION_SELF_HIT) {
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
             return;
         }
@@ -904,9 +904,9 @@ void BattleScene_TickRow19PostEffectCamera(ActivePokemon* active_pokemon) {
 
     if (animation_duration == active_pokemon->animationTimer) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
-            if (sBattleScene.scene->moveEffectKind == 24) {
-                D_84390234--;
-                if (D_84390234 < 0) {
+            if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_MULTI_HIT) {
+                sMultihitEffectCountdown--;
+                if (sMultihitEffectCountdown < 0) {
                     if (sBattleMoveFailed != 0) {
                         BattleAnim_PlaySpeciesReactionSound(active_pokemon, runtime, 2);
                     } else {
@@ -1901,7 +1901,7 @@ s32 Battle_IsRowAnimationSettled(ActivePokemon* active_pokemon, s32 frame_limit)
         return 1;
     }
 
-    if (sBattleScene.scene->moveEffectKind == 20) {
+    if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CONFUSION_SELF_HIT) {
         move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[0];
     }
 
