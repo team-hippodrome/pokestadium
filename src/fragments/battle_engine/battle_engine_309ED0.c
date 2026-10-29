@@ -3512,6 +3512,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_Phase28(camera);
             break;
         case 25:
+            // substitute creation
             BattleScene_Phase25(camera);
             break;
         case 12:
@@ -3567,6 +3568,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_Phase16(camera);
             break;
         case 11:
+            // this is switch out when not fainted
             BattleScene_PhaseWithdrawFainted(camera);
             break;
         case 18:
