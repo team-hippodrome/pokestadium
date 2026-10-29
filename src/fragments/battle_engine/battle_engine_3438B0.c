@@ -16,8 +16,8 @@ void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3) {
     gSPDisplayList(gDisplayListHead++, gDL_EndColorFill);
 }
 
-void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
-    BattleAnim_DrawEffectCallbacks(arg0);
+void BattleAnim_RenderEffectsFrame(CameraNode* camera) {
+    BattleAnim_DrawEffectCallbacks(camera);
     gParticleMatrixPool = Gfx_AllocDisplayList(sizeof(ParticleMatrixPool));
     gParticleMatrixPoolIndex = 0;
     gBattleAnimFrameCounter += 1;
@@ -29,7 +29,7 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
     ParticleGfx_SetEnvColor(gEnvColorR, gEnvColorG, gEnvColorB, gEnvColorA);
     ParticleGfx_SetBlendColor(gBlendColorR, gBlendColorG, gBlendColorB, gBlendColorA);
     Battle_SetStageTintColor(gSavedPrimColorR, gSavedPrimColorG, gSavedPrimColorB);
-    Particle_RenderWorldChains(arg0);
+    Particle_RenderWorldChains(camera);
     guOrtho(&gParticleMatrixPool->unk_5B80, 0.0f, 320.0f, 240.0f, 0.0f, -2.0f, 2.0f, 1.0f);
 
     gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->unk_5B80 & 0x1FFFFFFF,
@@ -37,7 +37,7 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
     gSPDisplayList(gDisplayListHead++, gDL_BeginUIOverlay);
 
     ParticleGfx_PipeSync();
-    Particle_RenderOrthoParticles(arg0);
+    Particle_RenderOrthoParticles(camera);
 
     gSPDisplayList(gDisplayListHead++, D_8140DAE0);
 }

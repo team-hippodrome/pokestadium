@@ -702,43 +702,43 @@ void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* 
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);
 }
 
-void ParticleGfx_DrawModelQuad(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrix(arg0, arg1, arg2);
+void ParticleGfx_DrawModelQuad(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
+    ParticleGfx_PushBillboardMatrix(camera, arg1, arg2);
 
     gSPVertex(gDisplayListHead++, arg3, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
-void ParticleGfx_DrawModelQuadRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrix(arg0, arg1, arg2, arg4);
+void ParticleGfx_DrawModelQuadRotated(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
+    ParticleGfx_PushBillboardRotatedMatrix(camera, arg1, arg2, arg4);
 
     gSPVertex(gDisplayListHead++, arg3, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
-void ParticleGfx_DrawModelQuadYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrixYScaled(arg0, arg1, arg2);
+void ParticleGfx_DrawModelQuadYScaled(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
+    ParticleGfx_PushBillboardMatrixYScaled(camera, arg1, arg2);
 
     gSPVertex(gDisplayListHead++, arg3, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
-void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrixYScaled(arg0, arg1, arg2, arg4);
+void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
+    ParticleGfx_PushBillboardRotatedMatrixYScaled(camera, arg1, arg2, arg4);
 
     gSPVertex(gDisplayListHead++, arg3, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
-void ParticleGfx_DrawModelTriangle(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrix(arg0, arg1, arg2);
+void ParticleGfx_DrawModelTriangle(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
+    ParticleGfx_PushBillboardMatrix(camera, arg1, arg2);
 
     gSPVertex(gDisplayListHead++, arg3, 3, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);
 }
 
-void ParticleGfx_DrawModelTriangleRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrix(arg0, arg1, arg2, arg4);
+void ParticleGfx_DrawModelTriangleRotated(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
+    ParticleGfx_PushBillboardRotatedMatrix(camera, arg1, arg2, arg4);
 
     gSPVertex(gDisplayListHead++, arg3, 3, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);

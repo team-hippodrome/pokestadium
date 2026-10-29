@@ -139,23 +139,23 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     }
 }
 
-void BattleScene_ApplyCameraShake(CameraNode* arg0) {
+void BattleScene_ApplyCameraShake(CameraNode* camera) {
     UNUSED s32 pad;
     f32 sp30;
     f32 temp_fv0;
     s16 sp2A;
     s16 sp28;
 
-    BattleAnim_CalculateDistanceAngles(&arg0->view.eyePosition, &arg0->view.targetPosition, &sp30, &sp28, &sp2A);
+    BattleAnim_CalculateDistanceAngles(&camera->view.eyePosition, &camera->view.targetPosition, &sp30, &sp28, &sp2A);
     sBattleScene.scene->unk_7A += 0x38E0;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_68, 0.0f, 0.18f);
 
     temp_fv0 = COSS(sBattleScene.scene->unk_7A) * sBattleScene.scene->unk_68;
 
-    arg0->view.eyePosition.y += temp_fv0 / 3.0f;
-    arg0->view.targetPosition.y += temp_fv0 / 3.0f;
-    arg0->view.eyePosition.x += temp_fv0 * SINS(sp2A + 0x4000);
-    arg0->view.targetPosition.x += temp_fv0 * SINS(sp2A + 0x4000);
+    camera->view.eyePosition.y += temp_fv0 / 3.0f;
+    camera->view.targetPosition.y += temp_fv0 / 3.0f;
+    camera->view.eyePosition.x += temp_fv0 * SINS(sp2A + 0x4000);
+    camera->view.targetPosition.x += temp_fv0 * SINS(sp2A + 0x4000);
 }
 
 void BattleScene_StartCameraShake(UNUSED ActivePokemon* active_pokemon) {
@@ -218,7 +218,7 @@ s32 BattleScene_ApproachCameraRotationY(CameraNode* camera, s16 delta_theta, s16
 /**
  * Same rotationY stepping as BattleScene_ApproachCameraRotationY, without recomputing the camera eye.
  */
-s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* camera, s16 arg1, s16 arg2) {
     sBattleScene.scene->rotationY -= arg1;
 
     if (arg1 > 0) {
@@ -363,7 +363,7 @@ void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* camera, s16 rotati
     camera->view.eyePosition.y += y_offset;
 }
 
-void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
+void BattleScene_CameraHelperNop(UNUSED CameraNode* camera) {
 }
 
 void BattleScene_SnapFloatPair(f32* a, f32* b) {
@@ -1030,7 +1030,7 @@ s32 BattleScene_AnimateCameraIntro(CameraNode* camera, ActivePokemon* pokemon) {
     return 1;
 }
 
-s32 BattleScene_AreActivePokemonHeightsSeparated(UNUSED CameraNode* arg0) {
+s32 BattleScene_AreActivePokemonHeightsSeparated(UNUSED CameraNode* camera) {
     Vec3f anchor1;
     Vec3f anchor2;
     f32 pokemon_height_difference;

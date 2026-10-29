@@ -54,11 +54,11 @@ unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_860
 unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_alt23* arg1, s16 arg2);
 unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_alt24* arg1, s32 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s32 arg9,
                                     u8 r, u8 g, u8 b, u8 a);
-void GeoCamera_SetViewport(CameraNode* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-void GeoCamera_SetPerspective(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3);
-void GeoCamera_SetEyeAtUp(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s32 arg7);
-void GeoCamera_SetBackground(CameraNode* arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
-void GeoCamera_SetBackgroundTexture(CameraNode* arg0, s16 arg1, s16 arg2, s32 arg3, u32 arg4);
+void GeoCamera_SetViewport(CameraNode* camera, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+void GeoCamera_SetPerspective(CameraNode* camera, f32 arg1, f32 arg2, f32 arg3);
+void GeoCamera_SetEyeAtUp(CameraNode* camera, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s32 arg7);
+void GeoCamera_SetBackground(CameraNode* camera, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5);
+void GeoCamera_SetBackgroundTexture(CameraNode* camera, s16 arg1, s16 arg2, s32 arg3, u32 arg4);
 void GraphNode_AppendChild(GraphNode* parent, GraphNode* child);
 void GraphNode_RemoveChild(GraphNode* arg0, GraphNode* arg1);
 GraphNode* GraphNode_GetChildAtIndex(GraphNode* arg0, s32 arg1);

@@ -4724,7 +4724,7 @@ void BattleAnim_ProcessQueuedEffects(void) {
     }
 }
 
-void BattleAnim_UpdateFrame(UNUSED CameraNode* arg0) {
+void BattleAnim_UpdateFrame(UNUSED CameraNode* camera) {
     Particle_UpdateFrameCounters();
     BattleAnim_ProcessQueuedEffects();
     BattleAnim_UpdateEffects();
@@ -5037,7 +5037,7 @@ s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0) {
     return ret;
 }
 
-void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
+void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* camera) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -5048,7 +5048,7 @@ void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0) {
     }
 }
 
-void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {
+void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* camera) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -5058,13 +5058,13 @@ void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {
     }
 }
 
-void BattleAnim_UpdateCamera(CameraNode* arg0) {
-    gParticleRenderContext.unk_0C = arg0;
+void BattleAnim_UpdateCamera(CameraNode* camera) {
+    gParticleRenderContext.unk_0C = camera;
     gParticleCameraState = &gParticleRenderContext.unk_10;
 
-    MtxF_Copy(&gParticleCameraState->unk_00, &arg0->view.floatMatrix);
-    ParticleMath_CopyVec3f(&gParticleCameraState->unk_40, &arg0->view.eyePosition);
-    ParticleMath_CopyVec3f(&gParticleCameraState->unk_4C, &arg0->view.targetPosition);
+    MtxF_Copy(&gParticleCameraState->unk_00, &camera->view.floatMatrix);
+    ParticleMath_CopyVec3f(&gParticleCameraState->unk_40, &camera->view.eyePosition);
+    ParticleMath_CopyVec3f(&gParticleCameraState->unk_4C, &camera->view.targetPosition);
     BattleAnim_GetCameraLookAngles(&gParticleCameraState->unk_70, &gParticleCameraState->unk_72);
     BattleAnim_GetCameraEyeAngles(&gParticleCameraState->unk_76, &gParticleCameraState->unk_78);
     ParticleMath_NormalizedDirection(&gParticleCameraState->unk_58, gParticleCameraState->unk_40, gParticleCameraState->unk_4C);

@@ -81,8 +81,8 @@ static Gfx D_87A012A8[] = {
 static u8 pad_D_87A01300[0x30];
 static CameraNode* D_87A01330;
 
-void MiniCam_SetActive(CameraNode* arg0) {
-    D_87A01330 = arg0;
+void MiniCam_SetActive(CameraNode* camera) {
+    D_87A01330 = camera;
 }
 
 Gfx* MiniCam_ApplyProjection(Gfx* arg0) {
