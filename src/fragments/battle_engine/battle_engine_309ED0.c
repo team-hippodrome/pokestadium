@@ -3520,6 +3520,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_Phase12(camera);
             break;
         case 13:
+            // dig
             BattleScene_Phase13(camera);
             break;
         case 14:
