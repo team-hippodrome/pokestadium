@@ -3509,6 +3509,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             break;
         case 28:
             // flinch
+            // also healing moves when used at full hp
             BattleScene_Phase28(camera);
             break;
         case 25:
