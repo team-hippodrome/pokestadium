@@ -247,7 +247,7 @@ typedef struct BattleScene {
     /* 0x6C */ f32 unk_6C;
     /* 0x70 */ f32 targetDistance;
     /* 0x74 */ f32 unk_74;
-    /* 0x78 */ u8 unk_78;
+    /* 0x78 */ u8 nextPhase;
     /* 0x7A */ s16 unk_7A;
     /* 0x7C */ char unk7C[0x8];
     /* 0x84 */ f32 unk_84;

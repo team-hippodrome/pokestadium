@@ -17,7 +17,7 @@ static f32 D_84390208;
 static s32 pad_D_84390210[4];
 static s32 sSide1HpConsistent;
 static s32 sSide2HpConsistent;
-static s32 D_84390228;
+static s32 sNormalOrFlyingAnimationRNG;
 s32 sMultihitCount;
 s32 sMultihitCountdown;
 s32 D_84390234;
@@ -556,12 +556,12 @@ void Battle_ActSecondAttacker(u8 next_phase) {
     sBattleScene.scene->unk_34 = 1;
     sBattleScene.scene->unk_A0.z = 0.0f;
     BattleScene_SetPhase(sBattleScene.scene->camera, 0x24);
-    sBattleScene.scene->unk_78 = next_phase;
+    sBattleScene.scene->nextPhase = next_phase;
 }
 
 void BattleScene_PhaseResumeSaved(void) {
     if (BattleScene_AdvanceOwnerAnimation(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
-        sBattleScene.scene->phase = sBattleScene.scene->unk_78;
+        sBattleScene.scene->phase = sBattleScene.scene->nextPhase;
     }
 }
 
@@ -2323,11 +2323,11 @@ void BattleScene_Phase27(CameraNode* camera) {
 }
 
 void BattleScene_Phase30(CameraNode* camera) {
-    BattleMonRuntime* sp1C = &sNonActingPokemon->state.runtime;
+    BattleMonRuntime* non_acting_pokemon_runtime = &sNonActingPokemon->state.runtime;
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            Battle_ClearRuntimeFlags(sActingPokemon, 0x1800);
+            Battle_ClearRuntimeFlags(sActingPokemon, ACTIVE_SUBSTITUTE | ACTIVE_SUB_BREAK);
             BattleScene_SaveCameraFov(camera);
             BattleScene_ResetCameraFrameCounter();
             BattleScene_SelectActionCameraPresetFromTiming(camera, 0);
@@ -2378,7 +2378,7 @@ void BattleScene_Phase30(CameraNode* camera) {
             sSide1HpConsistent = BattleScene_AnimateDisplayedHpToRuntime(sActivePokemon[sBattleScene.scene->actingSide]);
             sSide2HpConsistent = BattleScene_AnimateDisplayedHpToRuntime(sActivePokemon[!sBattleScene.scene->actingSide]);
             if ((sSide2HpConsistent == 1) && (sSide1HpConsistent == 1)) {
-                if (sp1C->displayHp != 0) {
+                if (non_acting_pokemon_runtime->displayHp != 0) {
                     BattleAnim_CleanupEffects(1);
                     Audio_FadeAndClearStoredSounds();
                     BattleScene_SelectCameraFollowPreset(sActingPokemon, camera, 3);
@@ -2727,14 +2727,14 @@ void BattleScene_Phase14(CameraNode* camera) {
 }
 
 void BattleScene_Phase17(CameraNode* camera) {
-    ActivePokemonState* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    ActivePokemonState* acting_pokemon_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
             BattleScene_ResetCameraFrameCounter();
             BattleScene_SaveCameraFov(camera);
             Battle_ApplyAnimStateEffects(sActingPokemon);
-            if (!(sp1C->flags & 2)) {
+            if (!(acting_pokemon_state->flags & 2)) {
                 BattleScene_SelectActionCameraPresetFromTiming(camera, 0);
             }
             sBattleScene.scene->phaseStep += 1;
@@ -2899,7 +2899,7 @@ void BattleScene_Phase16(CameraNode* camera) {
 }
 
 void BattleScene_PhaseMoveFailedMessage(CameraNode* camera) {
-    ActivePokemonState* sp1C = &sNonActingPokemon->state;
+    ActivePokemonState* non_acting_pokemon_state = &sNonActingPokemon->state;
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -2909,13 +2909,13 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* camera) {
                 BattleScene_ResetCameraFov(camera);
                 BattleAnim_CleanupEffects(1);
 
-                if (sp1C->flags & 0x200) {
-                    BattleScene_SelectCameraShot(sNonActingPokemon, camera, D_84390228 = 2);
+                if (non_acting_pokemon_state->flags & ACTIVE_AIRBORNE) {
+                    BattleScene_SelectCameraShot(sNonActingPokemon, camera, sNormalOrFlyingAnimationRNG = 2);
                 } else {
-                    if (sNonActingPokemon->displayObject.objectType == 0xF) {
+                    if (sNonActingPokemon->displayObject.objectType == BEEDRILL) {
                         BattleScene_SelectCameraShot(sNonActingPokemon, camera, 0);
                     }
-                    BattleScene_SelectCameraShot(sNonActingPokemon, camera, D_84390228 = BattleAnim_RandomRange(2));
+                    BattleScene_SelectCameraShot(sNonActingPokemon, camera, sNormalOrFlyingAnimationRNG = BattleAnim_RandomRange(2));
                 }
 
                 BattleScene_EnterStateRow(sActingPokemon, 0xC);
@@ -2927,7 +2927,7 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* camera) {
             break;
 
         case 1:
-            if ((sNonActingPokemon->displayObject.objectType == 0xF) && !(sp1C->flags & 0x200)) {
+            if ((sNonActingPokemon->displayObject.objectType == BEEDRILL) && !(non_acting_pokemon_state->flags & ACTIVE_AIRBORNE)) {
                 BattleScene_FrameCamera(camera, sNonActingPokemon);
             }
 
@@ -3468,67 +3468,89 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_SetPhase(camera, 1);
 
         case 1:
+            // battle orders finished, begin turn
             BattleScene_PhaseIntro(camera);
             break;
         case 2:
-            // right after move selection
+            // first pokemon move
             BattleScene_Phase2(camera);
             break;
         case 3:
+            // second pokemon move
             BattleScene_Phase3(camera);
             break;
         case 4:
+            // end turn
             BattleScene_Phase4(camera);
             break;
         case 7:
+            // double team
+            // minimize
+            // rest
+            // self-target moves?
             BattleScene_Phase7(camera);
             break;
         case 38:
+            // withdraw
             BattleScene_Phase38(camera);
             break;
         case 27:
+            // bide
+            // bide 27th move by alphabetical order, but that seems to be a coincidence
             BattleScene_Phase27(camera);
             break;
         case 30:
+            // explosion and self-destruct
             BattleScene_Phase30(camera);
             break;
         case 29:
+            // haze
             BattleScene_Phase29(camera);
             break;
         case 28:
+            // flinch
             BattleScene_Phase28(camera);
             break;
         case 25:
             BattleScene_Phase25(camera);
             break;
         case 12:
+            // fly
             BattleScene_Phase12(camera);
             break;
         case 13:
             BattleScene_Phase13(camera);
             break;
         case 14:
+            // 2 turn charge moves
             BattleScene_Phase14(camera);
             break;
         case 15:
             BattleScene_Phase15(camera);
             break;
         case 17:
+            // sleeping or immobilized
             BattleScene_Phase17(camera);
             break;
         case 31:
+            // full paralysis
             BattleScene_Phase31(camera);
             break;
         case 20:
+            // causally self-damage by confusion
             BattleScene_PhaseFaint(camera);
             break;
         case 8:
+            // move failed
             BattleScene_PhaseMoveFailedMessage(camera);
             break;
         case 10:
+            // rage attack increase
             BattleScene_Phase10(camera);
             break;
         case 6:
+            // mislabeled , case 2 and 3 already handle hit animation
+            // actually poison (and probably burn) damage
             BattleScene_PhaseAttackHit(camera);
             break;
         case 33:
@@ -3538,6 +3560,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_PhaseAttackHitRecoil(camera);
             break;
         case 9:
+            // actually being hit with recoil
             BattleScene_PhaseDrainDamage(camera);
             break;
         case 16:
@@ -3547,9 +3570,11 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_PhaseWithdrawFainted(camera);
             break;
         case 18:
+            // this is SendOutAfterFaint
             BattleScene_PhaseWithdrawSwitch(camera);
             break;
         case 5:
+            // this is actuallyh phase faint
             BattleScene_PhaseSendOut(camera);
             break;
         case 34:
@@ -3559,6 +3584,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_PhaseResumeSaved();
             break;
         case 37:
+            // charge moves start?
             BattleScene_PhaseSelectMoveAnim();
             break;
     }
