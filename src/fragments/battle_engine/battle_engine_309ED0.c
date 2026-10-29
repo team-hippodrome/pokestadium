@@ -3567,6 +3567,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_PhaseDrainDamage(camera);
             break;
         case 16:
+            // hi jump kick crash
             BattleScene_Phase16(camera);
             break;
         case 11:
@@ -3585,6 +3586,7 @@ void BattleScene_UpdatePhase(CameraNode* camera) {
             BattleScene_PhaseSendOutAfterFaint(camera);
             break;
         case 36:
+            // do next phase
             BattleScene_PhaseResumeSaved();
             break;
         case 37:
