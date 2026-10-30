@@ -5059,16 +5059,16 @@ void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* camera) {
 }
 
 void BattleAnim_UpdateCamera(CameraNode* camera) {
-    gParticleRenderContext.unk_0C = camera;
-    gParticleCameraState = &gParticleRenderContext.unk_10;
+    sParticleRenderContext.camera = camera;
+    sParticleCameraState = &sParticleRenderContext.cameraState;
 
-    MtxF_Copy(&gParticleCameraState->unk_00, &camera->view.floatMatrix);
-    ParticleMath_CopyVec3f(&gParticleCameraState->unk_40, &camera->view.eyePosition);
-    ParticleMath_CopyVec3f(&gParticleCameraState->unk_4C, &camera->view.targetPosition);
-    BattleAnim_GetCameraLookAngles(&gParticleCameraState->unk_70, &gParticleCameraState->unk_72);
-    BattleAnim_GetCameraEyeAngles(&gParticleCameraState->unk_76, &gParticleCameraState->unk_78);
-    ParticleMath_NormalizedDirection(&gParticleCameraState->unk_58, gParticleCameraState->unk_40, gParticleCameraState->unk_4C);
-    ParticleMath_NormalizedDirection(&gParticleCameraState->unk_64, gParticleCameraState->unk_4C, gParticleCameraState->unk_40);
+    MtxF_Copy(&sParticleCameraState->viewMatrix, &camera->view.floatMatrix);
+    ParticleMath_CopyVec3f(&sParticleCameraState->eyePosition, &camera->view.eyePosition);
+    ParticleMath_CopyVec3f(&sParticleCameraState->targetPosition, &camera->view.targetPosition);
+    BattleAnim_GetCameraLookAngles(&sParticleCameraState->unk_70, &sParticleCameraState->unk_72);
+    BattleAnim_GetCameraEyeAngles(&sParticleCameraState->unk_76, &sParticleCameraState->unk_78);
+    ParticleMath_NormalizedDirection(&sParticleCameraState->lookDirection, sParticleCameraState->eyePosition, sParticleCameraState->targetPosition);
+    ParticleMath_NormalizedDirection(&sParticleCameraState->eyeDirection, sParticleCameraState->targetPosition, sParticleCameraState->eyePosition);
 }
 
 s32 BattleAnim_DispatchPresentation(s32 arg0, CameraNode* arg1) {
@@ -5106,9 +5106,9 @@ void BattleAnim_Reset(void) {
 
     gBattleAnimCurrentOwner = NULL;
     sD_843902BC = 0;
-    gParticleRenderContext.unk_00.x = 1.0f;
-    gParticleRenderContext.unk_00.y = 1.0f;
-    gParticleRenderContext.unk_00.z = 1.0f;
+    sParticleRenderContext.scale.x = 1.0f;
+    sParticleRenderContext.scale.y = 1.0f;
+    sParticleRenderContext.scale.z = 1.0f;
     D_843902F4 = 0;
     sD_84392040.unk_0C = 1.0f;
     sD_84392040.unk_10 = 1.0f;
@@ -5147,9 +5147,9 @@ void BattleAnim_Reset(void) {
 }
 
 void BattleAnim_GetPointAlongCameraRay(Vec3f* arg0, f32 arg1) {
-    arg0->x = gParticleCameraState->unk_40.x + (arg1 * gParticleCameraState->unk_58.x);
-    arg0->y = gParticleCameraState->unk_40.y + (arg1 * gParticleCameraState->unk_58.y);
-    arg0->z = gParticleCameraState->unk_40.z + (arg1 * gParticleCameraState->unk_58.z);
+    arg0->x = sParticleCameraState->eyePosition.x + (arg1 * sParticleCameraState->lookDirection.x);
+    arg0->y = sParticleCameraState->eyePosition.y + (arg1 * sParticleCameraState->lookDirection.y);
+    arg0->z = sParticleCameraState->eyePosition.z + (arg1 * sParticleCameraState->lookDirection.z);
 }
 
 void BattleAnim_GetCameraEyeAngles(s16* arg0, s16* arg1) {
@@ -5189,19 +5189,19 @@ void BattleAnim_GetCameraLookYaw(s16* arg0) {
 }
 
 void BattleAnim_GetCameraStoredAngles76(s16* arg0, s16* arg1) {
-    *arg0 = gParticleCameraState->unk_76;
-    *arg1 = gParticleCameraState->unk_78;
+    *arg0 = sParticleCameraState->unk_76;
+    *arg1 = sParticleCameraState->unk_78;
 }
 
 void BattleAnim_GetCameraStoredYaw78(s16* arg0) {
-    *arg0 = gParticleCameraState->unk_78;
+    *arg0 = sParticleCameraState->unk_78;
 }
 
 void BattleAnim_GetCameraStoredAngles70(s16* arg0, s16* arg1) {
-    *arg0 = gParticleCameraState->unk_70;
-    *arg1 = gParticleCameraState->unk_72;
+    *arg0 = sParticleCameraState->unk_70;
+    *arg1 = sParticleCameraState->unk_72;
 }
 
 void BattleAnim_GetCameraStoredYaw72(s16* arg0) {
-    *arg0 = gParticleCameraState->unk_72;
+    *arg0 = sParticleCameraState->unk_72;
 }

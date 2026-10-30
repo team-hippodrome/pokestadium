@@ -1,30 +1,33 @@
 #include "particle_math.h"
 
+/* Derived counters share one clock tick; "frame" does not establish a wall-clock rate. */
+/* Advance the particle clock and derive its remainder, quotient, and quotient-parity counters. */
 void Particle_UpdateFrameCounters(void) {
-    gParticleFrameCounter++;
-    gParticleFrameMod64 = gParticleFrameCounter & 0x3F;
-    gParticleFrameMod32 = gParticleFrameCounter & 0x1F;
-    gParticleFrameMod16 = gParticleFrameCounter & 0xF;
-    gParticleFrameMod8 = gParticleFrameCounter & 7;
-    gParticleFrameMod4 = gParticleFrameCounter & 3;
-    gParticleFrameMod3 = gParticleFrameCounter % 3;
-    gParticleFrameMod2 = gParticleFrameCounter & 1;
-    gParticleFrameDiv64 = gParticleFrameCounter >> 6;
-    gParticleFrameDiv32 = gParticleFrameCounter >> 5;
-    gParticleFrameDiv16 = gParticleFrameCounter >> 4;
-    gParticleFrameDiv8 = gParticleFrameCounter >> 3;
-    gParticleFrameDiv4 = gParticleFrameCounter >> 2;
-    gParticleFrameDiv3 = gParticleFrameCounter / 3;
-    gParticleFrameDiv2 = gParticleFrameCounter >> 1;
-    gParticleFrameDiv64Parity = gParticleFrameDiv64 & 1;
-    gParticleFrameDiv32Parity = gParticleFrameDiv32 & 1;
-    gParticleFrameDiv16Parity = gParticleFrameDiv16 & 1;
-    gParticleFrameDiv8Parity = gParticleFrameDiv8 & 1;
-    gParticleFrameDiv4Parity = gParticleFrameDiv4 & 1;
-    gParticleFrameDiv3Parity = gParticleFrameDiv3 & 1;
-    gParticleFrameDiv2Parity = gParticleFrameDiv2 & 1;
+    sParticleFrameCounter++;
+    sParticleFrameMod64 = sParticleFrameCounter & 0x3F;
+    sParticleFrameMod32 = sParticleFrameCounter & 0x1F;
+    sParticleFrameMod16 = sParticleFrameCounter & 0xF;
+    sParticleFrameMod8 = sParticleFrameCounter & 7;
+    sParticleFrameMod4 = sParticleFrameCounter & 3;
+    sParticleFrameMod3 = sParticleFrameCounter % 3;
+    sParticleFrameMod2 = sParticleFrameCounter & 1;
+    sParticleFrameDiv64 = sParticleFrameCounter >> 6;
+    sParticleFrameDiv32 = sParticleFrameCounter >> 5;
+    sParticleFrameDiv16 = sParticleFrameCounter >> 4;
+    sParticleFrameDiv8 = sParticleFrameCounter >> 3;
+    sParticleFrameDiv4 = sParticleFrameCounter >> 2;
+    sParticleFrameDiv3 = sParticleFrameCounter / 3;
+    sParticleFrameDiv2 = sParticleFrameCounter >> 1;
+    sParticleFrameDiv64Parity = sParticleFrameDiv64 & 1;
+    sParticleFrameDiv32Parity = sParticleFrameDiv32 & 1;
+    sParticleFrameDiv16Parity = sParticleFrameDiv16 & 1;
+    sParticleFrameDiv8Parity = sParticleFrameDiv8 & 1;
+    sParticleFrameDiv4Parity = sParticleFrameDiv4 & 1;
+    sParticleFrameDiv3Parity = sParticleFrameDiv3 & 1;
+    sParticleFrameDiv2Parity = sParticleFrameDiv2 & 1;
 }
 
+/* Advance the particle clock through the shared frame-counter updater. */
 void Particle_UpdateFrameCountersAlias(void) {
     Particle_UpdateFrameCounters();
 }

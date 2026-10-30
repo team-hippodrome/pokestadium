@@ -292,7 +292,7 @@
 - {vram: 0x800B2A00, type: bss, name: display_object_textures}
 -> - {vram: 0x800B2A00, type: .bss, name: display_object_textures}
 - {vram: 0x800B3400, type: bss, name: pokemon_stats}
-# fragments/particle_math/particle_math_264380: only func_81407590 differs (the Japanese build
+# fragments/particle_math/particle_math_264380: only ParticleGfx_AppendDescriptorMaterial differs (the Japanese build
 # has neither the full-scale gSPTexture used when unk_1C is NULL and unk_04 is set nor the
 # G_TT_NONE gDPSetTextureLUT for unk_04 != 0, expressed with VERSION_JP in the shared C). The porter already
 # gives the file its own data blob (0xA10, the US .data size), so it becomes the file's .data.

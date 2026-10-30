@@ -5,9 +5,9 @@
 #include "src/geo_render.h"
 
 void MiniFx_Init(void) {
-    gParticlePool = main_pool_alloc(sizeof(Particle) * 300, 0);
-    bzero(gParticlePool, sizeof(Particle) * 300);
-    gParticlePoolIndex = 0;
+    sParticlePool = main_pool_alloc(sizeof(Particle) * 300, 0);
+    bzero(sParticlePool, sizeof(Particle) * 300);
+    sParticlePoolIndex = 0;
 
     gMiniFxEmitters = main_pool_alloc(sizeof(ParticleEmitter) * 128, 0);
     bzero(gMiniFxEmitters, sizeof(ParticleEmitter) * 128);
@@ -65,16 +65,16 @@ s32 MiniFx_ConfigureEmitter(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4, V
 
         temp_v0->unk_00 = arg3;
 
-        temp_v0->unk_04.x = arg4.x;
-        temp_v0->unk_04.y = arg4.y;
-        temp_v0->unk_04.z = arg4.z;
+        temp_v0->origin.x = arg4.x;
+        temp_v0->origin.y = arg4.y;
+        temp_v0->origin.z = arg4.z;
 
-        temp_v0->unk_10.x = arg7.x;
-        temp_v0->unk_10.y = arg7.y;
-        temp_v0->unk_10.z = arg7.z;
+        temp_v0->rotation.x = arg7.x;
+        temp_v0->rotation.y = arg7.y;
+        temp_v0->rotation.z = arg7.z;
 
-        temp_v0->unk_18 = arg9;
-        temp_v0->unk_1C = argA;
+        temp_v0->updateCallback = arg9;
+        temp_v0->descriptor = argA;
         temp_v0->unk_20 = argB;
         temp_v0->unk_24 = argD;
         temp_v0->unk_2D = argE;
@@ -108,13 +108,13 @@ void MiniFx_ApplyEmitterToParticle(Particle* arg0, ParticleEmitter* arg1, s16 ar
         while (arg0 != NULL) {
             arg0->unk_28 = arg1->unk_00;
 
-            ParticleMath_CopyVec3f(&arg0->unk_68, &arg1->unk_04);
-            ParticleMath_CopyVec3s(&arg0->unk_94, &arg1->unk_10);
+            ParticleMath_CopyVec3f(&arg0->origin, &arg1->origin);
+            ParticleMath_CopyVec3s(&arg0->rotation, &arg1->rotation);
 
             arg0->unk_AC = arg2++;
 
-            arg0->unk_08 = arg1->unk_18;
-            arg0->unk_0C = arg1->unk_1C;
+            arg0->updateCallback = arg1->updateCallback;
+            arg0->descriptor = arg1->descriptor;
 
             arg0->unk_CD = arg1->unk_2F;
             arg0->unk_CE = arg1->unk_2D;
@@ -129,11 +129,11 @@ void MiniFx_ApplyEmitterToParticle(Particle* arg0, ParticleEmitter* arg1, s16 ar
 void MiniFx_EmitParticles(ParticleEmitter* arg0) {
     s16 i;
     s16 sp2C;
-    ParticleDescriptor* temp_v0 = arg0->unk_1C;
+    ParticleDescriptor* temp_v0 = arg0->descriptor;
     s16 temp_v1 = arg0->unk_24;
-    ParticleDescriptorChild* unk_04 = temp_v0->unk_04.a;
+    ParticleDescriptorChild* unk_04 = temp_v0->payload.a;
 
-    if ((temp_v0->unk_00 == 1) && (unk_04->unk_00 == 1)) {
+    if ((temp_v0->kind == 1) && (unk_04->setupScope == 1)) {
         MiniFx_ApplyEmitterToParticle(Particle_AllocChain(temp_v1), arg0, 0);
     } else {
         for (i = 0; i < sp2C; i++) {
@@ -171,14 +171,14 @@ void MiniFx_TickEmitters(void) {
 }
 
 void MiniFx_SetParticleRenderScale(Particle* arg0) {
-    gParticleRenderContext.unk_00.x = arg0->unk_28;
-    gParticleRenderContext.unk_00.y = arg0->unk_28;
-    gParticleRenderContext.unk_00.z = arg0->unk_28;
+    sParticleRenderContext.scale.x = arg0->unk_28;
+    sParticleRenderContext.scale.y = arg0->unk_28;
+    sParticleRenderContext.scale.z = arg0->unk_28;
 }
 
 void MiniFx_RetireParticle(Particle* arg0) {
     if (Particle_IsInactive(arg0) != 0) {
-        arg0->unk_18 = 0;
+        arg0->flags = 0;
         Particle_DisableAndDetach(arg0);
         Particle_Free(arg0);
     } else {
@@ -188,15 +188,15 @@ void MiniFx_RetireParticle(Particle* arg0) {
 
 void MiniFx_UpdateParticles(void) {
     s32 i;
-    Particle* var_s0 = gParticlePool;
+    Particle* var_s0 = sParticlePool;
 
     MiniFx_TickEmitters();
 
     for (i = 0; i < 0x12C; i++, var_s0++) {
-        if (var_s0->unk_D0 != 0) {
+        if (var_s0->allocated != 0) {
             MiniFx_SetParticleRenderScale(var_s0);
 
-            var_s0->unk_08(var_s0);
+            var_s0->updateCallback(var_s0);
 
             MiniFx_RetireParticle(var_s0);
         }
@@ -208,8 +208,8 @@ void MiniFx_DrawParticles(void) {
     gSPMatrix(gDisplayListHead++, D_87906054->perspective.projectionMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, D_87906054->view.fixedMatrix, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
-    gParticleMatrixPool = Gfx_AllocDisplayList(sizeof(ParticleMatrixPool));
-    gParticleMatrixPoolIndex = 0;
+    sParticleMatrixPool = Gfx_AllocDisplayList(sizeof(ParticleMatrixPool));
+    sParticleMatrixPoolIndex = 0;
 
     gSPDisplayList(gDisplayListHead++, D_8140DB30);
 
@@ -224,43 +224,43 @@ void MiniFx_InitRandomVelocityGravityParticle(Particle* arg0) {
 
     Particle_SetPrimColor(arg0, 0xC8, 0xAA, 0x64);
     Particle_SetEnvColor(arg0, 0x3A, 0x18, 0x18);
-    Particle_Field1C_SetScaled_0B938(arg0, (ParticleMath_RandomRange(0xA) * 0.03f) + 0.15f);
+    Particle_Scale_SetScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.03f) + 0.15f);
 
     sp28.x = ParticleMath_RandomSigned(0x400) - 0x3000;
     sp28.y = (ParticleMath_RandomSigned(0x400) + (sp26 << 0xD)) - 0x3000;
     sp28.z = 0;
 
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
-    Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.3f) + 6.0f);
-    Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+    Particle_Rotation_AddVecFromVec3s(arg0, sp28);
+    Particle_StepMagnitude_SetScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.3f) + 6.0f);
+    Particle_MotionStep_SetVecFromField74AnglesXY(arg0);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
 
 void MiniFx_UpdateRandomVelocityGravityParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitRandomVelocityGravityParticle(arg0);
             break;
 
         case 2:
-            if (arg0->unk_2C.y < 0.0f) {
+            if (arg0->worldPosition.y < 0.0f) {
                 Particle_MarkInactive(arg0);
             }
             break;
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Particle_Field7C_DecrementYUntilAtMost_0B0A4(arg0, -8.0f, 1.0f);
-        Particle_Field50_AddVecFromField7C_09BDC(arg0);
+        Particle_MotionStep_DecrementYUntilAtMost(arg0, -8.0f, 1.0f);
+        Particle_MotionOffset_AddVecFromMotionStep(arg0);
     }
 }
 
 void MiniFx_InitPalette10FastRiseFadeParticle(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomRange(0x10000));
-    Particle_Field74_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 4.0f);
-    Particle_Field7C_SetYScaled_0AF24(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
+    Particle_Scale_SetScaled(arg0, 0.25f);
+    Particle_Rotation_AddY(arg0, ParticleMath_RandomRange(0x10000));
+    Particle_StepMagnitude_SetScaled(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 4.0f);
+    Particle_MotionStep_SetYScaled(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xA);
     Particle_SetPrimAlpha(arg0, 0x64);
     Particle_FieldA6_SetS16_0BCA8(arg0, 7);
@@ -268,18 +268,18 @@ void MiniFx_InitPalette10FastRiseFadeParticle(Particle* arg0) {
 }
 
 void MiniFx_UpdatePalette10FastRiseFadeParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitPalette10FastRiseFadeParticle(arg0);
             break;
 
         case 2:
             Particle_AnimateFramesForwardAndAdvanceLifecycle(arg0, 0, 7, 1, 2, 0);
-            Particle_Field1C_Approach_0B98C(arg0, 0.8f, 0.1f);
-            Particle_Field74_Approach_0ADBC(arg0, 1.0f, 1);
+            Particle_Scale_Approach(arg0, 0.8f, 0.1f);
+            Particle_StepMagnitude_Approach(arg0, 1.0f, 1);
             if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
-                Particle_Field7C_ApproachY_0B180(arg0, 0.5f, 0.4f);
-                Particle_Field50_AddYFromField7C_09C6C(arg0);
+                Particle_MotionStep_ApproachY(arg0, 0.5f, 0.4f);
+                Particle_MotionOffset_AddYFromMotionStep(arg0);
             }
             break;
 
@@ -294,10 +294,10 @@ void MiniFx_UpdatePalette10FastRiseFadeParticle(Particle* arg0) {
 }
 
 void MiniFx_InitPalette10SlowRiseFadeParticle(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.25f);
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomRange(0x10000));
-    Particle_Field74_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 2.0f);
-    Particle_Field7C_SetYScaled_0AF24(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
+    Particle_Scale_SetScaled(arg0, 0.25f);
+    Particle_Rotation_AddY(arg0, ParticleMath_RandomRange(0x10000));
+    Particle_StepMagnitude_SetScaled(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 2.0f);
+    Particle_MotionStep_SetYScaled(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xA);
     Particle_SetPrimAlpha(arg0, 0x64);
     Particle_FieldA6_SetS16_0BCA8(arg0, 7);
@@ -305,18 +305,18 @@ void MiniFx_InitPalette10SlowRiseFadeParticle(Particle* arg0) {
 }
 
 void MiniFx_UpdatePalette10SlowRiseFadeParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitPalette10SlowRiseFadeParticle(arg0);
             break;
 
         case 2:
             Particle_AnimateFramesForwardAndAdvanceLifecycle(arg0, 0, 7, 1, 2, 0);
-            Particle_Field1C_Approach_0B98C(arg0, 0.8f, 0.1f);
-            Particle_Field74_Approach_0ADBC(arg0, 1.0f, 1);
+            Particle_Scale_Approach(arg0, 0.8f, 0.1f);
+            Particle_StepMagnitude_Approach(arg0, 1.0f, 1);
             if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
-                Particle_Field7C_ApproachY_0B180(arg0, 0.5f, 0.4f);
-                Particle_Field50_AddYFromField7C_09C6C(arg0);
+                Particle_MotionStep_ApproachY(arg0, 0.5f, 0.4f);
+                Particle_MotionOffset_AddYFromMotionStep(arg0);
             }
             break;
 
@@ -331,11 +331,11 @@ void MiniFx_UpdatePalette10SlowRiseFadeParticle(Particle* arg0) {
 }
 
 void MiniFx_InitRandomOffsetPalette10RiseFadeParticle(Particle* arg0) {
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
-    Particle_SetRandomVelocityXYZ(arg0, 3, 0, 3);
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomRange(0x10000));
-    Particle_Field74_SetScaled_0AD8C(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 3.0f);
-    Particle_Field7C_SetYScaled_0AF24(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 4.0f);
+    Particle_Scale_SetScaled(arg0, 0.5f);
+    Particle_SetRandomPositionOffsetXYZ(arg0, 3, 0, 3);
+    Particle_Rotation_AddY(arg0, ParticleMath_RandomRange(0x10000));
+    Particle_StepMagnitude_SetScaled(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 3.0f);
+    Particle_MotionStep_SetYScaled(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 4.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xA);
     Particle_SetPrimAlpha(arg0, 0x64);
     Particle_FieldA6_SetS16_0BCA8(arg0, 7);
@@ -343,18 +343,18 @@ void MiniFx_InitRandomOffsetPalette10RiseFadeParticle(Particle* arg0) {
 }
 
 void MiniFx_UpdateRandomOffsetPalette10RiseFadeParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitRandomOffsetPalette10RiseFadeParticle(arg0);
             break;
 
         case 2:
             Particle_AnimateFramesForwardAndAdvanceLifecycle(arg0, 0, 7, 1, 2, 0);
-            Particle_Field1C_Approach_0B98C(arg0, 1.0f, 0.05f);
-            Particle_Field74_Approach_0ADBC(arg0, 1.0f, 1);
+            Particle_Scale_Approach(arg0, 1.0f, 0.05f);
+            Particle_StepMagnitude_Approach(arg0, 1.0f, 1);
             if (Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) {
-                Particle_Field7C_ApproachY_0B180(arg0, 1.0f, 0.2f);
-                Particle_Field50_AddYFromField7C_09C6C(arg0);
+                Particle_MotionStep_ApproachY(arg0, 1.0f, 0.2f);
+                Particle_MotionOffset_AddYFromMotionStep(arg0);
             }
             break;
 
@@ -373,40 +373,40 @@ void MiniFx_InitSurfaceCrossingGravityParticle(Particle* arg0) {
 
     Particle_SetPrimColor(arg0, 0xC8, 0xAA, 0x64);
     Particle_SetEnvColor(arg0, 0x3A, 0x18, 0x18);
-    Particle_Field1C_SetScaled_0B938(arg0, (MathUtil_Random_ZeroOne() * 0.1f) + 0.1f);
+    Particle_Scale_SetScaled(arg0, (MathUtil_Random_ZeroOne() * 0.1f) + 0.1f);
 
     sp28.x = ParticleMath_RandomSigned(0x800) - 0x3800;
     sp28.y = ParticleMath_RandomSigned(0x1000) + 0x8000;
     sp28.z = 0;
 
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
-    Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.3f) + 6.0f);
-    Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+    Particle_Rotation_AddVecFromVec3s(arg0, sp28);
+    Particle_StepMagnitude_SetScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.3f) + 6.0f);
+    Particle_MotionStep_SetVecFromField74AnglesXY(arg0);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
 
 void MiniFx_UpdateSurfaceCrossingGravityParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitSurfaceCrossingGravityParticle(arg0);
             break;
 
         case 2:
-            if (arg0->unk_50.y < 0.0f) {
+            if (arg0->motionOffset.y < 0.0f) {
                 Particle_MarkInactive(arg0);
             }
             break;
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        if (arg0->unk_2C.y > 0.0f) {
+        if (arg0->worldPosition.y > 0.0f) {
             Particle_EnableRendering(arg0);
         } else {
             Particle_DisableRendering(arg0);
         }
-        Particle_Field7C_DecrementYUntilAtMost_0B0A4(arg0, -8.0f, 1.0f);
-        Particle_Field50_AddVecFromField7C_09BDC(arg0);
+        Particle_MotionStep_DecrementYUntilAtMost(arg0, -8.0f, 1.0f);
+        Particle_MotionOffset_AddVecFromMotionStep(arg0);
     }
 }
 
@@ -420,23 +420,23 @@ void MiniFx_InitPalette17DelayedRevealFallParticle(Particle* arg0) {
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = 0;
 
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp28);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    Particle_Field78_SetScaled_0ADA4(arg0, 0);
+    Particle_Rotation_SetVecFromVec3s(arg0, sp28);
+    Particle_StepMagnitude_SetScaled(arg0, 0.0f);
+    Particle_MagnitudeStep_SetScaled(arg0, 0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.0f);
-    Particle_SetScaleSpeed(arg0, 0.6f);
-    Particle_SetScaleTarget(arg0, 0.1f);
-    Particle_SetRandomVelocityXSymmetric(arg0, 0x14, 0xA);
-    Particle_SetRandomVelocityYOffset(arg0, 0xF, 0xF);
-    Particle_SetRandomVelocityZSymmetric(arg0, 0x14, 0xA);
+    Particle_Scale_SetScaled(arg0, 0.0f);
+    Particle_SetScaleParameter20(arg0, 0.6f);
+    Particle_SetScaleParameter24(arg0, 0.1f);
+    Particle_SetRandomPositionOffsetXSymmetric(arg0, 0x14, 0xA);
+    Particle_SetRandomPositionOffsetYOffset(arg0, 0xF, 0xF);
+    Particle_SetRandomPositionOffsetZSymmetric(arg0, 0x14, 0xA);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp26);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
 void MiniFx_UpdatePalette17DelayedRevealFallParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitPalette17DelayedRevealFallParticle(arg0);
             break;
@@ -448,13 +448,13 @@ void MiniFx_UpdatePalette17DelayedRevealFallParticle(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_Field1C_ApproachField24AndStepState_0BA48(arg0) != 0) {
-                Particle_SetScaleSpeed(arg0, 0.0f);
+            if (Particle_ApproachStoredScaleAndAdvanceLifecycle(arg0) != 0) {
+                Particle_SetScaleParameter20(arg0, 0.0f);
             }
             break;
 
         case 4:
-            Particle_Field1C_ApproachField24AndStepState_0BA48(arg0);
+            Particle_ApproachStoredScaleAndAdvanceLifecycle(arg0);
             break;
 
         case 5:
@@ -464,7 +464,7 @@ void MiniFx_UpdatePalette17DelayedRevealFallParticle(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -478,23 +478,23 @@ void MiniFx_InitPalette17SmallDelayedRevealFallParticle(Particle* arg0) {
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = 0;
 
-    Particle_Field94_SetVecFromVec3s_0A24C(arg0, sp28);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
+    Particle_Rotation_SetVecFromVec3s(arg0, sp28);
+    Particle_StepMagnitude_SetScaled(arg0, 0.0f);
+    Particle_MagnitudeStep_SetScaled(arg0, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
-    Particle_Field1C_SetScaled_0B938(arg0, 0.0f);
-    Particle_SetScaleSpeed(arg0, 0.2f);
-    Particle_SetScaleTarget(arg0, 0.035f);
-    Particle_SetRandomVelocityXSymmetric(arg0, 7, 3);
-    Particle_SetRandomVelocityYOffset(arg0, 0x14, 0xA);
-    Particle_SetRandomVelocityZSymmetric(arg0, 7, 3);
+    Particle_Scale_SetScaled(arg0, 0.0f);
+    Particle_SetScaleParameter20(arg0, 0.2f);
+    Particle_SetScaleParameter24(arg0, 0.035f);
+    Particle_SetRandomPositionOffsetXSymmetric(arg0, 7, 3);
+    Particle_SetRandomPositionOffsetYOffset(arg0, 0x14, 0xA);
+    Particle_SetRandomPositionOffsetZSymmetric(arg0, 7, 3);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp26);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
 void MiniFx_UpdatePalette17SmallDelayedRevealFallParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitPalette17SmallDelayedRevealFallParticle(arg0);
             break;
@@ -506,13 +506,13 @@ void MiniFx_UpdatePalette17SmallDelayedRevealFallParticle(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_Field1C_ApproachField24AndStepState_0BA48(arg0) != 0) {
-                Particle_SetScaleSpeed(arg0, 0.0f);
+            if (Particle_ApproachStoredScaleAndAdvanceLifecycle(arg0) != 0) {
+                Particle_SetScaleParameter20(arg0, 0.0f);
             }
             break;
 
         case 4:
-            Particle_Field1C_ApproachField24AndStepState_0BA48(arg0);
+            Particle_ApproachStoredScaleAndAdvanceLifecycle(arg0);
             break;
 
         case 5:
@@ -522,7 +522,7 @@ void MiniFx_UpdatePalette17SmallDelayedRevealFallParticle(Particle* arg0) {
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
@@ -533,37 +533,37 @@ void MiniFx_InitCoolGravityParticle(Particle* arg0) {
 
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
-    Particle_Field1C_SetScaled_0B938(arg0, (MathUtil_Random_ZeroOne() * 0.2f) + 0.3f);
+    Particle_Scale_SetScaled(arg0, (MathUtil_Random_ZeroOne() * 0.2f) + 0.3f);
 
     sp30.x = ParticleMath_RandomSigned(0x1800) - 0x3000;
     sp30.y = ParticleMath_RandomSigned(0x10000);
     sp30.z = 0;
 
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp30);
+    Particle_Rotation_AddVecFromVec3s(arg0, sp30);
 
-    Particle_Field38_AddVecScaled_08E18(arg0, ParticleMath_RandomSigned(0xA) * 0.1f, ParticleMath_RandomRange(0xA) * 0.25f, ParticleMath_RandomSigned(0xA) * 0.1f);
-    Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(5) * 0.35f) + 4.0f);
-    Particle_Field7C_SetVecFromField74AnglesXY_0B2B4(arg0);
+    Particle_PositionOffset_AddVecScaled(arg0, ParticleMath_RandomSigned(0xA) * 0.1f, ParticleMath_RandomRange(0xA) * 0.25f, ParticleMath_RandomSigned(0xA) * 0.1f);
+    Particle_StepMagnitude_SetScaled(arg0, (ParticleMath_RandomRange(5) * 0.35f) + 4.0f);
+    Particle_MotionStep_SetVecFromField74AnglesXY(arg0);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
 
 void MiniFx_UpdateCoolGravityParticle(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             MiniFx_InitCoolGravityParticle(arg0);
             break;
 
         case 2:
-            if (arg0->unk_50.y < -2.5f) {
+            if (arg0->motionOffset.y < -2.5f) {
                 Particle_MarkInactive(arg0);
             }
             break;
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Particle_Field7C_DecrementYUntilAtMost_0B0A4(arg0, -8.0f, 0.8f);
-        Particle_Field50_AddVecFromField7C_09BDC(arg0);
+        Particle_MotionStep_DecrementYUntilAtMost(arg0, -8.0f, 0.8f);
+        Particle_MotionOffset_AddVecFromMotionStep(arg0);
     }
 }
 

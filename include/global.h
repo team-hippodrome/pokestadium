@@ -509,24 +509,24 @@ typedef struct unk_D_864027C0 {
     /* 0x1C */ s16 unk_1C;
 } unk_D_864027C0; // size = 0x20
 
-typedef struct arg1_func_81407874_014_000_010 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09;
-    /* 0x0A */ u8 unk_0A;
-    /* 0x0B */ u8 unk_0B;
-    /* 0x0C */ u8 unk_0C;
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ u8 unk_0F;
-} arg1_func_81407874_014_000_010; // size >= 0x10
+typedef struct ParticleCombineMux {
+    /* 0x00 */ u8 colorA0;
+    /* 0x01 */ u8 colorB0;
+    /* 0x02 */ u8 colorC0;
+    /* 0x03 */ u8 colorD0;
+    /* 0x04 */ u8 alphaA0;
+    /* 0x05 */ u8 alphaB0;
+    /* 0x06 */ u8 alphaC0;
+    /* 0x07 */ u8 alphaD0;
+    /* 0x08 */ u8 colorA1;
+    /* 0x09 */ u8 colorB1;
+    /* 0x0A */ u8 colorC1;
+    /* 0x0B */ u8 colorD1;
+    /* 0x0C */ u8 alphaA1;
+    /* 0x0D */ u8 alphaB1;
+    /* 0x0E */ u8 alphaC1;
+    /* 0x0F */ u8 alphaD1;
+} ParticleCombineMux; // size >= 0x10
 
 typedef struct func_88002628_sp38 {
     /* 0x000 */ OSThread thread;

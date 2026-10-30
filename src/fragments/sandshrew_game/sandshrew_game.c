@@ -1810,12 +1810,12 @@ void SandshrewGame_DigStateMachine(MiniActor* sandshrew) {
 
         case 0x3: //  diggin
             if (sandshrew->diggingAccel2 != 0) {
-                if (gParticleFrameMod4 == 0) {
+                if (sParticleFrameMod4 == 0) {
                     Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle, &gMiniFxParticleDescriptorIa8, 1, 1); //	perticles
                     Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle, &gMiniFxParticleDescriptorIa8, 1, 2); //	particles
                 }
 
-                if (gParticleFrameMod4 == 0) {
+                if (sParticleFrameMod4 == 0) {
                     if (sandshrew->totalPos.y > -10.0f) {
                         Particle_EmitBurstAtTransform(1.0f, sandshrew->totalPos, sandshrew->totalRot, MiniFx_UpdatePalette10SlowRiseFadeParticle, &gMiniFxParticleDescriptorI4Frame,
                                       1); //	particles
@@ -2035,7 +2035,7 @@ void SandshrewGame_UpdateGeiser(MiniActor* geiser) {
             break;
     }
 
-    if ((geiser->mainState >= 2) && (gParticleFrameMod4 == 0)) {
+    if ((geiser->mainState >= 2) && (sParticleFrameMod4 == 0)) {
         Particle_EmitBurstFromObject(&geiser->unk_000, MiniFx_UpdateCoolGravityParticle, &gMiniFxParticleDescriptorI4FrameDiv2Mod4, 4, 0xA);
     }
 }
