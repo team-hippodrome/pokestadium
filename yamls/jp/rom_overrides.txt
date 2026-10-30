@@ -430,15 +430,15 @@
 - {vram: 0x800B5D80, type: bss, name: model_renderer_callbacks}
 -> - {vram: 0x800B5D80, type: .bss, name: model_renderer_callbacks}
 
-# battle_engine_313250: the Japanese BattleScene_IntroRevealFirstMon and
+# battle_engine_intro: the Japanese BattleScene_IntroRevealFirstMon and
 # BattleScene_IntroRevealSecondMon pass the "%s" send-out format (D_84386D84_jp) and the Pokemon's
 # name to a formatting Battle_QueueMessage instead of setting text token 0x19 first, and
 # pokemonPicked entries are 0x50 bytes (all under VERSION_JP in the shared C and headers). The
 # 0x30-byte rodata blob is the file .rodata (jump tables).
-- [0x3127B0, asm, fragments/battle_engine/battle_engine_313250]
--> - [0x3127B0, c, fragments/battle_engine/battle_engine_313250]
-- [0x376D70, rodata, fragments/battle_engine/battle_engine_313250]
--> - [0x376D70, .rodata, fragments/battle_engine/battle_engine_313250]
+- [0x3127B0, asm, fragments/battle_engine/battle_engine_intro]
+-> - [0x3127B0, c, fragments/battle_engine/battle_engine_intro]
+- [0x376D70, rodata, fragments/battle_engine/battle_engine_intro]
+-> - [0x376D70, .rodata, fragments/battle_engine/battle_engine_intro]
 
 # demo_scenes_15FA60: built from C with the Japanese differences under VERSION_JP (A/B-only skip
 # in Diorama_UpdateStateMachine, no Diorama_DrawEndCaption call or string table, mode settings

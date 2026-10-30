@@ -131,7 +131,7 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* pokemon1 = sActivePokemon[0];
     ActivePokemon* pokemon2 = sActivePokemon[1];
 
-    if ((gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->unk_30 == 0)) {
+    if ((gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->transitionStep == 0)) {
         BattleHud_DrawCompactMonStatusBox(pokemon1, 21, 15, pokemon1->sessionTeams->teamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
         BattleHud_DrawCompactMonStatusBox(pokemon2, 225, 15, pokemon2->sessionTeams->teamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
     }

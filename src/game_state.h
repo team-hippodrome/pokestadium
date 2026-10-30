@@ -58,7 +58,7 @@ typedef struct BattleMon {
     // BattleScene_IntroRevealFirstMon also indexes pokemonPicked in 0x50-byte steps and passes
     // pokemonPicked + 0x30 as the name.
     //@src/save_data.c
-    //@src/fragments/battle_engine/battle_engine_313250.c
+    //@src/fragments/battle_engine/battle_engine_intro.c
     /* 0x30 */ u8 nickname[12];
     /* 0x3C */ u8 unk_3C;
     /* 0x3D */ u8 unk_3D[3];
