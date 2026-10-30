@@ -1,6 +1,41 @@
 #include "battle_engine.h"
 #include "src/model_renderer.h"
 
+/*
+This file covers these classes of moves:
+    - moves that change the hue of the user (rage -> red, recover -> rainbow)
+    - moves that change the hue of the target (psybeam -> rainbow, fire punch -> red, acid -> green)
+    - moves that change the hue of the arena (OHKO -> pitch black, ice beam -> aqua, earthquake -> red)
+    - cutting moves (cut, scratch, vine whip)
+
+
+as well as a specific "flash" effect (descriptor25) used by these moves:
+    - Ice beam
+    - ember
+    - Blizzard
+    - psybeam
+    - Aurora beam
+    - hyper beam
+    - solarbeam 
+    - thunder shock
+    - Thunderbolt
+    - thunder
+    - confusion
+    - psychic
+    - night shade
+    - confuse ray
+    - light screen
+    - reflect
+    - self-destruct
+    - egg bomb
+    - bone club
+    - 
+
+
+Also:
+    - pokeball flash effect (hue change)
+*/
+
 void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
     BattleAnim_LoadGlobalTintToParticle(arg0);
     Particle_AdvanceLifecycle(arg0);

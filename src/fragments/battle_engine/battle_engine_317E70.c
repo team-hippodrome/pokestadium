@@ -5,6 +5,8 @@
 #include "src/fragments/particle_math/particle_math.h"
 #include "src/memory.h"
 
+/*particle loading*/
+
 void BattleAnim_InitParticleSystem(void) {
     gBattleAnimEffectSlots = main_pool_alloc(sizeof(*gBattleAnimEffectSlots) * 300, 0);
     gParticlePool = main_pool_alloc(sizeof(*gParticlePool) * 300, 0);

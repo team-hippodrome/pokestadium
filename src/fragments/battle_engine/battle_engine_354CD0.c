@@ -1,6 +1,20 @@
 #include "battle_engine.h"
 #include "src/gfx_buffer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static Trail50Effect D_843ADA80[50];
 
 static Gfx D_84389A50[] = {

@@ -2,6 +2,20 @@
 #include "src/gfx_buffer.h"
 #include "src/math_util.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static OwnerLinkedFourStream D_843AB940[4];
 
 static Gfx D_843899B0[] = {

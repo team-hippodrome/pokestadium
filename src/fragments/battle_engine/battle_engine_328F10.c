@@ -1,5 +1,19 @@
 #include "battle_engine.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);

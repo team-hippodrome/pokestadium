@@ -1,6 +1,20 @@
 #include "battle_engine.h"
 #include "src/model_renderer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_InitParticle(Particle* arg0, s16 arg1) {
     UNUSED s32 pad[3];
     s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);

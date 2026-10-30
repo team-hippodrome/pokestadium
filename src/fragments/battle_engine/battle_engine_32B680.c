@@ -5,6 +5,20 @@
 #include "src/matrix.h"
 #include "src/math_util.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static f32 D_84387B00[] = {
     0.0f, 1.0f,  1.0f,  1.3f, 0.8f, 0.9f, 1.3f,  0.8f,  1.0f,  0.9f,  0.6f, 1.2f,  1.2f, 0.6f,  0.9f, 1.5f, 0.8f,
     1.5f, 1.5f,  0.8f,  1.0f, 0.8f, 1.0f, 0.65f, 1.1f,  0.75f, 0.8f,  0.8f, 0.8f,  0.8f, 1.0f,  1.0f, 0.8f, 1.2f,

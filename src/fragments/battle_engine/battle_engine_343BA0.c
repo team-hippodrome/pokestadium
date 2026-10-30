@@ -4,6 +4,20 @@
 #include "include/math.h"
 #include "src/math_util.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 u8* sBattleAnimAssetPointers[256];
 s16 sBattleAnimResourceList[0x10];
 arg1_func_80019420* sBattleAnimResourceTablePointers[40];

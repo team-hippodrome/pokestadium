@@ -4,6 +4,20 @@
 #include "src/math_util.h"
 #include "include/math.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 typedef struct unk_D_843951D0_1010 {
     /* 0x00 */ f32 unk_00;
     /* 0x04 */ f32 unk_04;
