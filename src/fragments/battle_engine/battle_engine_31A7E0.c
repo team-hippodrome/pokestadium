@@ -1,5 +1,13 @@
 #include "battle_engine.h"
 
+/*
+Moves covered by this file:
+    - poison string
+    - Twineedle
+    - Pin missile
+    - Spike Cannon
+*/
+
 void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* arg0) {
     Particle_Field1C_SetScaled_0B938(arg0, 0.1f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
@@ -47,6 +55,7 @@ void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0) {
     }
 }
 
+// poison sting
 void BattleAnim_ConfigureSecondaryOwnerParticleVariant(Particle* arg0, u8 arg1) {
     switch (arg1) {
         case 1:

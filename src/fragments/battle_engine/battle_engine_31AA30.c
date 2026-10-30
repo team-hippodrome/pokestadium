@@ -1,5 +1,64 @@
 #include "battle_engine.h"
 
+/*
+moves covered by this file:
+    - Fire Punch
+    - Thunder punch
+    - Scratch
+    - razor wind
+    - Cut
+    - wing attack
+    - vine whip
+    - ember
+    - flamethrower
+    - Mist
+    - ice beam
+    - blizzard
+    - psybeam
+    - aurora beam
+    - hyper beam
+    - razor leaf
+    - solarbeam
+    - poison powder
+    - stun spore
+    - sleep powder
+    - pedal dance (OH GOD THE LAG)
+    - dragon rage
+    - fire spin
+    - thunder shock
+    - thunderbolt
+    - thunder
+    - Dig
+    - confusion
+    - psychic
+    - rage
+    - night shade
+    - smoke screen
+    - confuse ray
+    - Light screen
+    - haze
+    - reflect
+    - self-destruct
+    - egg bomb
+    - smog
+    - bone club
+    - fire blast
+    - poison gas
+    - sky attack
+    - spore
+    - flash
+    - crabhammer
+    - explosion
+    - fury swipes
+    - tri attack
+    - slash
+
+    maybe bonemerang?
+
+As well as:
+    - The Zs that appear when a pokemon is sleeping
+*/
+
 s32 BattleAnim_DrawAsset95Ia8Billboard(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
     ParticleGfx_PushBillboardMatrix(arg1, arg0->unk_2C, arg0->unk_1C);
