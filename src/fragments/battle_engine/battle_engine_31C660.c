@@ -29,7 +29,10 @@ as well as a specific "flash" effect (descriptor25) used by these moves:
     - self-destruct
     - egg bomb
     - bone club
-    - 
+    - flash 
+    - crabhammer
+    - explosion
+    - tri attack
 
 
 Also:
