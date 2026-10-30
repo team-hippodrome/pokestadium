@@ -1,7 +1,7 @@
 #include "demo_scenes.h"
 #include "src/matrix.h"
 
-u16 Diorama_IsModelInCameraCone(CameraNode* arg0, DisplayObject* arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
+u16 Diorama_IsModelInCameraCone(CameraNode* camera, DisplayObject* arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
     UNUSED s32 pad[6];
     f32 sp6C;
     f32 sp68;
@@ -20,9 +20,9 @@ u16 Diorama_IsModelInCameraCone(CameraNode* arg0, DisplayObject* arg1, s16 arg2,
     f32 sp38;
     s32 sp34 = 0;
 
-    Vec3f_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &sp48, &sp46, &sp44);
-    sp40 = (COSS(sp44 + 0x8000) * arg5) + arg0->view.eyePosition.z;
-    sp38 = (SINS(sp44 + 0x8000) * arg5) + arg0->view.eyePosition.x;
+    Vec3f_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &sp48, &sp46, &sp44);
+    sp40 = (COSS(sp44 + 0x8000) * arg5) + camera->view.eyePosition.z;
+    sp38 = (SINS(sp44 + 0x8000) * arg5) + camera->view.eyePosition.x;
 
     sp54 = (COSS((sp44 - arg3) + 0x8000) * arg4) + sp40;
     sp60 = (SINS((sp44 - arg3) + 0x8000) * arg4) + sp38;

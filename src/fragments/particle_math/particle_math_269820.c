@@ -1961,7 +1961,7 @@ void Particle_SetFieldOffsetB0IfNotSentinel(Particle* arg0, s16 arg1) {
     }
 }
 
-void Particle_RenderWorldChains(CameraNode* arg0) {
+void Particle_RenderWorldChains(CameraNode* camera) {
     s32 i;
     Particle* var_s0;
     Particle* var_s2 = gParticlePool;
@@ -1972,7 +1972,7 @@ void Particle_RenderWorldChains(CameraNode* arg0) {
             var_s0 = var_s2;
             while (var_s0 != NULL) {
                 if ((Particle_HasFlags(var_s0, 4) != 0) && (var_s0->unk_B2 >= 2)) {
-                    Particle_DispatchDraw(var_s0, arg0);
+                    Particle_DispatchDraw(var_s0, camera);
                 }
                 var_s0 = var_s0->next;
             }
@@ -1980,7 +1980,7 @@ void Particle_RenderWorldChains(CameraNode* arg0) {
     }
 }
 
-void Particle_RenderOrthoParticles(CameraNode* arg0) {
+void Particle_RenderOrthoParticles(CameraNode* camera) {
     s32 i;
     Particle* var_s0 = gParticlePool;
 
@@ -1988,7 +1988,7 @@ void Particle_RenderOrthoParticles(CameraNode* arg0) {
         if ((var_s0->unk_D0 != 0) && (Particle_HasFlags(var_s0, 8) != 0)) {
             Particle_PrepareRender(var_s0);
             if ((Particle_HasFlags(var_s0, 4) != 0) && (var_s0->unk_B2 >= 2)) {
-                Particle_DispatchDraw(var_s0, arg0);
+                Particle_DispatchDraw(var_s0, camera);
             }
         }
     }

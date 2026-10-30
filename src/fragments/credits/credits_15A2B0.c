@@ -3211,12 +3211,12 @@ static CameraNode* D_86A06254;
 static s16 D_86A06258;
 static s16* D_86A0625C;
 
-void Credits_InitCameraKeyframeBlend(CameraNode* arg0, u16 arg1, s8 arg2, u8 arg3) {
+void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 arg1, s8 arg2, u8 arg3) {
     f32 scale = 1.0f;
     unk_D_86A04328* ptr = &D_86A04328[arg2 - 1][arg3 - 3];
     Vec3f sp3C;
     Vec3f sp30;
-    D_86A06254 = arg0;
+    D_86A06254 = camera;
     D_86A06220 = 0;
     D_86A06222 = arg1;
 

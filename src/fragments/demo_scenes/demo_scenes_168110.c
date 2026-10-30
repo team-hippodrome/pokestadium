@@ -120,7 +120,7 @@ void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1) {
     IntroCamKeyframe_SetTransitionSpeed(arg0->targetZ, arg0->speed);
 }
 
-s32 Intro_UpdateCameraKeyframe(CameraNode* arg0) {
+s32 Intro_UpdateCameraKeyframe(CameraNode* camera) {
     Vec3f sp5C;
     Vec3f sp50;
     Vec3f sp44;
@@ -131,9 +131,9 @@ s32 Intro_UpdateCameraKeyframe(CameraNode* arg0) {
     s16 sp2C;
 
     if (D_86B0FA7C->unk_40 != 200.0f) {
-        arg0->perspective.verticalFieldOfView = D_86B0FA7C->unk_40;
+        camera->perspective.verticalFieldOfView = D_86B0FA7C->unk_40;
     } else {
-        Math_EaseTowardF(&arg0->perspective.verticalFieldOfView, 30.0f, 0.06f);
+        Math_EaseTowardF(&camera->perspective.verticalFieldOfView, 30.0f, 0.06f);
     }
 
     Math_EaseTowardF(&D_86B0FA7C->unk_44, D_86B0FA7C->unk_38, D_86B0FA7C->unk_3C);
@@ -144,17 +144,17 @@ s32 Intro_UpdateCameraKeyframe(CameraNode* arg0) {
         sp50.y = 10.0f;
     }
 
-    Vec3f_Copy(&sp44, &arg0->view.eyePosition);
+    Vec3f_Copy(&sp44, &camera->view.eyePosition);
     Vec3f_CalculateDistanceAngles(&sp44, &sp50, &sp34, &sp2E, &sp2C);
-    Camera_ComputeEyeFromAngles(&sp44, &arg0->view.eyePosition, D_86B0FA7C->unk_44 * sp34, sp2E, sp2C);
+    Camera_ComputeEyeFromAngles(&sp44, &camera->view.eyePosition, D_86B0FA7C->unk_44 * sp34, sp2E, sp2C);
     Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &sp38, D_86B0FA7C->unk_30, D_86B0FA7C->unk_24,
                   Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_26);
 
     sp38.y += D_86B10660.unk_0C;
 
-    Vec3f_Copy(&sp5C, &arg0->view.targetPosition);
+    Vec3f_Copy(&sp5C, &camera->view.targetPosition);
     Vec3f_CalculateDistanceAngles(&sp5C, &sp38, &sp30, &sp2E, &sp2C);
-    Camera_ComputeEyeFromAngles(&sp5C, &arg0->view.targetPosition, D_86B0FA7C->unk_44 * sp30, sp2E, sp2C);
+    Camera_ComputeEyeFromAngles(&sp5C, &camera->view.targetPosition, D_86B0FA7C->unk_44 * sp30, sp2E, sp2C);
 
     if ((sp34 <= 1.0f) && (sp30 <= 1.0f)) {
         return 1;

@@ -84,7 +84,7 @@ void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokem
     Sets up the camera framing for both pokemons's thumbnails.
 */
 void BattleThumbnail_SetupOwnerCameraFraming(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon) {
-    if (sBattleScene.scene->unk_1C == 1) {
+    if (sBattleScene.scene->mode == 1) {
         BattleThumbnail_SetBothOwnerIdleFlags();
     } else {
         BattleThumbnail_ClearBothOwnerIdleFlags();
@@ -111,12 +111,12 @@ void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
     camera = active_pokemon->thumbnail.camera;
     side = BattleScene_GetParticipantSideIndex(active_pokemon);
 
-    active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->unk_0C;
+    active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->rotationX;
     if (sSidePresentationTransform[side]->unk_10 == 0xFF) {
-        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->unk_0E * active_pokemon->thumbnail.side;
+        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY * active_pokemon->thumbnail.side;
         tmp_z = sSidePresentationTransform[side]->coordinates.z * active_pokemon->thumbnail.side;
     } else {
-        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->unk_0E;
+        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY;
         tmp_z = sSidePresentationTransform[side]->coordinates.z;
     }
 

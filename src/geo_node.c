@@ -471,31 +471,31 @@ unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_al
     return arg1;
 }
 
-void GeoCamera_SetViewport(CameraNode* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    arg0->viewport.x = arg1;
-    arg0->viewport.y = arg2;
-    arg0->viewport.width = arg3;
-    arg0->viewport.height = arg4;
+void GeoCamera_SetViewport(CameraNode* camera, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+    camera->viewport.x = arg1;
+    camera->viewport.y = arg2;
+    camera->viewport.width = arg3;
+    camera->viewport.height = arg4;
 
-    arg0->orthographic.unk_04 = -arg3 * 0.5f;
-    arg0->orthographic.unk_08 = arg3 * 0.5f;
-    arg0->orthographic.unk_10 = arg4 * 0.5f;
-    arg0->orthographic.unk_0C = -arg4 * 0.5f;
-    arg0->orthographic.unk_14 = -2.0f;
-    arg0->orthographic.unk_18 = 2.0f;
-    arg0->orthographic.unk_1C = 1.0f;
+    camera->orthographic.unk_04 = -arg3 * 0.5f;
+    camera->orthographic.unk_08 = arg3 * 0.5f;
+    camera->orthographic.unk_10 = arg4 * 0.5f;
+    camera->orthographic.unk_0C = -arg4 * 0.5f;
+    camera->orthographic.unk_14 = -2.0f;
+    camera->orthographic.unk_18 = 2.0f;
+    camera->orthographic.unk_1C = 1.0f;
 }
 
-void GeoCamera_SetPerspective(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3) {
-    arg0->perspective.unk_0C = (f32)arg0->viewport.width / arg0->viewport.height;
-    arg0->perspective.verticalFieldOfView = arg1;
-    arg0->perspective.nearPlane = arg2;
-    arg0->perspective.farPlane = arg3;
-    arg0->perspective.unk_18 = 1.0f;
+void GeoCamera_SetPerspective(CameraNode* camera, f32 arg1, f32 arg2, f32 arg3) {
+    camera->perspective.unk_0C = (f32)camera->viewport.width / camera->viewport.height;
+    camera->perspective.verticalFieldOfView = arg1;
+    camera->perspective.nearPlane = arg2;
+    camera->perspective.farPlane = arg3;
+    camera->perspective.unk_18 = 1.0f;
 }
 
-void GeoCamera_SetEyeAtUp(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s32 arg7) {
-    CameraView* sp1C = &arg0->view;
+void GeoCamera_SetEyeAtUp(CameraNode* camera, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s32 arg7) {
+    CameraView* sp1C = &camera->view;
     f32 sp28 = arg4 - arg1;
     f32 sp24 = arg6 - arg3;
     f32 temp_fv1_2 = -1.0 / sqrtf(SQ(sp28) + SQ(sp24));
@@ -508,8 +508,8 @@ void GeoCamera_SetEyeAtUp(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
     Vec3f_SetComponentsDuplicate(&sp1C->upDirection, SINS(arg7) * sp24, COSS(arg7), -SINS(arg7) * sp28);
 }
 
-void GeoCamera_SetBackground(CameraNode* arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
-    CameraOverlay* ptr = &arg0->overlay;
+void GeoCamera_SetBackground(CameraNode* camera, s16 arg1, s16 arg2, u8 arg3, u8 arg4, u8 arg5) {
+    CameraOverlay* ptr = &camera->overlay;
 
     if (arg2 < 2) {
         if ((arg1 == 2) || (arg1 == 4)) {
@@ -527,8 +527,8 @@ void GeoCamera_SetBackground(CameraNode* arg0, s16 arg1, s16 arg2, u8 arg3, u8 a
     }
 }
 
-void GeoCamera_SetBackgroundTexture(CameraNode* arg0, s16 arg1, s16 arg2, s32 arg3, u32 arg4) {
-    CameraOverlay* ptr = &arg0->overlay;
+void GeoCamera_SetBackgroundTexture(CameraNode* camera, s16 arg1, s16 arg2, s32 arg3, u32 arg4) {
+    CameraOverlay* ptr = &camera->overlay;
     ptr->unk_0C = arg1;
     ptr->unk_0E = arg2;
     ptr->unk_10 = 0;

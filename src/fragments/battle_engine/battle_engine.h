@@ -44,7 +44,7 @@ typedef struct ActivePokemonState {
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 ownerTeamMemberIndex;
-    /* 0x2D */ u8 unk_2D;
+    /* 0x2D */ u8 replacementState;
     /* 0x2E */ u8 alpha;
     /* 0x2F */ u8 forfeitCursorHover;
     /* 0x30 */ u16 flashTimer;
@@ -155,19 +155,19 @@ typedef struct MovePresentationCue {
     /* 0x03 */ u8 alternateAnchor;
     /* 0x04 */ u8 animationDuration;
     /* 0x05 */ u8 flags1;
-    /* 0x06 */ u8 unk_06;
+    /* 0x06 */ u8 currentFrame;
     /* 0x07 */ u8 endFrame;
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ u8 unk_09;
     /* 0x0A */ u8 frameCounter;
     /* 0x0B */ u8 animationTimer;
     /* 0x0C */ u8 checkpointFrame;
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ u8 unk_0F;
+    /* 0x0D */ u8 initialCameraCue;
+    /* 0x0E */ u8 followupCameraCue;
+    /* 0x0F */ u8 cameraHoldFrames;
 } MovePresentationCue; // size = 0x10
 
-typedef struct unk_D_8438E7B0 {
+typedef struct PokemonBattleCues {
     /* 0x000 */ MovePresentationCue moveCues[165];
     /* 0xA50 */ MovePresentationCue idleCues;
     /* 0xA60 */ char unkA60[0x10];
@@ -212,42 +212,115 @@ typedef struct unk_D_8438E7B0 {
 #define BATTLE_MSG_SUBSTITUTE_LOW_HP 215       // "Not enough HP!"
 #define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
 
+// BattleScene.moveEffectKind selects presentation, not moveCache.unk_01's
+// gameplay effect. Producers: Battle_Effect_* and Battle_CheckMonCanAct.
+#define MOVE_PRESENTATION_NORMAL 0
+#define MOVE_PRESENTATION_SELF_TARGET 7
+#define MOVE_PRESENTATION_FAILED 8
+#define MOVE_PRESENTATION_RECOIL 9
+#define MOVE_PRESENTATION_FLY_START 12
+#define MOVE_PRESENTATION_DIG_START 13
+#define MOVE_PRESENTATION_CHARGE 14
+#define MOVE_PRESENTATION_TRANSFORM 15
+#define MOVE_PRESENTATION_JUMP_KICK_CRASH 16
+#define MOVE_PRESENTATION_UNABLE_TO_ACT 17
+#define MOVE_PRESENTATION_CONFUSION_SELF_HIT 20
+#define MOVE_PRESENTATION_HEAL 21
+#define MOVE_PRESENTATION_TARGET_STATUS 22
+#define MOVE_PRESENTATION_MULTI_HIT 24
+#define MOVE_PRESENTATION_SUBSTITUTE 25
+#define MOVE_PRESENTATION_TARGET_STAT_DROP 26
+#define MOVE_PRESENTATION_BIDE 27
+#define MOVE_PRESENTATION_NO_ACTION 28
+#define MOVE_PRESENTATION_HAZE 29
+#define MOVE_PRESENTATION_EXPLOSION 30
+#define MOVE_PRESENTATION_FULL_PARALYSIS 31
+#define MOVE_PRESENTATION_DISABLE 32
+#define MOVE_PRESENTATION_WITHDRAW 38
+#define MOVE_PRESENTATION_TELEPORT 39
+
+// BattleScene.phase is a separate namespace: healing and Teleport share the
+// self-target phase, while status and stat drops finish in the ordinary action.
+// Dispatch and transitions: BattleScene_UpdatePhase and BattleScene_PhaseDispatchMoveEffect.
+#define BATTLE_PHASE_INITIALIZE 0
+#define BATTLE_PHASE_TURN_INTRO 1
+#define BATTLE_PHASE_FIRST_ACTION 2
+#define BATTLE_PHASE_SECOND_ACTION 3
+#define BATTLE_PHASE_END_TURN 4
+#define BATTLE_PHASE_FAINT 5
+#define BATTLE_PHASE_RESIDUAL_AFTER_MOVE 6
+#define BATTLE_PHASE_SELF_TARGET 7
+#define BATTLE_PHASE_MOVE_FAILED 8
+#define BATTLE_PHASE_RECOIL 9
+#define BATTLE_PHASE_RAGE 10
+#define BATTLE_PHASE_VOLUNTARY_SWITCH 11
+#define BATTLE_PHASE_FLY_START 12
+#define BATTLE_PHASE_DIG_START 13
+#define BATTLE_PHASE_CHARGE 14
+#define BATTLE_PHASE_TRANSFORM 15
+#define BATTLE_PHASE_JUMP_KICK_CRASH 16
+#define BATTLE_PHASE_UNABLE_TO_ACT 17
+#define BATTLE_PHASE_SEND_OUT_AFTER_FAINT 18
+#define BATTLE_PHASE_CONFUSION_SELF_HIT 20
+#define BATTLE_PHASE_SUBSTITUTE 25
+#define BATTLE_PHASE_BIDE 27
+#define BATTLE_PHASE_NO_ACTION 28
+#define BATTLE_PHASE_HAZE 29
+#define BATTLE_PHASE_EXPLOSION 30
+#define BATTLE_PHASE_FULL_PARALYSIS 31
+#define BATTLE_PHASE_RESIDUAL_FAINT_CHECK 33
+#define BATTLE_PHASE_RESIDUAL_FAINT 34
+#define BATTLE_PHASE_RESIDUAL_WITHOUT_MOVE 35
+#define BATTLE_PHASE_ENTER_QUEUED 36
+#define BATTLE_PHASE_DISPATCH_MOVE_EFFECT 37
+#define BATTLE_PHASE_WITHDRAW 38
+
+#define BATTLE_ACTION_FIRST 0
+#define BATTLE_ACTION_SECOND 1
+#define BATTLE_ACTION_COMPLETE 3
+
+// Producers: Battle_ApplyDamageAnimation, ProcessBattleTurn and secondary effects.
+#define BATTLE_HIT_REACTION_NONE 0
+#define BATTLE_HIT_REACTION_MULTI_HIT 1
+#define BATTLE_HIT_REACTION_SUBSTITUTE 2
+#define BATTLE_HIT_REACTION_SECONDARY 3
+
 typedef struct BattleScene {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s8 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
+    /* 0x0C */ s32 bRollShotIndex;
+    /* 0x10 */ s32 substepFrameCounter;
+    /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 cameraCounter;
-    /* 0x24 */ s32 unk_24;
+    /* 0x1A */ u8 hitReactionKind;
+    /* 0x1C */ s32 mode;
+    /* 0x20 */ s32 phaseStep;
+    /* 0x24 */ s32 modelReloadStep;
     /* 0x28 */ char unk28[0x2];
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 side;
+    /* 0x2A */ u16 sideCurrentlySwitching;
+    /* 0x2C */ u16 actingSide;
     /* 0x2E */ u16 unk_2E;
     /* 0x30 */ s32 unk_30;
-    /* 0x34 */ s32 unk_34;
-    /* 0x38 */ s32 unk_38;
-    /* 0x3C */ s32 unk_3C;
+    /* 0x34 */ s32 actionPass;
+    /* 0x38 */ s32 phase;
+    /* 0x3C */ s32 phaseSubstep;
     /* 0x40 */ s32 winner;
     /* 0x44 */ s32 unk_44;
-    /* 0x48 */ s32 unk_48;
-    /* 0x4C */ s32 unk_4C;
-    /* 0x50 */ s32 unk_50;
+    /* 0x48 */ s32 moveEffectKind;
+    /* 0x4C */ s32 rageFollowupPhase;
+    /* 0x50 */ s32 cameraPresetId;
     /* 0x54 */ u8 unk_54;
     /* 0x56 */ s16 rotationX;
     /* 0x58 */ s16 rotationY;
     /* 0x5A */ char unk5A[0x2];
     /* 0x5C */ f32 distance;
-    /* 0x60 */ f32 unk_60;
+    /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ char unk64[0x4];
     /* 0x68 */ f32 unk_68;
     /* 0x6C */ f32 unk_6C;
     /* 0x70 */ f32 targetDistance;
     /* 0x74 */ f32 unk_74;
-    /* 0x78 */ u8 unk_78;
+    /* 0x78 */ u8 nextPhase;
     /* 0x7A */ s16 unk_7A;
     /* 0x7C */ char unk7C[0x8];
     /* 0x84 */ f32 unk_84;
@@ -255,16 +328,16 @@ typedef struct BattleScene {
     /* 0x94 */ Vec3f targetPosition;
     /* 0xA0 */ Vec3f unk_A0;
     /* 0xAC */ char unkAC[0xC];
-    /* 0xB8 */ Vec3f unk_B8;
-    /* 0xC4 */ Vec3f unk_C4;
-    /* 0xD0 */ Vec3f cameraStartingPosition;
+    /* 0xB8 */ Vec3f savedCameraTarget;
+    /* 0xC4 */ Vec3f savedCameraEye;
+    /* 0xD0 */ Vec3f cameraAnchor;
     /* 0xDC */ CameraNode* camera;
 } BattleScene; // size = 0xE0
 
-typedef struct unk_D_84390240 {
+typedef struct BattleSceneContext {
     /* 0x00 */ BattleScene* scene;
     /* 0x04 */ char unk04[0x3C];
-} unk_D_84390240; // size = 0x40
+} BattleSceneContext; // size = 0x40
 
 typedef void (*BattleSceneStateCallback)(ActivePokemon*);
 
@@ -305,8 +378,8 @@ typedef struct unk_D_84390178 {
 
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x0C */ s16 rotationX;
+    /* 0x0E */ s16 rotationY;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ u16 idleTimer;
     /* 0x14 */ char unk14[0xC];
@@ -920,7 +993,7 @@ extern s16 sChargeMoveCues[];
 extern ThumbnailSettings sSideThumbnailSettings[2];
 extern DioramaAnimData D_843847EC[3];
 extern DioramaAnimData D_84384888[2];
-extern DioramaAnimData D_843848F0;
+extern DioramaAnimData sSwitchCameraPreset;
 extern DioramaAnimData D_84384924;
 extern DioramaAnimData D_84384958;
 extern DioramaAnimData D_8438498C;
@@ -987,12 +1060,12 @@ extern unk_D_84390178 sAttractScreenTimer;
 extern Vec3f sEndBattleBannerPos;
 extern BattleMessageQueue* sBattleMessageQueues;
 extern unk_D_843901B0 gCameraPreset;
-extern ActivePokemon* D_84390200;
-extern ActivePokemon* D_84390204;
+extern ActivePokemon* sNonActingPokemon;
+extern ActivePokemon* sActingPokemon;
 extern s32 sMultihitCount;
 extern s32 sMultihitCountdown;
-extern s32 D_84390234;
-extern unk_D_84390240 sBattleScene;
+extern s32 sMultihitEffectCountdown;
+extern BattleSceneContext sBattleScene;
 extern s32 D_84390288;
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;
@@ -1556,11 +1629,11 @@ void BattleScene_SetCameraClipPlanes(CameraNode* camera_node, f32 near_plane, f3
 void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1);
 void BattleScene_ApplyCameraPhaseDefaults(void);
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0);
-void BattleScene_ApplyCameraShake(CameraNode* arg0);
+void BattleScene_ApplyCameraShake(CameraNode* camera);
 void BattleScene_StartCameraShake(UNUSED ActivePokemon* active_pokemon);
 s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1);
 s32 BattleScene_ApproachCameraRotationY(CameraNode* camera, s16 delta_theta, s16 final_angle_y);
-s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2);
+s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* camera, s16 arg1, s16 arg2);
 void BattleScene_SetCameraAnglesAndDistance(s16 rotation_x, s16 rotation_y, f32 distance);
 void BattleScene_SetCameraSendOutShot(CameraNode* camera, s32 opposite_side);
 void BattleScene_ClampCameraEyeFloor(CameraNode* camera);
@@ -1572,7 +1645,7 @@ void BattleScene_SetCameraEyeFromPosition(CameraNode* camera, Vec3f starting_pos
 void BattleScene_SetCameraEyeFromAt(CameraNode* camera, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
 void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* camera, Vec3f starting_postion, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
 void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* camera, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
-void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0);
+void BattleScene_CameraHelperNop(UNUSED CameraNode* camera);
 void BattleScene_SnapFloatPair(f32* a, f32* b);
 void BattleScene_ApplyOwnerFramingAdjustments(CameraNode* camera, ActivePokemon* pokemon, UNUSED f32 arg2);
 void BattleScene_RecomputeCameraDistance(CameraNode* camera, ActivePokemon* pokemon);
@@ -1599,7 +1672,7 @@ void BattleScene_SetCameraPresetSmoothing(f32 target_z, f32 speed);
 void BattleScene_LoadCameraPreset(DioramaAnimData* diorama, CameraNode* camera, ActivePokemon* pokemon);
 void BattleScene_LoadCameraPresetUnscaled(DioramaAnimData* diorama, CameraNode* camera);
 s32 BattleScene_AnimateCameraIntro(CameraNode* camera, ActivePokemon* pokemon);
-s32 BattleScene_AreActivePokemonHeightsSeparated(UNUSED CameraNode* arg0);
+s32 BattleScene_AreActivePokemonHeightsSeparated(UNUSED CameraNode* camera);
 void BattleScene_SetCameraActivePokemonHeightShot(CameraNode* camera, s32 side);
 s32 BattleScene_ApproachCameraActivePokemonHeightShot(CameraNode* camera, s32 side);
 void BattleScene_SetCameraOwnerShot(CameraNode* camera, ActivePokemon* pokemon);
@@ -1624,165 +1697,165 @@ void BattleScene_SelectCameraShot(ActivePokemon* pokemon, CameraNode* camera, s3
 
 
 //@src/fragments/battle_engine/battle_engine_309ED0.c
-void BattleScene_ApplyModelAnimationSlot5A(ActivePokemon* active_pokemon);
-void BattleScene_ResetAnimationStep(void);
-s32 BattleScene_AdvanceOwnerAnimation(ActivePokemon* active_pokemon);
-s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* active_pokemon);
-s32 BattleScene_AdvanceOwnerAnimationAndClearFlags(ActivePokemon* active_pokemon);
-s32 BattleScene_AdvanceDoublesOwnerAnimation(ActivePokemon* active_pokemon);
-s32 BattleScene_AdvanceBothOwnerAnimations(void);
-void BattleScene_ClearInactiveOwnerAnimationFlags(void);
-void func_8431FCC4(void);
+void BattleScene_RestoreUndergroundDiglett(ActivePokemon* pokemon);
+void BattleScene_ResetModelReloadStep(void);
+s32 BattleScene_RevealSubstituteUser(ActivePokemon* pokemon);
+s32 BattleScene_RestoreSubstituteDoll(ActivePokemon* pokemon);
+s32 BattleScene_BreakSubstitute(ActivePokemon* pokemon);
+s32 BattleScene_RevealSubstituteForAction(ActivePokemon* pokemon);
+s32 BattleScene_RestoreBothSubstitutes(void);
+void Battle_ClearExpiredTrappingFlags(void);
+void BattleScene_NoOp8431FCC4(void);
 s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* active_pokemon);
-void BattleScene_ClearPhaseFlag(void);
-void BattleScene_SetPhaseFlag(void);
-void BattleScene_SetPhase(UNUSED CameraNode* arg0, s32 arg1);
-void BattleScene_SaveCameraFov(CameraNode* arg0);
-void BattleScene_ResetCameraFov(CameraNode* arg0);
-s32 BattleScene_GetAnimationTimingField0D(ActivePokemon* active_pokemon);
-s32 BattleScene_GetMappedAnimationTimingField0D(ActivePokemon* active_pokemon);
-s32 BattleScene_GetAnimationTimingField0E(ActivePokemon* active_pokemon);
-s32 BattleScene_GetMappedAnimationTimingField0E(ActivePokemon* active_pokemon);
-s32 BattleScene_GetCameraShotDuration(ActivePokemon* active_pokemon);
+void BattleScene_ResetPhaseSubstep(void);
+void BattleScene_BeginPhaseSubstep(void);
+void BattleScene_SetPhase(UNUSED CameraNode* camera, s32 phase);
+void BattleScene_SaveCameraFov(CameraNode* camera);
+void BattleScene_ResetCameraFov(CameraNode* camera);
+s32 BattleScene_GetInitialCameraCue(ActivePokemon* pokemon);
+s32 BattleScene_GetChargeInitialCameraCue(ActivePokemon* pokemon);
+s32 BattleScene_GetFollowupCameraCue(ActivePokemon* pokemon);
+s32 BattleScene_GetChargeFollowupCameraCue(ActivePokemon* pokemon);
+s32 BattleScene_GetCameraShotDuration(ActivePokemon* pokemon);
 void Battle_StartTurn(void);
 void BattleScene_InitializeSwitchActions(void);
 s32 BattleScene_PrepareReplacementTransition(void);
 void BattleScene_BeginBattlePhase(void);
-s32 BattleScene_TransitionToPhaseFull(s32 arg0);
-s32 BattleScene_TransitionToPhase(s32 arg0);
-s32 BattleScene_TransitionToPhaseDuplicate(s32 arg0);
-void BattleScene_SwitchActiveSideAndSetPhase(CameraNode* arg0);
-void Battle_ActSecondAttacker(u8 arg0);
-void BattleScene_PhaseResumeSaved(void);
+s32 BattleScene_TransitionAndClearMoveEffect(s32 phase);
+s32 BattleScene_TransitionPreservingMoveEffect(s32 phase);
+s32 BattleScene_TransitionToRage(s32 phase);
+void BattleScene_SwitchActiveSideAndSetPhase(CameraNode* camera);
+void Battle_ActSecondAttacker(u8 next_phase);
+void BattleScene_PhaseEnterQueuedPhase(void);
 void BattleScene_CleanupActionAndAdvance(void);
 s32 BattleScene_HandleFaintStatusCompletion(void);
 void BattleScene_CompleteActionPhase(void);
-void BattleScene_ResolveDisplayedHpCompletion(CameraNode* arg0);
-void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0);
-void BattleScene_WaitForDisplayedHpAnimations(CameraNode* arg0);
+void BattleScene_ResolveDisplayedHpCompletion(CameraNode* camera);
+void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* camera);
+void BattleScene_WaitForDisplayedHpAnimations(CameraNode* camera);
 s32 BattleScene_ActionPresentationTransitionCheck(void);
 s32 BattleScene_ActionPresentationCleanupCheck(void);
 s32 BattleScene_PrepareResidualStatusPresentation(void);
 void BattleScene_UpdateActiveOwnerPointers(void);
-void BattleScene_InitializeBattlePresentation(CameraNode* arg0);
-void BattleScene_SendOutPresentationFinalize(CameraNode* arg0);
-s32 BattleScene_ResetOwnerStatusPresentation(ActivePokemon* active_pokemon);
-void BattleScene_AdvanceSendOutPreparation(CameraNode* arg0);
-void BattleScene_AdvanceSendOutCamera(CameraNode* arg0);
-void BattleScene_AdvanceSendOutCameraClose(CameraNode* arg0);
-void BattleScene_FinishSendOutCameraClose(CameraNode* arg0);
-void BattleScene_CompleteSendOutPresentation(CameraNode* arg0);
-void func_84321D34(UNUSED CameraNode* arg0);
-void BattleScene_SetupSendOutOwnerShot(CameraNode* arg0);
-void BattleScene_CompleteSendOutCameraFade(UNUSED CameraNode* arg0);
-void BattleScene_CompleteSendOutExtendedFade(UNUSED CameraNode* arg0);
-void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0);
-void BattleScene_PhaseSendOut(CameraNode* arg0);
-void BattleScene_CompleteSendOutFollowup(UNUSED CameraNode* arg0);
-void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0);
-void BattleScene_ResetOwnerPresentationFlags(ActivePokemon* active_pokemon);
-void BattleScene_InitializeIntroCamera(CameraNode* arg0);
-void BattleScene_AdvanceIntroCamera(CameraNode* arg0);
-void BattleScene_PhaseIntro(CameraNode* arg0);
-void BattleScene_SetMonMoveResourceFlag(ActivePokemon* active_pokemon);
-void BattleScene_PrepareMoveResourcePresentation(UNUSED CameraNode* arg0);
-void BattleScene_SelectActionCameraPreset(CameraNode* arg0);
-s32 BattleScene_AdvanceActionPresentationSetup(CameraNode* arg0);
-void BattleScene_ActionSetupCameraStep(CameraNode* arg0);
-void BattleScene_RefreshActionCameraPreset(CameraNode* arg0);
-void BattleScene_SelectActionCameraPresetFromTiming(CameraNode* arg0, s32 arg1);
-s32 BattleScene_ApplyActionCameraMode(CameraNode* arg0, s32 arg1);
-void BattleScene_CleanupActionPresentation(UNUSED CameraNode* arg0);
-s32 BattleScene_WaitForActionCameraDuration(UNUSED CameraNode* arg0);
-void BattleScene_ActionSetupAnimationDefault(CameraNode* arg0);
-void BattleScene_ActionSetupAnimationVariantA(CameraNode* arg0);
-void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0);
-void BattleScene_ActionSetupAnimationVariantC(CameraNode* arg0);
-void BattleScene_ActionSetupAnimationVariantD(CameraNode* arg0);
-void BattleScene_ActionSetupAnimationStep(CameraNode* arg0);
-void BattleScene_StopSpecialOwnerAnimation(ActivePokemon* active_pokemon);
-s32 BattleScene_IsSpecialOwnerAnimation(ActivePokemon* active_pokemon);
-void BattleScene_CompleteHpUpdateTransition(CameraNode* arg0, s32* arg1, s32* arg2);
-void BattleScene_RunBasicHpTransition(CameraNode* arg0);
-void BattleScene_RunConditionalHpTransition(CameraNode* arg0);
-void BattleScene_RunMoveEffectEndHpTransition(CameraNode* arg0);
-void BattleScene_RunActionEffectHpTransition(CameraNode* arg0);
-void func_84324404(void);
-void func_8432440C(void);
-void BattleScene_RunRepeatedHitHpTransition(CameraNode* arg0);
-void BattleScene_ActionSetupFinalizeStep(CameraNode* arg0);
-void BattleScene_Phase2(CameraNode* arg0);
-void BattleScene_Phase3(CameraNode* arg0);
-s32 BattleScene_PhaseSelectMoveAnim(void);
-void BattleScene_Phase7(CameraNode* arg0);
-void BattleScene_Phase38(CameraNode* arg0);
-void BattleScene_Phase27(CameraNode* arg0);
-void BattleScene_Phase30(CameraNode* arg0);
-void BattleScene_Phase28(CameraNode* arg0);
-void BattleScene_Phase15(CameraNode* arg0);
-void BattleScene_Phase25(CameraNode* arg0);
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* active_pokemon);
-void BattleScene_Phase29(CameraNode* arg0);
-void BattleScene_Phase12(CameraNode* arg0);
-void BattleScene_Phase13(CameraNode* arg0);
-void BattleScene_Phase14(CameraNode* arg0);
-void BattleScene_Phase17(CameraNode* arg0);
-void BattleScene_PhaseFaint(CameraNode* arg0);
-void BattleScene_Phase31(CameraNode* arg0);
-void func_84326A70(void);
-void BattleScene_Phase4(UNUSED CameraNode* arg0);
-void BattleScene_Phase16(CameraNode* arg0);
-void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0);
-void BattleScene_PhaseAttackHit(CameraNode* arg0);
-void BattleScene_PhaseDrainDamage(CameraNode* arg0);
-void BattleScene_Phase10(CameraNode* arg0);
-void BattleScene_PhaseAttackHitRecoil(CameraNode* arg0);
-void BattleScene_PhaseCheckFaintedEndTurn(CameraNode* arg0);
-void BattleScene_ClearMonStatusAnimations(ActivePokemon* active_pokemon);
-void BattleScene_PhaseWithdrawFainted(CameraNode* arg0);
-void BattleScene_PhaseWithdrawSwitch(CameraNode* arg0);
-void BattleScene_UpdatePhase(CameraNode* arg0);
+void BattleScene_InitializeBattlePresentation(CameraNode* camera);
+void BattleScene_PrepareWinnerPresentation(CameraNode* camera);
+s32 BattleScene_ResetOwnerStatusPresentation(ActivePokemon* pokemon);
+void BattleScene_BeginFaintPresentation(CameraNode* camera);
+void BattleScene_UpdateFaintAnimation(CameraNode* camera);
+void BattleScene_AdvanceFaintCameraClose(CameraNode* camera);
+void BattleScene_FinishFaintCameraClose(CameraNode* camera);
+void BattleScene_CompleteFaintPresentation(CameraNode* camera);
+void BattleScene_FaintStepNoOp(UNUSED CameraNode* camera);
+void BattleScene_SetupWinnerCamera(CameraNode* camera);
+void BattleScene_CompleteWinnerCameraFade(UNUSED CameraNode* camera);
+void BattleScene_CompleteWinnerExtendedFade(UNUSED CameraNode* camera);
+void BattleScene_UpdateAlternateFaintAnimation(CameraNode* camera);
+void BattleScene_PhaseFaint(CameraNode* camera);
+void BattleScene_CompleteResidualFaintPresentation(UNUSED CameraNode* camera);
+void BattleScene_PhaseFaintAfterResidualDamage(CameraNode* camera);
+void BattleScene_ResetOwnerPresentationFlags(ActivePokemon* pokemon);
+void BattleScene_InitializeIntroCamera(CameraNode* camera);
+void BattleScene_AdvanceIntroCamera(CameraNode* camera);
+void BattleScene_PhaseTurnIntroCamera(CameraNode* camera);
+void BattleScene_SetMonMoveResourceFlag(ActivePokemon* pokemon);
+void BattleScene_PrepareMoveResourcePresentation(UNUSED CameraNode* camera);
+void BattleScene_SelectActionCameraPreset(CameraNode* camera);
+s32 BattleScene_AdvanceActionPresentationSetup(CameraNode* camera);
+void BattleScene_ActionSetupCameraStep(CameraNode* camera);
+void BattleScene_RefreshActionCameraPreset(CameraNode* camera);
+void BattleScene_SelectActionCameraPresetFromTiming(CameraNode* camera, s32 use_charge_cue);
+s32 BattleScene_ApplyActionCameraMode(CameraNode* camera, s32 allow_reframe);
+void BattleScene_CleanupActionPresentation(UNUSED CameraNode* camera);
+s32 BattleScene_WaitForActionCameraDuration(UNUSED CameraNode* camera);
+void BattleScene_ActionSetupAnimationDefault(CameraNode* camera);
+void BattleScene_AnimateMultiHitAction(CameraNode* camera);
+void BattleScene_AnimateConfusionAction(CameraNode* camera);
+void BattleScene_AnimateDigReturnAction(CameraNode* camera);
+void BattleScene_AnimateAirborneAction(CameraNode* camera);
+void BattleScene_ActionSetupAnimationStep(CameraNode* camera);
+void BattleScene_ResetSeismicTossFacing(ActivePokemon* pokemon);
+s32 BattleScene_IsFireSpin(ActivePokemon* pokemon);
+void BattleScene_CompleteHpUpdateTransition(CameraNode* camera, s32* side_hp_is_consistent, s32* other_side_hp_is_consistent);
+void BattleScene_PresentTargetStatus(CameraNode* camera);
+void BattleScene_PresentTargetStatDrop(CameraNode* camera);
+void BattleScene_PresentDisable(CameraNode* camera);
+void BattleScene_RunActionEffectHpTransition(CameraNode* camera);
+void BattleScene_NoOp84324404(void);
+void BattleScene_NoOp8432440C(void);
+void BattleScene_RunRepeatedHitHpTransition(CameraNode* camera);
+void BattleScene_ActionSetupFinalizeStep(CameraNode* camera);
+void BattleScene_PhaseFirstAttackerAction(CameraNode* camera);
+void BattleScene_PhaseSecondAttackerAction(CameraNode* camera);
+s32 BattleScene_PhaseDispatchMoveEffect(void);
+void BattleScene_PhaseSelfTargetMove(CameraNode* camera);
+void BattleScene_PhaseWithdrawMove(CameraNode* camera);
+void BattleScene_PhaseBide(CameraNode* camera);
+void BattleScene_PhaseExplosion(CameraNode* camera);
+void BattleScene_PhaseNoAction(CameraNode* camera);
+void BattleScene_PhaseTransform(CameraNode* camera);
+void BattleScene_PhaseSubstitute(CameraNode* camera);
+s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* pokemon);
+void BattleScene_PhaseHaze(CameraNode* camera);
+void BattleScene_PhaseFly(CameraNode* camera);
+void BattleScene_PhaseDig(CameraNode* camera);
+void BattleScene_PhaseTwoTurnCharge(CameraNode* camera);
+void BattleScene_PhaseSleepOrImmobilized(CameraNode* camera);
+void BattleScene_PhaseConfusionSelfHit(CameraNode* camera);
+void BattleScene_PhaseFullParalysis(CameraNode* camera);
+void BattleScene_NoOp84326A70(void);
+void BattleScene_PhaseEndTurn(UNUSED CameraNode* camera);
+void BattleScene_PhaseJumpKickCrash(CameraNode* camera);
+void BattleScene_PhaseMoveFailedMessage(CameraNode* camera);
+void BattleScene_PhaseResidualDamageAfterMove(CameraNode* camera);
+void BattleScene_PhaseRecoilDamage(CameraNode* camera);
+void BattleScene_PhaseRage(CameraNode* camera);
+void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* camera);
+void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* camera);
+void BattleScene_ClearMonStatusAnimations(ActivePokemon* pokemon);
+void BattleScene_PhaseVoluntarySwitch(CameraNode* camera);
+void BattleScene_PhaseSendOutAfterFaint(CameraNode* camera);
+void BattleScene_UpdatePhase(CameraNode* camera);
 
 
 //@src/fragments/battle_engine/battle_engine_313250.c
-void BattleScene_IntroSetupCamera(CameraNode* arg0);
-void BattleScene_IntroSendOutFirstMon(UNUSED CameraNode* arg0);
-void BattleScene_IntroSendOutSecondMon(UNUSED CameraNode* arg0);
-void BattleScene_IntroNarrowFov(CameraNode* arg0);
-void BattleScene_IntroPanCamera(CameraNode* arg0);
-void BattleScene_IntroWaitFirstMonAnim(UNUSED CameraNode* arg0);
-void BattleScene_IntroRevealFirstMon(CameraNode* arg0);
-void BattleScene_IntroFirstMonSettle(CameraNode* arg0);
-void BattleScene_IntroRevealSecondMon(CameraNode* arg0);
-void BattleScene_IntroSecondMonSettle(CameraNode* arg0);
-void BattleScene_IntroStepNop(UNUSED CameraNode* arg0);
+void BattleScene_IntroSetupCamera(CameraNode* camera);
+void BattleScene_IntroSendOutFirstMon(UNUSED CameraNode* camera);
+void BattleScene_IntroSendOutSecondMon(UNUSED CameraNode* camera);
+void BattleScene_IntroNarrowFov(CameraNode* camera);
+void BattleScene_IntroPanCamera(CameraNode* camera);
+void BattleScene_IntroWaitFirstMonAnim(UNUSED CameraNode* camera);
+void BattleScene_IntroRevealFirstMon(CameraNode* camera);
+void BattleScene_IntroFirstMonSettle(CameraNode* camera);
+void BattleScene_IntroRevealSecondMon(CameraNode* camera);
+void BattleScene_IntroSecondMonSettle(CameraNode* camera);
+void BattleScene_IntroStepNop(UNUSED CameraNode* camera);
 void BattleScene_IntroInitNop(void);
-void BattleScene_UpdateIntroSequence(CameraNode* arg0);
+void BattleScene_UpdateIntroSequence(CameraNode* camera);
 
 
 //@src/fragments/battle_engine/battle_engine_313D60.c
-void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0);
-void BattleScene_FinalPresentationFrameOwner0(CameraNode* arg0);
-void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* arg1, UNUSED ActivePokemon* arg2);
+void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* camera);
+void BattleScene_FinalPresentationFrameOwner0(CameraNode* camera);
+void BattleScene_RunFinalPresentation(CameraNode* camera, UNUSED ActivePokemon* arg1, UNUSED ActivePokemon* arg2);
 void BattleScene_AllocateMemory(void);
-void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* arg0);
-void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* arg0);
-void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0);
-void BattleScene_TickCameraSubstateDefault(CameraNode* arg0);
-void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0);
-void BattleScene_TickCameraSubstate(CameraNode* arg0);
+void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* camera);
+void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* camera);
+void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* camera);
+void BattleScene_TickCameraSubstateDefault(CameraNode* camera);
+void BattleScene_TickCameraSubstateStripWipe(CameraNode* camera);
+void BattleScene_TickCameraSubstate(CameraNode* camera);
 u16 BattleScene_IsOwnerInViewWedge(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 arg3, f32 arg4);
 u16 BattleScene_IsOwnerInViewWedgeAlt(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 arg3, f32 arg4);
-void BattleScene_UpdateBothOwnersVisibilityCulling(CameraNode* arg0);
-void BattleScene_UpdateOpponentVisibilityCulling(CameraNode* arg0);
+void BattleScene_UpdateBothOwnersVisibilityCulling(CameraNode* camera);
+void BattleScene_UpdateOpponentVisibilityCulling(CameraNode* camera);
 void func_8432A414(void);
 void BattleScene_ShowBothOwners(void);
 void BattleScene_HideOpponentOwner(void);
 void BattleScene_HideActiveOwner(void);
 void BattleScene_HideFaintedOwners(void);
-void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* arg0);
-void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* arg0);
-void BattleScene_Update(CameraNode* arg0);
+void BattleScene_UpdateOwnerVisibilitySingle(CameraNode* camera);
+void BattleScene_UpdateOwnerVisibilityDouble(CameraNode* camera);
+void BattleScene_Update(CameraNode* camera);
 s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1);
 
 
@@ -1816,7 +1889,7 @@ void BattleAnim_RunEffectInitEnd(s16 arg0);
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1);
 void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2);
 void BattleAnim_ProcessQueuedEffects(void);
-void BattleAnim_UpdateFrame(UNUSED CameraNode* arg0);
+void BattleAnim_UpdateFrame(UNUSED CameraNode* camera);
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
 u8 BattleAnim_GetCurrentEffectList(void);
 void BattleAnim_SetQueuedResourceListId(u8 arg0);
@@ -1852,9 +1925,9 @@ void BattleAnim_InitModel(DisplayObject* arg0, s16 arg1);
 void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1);
 void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1);
 s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0);
-void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* arg0);
-void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0);
-void BattleAnim_UpdateCamera(CameraNode* arg0);
+void BattleAnim_UpdateEffectCallbacks(UNUSED CameraNode* camera);
+void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* camera);
+void BattleAnim_UpdateCamera(CameraNode* camera);
 s32 BattleAnim_DispatchPresentation(s32 arg0, CameraNode* arg1);
 void BattleAnim_Initialize(void);
 void BattleAnim_Reset(void);

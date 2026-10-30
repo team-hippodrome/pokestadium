@@ -202,7 +202,7 @@ u16 MathUtil_RandomU16Range(s32);
 Vec3f* Vec3f_Copy(Vec3f*, Vec3f*);
 void Math_EaseTowardF(f32*, f32, f32);
 
-u16 Diorama_IsModelInCameraCone(CameraNode* arg0, DisplayObject* arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5);
+u16 Diorama_IsModelInCameraCone(CameraNode* camera, DisplayObject* arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5);
 void DioramaCamKeyframe_SetAngles(unk_D_86B0E5D4_04* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void DioramaCamKeyframe_SetDistance(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2);
 void DioramaCamKeyframe_SetAtAngles(unk_D_86B0E5D4_04* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
@@ -305,7 +305,7 @@ void IntroCamKeyframe_SetAtAngles(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
 void IntroCamKeyframe_SetAtDistance(f32 arg0, f32 arg1);
 void IntroCamKeyframe_SetTransitionSpeed(f32 arg0, f32 arg1);
 void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1);
-s32 Intro_UpdateCameraKeyframe(CameraNode* arg0);
+s32 Intro_UpdateCameraKeyframe(CameraNode* camera);
 
 void WipeTransition_Start(s32 arg0, s32 arg1);
 s32 WipeTransition_GetState(void);
