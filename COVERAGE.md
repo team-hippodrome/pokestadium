@@ -656,9 +656,9 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/61/fragment61_2DD710.c` | 39 |
 | `src/fragments/61/fragment61_2DFB60.c` | 41 |
 | `src/fragments/area_select/area_select.c` | 31 |
-| `src/fragments/battle_engine/battle_engine_3055E0.c` | 81 |
-| `src/fragments/battle_engine/battle_engine_309ED0.c` | 118 |
-| `src/fragments/battle_engine/battle_engine_315830.c` | 8 |
+| `src/fragments/battle_engine/battle_engine_camera.c` | 81 |
+| `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 |
+| `src/fragments/battle_engine/battle_engine_status_animation.c` | 8 |
 | `src/fragments/battle_engine/battle_engine_315D50.c` | 69 |
 | `src/fragments/battle_engine/battle_engine_339CA0.c` | 153 |
 | `src/fragments/battle_engine/battle_engine_343BA0.c` | 2 |

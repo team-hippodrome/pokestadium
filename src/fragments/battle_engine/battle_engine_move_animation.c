@@ -139,7 +139,7 @@ void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
 }
 
 /**
- * Handles charing moves by routing to BattleAnim_SetQueuedEffectList in @src/fragments/battle_engine/battle_engine_309ED0.c
+ * Handles charing moves by routing to BattleAnim_SetQueuedEffectList in @src/fragments/battle_engine/battle_engine_battle_phases.c
  * to which calls BattleAnim_SetQueuedEffectList unlike BattleAnim_QueueMoveEffectScript
  * Fury Swipes uses this function as a hack to allow it to both spawn the "slashing" animation of other slashing moves
  * while also being a mulithit attack.
@@ -2510,16 +2510,16 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
         case SESSION_MODE_VS_MEWTWO:
         case SESSION_MODE_BATTLE_NOW:
         case SESSION_MODE_EVENT_BATTLE:
-            BattleScene_SetCameraModeAndStep(4, 0);
+            BattleScene_SetCameraModeAndStep(BATTLE_SCENE_MODE_INTRO, INTRO_STEP_SETUP_CAMERA);
             break;
 
         case SESSION_MODE_ATTRACT_DEMO_BATTLE:
-            BattleScene_SetCameraModeAndStep(1, 50);
+            BattleScene_SetCameraModeAndStep(BATTLE_SCENE_MODE_ACTION_SELECTION, BROLL_STEP_SELECT_NEXT);
             Audio_StartMusicTrack(1);
             break;
 
         default:
-            BattleScene_SetCameraModeAndStep(4, 0);
+            BattleScene_SetCameraModeAndStep(BATTLE_SCENE_MODE_INTRO, INTRO_STEP_SETUP_CAMERA);
             break;
     }
 

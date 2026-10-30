@@ -1890,12 +1890,12 @@
     - [0x2EA000, asm, fragment62_2EA000]
     - [0x2ED000, asm, fragments/battle_engine/battle_engine_hud]
     - [0x2F4C00, c,      fragments/battle_engine/battle_engine_messages]
-    - [0x2F6B90, c,      fragments/battle_engine/battle_engine_304060]
-    - [0x2F8110, c,      fragments/battle_engine/battle_engine_3055E0]
-    - [0x2FCA00, c,      fragments/battle_engine/battle_engine_309ED0]
-    - [0x305D80, c,      fragments/battle_engine/battle_engine_313250]
-    - [0x306890, c,      fragments/battle_engine/battle_engine_313D60]
-    - [0x308360, c,      fragments/battle_engine/battle_engine_315830]
+    - [0x2F6B90, c,      fragments/battle_engine/battle_engine_broll]
+    - [0x2F8110, c,      fragments/battle_engine/battle_engine_camera]
+    - [0x2FCA00, c,      fragments/battle_engine/battle_engine_battle_phases]
+    - [0x305D80, c,      fragments/battle_engine/battle_engine_intro]
+    - [0x306890, c,      fragments/battle_engine/battle_engine_scene]
+    - [0x308360, c,      fragments/battle_engine/battle_engine_status_animation]
     - [0x308880, c,      fragments/battle_engine/battle_engine_315D50]
     - [0x30A9A0, c,      fragments/battle_engine/battle_engine_317E70]
     - [0x30D310, c,      fragments/battle_engine/battle_engine_31A7E0]
@@ -1936,9 +1936,9 @@
     - [0x362BD0, data, fragments/battle_engine/battle_engine_action_selection]
     - [0x362C10, data, fragments/battle_engine/battle_engine_hud]
     - [0x362E10, .data,   fragments/battle_engine/battle_engine_messages]
-    - [0x362E60, .data,   fragments/battle_engine/battle_engine_304060]
-    - [0x362FD0, .data,   fragments/battle_engine/battle_engine_3055E0]
-    - [0x362FF0, .data,   fragments/battle_engine/battle_engine_309ED0]
+    - [0x362E60, .data,   fragments/battle_engine/battle_engine_broll]
+    - [0x362FD0, .data,   fragments/battle_engine/battle_engine_camera]
+    - [0x362FF0, .data,   fragments/battle_engine/battle_engine_battle_phases]
     - [0x363030, .data,   fragments/battle_engine/battle_engine_315D50]
     - [0x364F80, .data,   fragments/battle_engine/battle_engine_32B680]
     - [0x365440, data, fragments/battle_engine/battle_engine_343BA0]
@@ -1966,11 +1966,11 @@
     - [0x368720, .rodata, fragments/battle_engine/battle_engine_math]
     - [0x368760, rodata, fragments/battle_engine/battle_engine_hud]
     - [0x368800, .rodata, fragments/battle_engine/battle_engine_messages]
-    - [0x368900, .rodata, fragments/battle_engine/battle_engine_304060]
-    - [0x368A50, .rodata, fragments/battle_engine/battle_engine_3055E0]
-    - [0x368CB0, .rodata, fragments/battle_engine/battle_engine_309ED0]
-    - [0x369060, .rodata, fragments/battle_engine/battle_engine_313250]
-    - [0x369090, .rodata, fragments/battle_engine/battle_engine_313D60]
+    - [0x368900, .rodata, fragments/battle_engine/battle_engine_broll]
+    - [0x368A50, .rodata, fragments/battle_engine/battle_engine_camera]
+    - [0x368CB0, .rodata, fragments/battle_engine/battle_engine_battle_phases]
+    - [0x369060, .rodata, fragments/battle_engine/battle_engine_intro]
+    - [0x369090, .rodata, fragments/battle_engine/battle_engine_scene]
     - [0x369200, .rodata, fragments/battle_engine/battle_engine_315D50]
     - [0x369340, .rodata, fragments/battle_engine/battle_engine_317E70]
     - [0x369460, .rodata, fragments/battle_engine/battle_engine_31C660]
@@ -2007,9 +2007,9 @@
     - {vram: 0x843901B0, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
     - {vram: 0x84390220, type:  bss, name: fragments/battle_engine/battle_engine_hud}
     - {vram: 0x84390230, type:  .bss, name: fragments/battle_engine/battle_engine_messages}
-    - {vram: 0x84390240, type:  .bss, name: fragments/battle_engine/battle_engine_3055E0}
-    - {vram: 0x84390290, type:  .bss, name: fragments/battle_engine/battle_engine_309ED0}
-    - {vram: 0x843902D0, type:  .bss, name: fragments/battle_engine/battle_engine_313D60}
+    - {vram: 0x84390240, type:  .bss, name: fragments/battle_engine/battle_engine_camera}
+    - {vram: 0x84390290, type:  .bss, name: fragments/battle_engine/battle_engine_battle_phases}
+    - {vram: 0x843902D0, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
     - {vram: 0x84390330, type:  .bss, name: fragments/battle_engine/battle_engine_315D50}
     - {vram: 0x84392150, type:  bss, name: fragments/battle_engine/battle_engine_343BA0}
     - {vram: 0x84392670, type:  .bss, name: fragments/battle_engine/battle_engine_347330}

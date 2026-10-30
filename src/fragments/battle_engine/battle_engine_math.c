@@ -154,7 +154,7 @@ s32 BattleAnim_RandomIntWithWarmup(f32 count) {
  * BattleAnim_RandomRange(5) result of 5 to 0.
  */
 //@src/math_util.c
-//@src/fragments/battle_engine/battle_engine_309ED0.c
+//@src/fragments/battle_engine/battle_engine_battle_phases.c
 u16 BattleAnim_RandomRange(s32 range) {
     f32 random_value = (u32)MathUtil_Random16();
 
