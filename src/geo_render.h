@@ -106,7 +106,7 @@ void GeoRender_SetMode(s32 arg0);
 void GeoRender_AdvanceFrameCounter(void);
 s32 GeoRender_IsModelFrameCurrent(void);
 Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id, Vec3f* dest);
-void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1);
+void GeoRender_SetCombineMode(Gfx* arg0, ParticleCombineMux* arg1);
 void GeoRender_SyncMaterialState(void);
 void GeoRender_SetRenderMode(void);
 void GeoRender_ApplyMaterialState(void);

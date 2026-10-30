@@ -661,7 +661,7 @@ void Gallery_CapturePhoto(void) {
             }
 
             D_83402EE0[D_8690B344].unk_6C |= D_8690A710->unk_00C * 0x10;
-            D_83402EE0[D_8690B344].unk_68 = gParticleFrameCounter;
+            D_83402EE0[D_8690B344].unk_68 = sParticleFrameCounter;
 
             D_83402EE0[D_8690B344].unk_00 = D_8690A69C->unk_004.position.y;
             D_83402EE0[D_8690B344].unk_04 = D_8690A69C->unk_16C;
