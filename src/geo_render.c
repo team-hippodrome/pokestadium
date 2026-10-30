@@ -1104,12 +1104,12 @@ Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id
     return NULL;
 }
 
-void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
+void GeoRender_SetCombineMode(Gfx* arg0, ParticleCombineMux* arg1) {
     gDPSetCombine(arg0++,
-                  GCCc0w0(arg1->unk_00, arg1->unk_02, arg1->unk_04, arg1->unk_06) | GCCc1w0(arg1->unk_08, arg1->unk_0A),
+                  GCCc0w0(arg1->colorA0, arg1->colorC0, arg1->alphaA0, arg1->alphaC0) | GCCc1w0(arg1->colorA1, arg1->colorC1),
 
-                  GCCc0w1(arg1->unk_01, arg1->unk_03, arg1->unk_05, arg1->unk_07) |
-                      GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
+                  GCCc0w1(arg1->colorB0, arg1->colorD0, arg1->alphaB0, arg1->alphaD0) |
+                      GCCc1w1(arg1->colorB1, arg1->alphaA1, arg1->alphaC1, arg1->colorD1, arg1->alphaB1, arg1->alphaD1));
 }
 
 void GeoRender_SyncMaterialState(void) {

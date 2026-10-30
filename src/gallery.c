@@ -741,7 +741,7 @@ u8* Gallery_ProcessSceneInstance(unk_func_80031270* arg0) {
                     GfxImage_FillCurrent(&gDisplayListHead, 0xA6BF);
                 }
                 GeoRender_AdvanceFrameCounter();
-                *((s32*)Util_ConvertAddrToVirtAddr(&gParticleFrameCounter)) = sp24->unk_18;
+                *((s32*)Util_ConvertAddrToVirtAddr(&sParticleFrameCounter)) = sp24->unk_18;
                 sp20();
                 Geo_RenderRootNode(arg0->unk_1C);
                 break;

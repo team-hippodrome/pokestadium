@@ -1,7 +1,7 @@
 # AI Disclaimer
 This project is was a collaborative effort by humans that used AI. AI was used for for *matching* functions and *annotating* where abundant evidence greatly reduced hallucination risk (either through prior human instruction, texture/string evidence, or abundant examples in the code base).
 
-The original pret contributors (the first four years of contributions) did not use AI to our knowledge. Pret has no official relationship with us (Team Hippodrome) other sharing some members.
+The original pret contributors (the first four years of contributions) did not use AI to our knowledge. Pret has no official relationship with us (Team Hippodrome) other than sharing some members.
 
 # Pokemon Stadium (US)
 A WIP decomp of Pokemon Stadium (US).
