@@ -539,15 +539,15 @@ void ParticleMath_AddVec3s(Vec3s* destination, Vec3s* source) {
 }
 
 /* Return the sum of the three component-wise products. */
-f32 ParticleMath_DotVec3f(Vec3f arg0, Vec3f arg1) {
-    return (arg0.x * arg1.x) + (arg0.y * arg1.y) + (arg0.z * arg1.z);
+f32 ParticleMath_DotVec3f(Vec3f lhs, Vec3f rhs) {
+    return (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z);
 }
 
 /* Compare squared 2D distance with squared radius, including the boundary. */
-s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
+s32 ParticleMath_IsWithinRadius2D(f32 first_x, f32 first_y, f32 second_x, f32 second_y, f32 radius) {
     s32 var_v1 = 0;
 
-    if ((SQ(arg2 - arg0) + SQ(arg3 - arg1)) <= SQ(arg4)) {
+    if ((SQ(second_x - first_x) + SQ(second_y - first_y)) <= SQ(radius)) {
         var_v1 = 1;
     }
     return var_v1;
@@ -599,80 +599,80 @@ s32 ParticleMath_RandomSignedOffsetBySign(s32 range, s32 offset) {
 }
 
 /* Empty callback retained at its original entry point. */
-void ParticleMath_NoopStub(UNUSED s32 arg0) {
+void ParticleMath_NoopStub(UNUSED s32 unused_value) {
 }
 
 /* Return MathUtil_Atan2s for the vector's Y and Z components, in that argument order. */
-s16 ParticleMath_Atan2YZ(Vec3f arg0) {
-    return MathUtil_Atan2s(arg0.y, arg0.z);
+s16 ParticleMath_Atan2YZ(Vec3f vector) {
+    return MathUtil_Atan2s(vector.y, vector.z);
 }
 
 /* Return MathUtil_Atan2s for the vector's Z and X components, in that argument order. */
-s16 ParticleMath_Atan2ZX(Vec3f arg0) {
-    return MathUtil_Atan2s(arg0.z, arg0.x);
+s16 ParticleMath_Atan2ZX(Vec3f vector) {
+    return MathUtil_Atan2s(vector.z, vector.x);
 }
 
 /* Return MathUtil_Atan2s for the vector's X and Y components, in that argument order. */
-s16 ParticleMath_Atan2XY(Vec3f arg0) {
-    return MathUtil_Atan2s(arg0.x, arg0.y);
+s16 ParticleMath_Atan2XY(Vec3f vector) {
+    return MathUtil_Atan2s(vector.x, vector.y);
 }
 
 /* Write the YZ, ZX, and XY atan2 results to the three destination components. */
-void ParticleMath_Vec3ToAngles(Vec3s* arg0, Vec3f arg1) {
-    arg0->x = MathUtil_Atan2s(arg1.y, arg1.z);
-    arg0->y = MathUtil_Atan2s(arg1.z, arg1.x);
-    arg0->z = MathUtil_Atan2s(arg1.x, arg1.y);
+void ParticleMath_Vec3ToAngles(Vec3s* destination, Vec3f vector) {
+    destination->x = MathUtil_Atan2s(vector.y, vector.z);
+    destination->y = MathUtil_Atan2s(vector.z, vector.x);
+    destination->z = MathUtil_Atan2s(vector.x, vector.y);
 }
 
 /* Return x*cos(angle) - y*sin(angle), the rotated 2D X component. */
-f32 ParticleMath_Rotate2DX(f32 arg0, f32 arg1, s16 arg2) {
-    return (COSS(arg2) * arg0) - (SINS(arg2) * arg1);
+f32 ParticleMath_Rotate2DX(f32 point_x, f32 point_y, s16 angle) {
+    return (COSS(angle) * point_x) - (SINS(angle) * point_y);
 }
 
 /* Return x*sin(angle) + y*cos(angle), the rotated 2D Y component. */
-f32 ParticleMath_Rotate2DY(f32 arg0, f32 arg1, s16 arg2) {
-    return (SINS(arg2) * arg0) + (COSS(arg2) * arg1);
+f32 ParticleMath_Rotate2DY(f32 point_x, f32 point_y, s16 angle) {
+    return (SINS(angle) * point_x) + (COSS(angle) * point_y);
 }
 
 /* Rotate the supplied vector around the Y axis and return the destination. */
-Vec3f* ParticleMath_RotateVec3fY(Vec3f* arg0, Vec3f arg1, Vec3s arg2) {
-    f32 temp_fv0 = SINS(arg2.y);
-    f32 temp_fv1 = COSS(arg2.y);
+Vec3f* ParticleMath_RotateVec3fY(Vec3f* destination, Vec3f vector, Vec3s rotation) {
+    f32 temp_fv0 = SINS(rotation.y);
+    f32 temp_fv1 = COSS(rotation.y);
 
-    arg0->x = (arg1.x * temp_fv1) + (arg1.z * temp_fv0);
-    arg0->y = arg1.y;
-    arg0->z = (-arg1.x * temp_fv0) + (arg1.z * temp_fv1);
+    destination->x = (vector.x * temp_fv1) + (vector.z * temp_fv0);
+    destination->y = vector.y;
+    destination->z = (-vector.x * temp_fv0) + (vector.z * temp_fv1);
 
-    return arg0;
+    return destination;
 }
 
 /* Build (length*sin(angle), 0, length*cos(angle)) and return the destination. */
-Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
-    f32 temp_fv0 = SINS(arg2);
-    f32 temp_fv1 = COSS(arg2);
+Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* destination, f32 length, s16 angle) {
+    f32 temp_fv0 = SINS(angle);
+    f32 temp_fv1 = COSS(angle);
 
-    arg0->x = arg1 * temp_fv0;
-    arg0->y = 0.0f;
-    arg0->z = arg1 * temp_fv1;
+    destination->x = length * temp_fv0;
+    destination->y = 0.0f;
+    destination->z = length * temp_fv1;
 
-    return arg0;
+    return destination;
 }
 
 /* Apply the explicit X/Y-angle transform to a copied vector and return the destination. */
-Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
-    f32 x = arg1.x;
-    f32 y = arg1.y;
-    f32 z = arg1.z;
-    f32 temp_fv0 = SINS(arg4.x);
-    f32 temp_fv1 = COSS(arg4.x);
-    f32 temp_ft4 = SINS(arg4.y);
-    f32 temp_ft5 = COSS(arg4.y);
+Vec3f* ParticleMath_RotateVec3fXY(Vec3f* destination, Vec3f vector, Vec3s rotation) {
+    f32 x = vector.x;
+    f32 y = vector.y;
+    f32 z = vector.z;
+    f32 temp_fv0 = SINS(rotation.x);
+    f32 temp_fv1 = COSS(rotation.x);
+    f32 temp_ft4 = SINS(rotation.y);
+    f32 temp_ft5 = COSS(rotation.y);
 
-    arg0->x = (x * temp_ft5) + (z * temp_ft4);
-    arg0->y = ((x * temp_fv0 * temp_ft4) + (y * temp_fv1)) - (z * temp_fv0 * temp_ft5);
-    arg0->z = (-x * temp_fv1 * temp_ft4) + (y * temp_fv0) + (z * temp_fv1 * temp_ft5);
+    destination->x = (x * temp_ft5) + (z * temp_ft4);
+    destination->y = ((x * temp_fv0 * temp_ft4) + (y * temp_fv1)) - (z * temp_fv0 * temp_ft5);
+    destination->z = (-x * temp_fv1 * temp_ft4) + (y * temp_fv0) + (z * temp_fv1 * temp_ft5);
 
-    return arg0;
+    return destination;
 }
 
 /* Return the Euclidean distance between two 3D points. */
@@ -719,28 +719,28 @@ s32 ParticleMath_ScaleDirectionToLength(Vec3f* destination, Vec3f start, Vec3f e
 }
 
 /* Rotate a +Z vector by independently sampled X/Y angles; this is not a uniform-sphere sampler. */
-Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
+Vec3f* ParticleMath_RandomDirection(Vec3f* destination, f32 length) {
     Vec3f sp2C;
     Vec3s sp24;
 
     sp2C.x = 0.0f;
     sp2C.y = 0.0f;
-    sp2C.z = arg1;
+    sp2C.z = length;
 
     sp24.x = ParticleMath_RandomRange(0x10000);
     sp24.y = ParticleMath_RandomRange(0x10000);
 
-    ParticleMath_RotateVec3fXY(arg0, sp2C, sp24);
-    return arg0;
+    ParticleMath_RotateVec3fXY(destination, sp2C, sp24);
+    return destination;
 }
 
 /* Multiply all three components in place and return the vector. */
-Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
-    arg0->x *= arg1;
-    arg0->y *= arg1;
-    arg0->z *= arg1;
+Vec3f* ParticleMath_ScaleVec3f(Vec3f* vector, f32 scale) {
+    vector->x *= scale;
+    vector->y *= scale;
+    vector->z *= scale;
 
-    return arg0;
+    return vector;
 }
 
 /* Return the YZ-component atan2 of end - start in that argument order. */
@@ -759,32 +759,32 @@ s16 ParticleMath_AngleZBetweenPoints(Vec3f start, Vec3f end) {
 }
 
 /* Select a fixed angular increment from the signed difference, or snap when the high bytes agree. */
-s16 ParticleMath_ApproachAngleCoarse(s16 arg0, s16 arg1) {
-    s16 temp_v0 = arg1 - arg0;
+s16 ParticleMath_ApproachAngleCoarse(s16 angle, s16 target_angle) {
+    s16 temp_v0 = target_angle - angle;
 
-    if ((arg0 >> 8) != (arg1 >> 8)) {
+    if ((angle >> 8) != (target_angle >> 8)) {
         if (temp_v0 < 0x400) {
-            arg0 += 0x80;
+            angle += 0x80;
         } else if (temp_v0 < 0x800) {
-            arg0 += 0x200;
+            angle += 0x200;
         } else if (temp_v0 < 0x4000) {
-            arg0 += 0x400;
+            angle += 0x400;
         } else if (temp_v0 < 0x8000) {
-            arg0 += 0x700;
+            angle += 0x700;
         } else if (temp_v0 < 0xC000) {
-            arg0 -= 0x700;
+            angle -= 0x700;
         } else if (temp_v0 < 0xF800) {
-            arg0 -= 0x400;
+            angle -= 0x400;
         } else if (temp_v0 < 0xFC00) {
-            arg0 -= 0x200;
+            angle -= 0x200;
         } else {
-            arg0 -= 0x80;
+            angle -= 0x80;
         }
     } else {
-        arg0 = arg1;
+        angle = target_angle;
     }
 
-    return arg0;
+    return angle;
 }
 
 /* Empty callback retained at its original entry point. */
@@ -792,9 +792,9 @@ void ParticleGfx_NoopStub1(void) {
 }
 
 /* Convert a float matrix into the next pool slot and load it as MODELVIEW; stop emitting when all 364 slots are used. */
-void ParticleGfx_PushMatrix(MtxF* arg0) {
+void ParticleGfx_PushMatrix(MtxF* matrix) {
     if (sParticleMatrixPoolIndex < 0x16C) {
-        MtxF_ToFixed(&sParticleMatrixPool->unk_0000[sParticleMatrixPoolIndex], arg0);
+        MtxF_ToFixed(&sParticleMatrixPool->unk_0000[sParticleMatrixPoolIndex], matrix);
 
         gSPMatrix(gDisplayListHead++, (u32)&sParticleMatrixPool->unk_0000[sParticleMatrixPoolIndex] & 0x1FFFFFFF,
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -804,75 +804,75 @@ void ParticleGfx_PushMatrix(MtxF* arg0) {
 }
 
 /* Build a translated 2D rotation matrix and apply uniform scale. */
-void ParticleGfx_Build2DTransformMatrix(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
-    f32 temp_fv0 = SINS(arg3) * arg4;
-    f32 temp_fv1 = COSS(arg3) * arg4;
+void ParticleGfx_Build2DTransformMatrix(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale) {
+    f32 temp_fv0 = SINS(rotation_z) * scale;
+    f32 temp_fv1 = COSS(rotation_z) * scale;
 
-    arg0->mf[0][0] = temp_fv1;
-    arg0->mf[0][1] = -temp_fv0;
-    arg0->mf[0][2] = 0.0f;
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = temp_fv1;
+    matrix->mf[0][1] = -temp_fv0;
+    matrix->mf[0][2] = 0.0f;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = temp_fv0;
-    arg0->mf[1][1] = temp_fv1;
-    arg0->mf[1][2] = 0.0f;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = temp_fv0;
+    matrix->mf[1][1] = temp_fv1;
+    matrix->mf[1][2] = 0.0f;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = 0.0f;
-    arg0->mf[2][1] = 0.0f;
-    arg0->mf[2][2] = 1.0f;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = 0.0f;
+    matrix->mf[2][1] = 0.0f;
+    matrix->mf[2][2] = 1.0f;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg1;
-    arg0->mf[3][1] = arg2;
-    arg0->mf[3][2] = 0.0f;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = translation_x;
+    matrix->mf[3][1] = translation_y;
+    matrix->mf[3][2] = 0.0f;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated 2D rotation matrix and scale only its Y basis. */
-void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* arg0, s16 arg1, s16 arg2, s16 arg3, f32 arg4) {
-    f32 temp_fv0 = SINS(arg3);
-    f32 temp_fv1 = COSS(arg3);
+void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale_y) {
+    f32 temp_fv0 = SINS(rotation_z);
+    f32 temp_fv1 = COSS(rotation_z);
 
-    arg0->mf[0][0] = temp_fv1;
-    arg0->mf[0][1] = -temp_fv0;
-    arg0->mf[0][2] = 0.0f;
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = temp_fv1;
+    matrix->mf[0][1] = -temp_fv0;
+    matrix->mf[0][2] = 0.0f;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = temp_fv0 * arg4;
-    arg0->mf[1][1] = temp_fv1 * arg4;
-    arg0->mf[1][2] = 0.0f;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = temp_fv0 * scale_y;
+    matrix->mf[1][1] = temp_fv1 * scale_y;
+    matrix->mf[1][2] = 0.0f;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = 0.0f;
-    arg0->mf[2][1] = 0.0f;
-    arg0->mf[2][2] = 1.0f;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = 0.0f;
+    matrix->mf[2][1] = 0.0f;
+    matrix->mf[2][2] = 1.0f;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg1;
-    arg0->mf[3][1] = arg2;
-    arg0->mf[3][2] = 0.0f;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = translation_x;
+    matrix->mf[3][1] = translation_y;
+    matrix->mf[3][2] = 0.0f;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build the 2D transform with an added half turn and load it through the matrix pool. */
-void ParticleGfx_Push2DTransform(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
+void ParticleGfx_Push2DTransform(s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale) {
     MtxF sp20;
 
-    ParticleGfx_Build2DTransformMatrix(&sp20, arg0, arg1, arg2 + 0x8000, arg3);
+    ParticleGfx_Build2DTransformMatrix(&sp20, translation_x, translation_y, rotation_z + 0x8000, scale);
     ParticleGfx_PushMatrix(&sp20);
 }
 
 /* Build the 2D transform with an added half turn and load it through the matrix pool. */
-void ParticleGfx_Push2DTransformYScaled(s16 arg0, s16 arg1, s16 arg2, f32 arg3) {
+void ParticleGfx_Push2DTransformYScaled(s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale_y) {
     MtxF sp20;
 
-    ParticleGfx_Build2DTransformMatrixYScaled(&sp20, arg0, arg1, arg2 + 0x8000, arg3);
+    ParticleGfx_Build2DTransformMatrixYScaled(&sp20, translation_x, translation_y, rotation_z + 0x8000, scale_y);
     ParticleGfx_PushMatrix(&sp20);
 }
 
 /* Build a translated 3D rotation matrix and apply uniform scale. */
-void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
+void ParticleGfx_BuildTransformMatrix(MtxF* matrix, Vec3f position, Vec3s rotation, f32 scale) {
     f32 temp_fa1;
     f32 temp_fs0;
     f32 temp_fs1;
@@ -880,38 +880,38 @@ void ParticleGfx_BuildTransformMatrix(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 ar
     f32 temp_fv0;
     f32 temp_fv1;
 
-    temp_ft4 = SINS(arg2.x);
-    temp_fv0 = COSS(arg2.x);
+    temp_ft4 = SINS(rotation.x);
+    temp_fv0 = COSS(rotation.x);
 
-    temp_fv1 = SINS(arg2.y);
-    temp_fa1 = COSS(arg2.y);
+    temp_fv1 = SINS(rotation.y);
+    temp_fa1 = COSS(rotation.y);
 
-    temp_fs0 = SINS(arg2.z);
-    temp_fs1 = COSS(arg2.z);
+    temp_fs0 = SINS(rotation.z);
+    temp_fs1 = COSS(rotation.z);
 
-    arg0->mf[0][0] = ((temp_fa1 * temp_fs1) + (temp_ft4 * temp_fv1 * temp_fs0)) * arg3;
-    arg0->mf[0][1] = temp_fv0 * temp_fs0 * arg3;
-    arg0->mf[0][2] = ((-temp_fv1 * temp_fs1) + (temp_ft4 * temp_fa1 * temp_fs0)) * arg3;
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = ((temp_fa1 * temp_fs1) + (temp_ft4 * temp_fv1 * temp_fs0)) * scale;
+    matrix->mf[0][1] = temp_fv0 * temp_fs0 * scale;
+    matrix->mf[0][2] = ((-temp_fv1 * temp_fs1) + (temp_ft4 * temp_fa1 * temp_fs0)) * scale;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = ((-temp_fa1 * temp_fs0) + (temp_ft4 * temp_fv1 * temp_fs1)) * arg3;
-    arg0->mf[1][1] = temp_fv0 * temp_fs1 * arg3;
-    arg0->mf[1][2] = ((temp_fv1 * temp_fs0) + (temp_ft4 * temp_fa1 * temp_fs1)) * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = ((-temp_fa1 * temp_fs0) + (temp_ft4 * temp_fv1 * temp_fs1)) * scale;
+    matrix->mf[1][1] = temp_fv0 * temp_fs1 * scale;
+    matrix->mf[1][2] = ((temp_fv1 * temp_fs0) + (temp_ft4 * temp_fa1 * temp_fs1)) * scale;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = temp_fv0 * temp_fv1 * arg3;
-    arg0->mf[2][1] = -temp_ft4 * arg3;
-    arg0->mf[2][2] = temp_fv0 * temp_fa1 * arg3;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = temp_fv0 * temp_fv1 * scale;
+    matrix->mf[2][1] = -temp_ft4 * scale;
+    matrix->mf[2][2] = temp_fv0 * temp_fa1 * scale;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg1.x;
-    arg0->mf[3][1] = arg1.y;
-    arg0->mf[3][2] = arg1.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated 3D rotation matrix and scale only its Y basis. */
-void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3) {
+void ParticleGfx_BuildTransformMatrixYScaled(MtxF* matrix, Vec3f position, Vec3s rotation, f32 scale_y) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_fs0;
@@ -919,38 +919,38 @@ void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2,
     f32 temp_fv0;
     f32 temp_fv1;
 
-    temp_fa1 = SINS(arg2.x);
-    temp_fv0 = COSS(arg2.x);
+    temp_fa1 = SINS(rotation.x);
+    temp_fv0 = COSS(rotation.x);
 
-    temp_fv1 = SINS(arg2.y);
-    temp_fa0 = COSS(arg2.y);
+    temp_fv1 = SINS(rotation.y);
+    temp_fa0 = COSS(rotation.y);
 
-    temp_ft5 = SINS(arg2.z);
-    temp_fs0 = COSS(arg2.z);
+    temp_ft5 = SINS(rotation.z);
+    temp_fs0 = COSS(rotation.z);
 
-    arg0->mf[0][0] = (temp_fa0 * temp_fs0) + (temp_fa1 * temp_fv1 * temp_ft5);
-    arg0->mf[0][1] = temp_fv0 * temp_ft5;
-    arg0->mf[0][2] = (-temp_fv1 * temp_fs0) + (temp_fa1 * temp_fa0 * temp_ft5);
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = (temp_fa0 * temp_fs0) + (temp_fa1 * temp_fv1 * temp_ft5);
+    matrix->mf[0][1] = temp_fv0 * temp_ft5;
+    matrix->mf[0][2] = (-temp_fv1 * temp_fs0) + (temp_fa1 * temp_fa0 * temp_ft5);
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = ((-temp_fa0 * temp_ft5) + (temp_fa1 * temp_fv1 * temp_fs0)) * arg3;
-    arg0->mf[1][1] = temp_fv0 * temp_fs0 * arg3;
-    arg0->mf[1][2] = ((temp_fv1 * temp_ft5) + (temp_fa1 * temp_fa0 * temp_fs0)) * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = ((-temp_fa0 * temp_ft5) + (temp_fa1 * temp_fv1 * temp_fs0)) * scale_y;
+    matrix->mf[1][1] = temp_fv0 * temp_fs0 * scale_y;
+    matrix->mf[1][2] = ((temp_fv1 * temp_ft5) + (temp_fa1 * temp_fa0 * temp_fs0)) * scale_y;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = temp_fv0 * temp_fv1;
-    arg0->mf[2][1] = -temp_fa1;
-    arg0->mf[2][2] = temp_fv0 * temp_fa0;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = temp_fv0 * temp_fv1;
+    matrix->mf[2][1] = -temp_fa1;
+    matrix->mf[2][2] = temp_fv0 * temp_fa0;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg1.x;
-    arg0->mf[3][1] = arg1.y;
-    arg0->mf[3][2] = arg1.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated 3D rotation matrix and scale its X/Y bases separately. */
-void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3, f32 arg4) {
+void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* matrix, Vec3f position, Vec3s rotation, f32 scale_x, f32 scale_y) {
     f32 temp_fa0;
     f32 temp_fa1;
     f32 temp_fs0;
@@ -958,241 +958,241 @@ void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2
     f32 temp_fv0;
     f32 temp_fv1;
 
-    temp_fa1 = SINS(arg2.x);
-    temp_fv0 = COSS(arg2.x);
+    temp_fa1 = SINS(rotation.x);
+    temp_fv0 = COSS(rotation.x);
 
-    temp_fv1 = SINS(arg2.y);
-    temp_fa0 = COSS(arg2.y);
+    temp_fv1 = SINS(rotation.y);
+    temp_fa0 = COSS(rotation.y);
 
-    temp_ft5 = SINS(arg2.z);
-    temp_fs0 = COSS(arg2.z);
+    temp_ft5 = SINS(rotation.z);
+    temp_fs0 = COSS(rotation.z);
 
-    arg0->mf[0][0] = ((temp_fa0 * temp_fs0) + (temp_fa1 * temp_fv1 * temp_ft5)) * arg3;
-    arg0->mf[0][1] = temp_fv0 * temp_ft5 * arg3;
-    arg0->mf[0][2] = ((-temp_fv1 * temp_fs0) + (temp_fa1 * temp_fa0 * temp_ft5)) * arg3;
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = ((temp_fa0 * temp_fs0) + (temp_fa1 * temp_fv1 * temp_ft5)) * scale_x;
+    matrix->mf[0][1] = temp_fv0 * temp_ft5 * scale_x;
+    matrix->mf[0][2] = ((-temp_fv1 * temp_fs0) + (temp_fa1 * temp_fa0 * temp_ft5)) * scale_x;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = ((-temp_fa0 * temp_ft5) + (temp_fa1 * temp_fv1 * temp_fs0)) * arg4;
-    arg0->mf[1][1] = temp_fv0 * temp_fs0 * arg4;
-    arg0->mf[1][2] = ((temp_fv1 * temp_ft5) + (temp_fa1 * temp_fa0 * temp_fs0)) * arg4;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = ((-temp_fa0 * temp_ft5) + (temp_fa1 * temp_fv1 * temp_fs0)) * scale_y;
+    matrix->mf[1][1] = temp_fv0 * temp_fs0 * scale_y;
+    matrix->mf[1][2] = ((temp_fv1 * temp_ft5) + (temp_fa1 * temp_fa0 * temp_fs0)) * scale_y;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = temp_fv0 * temp_fv1;
-    arg0->mf[2][1] = -temp_fa1;
-    arg0->mf[2][2] = temp_fv0 * temp_fa0;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = temp_fv0 * temp_fv1;
+    matrix->mf[2][1] = -temp_fa1;
+    matrix->mf[2][2] = temp_fv0 * temp_fa0;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg1.x;
-    arg0->mf[3][1] = arg1.y;
-    arg0->mf[3][2] = arg1.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated billboard matrix by transposing the supplied view basis and applying uniform scale. */
-void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
-    arg0->mf[0][0] = arg1->mf[0][0] * arg3;
-    arg0->mf[0][1] = arg1->mf[1][0] * arg3;
-    arg0->mf[0][2] = arg1->mf[2][0] * arg3;
-    arg0->mf[0][3] = 0.0f;
+void ParticleGfx_BuildBillboardMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale) {
+    matrix->mf[0][0] = view_matrix->mf[0][0] * scale;
+    matrix->mf[0][1] = view_matrix->mf[1][0] * scale;
+    matrix->mf[0][2] = view_matrix->mf[2][0] * scale;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = arg1->mf[0][1] * arg3;
-    arg0->mf[1][1] = arg1->mf[1][1] * arg3;
-    arg0->mf[1][2] = arg1->mf[2][1] * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = view_matrix->mf[0][1] * scale;
+    matrix->mf[1][1] = view_matrix->mf[1][1] * scale;
+    matrix->mf[1][2] = view_matrix->mf[2][1] * scale;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = arg1->mf[0][2] * arg3;
-    arg0->mf[2][1] = arg1->mf[1][2] * arg3;
-    arg0->mf[2][2] = arg1->mf[2][2] * arg3;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = view_matrix->mf[0][2] * scale;
+    matrix->mf[2][1] = view_matrix->mf[1][2] * scale;
+    matrix->mf[2][2] = view_matrix->mf[2][2] * scale;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg2.x;
-    arg0->mf[3][1] = arg2.y;
-    arg0->mf[3][2] = arg2.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector. */
-void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
-    arg0->mf[0][0] = arg1->mf[0][0];
-    arg0->mf[0][1] = arg1->mf[1][0];
-    arg0->mf[0][2] = arg1->mf[2][0];
-    arg0->mf[0][3] = 0.0f;
+void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y) {
+    matrix->mf[0][0] = view_matrix->mf[0][0];
+    matrix->mf[0][1] = view_matrix->mf[1][0];
+    matrix->mf[0][2] = view_matrix->mf[2][0];
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = arg1->mf[0][1] * arg3;
-    arg0->mf[1][1] = arg1->mf[1][1] * arg3;
-    arg0->mf[1][2] = arg1->mf[2][1] * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = view_matrix->mf[0][1] * scale_y;
+    matrix->mf[1][1] = view_matrix->mf[1][1] * scale_y;
+    matrix->mf[1][2] = view_matrix->mf[2][1] * scale_y;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = arg1->mf[0][2];
-    arg0->mf[2][1] = arg1->mf[1][2];
-    arg0->mf[2][2] = arg1->mf[2][2];
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = view_matrix->mf[0][2];
+    matrix->mf[2][1] = view_matrix->mf[1][2];
+    matrix->mf[2][2] = view_matrix->mf[2][2];
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg2.x;
-    arg0->mf[3][1] = arg2.y;
-    arg0->mf[3][2] = arg2.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated billboard matrix by rotating its first two basis vectors and applying uniform scale. */
-void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
-    f32 temp_fv0 = SINS(arg4);
-    f32 temp_fv1 = COSS(arg4);
+void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale, s16 rotation_z) {
+    f32 temp_fv0 = SINS(rotation_z);
+    f32 temp_fv1 = COSS(rotation_z);
 
-    arg0->mf[0][0] = ((arg1->mf[0][0] * temp_fv1) + (arg1->mf[0][1] * temp_fv0)) * arg3;
-    arg0->mf[0][1] = ((arg1->mf[1][0] * temp_fv1) + (arg1->mf[1][1] * temp_fv0)) * arg3;
-    arg0->mf[0][2] = ((arg1->mf[2][0] * temp_fv1) + (arg1->mf[2][1] * temp_fv0)) * arg3;
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = ((view_matrix->mf[0][0] * temp_fv1) + (view_matrix->mf[0][1] * temp_fv0)) * scale;
+    matrix->mf[0][1] = ((view_matrix->mf[1][0] * temp_fv1) + (view_matrix->mf[1][1] * temp_fv0)) * scale;
+    matrix->mf[0][2] = ((view_matrix->mf[2][0] * temp_fv1) + (view_matrix->mf[2][1] * temp_fv0)) * scale;
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = ((arg1->mf[0][0] * -temp_fv0) + (arg1->mf[0][1] * temp_fv1)) * arg3;
-    arg0->mf[1][1] = ((arg1->mf[1][0] * -temp_fv0) + (arg1->mf[1][1] * temp_fv1)) * arg3;
-    arg0->mf[1][2] = ((arg1->mf[2][0] * -temp_fv0) + (arg1->mf[2][1] * temp_fv1)) * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = ((view_matrix->mf[0][0] * -temp_fv0) + (view_matrix->mf[0][1] * temp_fv1)) * scale;
+    matrix->mf[1][1] = ((view_matrix->mf[1][0] * -temp_fv0) + (view_matrix->mf[1][1] * temp_fv1)) * scale;
+    matrix->mf[1][2] = ((view_matrix->mf[2][0] * -temp_fv0) + (view_matrix->mf[2][1] * temp_fv1)) * scale;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = arg1->mf[0][2] * arg3;
-    arg0->mf[2][1] = arg1->mf[1][2] * arg3;
-    arg0->mf[2][2] = arg1->mf[2][2] * arg3;
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = view_matrix->mf[0][2] * scale;
+    matrix->mf[2][1] = view_matrix->mf[1][2] * scale;
+    matrix->mf[2][2] = view_matrix->mf[2][2] * scale;
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg2.x;
-    arg0->mf[3][1] = arg2.y;
-    arg0->mf[3][2] = arg2.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a translated billboard matrix by rotating its first two basis vectors and scaling only the second basis vector. */
-void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3, s16 arg4) {
-    f32 temp_fv0 = SINS(arg4);
-    f32 temp_fv1 = COSS(arg4);
+void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y, s16 rotation_z) {
+    f32 temp_fv0 = SINS(rotation_z);
+    f32 temp_fv1 = COSS(rotation_z);
 
-    arg0->mf[0][0] = (arg1->mf[0][0] * temp_fv1) + (arg1->mf[0][1] * temp_fv0);
-    arg0->mf[0][1] = (arg1->mf[1][0] * temp_fv1) + (arg1->mf[1][1] * temp_fv0);
-    arg0->mf[0][2] = (arg1->mf[2][0] * temp_fv1) + (arg1->mf[2][1] * temp_fv0);
-    arg0->mf[0][3] = 0.0f;
+    matrix->mf[0][0] = (view_matrix->mf[0][0] * temp_fv1) + (view_matrix->mf[0][1] * temp_fv0);
+    matrix->mf[0][1] = (view_matrix->mf[1][0] * temp_fv1) + (view_matrix->mf[1][1] * temp_fv0);
+    matrix->mf[0][2] = (view_matrix->mf[2][0] * temp_fv1) + (view_matrix->mf[2][1] * temp_fv0);
+    matrix->mf[0][3] = 0.0f;
 
-    arg0->mf[1][0] = ((arg1->mf[0][0] * -temp_fv0) + (arg1->mf[0][1] * temp_fv1)) * arg3;
-    arg0->mf[1][1] = ((arg1->mf[1][0] * -temp_fv0) + (arg1->mf[1][1] * temp_fv1)) * arg3;
-    arg0->mf[1][2] = ((arg1->mf[2][0] * -temp_fv0) + (arg1->mf[2][1] * temp_fv1)) * arg3;
-    arg0->mf[1][3] = 0.0f;
+    matrix->mf[1][0] = ((view_matrix->mf[0][0] * -temp_fv0) + (view_matrix->mf[0][1] * temp_fv1)) * scale_y;
+    matrix->mf[1][1] = ((view_matrix->mf[1][0] * -temp_fv0) + (view_matrix->mf[1][1] * temp_fv1)) * scale_y;
+    matrix->mf[1][2] = ((view_matrix->mf[2][0] * -temp_fv0) + (view_matrix->mf[2][1] * temp_fv1)) * scale_y;
+    matrix->mf[1][3] = 0.0f;
 
-    arg0->mf[2][0] = arg1->mf[0][2];
-    arg0->mf[2][1] = arg1->mf[1][2];
-    arg0->mf[2][2] = arg1->mf[2][2];
-    arg0->mf[2][3] = 0.0f;
+    matrix->mf[2][0] = view_matrix->mf[0][2];
+    matrix->mf[2][1] = view_matrix->mf[1][2];
+    matrix->mf[2][2] = view_matrix->mf[2][2];
+    matrix->mf[2][3] = 0.0f;
 
-    arg0->mf[3][0] = arg2.x;
-    arg0->mf[3][1] = arg2.y;
-    arg0->mf[3][2] = arg2.z;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[3][0] = position.x;
+    matrix->mf[3][1] = position.y;
+    matrix->mf[3][2] = position.z;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build a scaled basis from a normalized direction and cross products, with the supplied translation. */
-void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 arg3, f32 arg4) {
+void ParticleGfx_BuildDirectionMatrix(MtxF* matrix, Vec3f direction, Vec3f position, s16 reference_angle, f32 scale) {
     Vec3f sp3C;
     Vec3f sp30;
     Vec3f sp24;
 
-    Vec3f_SetComponentsDuplicate(&sp3C, SINS(arg3), 0.0f, COSS(arg3));
-    Vec3f_Normalize(&arg1);
-    Vec3f_CrossProduct(&sp30, &arg1, &sp3C);
+    Vec3f_SetComponentsDuplicate(&sp3C, SINS(reference_angle), 0.0f, COSS(reference_angle));
+    Vec3f_Normalize(&direction);
+    Vec3f_CrossProduct(&sp30, &direction, &sp3C);
     Vec3f_Normalize(&sp30);
-    Vec3f_CrossProduct(&sp24, &sp30, &arg1);
+    Vec3f_CrossProduct(&sp24, &sp30, &direction);
     Vec3f_Normalize(&sp24);
 
-    arg0->mf[0][0] = sp30.x * arg4;
-    arg0->mf[0][1] = sp30.y * arg4;
-    arg0->mf[0][2] = sp30.z * arg4;
-    arg0->mf[3][0] = arg2.x;
+    matrix->mf[0][0] = sp30.x * scale;
+    matrix->mf[0][1] = sp30.y * scale;
+    matrix->mf[0][2] = sp30.z * scale;
+    matrix->mf[3][0] = position.x;
 
-    arg0->mf[1][0] = arg1.x * arg4;
-    arg0->mf[1][1] = arg1.y * arg4;
-    arg0->mf[1][2] = arg1.z * arg4;
-    arg0->mf[3][1] = arg2.y;
+    matrix->mf[1][0] = direction.x * scale;
+    matrix->mf[1][1] = direction.y * scale;
+    matrix->mf[1][2] = direction.z * scale;
+    matrix->mf[3][1] = position.y;
 
-    arg0->mf[2][0] = sp24.x * arg4;
-    arg0->mf[2][1] = sp24.y * arg4;
-    arg0->mf[2][2] = sp24.z * arg4;
-    arg0->mf[3][2] = arg2.z;
+    matrix->mf[2][0] = sp24.x * scale;
+    matrix->mf[2][1] = sp24.y * scale;
+    matrix->mf[2][2] = sp24.z * scale;
+    matrix->mf[3][2] = position.z;
 
-    arg0->mf[0][3] = 0.0f;
-    arg0->mf[1][3] = 0.0f;
-    arg0->mf[2][3] = 0.0f;
-    arg0->mf[3][3] = 1.0f;
+    matrix->mf[0][3] = 0.0f;
+    matrix->mf[1][3] = 0.0f;
+    matrix->mf[2][3] = 0.0f;
+    matrix->mf[3][3] = 1.0f;
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushTransformMatrix(Vec3f arg0, Vec3s arg1, f32 arg2) {
+void ParticleGfx_PushTransformMatrix(Vec3f position, Vec3s rotation, f32 scale) {
     MtxF sp28;
 
-    ParticleGfx_BuildTransformMatrix(&sp28, arg0, arg1, arg2);
+    ParticleGfx_BuildTransformMatrix(&sp28, position, rotation, scale);
     ParticleGfx_PushMatrix(&sp28);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushTransformMatrixYScaled(Vec3f arg0, Vec3s arg1, f32 arg2) {
+void ParticleGfx_PushTransformMatrixYScaled(Vec3f position, Vec3s rotation, f32 scale_y) {
     MtxF sp28;
 
-    ParticleGfx_BuildTransformMatrixYScaled(&sp28, arg0, arg1, arg2);
+    ParticleGfx_BuildTransformMatrixYScaled(&sp28, position, rotation, scale_y);
     ParticleGfx_PushMatrix(&sp28);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushTransformMatrixXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3) {
+void ParticleGfx_PushTransformMatrixXYScaled(Vec3f position, Vec3s rotation, f32 scale_x, f32 scale_y) {
     MtxF sp28;
 
-    ParticleGfx_BuildTransformMatrixXYScaled(&sp28, arg0, arg1, arg2, arg3);
+    ParticleGfx_BuildTransformMatrixXYScaled(&sp28, position, rotation, scale_x, scale_y);
     ParticleGfx_PushMatrix(&sp28);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushBillboardMatrix(CameraNode* camera, Vec3f arg1, f32 arg4) {
+void ParticleGfx_PushBillboardMatrix(CameraNode* camera, Vec3f position, f32 scale) {
     MtxF sp20;
 
-    ParticleGfx_BuildBillboardMatrix(&sp20, &camera->view.floatMatrix, arg1, arg4);
+    ParticleGfx_BuildBillboardMatrix(&sp20, &camera->view.floatMatrix, position, scale);
     ParticleGfx_PushMatrix(&sp20);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* camera, Vec3f arg1, f32 arg4, s16 arg5) {
+void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* camera, Vec3f position, f32 scale, s16 rotation_z) {
     MtxF sp28;
 
-    ParticleGfx_BuildBillboardRotatedMatrix(&sp28, &camera->view.floatMatrix, arg1, arg4, arg5);
+    ParticleGfx_BuildBillboardRotatedMatrix(&sp28, &camera->view.floatMatrix, position, scale, rotation_z);
     ParticleGfx_PushMatrix(&sp28);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* camera, Vec3f arg1, f32 arg4) {
+void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* camera, Vec3f position, f32 scale_y) {
     MtxF sp20;
 
-    ParticleGfx_BuildBillboardMatrixYScaled(&sp20, &camera->view.floatMatrix, arg1, arg4);
+    ParticleGfx_BuildBillboardMatrixYScaled(&sp20, &camera->view.floatMatrix, position, scale_y);
     ParticleGfx_PushMatrix(&sp20);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* camera, Vec3f arg1, f32 arg4, s16 arg5) {
+void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* camera, Vec3f position, f32 scale_y, s16 rotation_z) {
     MtxF sp28;
 
-    ParticleGfx_BuildBillboardRotatedMatrixYScaled(&sp28, &camera->view.floatMatrix, arg1, arg4, arg5);
+    ParticleGfx_BuildBillboardRotatedMatrixYScaled(&sp28, &camera->view.floatMatrix, position, scale_y, rotation_z);
     ParticleGfx_PushMatrix(&sp28);
 }
 
 /* Add half turns to rotation X/Y, build the transform, and load it through the matrix pool. */
-void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5) {
+void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f position, Vec3s rotation, f32 scale) {
     MtxF sp30;
     Vec3s sp28;
 
-    sp28.x = arg3.x + 0x8000;
-    sp28.y = arg3.y + 0x8000;
-    sp28.z = arg3.z;
+    sp28.x = rotation.x + 0x8000;
+    sp28.y = rotation.y + 0x8000;
+    sp28.z = rotation.z;
 
-    ParticleGfx_BuildTransformMatrix(&sp30, arg0, sp28, arg5);
+    ParticleGfx_BuildTransformMatrix(&sp30, position, sp28, scale);
     ParticleGfx_PushMatrix(&sp30);
 }
 
 /* Build the corresponding transform and load it through the matrix pool. */
-void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6) {
+void ParticleGfx_PushDirectionMatrix(Vec3f position, Vec3f direction, f32 scale) {
     MtxF sp30;
 
-    ParticleGfx_BuildDirectionMatrix(&sp30, arg3, arg0, 0, arg6);
+    ParticleGfx_BuildDirectionMatrix(&sp30, direction, position, 0, scale);
     ParticleGfx_PushMatrix(&sp30);
 }

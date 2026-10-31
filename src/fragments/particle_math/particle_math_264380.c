@@ -744,8 +744,8 @@ void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, 
 }
 
 /* Load four vertices and emit two triangles. */
-void ParticleGfx_DrawQuadVertices(Vtx* arg0) {
-    gSPVertex(gDisplayListHead++, arg0, 4, 0);
+void ParticleGfx_DrawQuadVertices(Vtx* vtx) {
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
@@ -754,94 +754,94 @@ void ParticleGfx_NoopStub10(void) {
 }
 
 /* Load the supplied position/rotation/scale transform, then draw the selected vertices. */
-void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushTransformMatrix(arg0, arg1, arg2);
+void ParticleGfx_DrawTransformedQuad(Vec3f position, Vec3s rotation, f32 scale, Vtx* vtx) {
+    ParticleGfx_PushTransformMatrix(position, rotation, scale);
 
-    gSPVertex(gDisplayListHead++, arg3, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load the supplied position/rotation/scale transform, then draw the selected vertices. */
-void ParticleGfx_DrawTransformedQuadYScaled(Vec3f arg0, Vec3s arg1, f32 arg3, Vtx* arg4) {
-    ParticleGfx_PushTransformMatrixYScaled(arg0, arg1, arg3);
+void ParticleGfx_DrawTransformedQuadYScaled(Vec3f position, Vec3s rotation, f32 scale_y, Vtx* vtx) {
+    ParticleGfx_PushTransformMatrixYScaled(position, rotation, scale_y);
 
-    gSPVertex(gDisplayListHead++, arg4, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load the supplied position/rotation/scale transform, then draw the selected vertices. */
-void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3, Vtx* arg4) {
-    ParticleGfx_PushTransformMatrixXYScaled(arg0, arg1, arg2, arg3);
+void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f position, Vec3s rotation, f32 scale_x, f32 scale_y, Vtx* vtx) {
+    ParticleGfx_PushTransformMatrixXYScaled(position, rotation, scale_x, scale_y);
 
-    gSPVertex(gDisplayListHead++, arg4, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load the supplied position/rotation/scale transform, then draw the selected vertices. */
-void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushTransformMatrix(arg0, arg1, arg2);
+void ParticleGfx_DrawTransformedTriangle(Vec3f position, Vec3s rotation, f32 scale, Vtx* vtx) {
+    ParticleGfx_PushTransformMatrix(position, rotation, scale);
 
-    gSPVertex(gDisplayListHead++, arg3, 3, 0);
+    gSPVertex(gDisplayListHead++, vtx, 3, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelQuad(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrix(camera, arg1, arg2);
+void ParticleGfx_DrawModelQuad(CameraNode* camera, Vec3f position, f32 scale, Vtx* vtx) {
+    ParticleGfx_PushBillboardMatrix(camera, position, scale);
 
-    gSPVertex(gDisplayListHead++, arg3, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelQuadRotated(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrix(camera, arg1, arg2, arg4);
+void ParticleGfx_DrawModelQuadRotated(CameraNode* camera, Vec3f position, f32 scale, Vtx* vtx, s16 rotation_z) {
+    ParticleGfx_PushBillboardRotatedMatrix(camera, position, scale, rotation_z);
 
-    gSPVertex(gDisplayListHead++, arg3, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelQuadYScaled(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrixYScaled(camera, arg1, arg2);
+void ParticleGfx_DrawModelQuadYScaled(CameraNode* camera, Vec3f position, f32 scale_y, Vtx* vtx) {
+    ParticleGfx_PushBillboardMatrixYScaled(camera, position, scale_y);
 
-    gSPVertex(gDisplayListHead++, arg3, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrixYScaled(camera, arg1, arg2, arg4);
+void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* camera, Vec3f position, f32 scale_y, Vtx* vtx, s16 rotation_z) {
+    ParticleGfx_PushBillboardRotatedMatrixYScaled(camera, position, scale_y, rotation_z);
 
-    gSPVertex(gDisplayListHead++, arg3, 4, 0);
+    gSPVertex(gDisplayListHead++, vtx, 4, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E408);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelTriangle(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3) {
-    ParticleGfx_PushBillboardMatrix(camera, arg1, arg2);
+void ParticleGfx_DrawModelTriangle(CameraNode* camera, Vec3f position, f32 scale, Vtx* vtx) {
+    ParticleGfx_PushBillboardMatrix(camera, position, scale);
 
-    gSPVertex(gDisplayListHead++, arg3, 3, 0);
+    gSPVertex(gDisplayListHead++, vtx, 3, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelTriangleRotated(CameraNode* camera, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
-    ParticleGfx_PushBillboardRotatedMatrix(camera, arg1, arg2, arg4);
+void ParticleGfx_DrawModelTriangleRotated(CameraNode* camera, Vec3f position, f32 scale, Vtx* vtx, s16 rotation_z) {
+    ParticleGfx_PushBillboardRotatedMatrix(camera, position, scale, rotation_z);
 
-    gSPVertex(gDisplayListHead++, arg3, 3, 0);
+    gSPVertex(gDisplayListHead++, vtx, 3, 0);
     gSPDisplayList(gDisplayListHead++, D_8140E3F8);
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
+void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
     u8* var_s3 = texture;
 
-    for (i = 0; i < arg3 / height; i++) {
-        for (j = 0; j < arg2 / width; j++) {
+    for (i = 0; i < atlas_height / height; i++) {
+        for (j = 0; j < atlas_width / width; j++) {
             ParticleGfx_LoadTextureI8(var_s3, width, height);
 
             gSPVertex(gDisplayListHead++, &vtx[var_s4], 4, 0);
@@ -856,14 +856,14 @@ void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
+void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
     u8* var_s3 = texture;
 
-    for (i = 0; i < arg3 / height; i++) {
-        for (j = 0; j < arg2 / width; j++) {
+    for (i = 0; i < atlas_height / height; i++) {
+        for (j = 0; j < atlas_width / width; j++) {
             ParticleGfx_LoadTextureIa16(var_s3, width, height);
 
             gSPVertex(gDisplayListHead++, &vtx[var_s4], 4, 0);
@@ -878,14 +878,14 @@ void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3,
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
+void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
     u8* var_s3 = texture;
 
-    for (i = 0; i < arg3 / height; i++) {
-        for (j = 0; j < arg2 / width; j++) {
+    for (i = 0; i < atlas_height / height; i++) {
+        for (j = 0; j < atlas_width / width; j++) {
             ParticleGfx_LoadTextureIa8(var_s3, width, height);
 
             gSPVertex(gDisplayListHead++, &vtx[var_s4], 4, 0);
@@ -900,14 +900,14 @@ void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, 
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
+void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
     u8* var_s3 = texture;
 
-    for (i = 0; i < arg3 / height; i++) {
-        for (j = 0; j < arg2 / width; j++) {
+    for (i = 0; i < atlas_height / height; i++) {
+        for (j = 0; j < atlas_width / width; j++) {
             ParticleGfx_LoadTextureI4(var_s3, width, height);
 
             gSPVertex(gDisplayListHead++, &vtx[var_s4], 4, 0);
@@ -922,14 +922,14 @@ void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
+void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
     u8* var_s3 = texture;
 
-    for (i = 0; i < arg3 / height; i++) {
-        for (j = 0; j < arg2 / width; j++) {
+    for (i = 0; i < atlas_height / height; i++) {
+        for (j = 0; j < atlas_width / width; j++) {
             ParticleGfx_LoadTextureTileI4(var_s3, width, height);
 
             gSPVertex(gDisplayListHead++, &vtx[var_s4], 4, 0);
@@ -975,9 +975,9 @@ void ParticleGfx_SetPrimColorTextureCombine(u8 r, u8 g, u8 b, u8 a) {
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetTextureAlphaCombine(u8 a) {
+void ParticleGfx_SetTextureAlphaCombine(u8 alpha) {
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, a);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, alpha);
     gDPSetCombineLERP(gDisplayListHead++, SHADE, 0, TEXEL0, 0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                       COMBINED);
 }
@@ -1010,28 +1010,28 @@ void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
+void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, l, prim_r, prim_g, prim_b, prim_a);
+    gDPSetPrimColor(gDisplayListHead++, 0, lod_frac, prim_r, prim_g, prim_b, prim_a);
     gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, 0);
     gDPSetCombineLERP(gDisplayListHead++, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0,
                       PRIMITIVE, ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
+void ParticleGfx_SetPrimEnvLodTextureCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, l, prim_r, prim_g, prim_b, prim_a);
+    gDPSetPrimColor(gDisplayListHead++, 0, lod_frac, prim_r, prim_g, prim_b, prim_a);
     gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, 0);
     gDPSetCombineLERP(gDisplayListHead++, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, 0, 0, 0, TEXEL0, PRIMITIVE,
                       ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0);
 }
 
 /* Select the frame counter divided by 2, 3, or 4; other selectors use the undivided counter. */
-u32 ParticleGfx_GetFrameDivisor(s32 arg0) {
+u32 ParticleGfx_GetFrameDivisor(s32 divisor) {
     u32 ret = sParticleFrameCounter;
 
-    switch (arg0) {
+    switch (divisor) {
         case 2:
             ret = sParticleFrameDiv2;
             break;
@@ -1049,58 +1049,58 @@ u32 ParticleGfx_GetFrameDivisor(s32 arg0) {
 }
 
 /* Write bounds for the render tile, scrolling S positively and T negatively with the particle clock. */
-void ParticleGfx_SetAnimatedTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, arg0 * sParticleFrameCounter, -arg1 * sParticleFrameCounter,
-                   (((arg0 * sParticleFrameCounter) + arg2) - 1) << 2, (((-arg1 * sParticleFrameCounter) + arg3) - 1) << 2);
+void ParticleGfx_SetAnimatedTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
+                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2, (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock. */
-void ParticleGfx_SetAnimatedAuxTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    gDPSetTileSize(gDisplayListHead++, 1, arg0 * sParticleFrameCounter, -arg1 * sParticleFrameCounter,
-                   (((arg0 * sParticleFrameCounter) + arg2) - 1) << 2, (((-arg1 * sParticleFrameCounter) + arg3) - 1) << 2);
+void ParticleGfx_SetAnimatedAuxTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gDisplayListHead++, 1, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
+                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2, (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for the render tile, scrolling S positively and T negatively with the particle clock. */
-void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1 * sParticleFrameCounter, -arg2 * sParticleFrameCounter, (((arg1 * sParticleFrameCounter) + arg3) - 1) << 2,
-                   (((-arg2 * sParticleFrameCounter) + arg4) - 1) << 2);
+void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gfx, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter, (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock. */
-void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    gDPSetTileSize(gfx, 1, arg1 * sParticleFrameCounter, -arg2 * sParticleFrameCounter, (((arg1 * sParticleFrameCounter) + arg3) - 1) << 2,
-                   (((-arg2 * sParticleFrameCounter) + arg4) - 1) << 2);
+void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gfx, 1, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter, (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for the render tile with fixed S and clock-scrolled negative T. */
-void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1, -arg2 * sParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
-                   (((-arg2 * sParticleFrameCounter) + arg4) - 1) << 2);
+void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 start_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gfx, G_TX_RENDERTILE, start_s, -scroll_t * sParticleFrameCounter, ((width + start_s) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for auxiliary tile 1 with fixed S and clock-scrolled negative T. */
-void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    gDPSetTileSize(gfx, 1, arg1, -arg2 * sParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
-                   (((-arg2 * sParticleFrameCounter) + arg4) - 1) << 2);
+void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 start_s, s32 scroll_t, s32 width, s32 height) {
+    gDPSetTileSize(gfx, 1, start_s, -scroll_t * sParticleFrameCounter, ((width + start_s) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write scrolling bounds for the render tile, using the selected divided clock and the supplied origin, steps, and dimensions. */
-void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    u32 temp_v0 = ParticleGfx_GetFrameDivisor(arg7);
-    s32 temp_v1 = arg1 + (arg3 * temp_v0);
-    s32 temp_a0 = arg2 - (arg4 * temp_v0);
+void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor) {
+    u32 temp_v0 = ParticleGfx_GetFrameDivisor(clock_divisor);
+    s32 temp_v1 = start_s + (step_s * temp_v0);
+    s32 temp_a0 = start_t - (step_t * temp_v0);
 
-    gDPSetTileSize(gfx, G_TX_RENDERTILE, temp_v1, temp_a0, ((temp_v1 + arg5) - 1) << 2, ((temp_a0 + arg6) - 1) << 2);
+    gDPSetTileSize(gfx, G_TX_RENDERTILE, temp_v1, temp_a0, ((temp_v1 + width) - 1) << 2, ((temp_a0 + height) - 1) << 2);
 }
 
 /* Write scrolling bounds for auxiliary tile 1, using the selected divided clock and the supplied origin, steps, and dimensions. */
-void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7) {
-    u32 temp_v0 = ParticleGfx_GetFrameDivisor(arg7);
-    s32 temp_v1 = arg1 + (arg3 * temp_v0);
-    s32 temp_a0 = arg2 - (arg4 * temp_v0);
+void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor) {
+    u32 temp_v0 = ParticleGfx_GetFrameDivisor(clock_divisor);
+    s32 temp_v1 = start_s + (step_s * temp_v0);
+    s32 temp_a0 = start_t - (step_t * temp_v0);
 
-    gDPSetTileSize(gfx, 1, arg1 + (arg3 * temp_v0), arg2 - (arg4 * temp_v0), ((temp_v1 + arg5) - 1) << 2,
-                   ((temp_a0 + arg6) - 1) << 2);
+    gDPSetTileSize(gfx, 1, start_s + (step_s * temp_v0), start_t - (step_t * temp_v0), ((temp_v1 + width) - 1) << 2,
+                   ((temp_a0 + height) - 1) << 2);
 }
 
 /* Append a 4-bit texture block load to the supplied cursor and return the advanced cursor. */
@@ -1117,119 +1117,119 @@ void ParticleGfx_LoadTextureI4ToList(Gfx* gfx, u8* texture, s32 width, s32 heigh
 }
 
 /* Load the descriptor's supported RGBA16, IA8/16, or I4/8 image into the requested TMEM/tile. */
-Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* arg0, u8* texture, ParticleTexture* arg2, s32 tmem, s32 rtile) {
-    switch (arg2->unk_04->format) {
+Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* gfx, u8* texture, ParticleTexture* descriptor, s32 tmem, s32 rtile) {
+    switch (descriptor->unk_04->format) {
         case G_IM_FMT_RGBA:
-            switch (arg2->unk_04->texelSize) {
+            switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_16b:
-                    gDPLoadMultiTile(arg0++, texture, tmem, rtile, G_IM_FMT_RGBA, G_IM_SIZ_16b, arg2->unk_04->width,
-                                     arg2->unk_04->height, 0, 0, arg2->unk_04->width - 1, arg2->unk_04->height - 1, 0,
-                                     arg2->unk_04->addressModeS, arg2->unk_04->addressModeT, arg2->unk_04->maskS, arg2->unk_04->maskT,
-                                     arg2->unk_04->shiftS, arg2->unk_04->shiftT);
+                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_RGBA, G_IM_SIZ_16b, descriptor->unk_04->width,
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
+                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
             }
             break;
 
         case G_IM_FMT_IA:
-            switch (arg2->unk_04->texelSize) {
+            switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_8b:
-                    gDPLoadMultiTile(arg0++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_8b, arg2->unk_04->width,
-                                     arg2->unk_04->height, 0, 0, arg2->unk_04->width - 1, arg2->unk_04->height - 1, 0,
-                                     arg2->unk_04->addressModeS, arg2->unk_04->addressModeT, arg2->unk_04->maskS, arg2->unk_04->maskT,
-                                     arg2->unk_04->shiftS, arg2->unk_04->shiftT);
+                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_8b, descriptor->unk_04->width,
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
+                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
 
                 case G_IM_SIZ_16b:
-                    gDPLoadMultiTile(arg0++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_16b, arg2->unk_04->width,
-                                     arg2->unk_04->height, 0, 0, arg2->unk_04->width - 1, arg2->unk_04->height - 1, 0,
-                                     arg2->unk_04->addressModeS, arg2->unk_04->addressModeT, arg2->unk_04->maskS, arg2->unk_04->maskT,
-                                     arg2->unk_04->shiftS, arg2->unk_04->shiftT);
+                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_16b, descriptor->unk_04->width,
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
+                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
             }
             break;
 
         case G_IM_FMT_I:
-            switch (arg2->unk_04->texelSize) {
+            switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_4b:
-                    gDPLoadMultiTile_4b(arg0++, texture, tmem, rtile, G_IM_FMT_I, arg2->unk_04->width,
-                                        arg2->unk_04->height, 0, 0, arg2->unk_04->width - 1, arg2->unk_04->height - 1,
-                                        0, arg2->unk_04->addressModeS, arg2->unk_04->addressModeT, arg2->unk_04->maskS,
-                                        arg2->unk_04->maskT, arg2->unk_04->shiftS, arg2->unk_04->shiftT);
+                    gDPLoadMultiTile_4b(gfx++, texture, tmem, rtile, G_IM_FMT_I, descriptor->unk_04->width,
+                                        descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1,
+                                        0, descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
+                                        descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
 
                 case G_IM_SIZ_8b:
-                    gDPLoadMultiTile(arg0++, texture, tmem, rtile, G_IM_FMT_I, G_IM_SIZ_8b, arg2->unk_04->width,
-                                     arg2->unk_04->height, 0, 0, arg2->unk_04->width - 1, arg2->unk_04->height - 1, 0,
-                                     arg2->unk_04->addressModeS, arg2->unk_04->addressModeT, arg2->unk_04->maskS, arg2->unk_04->maskT,
-                                     arg2->unk_04->shiftS, arg2->unk_04->shiftT);
+                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_I, G_IM_SIZ_8b, descriptor->unk_04->width,
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
+                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
             }
             break;
     }
 
-    return arg0;
+    return gfx;
 }
 
 /* Select a static or frame-indexed texture, load it if present, and optionally emit scrolling tile bounds. */
-Gfx* ParticleGfx_LoadDescriptorTextureAndTile(Gfx* arg0, ParticleTexture* arg1, s32 tmem, s32 rtile) {
+Gfx* ParticleGfx_LoadDescriptorTextureAndTile(Gfx* gfx, ParticleTexture* descriptor, s32 tmem, s32 rtile) {
     u8* texture;
     u32 ret;
 
     texture = NULL;
-    if (arg1->unk_0C != NULL) {
-        ret = ParticleGfx_GetFrameDivisor(arg1->unk_0C->unk_06) % arg1->unk_0C->unk_04;
-        texture = arg1->unk_0C->unk_00.texture[ret];
-    } else if (arg1->unk_00 != NULL) {
-        texture = arg1->unk_00;
+    if (descriptor->unk_0C != NULL) {
+        ret = ParticleGfx_GetFrameDivisor(descriptor->unk_0C->unk_06) % descriptor->unk_0C->unk_04;
+        texture = descriptor->unk_0C->unk_00.texture[ret];
+    } else if (descriptor->unk_00 != NULL) {
+        texture = descriptor->unk_00;
     }
 
     if (texture != NULL) {
-        arg0 = ParticleGfx_LoadDescriptorTexture(arg0, texture, arg1, tmem, rtile);
+        gfx = ParticleGfx_LoadDescriptorTexture(gfx, texture, descriptor, tmem, rtile);
     }
 
-    if (arg1->unk_08 != NULL) {
+    if (descriptor->unk_08 != NULL) {
         switch (rtile) {
             case G_TX_RENDERTILE:
-                ParticleGfx_SetFrameIndexedTileSize(arg0++, arg1->unk_08->startS, arg1->unk_08->startT, arg1->unk_08->stepS,
-                              arg1->unk_08->stepT, arg1->unk_04->width, arg1->unk_04->height, arg1->unk_08->clockDivisor);
+                ParticleGfx_SetFrameIndexedTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT, descriptor->unk_08->stepS,
+                              descriptor->unk_08->stepT, descriptor->unk_04->width, descriptor->unk_04->height, descriptor->unk_08->clockDivisor);
                 break;
 
             case 1:
-                ParticleGfx_SetFrameIndexedAuxTileSize(arg0++, arg1->unk_08->startS, arg1->unk_08->startT, arg1->unk_08->stepS,
-                              arg1->unk_08->stepT, arg1->unk_04->width, arg1->unk_04->height, arg1->unk_08->clockDivisor);
+                ParticleGfx_SetFrameIndexedAuxTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT, descriptor->unk_08->stepS,
+                              descriptor->unk_08->stepT, descriptor->unk_04->width, descriptor->unk_04->height, descriptor->unk_08->clockDivisor);
                 break;
         }
     }
 
-    return arg0;
+    return gfx;
 }
 
 /* Load the primary texture descriptor at TMEM zero on the render tile. */
-Gfx* ParticleGfx_LoadPrimaryDescriptorTexture(Gfx* arg0, ParticleMaterial* arg1) {
-    return ParticleGfx_LoadDescriptorTextureAndTile(arg0, arg1->unk_00, 0, G_TX_RENDERTILE);
+Gfx* ParticleGfx_LoadPrimaryDescriptorTexture(Gfx* gfx, ParticleMaterial* material) {
+    return ParticleGfx_LoadDescriptorTextureAndTile(gfx, material->unk_00, 0, G_TX_RENDERTILE);
 }
 
 /* Load the auxiliary texture on tile one, sharing TMEM zero only when the base texture pointers agree. */
-Gfx* ParticleGfx_LoadSecondaryDescriptorTexture(Gfx* arg0, ParticleMaterial* arg1) {
+Gfx* ParticleGfx_LoadSecondaryDescriptorTexture(Gfx* gfx, ParticleMaterial* material) {
     s32 var_a2 = 0;
 
-    if (arg1->unk_04->unk_00 != arg1->unk_00->unk_00) {
+    if (material->unk_04->unk_00 != material->unk_00->unk_00) {
         var_a2 = 0x100;
     }
-    return ParticleGfx_LoadDescriptorTextureAndTile(arg0, arg1->unk_04, var_a2, 1);
+    return ParticleGfx_LoadDescriptorTextureAndTile(gfx, material->unk_04, var_a2, 1);
 }
 
 /* Pack the descriptor's sixteen color/alpha mux selectors into an RDP combine command. */
-void ParticleGfx_SetCombineModeFromDescriptor(Gfx* arg0, ParticleCombineMux* arg1) {
-    gDPSetCombine(arg0++,
-                  GCCc0w0(arg1->colorA0, arg1->colorC0, arg1->alphaA0, arg1->alphaC0) | GCCc1w0(arg1->colorA1, arg1->colorC1),
+void ParticleGfx_SetCombineModeFromDescriptor(Gfx* gfx, ParticleCombineMux* combine_mux) {
+    gDPSetCombine(gfx++,
+                  GCCc0w0(combine_mux->colorA0, combine_mux->colorC0, combine_mux->alphaA0, combine_mux->alphaC0) | GCCc1w0(combine_mux->colorA1, combine_mux->colorC1),
 
-                  GCCc0w1(arg1->colorB0, arg1->colorD0, arg1->alphaB0, arg1->alphaD0) |
-                      GCCc1w1(arg1->colorB1, arg1->alphaA1, arg1->alphaC1, arg1->colorD1, arg1->alphaB1, arg1->alphaD1));
+                  GCCc0w1(combine_mux->colorB0, combine_mux->colorD0, combine_mux->alphaB0, combine_mux->alphaD0) |
+                      GCCc1w1(combine_mux->colorB1, combine_mux->alphaA1, combine_mux->alphaC1, combine_mux->colorD1, combine_mux->alphaB1, combine_mux->alphaD1));
 }
 
 /* Append descriptor-driven combine, color, texture-generation, and texture-load commands; return the advanced cursor. */
-Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* arg0, ParticleMaterial* arg1) {
+Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* gfx, ParticleMaterial* material) {
     ParticleMaterialState* var_a3;
     ParticleTexture* sp20;
     arg1_func_81407874_014_000_018_000_000* temp_v0;
@@ -1241,12 +1241,12 @@ Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* arg0, ParticleMaterial* arg1) {
     s16 sp14;
     s16 sp10;
 
-    var_a3 = arg1->unk_00;
-    sp20 = arg1->unk_04;
+    var_a3 = material->unk_00;
+    sp20 = material->unk_04;
 
     if (var_a3 != NULL) {
         if (var_a3->unk_10 != NULL) {
-            ParticleGfx_SetCombineModeFromDescriptor(arg0++, var_a3->unk_10);
+            ParticleGfx_SetCombineModeFromDescriptor(gfx++, var_a3->unk_10);
         }
 
         if (var_a3->unk_14 != NULL) {
@@ -1257,59 +1257,59 @@ Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* arg0, ParticleMaterial* arg1) {
                 sp14 = color.rgba >> 0x8;
                 sp10 = color.rgba;
 
-                gDPPipeSync(arg0++);
-                gDPSetPrimColor(arg0++, 0, 0xFF, sp1c, sp18, sp14, sp10);
+                gDPPipeSync(gfx++);
+                gDPSetPrimColor(gfx++, 0, 0xFF, sp1c, sp18, sp14, sp10);
             } else {
                 ret = ParticleGfx_GetFrameDivisor(var_a3->unk_14->unk_06) % var_a3->unk_14->unk_04;
                 temp_v1 = &var_a3->unk_14->unk_00.ptr5[ret];
 
-                gDPPipeSync(arg0++);
-                gDPSetPrimColor(arg0++, 0, temp_v1->l, temp_v1->color.r, temp_v1->color.g, temp_v1->color.b,
+                gDPPipeSync(gfx++);
+                gDPSetPrimColor(gfx++, 0, temp_v1->l, temp_v1->color.r, temp_v1->color.g, temp_v1->color.b,
                                 temp_v1->color.a);
             }
         }
 
         if (var_a3->unk_18 != NULL) {
             if (var_a3->unk_18->unk_04 == 0) {
-                gDPSetColor(arg0++, G_SETENVCOLOR, var_a3->unk_18->unk_00.color.rgba);
+                gDPSetColor(gfx++, G_SETENVCOLOR, var_a3->unk_18->unk_00.color.rgba);
             } else {
                 ret = ParticleGfx_GetFrameDivisor(var_a3->unk_18->unk_06) % var_a3->unk_18->unk_04;
                 temp_v0 = &var_a3->unk_18->unk_00.ptr4[ret];
 
-                gDPSetEnvColor(arg0++, temp_v0->color.r, temp_v0->color.g, temp_v0->color.b, temp_v0->color.a);
+                gDPSetEnvColor(gfx++, temp_v0->color.r, temp_v0->color.g, temp_v0->color.b, temp_v0->color.a);
             }
         }
 
         if (var_a3->unk_1C != NULL) {
-            gSPSetGeometryMode(arg0++, G_TEXTURE_GEN);
-            gSPTexture(arg0++, var_a3->unk_1C->unk_00, var_a3->unk_1C->unk_02, 0, G_TX_RENDERTILE, G_ON);
+            gSPSetGeometryMode(gfx++, G_TEXTURE_GEN);
+            gSPTexture(gfx++, var_a3->unk_1C->unk_00, var_a3->unk_1C->unk_02, 0, G_TX_RENDERTILE, G_ON);
         }
 #if !defined(VERSION_JP)
         // JP has neither the full-scale gSPTexture used when unk_1C is NULL and unk_04 is
         // set, nor the G_TT_NONE TLUT reset for unk_04 != 0.
         else if (var_a3->unk_04 != 0) {
-            gSPTexture(arg0++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
+            gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
         }
 
         if (var_a3->unk_04 != 0) {
-            gDPSetTextureLUT(arg0++, G_TT_NONE);
+            gDPSetTextureLUT(gfx++, G_TT_NONE);
         }
 #endif
 
-        arg0 = ParticleGfx_LoadPrimaryDescriptorTexture(arg0, arg1);
+        gfx = ParticleGfx_LoadPrimaryDescriptorTexture(gfx, material);
     }
 
     if (sp20 != NULL) {
-        arg0 = ParticleGfx_LoadSecondaryDescriptorTexture(arg0, arg1);
+        gfx = ParticleGfx_LoadSecondaryDescriptorTexture(gfx, material);
     }
 
-    return arg0;
+    return gfx;
 }
 
 /* Append the graph node's descriptor material only during render callback phase 5. */
-void ParticleGfx_GraphNodeBuildDescriptorMaterialList(s32 arg0, arg1_func_87903D64* arg1) {
-    if (arg0 == 5) {
-        ParticleMaterial* tmp = arg1->unk_14;
+void ParticleGfx_GraphNodeBuildDescriptorMaterialList(s32 callback_phase, arg1_func_87903D64* node) {
+    if (callback_phase == 5) {
+        ParticleMaterial* tmp = node->unk_14;
 
         gDisplayListHead = ParticleGfx_AppendDescriptorMaterial(gDisplayListHead, tmp);
     }
