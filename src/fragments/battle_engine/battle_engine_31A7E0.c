@@ -8,32 +8,32 @@ Moves covered by this file:
     - Spike Cannon
 */
 
-void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* arg0) {
-    Particle_Scale_SetScaled(arg0, 0.1f);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-    Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
-    Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_AdvanceLifecycle(arg0);
+void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* particle) {
+    Particle_Scale_SetScaled(particle, 0.1f);
+    Particle_SetPrimColor(particle, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Particle_SetEnvColor(particle, 0x64, 0xC8, 0xFF); // #64C8FF
+    Particle_SetPrimAlpha(particle, 0xFF);
+    Particle_AdvanceLifecycle(particle);
 }
 
-void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(Particle* arg0) {
-    switch (arg0->lifecycle) {
+void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(Particle* particle) {
+    switch (particle->lifecycle) {
         case 1:
-            BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(arg0);
+            BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(particle);
             break;
 
         case 2:
-            Particle_AnimateFramesForwardAndAdvanceLifecycle(arg0, 0, 7, 1, 2, 0);
-            Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 8);
+            Particle_AnimateFramesForwardAndAdvanceLifecycle(particle, 0, 7, 1, 2, 0);
+            Particle_PrimAlpha_Approach_0BC2C(particle, 0x20, 8);
             break;
 
         case 3:
-            Particle_MarkInactive(arg0);
+            Particle_MarkInactive(particle);
             break;
     }
 
-    if (Particle_IsRunning(arg0) != 0) {
-        Particle_Scale_Approach(arg0, 0.5f, 0.05f);
+    if (Particle_IsRunning(particle) != 0) {
+        Particle_Scale_Approach(particle, 0.5f, 0.05f);
     }
 }
 

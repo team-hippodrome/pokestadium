@@ -7,6 +7,8 @@
 
 /*
 This file covers these classes of moves:
+    - moves that have a generic "purple hit" effect (pound, karate chop)
+        - ParticleEffect_ConfigVariantMotion6
 
 This file covers this {non obvious effect} for:
     - slashing moves 

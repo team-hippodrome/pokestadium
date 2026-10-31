@@ -1862,8 +1862,8 @@ s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 arg
 }
 
 /* Set particle scale after multiplying by the render context's Y scale. */
-void Particle_Scale_SetScaled(Particle* particle, f32 arg1) {
-    particle->scale = arg1 * sParticleRenderContext.scale.y;
+void Particle_Scale_SetScaled(Particle* particle, f32 scale) {
+    particle->scale = scale * sParticleRenderContext.scale.y;
 }
 
 /* Set particle scale directly, without render-context scaling. */
@@ -1917,10 +1917,10 @@ s32 Particle_Field20_Approach_0BA84(Particle* particle, f32 arg1, f32 arg2) {
 }
 
 /* Set primRed, primGreen, primBlue. */
-void Particle_SetPrimColor(Particle* particle, u8 arg1, u8 arg2, u8 arg3) {
-    particle->primRed = arg1;
-    particle->primGreen = arg2;
-    particle->primBlue = arg3;
+void Particle_SetPrimColor(Particle* particle, u8 r, u8 g, u8 b) {
+    particle->primRed = r;
+    particle->primGreen = g;
+    particle->primBlue = b;
 }
 
 /* Approach primRed using the stored or supplied target and step. */
@@ -1939,10 +1939,10 @@ s32 Particle_PrimB_Approach_0BB44(Particle* particle, u8 arg1, u8 arg2) {
 }
 
 /* Set envRed, envGreen, envBlue. */
-void Particle_SetEnvColor(Particle* particle, u8 arg1, u8 arg2, u8 arg3) {
-    particle->envRed = arg1;
-    particle->envGreen = arg2;
-    particle->envBlue = arg3;
+void Particle_SetEnvColor(Particle* particle, u8 r, u8 g, u8 b) {
+    particle->envRed = r;
+    particle->envGreen = g;
+    particle->envBlue = b;
 }
 
 /* Approach envRed using the stored or supplied target and step. */
@@ -1961,8 +1961,8 @@ s32 Particle_ApproachEnvGreen(Particle* particle, u8 arg1, u8 arg2) {
 }
 
 /* Set primAlpha. */
-void Particle_SetPrimAlpha(Particle* particle, u8 arg1) {
-    particle->primAlpha = arg1;
+void Particle_SetPrimAlpha(Particle* particle, u8 alpha) {
+    particle->primAlpha = alpha;
 }
 
 /* Approach primAlpha using the stored or supplied target and step. */
