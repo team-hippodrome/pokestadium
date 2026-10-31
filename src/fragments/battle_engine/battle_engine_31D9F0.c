@@ -2,19 +2,25 @@
 #include "src/model_renderer.h"
 
 /*
-This file covers these classes of moves:
-    - 
-
-This file covers this {non obvious effect} for:
-    - 
-
-
-As well as effects for these specific moves:
+This file covers these specific moves:
     - fire punch
-    - 
-
-
-
+    - ember
+    - flamethrower
+    - hydro pump
+    - ice beam
+    - psybeam
+    - bubble beam
+    - hyper beam
+    - solar beam
+    - dragon rage
+    - fire spin
+    - rage
+    - self-destruct
+    - egg bomb
+    - fire blast
+    - waterfall
+    - sky attack
+    - explosion
 */
 
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_InitParticle(Particle* arg0, s16 arg1) {

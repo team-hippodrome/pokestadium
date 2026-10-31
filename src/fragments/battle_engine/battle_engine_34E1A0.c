@@ -4,17 +4,9 @@
 #include "src/gfx_buffer.h"
 
 /*
-This file covers these classes of moves:
-
-This file covers this {non obvious effect} for:
-    - 
-
-
-As well as effects for these specific moves:
-    - 
-
-
-
+This file covers these  moves:
+    - hypnosis
+    - screech
 */
 
 static Trail40 sWaterSurface;

@@ -5,17 +5,14 @@
 #include "include/math.h"
 
 /*
-This file covers these classes of moves:
-
-This file covers this {non obvious effect} for:
-    - 
-
-
-As well as effects for these specific moves:
-    - 
-
-
-
+This file covers these moves:
+    - lasso moves
+        - bind
+        - wrap
+        - disable 
+        - string shot
+        - constrict
+    - tri attack
 */
 
 typedef struct Strip400State {

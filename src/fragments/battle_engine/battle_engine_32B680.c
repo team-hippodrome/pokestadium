@@ -7,16 +7,67 @@
 
 /*
 This file covers these classes of moves:
-
+    - moves with over lay effects
+        - moves that summon a "wind" effect (Gust, whirlwind, razor win)
+        - draining moves (absorb, leech life, mega drain)
+        - spore and powder moves
+        - moves that create a bite particle (vicegrip, clamp, bite)
+        - confusion
+        - psychic
+        - blizzard
+        - meditate 
+        - rage (actually uses mega drain effects)
+        - night shade
+        - focus energy 
+        - dream eater
+        - psywave
+    - moves that creat a "spear" particle (Horn Attack, Fury attack)
+    - moves that create a drill particle (horn drill, drill peck)
+    - moves that create "motion gust" (fly, quick attack, take down)
+    - moves that create "eye" effects (leer, glare)
+    - damage by poison
+    - the Zs created by sleeping
+    - the ?s created by confusion and amnesia
+    - moves that create a "slime" effect (acid, toxic, lick)
+    - moves that create full screen smoke (mist, haze)
+    - rock throwing moves (strength, rock throw, rock slide)
+    - screens (barrier, light screen, reflect)
+    - moves that summon props (swords dance, egg bomb, kinesis, lick, lovely kiss)
 This file covers this {non obvious effect} for:
-    - 
+    - moves that creat a circular hit effect (mega punch/kick, body slam, stomp)
+    - being hit by recoil
 
 
 As well as effects for these specific moves:
-    - 
-
-
-
+    - pay day
+    - ice punch
+    - thunder punch
+    - sonic boom
+    - water gun
+    - hydro pump
+    - Surf
+    - hyper beam
+    - leech seed
+    - solar beam
+    - thunder shock
+    - thunderbolt
+    - thunder wave
+    - thunder
+    - earthquake
+    - fissure
+    - dig
+    - teleport
+    - confuse ray
+    - withdraw
+    - defense curle
+    - sharpen
+    - self-destruct
+    - Waterfall
+    - barrage
+    - sky attack
+    - dizzy punch
+    - explosion
+    - sharpen
 */
 
 static f32 D_84387B00[] = {

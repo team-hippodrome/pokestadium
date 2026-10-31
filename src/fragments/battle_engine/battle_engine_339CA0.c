@@ -9,14 +9,20 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    - slashing moves 
+    - wing attasck
 
 
 As well as effects for these specific moves:
-    - 
+    - pound
+    - fire punch
+    - ice punch
+    - thunder punch
+    - scratch
 
 
 
+and pokeball effects
 */
 
 void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade_InitParticle(Particle* arg0) {
