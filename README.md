@@ -4,7 +4,7 @@ This project is was a collaborative effort by humans that used AI. AI was used f
 The original pret contributors (the first four years of contributions) did not use AI to our knowledge. Pret has no official relationship with us (Team Hippodrome) other than sharing some members.
 
 # Pokemon Stadium (US)
-A WIP decomp of Pokemon Stadium (US).
+A WIP decomp of Pokemon Stadium (US). This builds off of the work done in pret/pokestadium.
 
 It builds the following ROMs:
 
@@ -49,8 +49,8 @@ For Japanese and European versions: regenerate the config of those versions with
 `make extract VERSION={Version}` reports errors for US-only unpacked asset views; the build
 does not use them.
 
-For contacts and other pret projects, see [pret.github.io](https://pret.github.io/).
-
 Last mile decomp and annotation work done by [Team Hippodrome](https://discord.gg/8EvuQxbxu8).
 
 Part of the [R.A.I.D. (Retro AI Development)](https://discord.gg/eCvnsvrjnY) community. 
+
+For contacts for pret projects, see [pret.github.io](https://pret.github.io/).
