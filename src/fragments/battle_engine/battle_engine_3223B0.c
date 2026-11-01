@@ -32,6 +32,10 @@ void BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion_InitParticl
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better name: BattleAnim_RunSurfHitSpark
+/*
+    Handles the hit spark from being hit by Surf
+*/
 void BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
