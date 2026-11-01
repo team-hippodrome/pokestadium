@@ -390,7 +390,7 @@ void BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunWaterGunAndHydroPumpEmitterFade
+// better name: BattleAnim_RunWaterGunAndHydroPumpEmitterFade
 /*
     Handles the fading of the burst emitters for Water Gun and Hydro Pump
 */
@@ -423,7 +423,7 @@ void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild_InitParticle(Particl
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunHydroPumpBurstChild
+// better name: BattleAnim_RunHydroPumpBurstChild
 /*
     Handles a child particle emitted by the Hydro Pump burst
 */
@@ -462,7 +462,7 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild_InitParticle
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunHydroPumpMetadataBurstChild
+// better name: BattleAnim_RunHydroPumpMetadataBurstChild
 /*
     Handles a metadata-controlled Hydro Pump burst particle
 */
@@ -494,7 +494,7 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstEmitter_InitPartic
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunHydroPumpBurstEmitter
+// better name: BattleAnim_RunHydroPumpBurstEmitter
 /*
     Emits metadata-controlled particles and child projectiles for Hydro Pump
 */
@@ -530,7 +530,7 @@ void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild_InitParticle(Particle
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunWaterGunProjectileChild
+// better name: BattleAnim_RunWaterGunProjectileChild
 /*
     Handles the child projectiles for Water gun
 */
@@ -573,7 +573,7 @@ void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild_InitParticle(
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_AdvanceLifecycle(arg0);
 }
-// better name: RunWaterGunProjectileMetadata
+// better name: BattleAnim_RunWaterGunProjectileMetadata
 /*
     Handles the metadata for the water gun projectile
 */
@@ -604,7 +604,7 @@ void BattleAnim_CallbackStartEffect6DefaultDescriptorBurstEmitter_InitParticle(P
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
-// better name: RunWaterGunProjectile
+// better name: BattleAnim_RunWaterGunProjectile
 /*
     Handles the parent projectile for Water gun
 */
@@ -1325,7 +1325,7 @@ void BattleAnim_CallbackEndEffect27Descriptor4BGrowColorShiftFade_InitParticle(P
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunHydroPumpColorShiftFade
+// better name: BattleAnim_RunHydroPumpColorShiftFade
 /*
     Handles the growth, color shift, and fade of a Hydro Pump particle
 */
@@ -1387,7 +1387,7 @@ void BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: RunWaterGunEmitterColoration
+// better name: BattleAnim_RunWaterGunEmitterColoration
 /*
     Handles the coloring of the burst emitter for Water gun
 */
