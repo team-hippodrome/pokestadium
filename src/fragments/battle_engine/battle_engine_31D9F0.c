@@ -68,6 +68,10 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade_
     }
 }
 
+// better name: BattleAnim_RunFireBreathFlameFading
+/*
+    Handles the fading of flames when using Fire Blast, Fire Spin, Flamethrower, or Dragon Rage
+*/
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FColorCycleScaleFade(Particle* arg0) {
     s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -256,6 +260,10 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor3DAlphaScaleFade_Advan
     }
 }
 
+// better name: BattleAnim_RunFireBreathFlameGeometry
+/*
+    Handles the geometry of flames when using Fire Blast, Fire Spin, Flamethrower, or Dragon Rage
+*/
 void BattleAnim_CallbackStartEffects23And35And84Descriptor3DAlphaScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -330,6 +338,10 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
     }
 }
 
+// better name: BattleAnim_RunFireBreathFlameColoration
+/*
+    Handles the color of flames when using Fire Blast, Fire Spin, Flamethrower, or Dragon Rage
+*/
 void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCycle(Particle* arg0) {
     s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -394,7 +406,11 @@ void BattleAnim_CallbackStartEffects23And35And84Descriptor4FRotatingFallColorCyc
         }
     }
 }
-
+// Better name: BattleAnim_SetupExpandingHitSpark
+/*
+    handles setting up the hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall, and Sky Attack
+    Oddly, Psybeam calls this setup, but not the runner for the effect
+*/
 void BattleAnim_CallbackSharedGrowFadeSetup(Particle* arg0) {
     Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 33.0f);
     Particle_Scale_SetScaled(arg0, 0.67f);
@@ -403,6 +419,10 @@ void BattleAnim_CallbackSharedGrowFadeSetup(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better name: BattleAnim_RunExpandingHitSpark
+/*
+    handles expanding hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall, and Sky Attack
+*/
 void BattleAnim_CallbackSharedDescriptor04GrowFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -512,6 +532,13 @@ void BattleAnim_CallbackStartEffect104DelayedSpiralFade_InitParticle(Particle* a
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunOscillatingFlameUnderneathPokemon
+/*
+    handles the flame that appears under a pokemon when:
+        - charging Sky Attack
+        - Using Rage or Bide
+        - Being hit by Fire Spin
+*/
 void BattleAnim_CallbackStartEffect104DelayedSpiralFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1508,6 +1535,11 @@ void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade
     }
 }
 
+// better name: BattleAnim_RunFireBlastHitFrontFlames
+/*
+    Handles the flames that appear in front of the pokemon when being hit by fire blast
+    also called for flamethrower and dragon rage
+*/
 void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:

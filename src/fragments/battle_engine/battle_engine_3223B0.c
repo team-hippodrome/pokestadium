@@ -1423,6 +1423,11 @@ void BattleAnim_CallbackEndEffects2And27Descriptor0AFallingSparkFade(Particle* a
     }
 }
 
+
+
+/*
+    Starts the effect for Mega Punch
+*/
 void BattleAnim_StartEffect15Descriptor08IndexedScaleDelayFade(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackStartEffects2And15Descriptor08IndexedScaleDelayFade, &gBattleAnimParticleDescriptors[8], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
