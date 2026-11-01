@@ -2223,7 +2223,7 @@ void BattleAnim_EffectEndNop(void);
 void BattleAnim_SetEffectStateFlag(s32 arg0);
 void BattleAnim_ClearEffectStateFlag(void);
 s32 BattleAnim_GetEffectStateFlag(void);
-s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0);
+s32 BattleAnim_IsCurrentOwnerSpecies(s32 species);
 s32 BattleAnim_GetSecondaryOwnerSpecies(void);
 s32 BattleAnim_GetTertiaryOwnerSpecies(void);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);

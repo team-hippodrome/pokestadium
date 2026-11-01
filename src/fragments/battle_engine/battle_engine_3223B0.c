@@ -1,5 +1,6 @@
 #include "battle_engine.h"
 #include "src/math_util.h"
+#include "pokemon.h"
 
 /*
 This file covers these classes of moves:
@@ -389,6 +390,10 @@ void BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunWaterGunAndHydroPumpEmitterFade
+/*
+    Handles the fading of the burst emitters for Water Gun and Hydro Pump
+*/
 void BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -418,6 +423,10 @@ void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild_InitParticle(Particl
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunHydroPumpBurstChild
+/*
+    Handles a child particle emitted by the Hydro Pump burst
+*/
 void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -453,6 +462,10 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild_InitParticle
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunHydroPumpMetadataBurstChild
+/*
+    Handles a metadata-controlled Hydro Pump burst particle
+*/
 void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -481,6 +494,10 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstEmitter_InitPartic
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunHydroPumpBurstEmitter
+/*
+    Emits metadata-controlled particles and child projectiles for Hydro Pump
+*/
 void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -513,6 +530,10 @@ void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild_InitParticle(Particle
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunWaterGunProjectileChild
+/*
+    Handles the child projectiles for Water gun
+*/
 void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -552,7 +573,10 @@ void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild_InitParticle(
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_AdvanceLifecycle(arg0);
 }
-
+// better name: RunWaterGunProjectileMetadata
+/*
+    Handles the metadata for the water gun projectile
+*/
 void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -580,7 +604,10 @@ void BattleAnim_CallbackStartEffect6DefaultDescriptorBurstEmitter_InitParticle(P
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
-
+// better name: RunWaterGunProjectile
+/*
+    Handles the parent projectile for Water gun
+*/
 void BattleAnim_CallbackStartEffect6DefaultDescriptorBurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1298,6 +1325,10 @@ void BattleAnim_CallbackEndEffect27Descriptor4BGrowColorShiftFade_InitParticle(P
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunHydroPumpColorShiftFade
+/*
+    Handles the growth, color shift, and fade of a Hydro Pump particle
+*/
 void BattleAnim_CallbackEndEffect27Descriptor4BGrowColorShiftFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1356,6 +1387,10 @@ void BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: RunWaterGunEmitterColoration
+/*
+    Handles the coloring of the burst emitter for Water gun
+*/
 void BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1424,7 +1459,7 @@ void BattleAnim_CallbackEndEffects2And27Descriptor0AFallingSparkFade(Particle* a
 }
 
 
-
+// better name: BattleAnim_StartMegaPunchEffect
 /*
     Starts the effect for Mega Punch
 */
@@ -1432,18 +1467,22 @@ void BattleAnim_StartEffect15Descriptor08IndexedScaleDelayFade(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackStartEffects2And15Descriptor08IndexedScaleDelayFade, &gBattleAnimParticleDescriptors[8], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
+// Better name: BattleAnim_DispatchNormalMegaKickAnimation
+/*
+    Dispatches mega kick animation for all pokemon other than Charmander and Jynx
+*/
 void BattleAnim_StartEffect2Descriptor08IndexedScaleDelayFade(void) {
-    s32 sp34 = 0;
+    s32 has_special_mega_kick_animation = 0;
 
-    if (BattleAnim_IsCurrentOwnerSpecies(0x7C) != 0) {
-        sp34 = 1;
+    if (BattleAnim_IsCurrentOwnerSpecies(JYNX) != 0) {
+        has_special_mega_kick_animation = 1;
     }
 
-    if (BattleAnim_IsCurrentOwnerSpecies(4) != 0) {
-        sp34 = 1;
+    if (BattleAnim_IsCurrentOwnerSpecies(CHARMANDER) != 0) {
+        has_special_mega_kick_animation = 1;
     }
 
-    if (sp34 == 0) {
+    if (has_special_mega_kick_animation == 0) {
         BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects2And15Descriptor08IndexedScaleDelayFade, &gBattleAnimParticleDescriptors[8], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0, 0);
     }
 }
@@ -1458,6 +1497,7 @@ void InitParticleEffectGroup_Basic(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &gBattleAnimParticleDescriptors[0x45], 0, 0x10, 0x11, 9, 0, 0);
 }
 
+// initializes water gun
 void BattleAnim_StartEffect6AnimatedScaleAndBurstEmitter(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade, &gBattleAnimParticleDescriptors[0xE], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade, &gBattleAnimParticleDescriptors[0x19], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 1);
@@ -1472,6 +1512,7 @@ void InitComplexParticleSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 1, 0x10, BattleAnim_CallbackEndEffects2And27Descriptor0AFallingSparkFade, &gBattleAnimParticleDescriptors[0xA], 0, 2, 0x11, gBattleAnimCurrentAnchor, 0x4C, 0);
 }
 
+// initializes hydro pump
 void InitExplosionEffectSet(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x40, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackStartEffects6And58AnimatedScaleAlphaFade, &gBattleAnimParticleDescriptors[0xE], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -1479,6 +1520,7 @@ void InitExplosionEffectSet(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstEmitter, &gBattleAnimParticleDescriptors[8], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
+// initializes hydro pump
 void InitAdvancedParticleCombo(void) {
     BattleAnim_SpawnOwnerModelTintPaletteApproachInactive(4, 0xA, 0x35, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor04GrowFade, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x35, 0);

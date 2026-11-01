@@ -801,10 +801,10 @@ s32 BattleAnim_GetEffectStateFlag(void) {
     return D_843902F4;
 }
 
-s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
+s32 BattleAnim_IsCurrentOwnerSpecies(s32 species) {
     s32 sp1C = 0;
 
-    if (BattleAnim_GetOwnerSpecies(gBattleAnimCurrentOwner) == arg0) {
+    if (BattleAnim_GetOwnerSpecies(gBattleAnimCurrentOwner) == species) {
         sp1C = 1;
     }
     return sp1C;
