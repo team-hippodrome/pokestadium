@@ -375,7 +375,7 @@ define print
 endef
 
 DECOMP_POKESTADIUM := $(filter-out src/libleo/%,$(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c)))
-DECOMP_POKESTADIUM_FILTERED := $(patsubst %.c,%.o,$(addprefix $(BUILD_DIR)/,$(shell find $(DECOMP_POKESTADIUM) -type f -exec grep -lE "GLOBAL_ASM|SWAP_FUNCTION_WORDS" {} \;)))
+DECOMP_POKESTADIUM_FILTERED := $(patsubst %.c,%.o,$(addprefix $(BUILD_DIR)/,$(shell find $(DECOMP_POKESTADIUM) -type f -exec grep -l "GLOBAL_ASM" {} \;)))
 
 # only run asm processor on files that need it.
 ifeq ($(DETECTED_OS),windows)
