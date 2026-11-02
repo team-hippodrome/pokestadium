@@ -1,5 +1,15 @@
 #include "battle_engine.h"
 
+/*
+This file covers the particles that fall slowly in these specific moves:
+    - wing attack (feathers)
+    - vine whip (green leaves)
+    - pedal dance (pink leaves)
+
+
+
+*/
+
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);

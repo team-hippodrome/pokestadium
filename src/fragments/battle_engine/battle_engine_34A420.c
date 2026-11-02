@@ -4,6 +4,17 @@
 #include "src/math_util.h"
 #include "include/math.h"
 
+/*
+This file covers these moves:
+    - lasso moves
+        - bind
+        - wrap
+        - disable 
+        - string shot
+        - constrict
+    - tri attack
+*/
+
 typedef struct Strip400State {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;

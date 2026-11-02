@@ -5,6 +5,28 @@
 #include "src/matrix.h"
 #include "src/math_util.h"
 
+/*
+This file covers these classes of moves:
+    - moves that have a generic "purple hit" effect (pound, karate chop)
+        - ParticleEffect_ConfigVariantMotion6
+
+This file covers this {non obvious effect} for:
+    - slashing moves 
+    - wing attasck
+
+
+As well as effects for these specific moves:
+    - pound
+    - fire punch
+    - ice punch
+    - thunder punch
+    - scratch
+
+
+
+and pokeball effects
+*/
+
 void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);

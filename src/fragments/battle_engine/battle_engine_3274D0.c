@@ -1,6 +1,20 @@
 #include "battle_engine.h"
 #include "src/math_util.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0) {
     UNUSED s32 pad;
     Vec3s sp2C;

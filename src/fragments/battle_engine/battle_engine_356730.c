@@ -2,6 +2,20 @@
 #include "src/battle_hud.h"
 #include "src/gfx_buffer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static DoubleTextureTrail D_843C2C00[4];
 
 static Gfx D_84389C70[] = {

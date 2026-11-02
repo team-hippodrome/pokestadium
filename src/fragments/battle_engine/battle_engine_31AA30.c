@@ -1,12 +1,75 @@
 #include "battle_engine.h"
 
+/*
+moves covered by this file:
+    - Fire Punch
+    - Thunder punch
+    - Scratch
+    - razor wind
+    - Cut
+    - wing attack
+    - vine whip
+    - ember
+    - flamethrower
+    - Mist
+    - ice beam
+    - blizzard
+    - psybeam
+    - aurora beam
+    - hyper beam
+    - razor leaf
+    - solarbeam
+    - poison powder
+    - stun spore
+    - sleep powder
+    - pedal dance (OH GOD THE LAG)
+    - dragon rage
+    - fire spin
+    - thunder shock
+    - thunderbolt
+    - thunder
+    - Dig
+    - confusion
+    - psychic
+    - rage
+    - night shade
+    - smoke screen
+    - confuse ray
+    - Light screen
+    - haze
+    - reflect
+    - self-destruct
+    - egg bomb
+    - smog
+    - bone club
+    - fire blast
+    - poison gas
+    - sky attack
+    - spore
+    - flash
+    - crabhammer
+    - explosion
+    - fury swipes
+    - tri attack
+    - slash
+
+    maybe bonemerang?
+
+As well as:
+    - The Zs that appear when a pokemon is sleeping
+*/
+
 s32 BattleAnim_DrawAsset95Ia8Billboard(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
     ParticleGfx_PushBillboardMatrix(arg1, arg0->worldPosition, arg0->scale);
-
+    
     gSPDisplayList(gDisplayListHead++, gDL_PanelBackground);
 }
 
+// better name: BattleAnim_DrawFlame
+/*
+    Draws a ball of fire
+*/
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_LoadTextureIa8(sBattleAnimAssetPointers[0x76] + (arg0->textureFrame << 0xB), 0x20, 0x40);
     ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(sBattleAnimAssetPointers[0x77], 0x40, 0x40, 2, 1);
@@ -15,12 +78,21 @@ void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNo
     ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_8140E1F8);
 }
 
-void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineA(Particle* arg0, CameraNode* arg1) {
+
+// Better name: BattleAnim_DrawFlameHit
+/*
+    Draw the flames when being *hit* by Flamethrower or dragon rage
+*/
+void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineA(Particle* particle, CameraNode* camera) {
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
+    BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(particle, camera);
 }
 
+// Better name: BattleAnim_DrawFlameUse
+/*
+    Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack, or Explosion
+*/
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4OverlayPipelineB(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
 
@@ -40,8 +112,12 @@ void BattleAnim_DrawAsset1FAnimatedI4WithAsset20DisplayList(Particle* arg0, Came
     gSPDisplayList(gDisplayListHead++, sBattleAnimAssetPointers[0x20]);
 }
 
-s32 BattleAnim_DrawAssetBcRgba16WithAssetBdDisplayList(Particle* arg0, UNUSED CameraNode* arg1) {
-    ParticleGfx_PushTransformMatrix(arg0->worldPosition, arg0->rotation, arg0->scale);
+// Better name: BattleAnim_DrawDigRocks
+/*
+    Raws the rocks that spawn out of the tunnel when pokemon other than diglett and dugtrio use dig
+*/
+s32 BattleAnim_DrawAssetBcRgba16WithAssetBdDisplayList(Particle* particle, UNUSED CameraNode* arg1) {
+    ParticleGfx_PushTransformMatrix(particle->worldPosition, particle->rotation, particle->scale);
 
     gSPDisplayList(gDisplayListHead++, gDL_ItemIcon);
 
@@ -50,6 +126,10 @@ s32 BattleAnim_DrawAssetBcRgba16WithAssetBdDisplayList(Particle* arg0, UNUSED Ca
     gSPDisplayList(gDisplayListHead++, sBattleAnimAssetPointers[0xBD]);
 }
 
+// better name: BattleAnim_DrawSporePuffs
+/*
+    Draws spore puffs for powder moves 
+*/
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -63,6 +143,10 @@ void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED Ca
     ParticleGfx_DrawQuadVertices(D_84385DC0);
 }
 
+// better name: BattleAnim_DrawSporePuffsFast
+/*
+    Draws faster spore puffs for powder moves 
+*/
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -76,6 +160,10 @@ void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED Ca
     ParticleGfx_DrawQuadVertices(D_84385E00);
 }
 
+// better name: BattleAnim_DrawMistLightest
+/*
+    Draw the lightest mist for mist/smoke moves (Mist, Smokescreen, Haze, Smog, Poison Gas)
+*/
 void BattleAnim_DrawAsset29DualI4LayeredQuad(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -100,6 +188,11 @@ void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg
     ParticleGfx_DrawQuadVertices(gFullscreenQuadVtx);
 }
 
+// Better name: BattleAnim_DrawFullScreenSlash
+/*
+    Draws the triple effect for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, and Slash. Called from 
+    BattleAnim_DrawAsset19I4AtlasYScaled or BattleAnim_DrawAsset5EI4AtlasYScaled depending on the move
+*/
 void BattleAnim_DrawI4AtlasYScaled(Particle* arg0, u8* arg1) {
     ParticleGfx_Push2DTransformYScaled(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
@@ -109,14 +202,29 @@ void BattleAnim_DrawI4AtlasYScaled(Particle* arg0, u8* arg1) {
     ParticleGfx_DrawI4TextureAtlas(arg1, D_84385C80, 0x40, 0x40, 0x40, 0x40);
 }
 
-void BattleAnim_DrawAsset19I4AtlasYScaled(Particle* arg0, UNUSED CameraNode* arg1) {
-    BattleAnim_DrawI4AtlasYScaled(arg0, sBattleAnimAssetPointers[0x19]);
+// Better name: BattleAnim_DrawFullScreenTripleSlash
+/*
+    Draws the triple slash effect for scratch, fury swipes, and slash. Goes \\\ on use, and /// on hit
+*/
+void BattleAnim_DrawAsset19I4AtlasYScaled(Particle* particle, UNUSED CameraNode* arg1) {
+    BattleAnim_DrawI4AtlasYScaled(particle, sBattleAnimAssetPointers[0x19]);
 }
 
+
+// Better name: BattleAnim_DrawFullScreenSingleSlash
+/*
+    Draws the Single slash effect for Cut, Vine Whip, and Crabhammer. Goes \ on use, and / on hit
+*/
 void BattleAnim_DrawAsset5EI4AtlasYScaled(Particle* arg0, UNUSED CameraNode* arg1) {
     BattleAnim_DrawI4AtlasYScaled(arg0, sBattleAnimAssetPointers[0x5E]);
 }
 
+
+// Better name: BattleAnim_DrawSlashingEffect
+/*
+    Draws slashes effects used at the start of Scratch,  Cut, Vine Whip, Fury Swipes, Slash being used
+    As well as the effects of Razor Wind,Razor Leaf, and Petal Dance upon hit
+*/
 void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -128,16 +236,24 @@ void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void BattleAnim_DrawAsset1CRgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
+// better name: BattleAnim_DrawVineWhipLeaves
+/*
+    Draws the leaves that appear when hit by vine whip
+*/
+void BattleAnim_DrawAsset1CRgba16Quad(Particle* particle, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DC00);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureRgba16(sBattleAnimAssetPointers[0x1C], 0x20, 0x20);
-    ParticleGfx_DrawTransformedQuad(arg0->worldPosition, arg0->rotation, arg0->scale, D_8140E018);
+    ParticleGfx_DrawTransformedQuad(particle->worldPosition, particle->rotation, particle->scale, D_8140E018);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+// better name: BattleAnim_DrawPetalDanceSakura
+/*
+    Draws the sakura flower pedals that appear when hit by petal dance
+*/
 void BattleAnim_DrawAsset1ERgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DC00);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -148,12 +264,16 @@ void BattleAnim_DrawAsset1ERgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void BattleAnim_DrawAssetC3Rgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
+// better name: BattleAnim_DrawAssetWingAttackFeathers
+/*
+    Draws the feathers that appear when hit by wing attack
+*/
+void BattleAnim_DrawAssetC3Rgba16Quad(Particle* particle, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DC00);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureRgba16(sBattleAnimAssetPointers[0xC3], 0x20, 0x20);
-    ParticleGfx_DrawTransformedQuad(arg0->worldPosition, arg0->rotation, arg0->scale, D_8140E018);
+    ParticleGfx_DrawTransformedQuad(particle->worldPosition, particle->rotation, particle->scale, D_8140E018);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -177,6 +297,11 @@ void BattleAnim_DrawAsset1DRotatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1
 void BattleAnim_DrawParticleNoop(UNUSED Particle* arg0, UNUSED CameraNode* arg1) {
 }
 
+// Better name: BattleAnim_DrawHyperBeamImpactThinBolts
+/*
+    Draws the thin impact bolts when being hit by Hyper beam
+    Also draws particular bolts during thunder shock, thunderbolt, and thunder
+*/ 
 void BattleAnim_DrawAsset13FrameI4YScaledQuadA(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
 
@@ -201,17 +326,25 @@ void BattleAnim_DrawAsset13FrameI4YScaledQuadB(Particle* arg0, UNUSED CameraNode
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void BattleAnim_DrawAsset13FrameI4YScaledQuadC(Particle* arg0, UNUSED CameraNode* arg1) {
+// Better name: BattleAnim_DrawBoltOfLightening
+/*
+    Draws Bolts for thunder punch, thunder shock, thunder, and thunderbolt
+*/
+void BattleAnim_DrawAsset13FrameI4YScaledQuadC(Particle* particle, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
-    ParticleGfx_DrawTransformedQuadYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, D_84385D40);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_DrawTransformedQuadYScaled(particle->worldPosition, particle->rotation, particle->scale, D_84385D40);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+// better name: BattleAnim_DrawLongBoltOfLightening
+/*
+    Spawns the long bolts of lighting for Thunder shock, thunderbolt, and thunder
+*/
 void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -222,7 +355,11 @@ void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
-
+// Better name: BattleAnim_DrawHyperBeamImpactThinkBolts
+/*
+    Draws the think impact bolts when being hit by Hyper beam
+    Also draws particular bolts during thunder shock, thunderbolt, and thunder
+*/ 
 void BattleAnim_DrawAsset13FrameI4ModelQuadB(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -234,13 +371,17 @@ void BattleAnim_DrawAsset13FrameI4ModelQuadB(Particle* arg0, CameraNode* arg1) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void BattleAnim_DrawAsset13FrameI4ModelQuadC(Particle* arg0, CameraNode* arg1) {
+// better name: BattleAnim_DrawThunderShockUnknown
+/*
+     draws... something from using thunder shock. it's not the jolts
+*/
+void BattleAnim_DrawAsset13FrameI4ModelQuadC(Particle* particle, CameraNode* camera) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
-    ParticleGfx_DrawModelQuadRotatedYScaled(arg1, arg0->worldPosition, arg0->scale, D_84385D40, arg0->rotation.z);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_DrawModelQuadRotatedYScaled(camera, particle->worldPosition, particle->scale, D_84385D40, particle->rotation.z);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }

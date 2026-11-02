@@ -117,6 +117,8 @@ Never use the name Poke Cup. All versions of the game contain duplicate internal
 
 The adopted term for the creature in Kangaskhan's pouch is Kangaskid.
 
+Explosion and self-destruct are collectively referred to as "boom" (following competitive pokemon terminology). This is to allow for using the term explosion descriptively elsewhere.
+
 ##### Area Names 
 
 Because the areas in Stadium are rather poorly named (the names in the game's dialogue can contradict the selection labels), this repository uses the more common names regardless of the selection label:

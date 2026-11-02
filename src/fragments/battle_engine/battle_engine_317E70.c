@@ -5,6 +5,8 @@
 #include "src/fragments/particle_math/particle_math.h"
 #include "src/memory.h"
 
+/*particle loading*/
+
 void BattleAnim_InitParticleSystem(void) {
     gBattleAnimEffectSlots = main_pool_alloc(sizeof(*gBattleAnimEffectSlots) * 300, 0);
     sParticlePool = main_pool_alloc(sizeof(*sParticlePool) * 300, 0);
@@ -799,10 +801,10 @@ s32 BattleAnim_GetEffectStateFlag(void) {
     return D_843902F4;
 }
 
-s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
+s32 BattleAnim_IsCurrentOwnerSpecies(s32 species) {
     s32 sp1C = 0;
 
-    if (BattleAnim_GetOwnerSpecies(gBattleAnimCurrentOwner) == arg0) {
+    if (BattleAnim_GetOwnerSpecies(gBattleAnimCurrentOwner) == species) {
         sp1C = 1;
     }
     return sp1C;
@@ -911,7 +913,7 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 
     if ((u32)sp1C != -1) {
         ParticleMath_CopyVec3f(&sp1C->origin, &arg0);
-        BattleAnim_ConfigureSecondaryOwnerParticleVariant(sp1C, arg1);
+        BattleAnim_InitStingerMoveParticle(sp1C, arg1);
         sp1C->pokemon = gBattleAnimSecondaryOwner;
         sp1C->displayObject = NULL;
         sp1C->unk_CD = 0xFF;

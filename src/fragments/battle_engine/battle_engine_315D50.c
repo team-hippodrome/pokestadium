@@ -11,6 +11,8 @@
 #include "src/matrix.h"
 #include "src/math_util.h"
 
+/*stores particle descriptions*/
+
 typedef struct unk_D_84392040 {
     /* 0x00 */ char unk00[0xC];
     /* 0x0C */ f32 unk_0C;

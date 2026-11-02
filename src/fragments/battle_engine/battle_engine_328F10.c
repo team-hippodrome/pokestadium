@@ -1,5 +1,10 @@
 #include "battle_engine.h"
 
+/*
+covers pokeball sent out and return effects
+
+*/
+
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);

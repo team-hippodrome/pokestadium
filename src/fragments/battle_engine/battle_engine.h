@@ -2223,7 +2223,7 @@ void BattleAnim_EffectEndNop(void);
 void BattleAnim_SetEffectStateFlag(s32 arg0);
 void BattleAnim_ClearEffectStateFlag(void);
 s32 BattleAnim_GetEffectStateFlag(void);
-s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0);
+s32 BattleAnim_IsCurrentOwnerSpecies(s32 species);
 s32 BattleAnim_GetSecondaryOwnerSpecies(void);
 s32 BattleAnim_GetTertiaryOwnerSpecies(void);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
@@ -2250,11 +2250,11 @@ void BattleAnim_LoadGlobalTintToParticle(Particle* arg0);
 
 
 //@src/fragments/battle_engine/battle_engine_31A7E0.c
-void BattleAnim_InitSecondaryOwnerParticleBlueFadeGrow(Particle* arg0);
-void BattleAnim_UpdateSecondaryOwnerParticleBlueFadeGrow(Particle* arg0);
-void BattleAnim_InitSecondaryOwnerParticleBlueGrow(Particle* arg0);
-void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0);
-void BattleAnim_ConfigureSecondaryOwnerParticleVariant(Particle* arg0, u8 arg1);
+void BattleAnim_InitStingerTrailColor(Particle* arg0);
+void BattleAnim_UpdateStingerProjectileLifecycle(Particle* arg0);
+void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
+void BattleAnim_SpawnStingerProjectile(Particle* arg0);
+void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
 
 //@src/fragments/battle_engine/battle_engine_31AA30.c
