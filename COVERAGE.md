@@ -656,9 +656,6 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/61/fragment61_2DD710.c` | 39 |
 | `src/fragments/61/fragment61_2DFB60.c` | 41 |
 | `src/fragments/area_select/area_select.c` | 31 |
-| `src/fragments/battle_engine/battle_engine_camera.c` | 81 |
-| `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 |
-| `src/fragments/battle_engine/battle_engine_status_animation.c` | 8 |
 | `src/fragments/battle_engine/battle_engine_315D50.c` | 69 |
 | `src/fragments/battle_engine/battle_engine_339CA0.c` | 153 |
 | `src/fragments/battle_engine/battle_engine_343BA0.c` | 2 |
@@ -667,11 +664,14 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/battle_engine/battle_engine_35DF70.c` | 38 |
 | `src/fragments/battle_engine/battle_engine_361050.c` | 1 |
 | `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
+| `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 |
+| `src/fragments/battle_engine/battle_engine_camera.c` | 81 |
 | `src/fragments/battle_engine/battle_engine_helper.c` | 59 |
 | `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
 | `src/fragments/battle_engine/battle_engine_main.c` | 26 |
 | `src/fragments/battle_engine/battle_engine_messages.c` | 23 |
 | `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
+| `src/fragments/battle_engine/battle_engine_status_animation.c` | 8 |
 | `src/fragments/battle_order_select/battle_order_select.c` | 1 |
 | `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
 | `src/fragments/battle_prep/battle_prep_397B10.c` | 44 |
