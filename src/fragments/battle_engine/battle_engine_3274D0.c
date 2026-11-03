@@ -31,6 +31,11 @@ void BattleAnim_SetupStartEffects18And73Descriptor11ScatterRiseFade(Particle* ar
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunStrongElectricSpark
+/*
+    Handles the continuous spark that appears when using Thunderpunch, thunderbolt, or thunder
+    As well as when getting hit by thunder punch
+*/
 void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -310,6 +315,10 @@ void BattleAnim_SetupStartEffect59EndEffect28DirectionalStreamFade(Particle* arg
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunThunderShockOuterJolts
+/*
+    Handles the outer most jolts of lightening when using thunder shock
+*/
 void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -462,6 +471,7 @@ void BattleAnim_CallbackEndEffect28Descriptor10WideScatterBurstFade(Particle* ar
     Particle_AddMotionOffsetFromRotationTemplate5(arg0);
 }
 
+// initializes using thunderbolt or thunder
 void BattleAnim_StartEffect18ScatterRadialAndColumnSequence(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
@@ -476,6 +486,7 @@ void BattleAnim_StartEffect18ScatterRadialAndColumnSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
 
+// initalizes being hit by thunder shock or thunderbolt
 void BattleAnim_CreateSprayColumnEffect(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0x2C, 4, 0x10, 0xA, 0xFF);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
@@ -484,6 +495,7 @@ void BattleAnim_CreateSprayColumnEffect(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
 }
 
+// initializes getting hit by thunder
 void BattleAnim_CreateSprayColumnEffectTrigger(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 4, 8, 0xA, 0xC8);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
@@ -493,6 +505,7 @@ void BattleAnim_CreateSprayColumnEffectTrigger(void) {
     BattleAnim_EndEffect72Descriptor20ModelAnimWaitSequence();
 }
 
+// initializes using thunder shock
 void BattleAnim_CreateStreamSprayColumnEffect(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
@@ -515,11 +528,13 @@ void BattleAnim_CreateBurstStreamEffect(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 2, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x13], 0xC, 3, 3, 0, 0x25, 0);
 }
 
+// initializes using thunder punch
 void BattleAnim_CreateCollisionRandomEffect(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
+// initializes getting hit by hyper beam
 void BattleAnim_EndEffect70Descriptor0F_13SprayColumnSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
