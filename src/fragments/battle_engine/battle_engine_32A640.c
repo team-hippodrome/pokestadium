@@ -164,6 +164,10 @@ void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunPetalDanceLingeringHitEffect
+/*
+    Handles the floating pedals that linger when being hit by pedal dance
+*/
 void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -273,6 +277,10 @@ void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunSlowFallingHitEffect
+/*
+    Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
+*/
 void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -337,11 +345,13 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
 }
 
+// initializes being hit by pedal dance
 void RegisterParticleEffect_ComplexMovement(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
     BattleAnim_EndEffect26DelayedDescriptor29ScatterSequence();
 }
 
+// initializes being hit by wing attack
 void RegisterParticleEffect_Burst(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);

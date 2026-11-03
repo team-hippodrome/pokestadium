@@ -486,7 +486,7 @@ void BattleAnim_StartEffect18ScatterRadialAndColumnSequence(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
 
-// initalizes being hit by thunder shock or thunderbolt
+// initializes being hit by thunder shock or thunderbolt
 void BattleAnim_CreateSprayColumnEffect(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0x2C, 4, 0x10, 0xA, 0xFF);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
