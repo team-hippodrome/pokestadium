@@ -1179,316 +1179,316 @@ void BattleAnim_ApplySpeciesMotionOffset(Particle* arg0) {
     f32 sp18 = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x5:
+        case CHARMELEON:
             sp18 = 10.0f;
             break;
-        case 0xB:
+        case METAPOD:
             sp1C = 20.0f;
             break;
-        case 0xC:
+        case BUTTERFREE:
             sp1C = 8.0f;
             break;
-        case 0xD:
+        case WEEDLE:
             sp1C = 15.0f;
             break;
-        case 0xF:
+        case BEEDRILL:
             sp1C = -10.0f;
             break;
-        case 0x11:
+        case PIDGEOTTO:
             sp18 = 35.0f;
             sp1C = 0.0f;
             break;
-        case 0x12:
+        case PIDGEOT:
             sp18 = 35.0f;
             sp1C = -5.0f;
             break;
-        case 0x15:
+        case SPEAROW:
             sp1C = 4.0f;
             break;
-        case 0x16:
+        case FEAROW:
             sp18 = 5.0f;
             sp1C = 0.0f;
             break;
-        case 0x18:
+        case ARBOK:
             sp18 = 8.0f;
             break;
-        case 0x1C:
+        case SANDSLASH:
             sp18 = 5.0f;
             break;
-        case 0x21:
+        case NIDORINO:
             sp18 = 5.0f;
             break;
-        case 0x26:
+        case NINETALES:
             sp1C = 15.0f;
             sp18 = 15.0f;
             break;
-        case 0x28:
+        case WIGGLYTUFF:
             sp1C = 15.0f;
             sp18 = 5.0f;
             break;
-        case 0x29:
+        case ZUBAT:
             sp1C = 0.0f;
             break;
-        case 0x2A:
+        case GOLBAT:
             sp18 = 20.0f;
             break;
-        case 0x2B:
+        case ODDISH:
             sp1C = 15.0f;
             break;
-        case 0x2D:
+        case VILEPLUME:
             sp1C = 10.0f;
             sp18 = 15.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, -1.0f);
             break;
-        case 0x30:
+        case VENONAT:
             sp18 = 30.0f;
             sp1C = -2.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, -5.0f);
             break;
-        case 0x31:
+        case VENOMOTH:
             sp1C = 5.0f;
             break;
-        case 0x32:
+        case DIGLETT:
             sp1C = 20.0f;
             break;
-        case 0x33:
+        case DUGTRIO:
             sp1C = 25.0f;
             break;
-        case 0x34:
+        case MEOWTH:
             sp1C = 20.0f;
             break;
-        case 0x36:
+        case PSYDUCK:
             sp1C = 15.0f;
             break;
-        case 0x3B:
+        case ARCANINE:
             sp1C = 20.0f;
             sp18 = 10.0f;
             break;
-        case 0x3C:
+        case POLIWAG:
             sp1C = 5.0f;
             break;
-        case 0x3D:
+        case POLIWHIRL:
             sp1C = 5.0f;
             break;
-        case 0x3F:
+        case ABRA:
             sp1C = 5.0f;
             break;
-        case 0x40:
+        case KADABRA:
             sp18 = 10.0f;
             sp1C = 0.0f;
             break;
-        case 0x41:
+        case ALAKAZAM:
             sp1C = 20.0f;
             break;
-        case 0x43:
+        case MACHOKE:
             sp1C = 0.0f;
             break;
-        case 0x44:
+        case MACHAMP:
             sp18 = 8.0f;
             break;
-        case 0x46:
+        case WEEPINBELL:
             sp1C = -15.0f;
             break;
-        case 0x47:
+        case VICTREEBEL:
             sp1C = -5.0f;
             break;
-        case 0x48:
+        case TENTACOOL:
             sp1C = -8.0f;
             break;
-        case 0x49:
+        case TENTACRUEL:
             sp1C = 0.0f;
             break;
-        case 0x4B:
+        case GRAVELER:
             sp1C = 0.0f;
             break;
-        case 0x4C:
+        case GOLEM:
             sp1C = 0.0f;
             break;
-        case 0x4D:
+        case PONYTA:
             sp1C = -10.0f;
             sp18 = 15.0f;
             break;
-        case 0x4E:
+        case RAPIDASH:
             sp1C = -5.0f;
             break;
-        case 0x4F:
+        case SLOWPOKE:
             sp18 = 10.0f;
             break;
-        case 0x51:
+        case MAGNEMITE:
             sp1C = 0.0f;
             break;
-        case 0x54:
+        case DODUO:
             sp1C = 5.0f;
             break;
-        case 0x55:
+        case DODRIO:
             sp1C = 5.0f;
             break;
-        case 0x56:
+        case SEEL:
             sp1C = 15.0f;
             sp18 = 15.0f;
             break;
-        case 0x58:
+        case GRIMER:
             sp18 = 15.0f;
             break;
-        case 0x59:
+        case MUK:
             sp18 = 40.0f;
             break;
-        case 0x5B:
+        case CLOYSTER:
             sp1C = 0.0f;
             break;
-        case 0x5C:
+        case GASTLY:
             sp18 = 10.0f;
             break;
-        case 0x5D:
+        case HAUNTER:
             sp18 = 15.0f;
             break;
-        case 0x5E:
+        case GENGAR:
             sp1C = 5.0f;
             sp18 = 5.0f;
             break;
-        case 0x5F:
+        case ONIX:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 23.0f);
             sp1C = -10.0f;
             sp18 = 0.0f;
             break;
-        case 0x60:
+        case DROWZEE:
             sp1C = 5.0f;
             sp18 = 10.0f;
             break;
-        case 0x61:
+        case HYPNO:
             sp18 = 10.0f;
             break;
-        case 0x62:
+        case KRABBY:
             sp18 = 10.0f;
             break;
-        case 0x63:
+        case KINGLER:
             sp1C = 15.0f;
             sp18 = 60.0f;
             break;
-        case 0x65:
+        case ELECTRODE:
             sp1C = 0.0f;
             sp18 = 20.0f;
             break;
-        case 0x66:
+        case EXEGGCUTE:
             sp18 = 10.0f;
             break;
-        case 0x67:
+        case EXEGGUTOR:
             sp18 = 40.0f;
             break;
-        case 0x68:
+        case CUBONE:
             sp1C = 15.0f;
             break;
-        case 0x6A:
+        case HITMONLEE:
             sp1C = 8.0f;
             break;
-        case 0x6B:
+        case HITMONCHAN:
             sp1C = 15.0f;
             break;
-        case 0x6C:
+        case LICKITUNG:
             sp18 = 15.0f;
             break;
-        case 0x6D:
+        case KOFFING:
             sp1C = 5.0f;
             break;
-        case 0x6E:
+        case WEEZING:
             sp1C = 5.0f;
             break;
-        case 0x6F:
+        case RHYHORN:
             sp18 = 15.0f;
             sp1C = 0.0f;
             break;
-        case 0x70:
+        case RHYDON:
             sp1C = 17.0f;
             sp18 = 10.0f;
             break;
-        case 0x73:
+        case KANGASKHAN:
             sp18 = 50.0f;
             break;
-        case 0x75:
+        case SEADRA:
             sp1C = -10.0f;
             sp18 = 25.0f;
             break;
-        case 0x77:
+        case SEAKING:
             sp1C = 0.0f;
             break;
-        case 0x79:
+        case STARMIE:
             sp18 = 10.0f;
             sp1C = 5.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, -3.0f);
             break;
-        case 0x7B:
+        case SCYTHER:
             sp1C = 5.0f;
             break;
-        case 0x7C:
+        case JYNX:
             sp18 = 10.0f;
             break;
-        case 0x7D:
+        case ELECTABUZZ:
             sp18 = 10.0f;
             break;
-        case 0x7F:
+        case PINSIR:
             sp1C = 25.0f;
             break;
-        case 0x80:
+        case TAUROS:
             sp18 = 5.0f;
             sp1C = -5.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 3.0f);
             break;
-        case 0x82:
+        case GYARADOS:
             sp1C = 15.0f;
             sp18 = 20.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 3.0f);
             break;
-        case 0x83:
+        case LAPRAS:
             sp18 = 10.0f;
             break;
-        case 0x84:
+        case DITTO:
             sp1C = 15.0f;
             break;
-        case 0x85:
+        case EEVEE:
             sp1C = 20.0f;
             break;
-        case 0x86:
+        case VAPOREON:
             sp18 = 10.0f;
             break;
-        case 0x8B:
+        case OMASTAR:
             sp1C = 5.0f;
             break;
-        case 0x8D:
+        case KABUTOPS:
             sp18 = 15.0f;
             sp1C = 0.0f;
             break;
-        case 0x8E:
+        case AERODACTYL:
             sp1C = -15.0f;
             sp18 = 25.0f;
             break;
-        case 0x8F:
+        case SNORLAX:
             sp1C = 15.0f;
             sp18 = 30.0f;
             break;
-        case 0x90:
+        case ARTICUNO:
             sp18 = 15.0f;
             break;
-        case 0x91:
+        case ZAPDOS:
             sp1C = 15.0f;
             sp18 = 10.0f;
             break;
-        case 0x92:
+        case MOLTRES:
             sp1C = 15.0f;
             sp18 = 20.0f;
             break;
-        case 0x94:
+        case DRAGONAIR:
             sp18 = 15.0f;
             break;
-        case 0x95:
+        case DRAGONITE:
             Particle_PositionOffset_AddXZFromRotationYOffset90(arg0, 1.0f);
             sp1C = 10.0f;
             sp18 = 15.0f;
             break;
-        case 0x96:
+        case MEWTWO:
             sp18 = 20.0f;
             sp1C = 7.0f;
             break;
-        case 0x97:
+        case MEW:
             break;
     }
     Particle_PositionOffset_AddYScaled(arg0, sp1C);
@@ -2787,54 +2787,54 @@ void BattleAnim_ApplySpeciesXZOffsetVariantA(Particle* arg0) {
     f32 var_fs0 = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x5:
+        case CHARMELEON:
             Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 10.0f);
             break;
 
-        case 0xC:
+        case BUTTERFREE:
             var_fs0 = 20.0f;
             break;
 
-        case 0xD:
+        case WEEDLE:
             var_fs0 = -5.0f;
             Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, 15.0f);
             break;
 
-        case 0x34:
+        case MEOWTH:
             var_fs0 = -10.0f;
             break;
 
-        case 0x4A:
+        case GEODUDE:
             var_fs0 = 10.0f;
             break;
 
-        case 0x4D:
+        case PONYTA:
             var_fs0 = 10.0f;
             Particle_PositionOffset_AddXZFromRotationY(arg0, 10.0f);
             break;
 
-        case 0x5A:
+        case SHELLDER:
             var_fs0 = -5.0f;
             Particle_PositionOffset_AddXZFromRotationY(arg0, 5.0f);
             break;
 
-        case 0x66:
+        case EXEGGCUTE:
             var_fs0 = -5.0f;
             break;
 
-        case 0x6A:
+        case HITMONLEE:
             var_fs0 = 15.0f;
             break;
 
-        case 0x91:
+        case ZAPDOS:
             var_fs0 = 15.0f;
             break;
 
-        case 0x94:
+        case DRAGONAIR:
             var_fs0 = -15.0f;
             break;
 
-        case 0x97:
+        case MEW:
             var_fs0 = 20.0f;
             break;
     }
@@ -3454,16 +3454,16 @@ f32 BattleAnim_GetSpeciesScaleAdjust(Particle* arg0) {
     f32 sp1C = 1.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3B:
+        case ARCANINE:
             sp1C = 1.45f;
             break;
 
-        case 0x5F:
+        case ONIX:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 20.0f);
             sp1C = 0.9f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 0.9f;
             break;
     }
@@ -3492,7 +3492,7 @@ void BattleAnim_StartEffect69ModelPhaseWaitAndFallingParticles(void) {
 }
 
 void BattleAnim_ApplySpeciesXZOffsetVariantB(Particle* arg0) {
-    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == 0x5F) {
+    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == ONIX) {
         Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 20.0f);
     }
 }
@@ -3512,12 +3512,12 @@ void BattleAnim_ApplySpeciesYOffsetVariantA(Particle* arg0) {
     f32 sp1C = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x57:
+        case DEWGONG:
             sp1C = -20.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 10.0f);
             break;
 
-        case 0x5F:
+        case ONIX:
             sp1C = -20.0f;
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 15.0f);
             break;
@@ -3541,15 +3541,15 @@ void BattleAnim_ApplySpeciesYOffsetVariantB(Particle* arg0) {
     f32 sp18 = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3B:
+        case ARCANINE:
             sp1C = 30.0f;
             break;
 
-        case 0x4F:
+        case SLOWPOKE:
             sp18 = 10.0f;
             break;
 
-        case 0x66:
+        case EXEGGCUTE:
             sp1C = 15.0f;
             break;
     }
@@ -3884,19 +3884,19 @@ f32 BattleAnim_GetSpeciesScaleAndApplyYOffset(Particle* arg0) {
     f32 sp18 = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x57:
+        case DEWGONG:
             sp18 = -15.0f;
             break;
 
-        case 0x5F:
+        case ONIX:
             sp1C = 0.3f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp18 = 10.0f;
             break;
 
-        case 0x83:
+        case LAPRAS:
             sp1C = 0.4f;
             sp18 = 7.0f;
             break;
@@ -4053,54 +4053,54 @@ f32 BattleAnim_GetSpeciesScaleAndOffset(Particle* arg0) {
     f32 sp18 = 1.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x24:
+        case CLEFABLE:
             sp18 = 1.2f;
             sp1C = 10.0f;
             break;
 
-        case 0x34:
+        case MEOWTH:
             sp18 = 0.8f;
             break;
 
-        case 0x36:
+        case PSYDUCK:
             sp1C = 15.0f;
             break;
 
-        case 0x3B:
+        case ARCANINE:
             sp1C = 30.0f;
             sp18 = 0.8f;
             break;
 
-        case 0x5A:
+        case SHELLDER:
             sp1C = 10.0f;
             break;
 
-        case 0x5F:
+        case ONIX:
             Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(arg0, 15.0f);
             sp1C = 10.0f;
             sp18 = 0.5f;
             break;
 
-        case 0x66:
+        case EXEGGCUTE:
             sp1C = 15.0f;
             sp18 = 0.8f;
             break;
 
-        case 0x7D:
+        case ELECTABUZZ:
             sp1C = 8.0f;
             break;
 
-        case 0x7E:
+        case MAGMAR:
             sp1C = 15.0f;
             sp18 = 0.8f;
             break;
 
-        case 0x82:
+        case GYARADOS:
             sp1C = 10.0f;
             sp18 = 0.4f;
             break;
 
-        case 0x83:
+        case LAPRAS:
             sp1C = 10.0f;
             sp18 = 0.4f;
             break;
@@ -4124,11 +4124,11 @@ void BattleAnim_ApplySpeciesYOffsetVariantC(Particle* arg0) {
     f32 sp1C = 0.0f;
 
     switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x34:
+        case MEOWTH:
             sp1C = 12.0f;
             break;
 
-        case 0x36:
+        case PSYDUCK:
             sp1C = 20.0f;
             break;
     }
@@ -4635,7 +4635,7 @@ void Gfx_WaterAnimDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 f32 BattleAnim_GetSpeciesScaleAdjustSmall(Particle* arg0) {
     f32 sp1C = 2.5f;
 
-    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == 0x5F) {
+    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == ONIX) {
         sp1C = 1.75f;
     }
     return sp1C;
@@ -4932,7 +4932,7 @@ void BattleAnim_InitializeConfusionHit(void) {
 f32 BattleAnim_GetSpeciesScaleAdjustTiny(Particle* arg0) {
     f32 sp1C = 1.0f;
 
-    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == 0x34) {
+    if (BattleAnim_GetOwnerSpecies(arg0->pokemon) == MEOWTH) {
         sp1C = 1.75f;
     }
     return sp1C;
