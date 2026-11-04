@@ -832,22 +832,22 @@ void BattleAnim_ApproachParticleColorFromVariantIndex(Particle* particle) {
     switch (Particle_FieldCF_GetS16_0C058(particle)) {
         case 0:
             palette_index = 0x2E;
-            step = 10;
+            step = 0x10;
             break;
 
         case 1:
             palette_index = 0x2D;
-            step = 10;
+            step = 0x10;
             break;
 
         case 2:
             palette_index = 0x2D;
-            step = 10;
+            step = 0x10;
             break;
 
         case 3:
             palette_index = 0x2B;
-            step = 10;
+            step = 0x10;
             break;
     }
 
