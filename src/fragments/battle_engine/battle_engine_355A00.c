@@ -55,7 +55,7 @@ static Gfx D_84389BF0[] = {
     gsSPEndDisplayList(),
 };
 
-void Trail50EffectAlt_Init(void) {
+void RazorLeafTrail_Init(void) {
     Trail50Effect* var_v0 = &D_843B8340[0];
     Trail50EffectNode* var_a0;
     s32 i;
@@ -83,7 +83,7 @@ void Trail50EffectAlt_Init(void) {
     }
 }
 
-void Trail50EffectAlt_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     Trail50Effect* var_v1;
     Trail50EffectNode* var_s0;
@@ -144,7 +144,7 @@ void Trail50EffectAlt_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
     }
 }
 
-void Trail50EffectAlt_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
+void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     MtxF sp30;
     f32 temp_fv0 = (arg0 * 360.0) / 6.2831854820251465;
 
@@ -152,7 +152,7 @@ void Trail50EffectAlt_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
-void Trail50EffectAlt_AdvanceNodes(Trail50Effect* arg0) {
+void RazorLeafTrail_AdvanceNodes(Trail50Effect* arg0) {
     s32 i;
     f32 temp_fs3 = arg0->unk_010;
     Trail50EffectNode* var_s0 = &arg0->unk_040[0];
@@ -216,7 +216,7 @@ void Trail50EffectAlt_AdvanceNodes(Trail50Effect* arg0) {
     }
 }
 
-s32 Trail50EffectAlt_IsComplete(void) {
+s32 RazorLeafTrail_IsComplete(void) {
     s32 i;
     Trail50Effect* var_s0 = &D_843B8340[0];
 
@@ -226,14 +226,14 @@ s32 Trail50EffectAlt_IsComplete(void) {
             if ((var_s0->unk_002 == 1) && (var_s0->unk_006 < var_s0->unk_004)) {
                 var_s0->unk_000 = 0;
             } else {
-                Trail50EffectAlt_AdvanceNodes(var_s0);
+                RazorLeafTrail_AdvanceNodes(var_s0);
             }
         }
     }
     return 0;
 }
 
-Gfx* Trail50EffectAlt_Draw(Gfx* arg0) {
+Gfx* RazorLeafTrail_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;
@@ -275,7 +275,7 @@ Gfx* Trail50EffectAlt_Draw(Gfx* arg0) {
 
             var_s0 = var_s5->unk_020;
             for (j = 0; j < 10; j++) {
-                Trail50EffectAlt_Update(temp_s0->unk_08, &sp184, temp_s0->unk_04 * tmp);
+                RazorLeafTrail_Update(temp_s0->unk_08, &sp184, temp_s0->unk_04 * tmp);
 
                 var_s3 = temp_s0->unk_0C.y + sp184.y;
                 if (var_s3 < 0) {
@@ -291,7 +291,7 @@ Gfx* Trail50EffectAlt_Draw(Gfx* arg0) {
                 var_s0->v.cn[3] = temp_s0->unk_00;
                 var_s0++;
 
-                Trail50EffectAlt_Update(temp_s0->unk_08 + 3.1415927f, &sp184, temp_s0->unk_04 * tmp);
+                RazorLeafTrail_Update(temp_s0->unk_08 + 3.1415927f, &sp184, temp_s0->unk_04 * tmp);
 
                 var_s3 = temp_s0->unk_0C.y + sp184.y;
                 if (var_s3 < 0) {

@@ -48,7 +48,7 @@ static Gfx D_843893A8[] = {
     gsSPEndDisplayList(),
 };
 
-void Trail40_Init(s16 arg0) {
+void HypnosisScreechTrail_Init(s16 arg0) {
     s32 i;
     s32 j;
     s16 tmp1;
@@ -79,7 +79,7 @@ void Trail40_Init(s16 arg0) {
     }
 }
 
-void Trail40_Start(s32 arg0, s32 arg1) {
+void HypnosisScreechTrail_Start(s32 arg0, s32 arg1) {
     f32 sp84;
     f32 sp80;
     f32 sp7C;
@@ -186,7 +186,7 @@ void Trail40_Start(s32 arg0, s32 arg1) {
     }
 }
 
-void Trail40Node_FillVertex(Trail40Node* arg0, Vtx* arg1) {
+void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1) {
     f32 r;
     f32 g;
     f32 b;
@@ -208,7 +208,7 @@ void Trail40Node_FillVertex(Trail40Node* arg0, Vtx* arg1) {
     arg1->v.cn[3] = sWaterSurface.unk_0004;
 }
 
-s32 Trail40_IsComplete(void) {
+s32 HypnosisScreechTrail_IsComplete(void) {
     Trail40Node* var_s1;
     s32 i;
     s32 j;
@@ -248,14 +248,14 @@ s32 Trail40_IsComplete(void) {
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40_Start(i, j);
+            HypnosisScreechTrail_Start(i, j);
         }
     }
 
     return 0;
 }
 
-void Trail40_Reset(void) {
+void HypnosisScreechTrail_Reset(void) {
     CameraNode* temp_v0;
     f32 tmp1;
     f32 tmp2;
@@ -306,7 +306,7 @@ void Trail40_Reset(void) {
     Mtx_BuildTranslatedDirectionRotation(sWaterSurface.unk_0010, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6);
 }
 
-Gfx* Trail40_Draw(Gfx* arg0) {
+Gfx* HypnosisScreechTrail_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     Trail40Node* var_s2;
@@ -321,13 +321,13 @@ Gfx* Trail40_Draw(Gfx* arg0) {
     var_s2 = &sWaterSurface.unk_0014[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            Trail40Node_FillVertex(var_s2, vtx);
+            HypnosisScreechTrailNode_FillVertex(var_s2, vtx);
             var_s2++;
             vtx++;
         }
     }
 
-    Trail40_Reset();
+    HypnosisScreechTrail_Reset();
 
     gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0xA8], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
