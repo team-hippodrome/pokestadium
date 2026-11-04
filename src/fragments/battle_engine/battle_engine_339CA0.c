@@ -89,7 +89,7 @@ void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade(Particle* arg0) {
     Particle_Scale_Approach(arg0, 3.5f, 0.25f);
 }
 
-void BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_FieldCF_GetS16_0C058(arg0);
@@ -138,10 +138,10 @@ void BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade_InitParticle(
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade(Particle* arg0) {
+void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade_InitParticle(arg0);
+            BattleAnim_SetupRazorWindHitEffect(arg0);
             break;
 
         case 2:
@@ -166,7 +166,7 @@ void BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade(Particle* arg
     }
 }
 
-void BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -228,10 +228,10 @@ void BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade_InitParticle(Pa
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade(Particle* arg0) {
+void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade_InitParticle(arg0);
+            BattleAnim_SetupPetalDanceRazorLeafHitEffect(arg0);
             break;
 
         case 2:
@@ -388,7 +388,7 @@ void BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade(Particle* arg0) {
     Particle_Scale_Approach(arg0, 5.0f, 0.4f);
 }
 
-void BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupFurySwipesHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
     s16 sp22 = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
@@ -418,10 +418,10 @@ void BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade_InitPartic
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade(Particle* arg0) {
+void BattleAnim_RunFurySwipesHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade_InitParticle(arg0);
+            BattleAnim_SetupFurySwipesHitEffect(arg0);
             break;
 
         case 2:
@@ -554,7 +554,7 @@ void BattleAnim_CallbackSharedTieredLargeRiseImpulseFade(Particle* arg0) {
     Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
 }
 
-void BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
     UNUSED s16 pad;
     s16 sp24 = Particle_FieldAC_GetS16_0C038(arg0);
 
@@ -567,10 +567,10 @@ void BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade_InitParti
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade(Particle* arg0) {
+void BattleAnim_RunSandAttackUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade_InitParticle(arg0);
+            BattleAnim_SetupSandAttackUseEffect(arg0);
             break;
 
         case 2:
@@ -626,7 +626,7 @@ void BattleAnim_CallbackUnusedRiseImpulseVariant(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Scale_SetScaled(arg0, 0.3f);
@@ -640,10 +640,10 @@ void BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade_InitParticle(Part
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade(Particle* arg0) {
+void BattleAnim_RunSandAttackHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade_InitParticle(arg0);
+            BattleAnim_SetupSandAttackHitEffect(arg0);
             break;
 
         case 2:
@@ -711,7 +711,7 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0)
     }
 }
 
-void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
@@ -736,10 +736,10 @@ void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade_InitParticle(
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade(Particle* arg0) {
+void BattleAnim_RunIceBeamIcePunchEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade_InitParticle(arg0);
+            BattleAnim_SetupIceBeamIcePunchEffect(arg0);
             break;
 
         case 2:
@@ -1024,7 +1024,7 @@ void BattleAnim_CallbackSharedDescriptor3DAnimatedColorMotion(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSwiftHitEffect1(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
 
@@ -1044,10 +1044,10 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
+void BattleAnim_RunSwiftHitEffect1(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect52Descriptor42BurstChild_InitParticle(arg0);
+            BattleAnim_SetupSwiftHitEffect1(arg0);
             break;
 
         case 2:
@@ -1081,15 +1081,15 @@ void BattleAnim_CallbackEndEffect52Descriptor42BurstChild(Particle* arg0) {
     }
 }
 
-void BattleAnim_SetupEndEffect52DefaultBurstChild(Particle* arg0) {
-    BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackEndEffect52Descriptor42BurstChild, &gBattleAnimParticleDescriptors[0x42], 0xC);
+void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
+    BattleAnim_EmitParticleBurst(arg0, BattleAnim_RunSwiftHitEffect1, &gBattleAnimParticleDescriptors[0x42], 0xC);
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect52DefaultBurstEmitter(Particle* arg0) {
+void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupEndEffect52DefaultBurstChild(arg0);
+            BattleAnim_SetupSwiftHitEffect2(arg0);
             break;
 
         case 2:
@@ -1232,7 +1232,7 @@ void BattleAnim_CallbackSharedDescriptors42And44ScaleFall(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackEndEffect23Descriptor44ScalePulse_InitParticle(Particle* arg0) {
+void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1249,10 +1249,10 @@ void BattleAnim_CallbackEndEffect23Descriptor44ScalePulse_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect23Descriptor44ScalePulse(Particle* arg0) {
+void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect23Descriptor44ScalePulse_InitParticle(arg0);
+            BattleAnim_SetupBlizzardHitEffect(arg0);
             break;
 
         case 2:
@@ -1281,7 +1281,7 @@ void BattleAnim_CallbackEndEffect23Descriptor44ScalePulse(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackEndEffect67Descriptor42ScalePulseFallFade(Particle* arg0) {
+void BattleAnim_RunIceBeamHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupSharedScalePulseFallSetup(arg0);
@@ -1316,7 +1316,7 @@ void BattleAnim_CallbackEndEffect67Descriptor42ScalePulseFallFade(Particle* arg0
     }
 }
 
-void BattleAnim_CallbackEndEffect43Descriptor40DelayedAnimFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Scale_SetScaled(arg0, 0.7f);
@@ -1328,10 +1328,10 @@ void BattleAnim_CallbackEndEffect43Descriptor40DelayedAnimFade_InitParticle(Part
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackEndEffect43Descriptor40DelayedAnimFade(Particle* arg0) {
+void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackEndEffect43Descriptor40DelayedAnimFade_InitParticle(arg0);
+            BattleAnim_SetupThunderPunchHitEffect(arg0);
             break;
 
         case 2:
@@ -1640,7 +1640,7 @@ s32 BattleAnim_CallbackEndEffects37And38Descriptor34BurstEmitter(Particle* arg0)
     }
 }
 
-void BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Scale_SetScaled(arg0, 0.05f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 7);
@@ -1649,10 +1649,10 @@ void BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade_InitParticle(Part
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade(Particle* arg0) {
+void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade_InitParticle(arg0);
+            BattleAnim_SetupFirePunchUseEffect1(arg0);
             break;
 
         case 2:
@@ -1667,7 +1667,7 @@ void BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     s16 sp2E;
     s16 sp2C;
     Vec3s sp24;
@@ -1702,10 +1702,10 @@ void BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade_InitPartic
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade(Particle* arg0) {
+void BattleAnim_RunFirePunchUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade_InitParticle(arg0);
+            BattleAnim_SetupFirePunchUseEffect2(arg0);
             break;
 
         case 2:
@@ -1733,7 +1733,7 @@ void BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade(Particle* 
     }
 }
 
-void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp2C = sp2E % 3;
     Vec3s sp24;
@@ -1766,10 +1766,10 @@ void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade_InitPa
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Particle* arg0) {
+void BattleAnim_RunThunderPunchUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade_InitParticle(arg0);
+            BattleAnim_SetupThunderPunchUseEffect(arg0);
             break;
 
         case 2:
@@ -1893,7 +1893,7 @@ void BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMo
     }
 }
 
-void BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupAcidArmorUseEffect1(Particle* arg0) {
     Particle_Scale_SetScaled(arg0, 0.2f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
@@ -1902,10 +1902,10 @@ void BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade_InitParticle
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade(Particle* arg0) {
+void BattleAnim_RunAcidArmorUseEffect1(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade_InitParticle(arg0);
+            BattleAnim_SetupAcidArmorUseEffect1(arg0);
             break;
 
         case 2:
@@ -1927,7 +1927,7 @@ void BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade(Particle* ar
     }
 }
 
-void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupAcidArmorUseEffect2(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     Particle_Scale_SetScaled(arg0, 1.0f);
@@ -1940,10 +1940,10 @@ void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade_InitParticle(Par
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade(Particle* arg0) {
+void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade_InitParticle(arg0);
+            BattleAnim_SetupAcidArmorUseEffect2(arg0);
             break;
 
         case 2:
@@ -2339,7 +2339,7 @@ void BattleAnim_CallbackStartEffect69EndEffect78Descriptor30YThresholdFall(Parti
     }
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(Particle* arg0) {
+void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
     UNUSED s32 pad;
 
     Particle_FieldAC_GetS16_0C038(arg0);
@@ -2352,10 +2352,10 @@ void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticl
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild(Particle* arg0) {
+void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect101Descriptor3DMetadataBurstChild_InitParticle(arg0);
+            BattleAnim_SetupBarrageUseEffect2(arg0);
             break;
 
         case 2:
@@ -2482,7 +2482,7 @@ void BattleAnim_CallbackUnusedFallingTrailVariant(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_Scale_SetScaled(arg0, 0.2f);
@@ -2492,10 +2492,10 @@ void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(Particle*
     Particle_AdvanceLifecycle(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn(Particle* arg0) {
+void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn_InitParticle(arg0);
+            BattleAnim_SetupSolarBeamUseEffect(arg0);
             break;
 
         case 2:
@@ -2732,7 +2732,7 @@ void ParticleEffect_ConfigTexture7Palette1(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackSharedDescriptor3DAnimatedColorMotion, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x11, 7, 1, 0);
 }
 
-void ParticleEffect_ConfigTexture9Palette2(void) {
+void BattleAnim_InitializeLowKickHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 8);
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackSharedDescriptor3DAnimatedColorMotion, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x11, 9, 2, 0);
 }
@@ -2751,41 +2751,41 @@ void ParticleEffect_SpecialSetupBurstPalette3(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects37And38Descriptor34BurstEmitter, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 0);
 }
 
-void ParticleEffect_SpecialSetupBurstPalette4(void) {
+void BattleAnim_InitializePoisonStingTwineedleHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects37And38Descriptor34BurstEmitter, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 4, 0);
 }
 
-void ParticleEffect_SpecialSetupDelayedScatterPalette1(void) {
+void BattleAnim_InitializeFuryAttackGustHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 7, 0x11, 9, 1, 0xC);
 }
 
-void ParticleEffect_TextureSetup(void) {
+void BattleAnim_InitializeIcePunchUse(void) {
     s32 temp_s1 = gBattleAnimCurrentAnchor & 0xFF;
 
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 6, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 0x11, temp_s1, 0x18, 2);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(1, 8, 6, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 0x11, temp_s1, 0x18, 2);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(2, 8, 6, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 0x11, temp_s1, 0x18, 2);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 6, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 0x11, temp_s1, 0x18, 2);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 0xC, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x4A], 0, 2, 0x11, temp_s1, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(1, 6, 0xA, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x4A], 0, 2, 0x11, temp_s1, 1, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 0xC, BattleAnim_RunIceBeamIcePunchEffect, &gBattleAnimParticleDescriptors[0x4A], 0, 2, 0x11, temp_s1, 1, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(1, 6, 0xA, BattleAnim_RunIceBeamIcePunchEffect, &gBattleAnimParticleDescriptors[0x4A], 0, 2, 0x11, temp_s1, 1, 0);
 }
 
-void ParticleEffect_ModeSetup(void) {
+void BattleAnim_InitializeIcePunchHit(void) {
     UNUSED s32 pad;
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
-    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_RunIceBeamIcePunchEffect, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunIceBeamIcePunchEffect, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x18, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 4, 9, 0, 0x18, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 4, 9, 0, 0x18, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x35, 0xE0, 0, 0x20);
 }
 
-void ParticleEffect_CollisionSetup(void) {
+void BattleAnim_InitializeThunderPunchHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
-    BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect43Descriptor40DelayedAnimFade, &gBattleAnimParticleDescriptors[0x40], 0, 1, 0x10, 0x64, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunThunderPunchHitEffect, &gBattleAnimParticleDescriptors[0x40], 0, 1, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunStrongElectricSpark, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 0, 0x40, 0xA, 0xC8);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x19, 0xE1, 0, 0x40);
 }
@@ -2794,12 +2794,12 @@ void BattleAnim_OrphanDescriptor34Emitter(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
-void ParticleEffect_AdditionalSetupDualRiseFade(void) {
+void BattleAnim_InitializeSubmissionUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x28, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
-void ParticleEffect_AdditionalSetupBurstAndRiseFade(void) {
+void BattleAnim_InitializeStompHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor34BurstEmitter, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor36ScaleAlphaFade, &gBattleAnimParticleDescriptors[0x36], 0, 1, 0xA, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
@@ -2811,7 +2811,7 @@ void ParticleEffect_CombinedSetupBurst3DRandom(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
-void ParticleEffect_CombinedSetupBurstHorizontalRandom(void) {
+void BattleAnim_InitializeSubmissionHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor34BurstEmitter, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0xA, 0, 0xA, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackSharedDescriptor36ScaleAlphaFade, &gBattleAnimParticleDescriptors[0x36], 0, 1, 0xA, 0, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
@@ -2821,18 +2821,18 @@ void BattleAnim_EndEffects41And83Descriptor34BurstSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor34BurstEmitter, &gBattleAnimParticleDescriptors[0x34], 0, 7, 0xA, 0, 0xB, 0);
 }
 
-void BattleAnim_StartEffect7GlobalTintFade(void) {
+void BattleAnim_InitializeSwiftUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x22);
 }
 
-void ParticleEffect_MultiHandleSetup(void) {
+void BattleAnim_InitializeSwiftHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x12, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 0xA, 9, 0, 0x17, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x20, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 5, 9, 0, 0x17, 1);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect52DefaultBurstEmitter, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect52DefaultBurstEmitter, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_CallbackEndEffect52DefaultBurstEmitter, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffect52DefaultBurstEmitter, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunSwiftHitEffect2, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunSwiftHitEffect2, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_RunSwiftHitEffect2, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSwiftHitEffect2, &sDefaultParticleDescriptor, 0, 2, 9, 0, 0, 0);
 }
 
 void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {
@@ -2860,7 +2860,7 @@ void ParticleEffect_HandleCollisionSetup(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade, &gBattleAnimParticleDescriptors[0x41], 0, 1, 0x18, 0, 0xF, 0);
 }
 
-void BattleAnim_StartEffect13SecondaryOwnerSpeciesBranch(void) {
+void BattleAnim_InitializeScratchSlashUse(void) {
     s16 tmp = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     if (tmp == 0x7B) {
@@ -2875,7 +2875,7 @@ void BattleAnim_StartEffect13SecondaryOwnerSpeciesBranch(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x14);
 }
 
-void ParticleEffect_DynamicCollisionSetup(void) {
+void BattleAnim_InitializeScratchSlashHit(void) {
     s16 tmp = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     if (tmp == 0x7B) {
@@ -2890,7 +2890,7 @@ void ParticleEffect_DynamicCollisionSetup(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade, &gBattleAnimParticleDescriptors[0x28], 0, 1, 0x18, 0, 0xF, 0);
 }
 
-void ParticleEffect_ConditionalStateSetup(void) {
+void BattleAnim_InitializeFurySwipesUse1(void) {
     UNUSED s16 pad;
     s16 sp3C = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
     s16 sp3A = 3;
@@ -2911,7 +2911,7 @@ void ParticleEffect_ConditionalStateSetup(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x14);
 }
 
-void ParticleEffect_CollisionResponseSwitch(void) {
+void BattleAnim_InitializeFurySwipesUse2(void) {
     s16 tmp = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     if (tmp == 0x7B) {
@@ -2922,23 +2922,23 @@ void ParticleEffect_CollisionResponseSwitch(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(5, 0, 8, 0x14, 0x80);
 }
 
-void ParticleEffect_CollisionAndBurstSetup(void) {
+void BattleAnim_InitializeFurySwipesHit(void) {
     s16 tmp = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     if (tmp == 0x7B) {
         BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 2, 8, 0x14, 0x80);
-        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 2);
+        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunFurySwipesHitEffect, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 2);
         BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade, &gBattleAnimParticleDescriptors[0x41], 0, 1, 0x18, 0, 0xF, 0);
     } else {
         BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 2, 8, 0x14, 0x80);
-        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 0);
-        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 1);
-        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect88Descriptor2AOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 2);
+        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunFurySwipesHitEffect, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 0);
+        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunFurySwipesHitEffect, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 1);
+        BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunFurySwipesHitEffect, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x10, 2);
         BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade, &gBattleAnimParticleDescriptors[0x28], 0, 1, 0x18, 0, 0xF, 0);
     }
 }
 
-void ParticleEffect_StateCollisionSetupDesc29ScaleAnimFade(void) {
+void BattleAnim_InitializeVineWhipUse(void) {
     UNUSED s32 pad;
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 0);
@@ -2948,46 +2948,46 @@ void ParticleEffect_StateCollisionSetupDesc29ScaleAnimFade(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x29);
 }
 
-void ParticleEffect_StateCollisionSetupDesc2BGravityFall(void) {
+void BattleAnim_InitializeVineWhipHit(void) {
     UNUSED s32 pad;
 
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 2, 0x10, 0x29, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedAnimGrowFade, &gBattleAnimParticleDescriptors[0x2A], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade, &gBattleAnimParticleDescriptors[0x41], 0, 1, 0x18, 0, 0xD, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2B], 0, 2, 0xE, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2B], 0, 2, 0xE, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0xF, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2B], 0, 1, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2B], 0, 2, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2B], 0, 2, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0xF, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2B], 0, 1, 0xE, 0, 0, 0);
 }
 
-void ParticleEffect_AdditionalNodeSetup(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect56Descriptor46AnimColorImpulseFade, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect56Descriptor40AnimScaleFade, &gBattleAnimParticleDescriptors[0x40], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0, 0);
+void BattleAnim_InitializeFirePunchUse(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_RunFirePunchUseEffect2, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFirePunchUseEffect1, &gBattleAnimParticleDescriptors[0x40], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0, 0);
 }
 
-void ParticleEffect_SpecialCollisionSetup(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect3Descriptor29DirectionalScaleFade, &gBattleAnimParticleDescriptors[0x29], 0, 6, 0x10, 0x64, 0, 0);
+void BattleAnim_InitializeRazorWindHit(void) {
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunRazorWindHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 6, 0x10, 0x64, 0, 0);
 }
 
-void BattleAnim_StartEffect11GlobalTintFade(void) {
+void BattleAnim_InitializeRazorLeafUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x28);
 }
 
-void ParticleEffect_MultiTextureSetup(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 0xA, 0x10, 9, 0, 0);
+void BattleAnim_InitializeRazorLeafHit(void) {
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 0xA, 0x10, 9, 0, 0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x46, 4, 0xA);
 }
 
-void ParticleEffect_SmallNodeSetupGlobalTintFade17(void) {
+void BattleAnim_InitializePetalDanceUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x17);
 }
 
-void BattleAnim_EndEffect26DelayedDescriptor29ScatterSequence(void) {
+void BattleAnim_InitializePetalDanceHitSequence(void) {
     BattleAnim_AddSpawnDelay(0x10);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x20, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x30, BattleAnim_CallbackSharedDescriptor29DirectionalScatterFade, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0x20, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0x30, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 1, 0);
 }
 
 void ParticleEffect_ModeSpecificSetup(void) {
@@ -3019,25 +3019,25 @@ void ParticleEffect_ModeSpecificSetup(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion, &gBattleAnimParticleDescriptors[0x47], 0, 7, 0x10, 0x64, 1, 0);
 }
 
-void ParticleEffect_ComplexNodeSetup(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 3, BattleAnim_CallbackStartEffect31Descriptor49TieredRiseImpulseFade, &gBattleAnimParticleDescriptors[0x49], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+void BattleAnim_InitializeSandAttackUse(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 3, BattleAnim_RunSandAttackUseEffect, &gBattleAnimParticleDescriptors[0x49], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 2, BattleAnim_CallbackSharedTieredSmallRiseImpulseFade, &gBattleAnimParticleDescriptors[0x47], 0, 6, 0x11, gBattleAnimCurrentAnchor, 0x31, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedTieredLargeRiseImpulseFade, &gBattleAnimParticleDescriptors[0x47], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0x31, 0);
 }
 
-void ParticleEffect_SimpleNodeSetup(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade, &gBattleAnimParticleDescriptors[0x49], 0, 5, 0x10, 0x64, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade, &gBattleAnimParticleDescriptors[0x49], 0, 5, 0x10, 0x64, 0, 0);
+void BattleAnim_InitializeSandAttackHit(void) {
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunSandAttackHitEffect, &gBattleAnimParticleDescriptors[0x49], 0, 5, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunSandAttackHitEffect, &gBattleAnimParticleDescriptors[0x49], 0, 5, 0x10, 0x64, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion, &gBattleAnimParticleDescriptors[0x47], 0, 7, 0x10, 0x64, 1, 0);
 }
 
-void ParticleEffect_AdvancedModeSetup(void) {
-    BattleAnim_SpawnOwnerModelAlphaFade(0, 0xFF, 0x30, 6);
-    BattleAnim_SpawnOwnerModelAlphaFade(0x24, 0, 0, 0xFF);
+void BattleAnim_InitializeAcidArmorUse(void) {
+    BattleAnim_SpawnInvisibility(0, 0xFF, 0x30, 6);
+    BattleAnim_SpawnInvisibility(0x24, 0, 0, 0xFF);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0x23, 0, 0xFF, 8);
     BattleAnim_AddSpawnDelay(6);
-    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackStartEffect81Descriptor4BGrowColorShiftFade, &gBattleAnimParticleDescriptors[0x4B], 0, 1, 0xA, 0, 0x2F, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 4, BattleAnim_CallbackStartEffect81Descriptor3DRisingAnimFade, &gBattleAnimParticleDescriptors[0x3D], 0, 3, 9, 0, 0x30, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_RunAcidArmorUseEffect1, &gBattleAnimParticleDescriptors[0x4B], 0, 1, 0xA, 0, 0x2F, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 4, BattleAnim_RunAcidArmorUseEffect2, &gBattleAnimParticleDescriptors[0x3D], 0, 3, 9, 0, 0x30, 0);
 }
 
 void BattleAnim_StartEffect16TintDescriptor34Sequence(void) {
@@ -3051,7 +3051,7 @@ void BattleAnim_StartEffect16TintDescriptor34Sequence(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x10);
 }
 
-void ParticleEffect_FullSetupTintFadeOutAndRestore(void) {
+void BattleAnim_InitializeFlashHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 6);
     BattleAnim_SpawnOwnerModelTintRampDetach(8, 0xA, 0, 0xFF, 0x40);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0, 0, 0x10, 0xA);
@@ -3060,34 +3060,34 @@ void ParticleEffect_FullSetupTintFadeOutAndRestore(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x10);
 }
 
-void ParticleEffect_FinalSetupSpiralAndVerticalFade(void) {
+void BattleAnim_InitializeBideRageUse(void) {
     UNUSED s32 pad;
 
     BattleAnim_SpawnOwnerModelTintPulseDetach(0, 1, 0xC, 0, 0xC8, 0x10);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(6, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x1A, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(7, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x1A, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect104DelayedSpiralFade, &gBattleAnimParticleDescriptors[0x4F], 0, 0x20, 7, 0, 0, 0);
-    BattleAnim_EndEffect85TintAndDescriptorMode2Sequence();
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunOscillatingFlameUnderneathPokemon, &gBattleAnimParticleDescriptors[0x4F], 0, 0x20, 7, 0, 0, 0);
+    BattleAnim_InitializeBideRageUseSequence();
 }
 
-void ParticleEffect_FinalSetupRiseAndVerticalFade(void) {
+void BattleAnim_InitializeStruggleThrashUse(void) {
     BattleAnim_SpawnOwnerModelTintPulseDetach(0, 1, 0xC, 0, 0xC8, 4);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(6, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(7, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
 }
 
-void ParticleEffect_FinalSetupPortraitBurst(void) {
+void BattleAnim_InitializeDoubleEdgeTakeDownUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 6);
     ParticleEffect_PortraitBurst();
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
-void ParticleEffect_AdditionalNodeSingleRiseFade(void) {
+void BattleAnim_InitializeBodySlamUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 3, 2, BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
 }
 
-void BattleAnim_EndEffect58Descriptor4AAnd51Sequence(void) {
+void BattleAnim_InitializeEarthquakeFissureHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x4A], 0, 8, 0xA, 0, 0x33, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x4A], 0, 8, 0xA, 0, 0x33, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x4A], 0, 8, 0xA, 0, 0x33, 1);
@@ -3105,7 +3105,7 @@ void BattleAnim_EndEffectUnusedVerticalFadeAndDelayedFrameSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x51], 0, 5, 0x11, 9, 0x17, 0xE);
 }
 
-void BattleAnim_StartEffects87And88Descriptor3DVerticalFadeSequence(void) {
+void BattleAnim_InitializeDefenseCurlSharpenUseSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0xE, 0, 0x33, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 2, 0xE, 0, 0x33, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 2, 0xE, 0, 0x33, 2);
@@ -3114,7 +3114,7 @@ void BattleAnim_StartEffects87And88Descriptor3DVerticalFadeSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0xE, 0, 0x33, 2);
 }
 
-void ParticleEffect_MultiNodeD(void) {
+void BattleAnim_InitializeSubstituteTransformUse(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(4, 0xA, 0, 0xFF, 0x40);
     BattleAnim_SpawnOwnerModelTintRampDetach(9, 0xA, 0xFF, 0, 0x40);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0xE, 0, 0x33, 2);
@@ -3141,25 +3141,25 @@ void ParticleEffect_GroupSetupTintAndDefaultBurst(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x64, 0x20, 0xA);
 }
 
-void BattleAnim_StartEffect105TintDefaultBurstAndDescriptor3CSequence(void) {
+void BattleAnim_InitializeSolarBeamUseSequence(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_SpawnDefaultDescriptorBurstEmitterSequence(0x17);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0xA, BattleAnim_CallbackSharedDescriptor3CExpandingFadeIn, &gBattleAnimParticleDescriptors[0x3C], 0x1A, 1, 5, 0, 0x33, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0xA, BattleAnim_RunSolarBeamUseEffect, &gBattleAnimParticleDescriptors[0x3C], 0x1A, 1, 5, 0, 0x33, 0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x64, 0x20, 0xA);
 }
 
-void ParticleEffect_SimpleGroupSetup(void) {
+void BattleAnim_InitializeGrowthUse(void) {
     BattleAnim_SpawnOwnerModelTintPulseDetach(0xA, 1, 0xA, 0, 0xFF, 0x20);
 }
 
-void ParticleEffect_ComplexGroupSetup(void) {
+void BattleAnim_InitializeRecoverUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_SpawnDefaultDescriptorBurstEmitterSequence(0xC);
-    BattleAnim_SpawnOwnerModelTintPaletteRotateFadeDetach(4, 0x32, 0x20, 0xA0);
+    BattleAnim_SpawnRainbowHueChange(4, 0x32, 0x20, 0xA0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 5, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0xC, 9);
 }
 
-void ParticleEffect_FinalGroupSetup(void) {
+void BattleAnim_InitializeHardenUse(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x20);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 2, 2, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 1);
 }

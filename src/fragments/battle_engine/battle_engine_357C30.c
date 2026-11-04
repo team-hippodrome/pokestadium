@@ -21,7 +21,7 @@ As well as effects for these specific moves:
 static s16 D_843C3500;
 static unk_D_843C3508 D_843C3508[6];
 
-void BattleAnim_SixSlotTrail_ResetPool(void) {
+void HyperBeamIceBeamTrail_ResetPool(void) {
     s32 i;
     s32 j;
     unk_D_843C3508* var_v0;
@@ -56,7 +56,7 @@ void BattleAnim_SixSlotTrail_ResetPool(void) {
     }
 }
 
-void BattleAnim_SixSlotTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
+void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
                    s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C,
                    s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F) {
@@ -125,7 +125,7 @@ void BattleAnim_SixSlotTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
     }
 }
 
-void BattleAnim_SixSlotTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6,
+void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6,
                    UNUSED f32 arg7) {
     UNUSED s32 pad[36];
     CameraNode* temp_v0 = BattleAnim_GetCameraContext();
@@ -166,7 +166,7 @@ void BattleAnim_SixSlotTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, 
     }
 }
 
-void BattleAnim_SixSlotTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
+void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     UNUSED Mtx sp70;
     Mtx sp30;
     UNUSED s32 pad;
@@ -175,7 +175,7 @@ void BattleAnim_SixSlotTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* 
     guMtxXFMF(&sp30, 0.0f, 0.0f, arg3, &arg2->x, &arg2->y, &arg2->z);
 }
 
-void BattleAnim_SixSlotTrail_UpdateSlot(unk_D_843C3508* arg0) {
+void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
     unk_D_843C3508_0A4* var_s0;
     s32 spA8;
     s32 i;
@@ -219,7 +219,7 @@ void BattleAnim_SixSlotTrail_UpdateSlot(unk_D_843C3508* arg0) {
     }
 }
 
-s32 BattleAnim_SixSlotTrail_UpdateAll(void) {
+s32 HyperBeamIceBeamTrail_UpdateAll(void) {
     f32 temp_fv0;
     s32 i;
     s32 var_s2;
@@ -235,7 +235,7 @@ s32 BattleAnim_SixSlotTrail_UpdateAll(void) {
             if (var_s0->unk_006 < var_s0->unk_004) {
                 var_s0->unk_000 = 0;
             } else {
-                BattleAnim_SixSlotTrail_UpdateSlot(var_s0);
+                HyperBeamIceBeamTrail_UpdateSlot(var_s0);
                 var_s2++;
             }
 
@@ -263,7 +263,7 @@ s32 BattleAnim_SixSlotTrail_UpdateAll(void) {
     return -1;
 }
 
-Gfx* BattleAnim_SixSlotTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
+Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
     s32 i;
     Vtx* temp_v0 = arg1->unk_088;
 
@@ -276,7 +276,7 @@ Gfx* BattleAnim_SixSlotTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
     return arg0;
 }
 
-Gfx* BattleAnim_SixSlotTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
+Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
     unk_D_843C2C00_064* ptr;
     UNUSED s32 pad[2];
 
@@ -293,7 +293,7 @@ Gfx* BattleAnim_SixSlotTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
     return arg0;
 }
 
-Gfx* BattleAnim_SixSlotTrail_DrawAll(Gfx* arg0) {
+Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
     static Gfx D_84389CE8[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_2CYCLE),
@@ -336,14 +336,14 @@ Gfx* BattleAnim_SixSlotTrail_DrawAll(Gfx* arg0) {
                     switch (var_s6->unk_002) {
                         case 0:
                             if (var_s0->unk_00 <= 0.0) {
-                                BattleAnim_SixSlotTrail_ComputeRotatedOffset(var_s0->unk_08 + ((k % 2) * 3.1415927f), &var_s0->unk_18, &spF0,
+                                HyperBeamIceBeamTrail_ComputeRotatedOffset(var_s0->unk_08 + ((k % 2) * 3.1415927f), &var_s0->unk_18, &spF0,
                                               var_s0->unk_04, 1.0f, 0.0f, 0.0f);
                             }
                             break;
 
                         case 1:
                             if (var_s0->unk_00 <= 0.0) {
-                                BattleAnim_SixSlotTrail_ComputeCameraRelativeOffset(k % 2, &var_s0->unk_18, &var_s0->unk_0C, &spF0, var_s0->unk_04, 1.0f,
+                                HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(k % 2, &var_s0->unk_18, &var_s0->unk_0C, &spF0, var_s0->unk_04, 1.0f,
                                               0.0f, 0.0f);
                             }
                             break;
@@ -377,11 +377,11 @@ Gfx* BattleAnim_SixSlotTrail_DrawAll(Gfx* arg0) {
             gDPSetEnvColor(arg0++, var_s6->unk_00D.unk_00.r, var_s6->unk_00D.unk_00.g, var_s6->unk_00D.unk_00.b,
                            (u8)(var_s6->unk_00D.unk_00.a * var_s6->unk_018));
 
-            arg0 = BattleAnim_SixSlotTrail_LoadTextures(arg0, var_s6);
+            arg0 = HyperBeamIceBeamTrail_LoadTextures(arg0, var_s6);
 
             gDPPipeSync(arg0++);
 
-            arg0 = BattleAnim_SixSlotTrail_DrawSegments(arg0, var_s6);
+            arg0 = HyperBeamIceBeamTrail_DrawSegments(arg0, var_s6);
         }
     }
 

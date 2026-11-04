@@ -159,7 +159,6 @@ void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(Particle* arg0) {
     }
 }
 
-// better name: BattleAnim_SetupBeamBoomWaterfallHueChange
 /*
     sets up hue changes for being hit by:
         - boom (self-destruct and explosion)
@@ -168,13 +167,12 @@ void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(Particle* arg0) {
         - Egg Bomb
         - Solar Beam
 */
-void BattleAnim_SetupOwnerModelTintPaletteApproachInactive(Particle* arg0) {
+void BattleAnim_SetupBeamBoomWaterfallHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunBeamBoomWaterfallHueChange
 /*
     handles hue changes for being hit by:
         - boom (self-destruct and explosion)
@@ -183,10 +181,10 @@ void BattleAnim_SetupOwnerModelTintPaletteApproachInactive(Particle* arg0) {
         - Egg Bomb
         - Solar Beam
 */
-void BattleAnim_CallbackOwnerModelTintPaletteApproachInactive(Particle* arg0) {
+void BattleAnim_RunBeamBoomWaterfallHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteApproachInactive(arg0);
+            BattleAnim_SetupBeamBoomWaterfallHueChange(arg0);
             break;
 
         case 2:
@@ -234,24 +232,22 @@ void BattleAnim_CallbackOwnerModelTintPaletteApproach(Particle* arg0) {
     }
 }
 
-// Better name: BattleAnim_SetupIceBeamBlizzardHitHueChange
 /*
     Sets the hue coloration change of a pokemon hit by ice beam or blizzard
 */
-void BattleAnim_SetupOwnerModelTintPaletteCycle(Particle* particle) {
+void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, Particle_FieldCF_GetS16_0C058(particle));
     Particle_FieldAE_SetS16_0BF4C(particle, 0);
     Particle_AdvanceLifecycle(particle);
 }
 
-// Better name: BattleAnim_RunIceBeamBlizzardHitHueChange
 /*
     Runs the hue coloration of a pokemon hit by ice beam or blizzard
 */
-void BattleAnim_CallbackOwnerModelTintPaletteCycle(Particle* particle) {
+void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* particle) {
     switch (particle->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteCycle(particle);
+            BattleAnim_SetupIceBeamBlizzardHitHueChange(particle);
             break;
 
         case 2:
@@ -310,28 +306,26 @@ void BattleAnim_CallbackOwnerModelTintPaletteApproachRampDown(Particle* arg0) {
     }
 }
 
-// better name: BattleAnim_SetupDrainFlameHueChange
 /*
     Sets up the hue change upon being hit by
         - A Draining move (absorb, mega drain, leech life)
         - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
 */
-void BattleAnim_SetupOwnerModelTintPaletteFade(Particle* arg0) {
+void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunDrainFlameHueChange
 /*
     Runs the hue change upon being hit by
         - A Draining move (absorb, mega drain, leech life)
         - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
 */
-void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
+void BattleAnim_RunDrainFlameHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteFade(arg0);
+            BattleAnim_SetupDrainFlameHueChange(arg0);
             break;
 
         case 2:
@@ -386,11 +380,10 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
     }
 }
 
-// better name: BattleAnim_SetupRainbowHueChange
 /*
     Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
 */ 
-void BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(Particle* particle) {
+void BattleAnim_SetupRainbowHueChange(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, sParticlePaletteSetA[0]);
     Particle_FieldAE_SetS16_0BF4C(particle, 1);
     Particle_FieldCF_SetU8_0BEEC(particle, sParticlePaletteSetA[1]);
@@ -404,14 +397,13 @@ void BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(Particle* particle) {
     Particle_AdvanceLifecycle(particle);
 }
 
-// better name: BattleAnim_RunRainbowHueChange
 /*
     Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
 */ 
-void BattleAnim_CallbackOwnerModelTintPaletteRotateFadeDetach(Particle* particle) {
+void BattleAnim_RunRainbowHueChange(Particle* particle) {
     switch (particle->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPaletteRotateFadeDetach(particle);
+            BattleAnim_SetupRainbowHueChange(particle);
             break;
 
         case 2:
@@ -438,27 +430,25 @@ void BattleAnim_CallbackOwnerModelTintPaletteRotateFadeDetach(Particle* particle
     }
 }
 
-// better name: BattleAnim_SetupInvisibility
 /*
     Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
     These moves do not replace the user's model like transform or substitute and do not have unique animation varients like withdrawal;
     which are not covered by this function.
 */
-void BattleAnim_SetupOwnerModelAlphaFade(Particle* arg0) {
+void BattleAnim_SetupInvisibility(Particle* arg0) {
     arg0->primAlpha = arg0->unk_A6;
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunInvisibility
 /*
     Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
     These moves do not replace the user's model like transform or substitute and do not have unique animation varients like withdrawal;
     which are not covered by this function.
 */
-void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
+void BattleAnim_RunInvisibility(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelAlphaFade(arg0);
+            BattleAnim_SetupInvisibility(arg0);
             break;
 
         case 2:
@@ -503,30 +493,28 @@ void BattleAnim_CallbackStartEffect125OwnerColorAlphaFade(Particle* arg0) {
     Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
 }
 
-// Better name: BattleAnim_SetupWhiteHueChange
 /*
     Sets up coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
     Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
     It is used in blizzard to make the user's hue match that of the arena.
     Also used for the poke ball's hue change.
 */
-void BattleAnim_SetupDescriptor25AlphaFadeInHoldOut(Particle* particle) {
+void BattleAnim_SetupWhiteHueChange(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, Particle_FieldCF_GetS16_0C058(particle));
     Particle_SetPrimAlpha(particle, 0);
     Particle_AdvanceLifecycle(particle);
 }
 
-// Better name: BattleAnim_RunWhiteHueChange
 /*
     Runs coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
     Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
     It is used in blizzard to make the user's hue match that of the arena.
     Also used for the poke ball's hue change.
 */
-void BattleAnim_CallbackDescriptor25AlphaFadeInHoldOut(Particle* particle) {
+void BattleAnim_RunWhiteHueChange(Particle* particle) {
     switch (particle->lifecycle) {
         case 1:
-            BattleAnim_SetupDescriptor25AlphaFadeInHoldOut(particle);
+            BattleAnim_SetupWhiteHueChange(particle);
             break;
 
         case 2:
