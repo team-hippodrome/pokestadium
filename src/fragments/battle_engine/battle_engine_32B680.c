@@ -4,6 +4,8 @@
 #include "src/gfx_buffer.h"
 #include "src/matrix.h"
 #include "src/math_util.h"
+#include "pokemon.h"
+#include "moves.h"
 
 /*
 This file covers these classes of moves:
@@ -461,12 +463,18 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
     }
 }
 
+// BattleAnim_InitializeParticleModel
 void BattleAnim_CallbackInitModelAnim(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         BattleAnim_SelectParticleModelFrames(arg0, 0);
     }
 }
 
+// BattleAnim_RunScaryEyes
+/*
+    Used for the Eyes in Leer and Glare.
+    It is reused for additional flair in Sky Attack (hands an X shape on the bird)
+*/
 void BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -503,6 +511,7 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
     }
 }
 
+// BattleAnim_RunFillScreenOverlay
 void BattleAnim_CallbackInitModelAnimMode2Update(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1486,23 +1495,24 @@ void BattleAnim_ApplySpeciesMotionOffset(Particle* arg0) {
     Particle_PositionOffset_AddXZFromRotationY(arg0, sp18);
 }
 
+// BattleAnim_InitializeScreenMove
 void BattleAnim_StartEffect14ModelAnimAndMoveKeyedTintParticles(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnim, &sDefaultParticleDescriptor, 0x1E, 1, 0xB, 0, 0x1E, 0);
     BattleAnim_AddSpawnDelay(0xF);
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x70:
+        case BARRIER:
             BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0x10, 8, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x44], 0, 4, 0xB, 0, 0x18, 5);
             break;
 
-        case 0x71:
+        case LIGHT_SCREEN:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x20);
             BattleAnim_SpawnOwnerModelTintPulseDetach(0, 0, 0xA, 0, 0xFF, 0x30);
             BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0x10, 8, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x44], 0, 8, 0xB, 0, 0x17, 5);
             BattleAnim_SpawnWhiteHueChange(0, 1, 0x20, 0xA, 0xFF);
             break;
 
-        case 0x73:
+        case REFLECT:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x20);
             BattleAnim_SpawnOwnerModelTintPulseDetach(0, 0, 0xA, 0, 0xFF, 0x30);
             BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0x10, 8, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x44], 0, 8, 0xB, 0, 0, 5);
@@ -1638,28 +1648,28 @@ void ParticleEffect_RegisterCallbacks(void) {
 }
 
 void BattleAnim_InitEffect65Overlay(Particle* arg0) {
-    s16 sp26;
+    s16 move;
     u16 sp24;
     u16 sp22;
 
-    sp26 = BattleAnim_GetQueuedMoveId();
+    move = BattleAnim_GetQueuedMoveId();
     sp24 = 0x19;
     sp22 = 0xA;
     Particle_FieldCA_SetU8_0BECC(arg0, 7);
     Particle_Scale_SetScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
 
-    switch (sp26) {
-        case 0x4E:
-        case 0x93:
+    switch (move) {
+        case STUN_SPORE:
+        case SPORE:
             break;
 
-        case 0x4D:
+        case POISONPOWDER:
             sp24 = 0x3E;
             sp22 = 0;
             break;
 
-        case 0x4F:
+        case SLEEP_POWDER:
             sp24 = 0x35;
             break;
     }
@@ -1670,6 +1680,7 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// BattleAnim_RunSporePowderMoveOverlay
 void BattleAnim_CallbackStartEffect65Descriptors31And32FadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1699,6 +1710,7 @@ void BattleAnim_InitEffect28Overlay(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// BattleAnim_RunGasAttack
 void BattleAnim_CallbackStartEffects28And53And76Descriptor33FadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1711,6 +1723,7 @@ void BattleAnim_CallbackStartEffects28And53And76Descriptor33FadeIn(Particle* arg
     }
 }
 
+// BattleAnim_InitializeSmokeScreenHazePoisonGasUse
 void ParticleEffect_RegisterEffectE0(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackStartEffects28And53And76Descriptor33FadeIn, &gBattleAnimParticleDescriptors[0x33], 0, 1, 0x18, 0, 0x1C, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects28And53And65And76Descriptor47AnimatedScaleMotion, &gBattleAnimParticleDescriptors[0x47], 0, 0xF, 0x11, gBattleAnimCurrentAnchor, 0, 0);
@@ -2199,6 +2212,10 @@ void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
     }
 }
 
+// BattleAnim_RunHealthAbsorptionParticles
+/*
+    Handles Particles that spawn from being hit by a health draining move
+*/
 void BattleAnim_CallbackEndEffect21ModelAnimWait(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2395,6 +2412,7 @@ void BattleAnim_InitEffects63And75Model(Particle* arg0) {
     }
 }
 
+// BattleAnim_RunRaisingRock
 void BattleAnim_CallbackStartEffects63And75ModelAnimWait(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2464,6 +2482,7 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
     }
 }
 
+// BattleAnim_RunFallingRock
 void BattleAnim_CallbackEndEffects10And50ModelAnimColorFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2488,62 +2507,62 @@ void BattleAnim_CallbackEndEffects10And50ModelAnimColorFade(Particle* arg0) {
     }
 }
 
-void BattleAnim_ApplyEffects63And75SpeciesScaleOffset(Particle* arg0) {
-    f32 sp1C = 0.6f;
-    f32 sp18 = 0.0f;
+void BattleAnim_ApplyEffects63And75SpeciesScaleOffset(Particle* particle) {
+    f32 scale = 0.6f;
+    f32 magnitude = 0.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
-        case 0x3:
-            sp1C = 1.0f;
-            sp18 = 5.0f;
+    switch (BattleAnim_GetOwnerSpecies(particle->pokemon)) {
+        case VENUSAUR:
+            scale = 1.0f;
+            magnitude = 5.0f;
             break;
 
-        case 0x22:
-            sp1C = 1.0f;
-            sp18 = 5.0f;
+        case NIDOKING:
+            scale = 1.0f;
+            magnitude = 5.0f;
             break;
 
-        case 0x4C:
-            sp1C = 0.8f;
-            sp18 = 5.0f;
+        case GOLEM:
+            scale = 0.8f;
+            magnitude = 5.0f;
             break;
 
-        case 0x5E:
-            sp1C = 0.8f;
-            sp18 = 5.0f;
+        case GENGAR:
+            scale = 0.8f;
+            magnitude = 5.0f;
             break;
 
-        case 0x80:
-            sp1C = 0.8f;
-            sp18 = 10.0f;
+        case TAUROS:
+            scale = 0.8f;
+            magnitude = 10.0f;
             break;
 
-        case 0x82:
-            sp18 = 20.0f;
+        case GYARADOS:
+            magnitude = 20.0f;
             break;
 
-        case 0x88:
-            sp1C = 1.2f;
-            sp18 = 10.0f;
+        case FLAREON:
+            scale = 1.2f;
+            magnitude = 10.0f;
             break;
 
-        case 0x8E:
-            sp1C = 1.2f;
-            sp18 = 20.0f;
+        case AERODACTYL:
+            scale = 1.2f;
+            magnitude = 20.0f;
             break;
 
-        case 0x91:
-            sp1C = 1.2f;
-            sp18 = 15.0f;
+        case ZAPDOS:
+            scale = 1.2f;
+            magnitude = 15.0f;
             break;
 
-        case 0x95:
-            sp18 = 10.0f;
+        case DRAGONITE:
+            magnitude = 10.0f;
             break;
     }
 
-    Particle_Scale_SetScaled(arg0, sp1C);
-    Particle_Field38_AddXZFromField94YOffset180_08F38(arg0, sp18);
+    Particle_Scale_SetScaled(particle, scale);
+    Particle_Field38_AddXZFromField94YOffset180_08F38(particle, magnitude);
 }
 
 void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
@@ -2558,6 +2577,7 @@ void BattleAnim_InitEffects63And75Model38(Particle* arg0) {
     }
 }
 
+// BattleAnim_RunRockLiftingMotionEffect
 void BattleAnim_CallbackStartEffects63And75Model38FadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2638,6 +2658,7 @@ void Particle_CreateDisplayList_GreenPrim(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+
 void ParticleEffect_RegisterHandlers_Default(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects63And75ModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects63And75Model38FadeIn, &sDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
@@ -2690,6 +2711,7 @@ void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn_InitParticle(Particle* a
     }
 }
 
+// BattleAnim_RunStrongWinds
 void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -2747,6 +2769,10 @@ void Particle_CreateDisplayList_BluePrim(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+// BattleAnim_InitializeStrongWind
+/*
+    Full screen overlay for gust, razor wind, and whirlwind
+*/
 void BattleAnim_StartEffect10Model60AndModelAnimWait(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0xE, 0, 0x25, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect10Model60AlphaFadeIn, &sDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
@@ -3285,6 +3311,7 @@ void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle_InitPart
     }
 }
 
+// BattleAnim_RunBitingEffect
 void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
     s32 sp20 = 0;
@@ -3372,10 +3399,12 @@ void BattleAnim_InitializeGuillotineUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &sDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
 }
 
+// BattleAnim_InitializeBitingMoveUse
 void BattleAnim_StartEffect74SpecialModelColorCycle(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &sDefaultParticleDescriptor, 0, 1, 0x14, 0, 1, 0);
 }
 
+// BattleAnim_InitializeBitingMoveHit
 void BattleAnim_EndEffect41Descriptor34Burst(void) {
     BattleAnim_EndEffects41And83Descriptor34BurstSequence();
 }
@@ -3597,6 +3626,7 @@ void BattleAnim_CallbackEndEffect7ModelScaleAlphaFade_InitParticle(Particle* arg
     }
 }
 
+// better name: BattleAnim_RunSlimePuddle
 void BattleAnim_CallbackEndEffect7ModelScaleAlphaFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -3749,48 +3779,49 @@ void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+// BattleAnim_GetSlimeVariantIndex
 s16 BattleAnim_GetMoveKeyedModelVariantIndex(void) {
-    s16 sp1E;
+    s16 index;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
-            sp1E = 0;
+        case SLUDGE:
+            index = 0;
             break;
 
-        case 0x33:
-            sp1E = 1;
+        case ACID:
+            index = 1;
             break;
 
-        case 0x5C:
-            sp1E = 2;
+        case TOXIC:
+            index = 2;
             break;
 
-        case 0x7A:
-            sp1E = 3;
+        case LICK:
+            index = 3;
             break;
     }
 
-    return sp1E;
+    return index;
 }
 
 s16 BattleAnim_GetMoveKeyedTintRampParam(void) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
-            sp1E = 0x12;
+        case SLUDGE:
+            sp1E = 18;
             break;
 
-        case 0x33:
-            sp1E = 0x2B;
+        case ACID:
+            sp1E = 43;
             break;
 
-        case 0x5C:
-            sp1E = 0x3E;
+        case TOXIC:
+            sp1E = 62;
             break;
 
-        case 0x7A:
-            sp1E = 0x39;
+        case LICK:
+            sp1E = 57;
             break;
     }
 
@@ -3801,19 +3832,19 @@ s16 BattleAnim_GetMoveKeyedTrailVariantParam(void) {
     s16 sp1E;
 
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x7C:
+        case SLUDGE:
             sp1E = 8;
             break;
 
-        case 0x33:
+        case ACID:
             sp1E = 0x33;
             break;
 
-        case 0x5C:
+        case TOXIC:
             sp1E = 0x33;
             break;
 
-        case 0x7A:
+        case LICK:
             sp1E = 0x33;
             break;
     }
@@ -3821,6 +3852,10 @@ s16 BattleAnim_GetMoveKeyedTrailVariantParam(void) {
     return sp1E;
 }
 
+// BattleAnim_InitializeSlimeMove
+/*
+    Handles the slime using in Toxic, Sludge, and Acid
+*/
 void BattleAnim_StartEffect17ModelAnimFinish(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect17ModelAnimFinish, &sDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, BattleAnim_GetMoveKeyedModelVariantIndex(), 0);
 }
@@ -3977,6 +4012,7 @@ void Gfx_PokemonPortraitAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     }
 }
 
+// BattleAnim_InitializeSpeedLines
 void ParticleEffect_PortraitBurst(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 6, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 9, 0, 8, 0);
 }
@@ -4122,6 +4158,10 @@ void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParti
     }
 }
 
+// BattleAnim_RunPsychedelicOverlay
+/*
+    Used to make the overlays for mediate, night shade, and dream eater
+*/
 void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn(Particle* arg0) {
     u32 temp_v0 = Particle_FieldCD_GetU8_0C048(arg0);
 
@@ -4409,19 +4449,20 @@ void BattleAnim_InitializeDreamEaterHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0x20, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 9, 2, 0xD, 0);
 }
 
+// BattleAnim_CreateDrainingMoveOverlay
 void ParticleEffect_PaletteScriptBurst(void) {
     switch (BattleAnim_GetQueuedMoveId()) {
-        case 0x8D:
+        case LEECH_LIFE:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimMode2Update, &sDefaultParticleDescriptor, 0x80, 1, 0xC, 0xD, 0x1A, 0x20);
             break;
 
-        case 0x47:
+        case ABSORB:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x3A);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimMode2Update, &sDefaultParticleDescriptor, 0x80, 1, 0xC, 0xB, 0x1A, 0x20);
             break;
 
-        case 0x48:
+        case MEGA_DRAIN:
             BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x21);
             BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimMode2Update, &sDefaultParticleDescriptor, 0x80, 1, 0xC, 0xC, 0x1A, 0x20);
             break;
@@ -4461,6 +4502,7 @@ void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow_InitParticle(P
     }
 }
 
+// Better Name: BattleAnim_RunConfuseRayUseSpotlight
 void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* arg0) {
     s16 sp26;
 
@@ -4493,6 +4535,7 @@ void BattleAnim_CallbackEndEffect60Model42AnimC2RotationYFollow_InitParticle(Par
     }
 }
 
+// Better name: BattleAnim_RunConfuseRayHitSpotlight
 void BattleAnim_CallbackEndEffect60Model42AnimC2RotationYFollow(Particle* arg0) {
     s16 sp1E;
 
@@ -4552,6 +4595,7 @@ void BattleAnim_InitializeConfuseRayUse(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x10);
 }
 
+// BattleAnim_InitializeConfuseRayHit
 void ParticleEffect_WaterAnimFireworkModel42RotationFollow(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect60Model42AnimC2RotationYFollow, &sDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0, 0, 0x10, 0xA);
@@ -5089,6 +5133,10 @@ void BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade(Particle* arg0) {
     }
 }
 
+// BattleAnim_InitializeLargePhysicalHitSpark
+/*
+    Using to make a horizontal cylindrical hit spark for Skull Bash, Mega Punch, and Mega Kick
+*/
 void ParticleEffect_TriggerAnother(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(4, 0xA, 0xFF, 0, 0x20);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade, &sDefaultParticleDescriptor, 0, 1, 9, 0, 0x19, 0);
@@ -5117,6 +5165,10 @@ void BattleAnim_InitializeHornDrillHit(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0x30, 0xC, 0xFF, 0, 2);
 }
 
+// BattleAnim_RunWeakSpear
+/*
+    Used to create the spear projectile for fury attack, peck, and horn attack
+*/
 void BattleAnim_CallbackStartEffects118And119ModelPalettePulse(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -5154,6 +5206,10 @@ void BattleAnim_InitializeHornAttackUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects118And119ModelPalettePulse, &sDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x20, 1);
 }
 
+// BattleAnim_RunVerticalLandingHitSpark
+/*
+    Used in Fly, Stomp, Body Slam, and Seismic Toss
+*/
 void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -5170,6 +5226,7 @@ void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* arg0) 
     }
 }
 
+// BattleAnim_InitializeVerticalLandingHitSpark
 void ParticleEffect_CreateColorVariant(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade, &sDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x1F, 0);
 }
