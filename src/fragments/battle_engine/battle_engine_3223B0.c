@@ -739,7 +739,11 @@ void BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade_InitParticle(Particl
     Particle_AdvanceLifecycle(arg0);
 }
 
-// handles some shared hit effect between Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack
+// better name: BattleAnim_RunInitialBeamEmanator
+/*
+    Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack.
+    Most Beam mosts switch to the Pulsing emanator after a few frames
+*/
 void BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -938,7 +942,7 @@ void BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion_InitParticle(Partic
     Particle_AdvanceLifecycle(arg0);
 }
 
-//
+// Better name: BattleAnim_RunStrongOutwardMovingLargeHitSpark
 /*
     Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
 */
@@ -1168,6 +1172,10 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
     }
 }
 
+// Better name: BattleAnim_RunStrongOutwardMovingSmallHitSpark
+/*
+    Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
+*/
 void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade_InitParticle(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp2C = Particle_FieldCF_GetS16_0C058(arg0);

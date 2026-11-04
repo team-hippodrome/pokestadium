@@ -1,19 +1,6 @@
 #include "battle_engine.h"
 #include "src/gfx_buffer.h"
 
-/*
-This file covers these classes of moves:
-
-This file covers this {non obvious effect} for:
-    - 
-
-
-As well as effects for these specific moves:
-    - 
-
-
-
-*/
 
 void BattleAnim_RenderNop1(void) {
 }

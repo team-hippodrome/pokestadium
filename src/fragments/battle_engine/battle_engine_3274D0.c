@@ -1,19 +1,6 @@
 #include "battle_engine.h"
 #include "src/math_util.h"
 
-/*
-This file covers these classes of moves:
-
-This file covers this {non obvious effect} for:
-    - 
-
-
-As well as effects for these specific moves:
-    - 
-
-
-
-*/
 
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     UNUSED s32 pad;
@@ -141,6 +128,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better name: BattleAnim_RunDeterministicRotatingBoltOfLightening
 void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -187,6 +175,7 @@ void BattleAnim_SetupSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* 
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better name: BattleAnim_RunRandomRotatingBoltOfLightening
 void BattleAnim_CallbackSharedDescriptor0FDelayedRisingColumnRandomScale(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -231,6 +220,7 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better Name: BattleAnim_RunRandomStationaryBoltOfLightening
 void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -270,6 +260,7 @@ void BattleAnim_SetupSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0
     Particle_AdvanceLifecycle(arg0);
 }
 
+// Better Name: BattleAnim_RunDeterministicStationaryBoltOfLightening
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
