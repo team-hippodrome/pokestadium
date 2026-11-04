@@ -419,6 +419,10 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
-void BattleAnim_DrawParticleFullScreenColorOverlay(Particle* arg0, UNUSED CameraNode* arg1) {
-    BattleAnim_DrawFullScreenColorOverlay(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
+// better name: BattleAnim_DrawFadingFullScreenColorOverlay
+/*
+    handles drawing a single color over the entire screen that fades in and out for moves like Fire punch ands Slash
+*/
+void BattleAnim_DrawParticleFullScreenColorOverlay(Particle* particle, UNUSED CameraNode* arg1) {
+    BattleAnim_DrawFullScreenColorOverlay(particle->primRed, particle->primGreen, particle->primBlue, particle->primAlpha);
 }

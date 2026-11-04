@@ -39,11 +39,20 @@ Also:
     - pokeball flash effect (hue change)
 */
 
+// better name: BattleAnim_SetupBackgroundRecolor
 void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
     BattleAnim_LoadGlobalTintToParticle(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunBackgroundRecolor
+/*
+    recolors background (everything but the pokemon)
+    Examples:
+        - OHKO moves -> Black
+        - ice beam -> aqua
+        - earthquake -> red
+*/
 void BattleAnim_CallbackGlobalTintColorFadeDetach(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -64,12 +73,23 @@ void BattleAnim_CallbackGlobalTintColorFadeDetach(Particle* arg0) {
     BattleAnim_SetGlobalTintFromParticle(arg0);
 }
 
+// better name: BattleAnim_SetupTargetHueChange
 void BattleAnim_SetupOwnerModelTintRampDetach(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunTargetHueChange
+/*
+    handles changing the hue for the target
+    examples:
+        - ice punch -> aqua
+        - fire blast -> charcol
+        - Psybeam -> rainbow
+        - acid -> light green
+    Also handles move changes when target faints from a move
+*/
 void BattleAnim_CallbackOwnerModelTintRampDetach(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -92,12 +112,19 @@ void BattleAnim_CallbackOwnerModelTintRampDetach(Particle* arg0) {
     }
 }
 
+// better name: BattleAnim_SetupUserHueChange
 void BattleAnim_SetupOwnerModelTintPulseDetach(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_CE);
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunUserHueChange
+/*
+    Changes User's Hue. Examples:
+        - Thrash -> red
+        - Recover -> rainbow
+*/
 void BattleAnim_CallbackOwnerModelTintPulseDetach(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -533,12 +560,23 @@ void BattleAnim_RunWhiteHueChange(Particle* particle) {
     }
 }
 
+// better name: BattleAnim_SetupFullScreenHueChange
 void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, arg0->unk_CD);
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunFullScreenHueChange
+/*
+    handles full screen hue overlay changes to a single color. Examples:
+        - Vine whip -> green
+        - Slash -> red
+        - Fire punch -> white
+
+    BattleAnim_DrawParticleFullScreenColorOverlay in @battle_engine_31AA30.c is the equivalent for moves
+    that change both the full screen hue and the pokemon hue at the same time
+*/
 void BattleAnim_CallbackDescriptor25AlphaHoldFadeOut(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -563,6 +601,10 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunPokemonAndFullScreenHueChange
+/*
+    Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
+*/
 void BattleAnim_CallbackDescriptor25AlphaFadeInHold(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:

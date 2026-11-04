@@ -823,34 +823,35 @@ void BattleAnim_GetExplosionParticleColor(Particle* particle, u8 arg1) {
 void func_84334B04(void) {
 }
 
-void BattleAnim_ApproachParticleColorFromVariantIndex(Particle* arg0) {
+// better name: BattleAnim_FirePunchEmberEggBombColorChange
+void BattleAnim_ApproachParticleColorFromVariantIndex(Particle* particle) {
     UNUSED u16 pad;
-    u16 sp1C;
-    u16 sp1A;
+    u16 palette_index;
+    u16 step;
 
-    switch (Particle_FieldCF_GetS16_0C058(arg0)) {
+    switch (Particle_FieldCF_GetS16_0C058(particle)) {
         case 0:
-            sp1C = 0x2E;
-            sp1A = 0x10;
+            palette_index = 0x2E;
+            step = 10;
             break;
 
         case 1:
-            sp1C = 0x2D;
-            sp1A = 0x10;
+            palette_index = 0x2D;
+            step = 10;
             break;
 
         case 2:
-            sp1C = 0x2D;
-            sp1A = 0x10;
+            palette_index = 0x2D;
+            step = 10;
             break;
 
         case 3:
-            sp1C = 0x2B;
-            sp1A = 0x10;
+            palette_index = 0x2B;
+            step = 10;
             break;
     }
 
-    ParticleGfx_ApproachPrimEnvPalettePair(arg0, sp1C, sp1A);
+    ParticleGfx_ApproachPrimEnvPalettePair(particle, palette_index, step);
 }
 
 void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0) {
