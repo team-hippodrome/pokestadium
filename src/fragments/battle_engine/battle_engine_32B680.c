@@ -1901,6 +1901,7 @@ void BattleAnim_CallbackStartEffect34SpecialModelFadeIn_InitParticle(Particle* a
     }
 }
 
+// better name: BattleAnim_RunBlizzardHitSpark
 void BattleAnim_CallbackStartEffect34SpecialModelFadeIn(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1940,6 +1941,7 @@ void BattleAnim_CallbackEndEffect23Descriptor4AAnimatedFade_InitParticle(Particl
     Particle_AdvanceLifecycle(arg0);
 }
 
+// better name: BattleAnim_RunBlizzard
 void BattleAnim_CallbackEndEffect23Descriptor4AAnimatedFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
@@ -1966,12 +1968,14 @@ void BattleAnim_CallbackEndEffect23Descriptor4AAnimatedFade(Particle* arg0) {
     }
 }
 
+// initializes being hit by blizzard
 void ParticleEffect_RegisterSparkle(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 0x35);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0, 0xFF, 0x10, 0xA, 0x96);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect34SpecialModelFadeIn, &sDefaultParticleDescriptor, 0x1E, 1, 0x14, 0, 0, 0);
 }
 
+// initializes using blizzard
 void ParticleEffect_RegisterAll(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0xA, 2, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0xC, 0, 0x2A, 0);
     BattleAnim_SpawnOwnerModelTintPaletteCycle(4, 0xA, 0x35, 8, 0xC8, 0x18);
@@ -3906,6 +3910,7 @@ void ParticleEffect_SimpleBurst(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects83And103ModelAlphaFadeIn, &sDefaultParticleDescriptor, 0x64, 1, 0xB, 0, 3, 6);
 }
 
+// initializes using hyper beam
 void BattleAnim_StartEffect39Descriptor26ModelAnimWaitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x26, 0);
 }
@@ -5091,10 +5096,12 @@ void ParticleEffect_TriggerAnother(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect76DefaultDescriptorModelFade, &sDefaultParticleDescriptor, 0, 1, 9, 0, 0x19, 0);
 }
 
+// initializes using drill peck
 void ParticleEffect_TriggerDefaultPalette1B(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x1B, 1);
 }
 
+// initializes being hit by drill peck
 void ParticleEffect_TriggerDefaultPalette1C(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &sDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x1C, 1);
 }
