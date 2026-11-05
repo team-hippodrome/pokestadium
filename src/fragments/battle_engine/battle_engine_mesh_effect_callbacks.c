@@ -120,7 +120,7 @@ f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcMoveAimingVectors.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcMoveAimingVectors.s")
 #else
 /*
     Moves: Aurora Beam (use), Bind (use), Constrict (use), Disable (use), Hyper Beam (use), Ice Beam (use), Pin
@@ -164,7 +164,7 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
 #endif
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcSwiftAimVectors.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcSwiftAimVectors.s")
 #else
 /*
     Moves: Swift (use)

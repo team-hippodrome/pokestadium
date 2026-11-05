@@ -50,7 +50,7 @@
  *
  * Volatile per-turn battle state. Despite the field name, only some bits block
  * the Pokemon from acting. Setters are the Battle_Effect_* functions in
- * battle_engine_35DF70.c; consumers are in battle_engine_359F90.c
+ * battle_engine_move_mechanics.c; consumers are in battle_engine_mechanics.c
  * (Battle_CheckMonCanAct and the move-effect turn handler).
  * Keep the struct member u8.
  */

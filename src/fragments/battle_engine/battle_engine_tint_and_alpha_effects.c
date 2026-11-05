@@ -602,7 +602,7 @@ void BattleAnim_SetupFullScreenHueChange(Particle* arg0) {
         - Slash -> red
         - Fire punch -> white
 
-    BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_31AA30.c is the equivalent for moves
+    BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the equivalent for moves
     that change both the full screen hue and the pokemon hue at the same time
 */
 void BattleAnim_RunFullScreenHueChange(Particle* arg0) {

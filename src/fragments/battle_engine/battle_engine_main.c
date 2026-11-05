@@ -28,7 +28,7 @@ static GraphNode sStageLayout1;
 static GraphNode sStageLayout3;
 static CameraNode sSide1ThumbnailCamera;
 static CameraNode sSide2ThumbnailCamera;
-// Exported: battle_engine_32B680.c reads these to texture the HUD thumbnails.
+// Exported: battle_engine_model_and_overlay_effects.c reads these to texture the HUD thumbnails.
 u8* sSide1PokemonThumbnailImage;
 u8* sSide2PokemonThumbnailImage;
 static void* sStageBackdrop;
@@ -530,7 +530,7 @@ void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) 
 // triggers on battle start: bug boy in glc
 // Ask the COM selection routine for the picked prefix, then copy the brought
 // roster in that order. numberOfPokemonChosen keeps only the prefix length.
-//@src/fragments/battle_engine/battle_engine_361050.c
+//@src/fragments/battle_engine/battle_engine_com_decision_logic.c
 void Battle_SelectComRoster(void) {
     TeamRoster* com_roster;
     TeamRoster* player_roster;
