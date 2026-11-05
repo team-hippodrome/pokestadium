@@ -4,12 +4,12 @@
 #include "global.h"
 
 typedef struct CachedMoveData {
-    /* 0x00 */ u8 lastMove;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x00 */ u8 moveId;
+    /* 0x01 */ u8 effect;
+    /* 0x02 */ u8 power;
+    /* 0x03 */ u8 type;
+    /* 0x04 */ u8 accuracy;
+    /* 0x05 */ u8 pp;
 } CachedMoveData; // size = 0x6
 
 typedef struct BattleMonRuntime {
@@ -25,7 +25,7 @@ typedef struct BattleMonRuntime {
     /* 0x10 */ u16 unk_10;
     /* 0x12 */ u16 unk_12;
     /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 unk_15;
+    /* 0x15 */ u8 pendingStatusCondition;
     /* 0x16 */ u8 roster[9];
     /* 0x1F */ u8 moves[4];
     /* 0x23 */ char unk23[0x1];
@@ -47,7 +47,7 @@ typedef struct BattleMonRuntime {
     /* 0x4A */ u8 unk_4A;
     /* 0x4B */ u8 unk_4B;
     /* 0x4C */ u8 immobilizedReason;
-    /* 0x4D */ u8 unk_4D;
+    /* 0x4D */ u8 statusCondition;
     /* 0x4E */ u8 battleStatus3;
     /* 0x4F */ u8 isTrapped;
     /* 0x50 */ u8 unk_50;

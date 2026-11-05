@@ -144,22 +144,22 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
     u32 file_number_offset;
     BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
 
-    runtime->lastMove = runtime->moveCache.lastMove;
+    runtime->lastMove = runtime->moveCache.moveId;
 
     // TODO: find out what makes these attack require special handling
-    if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_84385990, 2) != 0) {
+    if (BattleScene_ByteArrayContains(runtime->moveCache.moveId, D_84385990, 2) != 0) {
         file_number_offset = 0;
-    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_84385994, 5) != 0) {
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.moveId, D_84385994, 5) != 0) {
         file_number_offset = 1;
-    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_8438599C, 5) != 0) {
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.moveId, D_8438599C, 5) != 0) {
         file_number_offset = 2;
-    } else if (BattleScene_ByteArrayContains(runtime->moveCache.lastMove, D_843859A4, 46) != 0) {
+    } else if (BattleScene_ByteArrayContains(runtime->moveCache.moveId, D_843859A4, 46) != 0) {
         file_number_offset = 3;
     } else {
         file_number_offset = 4;
     }
 
-    if ((runtime->moveCache.lastMove == METRONOME) || (runtime->moveCache.lastMove == MIRROR_MOVE)) {
+    if ((runtime->moveCache.moveId == METRONOME) || (runtime->moveCache.moveId == MIRROR_MOVE)) {
         Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 

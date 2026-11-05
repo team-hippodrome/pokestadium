@@ -1155,8 +1155,8 @@ void Cry_Play(u32 species, u32 cry_mode) {
         case 5:
             if ((is_partner_pikachu != 0) &&
                 ((D_800FCB18[0] == NULL) || (D_800FCB18[1] == NULL) ||
-                 (((D_800FCB18[0]->unk_15 & 7) == 0) && ((D_800FCB18[1]->unk_15 & 7) == 0) &&
-                  !(D_800FCB18[0]->unk_15 & 0x20) && !(D_800FCB18[1]->unk_15 & 0x20)))) {
+                 (((D_800FCB18[0]->pendingStatusCondition & 7) == 0) && ((D_800FCB18[1]->pendingStatusCondition & 7) == 0) &&
+                  !(D_800FCB18[0]->pendingStatusCondition & 0x20) && !(D_800FCB18[1]->pendingStatusCondition & 0x20)))) {
                 species = 0x9A;
                 sp24 = 0x70;
             } else {
@@ -1166,8 +1166,8 @@ void Cry_Play(u32 species, u32 cry_mode) {
 
         case 6:
             if ((is_partner_pikachu != 0) && (((D_800FCB18[0] == NULL) || (D_800FCB18[1] == NULL)) ||
-                                              (!(D_800FCB18[0]->unk_15 & 7) && !(D_800FCB18[1]->unk_15 & 7) &&
-                                               !(D_800FCB18[0]->unk_15 & 0x20) && !(D_800FCB18[1]->unk_15 & 0x20)))) {
+                                              (!(D_800FCB18[0]->pendingStatusCondition & 7) && !(D_800FCB18[1]->pendingStatusCondition & 7) &&
+                                               !(D_800FCB18[0]->pendingStatusCondition & 0x20) && !(D_800FCB18[1]->pendingStatusCondition & 0x20)))) {
                 species = 0x9B;
                 sp24 = 0x70;
             } else {

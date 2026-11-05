@@ -650,7 +650,7 @@ void BattleScene_CleanupActionAndAdvance(void) {
 s32 BattleScene_HandleFaintStatusCompletion(void) {
     BattleMonRuntime* non_acting_pokemon_runtime = &sNonActingPokemon->state.runtime;
 
-    if (((non_acting_pokemon_runtime->unk_4D & 0x80) || (non_acting_pokemon_runtime->unk_15 & 0x18)) &&
+    if (((non_acting_pokemon_runtime->statusCondition & 0x80) || (non_acting_pokemon_runtime->pendingStatusCondition & 0x18)) &&
         ((non_acting_pokemon_runtime->usedMove & 0xF0) == 0xF0)) {
         BattleAnim_ClearRockThrowingMoveFlag(sActivePokemon[sBattleScene.scene->actingSide]);
         Audio_FadeAndClearStoredSounds();
@@ -711,7 +711,7 @@ void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* camera) {
         BattleScene_TransitionToRage(BATTLE_PHASE_RAGE);
     } else if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_RECOIL) {
         BattleScene_TransitionAndClearMoveEffect(BATTLE_PHASE_RECOIL);
-    } else if ((acting_pokemon_runtime->unk_15 & 0x18) || (acting_pokemon_runtime->unk_4D & 0x80)) {
+    } else if ((acting_pokemon_runtime->pendingStatusCondition & 0x18) || (acting_pokemon_runtime->statusCondition & 0x80)) {
         BattleScene_TransitionAndClearMoveEffect(BATTLE_PHASE_RESIDUAL_AFTER_MOVE);
     } else {
         BattleScene_ResolveDisplayedHpCompletion(camera);
@@ -800,7 +800,7 @@ s32 BattleScene_PrepareResidualStatusPresentation(void) {
     s32 idx = sBattleScene.scene->actingSide;
     BattleMonRuntime* pokemon_runtime = &sActivePokemon[idx]->state.runtime;
 
-    if (((pokemon_runtime->unk_4D & 0x80) || (pokemon_runtime->unk_15 & 0x18)) &&
+    if (((pokemon_runtime->statusCondition & 0x80) || (pokemon_runtime->pendingStatusCondition & 0x18)) &&
         ((pokemon_runtime->usedMove & 0xF0) == 0xF0)) {
         return BattleScene_TransitionAndClearMoveEffect(BATTLE_PHASE_RESIDUAL_WITHOUT_MOVE);
     }
@@ -2070,7 +2070,7 @@ void BattleScene_RunActionEffectHpTransition(CameraNode* camera) {
             sSide2HpConsistent = BattleScene_AnimateDisplayedHpToRuntime(sActingPokemon);
             camera_settled = BattleScene_FrameCamera(camera, sNonActingPokemon);
             if ((BattleScene_IsFireSpin(sActingPokemon) != 0) &&
-                ((sTypeEffectiveness < 0xA) || (sBattleMoveFailed != 0)) && !(target_runtime->unk_15 & 0x20)) {
+                ((sTypeEffectiveness < 0xA) || (sBattleMoveFailed != 0)) && !(target_runtime->pendingStatusCondition & 0x20)) {
                 hold_frames = 0x5A;
             } else {
                 hold_frames = 0xF;
@@ -2632,7 +2632,7 @@ void BattleScene_PhaseTransform(CameraNode* camera) {
         case TRANSFORM_STEP_REQUEST_MODEL:
             BattleScene_SelectActionCameraPresetFromTiming(camera, 0);
             BattleScene_RecenterCameraOnOwner(camera, sActingPokemon);
-            if (acting_pokemon_runtime->unk_4D & 0x10) {
+            if (acting_pokemon_runtime->statusCondition & 0x10) {
                 if (non_acting_pokemon_runtime->battleStatus3 & 8) {
                     acting_pokemon_state->model = sActingPokemon->sessionTeams->displayModel =
                         non_acting_pokemon_state->unk_BE;
@@ -3241,11 +3241,11 @@ void BattleScene_PhaseResidualDamageAfterMove(CameraNode* camera) {
                 BattleScene_SetCameraOwnerStandardShot(camera, sActivePokemon[sBattleScene.scene->actingSide]);
                 BattleScene_EnterStateRow(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
 
-                if (acting_runtime->unk_15 & 0x18) {
+                if (acting_runtime->pendingStatusCondition & 0x18) {
                     BattleBox_Open(4);
                     acting_runtime->displayHp = acting_runtime->unk_0E;
                     other_runtime->displayHp = other_runtime->unk_0E;
-                    if (acting_runtime->unk_15 & 0x10) {
+                    if (acting_runtime->pendingStatusCondition & 0x10) {
                         BattleAnim_QueueEffectList(6, sActingPokemon);
                     } else {
                         BattleAnim_QueueEffectList(5, sActingPokemon);
@@ -3277,7 +3277,7 @@ void BattleScene_PhaseResidualDamageAfterMove(CameraNode* camera) {
                     BattleScene_ResetPhaseSubstep();
                     BattleScene_SetPhase(camera, BATTLE_PHASE_FAINT);
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
-                } else if (acting_runtime->unk_4D & 0x80) {
+                } else if (acting_runtime->statusCondition & 0x80) {
                     BattleScene_ResetCameraFrameCounter();
                     Audio_PlayCommand(0x22, 0, 0);
                     acting_runtime->displayHp = acting_runtime->unk_10;
@@ -3442,11 +3442,11 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* camera) {
                 BattleScene_SetCameraOwnerStandardShot(camera, sActivePokemon[sBattleScene.scene->actingSide]);
                 BattleScene_EnterStateRow(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
 
-                if (acting_runtime->unk_15 & 0x18) {
+                if (acting_runtime->pendingStatusCondition & 0x18) {
                     BattleBox_Open(4);
                     acting_runtime->displayHp = acting_runtime->unk_0E;
                     other_runtime->displayHp = other_runtime->unk_0E;
-                    if (acting_runtime->unk_15 & 0x10) {
+                    if (acting_runtime->pendingStatusCondition & 0x10) {
                         BattleAnim_QueueEffectList(6, sActingPokemon);
                     } else {
                         BattleAnim_QueueEffectList(5, sActingPokemon);
@@ -3475,7 +3475,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* camera) {
                     BattleScene_ResetPhaseSubstep();
                     BattleScene_SetPhase(camera, BATTLE_PHASE_FAINT);
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
-                } else if (acting_runtime->unk_4D & 0x80) {
+                } else if (acting_runtime->statusCondition & 0x80) {
                     Audio_PlayCommand(0x22, 0, 0);
                     acting_runtime->displayHp = acting_runtime->unk_10;
                     other_runtime->displayHp = other_runtime->unk_10;

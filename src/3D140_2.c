@@ -1430,22 +1430,22 @@ found_value:
         return;
     }
 
-    if ((D_800FCB18[side])->unk_15 & 0x20) {
+    if ((D_800FCB18[side])->pendingStatusCondition & 0x20) {
         Audio_QueueSoundAvoidingRecent(D_80077FFC);
         return;
     }
 
-    if ((D_800FCB18[side])->unk_15 & 7) {
+    if ((D_800FCB18[side])->pendingStatusCondition & 7) {
         Audio_QueueSoundAvoidingRecent(D_80078004);
         return;
     }
 
-    if ((D_800FCB18[side])->unk_15 & 8) {
+    if ((D_800FCB18[side])->pendingStatusCondition & 8) {
         Audio_QueueSequenceId(6);
         return;
     }
 
-    if ((D_800FCB18[side])->unk_15 & 0x10) {
+    if ((D_800FCB18[side])->pendingStatusCondition & 0x10) {
         Audio_QueueSequenceId(7);
         return;
     }
@@ -2915,9 +2915,9 @@ u32 Battle_EstimateMoveDamage(u32 moveId, BattleMonRuntime* attacker, BattleMonR
         var_f12 = 1.0f;
     }
 
-    if (defender->unk_15 & 0x20) {
+    if (defender->pendingStatusCondition & 0x20) {
         var_f0 = 1.2f;
-    } else if (defender->unk_15 & 7) {
+    } else if (defender->pendingStatusCondition & 7) {
         var_f0 = 1.10f;
     } else {
         var_f0 = 1.0f;

@@ -967,7 +967,7 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
         s32 sp38;
         s32 sp34;
 
-        sp38 = ((((sp130->unk_04 * 0x64) / 255) + 2) / 5) * 5;
+        sp38 = ((((sp130->accuracy * 0x64) / 255) + 2) / 5) * 5;
         Gfx_SetEnvColor(sp12C->unk_04.r, sp12C->unk_04.g, sp12C->unk_04.b, sp12C->unk_04.a);
         Font_SetActive(8, 0);
         Font_Printf(sp13C + 8, sp138 + 4, Text_GetString(NULL, 0, D_8861C518, sp134->unk_00[0] - 1));
@@ -979,7 +979,7 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
         Gfx_SetEnvColor(D_88605B4C.r, D_88605B4C.g, D_88605B4C.b, D_88605B4C.a);
         Font_SetActive(4, 0);
 
-        sp34 = sp130->unk_02;
+        sp34 = sp130->power;
         if ((arg0->unk_2C == 0x78) || (arg0->unk_2C == 0x99)) {
             sp34 *= 2;
         }

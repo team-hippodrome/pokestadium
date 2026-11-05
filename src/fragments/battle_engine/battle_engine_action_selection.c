@@ -593,7 +593,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* pokemon1, ActivePokemon* pokemon
         return 0;
     }
 
-    if (!(runtime1->unk_4D & 0x60)) {
+    if (!(runtime1->statusCondition & 0x60)) {
         runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
 
@@ -613,7 +613,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* pokemon1, ActivePokemon* pokemon
                 return 0;
             }
 
-            if (!(runtime1->unk_15 & 0x27)) {
+            if (!(runtime1->pendingStatusCondition & 0x27)) {
                 if (!(runtime1->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
                     if (runtime2->immobilizedReason & IMMOBILIZED_TRAPPING) {
                         BattleScene_CompleteCpuMoveAction(pokemon1, pokemon2);
@@ -1192,7 +1192,7 @@ void BattleScene_CheckForcedActionCondition(ActivePokemon* pokemon1, ActivePokem
     BattleMonRuntime* runtime1 = &pokemon1->state.runtime;
     BattleMonRuntime* runtime2 = &pokemon2->state.runtime;
 
-    if (!(pokemon1->state.runtime.unk_4D & 0x60)) {
+    if (!(pokemon1->state.runtime.statusCondition & 0x60)) {
         runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         if (runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED) {
@@ -1262,12 +1262,12 @@ void BattleScene_CollectPlayerAction(ActivePokemon* pokemon1, ActivePokemon* pok
     BattleMonRuntime* runtime2 = &pokemon2->state.runtime;
 
     if (BattleScene_HandlePlayerForcedActionState(pokemon1, pokemon2) == 0) {
-        if (!(runtime1->unk_4D & 0x60)) {
+        if (!(runtime1->statusCondition & 0x60)) {
             runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
             runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
             if (!(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
                 if (BattleScene_HandlePlayerActionInput(pokemon1) == 0) {
-                    if (!(runtime1->unk_15 & 0x27)) {
+                    if (!(runtime1->pendingStatusCondition & 0x27)) {
                         if (!(runtime1->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
                             if (runtime2->immobilizedReason & IMMOBILIZED_TRAPPING) {
                                 BattleScene_HandlePlayerMoveSelectionLocked(pokemon1, pokemon1->state.controller);
@@ -1337,12 +1337,12 @@ void BattleScene_CollectActions(void) {
             Battle_StartTurn();
         }
     } else {
-        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->unk_4D & 0x60) &&
+        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->statusCondition & 0x60) &&
             !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(0);
         }
 
-        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->unk_4D & 0x60) &&
+        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->statusCondition & 0x60) &&
             !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(1);
         }

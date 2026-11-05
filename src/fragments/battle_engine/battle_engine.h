@@ -1037,8 +1037,8 @@ typedef struct unk_D_843C3508 {
 } unk_D_843C3508; // size = 0x374
 
 typedef struct StatStageMultiplier {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x00 */ u8 multiplier;
+    /* 0x01 */ u8 devisor;
 } StatStageMultiplier; // size = 0x2
 
 typedef struct TypeEffectivenessEntry {
@@ -1228,8 +1228,8 @@ extern func_D_84390320 gMoveAnimEffectEndDrawFuncs[];
 extern Gfx D_84389AE0[];
 extern u32 D_8438A648[];
 extern Gfx D_8438A980[];
-extern u8 D_8438AC60[];
-extern StatStageMultiplier gStatStageMultipliers[];
+extern u8 sBattleMechanicsSetting[];
+extern StatStageMultiplier sStatStageMultipliers[];
 extern u8 D_8438ACD4[];
 extern u8 sTypeEffects[];
 extern u8* sSide1PokemonThumbnailImage;
