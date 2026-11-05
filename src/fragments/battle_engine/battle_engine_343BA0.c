@@ -122,6 +122,7 @@ f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
 #if defined(VERSION_US_REV2)
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcVectorAtToDm.s")
 #else
+// BattleAnim_CalcMoveAimingVectors
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
@@ -160,6 +161,7 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
 #if defined(VERSION_US_REV2)
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcVectorAtToDm2.s")
 #else
+// BattleAnim_CalcSwiftAimVectors
 void BattleAnim_CalcVectorAtToDm2(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
@@ -220,6 +222,7 @@ s32 BattleAnim_Effect5RibbonMesh_Update(void) {
     return RibbonMesh_UpdatePool();
 }
 
+// these BattleAnim_Effect5RibbonMesh functions only touch Mist
 void BattleAnim_Effect5RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -317,6 +320,7 @@ void BattleAnim_DrawSurfUseTerrainGrid(void) {
 void BattleAnim_EndEffect16_NoOpInit(void) {
 }
 
+// BattleAnim_SurfCompleteImmediately
 s32 BattleAnim_EndEffect16_CompleteImmediately(void) {
     return -1;
 }
@@ -347,6 +351,7 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
                   4.0f * sp5C, 0x3C);
 }
 
+// Effect19Radial20 -> TrappingLassoMove
 void BattleAnim_StartEffect19Radial20_Init(void) {
     D_843925CE = 0;
     BattleAnim_ResetSharedEffectMatrix();
@@ -694,6 +699,7 @@ void BattleAnim_DrawSingUseTrail(void) {
     gDisplayListHead = SingTrail_BuildGfx(gDisplayListHead);
 }
 
+// These BattleAnim_StartEffect44Trail40GridAlt only affect Kinesis and Supersonic
 void BattleAnim_StartEffect44Trail40GridAlt_Init(void) {
     Vec3f sp1C;
 
@@ -712,6 +718,7 @@ void BattleAnim_StartEffect44Trail40GridAlt_Draw(void) {
     gDisplayListHead = Trail40GridAlt_Draw(gDisplayListHead);
 }
 
+// These BattleAnim_StartEffect45FourStreamTrail functions only touch Sonic Boom
 void BattleAnim_StartEffect45FourStreamTrail_Init(void) {
     D_84392580 = 0;
     BattleAnim_ResetSharedEffectMatrix();
@@ -844,6 +851,7 @@ s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void) {
     return OwnerAnchoredFourStream_IsComplete();
 }
 
+// StartEffect67OwnerAnchoredFourStream -> StingerMoves
 void BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
