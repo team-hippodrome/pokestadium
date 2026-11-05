@@ -337,7 +337,8 @@ s32 BattlePrepStarBurst_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1);
 void BattlePrepStarBurst_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4);
 void BattlePrepStarBurst_UpdateSparkSlot(unk_D_84B25AC0_000* arg0);
 s32 BattlePrepStarBurst_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1);
-void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4);
+void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
+                                             s16 arg4);
 void BattlePrepStarBurst_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1);
 void BattlePrepStarBurst_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1, s16 arg2);
 void BattlePrepStarBurst_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, Vec3f* arg2);
@@ -384,6 +385,5 @@ void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* arg0);
 void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1);
 void BattlePrep_CloseRuleWindow(BattlePrepRuleWindow* arg0);
 s32 BattlePrep_PollRuleWindow(BattlePrepRuleWindow* arg0);
-
 
 #endif // _FRAGMENT63_H_

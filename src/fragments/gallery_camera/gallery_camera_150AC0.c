@@ -96,18 +96,20 @@ void Gallery_DrawHelpBalloonFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -127,7 +129,8 @@ void Gallery_DrawHelpBalloonFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg
 void func_86904BFC(void) {
 }
 
-void GalleryUI_DrawScrollingTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
+void GalleryUI_DrawScrollingTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
+                                        s16 arg7) {
     Rectangle sp30;
 
     GfxRect_SetBounds(&sp30, arg0, arg1, (arg0 + arg2) - 1, (arg1 + arg3) - 1);
@@ -144,8 +147,8 @@ void GalleryUI_DrawScrollingTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, 
         sp30.right += 1;
         sp30.bottom += 1;
 
-        gSPTextureRectangle(gDisplayListHead++, sp30.left << 2, sp30.top << 2, sp30.right << 2, sp30.bottom << 2, G_TX_RENDERTILE,
-                            arg4, arg5, arg6, arg7);
+        gSPTextureRectangle(gDisplayListHead++, sp30.left << 2, sp30.top << 2, sp30.right << 2, sp30.bottom << 2,
+                            G_TX_RENDERTILE, arg4, arg5, arg6, arg7);
     }
 }
 
@@ -461,8 +464,8 @@ void GalleryUI_DrawRotateArrowIconMirrored(u8* arg0, s16 arg1, s16 arg2, s16 arg
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
 }
 
-void GalleryUI_DrawNicknameRibbonSegment(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, u8 argB, u8 argC) {
+void GalleryUI_DrawNicknameRibbonSegment(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 arg5, u8 arg6, u8 arg7,
+                                         u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC) {
     DepthBuffer* temp_s1 = GfxImage_GetCurrent();
     Vtx* temp_s2 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
     Mtx* spAC = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
@@ -509,21 +512,30 @@ void Gallery_DrawNicknameBanner(char* arg0) {
         sp44 = Font_MeasureTextExtent(0x10, 0, arg0);
 
         if (D_8690A710->unk_014 == 1) {
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x3C, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0, 0, 0x22, 0x2B, 0x21, 0);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x5E, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0x22, 0, 0x44, 0x2B, 0x43, 0x22);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x80, 0xAE, 0x20, 0x2B, 0x64, 0x2B, 0x44, 0, 0x64, 0x2B, 0x63, 0x44);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xE2, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0, 0, 0x22, 0x2B, 0, 0x21);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xC0, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0x22, 0, 0x44, 0x2B, 0x22, 0x43);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xA0, 0xAE, 0x20, 0x2B, 0x64, 0x2B, 0x44, 0, 0x64, 0x2B, 0x44, 0x63);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x3C, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0, 0, 0x22, 0x2B, 0x21,
+                                                0);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x5E, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0x22, 0, 0x44, 0x2B,
+                                                0x43, 0x22);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0x80, 0xAE, 0x20, 0x2B, 0x64, 0x2B, 0x44, 0, 0x64, 0x2B,
+                                                0x63, 0x44);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xE2, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0, 0, 0x22, 0x2B, 0,
+                                                0x21);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xC0, 0xAE, 0x22, 0x2B, 0x64, 0x2B, 0x22, 0, 0x44, 0x2B,
+                                                0x22, 0x43);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5001950, 0xA0, 0xAE, 0x20, 0x2B, 0x64, 0x2B, 0x44, 0, 0x64, 0x2B,
+                                                0x44, 0x63);
             // clang-format off
             sp4C.r = 0xF0; sp4C.g = 0x78; sp4C.b = 0x6E;
             sp48.r = 0xF0; sp48.g = 0xF0; sp48.b = 0x78;
             // clang-format on
             sp40 = 5;
         } else {
-            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0x4C, 0xAE, 0x20, 0x28, 0x20, 0x28, 0, 0, 0x20, 0x28, 0x1F, 0);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0x6C, 0xAE, 0x68, 0x28, 0x20, 0x28, 0x1C, 0, 0x20, 0x2B, 0x87, 0x20);
-            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0xD4, 0xAE, 0x20, 0x28, 0x20, 0x28, 0, 0, 0x20, 0x28, 0, 0x20);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0x4C, 0xAE, 0x20, 0x28, 0x20, 0x28, 0, 0, 0x20, 0x28, 0x1F,
+                                                0);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0x6C, 0xAE, 0x68, 0x28, 0x20, 0x28, 0x1C, 0, 0x20, 0x2B,
+                                                0x87, 0x20);
+            GalleryUI_DrawNicknameRibbonSegment(&D_5003AE8, 0xD4, 0xAE, 0x20, 0x28, 0x20, 0x28, 0, 0, 0x20, 0x28, 0,
+                                                0x20);
             // clang-format off
             sp4C.r = 0xDC; sp4C.g = 0xFF; sp4C.b = 0xDC;
             sp48.r = 0x78; sp48.g = 0xB4; sp48.b = 0xFF;
@@ -589,7 +601,7 @@ void Gallery_DrawBackgroundSelectMenu(UNUSED s32 arg0) {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             }
             Font_Printf(0xA0 - (Font_MeasureTextExtent(4, 0, D_86908C58[i]) / 2), ((i - D_8690B384) * 0x14) + 0x36,
-                          D_86908C58[i]);
+                        D_86908C58[i]);
         }
 
         Font_EndTexturedTextRendering();
@@ -610,10 +622,10 @@ void Gallery_CameraDrawHelpBalloon(void) {
     if (D_8690B348 == 4) {
         if (D_8690B350.unk_0E < 0x15) {
             Ui_DrawGradientPanel(D_8690B350.unk_08, D_8690B350.unk_0A - (D_8690B350.unk_0E / 2), D_8690B350.unk_0C,
-                          D_8690B350.unk_0E, &sp34, &sp34);
+                                 D_8690B350.unk_0E, &sp34, &sp34);
         } else {
             Ui_DrawGradientPanel(D_8690B350.unk_08, D_8690B350.unk_0A - (D_8690B350.unk_0E / 2), D_8690B350.unk_0C,
-                          D_8690B350.unk_0E, &sp34, &sp30);
+                                 D_8690B350.unk_0E, &sp34, &sp30);
         }
 
         if (D_8690B350.unk_0E >= 0x1F) {
@@ -821,7 +833,8 @@ void Gallery_DrawFrameMarkers(void) {
 
 void Gallery_DrawTutorialTextBox(void) {
     if (D_8690B3C0.unk_00 != 0xFF) {
-        Gallery_DrawHelpBalloonFrame(0x3C, 0x9B - (D_8690B3C0.unk_0C / 2), D_8690B3C0.unk_08, D_8690B3C0.unk_0C, 0, 0, 0x9B, 0x7D);
+        Gallery_DrawHelpBalloonFrame(0x3C, 0x9B - (D_8690B3C0.unk_0C / 2), D_8690B3C0.unk_08, D_8690B3C0.unk_0C, 0, 0,
+                                     0x9B, 0x7D);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0xC);

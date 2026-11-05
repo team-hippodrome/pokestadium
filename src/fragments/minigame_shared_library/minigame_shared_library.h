@@ -21,5 +21,4 @@ extern s16 D_87B000F4;
 void MiniGame_ReadInputs(void);
 u32 MiniGame_RandomRange(u32);
 
-
 #endif // _FRAGMENT5_H_

@@ -65,8 +65,9 @@ static Gfx D_83804DD0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_83804EB8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_83804D10, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback, D_83804DD0, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_83804D10,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback,
+    D_83804DD0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_83804EF0[] = {
     VTX(-50, 68, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),     VTX(-50, 51, 0, 0, 544, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -98,8 +99,9 @@ static Gfx D_83804FF0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_83805118[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_83804EF0, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback, D_83804FF0, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_83804EF0,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback,
+    D_83804FF0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_83805150[] = {
     VTX(-50, 64, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),     VTX(-50, 48, 0, 0, 512, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -131,8 +133,9 @@ static Gfx D_83805250[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_83805378[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_83805150, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback, D_83805250, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_83805150,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback,
+    D_83805250, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_838053B0[] = {
     VTX(-36, 12, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -151,8 +154,9 @@ static Gfx D_838053F0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_83805458[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_838053B0, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback, D_838053F0, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_838053B0,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, Gallery_RentalViewerNodePostCallback,
+    D_838053F0, 0x06000000, 0x01000000,
 };
 static unk_D_8380548C D_8380548C[] = {
     {
@@ -402,10 +406,10 @@ void Gallery_RentalViewerInitSlotModels(void) {
         if (D_8380548C[i].unk_00 != 0) {
             Model_InitDisplayObject(D_83805698[0] + i, 0, 0, D_83805678[i]);
             Model_InitDisplayObject(D_83805698[1] + i, 0, 0, D_83805690);
-            Vec3f_SetComponentsDuplicate(&D_83805698[0][i].position, D_8380548C[i].unk_02 - 0x140, 0xF0 - D_8380548C[i].unk_04,
-                          -579.0f);
-            Vec3f_SetComponentsDuplicate(&D_83805698[1][i].position, D_8380548C[i].unk_02 - 0x140, 0xE4 - D_8380548C[i].unk_04,
-                          -579.0f);
+            Vec3f_SetComponentsDuplicate(&D_83805698[0][i].position, D_8380548C[i].unk_02 - 0x140,
+                                         0xF0 - D_8380548C[i].unk_04, -579.0f);
+            Vec3f_SetComponentsDuplicate(&D_83805698[1][i].position, D_8380548C[i].unk_02 - 0x140,
+                                         0xE4 - D_8380548C[i].unk_04, -579.0f);
             D_83805698[1][i].lodFraction = 0xB4;
         }
     }
@@ -714,11 +718,11 @@ void Gallery_RentalViewerDrawSlotLabel(s32 arg0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(8, 0);
             Font_Printf(((arg0 << 7) - (Font_MeasureTextExtent(8, 0, D_83806778[arg0].unk_06) / 2)) + 0x80, 0x5C,
-                          D_83806778[arg0].unk_06);
+                        D_83806778[arg0].unk_06);
             Gfx_SetEnvColor(0xFF, 0xBE, 0xFF, 0xFF);
             Font_SetActive(4, 0);
             Font_Printf(((arg0 << 7) - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x80, 0x73, "ID  %05d",
-                          D_83806778[arg0].unk_04);
+                        D_83806778[arg0].unk_04);
         } else {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(8, 0);

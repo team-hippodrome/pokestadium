@@ -5,5 +5,4 @@
 
 s32 Audio_PlaySoundEffectById(u32 sfx);
 
-
 #endif // _49790_H_

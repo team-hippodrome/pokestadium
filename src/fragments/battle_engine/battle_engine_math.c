@@ -362,8 +362,11 @@ void BattleAnim_BSplineWeightsClampedPenultimate(f32* dest, f32 t) {
     sClampedPenultimateTCubed = CB(t);
 
     dest[0] = sClampedPenultimateOneMinusTCubed / 6.0f;
-    dest[1] = (-0.5f * sClampedPenultimateOneMinusTCubed) + (0.5f * sClampedPenultimateOneMinusTSquared) + (0.5f * sClampedPenultimateOneMinusT) + 0.16666667f;
-    dest[2] = (((7.0f * sClampedPenultimateOneMinusTCubed) / 12.0f) - (5.0f * sClampedPenultimateOneMinusTSquared * 0.25f)) + (sClampedPenultimateOneMinusT * 0.25f) + 0.5833333f;
+    dest[1] = (-0.5f * sClampedPenultimateOneMinusTCubed) + (0.5f * sClampedPenultimateOneMinusTSquared) +
+              (0.5f * sClampedPenultimateOneMinusT) + 0.16666667f;
+    dest[2] =
+        (((7.0f * sClampedPenultimateOneMinusTCubed) / 12.0f) - (5.0f * sClampedPenultimateOneMinusTSquared * 0.25f)) +
+        (sClampedPenultimateOneMinusT * 0.25f) + 0.5833333f;
     dest[3] = sClampedPenultimateTCubed * 0.25f;
 }
 
@@ -386,6 +389,7 @@ void BattleAnim_BSplineWeightsClampedLast(f32* dest, f32 t) {
 
     dest[0] = sClampedLastOneMinusTCubed / 6.0f;
     dest[1] = ((-11.0f * sClampedLastOneMinusTCubed) / 12.0f) + (3.0f * sClampedLastOneMinusTSquared * 0.5f);
-    dest[2] = (((21.0f * sClampedLastOneMinusTCubed) / 12.0f) - (9.0f * sClampedLastOneMinusTSquared * 0.5f)) + (3.0f * sClampedLastOneMinusT);
+    dest[2] = (((21.0f * sClampedLastOneMinusTCubed) / 12.0f) - (9.0f * sClampedLastOneMinusTSquared * 0.5f)) +
+              (3.0f * sClampedLastOneMinusT);
     dest[3] = sClampedLastTCubed;
 }

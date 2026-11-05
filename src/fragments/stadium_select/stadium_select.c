@@ -383,8 +383,9 @@ static Gfx sMenuBarBackgroundDL[] = {
     gsSPEndDisplayList(),
 };
 static u32 sMenuBarGeoLayout[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, sMenuBarVtx0, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, sMenuBarVtx0,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx sMenuOptionVtx0[] = {
     VTX(0, 54, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -518,8 +519,9 @@ static Gfx sMenuOptionBackgroundDL[] = {
     gsSPEndDisplayList(),
 };
 static u32 sMenuOptionGeoLayout[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, sMenuOptionVtx0, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback, 0x00000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, sMenuOptionVtx0,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, StadiumSelect_IconGeoPostCallback,
+    0x00000000, 0x06000000, 0x01000000,
 };
 
 void StadiumSelect_AnimateRectangle(s16 arg0, s16 arg1, s16 arg2) {
@@ -654,18 +656,20 @@ void StadiumSelect_DrawBlurbBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -743,7 +747,7 @@ void StadiumSelect_DrawCupInfoPanel(s16 arg0) {
         Font_Printf(0x48, 0x160, Text_GetString(NULL, 0, D_84103440, D_84103CC8));
         Font_Printf(0x18C, 0x160, Text_GetString(NULL, 0, D_84103440, 0xC));
         Font_Printf(Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_84103440, 0xC)) + 0x190, 0x160, "%d~%d",
-                      sMenuOptionRanges[D_84103CC8][0], sMenuOptionRanges[D_84103CC8][1]);
+                    sMenuOptionRanges[D_84103CC8][0], sMenuOptionRanges[D_84103CC8][1]);
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetLineHeight(0x18);
@@ -804,7 +808,7 @@ void StadiumSelect_RenderFrame(s32 arg0, s32 arg1, f32 arg2) {
         temp_t1 = (ptr->unk_06 / 2) + ptr->unk_02;
         temp_fv0 = ptr->unk_04 / 640.0f;
         Gfx_DrawTiledImageMesh(temp_v1 + ((0x140 - temp_v1) * arg2), temp_t1 + ((0xF0 - temp_t1) * arg2), 0,
-                      ((1.0f - temp_fv0) * arg2) + temp_fv0, D_84103450, D_8410344C);
+                               ((1.0f - temp_fv0) * arg2) + temp_fv0, D_84103450, D_8410344C);
     }
 
     if (arg1 != 0) {

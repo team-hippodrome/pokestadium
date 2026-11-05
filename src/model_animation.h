@@ -43,5 +43,4 @@ s32 ModelAnim_HasCrossedFrame(DisplayObject* arg0, s16 arg1);
 s32 ModelAnim_IsAnimationDone(DisplayObject* display_object);
 s32 ModelAnim_IsFinished(DisplayObject* arg0);
 
-
 #endif // _17300_H_

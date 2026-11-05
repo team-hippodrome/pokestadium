@@ -512,7 +512,8 @@ void Gallery_SnapDrawScaledImage(u16* arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
     temp_fv1_2 = -temp_fv1_2;
     temp_fa0_2 = ROUND_MAX(arg4 * (arg6 - 1.0f) * 0.5f);
 
-    Gfx_DrawTexturedRectClipped(arg1 + temp_fv1_2, arg2 - temp_fa0_2, temp_fv1, temp_fa0, 0, 0, 1024.0f / arg5, 1024.0f / arg6, 0);
+    Gfx_DrawTexturedRectClipped(arg1 + temp_fv1_2, arg2 - temp_fa0_2, temp_fv1, temp_fa0, 0, 0, 1024.0f / arg5,
+                                1024.0f / arg6, 0);
 }
 
 void func_83301090(void) {
@@ -563,11 +564,11 @@ void func_83301090(void) {
             gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, r);
 
             if ((i == D_83402E28) && (D_833031B4[i].unk_12 == 0)) {
-                Gallery_SnapDrawScaledImage(D_833031B4[i].unk_00, temp_t0 + 0x46, (i * 0x36) + 0x48, D_833031B4[i].unk_04,
-                              D_833031B4[i].unk_06, temp_fs0, temp_fs1);
+                Gallery_SnapDrawScaledImage(D_833031B4[i].unk_00, temp_t0 + 0x46, (i * 0x36) + 0x48,
+                                            D_833031B4[i].unk_04, D_833031B4[i].unk_06, temp_fs0, temp_fs1);
             } else {
                 Gallery_DrawImageStrips(D_833031B4[i].unk_00, temp_t0 + 0x46, (i * 0x36) + 0x48, D_833031B4[i].unk_04,
-                              D_833031B4[i].unk_06, 0);
+                                        D_833031B4[i].unk_06, 0);
             }
         }
     }
@@ -848,9 +849,9 @@ void func_83302068(unk_D_83407B38* arg0) {
 
         if ((i != arg0->unk_04) && (Gallery_IsSceneReady(temp_s1) != 0) && (temp_s1->unk_00 == 2)) {
             for (j = 0; j < var_s6; j++) {
-                Gallery_DrawPhotoThumbnail(temp_s1->unk_08->img_p, (temp_s4 * sp78) + temp_fp + ((temp_s4 / 2) * (j % 2)),
-                              (temp_s5 * sp74) + sp8C + ((temp_s5 / 2) * (j / 2)), temp_s1->unk_04, temp_s1->unk_06, 8,
-                              1);
+                Gallery_DrawPhotoThumbnail(
+                    temp_s1->unk_08->img_p, (temp_s4 * sp78) + temp_fp + ((temp_s4 / 2) * (j % 2)),
+                    (temp_s5 * sp74) + sp8C + ((temp_s5 / 2) * (j / 2)), temp_s1->unk_04, temp_s1->unk_06, 8, 1);
             }
         }
     }
@@ -863,13 +864,12 @@ void func_83302068(unk_D_83407B38* arg0) {
                 jx = j % 2;
                 jy = j / 2;
                 Gallery_DrawDropShadow((temp_s4 * sp68) + temp_fp + ((temp_s4 / 2) * (j % 2)),
-                              (temp_s5 * sp64) + sp8C + ((temp_s5 / 2) * (j / 2)),
-                              temp_s1->unk_04, temp_s1->unk_06);
+                                       (temp_s5 * sp64) + sp8C + ((temp_s5 / 2) * (j / 2)), temp_s1->unk_04,
+                                       temp_s1->unk_06);
 
-                Gallery_DrawPhotoThumbnail(temp_s1->unk_08->img_p,
-                              ((temp_s4 * sp68) + temp_fp + ((temp_s4 / 2) * jx)) - 0x10,
-                              ((temp_s5 * sp64) + sp8C + ((temp_s5 / 2) * jy)) - 0x10,
-                              temp_s1->unk_04, temp_s1->unk_06, 8, 1);
+                Gallery_DrawPhotoThumbnail(
+                    temp_s1->unk_08->img_p, ((temp_s4 * sp68) + temp_fp + ((temp_s4 / 2) * jx)) - 0x10,
+                    ((temp_s5 * sp64) + sp8C + ((temp_s5 / 2) * jy)) - 0x10, temp_s1->unk_04, temp_s1->unk_06, 8, 1);
             }
         }
     }
@@ -916,7 +916,8 @@ void Gallery_SnapDrawCursor(unk_D_83407B38* arg0) {
                 var_a2 = temp_s0->unk_04 + 8;
                 var_a3 = temp_s0->unk_06 + 8;
             }
-            Gallery_DrawSelectionCorners(((sp48 * sp58) + sp50 + var_v0) - 4, ((sp44 * sp54) + sp4C + var_v0) - 4, var_a2, var_a3);
+            Gallery_DrawSelectionCorners(((sp48 * sp58) + sp50 + var_v0) - 4, ((sp44 * sp54) + sp4C + var_v0) - 4,
+                                         var_a2, var_a3);
             break;
 
         case 1:
@@ -930,7 +931,8 @@ void Gallery_SnapDrawCursor(unk_D_83407B38* arg0) {
                     var_a2 = temp_s0->unk_04 + 8;
                     var_a3 = temp_s0->unk_06 + 8;
                 }
-                Gallery_DrawSelectionCorners(((sp48 * sp58) + sp50) - 0x14, ((sp44 * sp54) + sp4C) - 0x14, var_a2, var_a3);
+                Gallery_DrawSelectionCorners(((sp48 * sp58) + sp50) - 0x14, ((sp44 * sp54) + sp4C) - 0x14, var_a2,
+                                             var_a3);
             }
             break;
     }

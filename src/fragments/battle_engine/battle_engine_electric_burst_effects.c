@@ -1,7 +1,6 @@
 #include "battle_engine.h"
 #include "src/math_util.h"
 
-
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     UNUSED s32 pad;
     Vec3s sp2C;
@@ -476,33 +475,46 @@ void BattleAnim_CallbackEndEffect28Descriptor10WideScatterBurstFade(Particle* ar
 void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_RunStrongElectricSpark, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_RunStrongElectricSpark,
+                                                        &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(0x19);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect,
+                                               &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect,
+                                               &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(8, 2, 8, 0xA, 0xFF);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
 
 // initializes being hit by thunder shock or thunderbolt
 void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0x2C, 4, 0x10, 0xA, 0xFF);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 5, BattleAnim_RunRandomStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x12], 8, 3, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 5, BattleAnim_RunRandomStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x12], 8, 3, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
 }
 
 // initializes getting hit by thunder
 void BattleAnim_InitializeThunderHit(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 4, 8, 0xA, 0xC8);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 5, BattleAnim_RunRandomStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x12], 8, 3, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 5, BattleAnim_RunRandomStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x12], 8, 3, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 3, 0, 0x25, 0);
     BattleAnim_InitializeThunderHitSequence();
 }
 
@@ -510,35 +522,54 @@ void BattleAnim_InitializeThunderHit(void) {
 void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_RunThunderShockOuterJolts, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_RunThunderShockOuterJolts, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_RunThunderShockOuterJolts,
+                                                        &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_RunThunderShockOuterJolts,
+                                                        &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(0x23);
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0xA);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_RunRandomStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_RunRandomStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
 }
 
 void BattleAnim_CreateBurstStreamEffect(void) {
     BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(0x22, 4, 0x10, 0xA);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0xA, 2, BattleAnim_CallbackEndEffect28Descriptor10UpwardBurstFade, &gBattleAnimParticleDescriptors[0x10], 0xC, 1, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_CallbackEndEffect28Descriptor10WideScatterBurstFade, &gBattleAnimParticleDescriptors[0x10], 0xC, 2, 3, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 2, BattleAnim_RunThunderShockOuterJolts, &gBattleAnimParticleDescriptors[0x13], 0xC, 3, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 0xA, 2,
+                                                        BattleAnim_CallbackEndEffect28Descriptor10UpwardBurstFade,
+                                                        &gBattleAnimParticleDescriptors[0x10], 0xC, 1, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3,
+                                                        BattleAnim_CallbackEndEffect28Descriptor10WideScatterBurstFade,
+                                                        &gBattleAnimParticleDescriptors[0x10], 0xC, 2, 3, 0, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 2, BattleAnim_RunThunderShockOuterJolts,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0xC, 3, 3, 0, 0x25, 0);
 }
 
 // initializes using thunder punch
 void BattleAnim_InitializeThunderPunchUse(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunStrongElectricSpark, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_RunThunderPunchUseEffect, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunStrongElectricSpark,
+                                                        &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10,
+                                                        gBattleAnimCurrentAnchor, 0x25, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_RunThunderPunchUseEffect,
+                                                        &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11,
+                                                        gBattleAnimCurrentAnchor, 0, 0);
 }
 
 // initializes getting hit by hyper beam
 void BattleAnim_InitializeHyperBeamHitSequence(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomStationaryBoltOfLightning, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomStationaryBoltOfLightning,
+                                                        &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunDeterministicRotatingBoltOfLightning,
+                                               &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunRandomRotatingBoltOfLightning,
+                                               &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);
 }

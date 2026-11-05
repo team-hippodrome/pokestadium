@@ -113,11 +113,11 @@
 
 #define NFILE 100
 
-#define IOFBF 0000   /* full buffered */
-#define IOLBF 0100   /* line buffered */
-#define IONBF 0004   /* not buffered */
-#define IOEOF 0020   /* EOF reached on read */
-#define IOERR 0040   /* I/O error from system */
+#define IOFBF 0000 /* full buffered */
+#define IOLBF 0100 /* line buffered */
+#define IONBF 0004 /* not buffered */
+#define IOEOF 0020 /* EOF reached on read */
+#define IOERR 0040 /* I/O error from system */
 
 #define IOREAD 0001  /* currently reading */
 #define IOWRT 0002   /* currently writing */
@@ -326,13 +326,13 @@ static void init_usr_lib_redirect(void) {
     mib[1] = KERN_PROC;
     mib[2] = KERN_PROC_PATHNAME;
     mib[3] = -1;
-    
+
     size_t len = sizeof(path);
     int success = sysctl(mib, 4, path, &len, NULL, 0);
-    
+
     if (success != 0) {
-       perror("sysctl");
-       return;
+        perror("sysctl");
+        return;
     }
 #else
     ssize_t size = readlink("/proc/self/exe", path, PATH_MAX);
@@ -1059,7 +1059,7 @@ int wrapper_open(uint8_t* mem, uint32_t path_addr, int flags, int mode) {
 
     if (redirect_path(rpath, path, "/usr/include", usr_include_redirect) ||
         redirect_path(rpath, path, "/usr/lib", usr_lib_redirect) ||
-        redirect_path(rpath, path, "/lib", usr_lib_redirect) ) {
+        redirect_path(rpath, path, "/lib", usr_lib_redirect)) {
         pathPtr = rpath;
     }
 
@@ -3067,11 +3067,11 @@ void wrapper___assert(uint8_t* mem, uint32_t assertion_addr, uint32_t file_addr,
     STRING(assertion)
     STRING(file)
 
-    #ifdef __FreeBSD__
+#ifdef __FreeBSD__
     __assert(assertion, file, line, NULL);
-    #else
+#else
     __assert(assertion, file, line);
-    #endif
+#endif
 }
 
 // https://linux.die.net/man/3/twalk

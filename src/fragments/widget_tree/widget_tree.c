@@ -281,8 +281,8 @@ s32 WidgetTree_DrawTiledTextureRegion(unk_func_88500E34* arg0, s32 arg1, s32 arg
     return 0;
 }
 
-void WidgetTree_InitTintedTexture(unk_func_88500EE4* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5, Color_RGBA8 arg6,
-                   Color_RGBA8 arg7) {
+void WidgetTree_InitTintedTexture(unk_func_88500EE4* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5,
+                                  Color_RGBA8 arg6, Color_RGBA8 arg7) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(unk_func_88500EE4));
     arg0->unk_00.unk_18 = WidgetTree_DrawTintedTexture;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -347,7 +347,7 @@ s32 WidgetTree_DrawSolidColor(unk_func_885012A4* arg0, s32 arg1, s32 arg2) {
 }
 
 void WidgetTree_InitPatternTexture(unk_func_8850143C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5,
-                   Color_RGBA8 arg6) {
+                                   Color_RGBA8 arg6) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(unk_func_8850143C));
     arg0->unk_00.unk_18 = WidgetTree_DrawPatternTexture;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -734,7 +734,8 @@ s32 WidgetTree_UpdateVisibilityGateBridge(unk_func_88503298* arg0) {
     return 0;
 }
 
-void WidgetTree_InitAnimatedFrameVariantA(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5) {
+void WidgetTree_InitAnimatedFrameVariantA(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                          Color_RGBA8 arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(WidgetAnimatedFrame));
     arg0->unk_00.unk_18 = WidgetTree_DrawAnimatedFrameVariantA;
     arg0->unk_00.unk_1C = WidgetTree_UpdateAnimatedFrameVariantA;
@@ -827,7 +828,8 @@ void WidgetTree_SetAnimatedFrameVariantAState(WidgetAnimatedFrame* arg0, s32 arg
     arg0->unk_30 = 0;
 }
 
-void WidgetTree_InitAnimatedFrameVariantB(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5) {
+void WidgetTree_InitAnimatedFrameVariantB(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                          Color_RGBA8 arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(WidgetAnimatedFrame));
     arg0->unk_00.unk_18 = WidgetTree_DrawAnimatedFrameVariantB;
     arg0->unk_00.unk_1C = WidgetTree_UpdateAnimatedFrameVariantB;
@@ -920,7 +922,8 @@ void WidgetTree_SetAnimatedFrameVariantBState(WidgetAnimatedFrame* arg0, s32 arg
     arg0->unk_30 = 0;
 }
 
-void WidgetTree_InitAnimatedFrameVariantC(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5) {
+void WidgetTree_InitAnimatedFrameVariantC(WidgetAnimatedFrame* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                          Color_RGBA8 arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(WidgetAnimatedFrame));
     arg0->unk_00.unk_18 = WidgetTree_DrawAnimatedFrameVariantC;
     arg0->unk_00.unk_1C = WidgetTree_UpdateAnimatedFrameVariantC;
@@ -1081,7 +1084,8 @@ void WidgetTree_SetDirectionalIndicatorState(unk_func_8820E99C_030_044* arg0, s3
     arg0->unk_30 = 0;
 }
 
-void WidgetTree_InitAnimatedPanelVariantB(WidgetAnimatedPanelVariantB* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5) {
+void WidgetTree_InitAnimatedPanelVariantB(WidgetAnimatedPanelVariantB* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                          Color_RGBA8 arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(WidgetAnimatedPanelVariantB));
     arg0->unk_00.unk_18 = WidgetTree_DrawAnimatedPanelVariantB;
     arg0->unk_00.unk_1C = WidgetTree_UpdateAnimatedPanelVariantB;
@@ -1207,7 +1211,7 @@ s32 WidgetTree_DrawAnimatedPanelVariantB(WidgetAnimatedPanelVariantB* arg0, s32 
 }
 
 void WidgetTree_InitTextList(WidgetTextList* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, Color_RGBA8 arg6,
-                   FontContext* arg7) {
+                             FontContext* arg7) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(WidgetTextList));
     arg0->unk_00.unk_18 = WidgetTree_DrawTextList;
     arg0->unk_00.unk_1C = WidgetTree_UpdateTextList;
@@ -1305,8 +1309,8 @@ void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1) {
     arg0->unk_30 = var_v0;
 }
 
-void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030* arg0, s32 arg1, s32 arg2, unk_func_88200FA0_030_030_040 arg3, s32 arg4,
-                   s32 arg5, s32 arg6, s32 arg7, MemoryPool* arg8) {
+void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030* arg0, s32 arg1, s32 arg2, unk_func_88200FA0_030_030_040 arg3,
+                              s32 arg4, s32 arg5, s32 arg6, s32 arg7, MemoryPool* arg8) {
     static Color_RGBA8 D_8850CF84 = { 255, 255, 0, 255 };
 
     s32 var_v0;
@@ -1401,7 +1405,8 @@ void WidgetTree_BindPagedGridStridedData(unk_func_88200FA0_030_030* arg0, unk_fu
     WidgetTree_ClearEntryFlags(arg0);
 }
 
-void WidgetTree_BindPagedGridStridedPage(unk_func_88200FA0_030_030* arg0, unk_func_8820BE14_06C* arg1, MemoryPool* arg2) {
+void WidgetTree_BindPagedGridStridedPage(unk_func_88200FA0_030_030* arg0, unk_func_8820BE14_06C* arg1,
+                                         MemoryPool* arg2) {
     WidgetTree_AllocateEntryFlags(arg0, arg1->unk_04, arg2);
     WidgetTree_BindPagedGridStridedData(arg0, arg1);
 }
@@ -1662,8 +1667,8 @@ s32 WidgetTree_FindSelectableGridEntry(unk_func_88200FA0_030_030* arg0) {
     return -1;
 }
 
-void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034* arg0, s32 arg1, s32 arg2, unk_func_88200FA0_030_030_040 arg3, s32 arg4,
-                   s32 arg5, s32 arg6, MemoryPool* arg7) {
+void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034* arg0, s32 arg1, s32 arg2,
+                                   unk_func_88200FA0_030_030_040 arg3, s32 arg4, s32 arg5, s32 arg6, MemoryPool* arg7) {
     WidgetTree_InitPagedGrid(&arg0->unk_00, arg1, arg2, arg3, arg4, arg5, arg6, 1, arg7);
     arg0->unk_00.unk_00.unk_1C = WidgetTree_UpdateScrollableGridScroll;
     arg0->unk_00.unk_00.unk_18 = func_8850734C;
@@ -1690,7 +1695,8 @@ void WidgetTree_BindScrollableGridData(unk_func_8820BE14_02C_038* arg0, unk_func
     WidgetTree_ClearEntryFlags(&arg0->unk_00);
 }
 
-void WidgetTree_BindScrollableGridPage(unk_func_8830867C_02C_034* arg0, unk_func_88200FA0_030_038* arg1, MemoryPool* arg2) {
+void WidgetTree_BindScrollableGridPage(unk_func_8830867C_02C_034* arg0, unk_func_88200FA0_030_038* arg1,
+                                       MemoryPool* arg2) {
     WidgetTree_AllocateEntryFlags(arg0, arg1->unk_04, arg2);
     WidgetTree_BindScrollableGridData(arg0, arg1);
 }
@@ -1706,7 +1712,8 @@ void WidgetTree_BindScrollableGridStridedData(unk_func_8821421C_038_034* arg0, u
     WidgetTree_ClearEntryFlags(&arg0->unk_00);
 }
 
-void WidgetTree_BindScrollableGridStridedPage(unk_func_8821421C_038_034* arg0, unk_func_8830867C_03C_0D0* arg1, MemoryPool* arg2) {
+void WidgetTree_BindScrollableGridStridedPage(unk_func_8821421C_038_034* arg0, unk_func_8830867C_03C_0D0* arg1,
+                                              MemoryPool* arg2) {
     WidgetTree_AllocateEntryFlags(&arg0->unk_00, arg1->unk_04, arg2);
     WidgetTree_BindScrollableGridStridedData(arg0, arg1);
 }
@@ -2085,7 +2092,8 @@ void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038* arg0) {
     WidgetTree_SetScrollableGridIndexPreserveScroll(arg0, var_a1);
 }
 
-void WidgetTree_InitScrollableGridScrollbar(unk_func_88507D4C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, unk_func_8820BE14_02C_038* arg5) {
+void WidgetTree_InitScrollableGridScrollbar(unk_func_88507D4C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                            unk_func_8820BE14_02C_038* arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(unk_func_88507D4C));
     arg0->unk_00.unk_18 = WidgetTree_DrawScrollableGridScrollbar;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -2399,7 +2407,7 @@ void WidgetTree_InitTextMessageBuffer(unk_func_88509F0C* arg0) {
 }
 
 void WidgetTree_InitMessagePanel(unk_func_88509F48* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, MemoryPool* arg5,
-                   FontContext* arg6) {
+                                 FontContext* arg6) {
     static Color_RGBA8 D_8850CFA8 = { 0x64, 0x1E, 0x1E, 0xFF };
 
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88509F48));
@@ -2603,7 +2611,7 @@ s32 WidgetTree_DrawInsetBorderFrame(WidgetNode* arg0, s32 arg1, s32 arg2) {
 }
 
 void WidgetTree_InitDashedBorderFrame(unk_func_8850B254* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5,
-                   Color_RGBA8 arg6) {
+                                      Color_RGBA8 arg6) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(unk_func_8850B254));
     arg0->unk_00.unk_18 = func_8850B2D4;
     arg0->unk_00.unk_10.unk_00 = arg1;

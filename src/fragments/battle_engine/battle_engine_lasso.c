@@ -9,7 +9,7 @@ This file covers these moves:
     - lasso moves
         - bind
         - wrap
-        - disable 
+        - disable
         - string shot
         - constrict
     - tri attack
@@ -335,8 +335,8 @@ void Radial20_ResetPool(void) {
     }
 }
 
-void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
+void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7,
+                                  u8 arg8, u8 arg9, u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_a1_2;
     s32 i;
@@ -390,7 +390,7 @@ void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
 }
 
 void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
+                       u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_v1_2;
     s32 i;
@@ -433,8 +433,9 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
     }
 }
 
-void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11) {
+void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7,
+                                   u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10,
+                                   s16 arg11) {
     Radial20* var_v0;
     Radial20Node* var_s0;
     s32 i;
@@ -508,8 +509,8 @@ void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
     Moves: Bind (use), Constrict (use), Disable (use), Wrap (use)
     TODO: Human contributor add screenshot
 */
-void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                              u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11) {
+void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8,
+                              u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11) {
     Radial20* var_v0;
     Radial20Node* var_s0;
     s32 i;
@@ -580,7 +581,7 @@ void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, 
 }
 
 void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
+                       u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_s0;
     s32 i;
@@ -643,7 +644,7 @@ void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 }
 
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
-                   UNUSED f32 arg6) {
+                                 UNUSED f32 arg6) {
     UNUSED MtxF pad;
     MtxF sp30;
     UNUSED s32 pad2[2];
@@ -894,7 +895,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                     sp1B4->unk_01C = vtx;
 
                     for (j = 0; j < 20; j++, vtx++) {
-                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f,
+                                                    0.0f);
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
                         vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
@@ -904,8 +906,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                         vtx++;
 
                         if (var_s2->unk_00 <= 0.0) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + M_PI_F, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f,
-                                          0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + M_PI_F, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                         }
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
@@ -922,7 +924,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                     sp1B4->unk_01C = vtx;
 
                     for (j = 0; j < 20; j++, vtx++) {
-                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f,
+                                                    0.0f);
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
                         vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
@@ -934,8 +937,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                         vtx++;
 
                         if (var_s2->unk_00 <= 0.0) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f,
-                                          0.0f, 0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                         }
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
@@ -948,8 +951,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                         vtx++;
 
                         if (var_s2->unk_00 <= 0.0) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f,
-                                          0.0f, 0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                         }
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
@@ -968,7 +971,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                     sp1B4->unk_01C = vtx;
 
                     for (j = 0; j < 20; j++, vtx++) {
-                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                        Radial20_RotateVertexOffset(var_s2->unk_0C, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f,
+                                                    0.0f);
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
                         vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
@@ -980,8 +984,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                         vtx++;
 
                         if (var_s2->unk_00 <= 0.0) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f,
-                                          0.0f, 0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                         }
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
@@ -994,8 +998,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                         vtx++;
 
                         if (var_s2->unk_00 <= 0.0) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f,
-                                          0.0f, 0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + TWO_THIRDS_PI * 2, &var_s2->unk_1C, &sp1A0,
+                                                        var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                         }
 
                         vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
@@ -1016,8 +1020,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
 
                     for (j = 0; j < 20; j++, var_s2++) {
                         for (x = 0; x < 6; x++) {
-                            Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 6.0), &var_s2->unk_1C, &sp1A0,
-                                          var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                            Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 6.0), &var_s2->unk_1C,
+                                                        &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
 
                             vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;
                             vtx->v.ob[1] = var_s2->unk_10.y + sp1A0.y;
@@ -1040,8 +1044,9 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                             for (y = 0; y < 3; y++) {
                                 f32 x1, y1, z1;
 
-                                Radial20_RotateVertexOffset(var_s2->unk_0C + ((TWO_PI_F * y) / 12.0f) + ((TWO_PI_F * x) / 3.0f),
-                                              &var_s2->unk_1C, &sp1A0, D_843892EC[y] * var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                                Radial20_RotateVertexOffset(
+                                    var_s2->unk_0C + ((TWO_PI_F * y) / 12.0f) + ((TWO_PI_F * x) / 3.0f),
+                                    &var_s2->unk_1C, &sp1A0, D_843892EC[y] * var_s2->unk_08, 1.0f, 0.0f, 0.0f);
 
                                 x1 = var_s2->unk_10.x + sp1A0.x;
                                 y1 = var_s2->unk_10.y + sp1A0.y;
@@ -1055,9 +1060,12 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                                     AuxiliaryEffect_Spawn(sp1B4->unk_002, x1, y1, z1, 0xA, 0.75f);
                                 }
 
-                                vtx->v.cn[0] = ((D_843892E0[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
-                                vtx->v.cn[1] = ((D_843892E4[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
-                                vtx->v.cn[2] = ((D_843892E8[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[0] =
+                                    ((D_843892E0[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[1] =
+                                    ((D_843892E4[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
+                                vtx->v.cn[2] =
+                                    ((D_843892E8[x] * (0xFF - var_s2->unk_04)) + (var_s2->unk_04 * 0xFF)) / 255;
                                 vtx->v.cn[3] = var_s2->unk_04;
                                 vtx++;
                             }
@@ -1073,8 +1081,8 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                     for (j = 0; j < 20; j++, var_s2++) {
                         for (x = 0; x < 15; x++) {
                             if (var_s2->unk_00 <= 0.0) {
-                                Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 15.0), &var_s2->unk_1C, &sp1A0,
-                                              var_s2->unk_08, 1.0f, 0.0f, 0.0f);
+                                Radial20_RotateVertexOffset(var_s2->unk_0C + ((2.0 * x * M_PI_F) / 15.0),
+                                                            &var_s2->unk_1C, &sp1A0, var_s2->unk_08, 1.0f, 0.0f, 0.0f);
                             }
 
                             vtx->v.ob[0] = var_s2->unk_10.x + sp1A0.x;

@@ -50,7 +50,7 @@ static Gfx D_82F13D70[] = {
 };
 
 static u32 D_82F13E58[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82F13CB0, 0x05000000, 0x22050000,
+    0x17000000, 0x00000000, 0x00000000,           0x00000000, D_82F13CB0, 0x05000000, 0x22050000,
     0x00000000, 0x08000000, Trade_DrawBox3DModel, D_82F13D70, 0x06000000, 0x01000000,
 };
 
@@ -798,8 +798,8 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
                 var_v0 = &sp5C;
             }
 
-            Trade_DrawRoundedFrameSmall(temp_s4->unk_00 + (i * 0x110) + 0x10, temp_s4->unk_02 + 0x28, 0xD0, 0x50, var_v0->r,
-                          var_v0->g, var_v0->b, 0xFF);
+            Trade_DrawRoundedFrameSmall(temp_s4->unk_00 + (i * 0x110) + 0x10, temp_s4->unk_02 + 0x28, 0xD0, 0x50,
+                                        var_v0->r, var_v0->g, var_v0->b, 0xFF);
         }
 
         Trade_DrawBoxMachineTransferArrows(temp_s4->unk_00 + 0xE0, temp_s4->unk_02 + 0x28);
@@ -864,7 +864,8 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
             var_v0 = &sp84;
         }
 
-        Trade_DrawRoundedFrameLarge(ptr->unk_00, ptr->unk_02, ptr->unk_04, ptr->unk_06, var_v0->r, var_v0->g, var_v0->b, var_v1);
+        Trade_DrawRoundedFrameLarge(ptr->unk_00, ptr->unk_02, ptr->unk_04, ptr->unk_06, var_v0->r, var_v0->g, var_v0->b,
+                                    var_v1);
     }
 
     Font_BeginTranslucentTextRendering();
@@ -894,7 +895,8 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
                 var_s0_2 = "?????";
             }
 
-            Font_Printf(((ptr->unk_04 - Font_MeasureTextExtent(0, 0, var_s0_2)) / 2) + ptr->unk_00, ptr->unk_02 + 8, var_s0_2);
+            Font_Printf(((ptr->unk_04 - Font_MeasureTextExtent(0, 0, var_s0_2)) / 2) + ptr->unk_00, ptr->unk_02 + 8,
+                        var_s0_2);
             Font_SetActive(4, 0);
 
             if (var_s2 != NULL) {
@@ -905,7 +907,7 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
             }
 
             Font_Printf(((ptr->unk_04 - Font_MeasureTextExtent(0, 0, var_s0_2)) / 2) + ptr->unk_00, ptr->unk_02 + 0x20,
-                          var_s0_2);
+                        var_s0_2);
         }
     }
 
@@ -916,14 +918,15 @@ void Trade_DrawBoxMachineTitle(unk_D_82F20A40* arg0) {
     unk_D_82F20A40_00E* temp_s1 = &arg0->unk_26;
     char* temp_v0;
 
-    Trade_DrawRoundedFrameLarge(arg0->unk_26.unk_00, arg0->unk_26.unk_02, arg0->unk_26.unk_04, arg0->unk_26.unk_06, 0x1E, 0x1E, 0x82,
-                  0xFF);
+    Trade_DrawRoundedFrameLarge(arg0->unk_26.unk_00, arg0->unk_26.unk_02, arg0->unk_26.unk_04, arg0->unk_26.unk_06,
+                                0x1E, 0x1E, 0x82, 0xFF);
     if ((temp_s1->unk_04 == 0x210) && (temp_s1->unk_06 == 0x28)) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         temp_v0 = Text_GetString(NULL, 0, gTradeStrings, 2);
-        Font_Printf((temp_s1->unk_00 - (Font_MeasureTextExtent(0, 0, temp_v0) / 2)) + 0x108, temp_s1->unk_02 + 8, temp_v0);
+        Font_Printf((temp_s1->unk_00 - (Font_MeasureTextExtent(0, 0, temp_v0) / 2)) + 0x108, temp_s1->unk_02 + 8,
+                    temp_v0);
         Font_EndTexturedTextRendering();
     }
 }
@@ -1001,25 +1004,25 @@ void Trade_DrawBoxMachineBanner(unk_D_82F20A40* arg0) {
                 case 1:
                     sp48 = Text_GetString(NULL, 0, gTradeStrings, 6);
                     Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp48) / 2),
-                                  temp_s0->unk_02 + 0x10, sp48);
+                                temp_s0->unk_02 + 0x10, sp48);
                     break;
 
                 case 2:
                     sp48 = Text_GetString(NULL, 0, gTradeStrings, 7);
                     Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp48) / 2),
-                                  temp_s0->unk_02 + 0x10, sp48);
+                                temp_s0->unk_02 + 0x10, sp48);
                     break;
 
                 case 3:
                     sp48 = Text_GetString(NULL, 0, gTradeStrings, 8);
                     Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp48) / 2),
-                                  temp_s0->unk_02 + 0x10, sp48);
+                                temp_s0->unk_02 + 0x10, sp48);
                     break;
 
                 case 4:
                     sp48 = Text_GetString(NULL, 0, gTradeStrings, 9);
                     Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp48) / 2),
-                                  temp_s0->unk_02 + 0x10, sp48);
+                                temp_s0->unk_02 + 0x10, sp48);
                     break;
             }
 

@@ -80,25 +80,25 @@ s32 PlayMoveSoundEffect(UNUSED s32 side_index, u32 move_id, u32 species, u32 sou
 
 found:
     switch (sound_kind) {
-    case 0:
-    case 2:
-    case 3:
-        size = 0;
-        break;
-    case 4:
-        size = 2;
-        break;
-    case 1:
-        size = 4;
-        break;
-    case 11:
-        size = 0;
-        break;
-    case 16:
-        species = move_id;
-        goto block_38;
-    default:
-        return 0;
+        case 0:
+        case 2:
+        case 3:
+            size = 0;
+            break;
+        case 4:
+            size = 2;
+            break;
+        case 1:
+            size = 4;
+            break;
+        case 11:
+            size = 0;
+            break;
+        case 16:
+            species = move_id;
+            goto block_38;
+        default:
+            return 0;
     }
     if (sound_kind == 0xB) {
         move_id = 0;
@@ -129,7 +129,7 @@ block_38:
 }
 
 void Audio_FadeStoredSound(void) {
-  if (D_80078A1C[0] != 0) {
-      Audio_QueueFadeSoundCommand(D_80078A18, (s32)D_80078A1C[0]);
-  }
+    if (D_80078A1C[0] != 0) {
+        Audio_QueueFadeSoundCommand(D_80078A18, (s32)D_80078A1C[0]);
+    }
 }

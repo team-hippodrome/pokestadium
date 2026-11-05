@@ -27,10 +27,12 @@ s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
 
 void PokeIcon_InitRenderScene(unk_func_8001A024* arg0, s16 arg1, s16 arg2) {
     static u32 D_8006F350[] = {
-        0x0C00FFFF,    0x05000000, 0x0B00001E, 0x00000000, 0x00300030, 0x00000000, 0x0000000A, 0x015404E2, 0x05000000,
-        0x0D000000,    0x05000000, 0x14000000, 0x002D0019, 0xFFFFFF32, 0x14000000, 0xFFD300CD, 0x80808032, 0x16646464,
-        0x0F000001,    0x05000000, 0x1F000000, 0x00000000, 0x00000000, 0xFF060000, 0x00640064, 0x00640000, 0x08000000,
-        PokeIcon_CaptureGeoNode, 0x00000000, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000, 0x00000000,
+        0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x00300030, 0x00000000, 0x0000000A,
+        0x015404E2, 0x05000000, 0x0D000000, 0x05000000, 0x14000000, 0x002D0019, 0xFFFFFF32,
+        0x14000000, 0xFFD300CD, 0x80808032, 0x16646464, 0x0F000001, 0x05000000, 0x1F000000,
+        0x00000000, 0x00000000, 0xFF060000, 0x00640064, 0x00640000, 0x08000000, PokeIcon_CaptureGeoNode,
+        0x00000000, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+        0x00000000,
     };
 
     CameraNode* sp24;
@@ -154,14 +156,16 @@ void func_8001A46C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
         w = arg0->unk_08[arg1].unk_0C->width;
         h = arg0->unk_08[arg1].unk_0C->height;
         bzero(arg0->unk_08[arg1].unk_0C->img_p, w * h * 2);
-        if (((s32) arg2->unk_00.unk_00 > 0) && ((s32) arg2->unk_00.unk_00 < 0x98)) {
+        if (((s32)arg2->unk_00.unk_00 > 0) && ((s32)arg2->unk_00.unk_00 < 0x98)) {
             arg0->unk_08[arg1].unk_00 = 3;
-            arg0->unk_08[arg1].unk_14.raw = arg2;;
+            arg0->unk_08[arg1].unk_14.raw = arg2;
+            ;
             arg0->unk_08[arg1].unk_02 = arg3 & ~1;
             arg0->unk_08[arg1].unk_08 = arg0->unk_18[arg2->unk_00.unk_00 - 1].unk_02 / 100.0f;
             Model_ComputeSizeVariant(&arg0->unk_08[arg1].unk_10, arg2);
             if (arg0->unk_18[arg2->unk_00.unk_00 - 1].name == NULL) {
-                arg0->unk_08[arg1].unk_04 = arg0->unk_18[arg2->unk_00.unk_00 - 1].unk_08 - 0xE38;;
+                arg0->unk_08[arg1].unk_04 = arg0->unk_18[arg2->unk_00.unk_00 - 1].unk_08 - 0xE38;
+                ;
                 return;
             }
             arg0->unk_08[arg1].unk_04 = -0xE38;
@@ -170,7 +174,7 @@ void func_8001A46C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
         arg0->unk_08[arg1].unk_00 = 1;
         arg0->unk_08[arg1].unk_02 = arg3 & ~1;
         arg0->unk_08[arg1].unk_14.raw = 0x98;
-        arg0->unk_08[arg1].unk_08 = (f32) ((f32) arg0->unk_18[151].unk_02 / 100.0f);
+        arg0->unk_08[arg1].unk_08 = (f32)((f32)arg0->unk_18[151].unk_02 / 100.0f);
         arg0->unk_08[arg1].unk_10.raw = 0;
         arg0->unk_08[arg1].unk_04 = -0xE38;
     }
@@ -477,10 +481,12 @@ s32 PokeIcon_CapturePreviewGeoNode(s32 arg0, GraphNode* arg1) {
 
 void PokeIcon_InitPreviewScene(unk_func_8001B1FC* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     static u32 D_8006F3E0[] = {
-        0x0C00FFFF,    0x05000000, 0x0B00001E, 0x00000000, 0x010000E0, 0x00000000, 0x0000000A, 0x015404E2, 0x05000000,
-        0x0D000000,    0x05000000, 0x14000000, 0x002D013B, 0xFFFFFF32, 0x14000000, 0xFFD30087, 0x80808032, 0x16646464,
-        0x0F000001,    0x05000000, 0x1F000000, 0x00000000, 0x00000000, 0xFF060000, 0x00640064, 0x00640000, 0x08000000,
-        PokeIcon_CapturePreviewGeoNode, 0x00000000, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000, 0x00000000,
+        0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x010000E0, 0x00000000, 0x0000000A,
+        0x015404E2, 0x05000000, 0x0D000000, 0x05000000, 0x14000000, 0x002D013B, 0xFFFFFF32,
+        0x14000000, 0xFFD30087, 0x80808032, 0x16646464, 0x0F000001, 0x05000000, 0x1F000000,
+        0x00000000, 0x00000000, 0xFF060000, 0x00640064, 0x00640000, 0x08000000, PokeIcon_CapturePreviewGeoNode,
+        0x00000000, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+        0x00000000,
     };
     MemoryBlock* sp24;
     MemoryBlock* temp_v0;
@@ -494,7 +500,7 @@ void PokeIcon_InitPreviewScene(unk_func_8001B1FC* arg0, s16 arg1, s16 arg2, s16 
 }
 
 unk_func_8001B1FC* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
-                                 s16 arg6, u8* arg7) {
+                                               s16 arg6, u8* arg7) {
     unk_func_8001B1FC* temp_v0 = main_pool_alloc(sizeof(unk_func_8001B1FC), 0);
 
     if (temp_v0 != NULL) {
@@ -714,7 +720,7 @@ u8* PokeIcon_RenderPreview(unk_func_8001B1FC* arg0) {
 
             case 3:
                 Font_Printf(0, 0x64, "A:%04X  F:%3d", *(u16*)&arg0->unk_24->rotation.y,
-                              arg0->unk_24->transformAnim.frameFixed >> 0x10);
+                            arg0->unk_24->transformAnim.frameFixed >> 0x10);
                 break;
         }
         Font_EndTexturedTextRendering();

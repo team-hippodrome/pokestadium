@@ -30,7 +30,7 @@ typedef struct StageContext {
     /* 0x11 */ u8 fadeMode; // 0 transparent, 1 opaque, 2 fading in, 3 fading out.
     /* 0x12 */ u8 fadeDuration;
     /* 0x13 */ u8 fadeFrame;
-    /* 0x14 */ u16 clearColor; // RGBA5551 framebuffer clear/fade color.
+    /* 0x14 */ u16 clearColor;       // RGBA5551 framebuffer clear/fade color.
     /* 0x16 */ s8 renderTargetIndex; // Current target; advances after recording the frame request.
     /* 0x17 */ u8 pad17;
     // Color-buffer descriptors with optional depth buffers. StageLoader_SetupFrame
@@ -57,7 +57,8 @@ void StageLoader_SetupFrame(void);
 void StageLoader_SwapDisplayListAndReset(void);
 void StageLoader_BeginFrame(void);
 void StageLoader_FillFrame(void);
-StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets);
+StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4,
+                                    s32 allocate_render_targets);
 StageContext* StageContext_GetCurrent(void);
 s32 StageContext_GetFadeMode(void);
 void StageContext_SaveAndSwitch(StageContext* arg0);
@@ -83,6 +84,5 @@ void TextRenderer_ClearQueuedStrings(void);
 char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size);
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...);
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...);
-
 
 #endif // _STAGE_LOADER_H_

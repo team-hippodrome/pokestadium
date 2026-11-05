@@ -475,12 +475,15 @@ void MtxF_ApplyScaleTransform(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* l
     dest->mf[2][2] = basis->mf[2][2] * z_norm;
     dest->mf[2][3] = 0.0f;
 
-    dest->mf[3][0] =
-        ((transform->mf[0][0] * local_position->x) + (transform->mf[1][0] * local_position->y) + (transform->mf[2][0] * local_position->z)) + transform->mf[3][0];
-    dest->mf[3][1] =
-        ((transform->mf[0][1] * local_position->x) + (transform->mf[1][1] * local_position->y) + (transform->mf[2][1] * local_position->z)) + transform->mf[3][1];
-    dest->mf[3][2] =
-        ((transform->mf[0][2] * local_position->x) + (transform->mf[1][2] * local_position->y) + (transform->mf[2][2] * local_position->z)) + transform->mf[3][2];
+    dest->mf[3][0] = ((transform->mf[0][0] * local_position->x) + (transform->mf[1][0] * local_position->y) +
+                      (transform->mf[2][0] * local_position->z)) +
+                     transform->mf[3][0];
+    dest->mf[3][1] = ((transform->mf[0][1] * local_position->x) + (transform->mf[1][1] * local_position->y) +
+                      (transform->mf[2][1] * local_position->z)) +
+                     transform->mf[3][1];
+    dest->mf[3][2] = ((transform->mf[0][2] * local_position->x) + (transform->mf[1][2] * local_position->y) +
+                      (transform->mf[2][2] * local_position->z)) +
+                     transform->mf[3][2];
     dest->mf[3][3] = 1.0f;
 }
 
@@ -582,9 +585,12 @@ void MtxF_TransformVec3s(MtxF* matrix, Vec3s* dest) {
     f32 entry1 = dest->y;
     f32 entry2 = dest->z;
 
-    dest->x = ((entry0 * matrix->mf[0][0]) + (entry1 * matrix->mf[1][0]) + (entry2 * matrix->mf[2][0])) + matrix->mf[3][0];
-    dest->y = ((entry0 * matrix->mf[0][1]) + (entry1 * matrix->mf[1][1]) + (entry2 * matrix->mf[2][1])) + matrix->mf[3][1];
-    dest->z = ((entry0 * matrix->mf[0][2]) + (entry1 * matrix->mf[1][2]) + (entry2 * matrix->mf[2][2])) + matrix->mf[3][2];
+    dest->x =
+        ((entry0 * matrix->mf[0][0]) + (entry1 * matrix->mf[1][0]) + (entry2 * matrix->mf[2][0])) + matrix->mf[3][0];
+    dest->y =
+        ((entry0 * matrix->mf[0][1]) + (entry1 * matrix->mf[1][1]) + (entry2 * matrix->mf[2][1])) + matrix->mf[3][1];
+    dest->z =
+        ((entry0 * matrix->mf[0][2]) + (entry1 * matrix->mf[1][2]) + (entry2 * matrix->mf[2][2])) + matrix->mf[3][2];
 }
 
 #define GET_HIGH_S16_OF_32(var) (((s16*)&(var))[0])
@@ -759,7 +765,8 @@ void Color_RGBA8ToHSV(Color_RGBA8_u32 color, Vec3f* dest) {
 }
 
 void Color_RGB5551ToHSV(u16 color, Vec3f* dest) {
-    Color_RGBToHSV(((color & 0xF800) >> 0xB) / 31.0f, ((color & 0x7C0) >> 6) / 31.0f, ((color & 0x3E) >> 1) / 31.0f, dest);
+    Color_RGBToHSV(((color & 0xF800) >> 0xB) / 31.0f, ((color & 0x7C0) >> 6) / 31.0f, ((color & 0x3E) >> 1) / 31.0f,
+                   dest);
 }
 
 f32 Color_HSVInterpolate(f32 hue, f32 low, f32 high) {

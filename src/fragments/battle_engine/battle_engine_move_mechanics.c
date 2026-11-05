@@ -6,7 +6,9 @@
 
 typedef void (*MoveEffectCallback)(void);
 
-static const char D_8438DC80[] = "は" "\n" "こんらんした";
+static const char D_8438DC80[] = "は"
+                                 "\n"
+                                 "こんらんした";
 static const char D_8438DC90[] = "SP %d\n";
 static const char D_8438DC98[] = "index %d  step %d\n";
 static const char D_8438DCAC[] = "index %d  step %d\n";
@@ -29,19 +31,93 @@ static const char D_8438DDC8[] = "******** spAttackMainEnd ********\n";
 
 static char* D_8438AE50 = D_8438DC80;
 static MoveEffectCallback sMoveEffectHandlers[] = {
-    Battle_Effect_Sleep, Battle_Effect_Poison, Battle_Effect_DrainHP, Battle_Effect_SecondaryStatusChance, Battle_Effect_SecondaryStatusChance, Battle_Effect_SecondaryStatusChance, Battle_Effect_Explosion,
-    Battle_Effect_DrainHP, NULL,          Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat, Battle_Effect_PayDay, NULL,          Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_Conversion, Battle_Effect_Haze, Battle_Effect_Bide, Battle_Effect_Thrash, Battle_Effect_ForceSwitchOrFlee,
-    Battle_Effect_MultiHit, Battle_Effect_MultiHit, Battle_Effect_Flinch, Battle_Effect_Sleep, Battle_Effect_Poison, Battle_Effect_SecondaryStatusChance, Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_SecondaryStatusChance, Battle_Effect_Flinch, Battle_Effect_OHKO, Battle_Effect_TwoTurnMove, NULL,          NULL,          Battle_Effect_Trap,
-    Battle_Effect_TwoTurnMove, Battle_Effect_MultiHit, NULL,          Battle_Effect_Mist, Battle_Effect_FocusEnergy, Battle_Effect_Recoil, Battle_Effect_Confuse,
-    Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_RaiseOwnStat, Battle_Effect_Heal,
-    Battle_Effect_Transform, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat,
-    Battle_Effect_ReflectLightScreen, Battle_Effect_ReflectLightScreen, Battle_Effect_Poison, Battle_Effect_Paralyze, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_LowerStat, Battle_Effect_ConfuseChance, Battle_Effect_MultiHit,
-    NULL,          Battle_Effect_Substitute, Battle_Effect_Recharge, Battle_Effect_Rage, Battle_Effect_Mimic, NULL,          Battle_Effect_LeechSeed,
-    Battle_Effect_Splash, Battle_Effect_Disable, NULL,
+    Battle_Effect_Sleep,
+    Battle_Effect_Poison,
+    Battle_Effect_DrainHP,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_Explosion,
+    Battle_Effect_DrainHP,
+    NULL,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_PayDay,
+    NULL,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_Conversion,
+    Battle_Effect_Haze,
+    Battle_Effect_Bide,
+    Battle_Effect_Thrash,
+    Battle_Effect_ForceSwitchOrFlee,
+    Battle_Effect_MultiHit,
+    Battle_Effect_MultiHit,
+    Battle_Effect_Flinch,
+    Battle_Effect_Sleep,
+    Battle_Effect_Poison,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_SecondaryStatusChance,
+    Battle_Effect_Flinch,
+    Battle_Effect_OHKO,
+    Battle_Effect_TwoTurnMove,
+    NULL,
+    NULL,
+    Battle_Effect_Trap,
+    Battle_Effect_TwoTurnMove,
+    Battle_Effect_MultiHit,
+    NULL,
+    Battle_Effect_Mist,
+    Battle_Effect_FocusEnergy,
+    Battle_Effect_Recoil,
+    Battle_Effect_Confuse,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_RaiseOwnStat,
+    Battle_Effect_Heal,
+    Battle_Effect_Transform,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_ReflectLightScreen,
+    Battle_Effect_ReflectLightScreen,
+    Battle_Effect_Poison,
+    Battle_Effect_Paralyze,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_LowerStat,
+    Battle_Effect_ConfuseChance,
+    Battle_Effect_MultiHit,
+    NULL,
+    Battle_Effect_Substitute,
+    Battle_Effect_Recharge,
+    Battle_Effect_Rage,
+    Battle_Effect_Mimic,
+    NULL,
+    Battle_Effect_LeechSeed,
+    Battle_Effect_Splash,
+    Battle_Effect_Disable,
+    NULL,
 };
 
 u16 Battle_ApplyStatStageMultiplier(u16* arg0, u16 arg1, u8 arg2) {
@@ -77,7 +153,8 @@ void Battle_Effect_Sleep(void) {
         if (sBattleTarget->unk_15 == 0) {
             HandleMoveEffectFlags();
             if ((sBattleMoveFailed == 0) &&
-                ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) || (D_8438AC60[0] == 2))) {
+                ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) ||
+                 (D_8438AC60[0] == 2))) {
                 goto block_9;
             }
         }
@@ -144,7 +221,8 @@ void Battle_Effect_Poison(void) {
                 sTypeEffectiveness = 0xA;
                 HandleMoveEffectFlags();
                 if (sBattleMoveFailed != 0) {
-                    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                    Text_SetStringToken(0x19,
+                                        Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     Battle_QueueMessage(sp1C, -0x7D);
                     return;
                 }
@@ -226,7 +304,8 @@ void Battle_Effect_SecondaryStatusChance(void) {
 
     if ((sBattleTarget->roster[6] != (*sBattleUser).moveCache.unk_03) &&
         (sBattleTarget->roster[7] != (*sBattleUser).moveCache.unk_03)) {
-        if ((sBattleUser->moveCache.unk_01 < 7) || ((D_8438AC60[0] != 2) && (sBattleUser->moveCache.lastMove == BLIZZARD))) {
+        if ((sBattleUser->moveCache.unk_01 < 7) ||
+            ((D_8438AC60[0] != 2) && (sBattleUser->moveCache.lastMove == BLIZZARD))) {
             if (Battle_Random() >= 0x1A) {
                 return;
             }
@@ -248,7 +327,8 @@ void Battle_Effect_SecondaryStatusChance(void) {
                 if (Battle_FreezeClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
                     sBattleTarget->unk_4D &= ~0x20;
                     sBattleTarget->unk_15 = 0x20;
-                    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                    Text_SetStringToken(0x19,
+                                        Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x75);
                 }
                 break;
@@ -708,8 +788,9 @@ void Battle_Effect_TwoTurnMove(void) {
 void Battle_Effect_Trap(void) {
     s32 var_v1;
 
-    if (!(sBattleUser->immobilizedReason & 0x20) && ((D_8438AC60[0] != 1) || (sBattleUser->moveCache.unk_03 != 0) ||
-                                         ((sBattleTarget->roster[6] != 8) && (sBattleTarget->roster[7] != 8)))) {
+    if (!(sBattleUser->immobilizedReason & 0x20) &&
+        ((D_8438AC60[0] != 1) || (sBattleUser->moveCache.unk_03 != 0) ||
+         ((sBattleTarget->roster[6] != 8) && (sBattleTarget->roster[7] != 8)))) {
         sBattleTarget->unk_4D &= 0xFFDF;
         sBattleUser->immobilizedReason |= 0x20;
         var_v1 = Battle_Random() & 3;
@@ -805,7 +886,8 @@ void Battle_Effect_Confuse(void) {
 void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     if (sBattleTarget->unk_15 == 0) {
-        if ((sBattleUser->moveCache.unk_03 != 0x17) || ((sBattleTarget->roster[6] != 4) && (sBattleTarget->roster[7] != 4))) {
+        if ((sBattleUser->moveCache.unk_03 != 0x17) ||
+            ((sBattleTarget->roster[6] != 4) && (sBattleTarget->roster[7] != 4))) {
             HandleMoveEffectFlags();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->unk_15 |= 0x40;

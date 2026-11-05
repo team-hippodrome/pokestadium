@@ -5,10 +5,9 @@
 
 // Command dispatch table, indexed by LEOCmdHeader.command. Slot 0 is unused.
 void (*D_80079520[16])(void) = {
-    NULL,          leoClr_queue,  leoInquiry,    leoTest_unit_rdy,
-    leoRezero,     leoRead,       leoWrite,      leoSeek,
-    leoStart_stop, leoRd_capacity, leoTranslate, leoMode_sel,
-    leoReadDiskId, leoReadTimer,  leoSetTimer,   leoClr_reset,
+    NULL,          leoClr_queue, leoInquiry,    leoTest_unit_rdy, leoRezero,    leoRead,
+    leoWrite,      leoSeek,      leoStart_stop, leoRd_capacity,   leoTranslate, leoMode_sel,
+    leoReadDiskId, leoReadTimer, leoSetTimer,   leoClr_reset,
 };
 
 // Premade READ of the system area: LBA 12, one block.

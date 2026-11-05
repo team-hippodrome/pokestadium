@@ -6,11 +6,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -97,7 +97,8 @@ Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg
     a3_y = arg3->y;
     a3_z = arg3->z;
 
-    Vec3f_CrossProductComponents(a2_x - a1_x, a2_y - a1_y, a2_z - a1_z, a1_x - a3_x, a1_y - a3_y, a1_z - a3_z, &sp130, &sp12C, &sp128);
+    Vec3f_CrossProductComponents(a2_x - a1_x, a2_y - a1_y, a2_z - a1_z, a1_x - a3_x, a1_y - a3_y, a1_z - a3_z, &sp130,
+                                 &sp12C, &sp128);
     if ((SQ(sp130) + SQ(sp12C) + SQ(sp128)) > 0.0f) {
         Vec3f_NormalizeComponents(&sp130, &sp12C, &sp128);
     }

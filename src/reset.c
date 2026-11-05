@@ -86,10 +86,10 @@ void func_8000559C(void) {
         // this function is supposed to only take 1 argument. huh?
         // this function packs 3 values into a RGBA5551 format.
         Display_ClearFramebufferLine(((((gSoftResetRed * (15 - gSoftResetLineNum)) >> 4) << 11) |
-                       (((gSoftResetGreen * (15 - gSoftResetLineNum)) >> 4) << 6) |
-                       (((gSoftResetBlue * (15 - gSoftResetLineNum)) >> 4) << 1) | 1) &
-                          0xFFFF,
-                      gSoftResetLineNum);
+                                      (((gSoftResetGreen * (15 - gSoftResetLineNum)) >> 4) << 6) |
+                                      (((gSoftResetBlue * (15 - gSoftResetLineNum)) >> 4) << 1) | 1) &
+                                         0xFFFF,
+                                     gSoftResetLineNum);
     }
 }
 

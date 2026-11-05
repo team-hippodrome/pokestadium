@@ -100,10 +100,10 @@ f32 ModelAnim_InterpolateKeyframe(Vec3s* arg0, s16 arg1, s16 arg2) {
             x = (arg2 - arg0[i].x) / 30.0f;
             y = 30.0f / (arg0[i + 1].x - arg0[i].x);
 
-            var_fv1 = (arg0[i].y * (((2.0f * x * x * x * y * y * y) - 3.0f * x * x * y * y) + 1.0f))
-                    + (arg0[i + 1].y * ((-2.0f * x * x * x * y * y * y) + 3.0f * x * x * y * y))
-                    + (arg0[i].z * ((x * x * x * y * y - (2.0f * x * x * y)) + x))
-                    + (arg0[i + 1].z * (x * x * x * y * y - (x * x * y)));
+            var_fv1 = (arg0[i].y * (((2.0f * x * x * x * y * y * y) - 3.0f * x * x * y * y) + 1.0f)) +
+                      (arg0[i + 1].y * ((-2.0f * x * x * x * y * y * y) + 3.0f * x * x * y * y)) +
+                      (arg0[i].z * ((x * x * x * y * y - (2.0f * x * x * y)) + x)) +
+                      (arg0[i + 1].z * (x * x * x * y * y - (x * x * y)));
         }
     }
     return var_fv1;
@@ -130,10 +130,10 @@ f32 ModelAnim_InterpolateKeyframeTangent(unk_func_80016B30_arg0* arg0, s16 arg1,
             x = (arg2 - arg0[i].vec.x) / 30.0f;
             y = 30.0f / (arg0[i + 1].vec.x - arg0[i].vec.x);
 
-            var_fv1 = (arg0[i].vec.y * (((2.0f * x * x * x * y * y * y) - 3.0f * x * x * y * y) + 1.0f))
-                    + (arg0[i + 1].vec.y * ((-2.0f * x * x * x * y * y * y) + 3.0f * x * x * y * y))
-                    + (arg0[i].unk_06 * ((x * x * x * y * y - (2.0f * x * x * y)) + x))
-                    + (arg0[i + 1].vec.z * (x * x * x * y * y - (x * x * y)));
+            var_fv1 = (arg0[i].vec.y * (((2.0f * x * x * x * y * y * y) - 3.0f * x * x * y * y) + 1.0f)) +
+                      (arg0[i + 1].vec.y * ((-2.0f * x * x * x * y * y * y) + 3.0f * x * x * y * y)) +
+                      (arg0[i].unk_06 * ((x * x * x * y * y - (2.0f * x * x * y)) + x)) +
+                      (arg0[i + 1].vec.z * (x * x * x * y * y - (x * x * y)));
         }
     }
     return var_fv1;

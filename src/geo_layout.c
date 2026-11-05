@@ -175,8 +175,8 @@ void geo_layout_cmd_create_camera(void) {
     if (temp_v0 != NULL) {
         temp_v0->perspective.verticalFieldOfView = cmd->unk_02;
         Vec3f_FromVec3s(&temp_v0->view.targetPosition, &cmd->unk_0C);
-        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->unk_16, (cmd->unk_12 << 0xF) / 180,
-                      (cmd->unk_14 << 0xF) / 180);
+        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->unk_16,
+                                    (cmd->unk_12 << 0xF) / 180, (cmd->unk_14 << 0xF) / 180);
     }
 
     register_graph_node(&temp_v0->node);
@@ -236,7 +236,8 @@ void geo_layout_cmd_noop(void) {
 void geo_layout_cmd_create_fog(void) {
     unk_D_800ABE00_cmd13* cmd = (unk_D_800ABE00_cmd13*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateFog(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06, cmd->r, cmd->g, cmd->b, 0xFF));
+    register_graph_node(
+        GeoNode_CreateFog(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06, cmd->r, cmd->g, cmd->b, 0xFF));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd13);
 }
@@ -244,8 +245,8 @@ void geo_layout_cmd_create_fog(void) {
 void geo_layout_cmd_create_light(void) {
     unk_D_800ABE00_cmd14* cmd = (unk_D_800ABE00_cmd14*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->unk_04 << 0xF) / 180, (cmd->unk_06 << 0xF) / 180, cmd->r,
-                                cmd->g, cmd->b, cmd->a));
+    register_graph_node(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->unk_04 << 0xF) / 180,
+                                            (cmd->unk_06 << 0xF) / 180, cmd->r, cmd->g, cmd->b, cmd->a));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd14);
 }
@@ -265,8 +266,8 @@ void geo_layout_cmd_create_ambient_light(void) {
 void geo_layout_cmd_create_shadow_context(void) {
     unk_D_800ABE00_cmd17* cmd = (unk_D_800ABE00_cmd17*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateShadowContext(gGraphNodePool, NULL, cmd->unk_02, cmd->unk_08, cmd->unk_04, cmd->unk_0C, cmd->unk_06,
-                                cmd->unk_10));
+    register_graph_node(GeoNode_CreateShadowContext(gGraphNodePool, NULL, cmd->unk_02, cmd->unk_08, cmd->unk_04,
+                                                    cmd->unk_0C, cmd->unk_06, cmd->unk_10));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd17);
 }
@@ -337,8 +338,8 @@ void geo_layout_cmd_create_animated_part(void) {
         var_a3 |= 2;
     }
 
-    register_graph_node(
-        GeoNode_CreateAnimatedPart(gGraphNodePool, NULL, cmd->unk_01, var_a3, cmd->unk_03, &cmd->unk_04, &cmd->unk_0A, &sp3C));
+    register_graph_node(GeoNode_CreateAnimatedPart(gGraphNodePool, NULL, cmd->unk_01, var_a3, cmd->unk_03, &cmd->unk_04,
+                                                   &cmd->unk_0A, &sp3C));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1D);
 }
@@ -408,8 +409,8 @@ void geo_layout_cmd_create_display_list(void) {
 void geo_layout_cmd_create_shadow_texture(void) {
     unk_D_800ABE00_cmd23* cmd = (unk_D_800ABE00_cmd23*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateShadowTexture(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_02, cmd->unk_04, cmd->unk_08, cmd->unk_0A,
-                                cmd->r, cmd->g, cmd->b, cmd->a));
+    register_graph_node(GeoNode_CreateShadowTexture(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_02, cmd->unk_04,
+                                                    cmd->unk_08, cmd->unk_0A, cmd->r, cmd->g, cmd->b, cmd->a));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd23);
 }
@@ -435,8 +436,9 @@ void geo_layout_cmd_set_node_flag4(void) {
 void geo_layout_cmd_create_group(void) {
     unk_D_800ABE00_cmd26* cmd = (unk_D_800ABE00_cmd26*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateGroup(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04, cmd->unk_06, cmd->unk_08, cmd->unk_0A,
-                                cmd->unk_02, cmd->unk_03, cmd->unk_0C, cmd->r, cmd->g, cmd->b, cmd->a));
+    register_graph_node(GeoNode_CreateGroup(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04, cmd->unk_06, cmd->unk_08,
+                                            cmd->unk_0A, cmd->unk_02, cmd->unk_03, cmd->unk_0C, cmd->r, cmd->g, cmd->b,
+                                            cmd->a));
 
     gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd26);
 }

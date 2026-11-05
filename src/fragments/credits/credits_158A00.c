@@ -97,16 +97,80 @@ u8 D_86A025C4 = 0;
 u32 D_86A025C8 = 0;
 u16 D_86A025CC = 0;
 u32 D_86A025D0[] = {
-    0x0C00FFFF, 0x05000000, 0x0B00001E,    0x00000000, 0x014000F0,  0x0000000F, 0x00000000,  0x00000000,
-    0x05000000, 0x0D000000, 0x05000000,    0x07000000, &D_86A06170, 0x14000000, 0x002D0019,  0xFFFFFF28,
-    0x16646464, 0x0F000002, 0x05000000,    0x1F00FFFF, 0x00000000,  0x00000000, 0x00000000,  0x00640064,
-    0x00640000, 0x08000000, Credits_BackgroundNodePostCallback, 0x00000000, 0x05000000,  0x07000000, &D_86A06190, 0x06000000,
-    0x06000000, 0x0F000003, 0x05000000,    0x1F00FFFF, 0x00000000,  0x00000000, 0x00000000,  0x00640064,
-    0x00640000, 0x08000000, Credits_BackgroundNodePostCallback, 0x00000000, 0x05000000,  0x07000000, &D_86A061A8, 0x06000000,
-    0x06000000, 0x0F000002, 0x05000000,    0x1F00FFFF, 0x00000000,  0x00000000, 0x00000000,  0x00640064,
-    0x00640000, 0x08000000, Credits_BackgroundNodePostCallback, 0x00000000, 0x05000000,  0x07000000, &D_86A061C0, 0x06000000,
-    0x06000000, 0x0F000003, 0x05000000,    0x0A000000, &D_800AC840, 0x06000000, 0x06000000,  0x06000000,
-    0x06000000, 0x01000000,
+    0x0C00FFFF,
+    0x05000000,
+    0x0B00001E,
+    0x00000000,
+    0x014000F0,
+    0x0000000F,
+    0x00000000,
+    0x00000000,
+    0x05000000,
+    0x0D000000,
+    0x05000000,
+    0x07000000,
+    &D_86A06170,
+    0x14000000,
+    0x002D0019,
+    0xFFFFFF28,
+    0x16646464,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Credits_BackgroundNodePostCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &D_86A06190,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Credits_BackgroundNodePostCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &D_86A061A8,
+    0x06000000,
+    0x06000000,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Credits_BackgroundNodePostCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &D_86A061C0,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x0A000000,
+    &D_800AC840,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x01000000,
 };
 
 s32 Credits_BackgroundNodePostCallback(s32 arg0, GraphNode* arg1) {
@@ -208,10 +272,12 @@ void Credits_PollInput(void) {
 
 void Credits_UpdateCamera(void) {
     if (D_86A061D9 < 6) {
-        Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC, D_86A061EE);
+        Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0,
+                                    D_86A061EC, D_86A061EE);
     } else if (D_86A061D9 < 9) {
         Camera_ComputeEyeFromAngles(&D_86A06248, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC, D_86A061EE);
-        Camera_ComputeEyeFromAngles(&D_86A06248, &D_86A061E8->view.targetPosition, D_86A061F0 + 500.0f, D_86A061EC, D_86A061EE);
+        Camera_ComputeEyeFromAngles(&D_86A06248, &D_86A061E8->view.targetPosition, D_86A061F0 + 500.0f, D_86A061EC,
+                                    D_86A061EE);
     }
 }
 
@@ -1423,7 +1489,8 @@ void Credits_InitCamera(void) {
 
     D_86A061E8->perspective.nearPlane = 50.0f;
     D_86A061E8->perspective.farPlane = 6400.0f;
-    Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC, D_86A061EE);
+    Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC,
+                                D_86A061EE);
 }
 
 void Credits_InitScene(s32 arg0) {
@@ -1577,10 +1644,10 @@ void func_86A01490(void) {
 
     if (D_86A06212 == 0) {
         D_86A06212 = 1;
-    } else if ((u32) D_86A0621C < (u32) temp_v0) {
+    } else if ((u32)D_86A0621C < (u32)temp_v0) {
         D_86A06210 = temp_v0 - D_86A0621C;
     } else {
-        D_86A06210 = ((u64) (u32) temp_v0 - 0x100000000ULL - 0x100000000ULL) - D_86A0621C;
+        D_86A06210 = ((u64)(u32)temp_v0 - 0x100000000ULL - 0x100000000ULL) - D_86A0621C;
     }
     D_86A0621C = temp_v0;
 }
@@ -1660,7 +1727,7 @@ void Credits_DrawRoleList(void) {
             }
 
             Font_Printf(0xA0 - (Font_MeasureTextExtent(0, 0, ptr->unk_04[D_86A06211]) / 2), (var_s11 * 4) >> 2,
-                          ptr->unk_04[D_86A06211]);
+                        ptr->unk_04[D_86A06211]);
             var_s11 += 0x11;
         }
 

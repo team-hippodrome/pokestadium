@@ -3,5 +3,4 @@
 
 #include "global.h"
 
-
 #endif // _33E30_H_

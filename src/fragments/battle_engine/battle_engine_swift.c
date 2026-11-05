@@ -5,11 +5,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -75,8 +75,8 @@ void SwiftRibbonSheet_Init(void) {
     }
 }
 
-void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   f32 argA, s16 argB) {
+void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                            u8 arg9, f32 argA, s16 argB) {
     TexturedRibbonSheet* var_v1;
     TexturedRibbonSheetNode* var_s0;
     s32 i;
@@ -263,7 +263,7 @@ Gfx* SwiftRibbonSheet_Draw(Gfx* arg0) {
                     for (k = 0, vtx2 = &temp_s0->unk_30[0]; k < 2; k++) {
                         if (temp_s0->unk_00 <= 0.0) {
                             SwiftRibbonSheet_Update(temp_s0->unk_08 + ((2.0 * k * 3.1415927410125732) / 2), &sp13C,
-                                          (10.0f * tmp) * 0.8f);
+                                                    (10.0f * tmp) * 0.8f);
                         }
 
                         vtx->v.ob[0] = temp_s0->unk_0C.x + sp13C.x;

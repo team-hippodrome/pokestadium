@@ -6,11 +6,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -63,11 +63,11 @@ void DoubleTextureTrail_InitPool(void) {
     }
 }
 
-void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9,
-                   f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12,
-                   s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16, unk_D_843C2C00_024* arg17, u8 arg18,
-                   u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22,
-                   u8 arg23, u8 arg24) {
+void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
+                              f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10,
+                              s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16,
+                              unk_D_843C2C00_024* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D,
+                              u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24) {
     DoubleTextureTrail* var_v0;
     unk_D_843C2C00_0B0* var_a0;
     s32 i;
@@ -354,7 +354,8 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0) {
             var_s0 = var_fp->unk_018;
             for (j = 0; j < 10; j++, var_s2++) {
                 for (k = 0; k < 9; k++) {
-                    DoubleTextureTrail_RotateVertexOffset(var_s2->unk_0C + ((2.0f * (k % 8) * 3.1415927f) / 8), &sp100, var_s2->unk_08);
+                    DoubleTextureTrail_RotateVertexOffset(var_s2->unk_0C + ((2.0f * (k % 8) * 3.1415927f) / 8), &sp100,
+                                                          var_s2->unk_08);
                     var_s0->v.ob[0] = var_s2->unk_10.x + sp100.x;
                     var_s0->v.ob[1] = var_s2->unk_10.y + sp100.y;
                     var_s0->v.ob[2] = var_s2->unk_10.z + sp100.z;
@@ -378,7 +379,7 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0) {
                 spDC.y = spD8->view.eyePosition.y;
                 spDC.z = spD8->view.eyePosition.z;
                 arg0 = Gfx_DrawThickLine(arg0, &spF4, &spE8, &spDC, 20.0f, var_fp->unk_086.r, var_fp->unk_086.g,
-                                     var_fp->unk_086.b, var_fp->unk_086.a * var_fp->unk_08C);
+                                         var_fp->unk_086.b, var_fp->unk_086.a * var_fp->unk_08C);
             }
 
             gSPDisplayList(arg0++, D_84389C70);

@@ -5,5 +5,4 @@
 
 void JigglypuffGame_UpdatePlayerPhysics(s32);
 
-
 #endif // _FRAGMENT9_H_

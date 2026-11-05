@@ -423,8 +423,9 @@ static Gfx D_825071F0[] = {
 };
 
 static u32 D_825073F0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_825061B0, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, MiniGameSelect_DrawMenuBackdrop, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_825061B0,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, MiniGameSelect_DrawMenuBackdrop,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 
 static Vtx D_82507428[] = {
@@ -596,8 +597,9 @@ static Gfx D_82507828[] = {
 };
 
 static u32 D_82507CC8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82507428, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, MiniGameSelect_DrawGameBackdrop, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82507428,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, MiniGameSelect_DrawGameBackdrop,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 
 static Vtx D_82507D00[] = {
@@ -705,8 +707,9 @@ static Gfx D_82508100[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_825085A0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82507D00, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, MiniGameSelect_DrawStaticBackdrop, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82507D00,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, MiniGameSelect_DrawStaticBackdrop,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 
 static Vtx D_825085D8[][4] = {
@@ -742,8 +745,9 @@ static Gfx D_825086D8[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_825086F8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_825085D8, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, MiniGameSelect_DrawLabelStrips, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_825085D8,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, MiniGameSelect_DrawLabelStrips,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 
 static Vtx D_82508730[] = {
@@ -763,8 +767,9 @@ static Gfx D_82508770[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_825087D8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82508730, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, MiniGameSelect_CursorNodeCallback, 0x00000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82508730,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, MiniGameSelect_CursorNodeCallback,
+    0x00000000, 0x06000000, 0x01000000,
 };
 static u32 D_8250880C[] = {
     0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000,
@@ -1369,7 +1374,7 @@ unk_D_8250A228* MiniGameSelect_CreateMenuWidget(s16 arg0, s16 arg1, GraphNode* a
             temp_v0->unk_0C = temp_v0->unk_04;
             temp_v0->unk_0A = temp_v0->unk_04;
             Vec3f_SetComponentsDuplicate(&temp_s1->unk_24, (((arg1 % 3) * 96.0f) + 224.0f) - 320.0f,
-                          240.0f - (((arg1 / 3) * 96.0f) + 156.0f), -579.0f);
+                                         240.0f - (((arg1 / 3) * 96.0f) + 156.0f), -579.0f);
             temp_s1->unk_14 = arg1;
             temp_s1->unk_30.x = temp_s1->unk_30.y = temp_s1->unk_30.z = 1.2f;
             break;
@@ -1464,7 +1469,6 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
         func_82501B18(arg0->unk_34, arg0->unk_02);
     }
 }
-
 
 void MiniGameSelect_SetWidgetTargetState(unk_D_8250A228* arg0, s16 arg1, s32 arg2) {
     if (arg2 != 0) {
@@ -1816,7 +1820,6 @@ void func_8250281C(void) {
     u32 var_a2 = 0;
     s32 sp2C = 0;
 
-
     switch (D_8250A26C) {
         case 1:
             var_a2 = 0;
@@ -1890,18 +1893,18 @@ void func_8250281C(void) {
             ptr = (s32)&D_8780FA48;
 
             if (*(s16*)ptr >= 0) {
-            gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-            gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
+                gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+                gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 
-            sp44 = *(s16*)ptr;
-            if (D_8780FA30[sp44] == 0) {
-                Widget_DrawPlayerIcon(sp44, (sp40 + var_a2) - 0x20, sp38 - 2, 1.0f);
-            } else {
-                Widget_DrawPlayerIcon(-1 - sp44, (sp40 + var_a2) - 0x20, sp38 - 2, 1.0f);
+                sp44 = *(s16*)ptr;
+                if (D_8780FA30[sp44] == 0) {
+                    Widget_DrawPlayerIcon(sp44, (sp40 + var_a2) - 0x20, sp38 - 2, 1.0f);
+                } else {
+                    Widget_DrawPlayerIcon(-1 - sp44, (sp40 + var_a2) - 0x20, sp38 - 2, 1.0f);
+                }
+
+                gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
             }
-
-            gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
-        }
         }
     }
 }
@@ -1955,7 +1958,7 @@ void MiniGameSelect_DrawOptionPanel(void) {
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_Printf(0x140 - (Text_MeasureStringWidth(D_8250A304, Text_GetString(NULL, 0, D_8250A47C, 2)) / 2),
-                          D_8250A2A0.unk_0A + 0x18, Text_GetString(NULL, 0, D_8250A47C, 2));
+                        D_8250A2A0.unk_0A + 0x18, Text_GetString(NULL, 0, D_8250A47C, 2));
 
             if (D_82508AF0 & 1) {
                 var_s4 = 4;
@@ -1974,7 +1977,7 @@ void MiniGameSelect_DrawOptionPanel(void) {
                     Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
                 }
                 Font_Printf(0x140 - (Text_MeasureStringWidth(D_8250A304, var_v0[i]) / 2),
-                              D_8250A2A0.unk_0A + var_s5 + (i * 0x18), var_v0[i]);
+                            D_8250A2A0.unk_0A + var_s5 + (i * 0x18), var_v0[i]);
             }
 
             Font_EndTexturedTextRendering();

@@ -79,7 +79,7 @@ void Pokedex_DrawCheckboxIcon(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void Pokedex_BuildListScrollArrowWidget(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
-                   unk_func_888044BC_038_02C* arg5) {
+                                        unk_func_888044BC_038_02C* arg5) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_888044BC_050));
     arg0->unk_00.unk_18 = Pokedex_DrawListScrollArrows;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -146,7 +146,8 @@ s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2
     return 0;
 }
 
-void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4, unk_func_888044BC_038_02C* arg5) {
+void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4,
+                                unk_func_888044BC_038_02C* arg5) {
     static Color_RGBA8 D_888081E8 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_888081EC[] = { { 0x1E, 0x1E, 0x64, 0xFF }, { 0x3C, 0x50, 0xA0, 0xFF } };
     static Color_RGBA8 D_888081F4 = { 0x46, 0x46, 0xAA, 0xFF };
@@ -224,12 +225,14 @@ void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3,
     Font_EndTexturedTextRendering();
 }
 
-void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, MemoryPool* arg5) {
+void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                    MemoryPool* arg5) {
     s32 i;
     unk_D_8006FF00** sp40;
     unk_D_8006FF00** sp3C;
 
-    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0, arg1, arg2, Pokedex_DrawSpeciesListRow, 0xF8, 0x20, arg3, arg5);
+    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0, arg1, arg2, Pokedex_DrawSpeciesListRow,
+                                                                           0xF8, 0x20, arg3, arg5);
 
     arg0->unk_00.unk_50.unk_00 = 0;
     arg0->unk_00.unk_50.unk_02 = 0;
@@ -295,7 +298,8 @@ void Pokedex_BuildSpeciesListPanel(unk_func_888044BC_038* arg0, s32 arg1, s32 ar
 
     arg0->unk_2C = mem_pool_alloc(arg4, sizeof(unk_func_888044BC_038_02C));
     Pokedex_BuildSpeciesListWidget(arg0->unk_2C, 0, 0, 6, arg3, arg4);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00,
+                                                                    &arg0->unk_2C->unk_00.unk_00.unk_00);
 }
 
 s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1) {
@@ -404,7 +408,8 @@ void Pokedex_BuildTrainerInfoPanel(unk_func_888044BC_03C* arg0, s32 arg1, s32 ar
 }
 
 void Pokedex_InitSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2) {
-    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_888044BC_040_030) + 0x18);
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00,
+                                                                   sizeof(unk_func_888044BC_040_030) + 0x18);
     arg0->unk_00.unk_18 = Pokedex_DrawSortOrderLabel;
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
@@ -462,7 +467,8 @@ void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0) {
     arg0->unk_2C = !arg0->unk_2C;
 }
 
-void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4, unk_func_88200FA0_030_030* arg5) {
+void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4,
+                               unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88808208 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_8880820C = { 0x00, 0x00, 0x00, 0xFF };
 
@@ -502,8 +508,8 @@ void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg
     PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, D_888267A0, 6), 3);
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_34, 0x154, 4, Pokedex_DrawEntryMenuItem, 0x70, 0x18, 4, 1,
-                                                           arg3);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_34, 0x154, 4, Pokedex_DrawEntryMenuItem,
+                                                                      0x70, 0x18, 4, 1, arg3);
     arg0->unk_34->unk_50 = -4;
     arg0->unk_34->unk_52 = -2;
     arg0->unk_34->unk_44->unk_00.unk_14.unk_00 = 0x78;
@@ -735,7 +741,8 @@ void Pokedex_BuildRootWidget(unk_func_888044BC* arg0, s32 arg1, s32 arg2, u8* ar
 
     arg0->unk_2C = mem_pool_alloc(arg4, sizeof(unk_func_88500994));
     ((func88500994)Memmap_GetFragmentVaddr(WidgetTree_InitPagedContainer))(arg0->unk_2C, 0, 0);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_34->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_34->unk_00.unk_00,
+                                                                    &arg0->unk_2C->unk_00.unk_00);
 
     arg0->unk_3C = mem_pool_alloc(arg4, sizeof(unk_func_888044BC_03C));
     Pokedex_BuildTrainerInfoPanel(arg0->unk_3C, 0x168, 0x4C, sp48, arg4);
@@ -774,14 +781,15 @@ void Pokedex_BuildRootWidget(unk_func_888044BC* arg0, s32 arg1, s32 arg2, u8* ar
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_30, &arg0->unk_4C->unk_00);
 
     arg0->unk_50 = mem_pool_alloc(arg4, sizeof(unk_func_888044BC_050));
-    Pokedex_BuildListScrollArrowWidget(arg0->unk_50, arg0->unk_38->unk_00.unk_10.unk_00 + 0x94, arg0->unk_38->unk_00.unk_10.unk_02 - 0x16,
-                  0x4A, 0, arg0->unk_38->unk_2C);
+    Pokedex_BuildListScrollArrowWidget(arg0->unk_50, arg0->unk_38->unk_00.unk_10.unk_00 + 0x94,
+                                       arg0->unk_38->unk_00.unk_10.unk_02 - 0x16, 0x4A, 0, arg0->unk_38->unk_2C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_50->unk_00.unk_00);
 
     arg0->unk_54 = mem_pool_alloc(arg4, sizeof(unk_func_888044BC_050));
     Pokedex_BuildListScrollArrowWidget(arg0->unk_54, arg0->unk_38->unk_00.unk_10.unk_00 + 0x94,
-                  arg0->unk_38->unk_00.unk_10.unk_02 + arg0->unk_38->unk_2C->unk_00.unk_00.unk_14.unk_02 + 6, 0x4A, 1,
-                  arg0->unk_38->unk_2C);
+                                       arg0->unk_38->unk_00.unk_10.unk_02 +
+                                           arg0->unk_38->unk_2C->unk_00.unk_00.unk_14.unk_02 + 6,
+                                       0x4A, 1, arg0->unk_38->unk_2C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_54->unk_00.unk_00);
 }
 
@@ -819,11 +827,13 @@ s32 func_88803614(void) {
                 var_s0 |= 0x80000003;
                 var_s2 = 0;
             } else if (gPlayer1Controller->buttonPressed & 0x8000) {
-                if (GbSave_GetSpeciesProgressLevel(D_88826938, Pokedex_GetSelectedSpeciesIndex(D_88826940->unk_38->unk_2C) + 1) == 0) {
+                if (GbSave_GetSpeciesProgressLevel(
+                        D_88826938, Pokedex_GetSelectedSpeciesIndex(D_88826940->unk_38->unk_2C) + 1) == 0) {
                     var_s0 |= 0x80000101;
                 } else {
                     D_88826940->unk_38->unk_2C->unk_00.unk_34[D_88826940->unk_38->unk_2C->unk_00.unk_38] |= 2;
-                    ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(D_88826940->unk_40->unk_34, 0);
+                    ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(
+                        D_88826940->unk_40->unk_34, 0);
                     var_s0 |= 0x80000005;
                     var_s2 = 2;
                 }
@@ -847,7 +857,6 @@ s32 Pokedex_ShowEntryMenu(void) {
     s32 var_s1;
     s32 var_s3;
     UNUSED s32 pad[1];
-
 
     var_s1 = var_s3 = 2;
     ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(D_88826940->unk_2C, 0);

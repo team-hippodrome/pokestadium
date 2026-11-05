@@ -49,47 +49,128 @@ static s32 sCompletionGate;
 // Values are stadium_models arena file indices, not session modes. Gym Leader Castle
 // adds modeSelection (0-9) to its base value 7, reaching Castle arenas 7-16.
 static u8 sBattleModeDispatch[] = {
-    0,     // [SESSION_MODE_ANYTHING_GOES]       -> arena 0 (Free Battle)
-    1,     // [SESSION_MODE_NINTENDO_CUP_97]     -> arena 1 (Nintendo Cup '97 / Poke Cup R1)
-    2,     // [SESSION_MODE_NINTENDO_CUP_98]     -> arena 2 (Nintendo Cup '98 / Poke Cup R2)
-    3,     // [SESSION_MODE_NINTENDO_CUP_99]     -> arena 3 (Nintendo Cup '99 / Poke Cup R3)
-    4,     // [SESSION_MODE_PETIT_CUP]           -> arena 4 (Petit Cup)
-    5,     // [SESSION_MODE_PIKA_CUP]            -> arena 5 (Pika Cup)
-    6,     // [SESSION_MODE_PRIME_CUP]           -> arena 6 (Prime Cup)
-    7,     // [SESSION_MODE_GYM_LEADER_CASTLE]   -> arenas 7..16 (7 + modeSelection)
-    17,    // [SESSION_MODE_VS_MEWTWO]           -> arena 17 (Vs. Mewtwo)
-    1,     // [SESSION_MODE_BATTLE_NOW]          -> arena 1
-    0,     // [SESSION_MODE_EVENT_BATTLE]        -> not read; BattleScene_Init indexes by ruleCategory
-    0, 0, 0, 0, 0, // 11-15: Unknown
-    1,     // [SESSION_MODE_ATTRACT_DEMO_BATTLE] -> not read; BattleScene_Init indexes by ruleCategory
-    1, 1,  // 17-18: Cutscenes
-    1,     // 19: Unknown
+    0,              // [SESSION_MODE_ANYTHING_GOES]       -> arena 0 (Free Battle)
+    1,              // [SESSION_MODE_NINTENDO_CUP_97]     -> arena 1 (Nintendo Cup '97 / Poke Cup R1)
+    2,              // [SESSION_MODE_NINTENDO_CUP_98]     -> arena 2 (Nintendo Cup '98 / Poke Cup R2)
+    3,              // [SESSION_MODE_NINTENDO_CUP_99]     -> arena 3 (Nintendo Cup '99 / Poke Cup R3)
+    4,              // [SESSION_MODE_PETIT_CUP]           -> arena 4 (Petit Cup)
+    5,              // [SESSION_MODE_PIKA_CUP]            -> arena 5 (Pika Cup)
+    6,              // [SESSION_MODE_PRIME_CUP]           -> arena 6 (Prime Cup)
+    7,              // [SESSION_MODE_GYM_LEADER_CASTLE]   -> arenas 7..16 (7 + modeSelection)
+    17,             // [SESSION_MODE_VS_MEWTWO]           -> arena 17 (Vs. Mewtwo)
+    1,              // [SESSION_MODE_BATTLE_NOW]          -> arena 1
+    0,              // [SESSION_MODE_EVENT_BATTLE]        -> not read; BattleScene_Init indexes by ruleCategory
+    0,  0, 0, 0, 0, // 11-15: Unknown
+    1,              // [SESSION_MODE_ATTRACT_DEMO_BATTLE] -> not read; BattleScene_Init indexes by ruleCategory
+    1,  1,          // 17-18: Cutscenes
+    1,              // 19: Unknown
     // The ROM table ends here at 20 bytes. Modes 20-26 index past it into the
     // first bytes of sStageGeoLayout (0x0C, 0x00, 0xFF, 0xFF, 0x05, 0x00, 0x00).
     // Adding entries would shift .data and break ROM identity.
 };
 static u32 sStageGeoLayout[] = {
-    0x0C00FFFF,  0x05000000,  0x07000000,    &sStageCamera,   0x05000000, 0x0D000000,    0x05000000,  0x07000000,
-    &sStageFog, 0x14000000,  0x002D0019,    0xFFFFFF28,    0x08000000, Battle_StageLightAngleCallbackA, 0x00000000,  0x14000000,
-    0x002D0019,  0x80808028,  0x08000000,    Battle_StageLightAngleCallbackB, 0x00000000, 0x16646464,    0x0F000002,  0x05000000,
-    0x1F00FFFF,  0x00000000,  0x00000000,    0x00000000,    0x00640064, 0x00640000,    0x08000000,  Battle_StageMaterialTintCallback,
-    0x00000000,  0x05000000,  0x07000000,    &sStageLayout0,   0x06000000, 0x06000000,    0x0F000003,  0x05000000,
-    0x1F00FFFF,  0x00000000,  0x00000000,    0x00000000,    0x00640064, 0x00640000,    0x08000000,  Battle_StageMaterialTintCallback,
-    0x00000000,  0x05000000,  0x07000000,    &sStageLayout1,   0x06000000, 0x06000000,    0x0F000002,  0x05000000,
-    0x1F00FFFF,  0x00000000,  0x00000000,    0x00000000,    0x00640064, 0x00640000,    0x08000000,  Battle_StageMaterialTintCallback,
-    0x00000000,  0x05000000,  0x07000000,    &sStageLayout3,   0x06000000, 0x06000000,    0x0F000003,  0x05000000,
-    0x0A000000,  &D_800AC840, 0x06000000,    0x0F000002,    0x05000000, 0x0A000000,    &D_800AC858, 0x06000000,
-    0x09000000,  0x08000000,  Battle_StageGeoDispatchCallback, 0x00000000,    0x06000000, 0x06000000,    0x06000000,  0x01000000,
+    0x0C00FFFF,
+    0x05000000,
+    0x07000000,
+    &sStageCamera,
+    0x05000000,
+    0x0D000000,
+    0x05000000,
+    0x07000000,
+    &sStageFog,
+    0x14000000,
+    0x002D0019,
+    0xFFFFFF28,
+    0x08000000,
+    Battle_StageLightAngleCallbackA,
+    0x00000000,
+    0x14000000,
+    0x002D0019,
+    0x80808028,
+    0x08000000,
+    Battle_StageLightAngleCallbackB,
+    0x00000000,
+    0x16646464,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Battle_StageMaterialTintCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &sStageLayout0,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Battle_StageMaterialTintCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &sStageLayout1,
+    0x06000000,
+    0x06000000,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Battle_StageMaterialTintCallback,
+    0x00000000,
+    0x05000000,
+    0x07000000,
+    &sStageLayout3,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x0A000000,
+    &D_800AC840,
+    0x06000000,
+    0x0F000002,
+    0x05000000,
+    0x0A000000,
+    &D_800AC858,
+    0x06000000,
+    0x09000000,
+    0x08000000,
+    Battle_StageGeoDispatchCallback,
+    0x00000000,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x01000000,
 };
 static u32 sSide1ThumbnailLayout[] = {
-    0x0C00FFFF,  0x05000000, 0x07000000, &sSide1ThumbnailCamera, 0x05000000, 0x0D000001, 0x05000000,
-    0x14000000,  0x002D0019, 0xFFFFFF28, 0x16FFFFFF,  0x0F000003, 0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000,  0x06000000, 0x01000000,
+    0x0C00FFFF, 0x05000000, 0x07000000,  &sSide1ThumbnailCamera,
+    0x05000000, 0x0D000001, 0x05000000,  0x14000000,
+    0x002D0019, 0xFFFFFF28, 0x16FFFFFF,  0x0F000003,
+    0x05000000, 0x0A000000, &D_800AC840, 0x06000000,
+    0x06000000, 0x06000000, 0x06000000,  0x01000000,
 };
 static u32 sSide2ThumbnailLayout[] = {
-    0x0C00FFFF,  0x05000000, 0x07000000, &sSide2ThumbnailCamera, 0x05000000, 0x0D000002, 0x05000000,
-    0x14000000,  0x002D0019, 0xFFFFFF28, 0x16FFFFFF,  0x0F000003, 0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000,  0x06000000, 0x01000000,
+    0x0C00FFFF, 0x05000000, 0x07000000,  &sSide2ThumbnailCamera,
+    0x05000000, 0x0D000002, 0x05000000,  0x14000000,
+    0x002D0019, 0xFFFFFF28, 0x16FFFFFF,  0x0F000003,
+    0x05000000, 0x0A000000, &D_800AC840, 0x06000000,
+    0x06000000, 0x06000000, 0x06000000,  0x01000000,
 };
 
 // called every frame: bug boy in GLC
@@ -110,7 +191,8 @@ s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
     s16 angle_y;
 
     if (event == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &distance, &angle_x, &angle_y);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &distance,
+                                      &angle_x, &angle_y);
         light->unk_1C = angle_x + 0x2000;
         light->unk_1E = angle_y - 0x2000;
     }
@@ -126,7 +208,8 @@ s32 Battle_StageLightAngleCallbackB(s32 event, unk_D_86002F34_alt18* light) {
     s16 angle_y;
 
     if (event == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &distance, &angle_x, &angle_y);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &distance,
+                                      &angle_x, &angle_y);
         light->unk_1C = -0x2000 - angle_x;
         light->unk_1E = angle_y + 0x6000;
     }
@@ -226,12 +309,13 @@ void Battle_DrawStageBackdrop(void) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, sTintColor.r, sTintColor.g, sTintColor.b, 255);
     gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
 
-    gDPLoadTextureBlock(gDisplayListHead++, Memmap_GetFragmentVaddr(sStageBackdrop), G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64, 0,
-                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+    gDPLoadTextureBlock(gDisplayListHead++, Memmap_GetFragmentVaddr(sStageBackdrop), G_IM_FMT_RGBA, G_IM_SIZ_32b, 4, 64,
+                        0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
-    gSPTextureRectangle(gDisplayListHead++, left << 2, top << 2, right << 2, middle << 2, G_TX_RENDERTILE, 0, 0, 0, texture_step_y);
-    gSPTextureRectangle(gDisplayListHead++, left << 2, middle << 2, right << 2, bottom << 2, G_TX_RENDERTILE, 0, 0x07E0, 0,
-                        0);
+    gSPTextureRectangle(gDisplayListHead++, left << 2, top << 2, right << 2, middle << 2, G_TX_RENDERTILE, 0, 0, 0,
+                        texture_step_y);
+    gSPTextureRectangle(gDisplayListHead++, left << 2, middle << 2, right << 2, bottom << 2, G_TX_RENDERTILE, 0, 0x07E0,
+                        0, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
@@ -281,8 +365,9 @@ void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2) {
         texture_spread_x += 0x10;
         texture_spread_y += 0x10;
 
-        gSPTextureRectangle(gDisplayListHead++, destination.left << 2, destination.top << 2, ((destination.right + 1) ^ 0) << 2,
-                            ((destination.bottom + 1) ^ 0) << 2, G_TX_RENDERTILE, texture_spread_x, texture_spread_y, 0x0800, 0x0800);
+        gSPTextureRectangle(gDisplayListHead++, destination.left << 2, destination.top << 2,
+                            ((destination.right + 1) ^ 0) << 2, ((destination.bottom + 1) ^ 0) << 2, G_TX_RENDERTILE,
+                            texture_spread_x, texture_spread_y, 0x0800, 0x0800);
 
         if ((x2 && x2) ^ 0) {} // karodo
     }
@@ -371,7 +456,8 @@ void Battle_UpdateFaintBatches(void) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
             roster = side->teamMember[trainer_index];
             for (pokemon_index = 0; pokemon_index < roster->numberOfPokemonBrought; pokemon_index++) {
-                if ((roster->pokemonPicked[pokemon_index].unk_25 == 0) && (roster->pokemonPicked[pokemon_index].hp == 0)) {
+                if ((roster->pokemonPicked[pokemon_index].unk_25 == 0) &&
+                    (roster->pokemonPicked[pokemon_index].hp == 0)) {
                     found_faint = 1;
                     roster->pokemonPicked[pokemon_index].unk_25 = sNextFaintBatch;
                 }
@@ -458,7 +544,8 @@ s32 BattleScene_UpdatePausedFrame(s32 fade_mode) {
 void Battle_UpdateCompletionGate(void) {
     if (sCompletionGate < 0) {
         sCompletionGate++;
-    } else if ((sCompletionGate == 0) && (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) && gPlayer1Controller->buttonPressed) {
+    } else if ((sCompletionGate == 0) && (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) &&
+               gPlayer1Controller->buttonPressed) {
         sCompletionGate = 1;
     }
 }
@@ -552,14 +639,16 @@ void Battle_SelectComRoster(void) {
             } else {
                 number_of_pokemon_picked = 3;
             }
-            func_843831A0(player_roster, player_teammate_roster, com_roster, gSessionContext.aiDifficulty, order_of_picked_pokemon, gSessionContext.ruleCategory, number_of_pokemon_picked);
+            func_843831A0(player_roster, player_teammate_roster, com_roster, gSessionContext.aiDifficulty,
+                          order_of_picked_pokemon, gSessionContext.ruleCategory, number_of_pokemon_picked);
         } else {
             if (gSessionContext.ruleCategory == RULE_CATEGORY_VS_MEWTWO) {
                 number_of_pokemon_picked = com_roster->rosterInfo->numberOfPokemonCanBePicked;
             } else {
                 number_of_pokemon_picked = 3;
             }
-            func_843831A0(player_roster, NULL, com_roster, com_roster->unk_018 & 0xFF, order_of_picked_pokemon, gSessionContext.ruleCategory, number_of_pokemon_picked);
+            func_843831A0(player_roster, NULL, com_roster, com_roster->unk_018 & 0xFF, order_of_picked_pokemon,
+                          gSessionContext.ruleCategory, number_of_pokemon_picked);
         }
         Battle_CompleteRosterOrder(order_of_picked_pokemon, number_of_pokemon_picked);
         com_roster->numberOfPokemonBrought = number_of_pokemon_picked;
@@ -627,7 +716,8 @@ void BattleScene_Init(unk_func_80007444* stage_context) {
 
     // Modes 16/10 use the ruleset as the arena key; other modes use the mode itself.
     // Castle key 7 adds the selected location to the table's base entry.
-    if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) || (gSessionContext.mode == SESSION_MODE_EVENT_BATTLE)) {
+    if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) ||
+        (gSessionContext.mode == SESSION_MODE_EVENT_BATTLE)) {
         arena_index = sBattleModeDispatch[gSessionContext.ruleCategory];
         if (gSessionContext.ruleCategory == RULE_CATEGORY_GYM_LEADER_CASTLE) {
             arena_index += gSessionContext.modeSelection;

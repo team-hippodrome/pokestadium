@@ -29,7 +29,7 @@ extern "C" {
  *   standard header ARE SPECIFIED BY ANSI!  CONFORMANCE WILL BE ALTERED
  *   IF ANY NEW IDENTIFIERS ARE ADDED TO THIS AREA UNLESS THEY ARE IN ANSI's
  *   RESERVED NAMESPACE. (i.e., unless they are prefixed by __[a-z] or
- *   _[A-Z].  For external objects, identifiers with the prefix _[a-z] 
+ *   _[A-Z].  For external objects, identifiers with the prefix _[a-z]
  *   are also reserved.)
  */
 
@@ -39,11 +39,11 @@ extern "C" {
 
 #else
 
-extern void __assert(const char *, const char *, int);
+extern void __assert(const char*, const char*, int);
 #ifdef __ANSI_CPP__
-#define assert(EX)  ((EX)?((void)0):__assert( # EX , __FILE__, __LINE__))
+#define assert(EX) ((EX) ? ((void)0) : __assert(#EX, __FILE__, __LINE__))
 #else
-#define assert(EX)  ((EX)?((void)0):__assert("EX", __FILE__, __LINE__))
+#define assert(EX) ((EX) ? ((void)0) : __assert("EX", __FILE__, __LINE__))
 #endif
 #endif /* NDEBUG */
 

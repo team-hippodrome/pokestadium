@@ -8,7 +8,8 @@
 /*
     Cause the Pokemon's idle animation to play in the thumbnail.
     The thumbnails in battles are not loaded icons, they are a frozen model of the Pokemon's idle animation
-    You can see this by disabling the check in Battle_RenderActivePokemonThumbnail in @src/fragments/battle_engine/battle_engine_main.c
+    You can see this by disabling the check in Battle_RenderActivePokemonThumbnail in
+   @src/fragments/battle_engine/battle_engine_main.c
 
     Speculation: Some models changed between Stadium 0 and Stadium 1 (most apparent with Nidoking)
     They could have choosen to render the thumbnails this way in case models changed mid-development.
@@ -77,7 +78,8 @@ void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokem
 
     active_pokemon->thumbnail.camera->perspective.nearPlane = sSideThumbnailSettings[side].nearPlane;
     active_pokemon->thumbnail.camera->perspective.farPlane = sSideThumbnailSettings[side].farPlane;
-    active_pokemon->thumbnail.camera->perspective.verticalFieldOfView = sSideThumbnailSettings[side].verticalFieldOfView;
+    active_pokemon->thumbnail.camera->perspective.verticalFieldOfView =
+        sSideThumbnailSettings[side].verticalFieldOfView;
 }
 
 /*
@@ -113,7 +115,8 @@ void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
 
     active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->rotationX;
     if (sSidePresentationTransform[side]->unk_10 == 0xFF) {
-        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY * active_pokemon->thumbnail.side;
+        active_pokemon->thumbnail.rotationY =
+            sSidePresentationTransform[side]->rotationY * active_pokemon->thumbnail.side;
         tmp_z = sSidePresentationTransform[side]->coordinates.z * active_pokemon->thumbnail.side;
     } else {
         active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY;
@@ -126,8 +129,10 @@ void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
     tmp_y = sSidePresentationTransform[side]->coordinates.y;
     active_pokemon->thumbnail.y = tmp_y;
 
-    BattleScene_SetCameraAtAndEyeFromAngles(camera, active_pokemon->thumbnail.displayObject.position.x + active_pokemon->thumbnail.z, active_pokemon->thumbnail.displayObject.position.y + tmp_y,
-                  active_pokemon->thumbnail.displayObject.position.z, active_pokemon->thumbnail.x, active_pokemon->thumbnail.rotationX, active_pokemon->thumbnail.rotationY);
+    BattleScene_SetCameraAtAndEyeFromAngles(
+        camera, active_pokemon->thumbnail.displayObject.position.x + active_pokemon->thumbnail.z,
+        active_pokemon->thumbnail.displayObject.position.y + tmp_y, active_pokemon->thumbnail.displayObject.position.z,
+        active_pokemon->thumbnail.x, active_pokemon->thumbnail.rotationX, active_pokemon->thumbnail.rotationY);
 }
 
 /*
@@ -140,7 +145,8 @@ void BattleThumbnail_TickOwnerCameraFraming(ActivePokemon* active_pokemon) {
 /*
     Initializes the camera coordinates for both owner's thumbnails.
 */
-void BattleThumbnail_InitializeOwnerCameraFraming(CameraNode* side1_camera_node, ActivePokemon* side1_pokemon, CameraNode* side2_camera_node, ActivePokemon* side2_pokemon) {
+void BattleThumbnail_InitializeOwnerCameraFraming(CameraNode* side1_camera_node, ActivePokemon* side1_pokemon,
+                                                  CameraNode* side2_camera_node, ActivePokemon* side2_pokemon) {
     side1_pokemon->thumbnail.camera = side1_camera_node;
     side2_pokemon->thumbnail.camera = side2_camera_node;
     BattleThumbnail_SetupOwnerCameraFraming(side1_pokemon, side2_pokemon);
@@ -160,7 +166,8 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
 
     if (active_pokemon->thumbnail.side == 1) {
         // This Substitute condition can never actually fire as switching out a pokemon destroys the substitute.
-        if ((active_pokemon->thumbnail.camera->viewport.x == -72) && !(active_pokemon->state.flags & ACTIVE_SUBSTITUTE)) {
+        if ((active_pokemon->thumbnail.camera->viewport.x == -72) &&
+            !(active_pokemon->state.flags & ACTIVE_SUBSTITUTE)) {
             BattleThumbnail_TriggerOwnerModelAnimation(active_pokemon);
         }
 
@@ -168,13 +175,16 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
             active_pokemon->thumbnail.status = 2;
             ModelRenderer_OnSlotReady(0);
         }
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x17, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x =
+            Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x17, delta, delta);
     } else {
-        if ((active_pokemon->thumbnail.camera->viewport.x == 351) && !(active_pokemon->state.flags & ACTIVE_SUBSTITUTE)) {
+        if ((active_pokemon->thumbnail.camera->viewport.x == 351) &&
+            !(active_pokemon->state.flags & ACTIVE_SUBSTITUTE)) {
             BattleThumbnail_TriggerOwnerModelAnimation(active_pokemon);
         }
 
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x103, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x =
+            Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x103, delta, delta);
 
         if ((ModelRenderer_IsReady(1) != 0) && (active_pokemon->thumbnail.status == 0)) {
             active_pokemon->thumbnail.status = 2;
@@ -189,14 +199,16 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
 void BattleThumbnail_TickOwnerSlideOut(ActivePokemon* active_pokemon, s32 delta) {
     if (active_pokemon->thumbnail.side == 1) {
         active_pokemon->thumbnail.status = 0;
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, -72, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x =
+            Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, -72, delta, delta);
         if (active_pokemon->thumbnail.camera->viewport.x == -72) {
             active_pokemon->thumbnail.camera->node.flags &= ~1;
             active_pokemon->thumbnail.displayObject.node.flags &= ~1;
         }
     } else {
         active_pokemon->thumbnail.status = 0;
-        active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 351, delta, delta);
+        active_pokemon->thumbnail.camera->viewport.x =
+            Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 351, delta, delta);
         if (active_pokemon->thumbnail.camera->viewport.x == 351) {
             active_pokemon->thumbnail.camera->node.flags &= ~1;
             active_pokemon->thumbnail.displayObject.node.flags &= ~1;
@@ -231,7 +243,8 @@ void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, 
 /*
     Dispatches the thumbnail's rendering based on the current of the battle
 */
-s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_camera_node, CameraNode* side2_camera_node) {
+s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_camera_node,
+                                                 CameraNode* side2_camera_node) {
     switch (state) {
         case 0:
             BattleThumbnail_OwnerCameraLifecycleNop();
@@ -243,7 +256,8 @@ s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_ca
             break;
 
         case 3:
-            BattleThumbnail_InitializeOwnerCameraFraming(side1_camera_node, sActivePokemon[0], side2_camera_node, sActivePokemon[1]);
+            BattleThumbnail_InitializeOwnerCameraFraming(side1_camera_node, sActivePokemon[0], side2_camera_node,
+                                                         sActivePokemon[1]);
             break;
     }
     return 0;

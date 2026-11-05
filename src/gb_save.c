@@ -549,7 +549,7 @@ void State_PokemonLab(void) {
             while ((game_state == STATE_POKEMON_LAB) && (D_800AE520.unk_00 != 0)) {
                 D_800AE520.unk_00 = 0;
                 game_state = Fragment_LoadAndCall(D_800AE520.fragment_id, D_800AE520.rom_start, D_800AE520.rom_end,
-                                           D_800AE520.arg0, D_800AE520.arg1);
+                                                  D_800AE520.arg0, D_800AE520.arg1);
             }
 
             StageContext_Deactivate();

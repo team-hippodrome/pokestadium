@@ -23,8 +23,8 @@ void Rental_DrawTeamTrayFrame(RentalTeamTray* arg0, s16 arg1, s16 arg2) {
     s16 i;
 
     TeamSelection_DrawCornerFrame(arg1, arg2, 0x208, 0x60);
-    if (((gSessionContext.ruleCategory == 0) || (gSessionContext.ruleCategory == 8)) && (arg0->unk_0004 != 0) && (arg0->unk_0006 > 0) &&
-        (arg0->unk_0006 < 6)) {
+    if (((gSessionContext.ruleCategory == 0) || (gSessionContext.ruleCategory == 8)) && (arg0->unk_0004 != 0) &&
+        (arg0->unk_0006 > 0) && (arg0->unk_0006 < 6)) {
         TeamSelection_DrawColoredFrame(arg1 + 4, arg2 + 4, 0x74, 0x58, 0, 0, 0, 0xFF);
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -102,40 +102,40 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
             Font_SetActive(8, 0);
             temp_v0_4 = TeamSelection_GetLabelText(arg0->unk_0006 + 0x2A);
             Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, temp_v0_4) / 2)) + 0x3C, arg0->unk_001A + 8,
-                          temp_v0_4);
+                        temp_v0_4);
             if (arg0->unk_0000 == 0) {
                 temp_v0_5 = TeamSelection_GetLabelText(0x31);
-                Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, temp_v0_5) / 2)) + 0x3C, arg0->unk_001A + 0x1C,
-                              temp_v0_5);
+                Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, temp_v0_5) / 2)) + 0x3C,
+                            arg0->unk_001A + 0x1C, temp_v0_5);
             } else {
                 temp_v0_6 = TeamSelection_GetLabelText(0x32);
-                Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, temp_v0_6) / 2)) + 0x3C, arg0->unk_001A + 0x1C,
-                              temp_v0_6);
+                Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, temp_v0_6) / 2)) + 0x3C,
+                            arg0->unk_001A + 0x1C, temp_v0_6);
             }
             Font_SetActive(4, 0);
             temp_v0_7 = TeamSelection_GetLabelText(0x33);
             Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, temp_v0_7) / 2)) + 0x3C, arg0->unk_001A + 0x46,
-                          temp_v0_7);
+                        temp_v0_7);
         } else {
             Font_SetActive(4, 0);
             if (arg0->unk_0000 == 0) {
                 temp_v0_8 = TeamSelection_GetLabelText(0x34);
                 Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0x3C, arg0->unk_001A + 9,
-                              temp_v0_8);
+                            temp_v0_8);
             } else {
                 temp_v0_9 = TeamSelection_GetLabelText(0x35);
                 Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, temp_v0_9) / 2)) + 0x3C, arg0->unk_001A + 9,
-                              temp_v0_9);
+                            temp_v0_9);
             }
             temp_v0_10 = TeamSelection_GetLabelText(0x36);
             Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, temp_v0_10) / 2)) + 0x3C, arg0->unk_001A + 0x1A,
-                          temp_v0_10);
+                        temp_v0_10);
             Font_SetActive(8, 0);
-            Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, arg0->unk_001E) / 2)) + 0x3C, arg0->unk_001A + 0x2F,
-                          arg0->unk_001E);
+            Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(8, 0, arg0->unk_001E) / 2)) + 0x3C,
+                        arg0->unk_001A + 0x2F, arg0->unk_001E);
             Font_SetActive(4, 0);
-            Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x3C, arg0->unk_001A + 0x46,
-                          "ID  %05d", arg0->unk_001C);
+            Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x3C,
+                        arg0->unk_001A + 0x46, "ID  %05d", arg0->unk_001C);
         }
         Font_SetActive(4, 0);
 
@@ -154,7 +154,8 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
             if (arg0->unk_0030[i].unk_004.unk_00.unk_00 != 0) {
                 sp42 = D_842115B0[i] + arg0->unk_0018 + 0x2C;
                 sp40 = D_842115BC[i] + arg0->unk_001A + 0x17;
-                Font_Printf(sp42, sp40, "%s %d", TeamSelection_GetInstructionText(0x15), arg0->unk_0030[i].unk_004.level);
+                Font_Printf(sp42, sp40, "%s %d", TeamSelection_GetInstructionText(0x15),
+                            arg0->unk_0030[i].unk_004.level);
             }
         }
 
@@ -287,7 +288,8 @@ void Rental_OpenSlotAssignmentDialog(RentalTeamTray* a0) {
         temp_v1 = a0->unk_0016 + (a0->unk_0012 * 0x2C);
 
         arg0->unk_0030[tmp].raw |= 0x80000000;
-        TeamSelection_Preview_StartFull(a0->unk_4D44, a0->unk_0002, 0x30, 0xEC, temp_v0, temp_v1, &a0->unk_0030[tmp], 2);
+        TeamSelection_Preview_StartFull(a0->unk_4D44, a0->unk_0002, 0x30, 0xEC, temp_v0, temp_v1, &a0->unk_0030[tmp],
+                                        2);
         a0->unk_0001 = 6;
     }
     a0->unk_0018 = a0->unk_0014;
@@ -705,8 +707,8 @@ s32 Rental_TeamSlotsUpdate(RentalTeamTray* arg0) {
     return sp1C;
 }
 
-s32 Rental_InitTeamTray(RentalTeamTray* arg0, RentalCarouselState* arg1, unk_D_8423D3A8* arg2, unk_D_84229EB0* arg3, s16 arg4,
-                  u16 arg5, char* arg6, s16 arg7, s16 arg8, s16 arg9) {
+s32 Rental_InitTeamTray(RentalTeamTray* arg0, RentalCarouselState* arg1, unk_D_8423D3A8* arg2, unk_D_84229EB0* arg3,
+                        s16 arg4, u16 arg5, char* arg6, s16 arg7, s16 arg8, s16 arg9) {
     s32 i;
 
     arg0->unk_0000 = arg4;

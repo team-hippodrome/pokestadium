@@ -12,7 +12,7 @@
 #define THREAD_ID_IDLE 1
 #define THREAD_ID_RESET 21
 
-#define POOL_START   0x80104BB0
+#define POOL_START 0x80104BB0
 #define POOL_END_4MB 0x80400000
 #define POOL_END_6MB 0x80600000
 
@@ -21,62 +21,67 @@
  * recovered original names or verified sample contents. Unknown IDs are
  * intentionally omitted. Category 12 IDs retain their complete command value.
  */
-#define SFX_MENU_SCROLL       0x01
-#define SFX_MENU_CONFIRM      0x02
-#define SFX_MENU_BACK         0x03
-#define SFX_PANEL_OPEN        0x04
-#define SFX_MENU_ERROR        0x08
-#define SFX_N64_LOGO          0x0A
-#define SFX_TITLE_START       0x0F
-#define SFX_MOVE_SWAP         0x18 // PC Pokemon, item, box and move reordering.
-#define SFX_ZOOM_IN           0x19 // Gallery enlargement and Pokedex area detail.
-#define SFX_ZOOM_OUT          0x1A
-#define SFX_PAUSE             0x23
-#define SFX_RESUME            0x24
-#define SFX_PAK_CURSOR        0x25 // Transfer Pak and trade-machine port selection.
-#define SFX_PAGE_CHANGE       0x27 // Gallery pages and Pokemon boxes.
-#define SFX_TROPHY_APPEAR     0x28
-#define SFX_PAK_LAB_SELECT    0x2A
-#define SFX_PAK_TOWER_SELECT  0x2B
-#define SFX_PHOTO_CAPTURE     0x2C
-#define SFX_CAMERA_FULL       0x2D // Automatic exit begins after the 24th photo.
-#define SFX_CAMERA_EXIT       0x2E
-#define SFX_AREA_CURSOR       0x32
-#define SFX_CAMERA_TEXT       0x3C // Tutorial character reveal; detuned ID 5.
+#define SFX_MENU_SCROLL 0x01
+#define SFX_MENU_CONFIRM 0x02
+#define SFX_MENU_BACK 0x03
+#define SFX_PANEL_OPEN 0x04
+#define SFX_MENU_ERROR 0x08
+#define SFX_N64_LOGO 0x0A
+#define SFX_TITLE_START 0x0F
+#define SFX_MOVE_SWAP 0x18 // PC Pokemon, item, box and move reordering.
+#define SFX_ZOOM_IN 0x19   // Gallery enlargement and Pokedex area detail.
+#define SFX_ZOOM_OUT 0x1A
+#define SFX_PAUSE 0x23
+#define SFX_RESUME 0x24
+#define SFX_PAK_CURSOR 0x25  // Transfer Pak and trade-machine port selection.
+#define SFX_PAGE_CHANGE 0x27 // Gallery pages and Pokemon boxes.
+#define SFX_TROPHY_APPEAR 0x28
+#define SFX_PAK_LAB_SELECT 0x2A
+#define SFX_PAK_TOWER_SELECT 0x2B
+#define SFX_PHOTO_CAPTURE 0x2C
+#define SFX_CAMERA_FULL 0x2D // Automatic exit begins after the 24th photo.
+#define SFX_CAMERA_EXIT 0x2E
+#define SFX_AREA_CURSOR 0x32
+#define SFX_CAMERA_TEXT 0x3C // Tutorial character reveal; detuned ID 5.
 
-#define SFX_TRADE_TEXT        0x01200001
-#define SFX_TRADE_BEGIN       0x01200002
-#define SFX_TRADE_END         0x01200003
-#define SFX_TRADE_LIGHT_ON    0x01200004
+#define SFX_TRADE_TEXT 0x01200001
+#define SFX_TRADE_BEGIN 0x01200002
+#define SFX_TRADE_END 0x01200003
+#define SFX_TRADE_LIGHT_ON 0x01200004
 #define SFX_TRADE_BALL_APPEAR 0x01200005
-#define SFX_TRADE_BALL_READY  0x01200006
-#define SFX_EVOLUTION_START  0x01200007
+#define SFX_TRADE_BALL_READY 0x01200006
+#define SFX_EVOLUTION_START 0x01200007
 
 // game states
 typedef enum {
-    STATE_N64_LOGO_INTRO      = 0x01, // N64 Logo + Intro
-    STATE_TITLE_SCREEN        = 0x02, // Title screen
-    STATE_N64DD_BOOT_UNUSED   = 0x03, // seems to be unused, but boots an N64DD disk. Leftover from JP.
-    STATE_MENU_SELECT         = 0x04, // Menu Select (select Battle Now!, POKeMON Stadium, etc)
-    STATE_AREA_SELECT         = 0x10, // Area Select (select Stadium, GB Tower, Gym Leader Castle, etc)
-    STATE_GALLERY             = 0x11, // Gallery
-    STATE_EVENT_BATTLE        = 0x12, // Event Battle
-    STATE_OPTIONS             = 0x13, // Options
-    STATE_FAST_N64_LOGO       = 0x40, // N64 Logo but no Intro. The Sticker Station might use this for booting quickly and into Gallery mode.
-    STATE_STADIUM_MENU        = 0x20, // POKeMON Stadium (the main Stadium mode) 
-    STATE_FREE_BATTLE         = 0x21, // Free Battle
-    STATE_VS_MEWTWO           = 0x22, // VS Mewtwo
-    STATE_KIDS_CLUB           = 0x23, // Kids Club
-    STATE_VICTORY_PALACE      = 0x24, // Victory Palace
-    STATE_POKEMON_LAB         = 0x25, // POKeMON Lab
-    STATE_GB_TOWER            = 0x26, // GB Tower
-    STATE_GYM_LEADER_CASTLE   = 0x27, // Gym Leader Castle
-    STATE_BATTLE_NOW_1P       = 0x28, // Battle Now! (1P)
-    STATE_BATTLE_NOW_2P       = 0x29, // Battle Now! (2P)
-    STATE_BATTLE_FROM_EVENT   = 0x2A, // Battle menu from Event Battle
-    STATE_STUBBED_DEBUG       = 0x80, // stubbed/removed debug menu. This could have been the Early Pokedex Menu seen in the JP version.
-    STATE_FAST_BATTLE         = 0x81, // most likely the P97/P98 mode(s) and uses GB Pak 1 and 2 for the teams for an immediate battle; skips even the VS screen and Battle Rule screen. However, the music/stadium used is probably set by some other menu, because it seems to use the outdoor Free Battle area + Poke Cup 1-3, which isnt correct.
-    STATE_KIDS_CLUB_TITLE     = 0x82, // Kids Club, but it returns to the title screen. Possibly for a Kiosk/demo version.
+    STATE_N64_LOGO_INTRO = 0x01,    // N64 Logo + Intro
+    STATE_TITLE_SCREEN = 0x02,      // Title screen
+    STATE_N64DD_BOOT_UNUSED = 0x03, // seems to be unused, but boots an N64DD disk. Leftover from JP.
+    STATE_MENU_SELECT = 0x04,       // Menu Select (select Battle Now!, POKeMON Stadium, etc)
+    STATE_AREA_SELECT = 0x10,       // Area Select (select Stadium, GB Tower, Gym Leader Castle, etc)
+    STATE_GALLERY = 0x11,           // Gallery
+    STATE_EVENT_BATTLE = 0x12,      // Event Battle
+    STATE_OPTIONS = 0x13,           // Options
+    STATE_FAST_N64_LOGO =
+        0x40, // N64 Logo but no Intro. The Sticker Station might use this for booting quickly and into Gallery mode.
+    STATE_STADIUM_MENU = 0x20,      // POKeMON Stadium (the main Stadium mode)
+    STATE_FREE_BATTLE = 0x21,       // Free Battle
+    STATE_VS_MEWTWO = 0x22,         // VS Mewtwo
+    STATE_KIDS_CLUB = 0x23,         // Kids Club
+    STATE_VICTORY_PALACE = 0x24,    // Victory Palace
+    STATE_POKEMON_LAB = 0x25,       // POKeMON Lab
+    STATE_GB_TOWER = 0x26,          // GB Tower
+    STATE_GYM_LEADER_CASTLE = 0x27, // Gym Leader Castle
+    STATE_BATTLE_NOW_1P = 0x28,     // Battle Now! (1P)
+    STATE_BATTLE_NOW_2P = 0x29,     // Battle Now! (2P)
+    STATE_BATTLE_FROM_EVENT = 0x2A, // Battle menu from Event Battle
+    STATE_STUBBED_DEBUG =
+        0x80, // stubbed/removed debug menu. This could have been the Early Pokedex Menu seen in the JP version.
+    STATE_FAST_BATTLE =
+        0x81, // most likely the P97/P98 mode(s) and uses GB Pak 1 and 2 for the teams for an immediate battle; skips
+              // even the VS screen and Battle Rule screen. However, the music/stadium used is probably set by some
+              // other menu, because it seems to use the outdoor Free Battle area + Poke Cup 1-3, which isnt correct.
+    STATE_KIDS_CLUB_TITLE = 0x82, // Kids Club, but it returns to the title screen. Possibly for a Kiosk/demo version.
 } GameState;
 
 /*
@@ -888,10 +893,10 @@ extern u8 D_87A00000;
 extern u8 D_87000000[];
 
 typedef struct Rectangle {
-	/* 0x00 */ s16 left;
-	/* 0x02 */ s16 right;
-	/* 0x04 */ s16 bottom;
-	/* 0x06 */ s16 top;
+    /* 0x00 */ s16 left;
+    /* 0x02 */ s16 right;
+    /* 0x04 */ s16 bottom;
+    /* 0x06 */ s16 top;
 } Rectangle; // size >= 0x8
 extern Rectangle D_800A7440;
 
@@ -899,26 +904,26 @@ extern struct DisplayNodeHeader D_800AC840;
 extern struct DisplayNodeHeader D_800AC858;
 
 typedef struct unk_D_8006FF00 {
-	/* 0x00 */ u8 unk_00;
-	/* 0x01 */ u8 unk_01;
-	/* 0x02 */ s16 unk_02;
-	/* 0x04 */ char* name;
-	/* 0x08 */ s32 unk_08;
-	/* 0x0C */ u8 unk_0C;
-	/* 0x0D */ u8 unk_0D;
-	/* 0x0E */ s16 unk_0E;
-	/* 0x10 */ s16 unk_10;
-	/* 0x12 */ s16 unk_12;
-	/* 0x14 */ u32 unk_14;
-	/* 0x18 */ u32 unk_18;
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ char* name;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ u8 unk_0C;
+    /* 0x0D */ u8 unk_0D;
+    /* 0x0E */ s16 unk_0E;
+    /* 0x10 */ s16 unk_10;
+    /* 0x12 */ s16 unk_12;
+    /* 0x14 */ u32 unk_14;
+    /* 0x18 */ u32 unk_18;
 } unk_D_8006FF00; // size = 0x1C
 extern unk_D_8006FF00 D_8006FF00[152];
 
 typedef struct FontSet {
-	/* 0x00 */ s16 unk_00;
-	/* 0x02 */ s16 unk_02;
-	/* 0x04 */ u8* unk_04;
-	/* 0x08 */ u8* unk_08;
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ u8* unk_04;
+    /* 0x08 */ u8* unk_08;
 } FontSet; // size = 0xC
 
 typedef struct FontContext {

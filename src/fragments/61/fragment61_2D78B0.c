@@ -124,7 +124,8 @@ void TeamSelection_DrawAnimatedGoldCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg
     Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, BOTTOM_LEFT_SECTION_CORNER, 0x10, 0);
     Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, TOP_LEFT_SECTION_CORNER, 0x10, 0);
     Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, BOTTOM_RIGHT_SECTION_CORNER, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, TOP_RIGHT_SECTION_CORNER, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10,
+                       TOP_RIGHT_SECTION_CORNER, 0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -161,18 +162,20 @@ void TeamSelection_DrawTexturedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -219,18 +222,20 @@ void TeamSelection_DrawTexturedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -332,15 +337,16 @@ void TeamSelection_DrawCategoryScreen(s16 arg0, s16 arg1, s16 arg2) {
         Ui_DrawBorderedPanelNoFill(0x6D, (s16)(((0xAA - temp_a3) / 2) + 0x81), 0x1A6, temp_a3);
         temp_v0 = (((arg2 * 0x5C) - 0x5C) / 8) + 0x10;
         if (1) {}
-        TeamSelection_DrawTexturedPanel(0x38, ((0x6C - temp_v0) / 2) + 0x14C, 0x210, (((arg2 * 0x5C) - 0x5C) / 8) + 0x10, 0x1E, 0x1E,
-                      0x82, 0x96);
+        TeamSelection_DrawTexturedPanel(0x38, ((0x6C - temp_v0) / 2) + 0x14C, 0x210,
+                                        (((arg2 * 0x5C) - 0x5C) / 8) + 0x10, 0x1E, 0x1E, 0x82, 0x96);
         if (arg2 == 9) {
             TeamSelection_DrawColoredFrame(0x74, 0x88, 0x198, 0x20, 0x8C, 0x28, 0x8C, 0xFF);
             TeamSelection_DrawColoredFrame(0x74, 0xA8, 0x198, 0x7C, 0x64, 0x1E, 0x64, 0xFF);
             Ui_DrawAnimatedTextureMarker(0x79, (D_8423D3F8 * 0x1E) + 0xAD);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf(0x7D, 0x8B, "%s %s", TeamSelection_GetLabelText(gSessionContext.ruleCategory + 0x3F), TeamSelection_GetLabelText(0x48));
+            Font_Printf(0x7D, 0x8B, "%s %s", TeamSelection_GetLabelText(gSessionContext.ruleCategory + 0x3F),
+                        TeamSelection_GetLabelText(0x48));
             TeamSelection_DrawCategoryRow(0x6D, 0x81, 0, TeamSelection_GetLabelText(0x49));
             TeamSelection_DrawCategoryRow(0x6D, 0x81, 1, TeamSelection_GetLabelText(0x4A));
             TeamSelection_DrawCategoryRow(0x6D, 0x81, 2, TeamSelection_GetLabelText(0x4B));
@@ -634,7 +640,8 @@ void TeamSelection_InitializeSlot(unk_D_8423D3D8* arg0, s16 arg1) {
     GbSavePlayerIdentity sp38;
 
     if (arg1 == 4) {
-        D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 0, 0x2C, 0x54, arg0->unk_02);
+        D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 0,
+                                                              0x2C, 0x54, arg0->unk_02);
         return;
     }
 
@@ -647,8 +654,10 @@ void TeamSelection_InitializeSlot(unk_D_8423D3D8* arg0, s16 arg1) {
         var_v1 = 0;
     }
 
-    D_84210D44 |= Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, NULL, 0, var_v1, sp50, 0x40, 0x54, arg0->unk_02);
-    D_84210D44 |= Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 0, 0x68, 0xE4, arg0->unk_02, arg1, D_84211B38);
+    D_84210D44 |=
+        Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, NULL, 0, var_v1, sp50, 0x40, 0x54, arg0->unk_02);
+    D_84210D44 |=
+        Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 0, 0x68, 0xE4, arg0->unk_02, arg1, D_84211B38);
 }
 
 s32 Team_CommitSelectionToTrainer(unk_D_8423D3D8* arg0, s16 arg1) {
@@ -731,7 +740,8 @@ void TeamSelection_ApplySlotSelection(s16 arg0, s16 arg1) {
         if (arg1 == 4) {
             TeamSelection_RegisteredTeam_ApplySelection(&D_84229EB0, temp_v1->rosterInfo->unk_028[0].unk_53);
         } else {
-            Rental_CopyRosterToTeam(&D_84211B50, &temp_v1->rosterInfo->unk_028, temp_v1->rosterInfo->numberOfPokemonCanBePicked);
+            Rental_CopyRosterToTeam(&D_84211B50, &temp_v1->rosterInfo->unk_028,
+                                    temp_v1->rosterInfo->numberOfPokemonCanBePicked);
         }
     }
 }
@@ -935,9 +945,11 @@ void RegisteredTeam_Register(void) {
         }
 
         ptr = &D_84229EB0;
-        D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(ptr, &D_84211B50, &D_842168A0, &D_8423D3A8, 3, 0x2C, 0xBC, 0);
+        D_84210D44 |=
+            TeamSelection_RegisteredTeam_Initialize(ptr, &D_84211B50, &D_842168A0, &D_8423D3A8, 3, 0x2C, 0xBC, 0);
         D_84210D44 |= Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, ptr, 1, var_s1, sp74, 0x40, 0x54, 0);
-        D_84210D44 |= Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 1, 0x68, 0xE4, 0, temp_v0, D_84211B38);
+        D_84210D44 |=
+            Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 1, 0x68, 0xE4, 0, temp_v0, D_84211B38);
 
         TeamSelection_Open(temp_v0, 1, 0);
         TeamSelection_RunInputLoop(temp_v0, 1, 0);
@@ -951,7 +963,8 @@ void RegisteredTeam_Register(void) {
 }
 
 void RegisteredTeam_Browse(void) {
-    D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 1, 0x2C, 0x54, 0);
+    D_84210D44 |=
+        TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 1, 0x2C, 0x54, 0);
 
     RegistrationManager_Begin(&D_84229EB0);
     Controller_PollInputs();
@@ -967,7 +980,8 @@ void RegisteredTeam_Browse(void) {
 }
 
 void RegisteredTeam_Delete(void) {
-    D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 2, 0x2C, 0x54, 0);
+    D_84210D44 |=
+        TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 2, 0x2C, 0x54, 0);
 
     RegistrationManager_Begin(&D_84229EB0);
     Controller_PollInputs();

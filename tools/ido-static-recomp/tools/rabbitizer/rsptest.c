@@ -8,7 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 int main() {
     uint32_t word;
     RabbitizerInstruction instr;
@@ -16,7 +15,7 @@ int main() {
     int extraLJust = 5;
     uint32_t validbits;
 
-    //word = 0x4B01C8E8; // vand    $v3, $v25, $v1[0]
+    // word = 0x4B01C8E8; // vand    $v3, $v25, $v1[0]
     word = 0x48952000; // mtc2    $21, $v4[0]
 
     RabbitizerInstructionRsp_init(&instr, word, 0x80000000);

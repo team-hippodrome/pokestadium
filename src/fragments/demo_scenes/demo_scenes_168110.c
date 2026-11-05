@@ -45,10 +45,10 @@ void Intro_ComputeFollowPoint(unk_D_86B0FA78* arg0, Vec3f* arg1) {
 }
 
 void Intro_UpdateOrbitCamera(void) {
-    Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA7C->unk_1C, D_86B0FA7C->unk_10,
-                  Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_12);
-    Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &D_86B0FA7C->unk_00->view.eyePosition, D_86B0FA7C->unk_20, D_86B0FA7C->unk_16,
-                  Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_18);
+    Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA7C->unk_1C,
+                                D_86B0FA7C->unk_10, Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_12);
+    Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &D_86B0FA7C->unk_00->view.eyePosition, D_86B0FA7C->unk_20,
+                                D_86B0FA7C->unk_16, Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_18);
 
     D_86B0FA7C->unk_00->view.targetPosition.y += D_86B10660.unk_0C;
     if (D_86B0FA7C->unk_00->view.eyePosition.y <= 10.0f) {
@@ -112,10 +112,12 @@ void Intro_LoadCameraKeyframe(DioramaAnimData* arg0, CameraNode* arg1) {
     sp2C = Intro_ClampOrbitDistance(arg0->eyeDistance, 500.0f);
     sp28 = Intro_ClampOrbitDistance(arg0->distance, 500.0f);
 
-    IntroCamKeyframe_SetAngles(arg0->startingRotationX, Intro_GetTrackedModelFacingOffset() + arg0->startingRotationY, arg0->rotationXOffset, Intro_GetTrackedModelFacingOffset() + arg0->rotationYOffset);
+    IntroCamKeyframe_SetAngles(arg0->startingRotationX, Intro_GetTrackedModelFacingOffset() + arg0->startingRotationY,
+                               arg0->rotationXOffset, Intro_GetTrackedModelFacingOffset() + arg0->rotationYOffset);
     IntroCamKeyframe_SetDistance(sp34, sp30);
 
-    IntroCamKeyframe_SetAtAngles(arg0->eyeRotationX, Intro_GetTrackedModelFacingOffset() + arg0->eyeRotationY, arg0->rotationX, Intro_GetTrackedModelFacingOffset() + arg0->rotationY);
+    IntroCamKeyframe_SetAtAngles(arg0->eyeRotationX, Intro_GetTrackedModelFacingOffset() + arg0->eyeRotationY,
+                                 arg0->rotationX, Intro_GetTrackedModelFacingOffset() + arg0->rotationY);
     IntroCamKeyframe_SetAtDistance(sp2C, sp28);
     IntroCamKeyframe_SetTransitionSpeed(arg0->targetZ, arg0->speed);
 }
@@ -138,7 +140,7 @@ s32 Intro_UpdateCameraKeyframe(CameraNode* camera) {
 
     Math_EaseTowardF(&D_86B0FA7C->unk_44, D_86B0FA7C->unk_38, D_86B0FA7C->unk_3C);
     Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &sp50, D_86B0FA7C->unk_34, D_86B0FA7C->unk_2A,
-                  Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_2C);
+                                Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_2C);
 
     if (sp50.y <= 10.0f) {
         sp50.y = 10.0f;
@@ -148,7 +150,7 @@ s32 Intro_UpdateCameraKeyframe(CameraNode* camera) {
     Vec3f_CalculateDistanceAngles(&sp44, &sp50, &sp34, &sp2E, &sp2C);
     Camera_ComputeEyeFromAngles(&sp44, &camera->view.eyePosition, D_86B0FA7C->unk_44 * sp34, sp2E, sp2C);
     Camera_ComputeEyeFromAngles(&D_86B0FA7C->unk_04, &sp38, D_86B0FA7C->unk_30, D_86B0FA7C->unk_24,
-                  Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_26);
+                                Intro_GetTrackedModelFacingOffset() + D_86B0FA7C->unk_26);
 
     sp38.y += D_86B10660.unk_0C;
 

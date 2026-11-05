@@ -1356,10 +1356,10 @@ void func_87802E58(void) {
 
     if (D_8780FCA1 == 0) {
         D_8780FCA1 = 1;
-    } else if ((u32) D_8780FE38 < (u32) v0) {
+    } else if ((u32)D_8780FE38 < (u32)v0) {
         D_8780FCA0 = v0 - D_8780FE38;
     } else {
-        D_8780FCA0 = ((u64) (u32) v0 - 0x100000000ULL - 0x100000000ULL) - D_8780FE38;
+        D_8780FCA0 = ((u64)(u32)v0 - 0x100000000ULL - 0x100000000ULL) - D_8780FE38;
     }
 
     D_8780FE38 = v0;
@@ -1460,8 +1460,8 @@ void Widget_DrawPanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5
     Widget_FillRect(arg0 - 1, arg1 - 1, arg2 + 2, arg3 + 2);
 }
 
-void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9,
-                   f32 argA) {
+void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
+                                f32 arg8, f32 arg9, f32 argA) {
     MtxF sp20;
 
     guRotateF(sp20.mf, arg4, arg5, arg6, arg7);
@@ -1563,7 +1563,7 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
             }
 
             MathUtil_BuildTransformMtx(spC8, 0.2f, 0.2f, 0.2f, D_8780FCD8[i][j].unk_04, 0.0f, 1.0f, 0.0f,
-                          (D_8780FCD8[i][j].unk_00 + arg0) - 0xA0, 0x78 - D_8780FCD8[i][j].unk_02, 0.0f);
+                                       (D_8780FCD8[i][j].unk_00 + arg0) - 0xA0, 0x78 - D_8780FCD8[i][j].unk_02, 0.0f);
 
             gSPMatrix(gDisplayListHead++, (u32)spC8++ & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
             gSPDisplayList(gDisplayListHead++, D_8780F840);
@@ -1571,8 +1571,8 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     }
 }
 
-void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, f32 arg8, f32 arg9,
-                   f32 argA, f32 argB, f32 argC, f32 argD, f32 argE) {
+void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
+                                  f32 arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD, f32 argE) {
     u8 i;
     s16 sp64 = (arg4 + arg6) / 2;
     s16 sp5C = (arg5 + arg7) / 2;
@@ -1774,8 +1774,10 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
             if (spA0[i] == 1) {
                 Gfx_SetVertexAttributes(&spAC[var_s4].vtx1, -0x63, spA4[var_s4], 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
                 Gfx_SetVertexAttributes(&spAC[var_s4].vtx2, -0x1B, spA4[var_s4], 0, 0x480, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, -0x63, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, -0x1B, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF, 0xFF, 0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, -0x63, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF,
+                                        0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, -0x1B, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF,
+                                        0xFF, 0xFF);
 
                 gSPVertex(gDisplayListHead++, &spAC[var_s4].vtx1, 4, 0);
                 gDPLoadTextureBlock(gDisplayListHead++, D_8780F910[D_8780FA30[i]][i], G_IM_FMT_RGBA, G_IM_SIZ_32b, 36,
@@ -1831,8 +1833,9 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
             }
         }
         Widget_PauseMenuDrawIconQuad(var_a0, D_8780F910[D_8780FA30[i]][i], 0x24, 0x1A, ((i * 0x36) + arg0) + 0x3E, 0xBF,
-                      ((i * 0x36) + arg0) + 0x62, 0xD9, D_8780F930[D_8780FCAC[i]], D_8780F930[D_8780FCAC[i]],
-                      D_8780F930[D_8780FCAC[i]], D_8780F940[D_8780FCB0[i]], 0.0f, 0.0f, 1.0f);
+                                     ((i * 0x36) + arg0) + 0x62, 0xD9, D_8780F930[D_8780FCAC[i]],
+                                     D_8780F930[D_8780FCAC[i]], D_8780F930[D_8780FCAC[i]], D_8780F940[D_8780FCB0[i]],
+                                     0.0f, 0.0f, 1.0f);
     }
 
     Font_BeginTranslucentTextRendering();
@@ -2016,7 +2019,8 @@ s32 Widget_PauseMenuUpdate(void) {
                     }
                 }
 
-                if ((D_8780FC4C == 0) || ((D_8780FC4C == 1) && (D_8780FCA6 == 0) && (Audio_CountCategorySounds(2) == 0))) {
+                if ((D_8780FC4C == 0) ||
+                    ((D_8780FC4C == 1) && (D_8780FCA6 == 0) && (Audio_CountCategorySounds(2) == 0))) {
                     for (i = 0; i < 4; i++) {
                         if (D_8780FDFC[i] == 1) {
                             break;
@@ -2253,9 +2257,11 @@ s32 Widget_PauseMenuUpdate(void) {
         if (D_8780FC70 != 0) {
             if (D_8780FC4C == 0) {
                 if (D_8780FA2A == 0) {
-                    Widget_DrawPanel(((0x140 - D_8780FE32) / 2) - 0xA, 0x58, D_8780FE32 + 0x14, 0x42, &sp70[0], &sp70[3]);
+                    Widget_DrawPanel(((0x140 - D_8780FE32) / 2) - 0xA, 0x58, D_8780FE32 + 0x14, 0x42, &sp70[0],
+                                     &sp70[3]);
                 } else {
-                    Widget_DrawPanel(((0x140 - D_8780FE34) / 2) - 0xA, 0x58, D_8780FE34 + 0x14, 0x42, &sp70[0], &sp70[3]);
+                    Widget_DrawPanel(((0x140 - D_8780FE34) / 2) - 0xA, 0x58, D_8780FE34 + 0x14, 0x42, &sp70[0],
+                                     &sp70[3]);
                 }
             } else {
                 Widget_DrawPanel(((0x140 - D_8780FE36) / 2) - 0xA, 0x61, D_8780FE36 + 0x14, 0x30, &sp70[0], &sp70[3]);
@@ -2291,7 +2297,7 @@ s32 Widget_PauseMenuUpdate(void) {
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
             Font_Printf(0xA0 - (Text_MeasureStringWidth(NULL, Text_GetString(0, 0, D_87806330, 0x56)) / 2), 0x6C,
-                          Text_GetString(0, 0, D_87806330, 0x56));
+                        Text_GetString(0, 0, D_87806330, 0x56));
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         }

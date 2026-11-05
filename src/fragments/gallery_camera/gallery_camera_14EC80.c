@@ -44,11 +44,13 @@ void GalleryCamera_InitFreeView(void) {
         D_87906054->view.targetPosition.y = D_8690B2F8.unk_04 + D_8690B2F8.unk_0C;
     }
 
-    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_8690B604, D_8690B600, D_8690B602);
+    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_8690B604, D_8690B600,
+                                D_8690B602);
 
     if (D_87906054->view.eyePosition.y < 12.0f) {
         D_87906054->view.eyePosition.y = 12.5f;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     }
 
     D_87906054->perspective.nearPlane = 20.0f;
@@ -58,7 +60,8 @@ void GalleryCamera_InitFreeView(void) {
 
     D_8690B610 = 0.0f;
 
-    Vec3f_SetComponentsDuplicate(&D_8690B618, D_87906054->view.targetPosition.x, D_87906054->view.targetPosition.y, D_87906054->view.targetPosition.z);
+    Vec3f_SetComponentsDuplicate(&D_8690B618, D_87906054->view.targetPosition.x, D_87906054->view.targetPosition.y,
+                                 D_87906054->view.targetPosition.z);
 }
 
 void GalleryCamera_DebugAdjustZoomOffset(void) {
@@ -97,11 +100,13 @@ void GalleryCamera_ResetFreeView(void) {
         D_87906054->view.targetPosition.y = D_8690B2F8.unk_04 + D_8690B2F8.unk_0C;
     }
 
-    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_8690B604, D_8690B600, D_8690B602);
+    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_8690B604, D_8690B600,
+                                D_8690B602);
 
     if (D_87906054->view.eyePosition.y < 12.0f) {
         D_87906054->view.eyePosition.y = 12.5f;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     }
 
     D_87906054->perspective.nearPlane = 20.0f;
@@ -110,7 +115,8 @@ void GalleryCamera_ResetFreeView(void) {
     D_8690A710->unk_008 = 40.0f;
     D_8690B610 = 0.0f;
 
-    Vec3f_SetComponentsDuplicate(&D_8690B618, D_87906054->view.targetPosition.x, D_87906054->view.targetPosition.y, D_87906054->view.targetPosition.z);
+    Vec3f_SetComponentsDuplicate(&D_8690B618, D_87906054->view.targetPosition.x, D_87906054->view.targetPosition.y,
+                                 D_87906054->view.targetPosition.z);
 }
 
 s32 GalleryCamera_UpdateZoomFov(void) {
@@ -122,7 +128,8 @@ s32 GalleryCamera_UpdateZoomFov(void) {
         }
     }
 
-    D_87906054->perspective.verticalFieldOfView = Math_StepToF(D_87906054->perspective.verticalFieldOfView, D_8690A710->unk_008, 1.5f, 1.5f);
+    D_87906054->perspective.verticalFieldOfView =
+        Math_StepToF(D_87906054->perspective.verticalFieldOfView, D_8690A710->unk_008, 1.5f, 1.5f);
 
     if (D_87906054->perspective.verticalFieldOfView == D_8690A710->unk_008) {
         return 0;
@@ -170,7 +177,8 @@ void GalleryCamera_OrbitAtPoint(s16 arg0) {
         D_87906054->view.targetPosition.x = sp50.x;
         D_87906054->view.targetPosition.z = sp50.z;
     }
-    Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+    Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                  &D_8690B600, &D_8690B602);
 }
 
 void GalleryCamera_HandleDPadInput(void) {
@@ -183,28 +191,34 @@ void GalleryCamera_HandleDPadInput(void) {
 
     if ((D_8690B390.buttonDown & 8) && (D_87906054->view.targetPosition.y < 300.0f)) {
         D_87906054->view.targetPosition.y += 4.0f * D_8690A710->unk_004;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
         if (D_8690B600 < -0x38E3) {
             D_87906054->view.targetPosition.y -= 4.0f * D_8690A710->unk_004;
         }
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     } else if ((D_8690B390.buttonDown & 4) && (D_87906054->view.targetPosition.y > 5.0f)) {
         D_87906054->view.targetPosition.y -= 4.0f * D_8690A710->unk_004;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
         if (D_8690B600 >= 0x38E4) {
             D_87906054->view.targetPosition.y += 4.0f * D_8690A710->unk_004;
         }
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     }
 
     if (D_87906054->view.targetPosition.y > 200.0f) {
         D_87906054->view.targetPosition.y = 200.0f;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     }
 
     if (D_87906054->view.targetPosition.y < 5.0f) {
         D_87906054->view.targetPosition.y = 5.0f;
-        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604, &D_8690B600, &D_8690B602);
+        Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_8690B604,
+                                      &D_8690B600, &D_8690B602);
     }
 
     if (D_8690B390.buttonDown & 1) {
@@ -453,7 +467,8 @@ void GalleryCamera_HandleFreeMoveInput(void) {
     f32 mag;
 
     if (D_8690B390.stickMag != 0.0f) {
-        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y, D_87906054->view.eyePosition.z);
+        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y,
+                                     D_87906054->view.eyePosition.z);
         if (D_8690B390.stickY >= 0.0f) {
             mag = -(D_8690B390.stickMag / 6.0f);
             Camera_ComputeEyeFromAngles(&D_87906054->view.eyePosition, &sp38, mag, D_8690B600, D_8690B602);
@@ -475,7 +490,8 @@ void GalleryCamera_HandleFreeMoveInput(void) {
     }
 
     if (D_8690B390.buttonDown & 0x300) {
-        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y, D_87906054->view.eyePosition.z);
+        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y,
+                                     D_87906054->view.eyePosition.z);
         Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &sp38, D_8690B604, D_8690B600, D_8690B602);
         GalleryCamera_ClampOrbitBounds(&sp44, &sp38, 1);
         Vec3f_SetComponentsDuplicate(&D_87906054->view.eyePosition, sp38.x, sp38.y, sp38.z);
@@ -490,7 +506,8 @@ void GalleryCamera_HandleFreeMoveInput(void) {
     }
 
     if (D_8690B390.buttonDown & 0xC00) {
-        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y, D_87906054->view.eyePosition.z);
+        Vec3f_SetComponentsDuplicate(&sp44, D_87906054->view.eyePosition.x, D_87906054->view.eyePosition.y,
+                                     D_87906054->view.eyePosition.z);
         Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &sp38, D_8690B604, D_8690B600, D_8690B602);
         GalleryCamera_ClampOrbitBounds(&sp44, &sp38, 0);
         Vec3f_SetComponentsDuplicate(&D_87906054->view.eyePosition, sp38.x, sp38.y, sp38.z);

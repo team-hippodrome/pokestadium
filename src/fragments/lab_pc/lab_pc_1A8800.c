@@ -101,13 +101,14 @@ void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp6C = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp6C, 0, 0, var_s2, 0x18, D_88217C04, D_88217C08);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp6C, 0, 0, var_s2, 0x18, D_88217C04,
+                                                                              D_88217C08);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp6C);
 
     temp_s1 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     temp_s0 = Text_GetString(NULL, 0, D_88224F94, 1);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s1, (var_s2 - Font_MeasureTextExtent(0x10, 0, temp_s0)) / 2, 0,
-                                                           temp_s0, 0x10);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        temp_s1, (var_s2 - Font_MeasureTextExtent(0x10, 0, temp_s0)) / 2, 0, temp_s0, 0x10);
     temp_s1->unk_3C = 0x1C;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp6C, temp_s1);
 
@@ -122,7 +123,8 @@ void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s0_2);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabPC_DrawMenuGridCell, var_s2, 0x20, 4, 1, arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabPC_DrawMenuGridCell,
+                                                                      var_s2, 0x20, 4, 1, arg4);
     ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_38, arg4);
     ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(arg0->unk_30, arg2);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0_2, arg0->unk_30);
@@ -223,8 +225,8 @@ void LabPC_BuildMenuWidget(unk_func_88200FA0* arg0, s32 arg1, s32 arg2, s32 arg3
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, sp4C);
 
     sp48 = mem_pool_alloc(arg4, sizeof(unk_func_88500EE4));
-    ((func88500EE4)Memmap_GetFragmentVaddr(WidgetTree_InitTintedTexture))(sp48, 0, 0, 0x280, 0x1E0, D_88223E48, D_88217C14,
-                                                           D_88217C18);
+    ((func88500EE4)Memmap_GetFragmentVaddr(WidgetTree_InitTintedTexture))(sp48, 0, 0, 0x280, 0x1E0, D_88223E48,
+                                                                          D_88217C14, D_88217C18);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp4C, sp48);
 
     arg0->unk_2C = mem_pool_alloc(arg4, sizeof(unk_func_885088F4));
@@ -236,11 +238,12 @@ void LabPC_BuildMenuWidget(unk_func_88200FA0* arg0, s32 arg1, s32 arg2, s32 arg3
 
     sp44 = mem_pool_alloc(arg4, sizeof(unk_func_88509A2C));
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp44, 0x38, 0x22, GbSave_GetActivePort(),
-                                                           Text_GetString(NULL, 0, D_88224F90, 0));
+                                                                          Text_GetString(NULL, 0, D_88224F90, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp44);
 
     sp40 = mem_pool_alloc(arg4, sizeof(unk_func_88509E34));
-    ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp40, 0, 0, Text_GetString(NULL, 0, D_88224F94, 0));
+    ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp40, 0, 0,
+                                                                        Text_GetString(NULL, 0, D_88224F94, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp40);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030));

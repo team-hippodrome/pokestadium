@@ -60,8 +60,13 @@ typedef struct unk_D_800FC6D4 {
     /* 0x10 */ unk_D_800FC6D4_entry entries[ENTRY_SIZE];
 } unk_D_800FC6D4; // size = 0x10
 
-typedef struct MoveSoundEntry { u8 unk0[0x6]; } MoveSoundEntry;
-typedef struct MoveSoundTable { u8 header[0x10]; MoveSoundEntry entries[1]; } MoveSoundTable;
+typedef struct MoveSoundEntry {
+    u8 unk0[0x6];
+} MoveSoundEntry;
+typedef struct MoveSoundTable {
+    u8 header[0x10];
+    MoveSoundEntry entries[1];
+} MoveSoundTable;
 
 extern u8 D_800B32A0[0x493E0];
 extern u32* D_800FC680;

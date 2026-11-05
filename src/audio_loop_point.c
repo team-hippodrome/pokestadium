@@ -498,75 +498,75 @@ s32 Audio_StartTrackForCategory(s32 arg0, s32 arg1) {
     D_80078E80 = 0;
     if ((arg0 == 0) || (arg0 == 0xFF)) {
         arg0 = 1;
-        if ((arg1 == 0xE)) {    
+        if ((arg1 == 0xE)) {
             return Audio_StartMusicTrack(2U);
         }
     }
     switch (arg1) {
-    case 10:
-    case 11:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078E83 + arg0));
-        break;
-    case 6:
-    case 7:
-    case 8:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078E8B + arg0));
-        break;
-    case 9:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078E93 + arg0));
-        break;
-    case 5:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078E9B + arg0));
-        break;
-    case 4:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078EA3 + arg0));
-        break;
-    case 0:
-    case 1:
-    case 2:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078EAB + arg0));
-        break;
-    case 3:
-        if (arg0 >= 9U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078EB3 + arg0));
-        break;
-    case 12:
-        if (arg0 >= 0x21U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078EBC + ((arg0 - 1) & 3)));
-        break;
-    case 13:
-        if (arg0 >= 6U) {
-            return 0;
-        }
-        ret = Audio_StartMusicTrack(*(&D_80078EBF + arg0));
-        break;
-    case 15:
-        ret = Audio_StartMusicTrack(0x14U);
-        break;
-    default:
-        ret = Audio_StartMusicTrack(2U);
+        case 10:
+        case 11:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078E83 + arg0));
+            break;
+        case 6:
+        case 7:
+        case 8:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078E8B + arg0));
+            break;
+        case 9:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078E93 + arg0));
+            break;
+        case 5:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078E9B + arg0));
+            break;
+        case 4:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078EA3 + arg0));
+            break;
+        case 0:
+        case 1:
+        case 2:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078EAB + arg0));
+            break;
+        case 3:
+            if (arg0 >= 9U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078EB3 + arg0));
+            break;
+        case 12:
+            if (arg0 >= 0x21U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078EBC + ((arg0 - 1) & 3)));
+            break;
+        case 13:
+            if (arg0 >= 6U) {
+                return 0;
+            }
+            ret = Audio_StartMusicTrack(*(&D_80078EBF + arg0));
+            break;
+        case 15:
+            ret = Audio_StartMusicTrack(0x14U);
+            break;
+        default:
+            ret = Audio_StartMusicTrack(2U);
     }
     return ret;
 }

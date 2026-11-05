@@ -352,8 +352,8 @@ void Gallery_RentalViewerBoxPickerMoveUp(unk_D_838067F0* arg0) {
             arg0->unk_0030 = -4;
             arg0->unk_0000 = 6;
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        } else if ((arg0->unk_0020 > 0) &&
-                   (Gallery_RentalViewerFillPage(arg0, arg0->unk_0160->unk_268C, arg0->unk_0020 - 1, arg0->unk_015C) != 0)) {
+        } else if ((arg0->unk_0020 > 0) && (Gallery_RentalViewerFillPage(arg0, arg0->unk_0160->unk_268C,
+                                                                         arg0->unk_0020 - 1, arg0->unk_015C) != 0)) {
             arg0->unk_0020 -= 1;
             arg0->unk_0160 = arg0->unk_0160->unk_268C;
             arg0->unk_002C = -1;
@@ -374,7 +374,8 @@ void Gallery_RentalViewerBoxPickerMoveDown(unk_D_838067F0* arg0) {
             arg0->unk_0030 = 4;
             arg0->unk_0000 = 6;
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        } else if (Gallery_RentalViewerFillPage(arg0, Gallery_RentalViewerGetPage(arg0->unk_0160, 6), arg0->unk_0020 + 6, arg0->unk_015C) != 0) {
+        } else if (Gallery_RentalViewerFillPage(arg0, Gallery_RentalViewerGetPage(arg0->unk_0160, 6),
+                                                arg0->unk_0020 + 6, arg0->unk_015C) != 0) {
             arg0->unk_0020++;
             arg0->unk_0160 = arg0->unk_0160->unk_2688;
             arg0->unk_002C = 1;

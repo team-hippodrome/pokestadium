@@ -7,11 +7,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -339,8 +339,8 @@ Gfx* Trail40GridAlt_Draw(Gfx* arg0) {
 
     Trail40GridAlt_Reset();
 
-    gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0x48], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0x48], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(arg0++, D_84389588);
     gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, D_843A06A0.unk_0004);
     gSPMatrix(arg0++, D_843A06A0.unk_0010, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);

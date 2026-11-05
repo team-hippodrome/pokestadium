@@ -28,9 +28,9 @@ typedef union ParticleSetupArgument {
 } ParticleSetupArgument;
 
 typedef struct ParticleDescriptorChild {
-    /* 0x00 */ u8 setupScope; // 0: draw stage; 1: prepare stage (once per world chain)
+    /* 0x00 */ u8 setupScope;     // 0: draw stage; 1: prepare stage (once per world chain)
     /* 0x01 */ u8 argumentSource; // 0: inline argument; 1: dereference setupArgument.s
-    /* 0x02 */ s16 renderMode; // Particle_SetRenderMode selector
+    /* 0x02 */ s16 renderMode;    // Particle_SetRenderMode selector
     /* 0x04 */ ParticleSetupCallback setupCallback;
     /* 0x08 */ ParticleDrawCallback drawCallback;
     /* 0x0C */ ParticleSetupArgument setupArgument;
@@ -124,7 +124,7 @@ typedef struct Particle {
     /* 0xCE */ u8 unk_CE;
     /* 0xCF */ u8 unk_CF;
     /* 0xD0 */ s8 allocated; // independent of lifecycle; Particle_Free releases the slot
-} Particle; // size = 0xD4
+} Particle;                  // size = 0xD4
 
 typedef void (*func_unk_D_8140E724)(struct Particle*);
 
@@ -182,9 +182,9 @@ typedef union ParticleMaterialValue {
 
 typedef struct ParticleValueSequence {
     /* 0x00 */ ParticleMaterialValue unk_00; // constant color or frame-indexed value storage
-    /* 0x04 */ s16 unk_04; // zero selects constant color; otherwise the sequence length
-    /* 0x06 */ s16 unk_06; // clock selector consumed by ParticleGfx_GetFrameDivisor
-} ParticleValueSequence; // size >= 0x08
+    /* 0x04 */ s16 unk_04;                   // zero selects constant color; otherwise the sequence length
+    /* 0x06 */ s16 unk_06;                   // clock selector consumed by ParticleGfx_GetFrameDivisor
+} ParticleValueSequence;                     // size >= 0x08
 
 typedef struct arg1_func_81407874_014_000_01C {
     /* 0x00 */ u16 unk_00;
@@ -195,7 +195,7 @@ typedef struct ParticleMaterialState {
     /* 0x00 */ struct ParticleMaterialState* unk_00;
     /* 0x04 */ s32 unk_04; // texture generation: 0 off, 1 generated, 2 generated + linear
     /* 0x08 */ char unk08[0x8];
-    /* 0x10 */ ParticleCombineMux* unk_10; // optional two-cycle combiner mux
+    /* 0x10 */ ParticleCombineMux* unk_10;    // optional two-cycle combiner mux
     /* 0x14 */ ParticleValueSequence* unk_14; // optional primitive color/LOD sequence
     /* 0x18 */ ParticleValueSequence* unk_18; // optional environment color sequence
     /* 0x1C */ arg1_func_81407874_014_000_01C* unk_1C;
@@ -226,14 +226,14 @@ typedef struct ParticleTextureFormat {
 typedef struct ParticleTexture {
     /* 0x00 */ ParticleMaterialState* unk_00; // static image pointer through the legacy type
     /* 0x04 */ ParticleTextureFormat* unk_04; // texture upload format and addressing
-    /* 0x08 */ ParticleTileScroll* unk_08; // optional tile scrolling
+    /* 0x08 */ ParticleTileScroll* unk_08;    // optional tile scrolling
     /* 0x0C */ ParticleValueSequence* unk_0C; // optional divided-clock image sequence
-} ParticleTexture; // size = 0x10
+} ParticleTexture;                            // size = 0x10
 
 typedef struct ParticleMaterial {
     /* 0x00 */ ParticleMaterialState* unk_00; // also passed to the primary texture reader via the legacy layout
-    /* 0x04 */ ParticleTexture* unk_04; // optional secondary texture
-} ParticleMaterial; // size >= 0x8
+    /* 0x04 */ ParticleTexture* unk_04;       // optional secondary texture
+} ParticleMaterial;                           // size >= 0x8
 
 typedef struct arg1_func_81407874 {
     /* 0x00 */ char unk00[0x14];
@@ -245,7 +245,7 @@ typedef struct ParticleCameraState {
     /* 0x40 */ Vec3f eyePosition;
     /* 0x4C */ Vec3f targetPosition;
     /* 0x58 */ Vec3f lookDirection; // normalized eye-to-target direction
-    /* 0x64 */ Vec3f eyeDirection; // normalized target-to-eye direction
+    /* 0x64 */ Vec3f eyeDirection;  // normalized target-to-eye direction
     /* 0x70 */ s16 unk_70;
     /* 0x72 */ s16 unk_72;
     /* 0x74 */ char unk74[0x2];
@@ -405,7 +405,8 @@ s16 ParticleMath_ApproachAngleCoarse(s16 angle, s16 target_angle);
 void ParticleGfx_NoopStub1(void);
 void ParticleGfx_PushMatrix(MtxF* matrix);
 void ParticleGfx_Build2DTransformMatrix(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale);
-void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale_y);
+void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z,
+                                               f32 scale_y);
 void ParticleGfx_Push2DTransform(s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale);
 void ParticleGfx_Push2DTransformYScaled(s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale_y);
 void ParticleGfx_BuildTransformMatrix(MtxF* matrix, Vec3f position, Vec3s rotation, f32 scale);
@@ -413,8 +414,10 @@ void ParticleGfx_BuildTransformMatrixYScaled(MtxF* matrix, Vec3f position, Vec3s
 void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* matrix, Vec3f position, Vec3s rotation, f32 scale_x, f32 scale_y);
 void ParticleGfx_BuildBillboardMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale);
 void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y);
-void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale, s16 rotation_z);
-void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y, s16 rotation_z);
+void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale,
+                                             s16 rotation_z);
+void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y,
+                                                    s16 rotation_z);
 void ParticleGfx_BuildDirectionMatrix(MtxF* matrix, Vec3f direction, Vec3f position, s16 reference_angle, f32 scale);
 void ParticleGfx_PushTransformMatrix(Vec3f position, Vec3s rotation, f32 scale);
 void ParticleGfx_PushTransformMatrixYScaled(Vec3f position, Vec3s rotation, f32 scale_y);
@@ -425,7 +428,6 @@ void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* camera, Vec3f position, 
 void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* camera, Vec3f position, f32 scale_y, s16 rotation_z);
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f position, Vec3s rotation, f32 scale);
 void ParticleGfx_PushDirectionMatrix(Vec3f position, Vec3f direction, f32 scale);
-
 
 void ParticleGfx_PipeSync(void);
 void ParticleGfx_SetTextureState(void);
@@ -438,15 +440,24 @@ void ParticleGfx_NoopStub6(void);
 void ParticleGfx_NoopStub7(void);
 void ParticleGfx_NoopStub8(void);
 void ParticleGfx_NoopStub9(void);
-void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
-void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                    s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                    s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                  s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                  s32 shifts, s32 shiftt);
+void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms,
+                                        s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt);
 void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height);
 void ParticleGfx_LoadTextureTileRgba32(u8* texture, s32 width, s32 height);
 void ParticleGfx_LoadTextureRgba16(u8* texture, s32 width, s32 height);
@@ -497,7 +508,8 @@ void ParticleGfx_DrawI8TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 
 void ParticleGfx_DrawIa16TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height);
 void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height);
 void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height);
-void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height);
+void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width,
+                                         s32 height);
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a);
 void ParticleGfx_SetEnvColor(u8 r, u8 g, u8 b, u8 a);
 void ParticleGfx_SetFogColor(u8 r, u8 g, u8 b, u8 a);
@@ -506,9 +518,12 @@ void ParticleGfx_SetPrimColorTextureCombine(u8 r, u8 g, u8 b, u8 a);
 void ParticleGfx_SetTextureAlphaCombine(u8 alpha);
 void ParticleGfx_SetPrimEnvColorCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a);
 void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a);
-void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b, u8 env_a);
-void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b);
-void ParticleGfx_SetPrimEnvLodTextureCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b);
+void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b,
+                                             u8 env_a);
+void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g,
+                                      u8 env_b);
+void ParticleGfx_SetPrimEnvLodTextureCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r,
+                                             u8 env_g, u8 env_b);
 u32 ParticleGfx_GetFrameDivisor(s32 divisor);
 void ParticleGfx_SetAnimatedTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height);
 void ParticleGfx_SetAnimatedAuxTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height);
@@ -516,8 +531,10 @@ void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t,
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t, s32 width, s32 height);
 void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 start_s, s32 scroll_t, s32 width, s32 height);
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 start_s, s32 scroll_t, s32 width, s32 height);
-void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor);
-void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor);
+void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width,
+                                         s32 height, s32 clock_divisor);
+void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width,
+                                            s32 height, s32 clock_divisor);
 void ParticleGfx_LoadTextureI4ToList(Gfx* gfx, u8* texture, s32 width, s32 height);
 Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* gfx, u8* texture, ParticleTexture* descriptor, s32 tmem, s32 rtile);
 Gfx* ParticleGfx_LoadDescriptorTextureAndTile(Gfx* gfx, ParticleTexture* descriptor, s32 tmem, s32 rtile);
@@ -527,16 +544,20 @@ void ParticleGfx_SetCombineModeFromDescriptor(Gfx* gfx, ParticleCombineMux* comb
 Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* gfx, ParticleMaterial* material);
 void ParticleGfx_GraphNodeBuildDescriptorMaterialList(s32 callback_phase, arg1_func_87903D64* node);
 
-
 void Particle_ResetDefaults(Particle* particle);
 Particle* Particle_Alloc(void);
 void Particle_Free(Particle* particle);
 Particle* Particle_New(void);
 Particle* Particle_AllocChain(u8 count);
-void Particle_EmitBurstAtTransform(f32 unk_28_value, Vec3f origin, Vec3s rotation, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count);
-void Particle_EmitBurstAtTransformWithMetadata(f32 unk_28_value, Vec3f origin, Vec3s rotation, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count, s16 metadata);
-void Particle_EmitBurstFromObject(DisplayObject* object, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count, s16 anchor_id);
-void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* object, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count, s16 anchor_id, s16 metadata);
+void Particle_EmitBurstAtTransform(f32 unk_28_value, Vec3f origin, Vec3s rotation,
+                                   ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count);
+void Particle_EmitBurstAtTransformWithMetadata(f32 unk_28_value, Vec3f origin, Vec3s rotation,
+                                               ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor,
+                                               s16 count, s16 metadata);
+void Particle_EmitBurstFromObject(DisplayObject* object, ParticleUpdateCallback update_callback,
+                                  ParticleDescriptor* descriptor, s16 count, s16 anchor_id);
+void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* object, ParticleUpdateCallback update_callback,
+                                              ParticleDescriptor* descriptor, s16 count, s16 anchor_id, s16 metadata);
 s32 Particle_CountActive(void);
 s32 Particle_CountActiveAlias(void);
 void Particle_InitLifecycle(Particle* particle);
@@ -559,14 +580,22 @@ void Particle_EnableFlag40(Particle* particle);
 void Particle_DisableFlag40(Particle* particle);
 void Particle_HasFlag40(Particle* particle);
 void Particle_SetTextureFrame(Particle* particle, s16 frame);
-s32 Particle_AnimateFramesForward(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesReverse(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesPingPong(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesPingPongAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesReverseFirstPingPong(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
-s32 Particle_AnimateFramesReverseFirstPingPongAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay, s16 loop_count);
+s32 Particle_AnimateFramesForward(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay,
+                                  s16 loop_count);
+s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame,
+                                                     s16 frame_step, s16 frame_delay, s16 loop_count);
+s32 Particle_AnimateFramesReverse(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay,
+                                  s16 loop_count);
+s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame,
+                                                     s16 frame_step, s16 frame_delay, s16 loop_count);
+s32 Particle_AnimateFramesPingPong(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step, s16 frame_delay,
+                                   s16 loop_count);
+s32 Particle_AnimateFramesPingPongAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame,
+                                                      s16 frame_step, s16 frame_delay, s16 loop_count);
+s32 Particle_AnimateFramesReverseFirstPingPong(Particle* particle, s16 first_frame, s16 last_frame, s16 frame_step,
+                                               s16 frame_delay, s16 loop_count);
+s32 Particle_AnimateFramesReverseFirstPingPongAndAdvanceLifecycle(Particle* particle, s16 first_frame, s16 last_frame,
+                                                                  s16 frame_step, s16 frame_delay, s16 loop_count);
 void Particle_BeginPhase(Particle* particle);
 void Particle_ResetPhase(Particle* particle);
 void Particle_AdvancePhase(Particle* particle);
@@ -742,7 +771,9 @@ void Particle_MotionStep_SetVecFromField74AnglesXYZAlt(Particle* particle);
 void Particle_MotionStep_SetVecFromField74AnglesYZAlt(Particle* particle);
 void Particle_Field7C_SetVecFromField74AnglesYZVariant_0B700(Particle* particle);
 void Particle_UpdateRotatingMotionOffsetXZ(Particle* particle, f32 radius, s16 angle_step);
-s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 initial_motion_step_y, f32 motion_step_y_decrement, f32 step_magnitude, s16 rotation_y, s16 duration);
+s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 initial_motion_step_y,
+                                                     f32 motion_step_y_decrement, f32 step_magnitude, s16 rotation_y,
+                                                     s16 duration);
 void Particle_Scale_SetScaled(Particle* particle, f32 scale);
 void Particle_SetScale(Particle* particle, f32 scale);
 void Particle_SetScaleParameter20(Particle* particle, f32 value);
@@ -813,10 +844,8 @@ void Particle_PrepareRender(Particle* particle);
 void Particle_DispatchDraw(Particle* particle, CameraNode* camera);
 void Particle_NoopDraw(UNUSED Particle* particle, UNUSED CameraNode* camera);
 
-
 void Particle_UpdateFrameCounters(void);
 void Particle_UpdateFrameCountersAlias(void);
-
 
 void ParticleGfx_LoadTextureCallbackRgba16_32x32(UNUSED Particle* particle, u8* texture);
 void ParticleGfx_LoadTextureCallbackIa8Frame_32x32(Particle* particle, u8* texture);

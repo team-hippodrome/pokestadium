@@ -35,11 +35,13 @@ static s32 D_83201F50 = 0;
 static s32 D_83201F54 = -1;
 static char* D_83201F58 = NULL;
 static u32 D_83201F5C[] = {
-    0x0C000000,  0x05000000, 0x0B00001E,    0x00000000, 0x014000F0, 0x00000320, 0x00000000, 0x000005DC, 0x05000000,
-    0x0D000000,  0x05000000, 0x0E000002,    0x05000000, 0x22010000, 0x8C200060, 0x06000000, 0x14000000, 0x002B0012,
-    0xFFFFFF32,  0x16FFFFFF, 0x0F000003,    0x05000000, 0x1F000000, 0x00000000, 0x00000000, 0x003CFF06, 0x00640064,
-    0x00640000,  0x08000000, PikachuReward_PositionSurfingPikachuModel, 0x00000000, 0x05000000, 0x00000000, D_8C200920, 0x06000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000,    0x06000000, 0x06000000, 0x01000000,
+    0x0C000000,  0x05000000, 0x0B00001E, 0x00000000, 0x014000F0, 0x00000320,
+    0x00000000,  0x000005DC, 0x05000000, 0x0D000000, 0x05000000, 0x0E000002,
+    0x05000000,  0x22010000, 0x8C200060, 0x06000000, 0x14000000, 0x002B0012,
+    0xFFFFFF32,  0x16FFFFFF, 0x0F000003, 0x05000000, 0x1F000000, 0x00000000,
+    0x00000000,  0x003CFF06, 0x00640064, 0x00640000, 0x08000000, PikachuReward_PositionSurfingPikachuModel,
+    0x00000000,  0x05000000, 0x00000000, D_8C200920, 0x06000000, 0x0A000000,
+    &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
 };
 
 s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1) {
@@ -130,7 +132,8 @@ s32 PikachuReward_FindPikachuOnCart(void) {
             D_832027C8.unk_01 = var_v1->pokemonPicked[i].unk_52 & 0xF;
             if ((D_832027C8.unk_00 < 4) && (D_832027C8.unk_01 < 0xD)) {
                 if (GbSave_LoadPort(D_832027C8.unk_00) != 0) {
-                    D_832027C8.unk_02 = PikachuReward_SearchDeckForPikachu(D_832027C8.unk_00, D_832027C8.unk_01, var_v1->pokemonPicked[i].unk_53);
+                    D_832027C8.unk_02 = PikachuReward_SearchDeckForPikachu(D_832027C8.unk_00, D_832027C8.unk_01,
+                                                                           var_v1->pokemonPicked[i].unk_53);
                     if (D_832027C8.unk_02 >= 0) {
                         return 1;
                     }

@@ -628,7 +628,9 @@ void miniMetapodHumanControls(MiniActor* metapod) {
         case 1: // start harden
             MetapodGame_BeginHarden(metapod);
             miniChangeActorAnim(metapod, 1, -1, 1);
-            Particle_EmitBurstAtTransform(1.0f, metapod->totalPos, metapod->totalRot, MiniFx_UpdatePalette17SmallDelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 4);
+            Particle_EmitBurstAtTransform(1.0f, metapod->totalPos, metapod->totalRot,
+                                          MiniFx_UpdatePalette17SmallDelayedRevealFallParticle,
+                                          &gMiniFxParticleDescriptorIa8Variant, 4);
             metapod->mainState++;
             break;
 
@@ -857,8 +859,9 @@ void miniMetapodCompControls(MiniActor* compMetapod, s32 nPlayer) {
                         compMetapod->mainState = 1;
                         compMetapod->unk_272 = 4;
                         compMetapod->compState++;
-                        Particle_EmitBurstAtTransform(1.0f, compMetapod->totalPos, compMetapod->totalRot, MiniFx_UpdatePalette17SmallDelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant,
-                                      4);
+                        Particle_EmitBurstAtTransform(1.0f, compMetapod->totalPos, compMetapod->totalRot,
+                                                      MiniFx_UpdatePalette17SmallDelayedRevealFallParticle,
+                                                      &gMiniFxParticleDescriptorIa8Variant, 4);
                     } else {
                         compMetapod->compState = 0x64;
                     }
@@ -1194,7 +1197,9 @@ void miniRockStateMachine(MiniActor* rock) {
                     rock->ySpeed = 5.0f;
                     rock->zSpeed = 1.5f;
                     MetapodGame_DespawnRock(rock);
-                    Particle_EmitBurstAtTransform(1.0f, rock->totalPos, rock->totalRot, MiniFx_UpdateRandomVelocityGravityParticle, &gMiniFxParticleDescriptorIa8, 4);
+                    Particle_EmitBurstAtTransform(1.0f, rock->totalPos, rock->totalRot,
+                                                  MiniFx_UpdateRandomVelocityGravityParticle,
+                                                  &gMiniFxParticleDescriptorIa8, 4);
                 } else {
                     rock->mainState++;
                 }
@@ -1209,7 +1214,8 @@ void miniRockStateMachine(MiniActor* rock) {
             sp3C.y = 0.0f;
             sp3C.z = rock->totalPos.z;
 
-            Particle_EmitBurstAtTransform(1.0f, sp3C, rock->totalRot, MiniFx_UpdatePalette10FastRiseFadeParticle, &gMiniFxParticleDescriptorI4Frame, 4);
+            Particle_EmitBurstAtTransform(1.0f, sp3C, rock->totalRot, MiniFx_UpdatePalette10FastRiseFadeParticle,
+                                          &gMiniFxParticleDescriptorI4Frame, 4);
             rock->mainState++;
             break;
 
@@ -1615,7 +1621,7 @@ void MetapodGame_DrawTutorialText(void) {
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
     Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86E08E44, Text_GetString(NULL, 0, D_87806330, 0x44)) / 2), 0x20,
-                  Text_GetString(NULL, 0, D_87806330, 0x44));
+                Text_GetString(NULL, 0, D_87806330, 0x44));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x45));
@@ -1624,11 +1630,11 @@ void MetapodGame_DrawTutorialText(void) {
     Font_Printf(0x28, 0x94, Text_GetString(NULL, 0, D_87806330, 0x48));
     Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x45), Text_GetString(NULL, 0, D_87806330, 0x5F),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x45),
+                           Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x5F));
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x46), Text_GetString(NULL, 0, D_87806330, 0x5F),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x46),
+                           Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x58, Text_GetString(NULL, 0, D_87806330, 0x5F));
     Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
     Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
@@ -1796,8 +1802,8 @@ void MetapodGame_ShowResultText(void) {
     }
 
     for (i = 0; i < 30; i++) {
-        MiniActor_ReadControllerInputs();  // input reading
-        MetapodGame_DrawFrame(2); // display text ?
+        MiniActor_ReadControllerInputs(); // input reading
+        MetapodGame_DrawFrame(2);         // display text ?
     }
 
     while (Audio_GetActivityScore() != 0) {}
@@ -1842,7 +1848,8 @@ void MetapodGame_LoadAssets(void) {
         miniMetapods[i].cubeRadio = playerVariations[randN][1];
         miniMetapods[i].halfHeight = playerVariations[randN][2];
 
-        Model_InitDisplayObject(&miniMetapods[i].unk_000, 0, miniMetapods[i].unk_23C, miniMetapods[i].unk_168->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniMetapods[i].unk_000, 0, miniMetapods[i].unk_23C,
+                                miniMetapods[i].unk_168->unk_08->unk_00[0]);
         ModelAnim_SetAnimation(&miniMetapods[i].unk_000, 0);
 
         if (miniMetapods) {}
@@ -1853,7 +1860,8 @@ void MetapodGame_LoadAssets(void) {
         miniMetapodRocks[i].unk_23C = 0x9C;
         miniMetapodRocks[i].unk_168 = temp_s1_2;
 
-        Model_InitDisplayObject(&miniMetapodRocks[i].unk_000, 0, miniMetapodRocks[i].unk_23C, temp_s1_2->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniMetapodRocks[i].unk_000, 0, miniMetapodRocks[i].unk_23C,
+                                temp_s1_2->unk_08->unk_00[0]);
         ModelAnim_SetAnimation(&miniMetapodRocks[i].unk_000, 0);
 
         miniMetapodRocks[i].unk_000.node.flags &= ~1;
@@ -1885,7 +1893,7 @@ s32 metapodMinigameLoad(s32 arg0, s32 arg1) {
     MetapodGame_MainLoop(); //	tutorial screen ?
     MetapodGame_ShowResultText();
     StageContext_Deactivate();
-    Font_Free(); //	main_pool_try_free(D_800AC870);
+    Font_Free();                  //	main_pool_try_free(D_800AC870);
     Gfx_FreeDisplayListBuffers(); //	main_pool_try_free(D_800A7428.unk4); main_pool_try_free(D_800A7428.unk0);
 
     main_pool_pop_state('MINI');

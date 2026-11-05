@@ -5,10 +5,10 @@
 #include "src/game_state.h"
 
 typedef struct unk_func_8001C014 {
-	/* 0x00 */ char unk_00[0x2];
-	/* 0x02 */ u16 unk_02;
-	/* 0x04 */ s8 unk_04[0x10];
-	/* 0x14 */ s8 unk_14[0x10];
+    /* 0x00 */ char unk_00[0x2];
+    /* 0x02 */ u16 unk_02;
+    /* 0x04 */ s8 unk_04[0x10];
+    /* 0x14 */ s8 unk_14[0x10];
 } unk_func_8001C014; // size >= 0x24
 
 typedef struct unk_func_8001C248 {
@@ -40,6 +40,5 @@ void PokeIcon_PollFrameLoadForObject(unk_func_8001C248* arg0);
 void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0);
 void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0);
 void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0);
-
 
 #endif // _1C720_H_

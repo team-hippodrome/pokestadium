@@ -12,8 +12,8 @@
 #include "src/audio_loop_point.h"
 
 typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
+    /* 0x0000 */ OSThread thread;
+    /* 0x01B0 */ char unk01B0[0x2030];
 } unk_D_800A8480; // size = 0x21E0
 
 static s32 D_800A83A0;

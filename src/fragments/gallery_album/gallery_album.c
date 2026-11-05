@@ -234,7 +234,8 @@ void Gallery_AlbumInit(s32 arg0, s32 arg1) {
         D_83504090[i] = 0;
         if (Gallery_IsPhotoSpeciesValid(ptr) != 0) {
             for (j = 0; j < 21; j++) {
-                if ((Gallery_IsPhotoSpeciesValid(&D_834063C0[j]) != 0) && (Gallery_PhotoRecordsEqual(&D_834063C0[j], ptr) != 0)) {
+                if ((Gallery_IsPhotoSpeciesValid(&D_834063C0[j]) != 0) &&
+                    (Gallery_PhotoRecordsEqual(&D_834063C0[j], ptr) != 0)) {
                     if (j < 4) {
                         D_83504090[i] |= 1;
                     } else {
@@ -511,7 +512,8 @@ void Gallery_AlbumDrawThumbnails(s32 arg0, s32 arg1, unk_D_83407B38* arg2) {
         var_s4 = 0;
         if ((temp_s3 != arg2->unk_04) && (Gallery_IsSceneReady(ptr) != 0) && (ptr->unk_00 == 2)) {
             var_s4 = 1;
-            Gallery_DrawPhotoThumbnail(ptr->unk_08->img_p, ((idx % 3) * 0xA0) + arg0, ((idx / 3) * 0x76) + arg1, 0x88, 0x66, 0xF, 1);
+            Gallery_DrawPhotoThumbnail(ptr->unk_08->img_p, ((idx % 3) * 0xA0) + arg0, ((idx / 3) * 0x76) + arg1, 0x88,
+                                       0x66, 0xF, 1);
         }
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -536,8 +538,8 @@ void Gallery_AlbumDrawThumbnails(s32 arg0, s32 arg1, unk_D_83407B38* arg2) {
         if ((Gallery_IsSceneReady(ptr) != 0) && (ptr->unk_00 == 2)) {
             if (sp6C < 2) {
                 Gallery_DrawDropShadow((sp70 * 0xA0) + arg0, (sp6C * 0x76) + arg1, 0x88, 0x66);
-                Gallery_DrawPhotoThumbnail(ptr->unk_08->img_p, ((sp70 * 0xA0) + arg0) - 0x10, ((sp6C * 0x76) + arg1) - 0x10, 0x88,
-                              0x66, 8, 1);
+                Gallery_DrawPhotoThumbnail(ptr->unk_08->img_p, ((sp70 * 0xA0) + arg0) - 0x10,
+                                           ((sp6C * 0x76) + arg1) - 0x10, 0x88, 0x66, 8, 1);
             } else {
                 Gallery_AlbumComputeEnlargeMotion(D_835040D8, &sp68, &sp64, &sp60);
                 func_83501718(ptr->unk_08->img_p, sp68, sp64, 0x88, 0x66, sp60);
@@ -571,7 +573,8 @@ void Gallery_AlbumDrawTitleBar(unk_D_83407B38* arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     Gallery_DrawImageStrips(D_3001D20, (arg1 + temp_s0) - 0x44, arg2 - 3, 0x30, 0x23, 0);
-    Gallery_DrawImageStrips(D_3001D20, Font_MeasureTextExtent(0x10, 0, sp5C) + arg1 + temp_s0 + 0x14, arg2 - 3, 0x30, 0x23, 1);
+    Gallery_DrawImageStrips(D_3001D20, Font_MeasureTextExtent(0x10, 0, sp5C) + arg1 + temp_s0 + 0x14, arg2 - 3, 0x30,
+                            0x23, 1);
 
     if (arg0->unk_08 > 0) {
         temp_s0 = sp54;
@@ -906,8 +909,8 @@ void Gallery_AlbumDrawExitButton(int arg0, int arg1, s32 arg2, f32 arg3) {
                            temp_v0_2 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,
                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        Gfx_DrawTexturedRectClipped(arg0 + ((spFC - temp_ft2) / 2), arg1 + ((spF8 - temp_fv1) / 2) + temp_fa0, temp_ft2, temp_fv1_2,
-                      0, 0, tmp / arg3, tmp / arg3, 0);
+        Gfx_DrawTexturedRectClipped(arg0 + ((spFC - temp_ft2) / 2), arg1 + ((spF8 - temp_fv1) / 2) + temp_fa0, temp_ft2,
+                                    temp_fv1_2, 0, 0, tmp / arg3, tmp / arg3, 0);
     }
 
     temp_s3 = (spFC - Font_MeasureTextExtent(0, 0, spD8)) / 2;

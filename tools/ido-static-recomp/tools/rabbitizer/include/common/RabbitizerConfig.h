@@ -10,11 +10,10 @@
 extern "C" {
 #endif
 
-
 #define RABBITIZER_DEF_ABI(name) RABBITIZER_ABI_##name
 
 typedef enum RabbitizerAbi {
-    #include "Abi.inc"
+#include "Abi.inc"
 
     RABBITIZER_DEF_ABI(MAX),
 } RabbitizerAbi;
@@ -23,12 +22,11 @@ typedef enum RabbitizerAbi {
 
 RabbitizerAbi RabbitizerAbi_fromStr(const char *name);
 
-
 typedef struct RabbitizerConfig_RegisterNames {
-    bool namedRegisters; // Enables using named registers. This option takes precedence over the other named register options
-    RabbitizerAbi gprAbiNames; // The ABI names to be used for general purpose registers when disassembling the main processor's instructions
-    RabbitizerAbi fprAbiNames; // The ABI names to be used for floating point registers when disassembling the floating point (coprocessor 1) instructions
-    bool userFpcCsr; // Use FpcCsr as register $31 for the FP control/status register
+    bool namedRegisters;           // Enables using named registers. This option takes precedence over the other named register options
+    RabbitizerAbi gprAbiNames;     // The ABI names to be used for general purpose registers when disassembling the main processor's instructions
+    RabbitizerAbi fprAbiNames;     // The ABI names to be used for floating point registers when disassembling the floating point (coprocessor 1) instructions
+    bool userFpcCsr;               // Use FpcCsr as register $31 for the FP control/status register
     bool vr4300Cop0NamedRegisters; // Use named registers for VR4300's coprocessor 0 registers
     bool vr4300RspCop0NamedRegisters; // Use named registers for VR4300's RSP's coprocessor 0 registers
 } RabbitizerConfig_RegisterNames;
@@ -60,7 +58,7 @@ typedef struct RabbitizerConfig_ToolchainTweaks {
 } RabbitizerConfig_ToolchainTweaks;
 
 typedef struct RabbitizerConfig_Misc {
-    int opcodeLJust; // The minimal number of characters to left-align the opcode name
+    int opcodeLJust;          // The minimal number of characters to left-align the opcode name
     bool unknownInstrComment; // Generate a pseudo-disassembly comment when disassembling non implemented instructions
     bool omit0XOnSmallImm;
     bool upperCaseImm;
@@ -74,7 +72,6 @@ typedef struct RabbitizerConfig {
 } RabbitizerConfig;
 
 extern RabbitizerConfig RabbitizerConfig_Cfg;
-
 
 #ifdef __cplusplus
 }

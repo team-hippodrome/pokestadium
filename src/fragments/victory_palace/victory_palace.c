@@ -1647,10 +1647,23 @@ static Gfx D_826071B8[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82607228[] = {
-    0x0C00FFFF,  0x05000000, 0x0B00001E, 0x00000000,    0x014000F0, 0x00000000, 0x00000005,    0x000003E8, 0x05000000,
-    0x0D000000,  0x05000000, 0x14000000, 0x002D0019,    0xFFFFFF28, 0x08000000, VictoryPalace_UpdateLeftPillarGlow, 0x00000000, 0x14000000,
-    0x002D0019,  0x96966428, 0x08000000, VictoryPalace_UpdateRightPillarGlow, 0x00000000, 0x16646464, 0x0F000003,    0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000,    0x06000000, 0x01000000, 0x00000000,
+    0x0C00FFFF, 0x05000000,
+    0x0B00001E, 0x00000000,
+    0x014000F0, 0x00000000,
+    0x00000005, 0x000003E8,
+    0x05000000, 0x0D000000,
+    0x05000000, 0x14000000,
+    0x002D0019, 0xFFFFFF28,
+    0x08000000, VictoryPalace_UpdateLeftPillarGlow,
+    0x00000000, 0x14000000,
+    0x002D0019, 0x96966428,
+    0x08000000, VictoryPalace_UpdateRightPillarGlow,
+    0x00000000, 0x16646464,
+    0x0F000003, 0x05000000,
+    0x0A000000, &D_800AC840,
+    0x06000000, 0x06000000,
+    0x06000000, 0x06000000,
+    0x01000000, 0x00000000,
 };
 static Gfx D_826072B0[] = {
     gsDPPipeSync(),
@@ -1772,7 +1785,8 @@ s32 VictoryPalace_UpdateLeftPillarGlow(s32 arg0, unk_D_86002F34_alt18* arg1) {
 
     if (arg0 == 2) {
 
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp30, &sp2E, &sp2C);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp30, &sp2E,
+                                      &sp2C);
         arg1->unk_1C = sp2E + 0x2000;
         arg1->unk_1E = sp2C - 0x2000;
 
@@ -1805,7 +1819,8 @@ s32 VictoryPalace_UpdateRightPillarGlow(s32 arg0, unk_D_86002F34_alt18* arg1) {
     s16 sp2C;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp30, &sp2E, &sp2C);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp30, &sp2E,
+                                      &sp2C);
 
         arg1->unk_1C = -0x2000 - sp2E;
         arg1->unk_1E = sp2C + 0x6000;
@@ -1835,7 +1850,8 @@ void VictoryPalace_InitCamera(void) {
     D_82608558->view.targetPosition.x = 0.0f;
     D_82608558->view.targetPosition.y = 20.0f;
     D_82608558->view.targetPosition.z = 0.0f;
-    Camera_ComputeEyeFromAngles(&D_82608558->view.targetPosition, &D_82608558->view.eyePosition, D_82608540, D_8260853C, D_8260853E);
+    Camera_ComputeEyeFromAngles(&D_82608558->view.targetPosition, &D_82608558->view.eyePosition, D_82608540, D_8260853C,
+                                D_8260853E);
     D_8006F088 = D_82608558;
 }
 
@@ -1970,7 +1986,8 @@ void VictoryPalace_DrawOverlay(void) {
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            temp_v0_2 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, D_8267E75C, (((sp158.unk_00 & 0x7F) - 1) % 7) + 7));
+            temp_v0_2 = Font_MeasureTextExtent(
+                4, 0, Text_GetString(NULL, 0, D_8267E75C, (((sp158.unk_00 & 0x7F) - 1) % 7) + 7));
 
             gSPTextureRectangle(gDisplayListHead++, (temp_v0_2 + 0x49) << 2, 0x0264, (temp_v0_2 + 0x59) << 2, 0x02A4,
                                 G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);

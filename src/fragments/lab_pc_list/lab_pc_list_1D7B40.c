@@ -25,7 +25,7 @@ static u8 D_88317360[] = {
 };
 
 void BattleMoveListWidget_DrawMove(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, u32 arg4,
-                   unk_func_88200FA0_030_030* arg5) {
+                                   unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88317404[] = {
         { 0xF0, 0xF0, 0xF0, 0xFF },
         { 0xF0, 0xF0, 0xF0, 0x4D },
@@ -101,7 +101,8 @@ void BattleMoveListWidget_Initialize(unk_func_8830867C_04C_078* arg0, s32 arg1, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp44);
 
     arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, BattleMoveListWidget_DrawMove, sp58, 0x1C, 4, 1, arg3);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, BattleMoveListWidget_DrawMove,
+                                                                      sp58, 0x1C, 4, 1, arg3);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_30, 4, arg3);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp44, arg0->unk_30);
 }
@@ -268,7 +269,7 @@ void BattleInfoWidget_DrawIndicator(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 }
 
 void BattleInfoWidget_DrawEntry(s32 arg0, s32 arg1, unk_func_88309C38_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_8830867C_034_03C_038* arg5) {
+                                unk_func_8830867C_034_03C_038* arg5) {
     static Color_RGBA8 D_88317424 = { 0xB2, 0xFF, 0xC3, 0xFF };
     static Color_RGBA8 D_88317428 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
@@ -345,7 +346,8 @@ void BattleInfoWidget_Initialize(unk_func_8830867C_034_03C* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp74 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp74, 0, 0, sp78, 0x14, D_8831742C, D_88317430);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp74, 0, 0, sp78, 0x14, D_8831742C,
+                                                                              D_88317430);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp74);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88500994));
@@ -381,8 +383,8 @@ void BattleInfoWidget_Initialize(unk_func_8830867C_034_03C* arg0, s32 arg1, s32 
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, sp64);
 
     arg0->unk_38[0] = mem_pool_alloc(arg4, sizeof(unk_func_8830867C_034_03C_038));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_38[0], 0x12, 4, BattleInfoWidget_DrawEntry, sp80, 0x18, arg3, 1,
-                                                           arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_38[0], 0x12, 4, BattleInfoWidget_DrawEntry, sp80, 0x18, arg3, 1, arg4);
     arg0->unk_38[0]->unk_00.unk_28 |= 0x100;
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_38[0], arg3, arg4);
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, arg0->unk_38[0]);
@@ -392,8 +394,8 @@ void BattleInfoWidget_Initialize(unk_func_8830867C_034_03C* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_38[0]->unk_44, sp60);
 
     arg0->unk_38[1] = mem_pool_alloc(arg4, sizeof(unk_func_8830867C_034_03C_038));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_38[1], 0x12, 4, BattleInfoWidget_DrawEntry, sp80, 0x18, arg3, 1,
-                                                           arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_38[1], 0x12, 4, BattleInfoWidget_DrawEntry, sp80, 0x18, arg3, 1, arg4);
     arg0->unk_38[1]->unk_00.unk_28 |= 0x100;
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_38[1], arg3, arg4);
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, arg0->unk_38[1]);
@@ -404,7 +406,7 @@ void BattleInfoWidget_Initialize(unk_func_8830867C_034_03C* arg0, s32 arg1, s32 
 }
 
 void BattleInfoWidget_SetEntries(unk_func_8830867C_034_03C* arg0, unk_func_8830867C_034_03C_038_02C* arg1,
-                   unk_func_8830867C_034_03C_038_02C* arg2) {
+                                 unk_func_8830867C_034_03C_038_02C* arg2) {
     ((func885063B8)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridStridedData))(arg0->unk_38[0], arg1);
     ((func885063B8)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridStridedData))(arg0->unk_38[1], arg2);
     BattleInfoWidget_ApplyEntryDisabledFlags(arg0);
@@ -539,7 +541,7 @@ void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1)
 }
 
 void BattleInfoWidget_DrawStatusEntry(s32 arg0, s32 arg1, unk_func_88309C38_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_88200FA0_030_030* arg5) {
+                                      unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88317440 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
     Color_RGBA8 sp34;
@@ -559,7 +561,7 @@ void BattleInfoWidget_DrawStatusEntry(s32 arg0, s32 arg1, unk_func_88309C38_arg2
         Font_EndTexturedTextRendering();
         if (arg2->unk_14 == 1) {
             BattleInfoWidget_DrawIndicator((arg5->unk_00.unk_14.unk_00 + arg0) - 0x35, arg1 + 0xC, arg2->unk_0C->unk_18,
-                          arg2->unk_0C->unk_14);
+                                           arg2->unk_0C->unk_14);
         }
     }
 }
@@ -633,7 +635,8 @@ void BattleInfoWidget_Build(unk_func_8830867C_034* arg0, s32 arg1, s32 arg2, Wid
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp7C = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp7C, 0, 0, sp84, 0x2C, D_88317444, D_88317448);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp7C, 0, 0, sp84, 0x2C, D_88317444,
+                                                                              D_88317448);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp7C);
 
     sp78 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
@@ -646,8 +649,8 @@ void BattleInfoWidget_Build(unk_func_8830867C_034* arg0, s32 arg1, s32 arg2, Wid
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp74);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, BattleInfoWidget_DrawStatusEntry, sp84 - 0x12, 0x1C, 3, 1,
-                                                           arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_30, 0, 4, BattleInfoWidget_DrawStatusEntry, sp84 - 0x12, 0x1C, 3, 1, arg4);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_30, 3, arg4);
     arg0->unk_30->unk_00.unk_28 |= 0x300;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp74, arg0->unk_30);
@@ -677,7 +680,7 @@ void BattleInfoWidget_Build(unk_func_8830867C_034* arg0, s32 arg1, s32 arg2, Wid
 
     sp5C = mem_pool_alloc(arg4, sizeof(WidgetAnimatedFrame));
     ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(sp5C, -3, -3, sp6C->unk_14.unk_00 + 6,
-                                                           sp6C->unk_14.unk_02 + 6, D_88317450);
+                                                                                  sp6C->unk_14.unk_02 + 6, D_88317450);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp6C, sp5C);
 
     sp58 = mem_pool_alloc(arg4, sizeof(unk_func_8850BD40));
@@ -776,8 +779,8 @@ s32 BattleInfoWidget_HandleSelectionProxyInput(unk_func_8830867C_034_038* arg0, 
                 if (arg1->buttonPressed & 0x8000) {
                     arg0->unk_24->unk_30->unk_34[arg0->unk_24->unk_30->unk_38] ^= 2;
                     if (arg0->unk_24->unk_30->unk_38 != 0) {
-                        BattleInfoWidget_SetActivePageFlags(arg0->unk_24->unk_3C,
-                                      arg0->unk_24->unk_30->unk_34[arg0->unk_24->unk_30->unk_38] & 2);
+                        BattleInfoWidget_SetActivePageFlags(
+                            arg0->unk_24->unk_3C, arg0->unk_24->unk_30->unk_34[arg0->unk_24->unk_30->unk_38] & 2);
                     }
                     BattleInfoWidget_UpdateConfirmState(arg0->unk_24);
                     var_v1 = 0x80000005;
@@ -790,8 +793,8 @@ s32 BattleInfoWidget_HandleSelectionProxyInput(unk_func_8830867C_034_038* arg0, 
         case 1:
             if (arg1->buttonPressed & 0x800) {
                 arg0->unk_24->unk_34->unk_00.unk_28 |= 1;
-                ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(arg0->unk_24->unk_30,
-                                                                       arg0->unk_24->unk_30->unk_2C->unk_08 - 1);
+                ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(
+                    arg0->unk_24->unk_30, arg0->unk_24->unk_30->unk_2C->unk_08 - 1);
                 BattleInfoWidget_SelectPage(arg0->unk_24->unk_3C, arg0->unk_24->unk_30->unk_38);
                 ((func8850CD24)Memmap_GetFragmentVaddr(WidgetTree_SetChildSelectionProxySelection))(arg0, 0);
                 var_v1 = 0x80000009;
@@ -912,7 +915,8 @@ void BattleInfoWidget_InitDropdownMenu(unk_func_8830867C_030* arg0, WidgetNode* 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_38);
 
     arg0->unk_3C = mem_pool_alloc(arg2, sizeof(unk_func_88200FA0_030_030_1CEA00));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_3C, 0, 4, BattleInfoWidget_DrawLabel, 0x10, 0x10, 0xA, 1, arg2);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_3C, 0, 4, BattleInfoWidget_DrawLabel,
+                                                                      0x10, 0x10, 0xA, 1, arg2);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_3C, 0xA, arg2);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_3C);
 
@@ -1076,7 +1080,8 @@ void BattleInfoWidget_DrawStatusMenuLabel(s32 arg0, s32 arg1, char* arg2, s32 ar
     Font_EndTexturedTextRendering();
 }
 
-void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                      MemoryPool* arg4) {
     static Color_RGBA8 D_8831746C = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_88317470 = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_88317474 = { 0xA0, 0x96, 0x64, 0xFF };
@@ -1125,7 +1130,8 @@ void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32
     }
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030_1CEA00));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, BattleInfoWidget_DrawStatusMenuLabel, spAC, 0x1C, 4, 1, arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_30, 0, 4, BattleInfoWidget_DrawStatusMenuLabel, spAC, 0x1C, 4, 1, arg4);
     ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_34, arg4);
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, 0x44);
 
@@ -1142,11 +1148,13 @@ void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp88 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp88, 0, 0, tmp, 0x2C, D_8831746C, D_88317470);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp88, 0, 0, tmp, 0x2C, D_8831746C,
+                                                                              D_88317470);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp88);
 
     sp84 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp84, 8, 0, Text_GetString(NULL, 0, D_8831A4C4, 0x2A), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp84, 8, 0,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x2A), 8);
     sp84->unk_3C = 0x18;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp88, sp84);
 
@@ -1182,16 +1190,16 @@ void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32
     if (spA4 < sp94) {
         spA4 = sp94;
     }
-    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_40, arg0->unk_2C->unk_00.unk_14.unk_00 + 0x10,
-                                                           0x18, spA4 + 0x10, 0x90);
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(
+        arg0->unk_40, arg0->unk_2C->unk_00.unk_14.unk_00 + 0x10, 0x18, spA4 + 0x10, 0x90);
     arg0->unk_40->unk_00.unk_28 |= 0x200;
     arg0->unk_40->unk_00.unk_28 |= 0x400;
     arg0->unk_40->unk_00.unk_28 &= ~1;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_40);
 
     sp70 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp70, 0, 0, arg0->unk_40->unk_00.unk_14.unk_00, 0x14,
-                                                           D_88317478, D_8831747C);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(
+        sp70, 0, 0, arg0->unk_40->unk_00.unk_14.unk_00, 0x14, D_88317478, D_8831747C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_40, sp70);
     sp6C = Text_GetString(NULL, 0, D_8831A4C4, 0x2B);
 
@@ -1201,55 +1209,55 @@ void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp70, sp68);
 
     sp64 = mem_pool_alloc(arg4, sizeof(unk_func_885012A4));
-    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(sp64, 0, 0x18, arg0->unk_40->unk_00.unk_14.unk_00, 0x78,
-                                                           D_88317480);
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(
+        sp64, 0, 0x18, arg0->unk_40->unk_00.unk_14.unk_00, 0x78, D_88317480);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_40, sp64);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     sp5C = Text_GetString(NULL, 0, D_8831A4C4, 0x32);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 8, sp5C,
-                                                           8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 8, sp5C, 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     sp5C = Text_GetString(NULL, 0, D_8831A4C4, 0x33);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 0x24,
-                                                           sp5C, 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 0x24, sp5C, 8);
     sp60->unk_30 = (0, D_88317484);
     sp60->unk_44 = sp60->unk_44;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     sp5C = Text_GetString(NULL, 0, D_8831A4C4, 0x34);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 0x40,
-                                                           sp5C, 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        sp60, ((sp9C - Font_MeasureTextExtent(8, 0, sp5C)) / 2) + 8, 0x40, sp5C, 8);
     sp60->unk_30 = (0, D_88317488);
     sp60->unk_44 = sp60->unk_44;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, sp9C + 0x18, 8,
-                                                           Text_GetString(NULL, 0, D_8831A4C4, 0x35), 8);
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x35), 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, sp9C + 0x18, 0x24,
-                                                           Text_GetString(NULL, 0, D_8831A4C4, 0x36), 8);
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x36), 8);
     sp60->unk_30 = (0, D_88317484);
     sp60->unk_44 = sp60->unk_44;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, sp9C + 0x18, 0x40,
-                                                           Text_GetString(NULL, 0, D_8831A4C4, 0x37), 8);
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x37), 8);
     sp60->unk_30 = (0, D_88317488);
     sp60->unk_44 = sp60->unk_44;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     sp5C = Text_GetString(NULL, 0, D_8831A4C4, 0x38);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, (arg0->unk_40->unk_00.unk_14.unk_00 - sp94) / 2, 0x5C,
-                                                           sp5C, 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        sp60, (arg0->unk_40->unk_00.unk_14.unk_00 - sp94) / 2, 0x5C, sp5C, 8);
     sp60->unk_3C = 0x18;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 }
@@ -1360,7 +1368,7 @@ s32 BattleInfoWidget_DrawNumberSelector(unk_func_8830867C_044_038* arg0, s32 arg
 
     for (i = 0; i < arg0->unk_30.unk_0C; i++) {
         Font_DrawCharAt((((arg0->unk_30.unk_0C - i) - 1) * arg0->unk_44->unk_00.unk_14.unk_00) + arg1, arg2,
-                      (var_s2 % 10) + 0x30);
+                        (var_s2 % 10) + 0x30);
         var_s2 /= 10;
     }
 
@@ -1385,7 +1393,8 @@ s32 BattleInfoWidget_HandleNumberSelectorInput(unk_func_8830867C_044_038* arg0, 
     return var_v1;
 }
 
-void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                          MemoryPool* arg4) {
     static Color_RGBA8 D_88317490 = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_88317494 = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_88317498 = { 0xA0, 0x96, 0x64, 0xFF };
@@ -1435,25 +1444,26 @@ void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1,
     BattleInfoWidget_InitLevelRangeSelectionProxy(arg0->unk_40, arg0);
 
     arg0->unk_2C = mem_pool_alloc(arg4, sizeof(WidgetAnimatedPanel));
-    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, (sp90 + sp94) + sp90 + sp8C + 0x34,
-                                                           0x5C);
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0,
+                                                                          (sp90 + sp94) + sp90 + sp8C + 0x34, 0x5C);
     arg0->unk_2C->unk_00.unk_28 |= 0x200;
     arg0->unk_2C->unk_00.unk_28 |= 0x400;
     arg0->unk_2C->unk_00.unk_28 &= ~1;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp80 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp80, 0, 0, (sp90 + sp94) + sp90 + sp8C + 0x34, 0x14,
-                                                           D_88317490, D_88317494);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(
+        sp80, 0, 0, (sp90 + sp94) + sp90 + sp8C + 0x34, 0x14, D_88317490, D_88317494);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp80);
 
     temp_s0 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0, Text_GetString(NULL, 0, D_8831A4C4, 0x47), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x47), 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp80, temp_s0);
 
     sp78 = mem_pool_alloc(arg4, sizeof(unk_func_885012A4));
-    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(sp78, 0, 0x18, (sp90 + sp94) + sp90 + sp8C + 0x34, 0x44,
-                                                           D_88317498);
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(
+        sp78, 0, 0x18, (sp90 + sp94) + sp90 + sp8C + 0x34, 0x44, D_88317498);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp78);
 
     arg0->unk_38 = mem_pool_alloc(arg4, sizeof(unk_func_8830867C_044_038));
@@ -1474,7 +1484,7 @@ void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1,
 
     temp_s0_4 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_4, sp90 + 0x10, 0xD,
-                                                           Text_GetString(NULL, 0, D_8831A4C4, 0x48), 4);
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x48), 4);
     temp_s0_4->unk_30 = D_8831749C;
     temp_s0_4->unk_44 = temp_s0_4->unk_44;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp78, temp_s0_4);
@@ -1505,12 +1515,14 @@ void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1,
     sp58 = Font_MeasureTextExtent(8, 0, sp60);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_30, ((sp8C - sp58) / 2) + 6, 2, sp60, 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_30, ((sp8C - sp58) / 2) + 6, 2, sp60,
+                                                                      8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_34, arg0->unk_30);
     ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_44);
 
     temp_s0_6 = mem_pool_alloc(arg4, sizeof(WidgetAnimatedFrame));
-    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_6, 0, 0, 0x10, 0x10, D_883174A0);
+    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_6, 0, 0, 0x10, 0x10,
+                                                                                  D_883174A0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp78, temp_s0_6);
     arg0->unk_44->unk_1C = temp_s0_6;
 
@@ -1698,7 +1710,7 @@ s32 BattleInfoWidget_LevelRangeSelectionInput(unk_func_8830867C_044_040* arg0, C
 }
 
 void BattleInfoWidget_DrawStatusListEntry(s32 arg0, s32 arg1, unk_func_88309C38_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_8821421C_038_034* arg5) {
+                                          unk_func_8821421C_038_034* arg5) {
     static Color_RGBA8 D_883174B0 = { 0x54, 0x4B, 0x3A, 0xFF };
     static Color_RGBA8 D_883174B4 = { 0x99, 0x89, 0x6A, 0xFF };
 
@@ -1760,7 +1772,8 @@ void BattleInfoWidget_CenterLabel(unk_func_8830867C_03C* arg0, unk_func_8850878C
     arg1->unk_40 = arg2;
 }
 
-void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                     MemoryPool* arg4) {
     static Color_RGBA8 D_883174B8 = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_883174BC = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_883174C0 = { 0xA0, 0x96, 0x64, 0xFF };
@@ -1823,11 +1836,13 @@ void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     temp_s1 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s1, 0, 0, spCC, 0x14, D_883174B8, D_883174BC);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s1, 0, 0, spCC, 0x14, D_883174B8,
+                                                                              D_883174BC);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s1);
 
     temp_s0 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0, Text_GetString(NULL, 0, D_8831A4C4, 0x4B), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x4B), 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1, temp_s0);
 
     spA0 = mem_pool_alloc(arg4, sizeof(unk_func_885012A4));
@@ -1840,8 +1855,8 @@ void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 
 
     for (i = 0; i < 2; i++) {
         sp98[i] = mem_pool_alloc(arg4, sizeof(WidgetNode));
-        ((func8850A40C)Memmap_GetFragmentVaddr(WidgetTree_InitBorderFrame))(sp98[i], 0xC, 0x1C + (i * 0x1C), arg0->unk_E0 + 0xC,
-                                                               0x18);
+        ((func8850A40C)Memmap_GetFragmentVaddr(WidgetTree_InitBorderFrame))(sp98[i], 0xC, 0x1C + (i * 0x1C),
+                                                                            arg0->unk_E0 + 0xC, 0x18);
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, sp98[i]);
 
         arg0->unk_50->unk_18[i * arg0->unk_50->unk_2C] = sp98[i];
@@ -1860,8 +1875,8 @@ void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 
     temp_s1_3 = Font_MeasureTextExtent(8, 0, temp_v0_10);
 
     arg0->unk_44 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_44, ((spB0 - temp_s1_3) / 2) + 6, 2, temp_v0_10,
-                                                           8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_44, ((spB0 - temp_s1_3) / 2) + 6, 2,
+                                                                      temp_v0_10, 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s2_2, arg0->unk_44);
 
     arg0->unk_48 = mem_pool_alloc(arg4, sizeof(WidgetNode));
@@ -1872,13 +1887,14 @@ void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 
     temp_s1_3 = Font_MeasureTextExtent(8, 0, temp_v0_10);
 
     arg0->unk_40 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_40, ((spB0 - temp_s1_3) / 2) + 6, 2, temp_v0_10,
-                                                           8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_40, ((spB0 - temp_s1_3) / 2) + 6, 2,
+                                                                      temp_v0_10, 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_48, arg0->unk_40);
     ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_50);
 
     temp_s0_2 = mem_pool_alloc(arg4, sizeof(WidgetAnimatedFrame));
-    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_2, 0, 0, 0x10, 0x10, D_883174C4);
+    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_2, 0, 0, 0x10, 0x10,
+                                                                                  D_883174C4);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, temp_s0_2);
     arg0->unk_50->unk_1C = temp_s0_2;
 
@@ -1896,20 +1912,23 @@ void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, temp_s1_4);
 
     arg0->unk_54 = mem_pool_alloc(arg4, sizeof(unk_func_8821421C_038_034));
-    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0->unk_54, 0, 0x10, BattleInfoWidget_DrawStatusListEntry, spC4, 0x1C, 8, arg4);
-    ((func88506F8C)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridStridedPage))(arg0->unk_54, &arg0->unk_D0, arg4);
+    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(
+        arg0->unk_54, 0, 0x10, BattleInfoWidget_DrawStatusListEntry, spC4, 0x1C, 8, arg4);
+    ((func88506F8C)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridStridedPage))(arg0->unk_54, &arg0->unk_D0,
+                                                                                      arg4);
 
     temp_s0_3 = mem_pool_alloc(arg4, sizeof(unk_func_8850BD40));
     ((func8850BD40)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridInputProxy))(temp_s0_3, arg0->unk_54);
     ((func8850BF80)Memmap_GetFragmentVaddr(WidgetTree_AppendVerticalMenuItem))(arg0->unk_4C, temp_s0_3);
 
     sp6C[0] = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp6C[0], 0, 0, spC4, 0, arg0->unk_54);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp6C[0], 0, 0, spC4, 0,
+                                                                                    arg0->unk_54);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, sp6C[0]);
 
     sp6C[1] = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp6C[1], 0, arg0->unk_54->unk_00.unk_00.unk_14.unk_02 + 0x10,
-                                                           spC4, 1, arg0->unk_54);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(
+        sp6C[1], 0, arg0->unk_54->unk_00.unk_00.unk_14.unk_02 + 0x10, spC4, 1, arg0->unk_54);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, sp6C[1]);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, arg0->unk_54);
 
@@ -1931,9 +1950,9 @@ void BattleInfoWidget_SetTypeEntries(unk_func_8830867C_03C* arg0, unk_func_88308
     for (i = 0; i < 2; i++) {
         if (i < arg1->unk_00) {
             arg0->unk_30[i].unk_04 = arg1->unk_04[i];
-            var_s3 =
-                Text_GetString(NULL, 0, D_8831A4D4,
-                              ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(arg0->unk_30[i].unk_04)->unk_00);
+            var_s3 = Text_GetString(
+                NULL, 0, D_8831A4D4,
+                ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(arg0->unk_30[i].unk_04)->unk_00);
             arg0->unk_30[i].unk_00->unk_30 =
                 ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(arg0->unk_30[i].unk_04)->unk_04;
             arg0->unk_30[i].unk_00->unk_44 = arg0->unk_30[i].unk_00->unk_44;
@@ -2082,8 +2101,8 @@ s32 BattleInfoWidget_HandleTypeSelectionProxyInput(unk_func_8830867C_03C_04C* ar
                     var_t2 = (var_t2 & ~4) | 0x101;
                 } else {
                     if (arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_04 != -1) {
-                        arg0->unk_24->unk_54->unk_00
-                            .unk_34[Move_NormalizeDisplayIndex(arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_04)] &= ~2;
+                        arg0->unk_24->unk_54->unk_00.unk_34[Move_NormalizeDisplayIndex(
+                            arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_04)] &= ~2;
                     }
                     arg0->unk_24->unk_54->unk_00.unk_34[arg0->unk_24->unk_54->unk_00.unk_38] |= 2;
 
@@ -2092,7 +2111,7 @@ s32 BattleInfoWidget_HandleTypeSelectionProxyInput(unk_func_8830867C_03C_04C* ar
                     BattleInfoWidget_CenterLabel(
                         arg0->unk_24, arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_00,
                         Text_GetString(NULL, 0, D_8831A4D4,
-                                      arg0->unk_24->unk_58[arg0->unk_24->unk_54->unk_00.unk_38].unk_04->unk_00));
+                                       arg0->unk_24->unk_58[arg0->unk_24->unk_54->unk_00.unk_38].unk_04->unk_00));
                     arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_00->unk_30 =
                         arg0->unk_24->unk_58[arg0->unk_24->unk_54->unk_00.unk_38].unk_04->unk_04;
                     arg0->unk_24->unk_30[arg0->unk_24->unk_50->unk_24].unk_00->unk_44 =
@@ -2108,7 +2127,7 @@ s32 BattleInfoWidget_HandleTypeSelectionProxyInput(unk_func_8830867C_03C_04C* ar
 }
 
 void BattleInfoWidget_DrawTypeEntry(s32 arg0, s32 arg1, unk_func_88309C38_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_8821421C_038_034* arg5) {
+                                    unk_func_8821421C_038_034* arg5) {
     static Color_RGBA8 D_88317510 = { 0x54, 0x4B, 0x3A, 0xFF };
     static Color_RGBA8 D_88317514 = { 0x99, 0x89, 0x6A, 0xFF };
 
@@ -2178,7 +2197,8 @@ void BattleInfoWidget_CenterTypeLabel(unk_func_8830867C_040* arg0, unk_func_8850
     arg1->unk_40 = arg2;
 }
 
-void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                     MemoryPool* arg4) {
     static Color_RGBA8 D_88317518 = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_8831751C = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_88317520 = { 0xA0, 0x96, 0x64, 0xFF };
@@ -2238,11 +2258,13 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     temp_s1 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s1, 0, 0, spCC, 0x14, D_88317518, D_8831751C);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s1, 0, 0, spCC, 0x14, D_88317518,
+                                                                              D_8831751C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s1);
 
     temp_s0 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0, Text_GetString(NULL, 0, D_8831A4C4, 0x4C), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0, 8, 0,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x4C), 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1, temp_s0);
 
     spA0 = mem_pool_alloc(arg4, sizeof(unk_func_885012A4));
@@ -2255,7 +2277,8 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
 
     for (i = 0; i < 4; i++) {
         sp90[i] = mem_pool_alloc(arg4, sizeof(WidgetNode));
-        ((func8850A40C)Memmap_GetFragmentVaddr(WidgetTree_InitBorderFrame))(sp90[i], 0xC, (i + 1) * 0x1C, arg0->unk_74 + 0xC, 0x18);
+        ((func8850A40C)Memmap_GetFragmentVaddr(WidgetTree_InitBorderFrame))(sp90[i], 0xC, (i + 1) * 0x1C,
+                                                                            arg0->unk_74 + 0xC, 0x18);
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, sp90[i]);
         arg0->unk_60->unk_18[i * arg0->unk_60->unk_2C] = sp90[i];
 
@@ -2273,8 +2296,8 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
     temp_s1_3 = Font_MeasureTextExtent(8, 0, temp_v0_10);
 
     arg0->unk_54 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_54, ((spB0 - temp_s1_3) / 2) + 6, 2, temp_v0_10,
-                                                           8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_54, ((spB0 - temp_s1_3) / 2) + 6, 2,
+                                                                      temp_v0_10, 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s2_2, arg0->unk_54);
 
     arg0->unk_58 = mem_pool_alloc(arg4, sizeof(WidgetNode));
@@ -2285,13 +2308,14 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
     temp_s1_3 = Font_MeasureTextExtent(8, 0, temp_v0_10);
 
     arg0->unk_50 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_50, ((spB0 - temp_s1_3) / 2) + 6, 2, temp_v0_10,
-                                                           8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_50, ((spB0 - temp_s1_3) / 2) + 6, 2,
+                                                                      temp_v0_10, 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_58, arg0->unk_50);
     ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_60);
 
     temp_s0_2 = mem_pool_alloc(arg4, sizeof(WidgetAnimatedFrame));
-    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_2, 0, 0, 0x10, 0x10, D_88317524);
+    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_2, 0, 0, 0x10, 0x10,
+                                                                                  D_88317524);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, temp_s0_2);
     arg0->unk_60->unk_1C = temp_s0_2;
 
@@ -2310,7 +2334,8 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spA0, temp_s1_4);
 
     arg0->unk_64 = mem_pool_alloc(arg4, sizeof(unk_func_8821421C_038_034));
-    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0->unk_64, 0, 0x10, BattleInfoWidget_DrawTypeEntry, spC4, 0x1C, 8, arg4);
+    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(
+        arg0->unk_64, 0, 0x10, BattleInfoWidget_DrawTypeEntry, spC4, 0x1C, 8, arg4);
     ((func88506F1C)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridPage))(arg0->unk_64, &arg0->unk_68, arg4);
 
     temp_s0_3 = mem_pool_alloc(arg4, sizeof(unk_func_8850BD40));
@@ -2318,12 +2343,13 @@ void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 
     ((func8850BF80)Memmap_GetFragmentVaddr(WidgetTree_AppendVerticalMenuItem))(arg0->unk_5C, temp_s0_3);
 
     sp68[0] = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp68[0], 0, 0, spC4, 0, arg0->unk_64);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp68[0], 0, 0, spC4, 0,
+                                                                                    arg0->unk_64);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, sp68[0]);
 
     sp68[1] = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp68[1], 0, arg0->unk_64->unk_00.unk_00.unk_14.unk_02 + 0x10,
-                                                           spC4, 1, arg0->unk_64);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(
+        sp68[1], 0, arg0->unk_64->unk_00.unk_00.unk_14.unk_02 + 0x10, spC4, 1, arg0->unk_64);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, sp68[1]);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s1_4, arg0->unk_64);
 
@@ -2503,11 +2529,13 @@ s32 func_88310854(unk_func_8830867C_040_05C* arg0, Controller* arg1) {
                     }
                     arg0->unk_24->unk_64->unk_00.unk_34[arg0->unk_24->unk_64->unk_00.unk_38] |= 2;
 
-                    ptr2 = ((unk_func_88205880_A030*)arg0->unk_24->unk_64->unk_00.unk_2C)->unk_00[arg0->unk_24->unk_64->unk_00.unk_38];
+                    ptr2 = ((unk_func_88205880_A030*)arg0->unk_24->unk_64->unk_00.unk_2C)
+                               ->unk_00[arg0->unk_24->unk_64->unk_00.unk_38];
                     arg0->unk_24->unk_30[arg0->unk_24->unk_60->unk_24].unk_04 = ptr2;
 
-                    BattleInfoWidget_CenterTypeLabel(arg0->unk_24, arg0->unk_24->unk_30[arg0->unk_24->unk_60->unk_24].unk_00,
-                                  Text_GetString(NULL, 0, D_8831A4CC, ptr2[0] - 1));
+                    BattleInfoWidget_CenterTypeLabel(arg0->unk_24,
+                                                     arg0->unk_24->unk_30[arg0->unk_24->unk_60->unk_24].unk_00,
+                                                     Text_GetString(NULL, 0, D_8831A4CC, ptr2[0] - 1));
 
                     arg0->unk_24->unk_30[arg0->unk_24->unk_60->unk_24].unk_00->unk_30 =
                         ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(ptr2[1])->unk_04;
@@ -2524,7 +2552,8 @@ s32 func_88310854(unk_func_8830867C_040_05C* arg0, Controller* arg1) {
     return var_t2;
 }
 
-void BattleInfoWidget_InitGamePakSlotLabel(unk_func_88310B70* arg0, s32 arg1, s32 arg2, unk_func_8830867C_04C_030* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_InitGamePakSlotLabel(unk_func_88310B70* arg0, s32 arg1, s32 arg2, unk_func_8830867C_04C_030* arg3,
+                                           MemoryPool* arg4) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88310B70));
 
     arg0->unk_00.unk_1C = BattleInfoWidget_DrawGamePakSlotLabel;
@@ -2546,7 +2575,7 @@ s32 BattleInfoWidget_DrawGamePakSlotLabel(unk_func_88310B70* arg0) {
 }
 
 void BattleInfoWidget_DrawItemGridCell(s32 arg0, s32 arg1, unk_func_88310CA4_arg2* a2, s32 arg3, s32 arg4,
-                   unk_func_8830867C_04C_030* arg5) {
+                                       unk_func_8830867C_04C_030* arg5) {
     static Color_RGBA8 D_88317530[2] = {
         { 0x80, 0x79, 0x6C, 0xFF },
         { 0x67, 0x60, 0x53, 0xFF },
@@ -2606,18 +2635,21 @@ void BattleInfoWidget_DrawItemGridCell(s32 arg0, s32 arg1, unk_func_88310CA4_arg
         if (arg2->unk_04[0] == 0x12) {
             sp84 = Text_GetString(NULL, 0, D_8831A4C4, 0x51);
             Font_SetActive(8, 0);
-            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 + 0x106,
-                          arg1 + 4, sp84);
+            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 +
+                            0x106,
+                        arg1 + 4, sp84);
         } else if (arg2->unk_04[0] == 0x22) {
             sp84 = Text_GetString(NULL, 0, D_8831A4C4, 0x50);
             Font_SetActive(8, 0);
-            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 + 0x106,
-                          arg1 + 4, sp84);
+            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 +
+                            0x106,
+                        arg1 + 4, sp84);
         } else {
             sp84 = Text_GetString(NULL, 0, D_8831A4C4, 0x4F);
             Font_SetActive(8, 0);
-            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 + 0x106,
-                          arg1 + 4, sp84);
+            Font_Printf((((arg5->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp84)) - 0x106) / 2) + arg0 +
+                            0x106,
+                        arg1 + 4, sp84);
         }
 
         if (LabItem_IsQuantitylessItemForOperation(arg2->unk_00[0]) == 0) {
@@ -2629,7 +2661,8 @@ void BattleInfoWidget_DrawItemGridCell(s32 arg0, s32 arg1, unk_func_88310CA4_arg
     }
 }
 
-void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                    MemoryPool* arg4) {
     static Color_RGBA8 D_88317548 = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_8831754C = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_88317550 = { 0x43, 0x35, 0x1C, 0xFF };
@@ -2681,7 +2714,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     sp88 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp88, 0, 0, 0x166, 0x14, D_88317548, D_8831754C);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp88, 0, 0, 0x166, 0x14, D_88317548,
+                                                                              D_8831754C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp88);
     arg0->unk_38[0] = '\0';
 
@@ -2690,17 +2724,18 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp88, sp84);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_8830867C_04C_030));
-    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0->unk_30, 0, 0x28, BattleInfoWidget_DrawItemGridCell, 0x166, 0x1C, 5, arg4);
+    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(
+        arg0->unk_30, 0, 0x28, BattleInfoWidget_DrawItemGridCell, 0x166, 0x1C, 5, arg4);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_30, 0xAA, arg4);
 
     sp7C = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp7C, 0, 0x18, arg0->unk_30->unk_00.unk_14.unk_00, 0,
-                                                           arg0->unk_30);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(
+        sp7C, 0, 0x18, arg0->unk_30->unk_00.unk_14.unk_00, 0, arg0->unk_30);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp7C);
 
     sp80 = mem_pool_alloc(arg4, sizeof(unk_func_88507D4C));
-    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(sp80, 0, arg0->unk_30->unk_00.unk_14.unk_02 + 0x28,
-                                                           arg0->unk_30->unk_00.unk_14.unk_00, 1, arg0->unk_30);
+    ((func88507D4C)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGridScrollbar))(
+        sp80, 0, arg0->unk_30->unk_00.unk_14.unk_02 + 0x28, arg0->unk_30->unk_00.unk_14.unk_00, 1, arg0->unk_30);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp80);
 
     sp78 = mem_pool_alloc(arg4, sizeof(unk_func_8850BD40));
@@ -2717,7 +2752,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp74, arg0->unk_34);
 
     sp70 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp70, 0x12, 8, Text_GetString(NULL, 0, D_8831A4C4, 0x52), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp70, 0x12, 8,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x52), 8);
     sp70->unk_30 = (0, D_88317554);
     sp70->unk_44 = sp70->unk_44;
     sp70->unk_34 = (0, D_88317558);
@@ -2725,7 +2761,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, sp70);
 
     sp6C = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp6C, 0x17, 8, Text_GetString(NULL, 0, D_8831A4C4, 0x53), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp6C, 0x17, 8,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x53), 8);
     sp6C->unk_30 = (0, D_8831755C);
     sp6C->unk_44 = sp6C->unk_44;
     sp6C->unk_34 = (0, D_88317560);
@@ -2733,7 +2770,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, sp6C);
 
     sp68 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp68, 0x1C, 8, Text_GetString(NULL, 0, D_8831A4C4, 0x54), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp68, 0x1C, 8,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x54), 8);
     sp68->unk_30 = (0, D_88317564);
     sp68->unk_44 = sp68->unk_44;
     sp68->unk_34 = (0, D_88317568);
@@ -2741,7 +2779,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, sp68);
 
     sp64 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp64, 0x21, 8, Text_GetString(NULL, 0, D_8831A4C4, 0x55), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp64, 0x21, 8,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x55), 8);
     sp64->unk_30 = (0, D_8831756C);
     sp64->unk_44 = sp64->unk_44;
     sp64->unk_34 = (0, D_88317570);
@@ -2749,7 +2788,8 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_34, sp64);
 
     sp60 = mem_pool_alloc(arg4, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, 0x26, 8, Text_GetString(NULL, 0, D_8831A4C4, 0x56), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp60, 0x26, 8,
+                                                                      Text_GetString(NULL, 0, D_8831A4C4, 0x56), 8);
     sp60->unk_30 = (0, D_88317574);
     sp60->unk_44 = sp60->unk_44;
     sp60->unk_34 = (0, D_88317578);
@@ -2799,15 +2839,132 @@ void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 a
 
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     static SpeciesData D_8831757C[] = {
-        { 0x06, 0x4E, 0x54, 0x4E, 0x64, 0x55, 0x14, 0x02, 0x2D, 0xD1, {0x0A, 0x2D, 0x34, 0x2B}, 0x03, {0xB5, 0x43, 0x4F, 0xCE, 0xE3, 0x08, 0x2E}, 0x00 },
-        { 0x0C, 0x3C, 0x2D, 0x32, 0x46, 0x50, 0x07, 0x02, 0x2D, 0xA0, {0x5D, 0x00, 0x00, 0x00}, 0x00, {0x2A, 0x43, 0x38, 0xF0, 0x43, 0x28, 0x42}, 0x00 },
-        { 0x30, 0x3C, 0x37, 0x32, 0x2D, 0x28, 0x07, 0x03, 0xBE, 0x4B, {0x21, 0x32, 0x00, 0x00}, 0x00, {0x20, 0x03, 0x38, 0xD0, 0x03, 0x28, 0x42}, 0x00 },
-        { 0x31, 0x46, 0x41, 0x3C, 0x5A, 0x5A, 0x07, 0x03, 0x4B, 0x8A, {0x21, 0x32, 0x4D, 0x8D}, 0x00, {0x2A, 0x43, 0x38, 0xF0, 0x43, 0x28, 0x42}, 0x00 },
-        { 0x32, 0x0A, 0x37, 0x19, 0x5F, 0x2D, 0x04, 0x04, 0xFF, 0x51, {0x0A, 0x00, 0x00, 0x00}, 0x00, {0xA0, 0x03, 0x08, 0xCE, 0x02, 0x88, 0x06}, 0x00 },
-        { 0x33, 0x23, 0x50, 0x32, 0x78, 0x46, 0x04, 0x04, 0x32, 0x99, {0x0A, 0x2D, 0x5B, 0x00}, 0x00, {0xA0, 0x43, 0x08, 0xCE, 0x02, 0x88, 0x06}, 0x00 },
-        { 0x8D, 0x3C, 0x73, 0x69, 0x50, 0x46, 0x05, 0x15, 0x2D, 0xC9, {0x0A, 0x6A, 0x47, 0x00}, 0x00, {0xB6, 0x7F, 0x0D, 0xC0, 0x83, 0x08, 0x16}, 0x00 },
-        { 0x96, 0x6A, 0x6E, 0x5A, 0x82, 0x9A, 0x18, 0x18, 0x03, 0xDC, {0x5D, 0x32, 0x81, 0x5E}, 0x05, {0xB1, 0x7F, 0xAF, 0xF1, 0xAF, 0x38, 0x63}, 0x00 },
-        { 0x97, 0x64, 0x64, 0x64, 0x64, 0x64, 0x18, 0x18, 0x2D, 0x40, {0x01, 0x00, 0x00, 0x00}, 0x03, {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F}, 0x00 },
+        { 0x06,
+          0x4E,
+          0x54,
+          0x4E,
+          0x64,
+          0x55,
+          0x14,
+          0x02,
+          0x2D,
+          0xD1,
+          { 0x0A, 0x2D, 0x34, 0x2B },
+          0x03,
+          { 0xB5, 0x43, 0x4F, 0xCE, 0xE3, 0x08, 0x2E },
+          0x00 },
+        { 0x0C,
+          0x3C,
+          0x2D,
+          0x32,
+          0x46,
+          0x50,
+          0x07,
+          0x02,
+          0x2D,
+          0xA0,
+          { 0x5D, 0x00, 0x00, 0x00 },
+          0x00,
+          { 0x2A, 0x43, 0x38, 0xF0, 0x43, 0x28, 0x42 },
+          0x00 },
+        { 0x30,
+          0x3C,
+          0x37,
+          0x32,
+          0x2D,
+          0x28,
+          0x07,
+          0x03,
+          0xBE,
+          0x4B,
+          { 0x21, 0x32, 0x00, 0x00 },
+          0x00,
+          { 0x20, 0x03, 0x38, 0xD0, 0x03, 0x28, 0x42 },
+          0x00 },
+        { 0x31,
+          0x46,
+          0x41,
+          0x3C,
+          0x5A,
+          0x5A,
+          0x07,
+          0x03,
+          0x4B,
+          0x8A,
+          { 0x21, 0x32, 0x4D, 0x8D },
+          0x00,
+          { 0x2A, 0x43, 0x38, 0xF0, 0x43, 0x28, 0x42 },
+          0x00 },
+        { 0x32,
+          0x0A,
+          0x37,
+          0x19,
+          0x5F,
+          0x2D,
+          0x04,
+          0x04,
+          0xFF,
+          0x51,
+          { 0x0A, 0x00, 0x00, 0x00 },
+          0x00,
+          { 0xA0, 0x03, 0x08, 0xCE, 0x02, 0x88, 0x06 },
+          0x00 },
+        { 0x33,
+          0x23,
+          0x50,
+          0x32,
+          0x78,
+          0x46,
+          0x04,
+          0x04,
+          0x32,
+          0x99,
+          { 0x0A, 0x2D, 0x5B, 0x00 },
+          0x00,
+          { 0xA0, 0x43, 0x08, 0xCE, 0x02, 0x88, 0x06 },
+          0x00 },
+        { 0x8D,
+          0x3C,
+          0x73,
+          0x69,
+          0x50,
+          0x46,
+          0x05,
+          0x15,
+          0x2D,
+          0xC9,
+          { 0x0A, 0x6A, 0x47, 0x00 },
+          0x00,
+          { 0xB6, 0x7F, 0x0D, 0xC0, 0x83, 0x08, 0x16 },
+          0x00 },
+        { 0x96,
+          0x6A,
+          0x6E,
+          0x5A,
+          0x82,
+          0x9A,
+          0x18,
+          0x18,
+          0x03,
+          0xDC,
+          { 0x5D, 0x32, 0x81, 0x5E },
+          0x05,
+          { 0xB1, 0x7F, 0xAF, 0xF1, 0xAF, 0x38, 0x63 },
+          0x00 },
+        { 0x97,
+          0x64,
+          0x64,
+          0x64,
+          0x64,
+          0x64,
+          0x18,
+          0x18,
+          0x2D,
+          0x40,
+          { 0x01, 0x00, 0x00, 0x00 },
+          0x03,
+          { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F },
+          0x00 },
     };
 
     SpeciesData* var_v1;
@@ -3225,7 +3382,7 @@ s32 BattleInfoWidget_RunItemMenuModal(unk_func_8830867C_04C* arg0, Controller* a
 }
 
 void BattleInfoWidget_DrawSlotEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_88200FA0_030_030_1CEA00* arg5) {
+                                    unk_func_88200FA0_030_030_1CEA00* arg5) {
     static Color_RGBA8 D_8831764C = { 0xFF, 0xB2, 0xC3, 0xFF };
     static Color_RGBA8 D_88317650[] = {
         { 0xF0, 0xF0, 0xF0, 0xFF },
@@ -3254,14 +3411,16 @@ void BattleInfoWidget_DrawSlotEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* 
 
     sprintf(sp28, "%d", arg3 + 1);
 
-    Font_Printf(((arg0 + Font_MeasureTextExtent(0, 0, sp2C) + Font_MeasureTextExtent(0, 0, " 00")) - Font_MeasureTextExtent(0, 0, sp28)) + 8,
-                  arg1 + 2, sp28);
+    Font_Printf(((arg0 + Font_MeasureTextExtent(0, 0, sp2C) + Font_MeasureTextExtent(0, 0, " 00")) -
+                 Font_MeasureTextExtent(0, 0, sp28)) +
+                    8,
+                arg1 + 2, sp28);
     Font_EndTexturedTextRendering();
     BattleInfoWidget_DrawIndicator((arg5->unk_00.unk_14.unk_00 + arg0) - 0x35, arg1 + 8, arg2->unk_18, arg2->unk_14);
 }
 
 void BattleInfoWidget_DrawLocationEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4,
-                   unk_func_88200FA0_030_030_1CEA00* arg5) {
+                                        unk_func_88200FA0_030_030_1CEA00* arg5) {
     static Color_RGBA8 D_8831765C[] = {
         { 0xF0, 0xF0, 0xF0, 0xFF },
         { 0xF0, 0xF0, 0xF0, 0x4D },
@@ -3286,11 +3445,12 @@ void BattleInfoWidget_DrawLocationEntry(s32 arg0, s32 arg1, unk_func_88309160_ar
     Font_EndTexturedTextRendering();
     if (arg2->unk_14 == 1) {
         BattleInfoWidget_DrawIndicator((arg5->unk_00.unk_14.unk_00 + arg0) - 0x35, arg1 + 0xC, arg2->unk_0C->unk_18,
-                      arg2->unk_0C->unk_14);
+                                       arg2->unk_0C->unk_14);
     }
 }
 
-void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
+void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                               MemoryPool* arg4) {
     static Color_RGBA8 D_88317664 = { 0x64, 0x96, 0xB4, 0xFF };
     static Color_RGBA8 D_88317668 = { 0x3C, 0x64, 0x78, 0xFF };
     static Color_RGBA8 D_8831766C = { 0xA0, 0x96, 0x64, 0xFF };
@@ -3361,7 +3521,8 @@ void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     spB4 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(spB4, 0, 0, spBC, 0x2C, D_88317664, D_88317668);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(spB4, 0, 0, spBC, 0x2C, D_88317664,
+                                                                              D_88317668);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, spB4);
     arg0->unk_50[0] = '\0';
 
@@ -3375,7 +3536,8 @@ void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, spAC);
 
     arg0->unk_34 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030_1CEA00));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_34, 0, 4, BattleInfoWidget_DrawLocationEntry, spBC, 0x1C, 3, 1, arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_34, 0, 4, BattleInfoWidget_DrawLocationEntry, spBC, 0x1C, 3, 1, arg4);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_34, 3, arg4);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spAC, arg0->unk_34);
 
@@ -3405,15 +3567,16 @@ void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 
     spA0 += 0x10;
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(WidgetAnimatedPanel));
-    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_30, arg0->unk_2C->unk_00.unk_14.unk_00 + 0x10, 0,
-                                                           sp98, 0x140);
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(
+        arg0->unk_30, arg0->unk_2C->unk_00.unk_14.unk_00 + 0x10, 0, sp98, 0x140);
     arg0->unk_30->unk_00.unk_28 |= 0x200;
     arg0->unk_30->unk_00.unk_28 |= 0x400;
     arg0->unk_30->unk_00.unk_28 &= ~1;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_30);
 
     sp80 = mem_pool_alloc(arg4, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp80, 0, 0, sp98, 0x14, D_88317670, D_88317674);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp80, 0, 0, sp98, 0x14, D_88317670,
+                                                                              D_88317674);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_30, sp80);
 
     arg0->unk_40 = mem_pool_alloc(arg4, sizeof(unk_func_88500994));
@@ -3445,8 +3608,8 @@ void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_44, sp74);
 
     arg0->unk_38[0] = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030_1CEA00));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_38[0], (sp98 - spA0) / 2, 4, BattleInfoWidget_DrawSlotEntry, spA0,
-                                                           0x18, 0xC, 1, arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_38[0], (sp98 - spA0) / 2, 4, BattleInfoWidget_DrawSlotEntry, spA0, 0x18, 0xC, 1, arg4);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_38[0], 0xC, arg4);
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_44, arg0->unk_38[0]);
 
@@ -3455,8 +3618,8 @@ void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 
     ((func8850CC74)Memmap_GetFragmentVaddr(WidgetTree_AppendChildSelectionProxyItem))(arg0->unk_4C, sp70);
 
     arg0->unk_38[1] = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030_030_1CEA00));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_38[1], 0, 4, BattleInfoWidget_DrawSlotEntry, spA0, 0x18, 0xC, 1,
-                                                           arg4);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_38[1], 0, 4, BattleInfoWidget_DrawSlotEntry, spA0, 0x18, 0xC, 1, arg4);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_38[1], 0xC, arg4);
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_44, arg0->unk_38[1]);
 
@@ -3488,7 +3651,7 @@ typedef struct unk_func_88313894 {
 } unk_func_88313894; // size >= 0x60
 
 void BattleInfoWidget_MarkFullBoxSlots(unk_func_88200FA0_030_030_1CEA00* arg0, unk_func_8830867C_02C_0CC_000* arg1,
-                   unk_func_88313894_020* arg2) {
+                                       unk_func_88313894_020* arg2) {
     unk_func_8830867C_02C_0CC_000_000* sp24 = arg2->unk_0C;
     s32 i;
 
@@ -3619,8 +3782,8 @@ s32 BattleInfoWidget_MoveDestinationSelectionInput(unk_func_8830867C_048_048* ar
                 }
             } else if (arg1->buttonPressed & 0x8000) {
                 if (arg0->unk_24->unk_34->unk_38 != 0) {
-                    ((func8850CD24)Memmap_GetFragmentVaddr(WidgetTree_SetChildSelectionProxySelection))(arg0->unk_24->unk_4C,
-                                                                           arg0->unk_24->unk_34->unk_38 - 1);
+                    ((func8850CD24)Memmap_GetFragmentVaddr(WidgetTree_SetChildSelectionProxySelection))(
+                        arg0->unk_24->unk_4C, arg0->unk_24->unk_34->unk_38 - 1);
                     ((func8850C064)Memmap_GetFragmentVaddr(WidgetTree_SetVerticalMenuSelection))(arg0, 1);
                     var_a2 |= 1;
                 }
@@ -3708,7 +3871,8 @@ void BattleInfoWidget_BuildSaveConfirmDialog(unk_func_8830867C_02C_0B4* arg0, s3
     temp_v1 = Font_MeasureTextExtent(8, 0, sp50) + 0x10;
     sp68 = temp_v1;
     sp5C = temp_v1;
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp54, 0, 0, sp5C, 0x14, D_88317688, D_8831768C);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp54, 0, 0, sp5C, 0x14, D_88317688,
+                                                                              D_8831768C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp54, sp4C);
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, 0x40);
 
@@ -3729,7 +3893,8 @@ void BattleInfoWidget_BuildSaveConfirmDialog(unk_func_8830867C_02C_0B4* arg0, s3
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp48);
 
     arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_8830867C_02C_0B4_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, BattleInfoWidget_DrawSaveConfirmLabel, sp68, 0x1C, 2, 1, arg3);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(
+        arg0->unk_30, 0, 4, BattleInfoWidget_DrawSaveConfirmLabel, sp68, 0x1C, 2, 1, arg3);
 
     PointerList_Allocate(&arg0->unk_34, 2, arg3);
     PointerList_Insert(&arg0->unk_34, Text_GetString(NULL, 0, D_8831A4C4, 0x5A), 0);
@@ -3869,7 +4034,7 @@ s32 LabPCList_DrawTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2) {
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(sp68.r, sp68.g, sp68.b, sp68.a);
         Font_Printf(((arg0->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp6C)) / 2) + arg1,
-                      ((arg0->unk_00.unk_14.unk_02 - 0x10) / 2) + arg2, sp6C);
+                    ((arg0->unk_00.unk_14.unk_02 - 0x10) / 2) + arg2, sp6C);
         Font_EndTexturedTextRendering();
     }
     return 0;
@@ -3999,8 +4164,8 @@ s32 LabPCList_DrawPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 
 
     sprintf(sp84, "%d", arg0->unk_38);
 
-    Font_Printf(((arg1 + sp78 + sp80) - Font_MeasureTextExtent(0, 0, sp84)) - 4, arg0->unk_00.unk_00.unk_14.unk_02 + sp94,
-                  sp84);
+    Font_Printf(((arg1 + sp78 + sp80) - Font_MeasureTextExtent(0, 0, sp84)) - 4,
+                arg0->unk_00.unk_00.unk_14.unk_02 + sp94, sp84);
     Font_EndTexturedTextRendering();
 
     gDPPipeSync(gDisplayListHead++);
@@ -4209,8 +4374,8 @@ s32 LabPCList_DrawLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32
         var_v0 = *(s32*)&arg0->unk_34;
     }
 
-    LabPCList_DrawLocationCaption(arg1, arg2, arg0->unk_00.unk_14.unk_00, arg0->unk_00.unk_14.unk_02, D_883176B8[var_v0 >> 0x10],
-                  var_v0 & 0xFFFF, var_v1);
+    LabPCList_DrawLocationCaption(arg1, arg2, arg0->unk_00.unk_14.unk_00, arg0->unk_00.unk_14.unk_02,
+                                  D_883176B8[var_v0 >> 0x10], var_v0 & 0xFFFF, var_v1);
     return 0;
 }
 

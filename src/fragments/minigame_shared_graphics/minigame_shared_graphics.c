@@ -87,13 +87,15 @@ void MiniCam_SetActive(CameraNode* camera) {
 
 Gfx* MiniCam_ApplyProjection(Gfx* arg0) {
     gSPPerspNormalize(arg0++, D_87A01330->perspective.unk_04);
-    gSPMatrix(arg0++, (u32)D_87A01330->perspective.projectionMatrix & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(arg0++, (u32)D_87A01330->perspective.projectionMatrix & 0x1FFFFFFF,
+              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(arg0++, (u32)D_87A01330->view.fixedMatrix & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
     return arg0;
 }
 
-Gfx* MiniGfx_DrawTexturedQuad(Gfx* arg0, Mtx* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, void* arg6, s32 arg7, s32 arg8) {
+Gfx* MiniGfx_DrawTexturedQuad(Gfx* arg0, Mtx* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, void* arg6, s32 arg7,
+                              s32 arg8) {
     Mtx spD8;
     Mtx sp98;
     UNUSED Mtx sp58;
@@ -115,8 +117,8 @@ Gfx* MiniGfx_DrawTexturedQuad(Gfx* arg0, Mtx* arg1, f32 arg2, f32 arg3, f32 arg4
     return arg0;
 }
 
-Gfx* MiniGfx_DrawVertexColoredQuad(Gfx* arg0, Mtx* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7, s32 arg8,
-                   u8* arg9) {
+Gfx* MiniGfx_DrawVertexColoredQuad(Gfx* arg0, Mtx* arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s32 arg6, s32 arg7,
+                                   s32 arg8, u8* arg9) {
     s32 i;
     Mtx spE8;
     Mtx spA8;

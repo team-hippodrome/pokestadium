@@ -6,11 +6,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -54,8 +54,8 @@ void SpikeCannonFourStream_Init(void) {
     }
 }
 
-void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   f32 argA, f32 argB, f32 argC, s16 argD) {
+void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                                 u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;
     s32 j;
     OwnerLinkedFourStream* var_v1;

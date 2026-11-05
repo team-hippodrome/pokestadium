@@ -157,9 +157,12 @@ static ArenaCameraConfig sArenaCameraConfigs[] = {
 };
 
 s32 BattleScene_AreBothParticipantModelsCompact(void) {
-    if (((BattleScene_GetParticipantModelHeight(sActivePokemon[0]) + BattleScene_GetParticipantModelHeight(sActivePokemon[1])) <= 85.0f) &&
-        (BattleScene_GetParticipantModelRestingHeight(sActivePokemon[0]) == 0.0f) && (BattleScene_GetParticipantModelRestingHeight(sActivePokemon[1]) == 0.0f) &&
-        (sActivePokemon[0]->displayObject.position.y == 0.0f) && (sActivePokemon[1]->displayObject.position.y == 0.0f)) {
+    if (((BattleScene_GetParticipantModelHeight(sActivePokemon[0]) +
+          BattleScene_GetParticipantModelHeight(sActivePokemon[1])) <= 85.0f) &&
+        (BattleScene_GetParticipantModelRestingHeight(sActivePokemon[0]) == 0.0f) &&
+        (BattleScene_GetParticipantModelRestingHeight(sActivePokemon[1]) == 0.0f) &&
+        (sActivePokemon[0]->displayObject.position.y == 0.0f) &&
+        (sActivePokemon[1]->displayObject.position.y == 0.0f)) {
         return 1;
     }
     return 0;
@@ -267,7 +270,8 @@ void BattleScene_BRollCameraSetupStaticZoomedOutShot(CameraNode* camera, s32 sid
         }
 
         BattleScene_SetCameraAtFromAnchor(pokemon, camera, sBattleScene.scene->cameraAnchor, 0, 0, 0, 0.0f);
-        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->cameraAnchor, 0, 0x4000 - (rotation_y_rng * 182), pokemon_radius, pokemon_height);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->cameraAnchor, 0,
+                                             0x4000 - (rotation_y_rng * 182), pokemon_radius, pokemon_height);
         BattleScene_CameraPresetNop(camera);
         BattleScene_UpdateCameraModelOffset(pokemon, camera);
 
@@ -378,8 +382,9 @@ void BattleScene_BRollCameraSetupStaticArenaOverview(CameraNode* camera) {
     }
     camera->perspective.verticalFieldOfView = sArenaCameraConfigs[arena_index].verticalFieldOfView;
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, 0.0f, 10.0f, 0.0f);
-    Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, sArenaCameraConfigs[arena_index].distance, sArenaCameraConfigs[arena_index].rotationX,
-                  sArenaCameraConfigs[arena_index].rotationY);
+    Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition,
+                                sArenaCameraConfigs[arena_index].distance, sArenaCameraConfigs[arena_index].rotationX,
+                                sArenaCameraConfigs[arena_index].rotationY);
     sBattleScene.scene->phaseStep++;
 }
 
@@ -413,16 +418,24 @@ void BattleScene_BRollCameraSetupStaticCloseUp(CameraNode* camera, s32 side) {
             camera_adjustment_index = (pokemon->displayObject.objectType - 1) & 0xFF;
         }
 
-        target_y = (sSideCameraTransform[side]->coordinates.y + pokemon->displayObject.position.y) + sModelCameraAdjustments[camera_adjustment_index].z;
-        target_x = ((sSideCameraTransform[side]->coordinates.z + sModelCameraAdjustments[camera_adjustment_index].y) * pokemon->facingDirection) + pokemon->displayObject.position.x;
+        target_y = (sSideCameraTransform[side]->coordinates.y + pokemon->displayObject.position.y) +
+                   sModelCameraAdjustments[camera_adjustment_index].z;
+        target_x = ((sSideCameraTransform[side]->coordinates.z + sModelCameraAdjustments[camera_adjustment_index].y) *
+                    pokemon->facingDirection) +
+                   pokemon->displayObject.position.x;
 
-        Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, target_x, target_y, pokemon->displayObject.position.z);
+        Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, target_x, target_y,
+                                     pokemon->displayObject.position.z);
 
-        target_x = sSideCameraTransform[sBattleScene.scene->actingSide]->coordinates.x * sModelCameraAdjustments[camera_adjustment_index].x;
+        target_x = sSideCameraTransform[sBattleScene.scene->actingSide]->coordinates.x *
+                   sModelCameraAdjustments[camera_adjustment_index].x;
         target_rotation_x = sSideCameraTransform[sBattleScene.scene->actingSide]->rotationX;
-        target_rotation_y = (pokemon->facingDirection * sSideCameraTransform[sBattleScene.scene->actingSide]->rotationY) + BattleScene_GetParticipantFacingAngle(pokemon);
+        target_rotation_y =
+            (pokemon->facingDirection * sSideCameraTransform[sBattleScene.scene->actingSide]->rotationY) +
+            BattleScene_GetParticipantFacingAngle(pokemon);
 
-        Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, target_x, target_rotation_x, target_rotation_y);
+        Camera_ComputeEyeFromAngles(&camera->view.targetPosition, &camera->view.eyePosition, target_x,
+                                    target_rotation_x, target_rotation_y);
         sBattleScene.scene->phaseStep++;
     }
 }
@@ -437,8 +450,16 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode* camera) {
     UNUSED s32 pad[2];
     s32 shot_order[] = {
         // D_84385B20
-        BROLL_STEP_SETUP_ORBIT, BROLL_STEP_SETUP_ZOOM_SIDE_ZERO, BROLL_STEP_SETUP_WIDE_SIDE_ZERO, BROLL_STEP_SETUP_STATIC_OVERVIEW, BROLL_STEP_SETUP_ZOOM_SIDE_ONE,
-        BROLL_STEP_SETUP_WIDE_SIDE_ONE, BROLL_STEP_SETUP_ROTATING_OVERVIEW, BROLL_STEP_SETUP_CLOSE_SIDE_ZERO, BROLL_STEP_SETUP_CLOSE_SIDE_ONE, BROLL_STEP_ORDER_END,
+        BROLL_STEP_SETUP_ORBIT,
+        BROLL_STEP_SETUP_ZOOM_SIDE_ZERO,
+        BROLL_STEP_SETUP_WIDE_SIDE_ZERO,
+        BROLL_STEP_SETUP_STATIC_OVERVIEW,
+        BROLL_STEP_SETUP_ZOOM_SIDE_ONE,
+        BROLL_STEP_SETUP_WIDE_SIDE_ONE,
+        BROLL_STEP_SETUP_ROTATING_OVERVIEW,
+        BROLL_STEP_SETUP_CLOSE_SIDE_ZERO,
+        BROLL_STEP_SETUP_CLOSE_SIDE_ONE,
+        BROLL_STEP_ORDER_END,
     };
 
     BattleScene_SetCameraClipPlanes(camera, 20.0f, 12800.0f);
@@ -564,7 +585,8 @@ void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
         BattleScene_ApplyOwnerFramingOnly(camera, sActivePokemon[sBattleScene.scene->actingSide]);
     }
 
-    if ((state->flags & ACTIVE_SLEEP) || (state->flags & ACTIVE_FREEZE) || (sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType == SUBSTITUTE_DOLL)) {
+    if ((state->flags & ACTIVE_SLEEP) || (state->flags & ACTIVE_FREEZE) ||
+        (sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType == SUBSTITUTE_DOLL)) {
         if (BattleScene_AdvanceCameraFrameCounter(90) != 0) {
             BattleScene_SelectNextBRollCameraShot(camera);
         }
@@ -580,9 +602,11 @@ void BattleScene_BRollCameraUpdateStaticZoomedOutShot(CameraNode* camera) {
 void BattleScene_BRollCameraUpdateZoomShot(CameraNode* camera) {
     ActivePokemon* pokemon = sActivePokemon[sBattleScene.scene->actingSide];
 
-    if ((pokemon->state.replacementState == REPLACEMENT_INVOLUNTARY_SWITCH) || (pokemon->state.flags & ACTIVE_UNDERGROUND)) {
+    if ((pokemon->state.replacementState == REPLACEMENT_INVOLUNTARY_SWITCH) ||
+        (pokemon->state.flags & ACTIVE_UNDERGROUND)) {
         BattleScene_SelectNextBRollCameraShot(camera);
-    } else if ((BattleScene_AdvanceCameraFrameCounter(90) != 0) || (BattleScene_AnimateCameraPreset(camera, pokemon, 1, 0) != 0)) {
+    } else if ((BattleScene_AdvanceCameraFrameCounter(90) != 0) ||
+               (BattleScene_AnimateCameraPreset(camera, pokemon, 1, 0) != 0)) {
         BattleScene_SelectNextBRollCameraShot(camera);
     }
 }
@@ -593,7 +617,8 @@ void BattleScene_BRollCameraUpdateZoomShot(CameraNode* camera) {
 void BattleScene_BRollCameraUpdateSendOutShot(CameraNode* camera) {
     ActivePokemonState* pokemon_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
-    if ((pokemon_state->replacementState == REPLACEMENT_INVOLUNTARY_SWITCH) || (pokemon_state->flags & ACTIVE_UNDERGROUND)) {
+    if ((pokemon_state->replacementState == REPLACEMENT_INVOLUNTARY_SWITCH) ||
+        (pokemon_state->flags & ACTIVE_UNDERGROUND)) {
         BattleScene_SelectNextBRollCameraShot(camera);
     } else {
         camera->perspective.verticalFieldOfView = 60.0f;
@@ -652,13 +677,15 @@ void BattleScene_BRollCameraUpdateStaticCloseUp(CameraNode* camera) {
  * dispatches to the update function of the current b-roll shot (odd cameraCounter values).
  */
 void BattleScene_UpdateBRollCameraSequence(CameraNode* camera) {
-    if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->mode == BATTLE_SCENE_MODE_ACTION_SELECTION)) {
+    if ((gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) &&
+        (sBattleScene.scene->mode == BATTLE_SCENE_MODE_ACTION_SELECTION)) {
         BattleScene_UpdateActionSelectPhase();
     } else if (sBattleScene.scene->mode == BATTLE_SCENE_MODE_ACTION_SELECTION) {
         if ((sBattleScene.scene->transitionStep == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x == 0x17) &&
             (sActivePokemon[1]->thumbnail.camera->viewport.x == 0x103)) {
             BattleScene_UpdateActionSelectPhase();
-        } else if ((sBattleScene.scene->transitionStep == 0) && (sActivePokemon[0]->thumbnail.camera->viewport.x < 0xE) &&
+        } else if ((sBattleScene.scene->transitionStep == 0) &&
+                   (sActivePokemon[0]->thumbnail.camera->viewport.x < 0xE) &&
                    (sActivePokemon[1]->thumbnail.camera->viewport.x >= 0x10D)) {
             BattleScene_ResetActionSelectionTimer();
         }

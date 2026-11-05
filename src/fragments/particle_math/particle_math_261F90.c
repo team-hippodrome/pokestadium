@@ -791,7 +791,8 @@ s16 ParticleMath_ApproachAngleCoarse(s16 angle, s16 target_angle) {
 void ParticleGfx_NoopStub1(void) {
 }
 
-/* Convert a float matrix into the next pool slot and load it as MODELVIEW; stop emitting when all 364 slots are used. */
+/* Convert a float matrix into the next pool slot and load it as MODELVIEW; stop emitting when all 364 slots are used.
+ */
 void ParticleGfx_PushMatrix(MtxF* matrix) {
     if (sParticleMatrixPoolIndex < 0x16C) {
         MtxF_ToFixed(&sParticleMatrixPool->unk_0000[sParticleMatrixPoolIndex], matrix);
@@ -830,7 +831,8 @@ void ParticleGfx_Build2DTransformMatrix(MtxF* matrix, s16 translation_x, s16 tra
 }
 
 /* Build a translated 2D rotation matrix and scale only its Y basis. */
-void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z, f32 scale_y) {
+void ParticleGfx_Build2DTransformMatrixYScaled(MtxF* matrix, s16 translation_x, s16 translation_y, s16 rotation_z,
+                                               f32 scale_y) {
     f32 temp_fv0 = SINS(rotation_z);
     f32 temp_fv1 = COSS(rotation_z);
 
@@ -1011,7 +1013,8 @@ void ParticleGfx_BuildBillboardMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f pos
     matrix->mf[3][3] = 1.0f;
 }
 
-/* Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector. */
+/* Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector.
+ */
 void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y) {
     matrix->mf[0][0] = view_matrix->mf[0][0];
     matrix->mf[0][1] = view_matrix->mf[1][0];
@@ -1035,7 +1038,8 @@ void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Ve
 }
 
 /* Build a translated billboard matrix by rotating its first two basis vectors and applying uniform scale. */
-void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale, s16 rotation_z) {
+void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale,
+                                             s16 rotation_z) {
     f32 temp_fv0 = SINS(rotation_z);
     f32 temp_fv1 = COSS(rotation_z);
 
@@ -1060,8 +1064,10 @@ void ParticleGfx_BuildBillboardRotatedMatrix(MtxF* matrix, MtxF* view_matrix, Ve
     matrix->mf[3][3] = 1.0f;
 }
 
-/* Build a translated billboard matrix by rotating its first two basis vectors and scaling only the second basis vector. */
-void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y, s16 rotation_z) {
+/* Build a translated billboard matrix by rotating its first two basis vectors and scaling only the second basis vector.
+ */
+void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* matrix, MtxF* view_matrix, Vec3f position, f32 scale_y,
+                                                    s16 rotation_z) {
     f32 temp_fv0 = SINS(rotation_z);
     f32 temp_fv1 = COSS(rotation_z);
 

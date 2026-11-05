@@ -906,7 +906,7 @@ void GbMusic_BindSequenceTracks(u8 arg0) {
         D_800FCE48[x] = ((unk_D_800FC6D4_008*)D_800FCEC8 + i)->unk_00;
         D_800FCE88[x] = D_800FCE48[x];
         i++;
-        
+
         if (i > temp) {
             break;
         }
@@ -949,7 +949,8 @@ void func_80044A50(unk_D_800FC6D4* arg0) {
     u32 base;
     u8* temp_v1;
     unk_80044A50_008* temp_v0;
-    if (arg0->flags != 0) return;
+    if (arg0->flags != 0)
+        return;
     end = arg0->unk_04;
     base = (u32)arg0;
     temp_v1 = arg0->offset;

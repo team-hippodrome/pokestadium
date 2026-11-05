@@ -308,7 +308,8 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->level);
             Font_SetActive(4, 0);
-            Font_Printf(temp_s4 + 0xE8, temp_s5 + 0xC, "%s%03d", TeamSelection_GetInstructionText(0x16), temp_s6->unk_00.unk_00);
+            Font_Printf(temp_s4 + 0xE8, temp_s5 + 0xC, "%s%03d", TeamSelection_GetInstructionText(0x16),
+                        temp_s6->unk_00.unk_00);
             Font_SetActive(4, 0);
             Font_Printf(temp_s4 + 0x13C, temp_s5 + 0xC, TeamSelection_GetTextFromSetA(temp_s6->unk_00.unk_00));
             Font_SetActive(8, 0);
@@ -333,9 +334,11 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
 
             if (temp_s6->unk_06 != temp_s6->unk_07) {
                 temp_v0_8 = TeamSelection_GetLabelText(0xA);
-                Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x26, temp_v0_8);
+                Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x26,
+                            temp_v0_8);
                 temp_v0_8 = TeamSelection_GetModeText(PokemonType_ToDisplayIndex(temp_s6->unk_07));
-                Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x3A, temp_v0_8);
+                Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x3A,
+                            temp_v0_8);
             }
 
             Font_SetActive(8, 0);
@@ -351,9 +354,11 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                         break;
                     }
                     color = &D_842115F0[gMoveDisplayInfo[temp_a0 - 1].unk_01].unk_00[2];
-                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_a0));
+                    sp80 =
+                        TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_a0));
                     Gfx_SetEnvColor(color->r, color->g, color->b, 0xFF);
-                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5, TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
+                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5,
+                                TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
                 }
 
                 Font_EndTexturedTextRendering();
@@ -365,9 +370,10 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                         break;
                     }
 
-                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
+                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i],
+                                                                TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
                     Gfx_DrawTextureRgba16((temp_s4 + sp80) - 0x18, D_842116F8[i] + temp_s5, 0x14, 0x14,
-                                  D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].unk_01].unk_0C, 0x14, 0);
+                                          D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].unk_01].unk_0C, 0x14, 0);
                 }
             }
 
@@ -467,7 +473,7 @@ s32 TeamSelection_Preview_Update(unk_D_8423D3A8* arg0) {
 }
 
 s32 TeamSelection_Preview_StartFull(unk_D_8423D3A8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
-                  unk_D_838067F0_0168_0000* arg6, s16 arg7) {
+                                    unk_D_838067F0_0168_0000* arg6, s16 arg7) {
     if (arg0->unk_00 != 0) {
         return 0;
     }

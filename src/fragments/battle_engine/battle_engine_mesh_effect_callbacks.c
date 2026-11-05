@@ -120,7 +120,10 @@ f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
 }
 
 #if defined(VERSION_US_REV2)
+// asm-processor requires these imports on one physical line.
+// clang-format off
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcMoveAimingVectors.s")
+// clang-format on
 #else
 /*
     Moves: Aurora Beam (use), Bind (use), Constrict (use), Disable (use), Hyper Beam (use), Ice Beam (use), Pin
@@ -164,7 +167,9 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
 #endif
 
 #if defined(VERSION_US_REV2)
+// clang-format off
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcSwiftAimVectors.s")
+// clang-format on
 #else
 /*
     Moves: Swift (use)
@@ -373,8 +378,8 @@ void BattleAnim_StartTrappingLassoMove_EmitVariantD(void) {
     sp5C = BattleAnim_EffectSecondaryOwnerModelScale();
     sp54 = guRandom();
     LassoMoveDefaultRadial20(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
-                  (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0x64, 0xC8, 0xFF, 0xC8, 0, 0x64, 0xC8, 0.1f, sp5C,
-                  4.0f * sp5C, 0x3C);
+                             (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0x64, 0xC8, 0xFF, 0xC8, 0, 0x64, 0xC8, 0.1f,
+                             sp5C, 4.0f * sp5C, 0x3C);
 }
 
 /*
@@ -501,8 +506,8 @@ void BattleAnim_EmitStringShotUseRadial(void) {
     sp5C = BattleAnim_EffectSecondaryOwnerModelScale();
     sp54 = guRandom();
     StringShotRadial_EmitVariantC(sp74, sp70, sp6C, sp68, (((sp54 % 5) * 0.1f) + sp64) - 0.2f,
-                  (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0xFF, 0xFF, 0xFF, 0x64, 0x64, 0x96, 0x96, 0.1f, sp5C,
-                  3.0f * sp5C, 0x3C);
+                                  (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0xFF, 0xFF, 0xFF, 0x64, 0x64, 0x96,
+                                  0x96, 0.1f, sp5C, 3.0f * sp5C, 0x3C);
 }
 
 void BattleAnim_SetupStringShotUseRadial(void) {
@@ -592,8 +597,8 @@ void BattleAnim_EmitDisableUseRadial(void) {
     sp5C = BattleAnim_EffectSecondaryOwnerModelScale();
     sp54 = guRandom();
     LassoMoveDefaultRadial20(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
-                  (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0xFF, 0xFF, 0x64, 0xFF, 0x96, 0x96, 0, 0.1f, sp5C,
-                  4.0f * sp5C, 0x3C);
+                             (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0xFF, 0xFF, 0x64, 0xFF, 0x96, 0x96, 0, 0.1f,
+                             sp5C, 4.0f * sp5C, 0x3C);
 }
 
 void BattleAnim_SetupDisableUseRadial(void) {
@@ -812,8 +817,8 @@ s32 BattleAnim_RunSonicBoomUseFourStream(void) {
         if (sp64 < 0.0) {
             sp58 = -sp58;
         }
-        FourStreamTrail_Start(sp64, sp60, sp5C, sp58, sp54, sp50, 0xC0, 0xFF, 0xFF, 0x80, (((guRandom() % 2) * 2) - 1) * 0.3,
-                      2.0f, 13.0f, 0x28);
+        FourStreamTrail_Start(sp64, sp60, sp5C, sp58, sp54, sp50, 0xC0, 0xFF, 0xFF, 0x80,
+                              (((guRandom() % 2) * 2) - 1) * 0.3, 2.0f, 13.0f, 0x28);
     }
 
     if (D_84392580 >= 2) {
@@ -940,7 +945,8 @@ void BattleAnim_EmitTriAttackUseRadial(void) {
     sp50 *= 6.0f;
     sp4C *= 6.0f;
     sp48 *= 6.0f;
-    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 8, 0xFF, 0xFF, 0xFF, 0xB4, 0.3f, 2.0f, 20.0f, 0x3C);
+    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 8, 0xFF, 0xFF, 0xFF, 0xB4, 0.3f, 2.0f, 20.0f,
+                                 0x3C);
 }
 
 void BattleAnim_SetupTriAttackUseRadial(void) {
@@ -981,11 +987,12 @@ void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x8F, 0x8F, 6, 0xA, 0xF, 0xE,
-                  -3, 5, 0, 0xF, &D_84387FC0, &D_84387FE0, 0xFF, 0xFF, 0, 0x96, 0x64, 0xFF, 0, 0xC8, 0x32, 0xFF, 0x96,
-                  0xFF, 0x78);
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x8F, 0x90, 2, 6, 0, 0xF, -4,
-                  2, 0, 0, &D_84388000, &D_84388020, 0, 0xFF, 0x64, 0x96, 0x64, 0x64, 0, 0xFF, 0xC8, 0, 0, 0, 0);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x8F, 0x8F, 6,
+                             0xA, 0xF, 0xE, -3, 5, 0, 0xF, &D_84387FC0, &D_84387FE0, 0xFF, 0xFF, 0, 0x96, 0x64, 0xFF, 0,
+                             0xC8, 0x32, 0xFF, 0x96, 0xFF, 0x78);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x8F, 0x90, 2, 6,
+                             0, 0xF, -4, 2, 0, 0, &D_84388000, &D_84388020, 0, 0xFF, 0x64, 0x96, 0x64, 0x64, 0, 0xFF,
+                             0xC8, 0, 0, 0, 0);
 }
 
 void BattleAnim_SetupAuroraBeamUseDoubleTextureTrail(void) {
@@ -1023,8 +1030,9 @@ void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
     sp94 *= 12.0f;
     sp90 *= 12.0f;
 
-    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0x64, 0xFF, 0xFF, 0.4f, 2.0f,
-                  20.0f, 0x3C, 0x95, 0x95, 0, 0xA, 0, 0xD, 0, 0, 0, 0, &D_84388040, &D_84388060);
+    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0x64, 0xFF, 0xFF,
+                                0.4f, 2.0f, 20.0f, 0x3C, 0x95, 0x95, 0, 0xA, 0, 0xD, 0, 0, 0, 0, &D_84388040,
+                                &D_84388060);
 }
 
 void BattleAnim_SetupIceBeamUseSixSlotTrail(void) {
@@ -1065,12 +1073,12 @@ void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x93, 0x93, 5, 0xA, 0xF, 0xF,
-                  -5, 5, 0xF, 0xF, &D_84388080, &D_843880A0, 0xC8, 0xC8, 0, 0x64, 0, 0, 0xC8, 0, 0xFF, 0, 0xFF, 0,
-                  0x5A);
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x91, 0x91, -2, 0xA, 0xF,
-                  0xF, 5, 0xF, 0xF, 0xF, &D_843880C0, &D_843880E0, 0xFF, 0x32, 0x64, 0xC8, 0, 0x64, 0x32, 0xFF, 0xFF, 0,
-                  0, 0, 0);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x93, 0x93, 5,
+                             0xA, 0xF, 0xF, -5, 5, 0xF, 0xF, &D_84388080, &D_843880A0, 0xC8, 0xC8, 0, 0x64, 0, 0, 0xC8,
+                             0, 0xFF, 0, 0xFF, 0, 0x5A);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x91, 0x91, -2,
+                             0xA, 0xF, 0xF, 5, 0xF, 0xF, 0xF, &D_843880C0, &D_843880E0, 0xFF, 0x32, 0x64, 0xC8, 0, 0x64,
+                             0x32, 0xFF, 0xFF, 0, 0, 0, 0);
 }
 
 void BattleAnim_SetupPsybeamUseDoubleTextureTrail(void) {
@@ -1106,12 +1114,12 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x97, 0x98, -5, 0x14, 0xF,
-                  0xD, -5, 0x14, 0, 0xE, &D_84388100, &D_84388120, 0xFF, 0xFF, 0xFF, 0x32, 0x64, 0x64, 0, 0xFF, 0xFF,
-                  0xC8, 0xFF, 0xFF, 0x96);
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x98, 5, 0xF, 0xF, 0xE,
-                  0, 0xF, 0xF, 0xF, &D_84388140, &D_84388160, 0xFF, 0xFF, 0xFF, 0x32, 0x64, 0x64, 0x64, 0xFF, 0xFF, 0,
-                  0, 0, 0);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x97, 0x98, -5,
+                             0x14, 0xF, 0xD, -5, 0x14, 0, 0xE, &D_84388100, &D_84388120, 0xFF, 0xFF, 0xFF, 0x32, 0x64,
+                             0x64, 0, 0xFF, 0xFF, 0xC8, 0xFF, 0xFF, 0x96);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x98, 5,
+                             0xF, 0xF, 0xE, 0, 0xF, 0xF, 0xF, &D_84388140, &D_84388160, 0xFF, 0xFF, 0xFF, 0x32, 0x64,
+                             0x64, 0x64, 0xFF, 0xFF, 0, 0, 0, 0);
 }
 
 void BattleAnim_StartEffect77DoubleTextureTrail_Init(void) {
@@ -1145,9 +1153,9 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x94, 0, 0x14, 0xE,
-                  0xF, 0, 0x14, 0xF, 0xE, &D_84388180, &D_843881A0, 0xFF, 0xFF, 0xFF, 0x96, 0x96, 0xFF, 0xFF, 0, 0xFF,
-                  0xFF, 0xFF, 0, 0x96);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x94, 0,
+                             0x14, 0xE, 0xF, 0, 0x14, 0xF, 0xE, &D_84388180, &D_843881A0, 0xFF, 0xFF, 0xFF, 0x96, 0x96,
+                             0xFF, 0xFF, 0, 0xFF, 0xFF, 0xFF, 0, 0x96);
 }
 
 void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
@@ -1191,12 +1199,12 @@ void BattleAnim_SeedHyperBeamUseDoubleTextureTrail(void) {
     spA8 *= 12.0f;
     spA4 *= 12.0f;
     spA0 *= 12.0f;
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x91, 0x92, 5, 0x1E, 0, 0xD,
-                  -5, 0x1E, 0xF, 0xD, &D_843881C0, &D_843881E0, 0xFF, 0xFF, 0, 0xFF, 0x96, 0x32, 0, 0, 0xFF, 0xFF, 0xC8,
-                  0x64, 0xC8);
-    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x96, 6, 0x14, 0xE,
-                  0xF, -3, 0xA, 0, 0xF, &D_84388200, &D_84388220, 0xFF, 0xFF, 0x64, 0x96, 0xFF, 0xFF, 0x64, 0, 0xC8, 0,
-                  0, 0, 0);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 2.0f, 10.0f, 0x14, 0x91, 0x92, 5,
+                             0x1E, 0, 0xD, -5, 0x1E, 0xF, 0xD, &D_843881C0, &D_843881E0, 0xFF, 0xFF, 0, 0xFF, 0x96,
+                             0x32, 0, 0, 0xFF, 0xFF, 0xC8, 0x64, 0xC8);
+    DoubleTextureTrail_Spawn(spB4, spB0, spAC, spA8, spA4, spA0, 0.0f, 5.0f, 1.2f, 3.0f, 15.0f, 0x14, 0x97, 0x96, 6,
+                             0x14, 0xE, 0xF, -3, 0xA, 0, 0xF, &D_84388200, &D_84388220, 0xFF, 0xFF, 0x64, 0x96, 0xFF,
+                             0xFF, 0x64, 0, 0xC8, 0, 0, 0, 0);
 }
 
 void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
@@ -1223,8 +1231,9 @@ void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
     sp94 *= 12.0f;
     sp90 *= 12.0f;
 
-    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0x64, 0x32, 0xC8, 0xFF, 0x32, 0, 0xFF, 0.4f, 2.0f,
-                  5.0f, 0x3C, 0x95, 0x95, 0, 0x14, 0, 0xD, 0, 0x19, 0, 0xD, &D_84388240, &D_84388260);
+    HyperBeamIceBeamTrail_Spawn(0, spA4, spA0, sp9C, sp98, sp94, sp90, 0xFF, 0xFF, 0x64, 0x32, 0xC8, 0xFF, 0x32, 0,
+                                0xFF, 0.4f, 2.0f, 5.0f, 0x3C, 0x95, 0x95, 0, 0x14, 0, 0xD, 0, 0x19, 0, 0xD, &D_84388240,
+                                &D_84388260);
 }
 
 void BattleAnim_SetupHyperBeamUseCombinedTrail(void) {

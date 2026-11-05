@@ -35,8 +35,8 @@ void func_81002830(Gfx* gfx, unk_arg1_func_81002830* arg1) {
         // FAKE
         arg1 = NULL;
         var_a3 = D_800AF7AE;
-        gDPLoadTextureBlock(gfx++, p->unk_04[var_a3 & 0x7], G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                    G_TX_NOMIRROR | G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureBlock(gfx++, p->unk_04[var_a3 & 0x7], G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0,
+                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
         gDPSetTileSize(gfx++, 0, temp_v0, 0, ((temp_v0 + 63) << 2), 124);
     }
     gSPEndDisplayList(gfx++);
@@ -55,7 +55,8 @@ void DisplayList_InitAnimatedFrameSegment(s32 arg0, unk_arg1_func_81002968* arg1
 }
 
 Gfx* DisplayList_BuildSelectedTextureSegment(Gfx* gfx, u32* textures, s32 index) {
-    gDPLoadTextureBlock(gfx++, textures[index + 1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(gfx++, textures[index + 1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD, G_TX_NOLOD);
     gSPEndDisplayList(gfx++);
     return gfx;
 }
@@ -68,7 +69,7 @@ void DisplayList_InitSelectedTextureSegment(s32 arg0, TextureState* state) {
         textures = state->textures;
         state->gfx = (Gfx*)Gfx_AllocDisplayList(0x50);
         if (D_8006F09C->objectType == 0x58) {
-            index = (s32) D_8006F09C->transformAnim.frameFixed >> 0x10;
+            index = (s32)D_8006F09C->transformAnim.frameFixed >> 0x10;
             if (index >= 0x42) {
                 index = index - 0x42;
             } else {

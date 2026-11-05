@@ -29,7 +29,7 @@
 #define CB(x) ((x) * (x) * (x))
 
 // cast thru uintptr_t for integer to pointer casts
-#define INT2VOID(i) ((void *)(uintptr_t)(i))
+#define INT2VOID(i) ((void*)(uintptr_t)(i))
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -63,24 +63,20 @@
 #define FRAGMENT_ID(fragment) ((((u32)FRAGMENT_SYMBOL(fragment, _TEXT_START) & 0x0FF00000) >> 0x14) - 0x10)
 #define ASSET_ID(asset) (((u32)asset & 0x0F000000) >> 0x18)
 
-#define FRAGMENT_LOAD(fragment) ( \
-    Fragment_Load(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), FRAGMENT_SYMBOL(fragment, _relocs_ROM_END)) \
-)
+#define FRAGMENT_LOAD(fragment)                                                  \
+    (Fragment_Load(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), \
+                   FRAGMENT_SYMBOL(fragment, _relocs_ROM_END)))
 
-#define FRAGMENT_LOAD_AND_CALL(fragment, arg0, arg1) (\
-    Fragment_LoadAndCall(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), FRAGMENT_SYMBOL(fragment, _relocs_ROM_END), arg0, arg1) \
-)
+#define FRAGMENT_LOAD_AND_CALL(fragment, arg0, arg1)                                    \
+    (Fragment_LoadAndCall(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), \
+                          FRAGMENT_SYMBOL(fragment, _relocs_ROM_END), arg0, arg1))
 
-#define FRAGMENT_LOAD_AND_CALL2(fragment, arg0, arg1) (\
-    Fragment_QueueCall(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), FRAGMENT_SYMBOL(fragment, _relocs_ROM_END), arg0, arg1) \
-)
+#define FRAGMENT_LOAD_AND_CALL2(fragment, arg0, arg1)                                 \
+    (Fragment_QueueCall(FRAGMENT_ID(fragment), FRAGMENT_SYMBOL(fragment, _ROM_START), \
+                        FRAGMENT_SYMBOL(fragment, _relocs_ROM_END), arg0, arg1))
 
-#define ASSET_LOAD(vram, rom, arg0) (\
-    Asset_LoadToSegment(ASSET_ID(vram), rom##_ROM_START, rom##_ROM_END, arg0) \
-)
+#define ASSET_LOAD(vram, rom, arg0) (Asset_LoadToSegment(ASSET_ID(vram), rom##_ROM_START, rom##_ROM_END, arg0))
 
-#define ASSET_LOAD2(rom, arg0, arg1) (\
-    BinArchive_Open(rom##_ROM_START, rom##_ROM_END, arg0, arg1) \
-)
+#define ASSET_LOAD2(rom, arg0, arg1) (BinArchive_Open(rom##_ROM_START, rom##_ROM_END, arg0, arg1))
 
 #endif

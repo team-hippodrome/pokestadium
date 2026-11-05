@@ -4,7 +4,6 @@
 #include "instructions/RabbitizerInstruction.h"
 #include "analysis/RabbitizerRegistersTracker.h"
 
-
 int main() {
     RabbitizerRegistersTracker regsTracker;
     RabbitizerInstruction instr;

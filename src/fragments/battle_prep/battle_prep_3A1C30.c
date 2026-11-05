@@ -167,7 +167,8 @@ void BattlePrep_DrawResultPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindo
     if (arg1->unk_06 == 0x48) {
         Font_SetActive(1, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(arg1->unk_00 + 0x4A, arg1->unk_02 + 0x36, "%s%d", BattlePrep_GetString(0x2C), gSessionContext.continueCount);
+        Font_Printf(arg1->unk_00 + 0x4A, arg1->unk_02 + 0x36, "%s%d", BattlePrep_GetString(0x2C),
+                    gSessionContext.continueCount);
     }
 
     Font_EndTexturedTextRendering();
@@ -191,7 +192,8 @@ void BattlePrep_DrawContinuePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWin
     BattlePrep_DrawRuleOption(arg0, arg1->unk_00 + 0x1A, arg1->unk_02 + 6, 4, 1, BattlePrep_GetString(0x31));
     Font_SetActive(1, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-    Font_Printf(arg1->unk_00 + 0x4A, arg1->unk_02 + 0x4C, "%s%d", BattlePrep_GetString(0x2C), gSessionContext.continueCount);
+    Font_Printf(arg1->unk_00 + 0x4A, arg1->unk_02 + 0x4C, "%s%d", BattlePrep_GetString(0x2C),
+                gSessionContext.continueCount);
     Font_EndTexturedTextRendering();
 }
 
@@ -283,7 +285,7 @@ void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRule
         } else {
             sp12C = Font_MeasureTextExtent(4, 0, BattlePrep_GetString(gSessionContext.modeSelection + 0x1D));
             Font_Printf((arg1->unk_00 - (sp12C / 2)) + 0x64, arg1->unk_02 + 0x26,
-                          BattlePrep_GetString(gSessionContext.modeSelection + 0x1D));
+                        BattlePrep_GetString(gSessionContext.modeSelection + 0x1D));
         }
     }
 
@@ -302,7 +304,8 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
             Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_3025200, 0x24, 0);
             if (0) {}
         } else {
-            Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24, 0);
+            Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort],
+                                  0x24, 0);
         }
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -311,10 +314,12 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
 
     if (arg2->teamMember[0]->controllerPort < arg2->teamMember[1]->controllerPort) {
         Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24, 0);
-        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[1]->controllerPort], 0x24, 0);
+        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[1]->controllerPort], 0x24,
+                              0);
     } else {
         Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[1]->controllerPort], 0x24, 0);
-        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24, 0);
+        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24,
+                              0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -451,10 +456,11 @@ void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0) {
             }
         } else {
             if (temp_s0->unk_0C == 0) {
-                Ui_DrawBorderedPanel(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06, temp_s0->unk_0A);
+                Ui_DrawBorderedPanel(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06,
+                                     temp_s0->unk_0A);
             } else {
-                BattlePrep_DrawBorderedRect(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06, 0x1E, 0x1E, 0x82,
-                              0xFF);
+                BattlePrep_DrawBorderedRect(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06, 0x1E,
+                                            0x1E, 0x82, 0xFF);
             }
 
             switch (arg0->unk_01) {

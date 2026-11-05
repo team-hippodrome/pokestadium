@@ -252,8 +252,8 @@ void Rental_HandleTeamSaveResult(RentalTeamTray* arg0);
 void Rental_HandleTeamCancel(RentalTeamTray* arg0);
 void Rental_TeamTraySlideTick(RentalTeamTray* arg0);
 s32 Rental_TeamSlotsUpdate(RentalTeamTray* arg0);
-s32 Rental_InitTeamTray(RentalTeamTray* arg0, RentalCarouselState* arg1, unk_D_8423D3A8* arg2, unk_D_84229EB0* arg3, s16 arg4, u16 arg5,
-                  char* arg6, s16 arg7, s16 arg8, s16 arg9);
+s32 Rental_InitTeamTray(RentalTeamTray* arg0, RentalCarouselState* arg1, unk_D_8423D3A8* arg2, unk_D_84229EB0* arg3,
+                        s16 arg4, u16 arg5, char* arg6, s16 arg7, s16 arg8, s16 arg9);
 s32 Rental_TeamTrayOpen(RentalTeamTray* arg0, s16 arg1);
 s32 Rental_TeamTrayResume(RentalTeamTray*);
 s32 Rental_ResetTeamSlots(RentalTeamTray*);
@@ -266,7 +266,8 @@ s32 Rental_TeamTrayIsIdle(RentalTeamTray* arg0);
 void Rental_CopyRosterToTeam(RentalTeamTray* arg0, BattleMon* arg1, s16 arg2);
 
 void Rental_CarouselDraw(RentalCarouselState*, s32);
-s32 Rental_PrimeCarousel(RentalCarouselState*, RentalTeamTray*, unk_D_8423D3A8*, s16, s16, s16, s16, s16, RentalRoster*);
+s32 Rental_PrimeCarousel(RentalCarouselState*, RentalTeamTray*, unk_D_8423D3A8*, s16, s16, s16, s16, s16,
+                         RentalRoster*);
 s32 Rental_CarouselTick(RentalCarouselState*);
 s32 Rental_CarouselOpen(RentalCarouselState*, s16);
 s32 Rental_CarouselResumeAfterAssign(RentalCarouselState*);
@@ -288,7 +289,7 @@ void TeamSelection_Preview_Close(unk_D_8423D3A8* arg0);
 s32 TeamSelection_Preview_Initialize(unk_D_8423D3A8* arg0);
 s32 TeamSelection_Preview_Update(unk_D_8423D3A8* arg0);
 s32 TeamSelection_Preview_StartFull(unk_D_8423D3A8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
-    unk_D_838067F0_0168_0000* arg6, s16 arg7);
+                                    unk_D_838067F0_0168_0000* arg6, s16 arg7);
 s32 TeamSelection_Preview_StartCompact(unk_D_8423D3A8* arg0, s16 arg1, s16 arg2, unk_D_838067F0_0168_0000* arg3);
 s32 TeamSelection_Preview_GetSelectionState(unk_D_8423D3A8* arg0);
 void TeamSelection_RulePrompt_DrawOption(s16 arg0, s16 arg1, s16 arg2, char* arg3);
@@ -350,8 +351,8 @@ void RegisteredTeam_SaveFromTray(unk_D_84229EB0* arg0);
 void TeamSelection_RegisteredTeam_HandleDiscardPrompt(unk_D_84229EB0* arg0);
 void TeamSelection_RegisteredTeam_LoadVisible(unk_D_84229EB0* arg0);
 s32 TeamSelection_RegisteredTeam_Update(unk_D_84229EB0* arg0);
-s32 TeamSelection_RegisteredTeam_Initialize(unk_D_84229EB0* arg0, RentalTeamTray* arg1, RentalCarouselState* arg2, unk_D_8423D3A8* arg3,
-                  s16 arg4, s16 arg5, s16 arg6, s16 arg7);
+s32 TeamSelection_RegisteredTeam_Initialize(unk_D_84229EB0* arg0, RentalTeamTray* arg1, RentalCarouselState* arg2,
+                                            unk_D_8423D3A8* arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7);
 s32 RegistrationManager_Begin(unk_D_84229EB0* arg0);
 s32 RegistrationManager_Initialize(unk_D_84229EB0* arg0, u16 arg1, char* arg2, unk_D_838067F0_0168_0000* arg3);
 s32 TeamSelection_RegisteredTeam_GetSelection(unk_D_84229EB0* arg0);

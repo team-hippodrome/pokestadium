@@ -40,12 +40,14 @@ static Gfx D_84B16BA0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B16CC8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16AA0, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepStarBurst_DrawStarIcon, D_84B16BA0, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16AA0,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawStarIcon,
+    D_84B16BA0, 0x06000000, 0x01000000,
 };
 static u32 D_84B16CFC[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16AA0, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepStarBurst_DrawTrailIcon, D_84B16BA0, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16AA0,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawTrailIcon,
+    D_84B16BA0, 0x06000000, 0x01000000,
 };
 static Vtx D_84B16D30[] = {
     VTX(-16, 16, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -64,8 +66,9 @@ static Gfx D_84B16D70[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B16DD8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16D30, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepStarBurst_DrawSparkParticle, D_84B16D70, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16D30,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawSparkParticle,
+    D_84B16D70, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16E10[] = {
     VTX(-16, 16, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -84,8 +87,9 @@ static Gfx D_84B16E50[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B16EB8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16E10, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepStarBurst_DrawRainbowParticle, D_84B16E50, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16E10,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawRainbowParticle,
+    D_84B16E50, 0x06000000, 0x01000000,
 };
 static Color_RGBA8 D_84B16EEC[] = { {
                                         0xFF,
@@ -213,7 +217,8 @@ s32 BattlePrepStarBurst_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4) {
+void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
+                                             s16 arg4) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 0;
     arg0->unk_08 = arg4;
@@ -295,7 +300,7 @@ void BattlePrepStarBurst_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
     arg0->unk_06++;
     if ((arg0->unk_06 >= 8) && (arg0->unk_06 < 0x10)) {
         Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x * 0.8f, arg0->unk_00->scale.x * 0.8f,
-                      arg0->unk_00->scale.x * 0.8f);
+                                     arg0->unk_00->scale.x * 0.8f);
     } else if (arg0->unk_06 == 0x10) {
         BattlePrep_ResetDisplayObject(arg0->unk_00);
         arg0->unk_06 = -1;
@@ -321,8 +326,8 @@ void BattlePrepStarBurst_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
 
 void BattlePrepStarBurst_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
     if (arg0->unk_06 < 0x14) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x - 0.025f, arg0->unk_00->scale.x - 0.025f,
-                      arg0->unk_00->scale.x - 0.025f);
+        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x - 0.025f,
+                                     arg0->unk_00->scale.x - 0.025f, arg0->unk_00->scale.x - 0.025f);
         arg0->unk_0A.a -= 5;
         arg0->unk_00->position.y -= 2.0f;
         arg0->unk_06++;
@@ -401,15 +406,15 @@ void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
             if (arg0->unk_5A2 != 0) {
                 var_s2 = 0x2000;
                 for (i = 0; i < 5; i++, var_s2 += 0x3000) {
-                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x, arg0->unk_5A8->position.y,
-                                  var_s2);
+                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
+                                                            arg0->unk_5A8->position.y, var_s2);
                     BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[i]);
                 }
 
                 var_s2 = 0x6000;
                 for (i = 5; i < 10; i++, var_s2 -= 0x3000) {
-                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x, arg0->unk_5A8->position.y,
-                                  var_s2);
+                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
+                                                            arg0->unk_5A8->position.y, var_s2);
                     BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[i]);
                 }
 
@@ -418,15 +423,15 @@ void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
             } else {
                 var_s2 = 0x3000;
                 for (i = 0; i < 5; i++, var_s2 += 0x2800) {
-                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x, arg0->unk_5A8->position.y,
-                                  var_s2);
+                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
+                                                      arg0->unk_5A8->position.y, var_s2);
                     BattlePrepStarBurst_UpdateSparkSlot(&arg0->unk_000[i]);
                 }
 
                 var_s2 = 0x5000;
                 for (i = 5; i < 10; i++, var_s2 -= 0x2800) {
-                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x, arg0->unk_5A8->position.y,
-                                  var_s2);
+                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
+                                                      arg0->unk_5A8->position.y, var_s2);
                     BattlePrepStarBurst_UpdateSparkSlot(&arg0->unk_000[i]);
                 }
 
@@ -450,8 +455,10 @@ void BattlePrepStarBurst_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
 
         if (arg0->unk_5A1 < 0xE) {
             for (i = 0; i < 4; i++) {
-                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][0 + i], arg0->unk_5B8, &arg0->unk_5A8->position);
-                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][4 + i], arg0->unk_5B8, &arg0->unk_5A8->position);
+                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][0 + i], arg0->unk_5B8,
+                                                         &arg0->unk_5A8->position);
+                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][4 + i], arg0->unk_5B8,
+                                                         &arg0->unk_5A8->position);
             }
         }
 

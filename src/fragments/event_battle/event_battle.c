@@ -138,7 +138,8 @@ void EventBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     Gfx_DrawTextureIa8(arg0 + temp_ft3, arg1 + temp_ft3, 0x10, 0x10, D_2000C80, 0x10, 0);
     Gfx_DrawTextureIa8(arg0 + temp_ft3, ((arg1 + arg3) - temp_ft3) - 0x10, 0x10, 0x10, D_2000F80, 0x10, 0);
     Gfx_DrawTextureIa8(((arg0 + arg2) - temp_ft3) - 0x10, arg1 + temp_ft3, 0x10, 0x10, D_2000D80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - temp_ft3) - 0x10, ((arg1 + arg3) - temp_ft3) - 0x10, 0x10, 0x10, D_2000E80, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - temp_ft3) - 0x10, ((arg1 + arg3) - temp_ft3) - 0x10, 0x10, 0x10, D_2000E80,
+                       0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -191,18 +192,20 @@ void EventBattle_DrawSlicedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -250,18 +253,20 @@ void EventBattle_DrawThinSlicedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -353,7 +358,7 @@ void EventBattle_DrawInfoBox(SlidingPanel* arg0) {
             Font_SetActive(8, 0);
             Font_SetLineHeight(0x18);
             Font_Printf(tmp2 + 0x20, sp3A + 8,
-                          Text_GetString(NULL, 0, D_82305A20, D_82305A50[D_82305A28.unk_02].unk_18));
+                        Text_GetString(NULL, 0, D_82305A20, D_82305A50[D_82305A28.unk_02].unk_18));
             Font_EndTexturedTextRendering();
         }
     }
@@ -433,7 +438,7 @@ void EventBattle_DrawRuleCard(unk_D_82305A50* arg0) {
         } else {
             Font_SetActive(8, 0);
             Font_Printf((temp_s1 - ((s16)Font_MeasureTextExtent(8, 0, arg0->unk_10) / 2)) + 0x7A, temp_s2 + 0x12,
-                          arg0->unk_10);
+                        arg0->unk_10);
         }
         Font_EndTexturedTextRendering();
     }
@@ -584,7 +589,8 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         Font_SetActive(8, 0);
         Font_Printf((sp58 - (Font_MeasureTextExtent(8, 0, arg0->unk_0014) / 2)) + 0x3E, sp56 + 0x2F, arg0->unk_0014);
         Font_SetActive(4, 0);
-        Font_Printf((sp58 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x3E, sp56 + 0x46, "ID  %05d", arg0->unk_0012);
+        Font_Printf((sp58 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x3E, sp56 + 0x46, "ID  %05d",
+                    arg0->unk_0012);
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
@@ -834,7 +840,8 @@ void EventBattle_DrawOptionLabel(unk_D_8230F528* arg0) {
         if (arg0->unk_02 == 0x30) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf((sp38 - ((s16)Font_MeasureTextExtent(0x10, 0, arg0->unk_08) / 2)) + 0x4C, sp36 + 0xB, arg0->unk_08);
+            Font_Printf((sp38 - ((s16)Font_MeasureTextExtent(0x10, 0, arg0->unk_08) / 2)) + 0x4C, sp36 + 0xB,
+                        arg0->unk_08);
             Font_EndTexturedTextRendering();
         }
     }
@@ -883,8 +890,8 @@ void EventBattle_DrawSettingLine(unk_D_82305A40* arg0, s16 arg1, s16 arg2, s16 a
     if (arg3 >= 0) {
         Text_SetNumberToken(2, arg4);
         Text_GetString(sp30, sizeof(sp30), D_82305A20, arg3);
-        Font_Printf((arg0->unk_08 - (Font_MeasureTextExtent(0, 0, sp30) / 2)) + 0x158, arg0->unk_0A + arg1 * 0x21 + 0x2F, sp30,
-                      arg4);
+        Font_Printf((arg0->unk_08 - (Font_MeasureTextExtent(0, 0, sp30) / 2)) + 0x158,
+                    arg0->unk_0A + arg1 * 0x21 + 0x2F, sp30, arg4);
     }
 }
 
@@ -1133,8 +1140,8 @@ void EventBattle_DrawFrame(s16 arg0) {
     }
 
     if (arg0 >= 0) {
-        EventBattle_DrawSelectionCorners(gEventBattleModes[arg0].unk_00, gEventBattleModes[arg0].unk_02, gEventBattleModes[arg0].unk_04,
-                      gEventBattleModes[arg0].unk_06);
+        EventBattle_DrawSelectionCorners(gEventBattleModes[arg0].unk_00, gEventBattleModes[arg0].unk_02,
+                                         gEventBattleModes[arg0].unk_04, gEventBattleModes[arg0].unk_06);
     }
 
     BgStage_AdvanceFrame();

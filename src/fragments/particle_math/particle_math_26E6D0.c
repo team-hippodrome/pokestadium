@@ -5,9 +5,9 @@
  * Palette operations change RGB only; primitive alpha has its own helpers.
  */
 static u8 sParticlePalette[][3] = {
-    { 0, 0, 0 }, /* [0] #000000 */
-    { 0, 0x14, 0x1E }, /* [1] #00141E */
-    { 0, 0x23, 0x2D }, /* [2] #00232D */
+    { 0, 0, 0 },          /* [0] #000000 */
+    { 0, 0x14, 0x1E },    /* [1] #00141E */
+    { 0, 0x23, 0x2D },    /* [2] #00232D */
     { 0x40, 0x40, 0x40 }, /* [3] #404040 */
     { 0x46, 0x55, 0x55 }, /* [4] #465555 */
     { 0x6E, 0x6E, 0x6E }, /* [5] #6E6E6E */
@@ -16,59 +16,59 @@ static u8 sParticlePalette[][3] = {
     { 0xC8, 0xFF, 0xFF }, /* [8] #C8FFFF */
     { 0xE6, 0xF0, 0xF0 }, /* [9] #E6F0F0 */
     { 0xFF, 0xFF, 0xFF }, /* [10] #FFFFFF */
-    { 0xFF, 0, 0 }, /* [11] #FF0000 */
+    { 0xFF, 0, 0 },       /* [11] #FF0000 */
     { 0xF0, 0x28, 0x28 }, /* [12] #F02828 */
     { 0xFF, 0x80, 0x80 }, /* [13] #FF8080 */
-    { 0xAA, 0x32, 0 }, /* [14] #AA3200 */
-    { 0x96, 0, 0 }, /* [15] #960000 */
-    { 0x64, 0, 0 }, /* [16] #640000 */
-    { 0x46, 0x14, 0 }, /* [17] #461400 */
-    { 0x32, 0xA, 0xA }, /* [18] #320A0A */
-    { 0xFF, 0x80, 0 }, /* [19] #FF8000 */
-    { 0xFF, 0xA0, 0 }, /* [20] #FFA000 */
+    { 0xAA, 0x32, 0 },    /* [14] #AA3200 */
+    { 0x96, 0, 0 },       /* [15] #960000 */
+    { 0x64, 0, 0 },       /* [16] #640000 */
+    { 0x46, 0x14, 0 },    /* [17] #461400 */
+    { 0x32, 0xA, 0xA },   /* [18] #320A0A */
+    { 0xFF, 0x80, 0 },    /* [19] #FF8000 */
+    { 0xFF, 0xA0, 0 },    /* [20] #FFA000 */
     { 0xF0, 0xDC, 0xD8 }, /* [21] #F0DCD8 */
     { 0xFF, 0xC8, 0xC8 }, /* [22] #FFC8C8 */
     { 0xFF, 0x78, 0xC8 }, /* [23] #FF78C8 */
-    { 0xFF, 0, 0x64 }, /* [24] #FF0064 */
-    { 0xFF, 0xFF, 0 }, /* [25] #FFFF00 */
+    { 0xFF, 0, 0x64 },    /* [24] #FF0064 */
+    { 0xFF, 0xFF, 0 },    /* [25] #FFFF00 */
     { 0xFF, 0xFF, 0x64 }, /* [26] #FFFF64 */
     { 0xFF, 0xFF, 0x9B }, /* [27] #FFFF9B */
     { 0xFF, 0xFF, 0xC8 }, /* [28] #FFFFC8 */
-    { 0xFF, 0xC8, 0 }, /* [29] #FFC800 */
+    { 0xFF, 0xC8, 0 },    /* [29] #FFC800 */
     { 0xD7, 0xFF, 0x73 }, /* [30] #D7FF73 */
-    { 0xC8, 0xC8, 0 }, /* [31] #C8C800 */
+    { 0xC8, 0xC8, 0 },    /* [31] #C8C800 */
     { 0x96, 0x96, 0x32 }, /* [32] #969632 */
-    { 0x64, 0x64, 0 }, /* [33] #646400 */
+    { 0x64, 0x64, 0 },    /* [33] #646400 */
     { 0x80, 0x80, 0x50 }, /* [34] #808050 */
-    { 0, 0xFF, 0 }, /* [35] #00FF00 */
+    { 0, 0xFF, 0 },       /* [35] #00FF00 */
     { 0x28, 0xFF, 0x28 }, /* [36] #28FF28 */
     { 0x64, 0xFF, 0x64 }, /* [37] #64FF64 */
     { 0x80, 0xFF, 0x80 }, /* [38] #80FF80 */
     { 0x9B, 0xFF, 0xC8 }, /* [39] #9BFFC8 */
     { 0x50, 0x64, 0x3C }, /* [40] #50643C */
-    { 0xC8, 0xFF, 0 }, /* [41] #C8FF00 */
-    { 0xC8, 0xC8, 0 }, /* [42] #C8C800 */
-    { 0x96, 0xB4, 0 }, /* [43] #96B400 */
-    { 0, 0x96, 0 }, /* [44] #009600 */
-    { 0, 0x64, 0 }, /* [45] #006400 */
-    { 0, 0, 0xFF }, /* [46] #0000FF */
+    { 0xC8, 0xFF, 0 },    /* [41] #C8FF00 */
+    { 0xC8, 0xC8, 0 },    /* [42] #C8C800 */
+    { 0x96, 0xB4, 0 },    /* [43] #96B400 */
+    { 0, 0x96, 0 },       /* [44] #009600 */
+    { 0, 0x64, 0 },       /* [45] #006400 */
+    { 0, 0, 0xFF },       /* [46] #0000FF */
     { 0x32, 0x32, 0xFF }, /* [47] #3232FF */
-    { 0, 0x32, 0xFF }, /* [48] #0032FF */
-    { 0, 0x64, 0xFF }, /* [49] #0064FF */
-    { 0, 0x78, 0xFF }, /* [50] #0078FF */
+    { 0, 0x32, 0xFF },    /* [48] #0032FF */
+    { 0, 0x64, 0xFF },    /* [49] #0064FF */
+    { 0, 0x78, 0xFF },    /* [50] #0078FF */
     { 0x20, 0x7C, 0xFF }, /* [51] #207CFF */
     { 0x80, 0x80, 0xFF }, /* [52] #8080FF */
     { 0x64, 0xC8, 0xFF }, /* [53] #64C8FF */
-    { 0, 0xFF, 0xFF }, /* [54] #00FFFF */
+    { 0, 0xFF, 0xFF },    /* [54] #00FFFF */
     { 0x64, 0xFF, 0xFF }, /* [55] #64FFFF */
     { 0xB4, 0xFF, 0xFF }, /* [56] #B4FFFF */
     { 0xC8, 0xFF, 0xFF }, /* [57] #C8FFFF */
     { 0x46, 0x64, 0x78 }, /* [58] #466478 */
-    { 0xFF, 0, 0xFF }, /* [59] #FF00FF */
+    { 0xFF, 0, 0xFF },    /* [59] #FF00FF */
     { 0xFF, 0x32, 0xFF }, /* [60] #FF32FF */
-    { 0xD7, 0, 0xFF }, /* [61] #D700FF */
-    { 0x96, 0, 0xC8 }, /* [62] #9600C8 */
-    { 0x64, 0, 0xFF }, /* [63] #6400FF */
+    { 0xD7, 0, 0xFF },    /* [61] #D700FF */
+    { 0x96, 0, 0xC8 },    /* [62] #9600C8 */
+    { 0x64, 0, 0xFF },    /* [63] #6400FF */
     { 0xFF, 0x32, 0xFF }, /* [64] #FF32FF */
     { 0x78, 0x1E, 0x78 }, /* [65] #781E78 */
 };
@@ -206,21 +206,25 @@ void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* particle, u
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrim(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimColorTextureCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->primAlpha);
+    ParticleGfx_SetPrimColorTextureCombine(particle->primRed, particle->primGreen, particle->primBlue,
+                                           particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E018);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnv(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140DFD8);
 }
 
-/* Disable back-face culling, draw the transformed primitive, then restore culling; the s32 function has no return statement. */
+/* Disable back-face culling, draw the transformed primitive, then restore culling; the s32 function has no return
+ * statement. */
 s32 ParticleGfx_DrawBillboardDoubleSided(Particle* particle, UNUSED CameraNode* camera) {
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawTransformedQuad(particle->worldPosition, particle->rotation, particle->scale, D_8140DFD8);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -233,14 +237,16 @@ void ParticleGfx_DrawBillboardDefaultQuad(Particle* particle, CameraNode* camera
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvQuad(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E018);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardTextureAlphaRotatedQuad(Particle* particle, CameraNode* camera) {
     ParticleGfx_SetTextureAlphaCombine(particle->primAlpha);
-    ParticleGfx_DrawModelQuadRotated(camera, particle->worldPosition, particle->scale, D_8140E108, particle->rotation.z);
+    ParticleGfx_DrawModelQuadRotated(camera, particle->worldPosition, particle->scale, D_8140E108,
+                                     particle->rotation.z);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
@@ -250,51 +256,62 @@ void ParticleGfx_DrawBillboardOffsetQuad(Particle* particle, CameraNode* camera)
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvNoiseQuad(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvNoiseCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvNoiseCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E018);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvRotatedQuad(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
-    ParticleGfx_DrawModelQuadRotated(camera, particle->worldPosition, particle->scale, D_8140E018, particle->rotation.z);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_DrawModelQuadRotated(camera, particle->worldPosition, particle->scale, D_8140E018,
+                                     particle->rotation.z);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvRotatedTriangle(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
-    ParticleGfx_DrawModelTriangleRotated(camera, particle->worldPosition, particle->scale, D_8140E0D8, particle->rotation.z);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_DrawModelTriangleRotated(camera, particle->worldPosition, particle->scale, D_8140E0D8,
+                                         particle->rotation.z);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvQuadVariantA(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E178);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvQuadVariantB(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E1F8);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvQuadVariantC(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E1B8);
 }
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvComposite(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_8140E2B8);
 }
 
-/* Disable back-face culling, draw the transformed primitive, then restore culling; the s32 function has no return statement. */
+/* Disable back-face culling, draw the transformed primitive, then restore culling; the s32 function has no return
+ * statement. */
 s32 ParticleGfx_DrawBillboardPrimEnvTriangleDoubleSided(Particle* particle, UNUSED CameraNode* camera) {
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawTransformedQuad(particle->worldPosition, particle->rotation, particle->scale, D_8140E2B8);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -302,7 +319,8 @@ s32 ParticleGfx_DrawBillboardPrimEnvTriangleDoubleSided(Particle* particle, UNUS
 
 /* Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template. */
 void ParticleGfx_DrawBillboardPrimEnvTransformedQuad(Particle* particle, CameraNode* camera) {
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawTransformedQuad(particle->worldPosition, particle->rotation, particle->scale, D_8140E378);
 }
 
@@ -365,7 +383,8 @@ void ParticleGfx_RecolorEnvFromPaletteSetB(Particle* particle, s16 palette_index
     ParticleGfx_RecolorEnv(particle, sParticlePaletteSetB[palette_index]);
 }
 
-/* Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha unchanged. */
+/* Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged. */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* particle, s16 palette_index) {
     u8 sp1F = sParticlePaletteSetA[palette_index];
 
@@ -373,7 +392,8 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* particle, s16 palette_i
     ParticleGfx_RecolorEnv(particle, sp1F);
 }
 
-/* Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha unchanged. */
+/* Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
+ * unchanged. */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* particle, s16 palette_index) {
     u8 sp1F = sParticlePaletteSetB[palette_index];
 
@@ -391,7 +411,8 @@ void ParticleGfx_RecolorEnvRandomPalette(Particle* particle) {
     ParticleGfx_RecolorEnv(particle, sParticleRandomPaletteIndices[ParticleMath_RandomRange(5) & 0xFF]);
 }
 
-/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report completion. */
+/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion. */
 s32 ParticleGfx_ApproachPrimPalette(Particle* particle, u16 palette_index, u8 step) {
     s32 sp2C = 0;
     s32 sp28;
@@ -411,7 +432,8 @@ s32 ParticleGfx_ApproachPrimPalette(Particle* particle, u16 palette_index, u8 st
     return sp2C;
 }
 
-/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report completion. */
+/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion. */
 s32 ParticleGfx_ApproachEnvPalette(Particle* particle, u16 palette_index, u8 step) {
     s32 sp2C = 0;
     s32 sp28;
@@ -431,7 +453,8 @@ s32 ParticleGfx_ApproachEnvPalette(Particle* particle, u16 palette_index, u8 ste
     return sp2C;
 }
 
-/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report completion. */
+/* Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
+ * completion. */
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* particle, u16 palette_index, u8 step) {
     s32 sp44 = 0;
     s32 sp40;

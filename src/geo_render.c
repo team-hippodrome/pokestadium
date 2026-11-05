@@ -31,11 +31,37 @@ unk_D_86002F34_alt1* D_8006F098 = NULL;
 DisplayObject* D_8006F09C = NULL;
 unk_D_86002F34_alt11* D_8006F0A0 = NULL;
 static func_D_8006F0A4 D_8006F0A4[] = {
-    Geo_ProcessNodeChildren, Geo_NodeReference, Geo_NodeCamera, Geo_NodeType3Pass, Geo_NodeModelRoot, Geo_NodeOrtho, Geo_NodePerspective,
-    Geo_NodeBackground, Geo_NodeClearDepth, Geo_NodeType9Empty, Geo_NodeFog, func_80013D34, Geo_NodeType12Empty, Geo_NodeAmbientLight,
-    Geo_NodeShadowContext, Geo_NodeShadow, Geo_NodeCullDistance, Geo_NodeSwitchCase, Geo_NodeTranslateRotate, Geo_NodeTranslate, Geo_NodeAnimatedPart,
-    Geo_NodeDisplayListPart, Geo_NodeModelPart, Geo_NodeDisplayListMatrix, Geo_NodeScale, Geo_NodeDisplayList, Geo_NodeShadowTexture, Geo_NodeAnchor,
-    Geo_NodeGroup, NULL,          NULL,
+    Geo_ProcessNodeChildren,
+    Geo_NodeReference,
+    Geo_NodeCamera,
+    Geo_NodeType3Pass,
+    Geo_NodeModelRoot,
+    Geo_NodeOrtho,
+    Geo_NodePerspective,
+    Geo_NodeBackground,
+    Geo_NodeClearDepth,
+    Geo_NodeType9Empty,
+    Geo_NodeFog,
+    func_80013D34,
+    Geo_NodeType12Empty,
+    Geo_NodeAmbientLight,
+    Geo_NodeShadowContext,
+    Geo_NodeShadow,
+    Geo_NodeCullDistance,
+    Geo_NodeSwitchCase,
+    Geo_NodeTranslateRotate,
+    Geo_NodeTranslate,
+    Geo_NodeAnimatedPart,
+    Geo_NodeDisplayListPart,
+    Geo_NodeModelPart,
+    Geo_NodeDisplayListMatrix,
+    Geo_NodeScale,
+    Geo_NodeDisplayList,
+    Geo_NodeShadowTexture,
+    Geo_NodeAnchor,
+    Geo_NodeGroup,
+    NULL,
+    NULL,
 };
 
 static s32 D_8006F120 = 0;
@@ -219,10 +245,14 @@ Vtx* GeoOverlay_BuildFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
                 break;
         }
 
-        Gfx_SetVertexAttributes(&temp_v0[0], arg1->unk_04, arg1->unk_10, -1, 0, 0, arg0->color.r, arg0->color.g, arg0->color.b, sp47);
-        Gfx_SetVertexAttributes(&temp_v0[1], arg1->unk_04, arg1->unk_0C, -1, 0, 0, arg0->color.r, arg0->color.g, arg0->color.b, sp47);
-        Gfx_SetVertexAttributes(&temp_v0[2], arg1->unk_08, arg1->unk_0C, -1, 0, 0, arg0->color.r, arg0->color.g, arg0->color.b, sp47);
-        Gfx_SetVertexAttributes(&temp_v0[3], arg1->unk_08, arg1->unk_10, -1, 0, 0, arg0->color.r, arg0->color.g, arg0->color.b, sp47);
+        Gfx_SetVertexAttributes(&temp_v0[0], arg1->unk_04, arg1->unk_10, -1, 0, 0, arg0->color.r, arg0->color.g,
+                                arg0->color.b, sp47);
+        Gfx_SetVertexAttributes(&temp_v0[1], arg1->unk_04, arg1->unk_0C, -1, 0, 0, arg0->color.r, arg0->color.g,
+                                arg0->color.b, sp47);
+        Gfx_SetVertexAttributes(&temp_v0[2], arg1->unk_08, arg1->unk_0C, -1, 0, 0, arg0->color.r, arg0->color.g,
+                                arg0->color.b, sp47);
+        Gfx_SetVertexAttributes(&temp_v0[3], arg1->unk_08, arg1->unk_10, -1, 0, 0, arg0->color.r, arg0->color.g,
+                                arg0->color.b, sp47);
     }
 
     return temp_v0;
@@ -251,8 +281,7 @@ void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
     }
 }
 
-void func_80012870(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
-                   s16 arg7) {
+void func_80012870(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
     f32 temp_fa0;
     f32 temp_fv1;
     u16 idx = arg1->unk_18;
@@ -444,10 +473,13 @@ void Geo_NodeCamera(GraphNode* arg0) {
     gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, temp_s0->x * 4.0f, temp_s0->y * 4.0f,
                       (temp_s0->x + temp_s0->width) * 4.0f, (temp_s0->y + temp_s0->height) * 4.0f);
 
-    guOrtho(temp_s2->unk_00, temp_s2->unk_04, temp_s2->unk_08, temp_s2->unk_0C, temp_s2->unk_10, temp_s2->unk_14, temp_s2->unk_18, temp_s2->unk_1C);
-    guPerspective(sp48->projectionMatrix, &sp48->unk_04, sp48->verticalFieldOfView, sp48->unk_0C, sp48->nearPlane, sp48->farPlane, sp48->unk_18);
-    guLookAtReflectF(&temp_s1->floatMatrix, temp_s1->unk_44, temp_s1->eyePosition.x, temp_s1->eyePosition.y, temp_s1->eyePosition.z, temp_s1->targetPosition.x,
-                     temp_s1->targetPosition.y, temp_s1->targetPosition.z, temp_s1->upDirection.x, temp_s1->upDirection.y, temp_s1->upDirection.z);
+    guOrtho(temp_s2->unk_00, temp_s2->unk_04, temp_s2->unk_08, temp_s2->unk_0C, temp_s2->unk_10, temp_s2->unk_14,
+            temp_s2->unk_18, temp_s2->unk_1C);
+    guPerspective(sp48->projectionMatrix, &sp48->unk_04, sp48->verticalFieldOfView, sp48->unk_0C, sp48->nearPlane,
+                  sp48->farPlane, sp48->unk_18);
+    guLookAtReflectF(&temp_s1->floatMatrix, temp_s1->unk_44, temp_s1->eyePosition.x, temp_s1->eyePosition.y,
+                     temp_s1->eyePosition.z, temp_s1->targetPosition.x, temp_s1->targetPosition.y,
+                     temp_s1->targetPosition.z, temp_s1->upDirection.x, temp_s1->upDirection.y, temp_s1->upDirection.z);
     MtxF_ToFixed(temp_s1->fixedMatrix, &temp_s1->floatMatrix);
 
     D_8006F088 = arg;
@@ -607,7 +639,6 @@ void func_80013D34(GraphNode* arg0) {
     D_8006F090->unk_1C++;
 }
 
-
 void Geo_NodeType12Empty(UNUSED GraphNode* arg0) {
 }
 
@@ -727,7 +758,8 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     ModelAnim_EvaluateJointTransform(&sp84, &sp90, &sp78, arg->unk_32 * 3);
 
     if (arg->unk_31 & 2) {
-        MtxF_BuildTransform(&sp38, &sp84, &sp90, &sp78, &D_8006F088->view.floatMatrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0]);
+        MtxF_BuildTransform(&sp38, &sp84, &sp90, &sp78, &D_8006F088->view.floatMatrix,
+                            &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0]);
         D_800AA8C8.unk_10A0++;
         GeoRender_SetMatrix(&sp38);
     } else if (arg->unk_31 & 1) {
@@ -747,7 +779,7 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
                           &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0 - 1]);
         }
         MtxF_ScaleRows(&D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0], &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0 + 32],
-                      &D_800AB970.unk_000[D_800AB970.unk_180]);
+                       &D_800AB970.unk_000[D_800AB970.unk_180]);
         GeoRender_CommitMatrix();
         D_800AA8C8.unk_1080[D_800AA8C8.unk_10A0] = 1;
         sp30 = 1;
@@ -787,8 +819,8 @@ void Geo_NodeModelPart(GraphNode* arg0) {
         if (arg->node.renderFlags & 0x10) {
             MtxF_Multiply(&sp38, &arg->matrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0]);
         } else if (arg->node.renderFlags & 8) {
-            MtxF_ApplyScaleTransform(&sp38, &D_8006F088->view.floatMatrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0], &arg->position,
-                          1.0f);
+            MtxF_ApplyScaleTransform(&sp38, &D_8006F088->view.floatMatrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0],
+                                     &arg->position, 1.0f);
         } else if (arg->node.renderFlags & 0x80) {
             MtxF_SetRotationAndTransformTranslation(&sp38, &arg->position, &arg->rotation);
             MtxF_Multiply(&sp38, &sp38, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0]);
@@ -846,8 +878,8 @@ void Geo_NodeScale(GraphNode* arg0) {
     MtxF sp30;
     unk_D_86002F34_alt9* arg = (unk_D_86002F34_alt9*)arg0;
 
-    MtxF_ApplyScaleTransform(&sp30, &D_8006F088->view.floatMatrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0], &arg->unk_1C,
-                  arg->unk_28);
+    MtxF_ApplyScaleTransform(&sp30, &D_8006F088->view.floatMatrix, &D_800AA8C8.unk_0000[D_800AA8C8.unk_10A0],
+                             &arg->unk_1C, arg->unk_28);
     D_800AA8C8.unk_10A0++;
     GeoRender_SetMatrix(&sp30);
 
@@ -1113,11 +1145,12 @@ Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id
 }
 
 void GeoRender_SetCombineMode(Gfx* arg0, ParticleCombineMux* arg1) {
-    gDPSetCombine(arg0++,
-                  GCCc0w0(arg1->colorA0, arg1->colorC0, arg1->alphaA0, arg1->alphaC0) | GCCc1w0(arg1->colorA1, arg1->colorC1),
+    gDPSetCombine(
+        arg0++,
+        GCCc0w0(arg1->colorA0, arg1->colorC0, arg1->alphaA0, arg1->alphaC0) | GCCc1w0(arg1->colorA1, arg1->colorC1),
 
-                  GCCc0w1(arg1->colorB0, arg1->colorD0, arg1->alphaB0, arg1->alphaD0) |
-                      GCCc1w1(arg1->colorB1, arg1->alphaA1, arg1->alphaC1, arg1->colorD1, arg1->alphaB1, arg1->alphaD1));
+        GCCc0w1(arg1->colorB0, arg1->colorD0, arg1->alphaB0, arg1->alphaD0) |
+            GCCc1w1(arg1->colorB1, arg1->alphaA1, arg1->alphaC1, arg1->colorD1, arg1->alphaB1, arg1->alphaD1));
 }
 
 void GeoRender_SyncMaterialState(void) {
@@ -1397,8 +1430,8 @@ void GeoRender_SetMaterialParams(Color_RGBA8_u32 arg0, u8 arg1, u32 arg2) {
     D_800ABB10.unk_02 = arg2;
 }
 
-void GeoRender_SetMaterialTexture(s32 arg0, Color_RGBA8_u32 arg1, unk_D_86002F34_alt11_018* arg2, unk_D_86002F34_alt11_018* arg3,
-                   s32 arg4) {
+void GeoRender_SetMaterialTexture(s32 arg0, Color_RGBA8_u32 arg1, unk_D_86002F34_alt11_018* arg2,
+                                  unk_D_86002F34_alt11_018* arg3, s32 arg4) {
     D_800ABB10.unk_00 = arg0;
     D_800ABB10.unk_04.rgba = arg1.rgba;
     D_800ABB10.unk_0C = arg2;

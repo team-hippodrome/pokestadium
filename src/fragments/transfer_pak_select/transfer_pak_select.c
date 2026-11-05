@@ -58,9 +58,9 @@ static char D_81303C98[] = "ずかんが、\nありません。";
 static s16 D_81303CB0 = 0;
 
 static u32 D_81303CB4[] = {
-    0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243, 0x05000000,
-    0x0D000000,  0x05000000, 0x14000000, 0x002D013B, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002, 0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
+    0x0C000000, 0x05000000, 0x0B00002D,  0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243,
+    0x05000000, 0x0D000000, 0x05000000,  0x14000000, 0x002D013B, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002,
+    0x05000000, 0x0A000000, &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
 #if !defined(VERSION_JP)
     0x00000000,
 #endif
@@ -70,7 +70,8 @@ static u32 D_81303CB4[] = {
 // Prompt texts that the other builds read from string table 0x1F (entries 0x12 and 0x13) in
 // TransferPak_DrawPortSelectOverlay.
 static char* D_81303B94_jp = "ゲームボーイのカートリッジをえらんでください。";
-static char* D_81303B98_jp = "ポケモンの カートリッジが セット\nされていません。 でんげんをきってから\nカートリッジを セットしてください。";
+static char* D_81303B98_jp =
+    "ポケモンの カートリッジが セット\nされていません。 でんげんをきってから\nカートリッジを セットしてください。";
 #endif
 
 static Vtx D_81303D18[] = {
@@ -100,8 +101,9 @@ static Gfx D_81303DD8[] = {
 };
 
 static u32 D_81303EC0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_81303D18, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, TransferPak_RenderPortNodeCallback, D_81303DD8, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_81303D18,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, TransferPak_RenderPortNodeCallback,
+    D_81303DD8, 0x06000000, 0x01000000,
 };
 
 static u32 D_81303EF4[] = {
@@ -307,7 +309,7 @@ void TransferPak_DrawPortBox(s32 arg0, s32 arg1, s32 arg2) {
     if (D_81303FA8[arg0].unk_00 == 0) {
         Font_SetActive(8, 0);
         Font_Printf((arg1 - (Font_MeasureTextExtent(0, 0, D_81303FA8[arg0].unk_08) / 2)) + 0x3C, arg2 + 0xA,
-                      D_81303FA8[arg0].unk_08);
+                    D_81303FA8[arg0].unk_08);
         Font_SetActive(4, 0);
         sprintf(D_81304660, "ID %05d", D_81303FA8[arg0].unk_06);
         Font_Printf((arg1 - (Font_MeasureTextExtent(0, 0, D_81304660) / 2)) + 0x3C, arg2 + 0x1E, D_81304660);
@@ -463,18 +465,20 @@ void TransferPak_DrawPromptPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -515,7 +519,7 @@ void TransferPak_DrawPortSelectOverlay(void) {
 #else
         Font_SetActive(0x10, 0);
         Font_Printf(0x132 - (Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, D_81304658, 0x12)) / 2), 0x1A1,
-                      Text_GetString(NULL, 0, D_81304658, 0x12));
+                    Text_GetString(NULL, 0, D_81304658, 0x12));
 #endif
         Font_EndTexturedTextRendering();
         TransferPak_DrawPortBox(0, 0x38, 0x2E);
@@ -923,8 +927,9 @@ void func_8130306C(u8* arg0) {
         for (j = 0; j < 20; j++) {
             gDPPipeSync(gfx++);
 
-            gDPLoadTextureBlock(gfx++, arg0 + (i * 0x14 + j) * 0x200, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureBlock(gfx++, arg0 + (i * 0x14 + j) * 0x200, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(gfx++, (j * 0x20) << 2, (i * 0x20) << 2, ((j + 1) * 0x20) << 2, ((i + 1) * 0x20) << 2,
                                 G_TX_RENDERTILE, 0, 0, 0x0200, 0x0200);
         }

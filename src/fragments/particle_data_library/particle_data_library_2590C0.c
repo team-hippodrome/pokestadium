@@ -30,8 +30,8 @@ void DisplayList_SetFlagInRange(s32 arg0, unk_arg1_func_81003E00* arg1) {
         temp_v0 = arg1->unk_14;
         var_v1 = 0;
         if (D_8006F09C->transformAnim.animationId == temp_v0->unk_00) {
-            temp_a2 = ((s32) D_8006F09C->transformAnim.frameFixed >> 0x10) & 0xFFFF;
-            if ((temp_a2 >= (s32) temp_v0->unk_02) && ((s32) temp_v0->unk_04 >= temp_a2)) {
+            temp_a2 = ((s32)D_8006F09C->transformAnim.frameFixed >> 0x10) & 0xFFFF;
+            if ((temp_a2 >= (s32)temp_v0->unk_02) && ((s32)temp_v0->unk_04 >= temp_a2)) {
                 var_v1 = 1;
             }
         }
@@ -55,8 +55,8 @@ void DisplayList_SetFlagOutOfRange(s32 arg0, unk_arg1_func_81003E00* arg1) {
         temp_v0 = arg1->unk_14;
         var_v1 = 1;
         if (D_8006F09C->transformAnim.animationId == temp_v0->unk_00) {
-            temp_a2 = ((s32) D_8006F09C->transformAnim.frameFixed >> 0x10) & 0xFFFF;
-            if ((temp_a2 >= (s32) temp_v0->unk_02) && ((s32) temp_v0->unk_04 >= temp_a2)) {
+            temp_a2 = ((s32)D_8006F09C->transformAnim.frameFixed >> 0x10) & 0xFFFF;
+            if ((temp_a2 >= (s32)temp_v0->unk_02) && ((s32)temp_v0->unk_04 >= temp_a2)) {
                 var_v1 = 0;
             }
         }

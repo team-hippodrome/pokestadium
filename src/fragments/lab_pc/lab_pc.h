@@ -496,11 +496,13 @@ void LabPC_DrawBoxCount(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2);
 void LabPC_BuildBoxCountLabel(unk_func_8820253C* arg0, s32 arg1, s32 arg2, unk_func_88205880_00D0* arg3);
 void LabPC_BoxCountLabel_SetBox(unk_func_8820253C* arg0, unk_func_88205880_00D0* arg1);
 s32 LabPC_BoxCountLabel_Draw(unk_func_8820253C* arg0, s32 arg1, s32 arg2);
-void LabPC_BuildBoxPairSelector(unk_func_882025E0_1A9780* arg0, unk_func_88200FA0_030_030* arg1, unk_func_88200FA0_030_030* arg2, unk_func_88203ED8* arg3, MemoryPool* arg4);
+void LabPC_BuildBoxPairSelector(unk_func_882025E0_1A9780* arg0, unk_func_88200FA0_030_030* arg1,
+                                unk_func_88200FA0_030_030* arg2, unk_func_88203ED8* arg3, MemoryPool* arg4);
 void LabPC_BoxPairSelector_SetFlags(unk_func_882025E0_1A9780* arg0, s32 arg1);
 void LabPC_BoxPairSelector_Refresh(unk_func_882025E0_1A9780* arg0);
 void LabPC_BoxPairSelector_SetActiveSide(unk_func_882025E0_1A9780* arg0, s32 arg1);
-void LabPC_BoxPairSelector_GetSelectedBoxes(unk_func_882025E0_1A9780* arg0, unk_func_88205880_00D0** arg1, unk_func_88205880_00D0** arg2);
+void LabPC_BoxPairSelector_GetSelectedBoxes(unk_func_882025E0_1A9780* arg0, unk_func_88205880_00D0** arg1,
+                                            unk_func_88205880_00D0** arg2);
 void LabPC_BoxPairSelector_GetSelectedBoxIds(unk_func_882025E0_1A9780* arg0, WidgetPoint* arg1, WidgetPoint* arg2);
 void LabPC_DisableEmptyBoxes(unk_func_88200FA0_030_030* arg0);
 void LabPC_DisableNonEmptyBoxes(unk_func_88200FA0_030_030* arg0);
@@ -553,7 +555,8 @@ void LabPC_SwapMenu_RefreshHighlight(unk_func_8820B12C_02C* arg0);
 void LabPC_SwapMenu_SetActiveSide(unk_func_8820B12C_02C* arg0, s32 arg1);
 void LabPC_SwapMenu_SetState(unk_func_8820B12C_02C* arg0, s32 arg1);
 void LabPC_SwapMenu_SwapSides(unk_func_8820B12C_02C* arg0);
-void LabPC_SwapMenu_GetSelectedMons(unk_func_8820B12C_02C* arg0, unk_func_88205880_00D0** arg1, unk_func_88205880_00D0** arg2);
+void LabPC_SwapMenu_GetSelectedMons(unk_func_8820B12C_02C* arg0, unk_func_88205880_00D0** arg1,
+                                    unk_func_88205880_00D0** arg2);
 void LabPC_SwapMenu_GetSelectedPositions(unk_func_8820B12C_02C* arg0, WidgetPoint* arg1, WidgetPoint* arg2);
 void LabPC_SwapMenu_SetPhase(unk_func_8820B12C_02C* arg0, s32 arg1);
 void LabPC_SwapMenu_Reset(unk_func_8820B12C_02C* arg0);
@@ -621,7 +624,8 @@ void LabItem_DropdownMenu_SetDisabledIndex(unk_func_8821421C_02C_070* arg0, s32 
 s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2, s32 arg3);
 void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, unk_func_8820BE14_02C_038* arg5);
 void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2, s32 arg3);
-void LabItem_ItemRowWidget_SetItem(unk_func_8821421C_02C_06C_02C_060* arg0, unk_func_8821421C_02C_06C_02C_060_02C_000 arg1);
+void LabItem_ItemRowWidget_SetItem(unk_func_8821421C_02C_06C_02C_060* arg0,
+                                   unk_func_8821421C_02C_06C_02C_060_02C_000 arg1);
 s32 LabItem_ItemRowWidget_Draw(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2);
 void LabItem_QuantitySpinner_Init(unk_func_8820E99C_030* arg0, s32 arg1);
 void LabItem_InitQuantitySpinnerDigits(unk_func_8820E99C_030* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
@@ -638,7 +642,8 @@ void LabItem_QuantitySpinner_Close(unk_func_8820E99C* arg0);
 void LabItem_InitGamePakLabelWidget(unk_func_8821421C_038_02C* arg0, unk_func_8850143C* arg1);
 s32 LabItem_DrawGamePakLabel(unk_func_8821421C_038_02C* arg0, s32 arg1, s32 arg2);
 void LabItem_GamePakLabelWidget_SetSlot(unk_func_8821421C_038_02C* arg0, unk_func_8821421C_038_050* arg1);
-void LabItem_DrawGamePakInfoCard(s32 arg0, s32 arg1, unk_func_8820EFD8* arg2, s32 arg3, s32 arg4, unk_func_8821421C_038_034* arg5);
+void LabItem_DrawGamePakInfoCard(s32 arg0, s32 arg1, unk_func_8820EFD8* arg2, s32 arg3, s32 arg4,
+                                 unk_func_8821421C_038_034* arg5);
 void LabItem_BindBoxScreenSlot(unk_func_8821421C_038* arg0, unk_func_8821421C_07C* arg1);
 s32 LabItem_BoxScreen_UpdatePageSelection(unk_func_8821421C_038* arg0);
 s32 LabItem_BoxScreen_HandleInput(unk_func_8821421C_038* arg0, Controller* arg1);
@@ -664,8 +669,10 @@ void LabItem_RemoveGridEntryAt(unk_func_8820BE14_02C_038* arg0, s32 arg1);
 void LabItem_RemoveSelectedGridEntry(unk_func_8820BE14_02C_038* arg0);
 void func_88210F74(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2);
 void LabItem_SubtractSelectedItemQuantity(unk_func_8820BE14_02C_038* arg0, s32 arg1);
-void LabItem_MoveSelectedItem(unk_func_8820BE14_02C_038* arg0, unk_func_8820BE14_02C_038* arg1, unk_func_8820E99C* arg2);
-s32 LabItem_CombineStackQuantities(unk_func_8821421C_02C_06C_02C_060_02C_000* arg0, unk_func_8821421C_02C_06C_02C_060_02C_000* arg1);
+void LabItem_MoveSelectedItem(unk_func_8820BE14_02C_038* arg0, unk_func_8820BE14_02C_038* arg1,
+                              unk_func_8820E99C* arg2);
+s32 LabItem_CombineStackQuantities(unk_func_8821421C_02C_06C_02C_060_02C_000* arg0,
+                                   unk_func_8821421C_02C_06C_02C_060_02C_000* arg1);
 void func_882111F8(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2);
 void LabItem_SwapEntries(unk_func_8820BE14_02C_038* arg0, unk_func_8820BE14_02C_038* arg1);
 void LabItem_CommitMove(unk_func_8821421C_02C_06C_02C* arg0, Controller* arg1);
@@ -689,10 +696,12 @@ void LabPC_ItemScreen_DrawLoop(unk_func_8821421C* arg0);
 void LabPC_ItemScreen_InputThread(unk_func_8821421C* arg0);
 void LabPC_ShowItems(FontContext* arg0);
 
-void LabPC_InitTabWidget(unk_func_882149A0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, Color_RGBA8 arg7, Color_RGBA8 arg8, Color_RGBA8 arg9);
+void LabPC_InitTabWidget(unk_func_882149A0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
+                         Color_RGBA8 arg7, Color_RGBA8 arg8, Color_RGBA8 arg9);
 s32 LabPC_DrawTabWidget(unk_func_882149A0* arg0, s32 arg1, s32 arg2);
 void LabPC_TabWidget_ToggleFlip(unk_func_882149A0* arg0);
-void LabPC_InitScrollableBoxGrid(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2, s32 arg3, void (*arg4)(), s32 arg5, s32 arg6, MemoryPool* arg7);
+void LabPC_InitScrollableBoxGrid(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2, s32 arg3, void (*arg4)(),
+                                 s32 arg5, s32 arg6, MemoryPool* arg7);
 void LabPC_SetGridBorderActive(unk_func_88200FA0_030_030* arg0, s32 arg1);
 void LabPC_BoxGrid_BindMessagePanel(unk_func_8820BE14_02C_038* arg0, unk_func_88507D4C* arg1);
 s32 LabPC_ScrollableGrid_UpdateScroll(unk_func_8820BE14_02C_038* arg0);
@@ -702,7 +711,8 @@ s32 func_882169D4(unk_func_8820BE14_02C_038* arg0, Controller* arg1);
 void LabPC_ScrollableGrid_SetSwapMode(unk_func_8820BE14_02C_038* arg0, s32 arg1);
 void LabPC_BindGridDeckData(unk_func_8820BE14_02C_038* arg0, unk_func_8820BE14_06C_000* arg1, u32 arg2);
 void LabPC_BindGridStridedData(unk_func_8820BE14_02C_038*, s32*, s32);
-void LabPC_InitPageCounterWidget(unk_func_882170A8* arg0, s32 arg1, s32 arg2, unk_func_8820BE14_02C_038* arg3, s32 arg4);
+void LabPC_InitPageCounterWidget(unk_func_882170A8* arg0, s32 arg1, s32 arg2, unk_func_8820BE14_02C_038* arg3,
+                                 s32 arg4);
 void LabPC_DrawPageCounterDigits(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 s32 LabPC_PageCounterWidget_Draw(unk_func_882170A8* arg0, s32 arg1, s32 arg2);
 void LabPC_InitFlyingIconWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
@@ -717,6 +727,5 @@ void LabPC_ModeToggleIcon_SetMode(unk_func_88217740* arg0, s32 arg1);
 void LabPC_ModeToggleIcon_SetPressed(unk_func_88217740* arg0);
 void LabPC_ModeToggleIcon_ClearPressed(unk_func_88217740* arg0);
 void LabPC_ModeToggleIcon_ToggleMode(unk_func_88217740* arg0);
-
 
 #endif // _FRAGMENT23_H_

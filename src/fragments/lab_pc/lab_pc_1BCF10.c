@@ -19,7 +19,7 @@ typedef struct unk_func_8820BE14_02C_038_02C {
 } unk_func_8820BE14_02C_038_02C; // size >= 0x5C
 
 void LabPC_InitTabWidget(unk_func_882149A0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,
-                   Color_RGBA8 arg7, Color_RGBA8 arg8, Color_RGBA8 arg9) {
+                         Color_RGBA8 arg7, Color_RGBA8 arg8, Color_RGBA8 arg9) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_882149A0));
 
     arg0->unk_00.unk_18 = LabPC_DrawTabWidget;
@@ -125,9 +125,10 @@ void LabPC_TabWidget_ToggleFlip(unk_func_882149A0* arg0) {
     arg0->unk_40 = !arg0->unk_40;
 }
 
-void LabPC_InitScrollableBoxGrid(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2, s32 arg3, void (*arg4)(), s32 arg5, s32 arg6,
-                   MemoryPool* arg7) {
-    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0, arg1, arg2, arg4, arg5, arg6, arg3, arg7);
+void LabPC_InitScrollableBoxGrid(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2, s32 arg3, void (*arg4)(),
+                                 s32 arg5, s32 arg6, MemoryPool* arg7) {
+    ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0, arg1, arg2, arg4, arg5, arg6, arg3,
+                                                                           arg7);
 
     arg0->unk_70 = 0;
     arg0->unk_74 = arg0->unk_00.unk_00.unk_1C;
@@ -333,7 +334,8 @@ s32 func_88216000(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2) {
     s32 width = 8;
     s32 temp_s0;
 
-    sp12C = ((unk_func_8820BE14_02C_038_02C*)arg0->unk_00.unk_2C)->unk_3E * ((unk_func_8820BE14_02C_038_02C*)arg0->unk_00.unk_2C)->unk_4A;
+    sp12C = ((unk_func_8820BE14_02C_038_02C*)arg0->unk_00.unk_2C)->unk_3E *
+            ((unk_func_8820BE14_02C_038_02C*)arg0->unk_00.unk_2C)->unk_4A;
 
     temp_s0 = ((arg0->unk_00.unk_00.unk_14.unk_00 / 2) + arg1) - 9;
 
@@ -349,8 +351,9 @@ s32 func_88216000(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2) {
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    gSPTextureRectangle(gDisplayListHead++, arg1 << 2, (arg2 * 4) & 0xFFF, (arg0->unk_00.unk_00.unk_14.unk_00 + arg1) << 2,
-                        (arg2 + 0x10) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+    gSPTextureRectangle(gDisplayListHead++, arg1 << 2, (arg2 * 4) & 0xFFF,
+                        (arg0->unk_00.unk_00.unk_14.unk_00 + arg1) << 2, (arg2 + 0x10) << 2, G_TX_RENDERTILE, 0, 0,
+                        0x0400, 0x0400);
 
     gDPPipeSync(gDisplayListHead++);
 
@@ -360,29 +363,35 @@ s32 func_88216000(unk_func_8820BE14_02C_038* arg0, s32 arg1, s32 arg2) {
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
 
     if (arg0->unk_00.unk_30 == 0) {
-        gDPLoadTextureBlock(gDisplayListHead++, (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 > 0) ? D_4002368 : D_4002D88,
+        gDPLoadTextureBlock(gDisplayListHead++,
+                            (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 > 0) ? D_4002368
+                                                                                                  : D_4002D88,
                             G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, temp_s0 << 2, (arg2 * 4) & 0xFFF, (temp_s0 + 0x11) << 2, (arg2 + 0xF) << 2,
-                            G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+        gSPTextureRectangle(gDisplayListHead++, temp_s0 << 2, (arg2 * 4) & 0xFFF, (temp_s0 + 0x11) << 2,
+                            (arg2 + 0xF) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
 
-        gDPLoadTextureBlock(gDisplayListHead++, (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 > 0) ? D_4002878 : D_4003298,
+        gDPLoadTextureBlock(gDisplayListHead++,
+                            (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 > 0) ? D_4002878
+                                                                                                  : D_4003298,
                             G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, (temp_s0 - 0x1C) << 2, (arg2 * 4) & 0xFFF, (temp_s0 - 9) << 2, (arg2 + 0xF) << 2,
-                            G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+        gSPTextureRectangle(gDisplayListHead++, (temp_s0 - 0x1C) << 2, (arg2 * 4) & 0xFFF, (temp_s0 - 9) << 2,
+                            (arg2 + 0xF) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
     } else {
         s32 var_t5 = 0;
         if ((((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_2C != NULL) &&
-            ((((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 + sp12C) < (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_3E * (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_2C->unk_08 + 1)))) {
+            ((((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_58 + sp12C) <
+             (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_3E *
+              (((unk_func_8820BE14_02C_038_02C*)(arg0->unk_00.unk_2C))->unk_2C->unk_08 + 1)))) {
             var_t5 = 1;
         }
 
         gDPLoadTextureBlock(gDisplayListHead++, var_t5 != 0 ? D_40025F0 : D_4003010, G_IM_FMT_RGBA, G_IM_SIZ_16b, 20,
                             16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, temp_s0 << 2, (arg2 * 4) & 0xFFF, (temp_s0 + 0x11) << 2, (arg2 + 0xF) << 2,
-                            G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+        gSPTextureRectangle(gDisplayListHead++, temp_s0 << 2, (arg2 * 4) & 0xFFF, (temp_s0 + 0x11) << 2,
+                            (arg2 + 0xF) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
 
         gDPLoadTextureBlock(gDisplayListHead++, var_t5 != 0 ? D_4002B00 : D_4003520, G_IM_FMT_RGBA, G_IM_SIZ_16b, 20,
                             16, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
@@ -596,7 +605,8 @@ void LabPC_ScrollableGrid_SetSwapMode(unk_func_8820BE14_02C_038* arg0, s32 arg1)
         arg0->unk_00.unk_00.unk_20 = arg0->unk_7C;
         arg0->unk_84->unk_00.unk_18 = arg0->unk_80;
         if ((arg1 == 1) && (arg0->unk_00.unk_38 > 0) && (arg0->unk_00.unk_2C->unk_08 > 0)) {
-            ((func88507B80)Memmap_GetFragmentVaddr(WidgetTree_SetScrollableGridIndexPreserveScroll))(arg0, arg0->unk_00.unk_38 - 1);
+            ((func88507B80)Memmap_GetFragmentVaddr(WidgetTree_SetScrollableGridIndexPreserveScroll))(
+                arg0, arg0->unk_00.unk_38 - 1);
         }
     }
 }
@@ -613,7 +623,8 @@ void LabPC_BindGridStridedData(unk_func_8820BE14_02C_038* arg0, s32* arg1, s32 a
     ((func88506F50)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridStridedData))(arg0, arg1 + 1);
 }
 
-void LabPC_InitPageCounterWidget(unk_func_882170A8* arg0, s32 arg1, s32 arg2, unk_func_8820BE14_02C_038* arg3, s32 arg4) {
+void LabPC_InitPageCounterWidget(unk_func_882170A8* arg0, s32 arg1, s32 arg2, unk_func_8820BE14_02C_038* arg3,
+                                 s32 arg4) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_882170A8));
 
     arg0->unk_00.unk_18 = LabPC_PageCounterWidget_Draw;

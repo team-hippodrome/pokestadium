@@ -38,8 +38,9 @@ static Gfx D_84B164A0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B16588[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B163E0, 0x05000000, 0x22010000,
-    0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIcon, D_84B164A0, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B163E0,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIcon,
+    D_84B164A0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B165C0[] = {
     VTX(-24, 25, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),      VTX(-24, 0, 0, 0, 800, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -61,9 +62,10 @@ static Gfx D_84B16640[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B166E8[] = {
-    0x17000000,    0x00000000, 0x00000000, 0x00000000, D_84B165C0, 0x05000000, 0x1B000000,
-    0x00000000,    0x00000000, 0x00050000, 0x05000000, 0x22050000, 0x00000000, 0x08000000,
-    BattlePrepBadgeAward_DrawBadgeIconAlt, D_84B16640, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B165C0,
+    0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00050000,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIconAlt,
+    D_84B16640, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16738[] = {
     VTX(-16, 16, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -82,8 +84,9 @@ static Gfx D_84B16778[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B167E0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16738, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepBadgeAward_DrawSparkle, D_84B16778, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16738,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawSparkle,
+    D_84B16778, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16818[] = {
     VTX(-32, 32, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),       VTX(-32, 0, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -107,8 +110,9 @@ static Gfx D_84B16898[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B16948[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B16818, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepBadgeAward_DrawGlowFade, D_84B16898, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16818,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawGlowFade,
+    D_84B16898, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16980[] = {
     VTX(-16, 16, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -283,10 +287,12 @@ void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0) {
         if ((arg0->unk_01 % var_a0) == 0) {
             Audio_PlayCategory11SoundCommand(0x0110000E, var_s3 + 1, 0);
             Model_InitDisplayObject(&arg0->unk_04[8 + var_s3], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3], -289.0f);
+            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3],
+                                         -289.0f);
             arg0->unk_04[8 + var_s3].node.callbackArg = arg0;
             Model_InitDisplayObject(&arg0->unk_04[16 + var_s3], 0, 0, arg0->unk_10);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3] + 5, -289.0f);
+            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3],
+                                         D_84B163A0[var_s3] + 5, -289.0f);
             Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].scale, 2.5f, 2.5f, 2.5f);
             arg0->unk_04[16 + var_s3].node.callbackArg = arg0;
             arg0->unk_28[var_s3] = 0;
@@ -295,15 +301,18 @@ void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0) {
         if (var_a1 == (arg0->unk_01 - (var_s3 * var_a0))) {
             Audio_PlayCategory11SoundCommand(0x0110000F, 0, 0);
             Model_InitDisplayObject(&arg0->unk_04[8 + var_s3], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3], -289.0f);
+            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3],
+                                         -289.0f);
             arg0->unk_04[8 + var_s3].node.callbackArg = arg0;
             Model_InitDisplayObject(&arg0->unk_04[16 + var_s3], 0, 0, arg0->unk_10);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3] + 5, -289.0f);
+            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3],
+                                         D_84B163A0[var_s3] + 5, -289.0f);
             Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].scale, 6.0f, 6.0f, 6.0f);
             arg0->unk_04[16 + var_s3].node.callbackArg = arg0;
             arg0->unk_28[var_s3] = 0;
             Model_InitDisplayObject(&arg0->unk_04[24], 0, 0, arg0->unk_14);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[24].position, D_84B16390[var_s3], D_84B163A0[var_s3] + 5, -289.0f);
+            Vec3f_SetComponentsDuplicate(&arg0->unk_04[24].position, D_84B16390[var_s3], D_84B163A0[var_s3] + 5,
+                                         -289.0f);
             arg0->unk_04[24].node.callbackArg = arg0;
 
             for (i = 0; i < gSessionContext.roundOrDemoId - 1; i++) {

@@ -3,8 +3,9 @@
  * - PACKAGE_VERSION, e.g. with `-DPACKAGE_VERSION="\"$(LC_ALL=C git --git-dir .git describe --tags --dirty)\""`
  * - DATETIME, e.g. with `-DDATETIME="\"$(date +'%F %T UTC%z')\""`
  *
- * The code in this file is mostly taken from 
- * - CPython: https://github.com/python/cpython/, licensed under the PSF, available here: https://docs.python.org/3/license.html
+ * The code in this file is mostly taken from
+ * - CPython: https://github.com/python/cpython/, licensed under the PSF, available here:
+ * https://docs.python.org/3/license.html
  * - The Ocarina of Time practice rom, gz: https://github.com/glankk/gz/
  */
 #include <stdio.h>

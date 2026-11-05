@@ -16,7 +16,6 @@ extern "C" {
 
 #define RAB_REGISTERS_COUNT 32
 
-
 typedef struct RabbitizerRegistersTracker {
     RabbitizerTrackedRegisterState registers[RAB_REGISTERS_COUNT];
 } RabbitizerRegistersTracker;
@@ -33,15 +32,18 @@ bool RabbitizerRegistersTracker_moveRegisters(RabbitizerRegistersTracker *self, 
 NON_NULL(1, 2)
 void RabbitizerRegistersTracker_overwriteRegisters(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset);
 NON_NULL(1, 2, 3)
-void RabbitizerRegistersTracker_unsetRegistersAfterFuncCall(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, const RabbitizerInstruction *prevInstr);
+void RabbitizerRegistersTracker_unsetRegistersAfterFuncCall(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr,
+                                                            const RabbitizerInstruction *prevInstr);
 NON_NULL(1, 2, 4)
-bool RabbitizerRegistersTracker_getAddressIfCanSetType(const RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset, uint32_t *dstAddress);
+bool RabbitizerRegistersTracker_getAddressIfCanSetType(const RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset,
+                                                       uint32_t *dstAddress);
 NON_NULL(1, 2, 3, 4)
 bool RabbitizerRegistersTracker_getJrInfo(const RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int *dstOffset, uint32_t *dstAddress);
 
 // prevInstr can be NULL
 NON_NULL(1, 2)
-void RabbitizerRegistersTracker_processLui(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset, const RabbitizerInstruction *prevInstr);
+void RabbitizerRegistersTracker_processLui(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset,
+                                           const RabbitizerInstruction *prevInstr);
 NON_NULL(1, 2)
 void RabbitizerRegistersTracker_processGpLoad(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset);
 NON_NULL(1, 2, 3)
@@ -49,14 +51,14 @@ bool RabbitizerRegistersTracker_getLuiOffsetForConstant(const RabbitizerRegister
 NON_NULL(1, 2)
 void RabbitizerRegistersTracker_processConstant(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, uint32_t value, int offset);
 NON_NULL(1, 2, 4, 5) // deprecated
-bool RabbitizerRegistersTracker_getLuiOffsetForLo(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset, int *dstOffset, bool *dstIsGp);
-NODISCARD NON_NULL(1, 2)
-RabbitizerLoPairingInfo RabbitizerRegistersTracker_preprocessLoAndGetInfo(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset);
+bool RabbitizerRegistersTracker_getLuiOffsetForLo(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset, int *dstOffset,
+                                                  bool *dstIsGp);
+NODISCARD NON_NULL(1, 2) RabbitizerLoPairingInfo
+    RabbitizerRegistersTracker_preprocessLoAndGetInfo(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, int instrOffset);
 NON_NULL(1, 2)
 void RabbitizerRegistersTracker_processLo(RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr, uint32_t value, int offset);
 NON_NULL(1, 2)
 bool RabbitizerRegistersTracker_hasLoButNoHi(const RabbitizerRegistersTracker *self, const RabbitizerInstruction *instr);
-
 
 #ifdef __cplusplus
 }

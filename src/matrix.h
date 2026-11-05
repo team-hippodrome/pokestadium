@@ -60,5 +60,4 @@ Color_RGBA8_u32* Color_HSVToRGBA8(Color_RGBA8_u32* arg0, Vec3f* arg1, s32 arg2);
 u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1);
 u32 Color_AdjustRGBA8(u32 arg0, arg1_func_80010CA8 arg1);
 
-
 #endif // _F420_H_

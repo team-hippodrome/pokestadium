@@ -78,7 +78,8 @@ typedef struct BattleMon {
 
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
-    /* 0x002 */ u8 numberOfPokemonCanBePicked; // Only changes for Free Battle and VS Mewtwo, see @src/fragments/battle_engine/battle_engine_main.c
+    /* 0x002 */ u8 numberOfPokemonCanBePicked; // Only changes for Free Battle and VS Mewtwo, see
+                                               // @src/fragments/battle_engine/battle_engine_main.c
     /* 0x003 */ u8 unk_003;
     /* 0x004 */ char unk004[0x10];
     /* 0x014 */ char unk_014[4];
@@ -142,7 +143,7 @@ typedef struct SessionContext {
     /* 0x0874 */ ExtendedRosterInfo rosterInfo[4];
     /* 0x1194 */ BattleSessionTeams battleSides[2];
     /* 0x11E4 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
-    /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
+    /* 0x11EC */ u8 aiDifficulty;          // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
     /* 0x11ED */ u8 timeLimitsEnabled;
     /* 0x11EE */ u8 battleLimitMinutes;
     /* 0x11EF */ u8 orderLimitSeconds;
@@ -182,8 +183,6 @@ typedef struct SessionContext {
 #define SESSION_MODE_ATTRACT_DEMO_MINIGAME 25
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
-
-
 
 extern u16 D_80073660[16][256];
 extern s32 gCurrentGameState;

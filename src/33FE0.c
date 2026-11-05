@@ -6,203 +6,115 @@
 
 // .data
 s16 D_800763B0[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
-    5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10,
-    10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15,
-    15, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
-    5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10,
-    10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15,
-    15, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
-    5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10,
-    10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15,
-    15, 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4,
-    5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10,
-    10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15,
-    15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  2,  2,  2,
+    3,  3,  3,  4,  4,  4,  5,  5,  5,  6,  6,  6,  7,  7,  7,  8,  8,  8,  9,  9,  9,  10, 10, 10, 11, 11, 11, 12, 12,
+    12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 0,  0,  0,  1,  1,  1,  2,  2,  2,  3,  3,  3,  4,  4,  4,  5,  5,  5,  6,
+    6,  6,  7,  7,  7,  8,  8,  8,  9,  9,  9,  10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15, 15,
+    0,  0,  0,  1,  1,  1,  2,  2,  2,  3,  3,  3,  4,  4,  4,  5,  5,  5,  6,  6,  6,  7,  7,  7,  8,  8,  8,  9,  9,
+    9,  10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 0,  0,  0,  1,  1,  1,  2,  2,  2,  3,
+    3,  3,  4,  4,  4,  5,  5,  5,  6,  6,  6,  7,  7,  7,  8,  8,  8,  9,  9,  9,  10, 10, 10, 11, 11, 11, 12, 12, 12,
+    13, 13, 13, 14, 14, 14, 15, 15, 15, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 };
 
 s16 D_800765B4[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
-    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
-    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
-    3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
-    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
-    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
-    3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
-    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
-    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
-    3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
-    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
-    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
+    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
+    3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3,
+    1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1,
+    2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2,
+    3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_800767B8[0x102] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_800769BC[0x102] = {
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_80076BC0[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_80076DC4[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_80076FC8[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 0,
 };
 
 s16 D_800771CC[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 s16 D_800773D0[0x102] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
 f32 D_800775D4[16] = {
-    0.7f, 0.48999998f, 0.343f, 0.2401f,
-    0.16806999f, 0.11764899f, 0.08235429f, 0.057648003f,
-    0.0403536f, 0.02824752f, 0.019773263f, 0.013841284f,
-    0.009688899f, 0.006782229f, 0.0047475602f, 0.0033232921f,
+    0.7f,       0.48999998f, 0.343f,       0.2401f,      0.16806999f,  0.11764899f,  0.08235429f,   0.057648003f,
+    0.0403536f, 0.02824752f, 0.019773263f, 0.013841284f, 0.009688899f, 0.006782229f, 0.0047475602f, 0.0033232921f,
 };
 
 // Three zero words before the model tables at 0x80077620.
 u32 D_80077614[3] = { 0, 0, 0 };
 
 u32 D_80077620[40] = {
-    0xFFCE00AA, 0x00000000, 0x00000000, 0xFFFF00FF, 0xFFCE0078, 0x00000000,
-    0x00000200, 0xFFFF00FF, 0x00320078, 0x00000000, 0x04000200, 0xFFFF00FF,
-    0x003200AA, 0x00000000, 0x04000000, 0xFFFF00FF, 0xFFCE0046, 0x00000000,
-    0x00000400, 0xFFFF00FF, 0x00320046, 0x00000000, 0x04000400, 0xFFFF00FF,
-    0xFFCE0014, 0x00000000, 0x00000600, 0xFFFFC0FF, 0x00320014, 0x00000000,
-    0x04000600, 0xFFFFC0FF, 0xFFCEFFE2, 0x00000000, 0x00000800, 0xFFFF80FF,
-    0x0032FFE2, 0x00000000, 0x04000800, 0xFFFF80FF,
+    0xFFCE00AA, 0x00000000, 0x00000000, 0xFFFF00FF, 0xFFCE0078, 0x00000000, 0x00000200, 0xFFFF00FF,
+    0x00320078, 0x00000000, 0x04000200, 0xFFFF00FF, 0x003200AA, 0x00000000, 0x04000000, 0xFFFF00FF,
+    0xFFCE0046, 0x00000000, 0x00000400, 0xFFFF00FF, 0x00320046, 0x00000000, 0x04000400, 0xFFFF00FF,
+    0xFFCE0014, 0x00000000, 0x00000600, 0xFFFFC0FF, 0x00320014, 0x00000000, 0x04000600, 0xFFFFC0FF,
+    0xFFCEFFE2, 0x00000000, 0x00000800, 0xFFFF80FF, 0x0032FFE2, 0x00000000, 0x04000800, 0xFFFF80FF,
 };
 u32 D_800776C0[6] = {
     0x00000001, 0x00020003, 0x00040005, 0x00060007, 0x00080009, 0x00000000,
@@ -216,28 +128,24 @@ u32 D_80077708[12] = {
     0x00040006, 0x00070004, 0x00070005, 0x00060008, 0x00090006, 0x00090007,
 };
 u32 D_80077738[22] = {
-    0x00010002, 0x0003FFFF, 0x00000002, 0x00040005, 0xFFFF0000, 0x00010003,
-    0x0005FFFF, 0x00000002, 0xFFFF0001, 0x00050006, 0x0007FFFF, 0x00010004,
-    0x00020007, 0xFFFF0004, 0x00070008, 0x0009FFFF, 0x00040006, 0x00050009,
-    0xFFFF0006, 0x0009FFFF, 0x00060008, 0x0007FFFF,
+    0x00010002, 0x0003FFFF, 0x00000002, 0x00040005, 0xFFFF0000, 0x00010003, 0x0005FFFF, 0x00000002,
+    0xFFFF0001, 0x00050006, 0x0007FFFF, 0x00010004, 0x00020007, 0xFFFF0004, 0x00070008, 0x0009FFFF,
+    0x00040006, 0x00050009, 0xFFFF0006, 0x0009FFFF, 0x00060008, 0x0007FFFF,
 };
 u32 D_80077790[6] = {
     0x00CE00CB, 0x00CA00CD, 0x00980097, 0x00950094, 0x00920091, 0x00000000,
 };
 ModelSegment D_800777A8 = {
-    0x000A, 0x0000, 0x000A, 0x0008,
-    (u32) D_80077708, (u32) D_80077738, (u32) D_80077790,
-    (u32) D_800776C0, (u32) D_80077620, (Gfx*) D_800776D8,
+    0x000A,          0x0000,          0x000A,          0x0008,          (u32)D_80077708,
+    (u32)D_80077738, (u32)D_80077790, (u32)D_800776C0, (u32)D_80077620, (Gfx*)D_800776D8,
 };
 
 u32 D_800777C8[40] = {
-    0xFFCE00C8, 0x00000000, 0x00000000, 0xFFFF00FF, 0xFFCE0096, 0x00000000,
-    0x00000200, 0xFFFF00FF, 0x00320096, 0x00000000, 0x04000200, 0xFFFF00FF,
-    0x003200C8, 0x00000000, 0x04000000, 0xFFFF00FF, 0xFFCE0064, 0x00000000,
-    0x00000400, 0xFFFF00FF, 0x00320064, 0x00000000, 0x04000400, 0xFFFF00FF,
-    0xFFCE0032, 0x00000000, 0x00000600, 0xFFFFC0FF, 0x00320032, 0x00000000,
-    0x04000600, 0xFFFFC0FF, 0xFFCE0000, 0x00000000, 0x00000800, 0xFFFF80FF,
-    0x00320000, 0x00000000, 0x04000800, 0xFFFF80FF,
+    0xFFCE00C8, 0x00000000, 0x00000000, 0xFFFF00FF, 0xFFCE0096, 0x00000000, 0x00000200, 0xFFFF00FF,
+    0x00320096, 0x00000000, 0x04000200, 0xFFFF00FF, 0x003200C8, 0x00000000, 0x04000000, 0xFFFF00FF,
+    0xFFCE0064, 0x00000000, 0x00000400, 0xFFFF00FF, 0x00320064, 0x00000000, 0x04000400, 0xFFFF00FF,
+    0xFFCE0032, 0x00000000, 0x00000600, 0xFFFFC0FF, 0x00320032, 0x00000000, 0x04000600, 0xFFFFC0FF,
+    0xFFCE0000, 0x00000000, 0x00000800, 0xFFFF80FF, 0x00320000, 0x00000000, 0x04000800, 0xFFFF80FF,
 };
 u32 D_80077868[6] = {
     0x00000001, 0x00020003, 0x00040005, 0x00060007, 0x00080009, 0x00000000,
@@ -251,18 +159,16 @@ u32 D_800778B0[12] = {
     0x00040006, 0x00070004, 0x00070005, 0x00060008, 0x00090006, 0x00090007,
 };
 u32 D_800778E0[22] = {
-    0x00010002, 0x0003FFFF, 0x00000002, 0x00040005, 0xFFFF0000, 0x00010003,
-    0x0005FFFF, 0x00000002, 0xFFFF0001, 0x00050006, 0x0007FFFF, 0x00010004,
-    0x00020007, 0xFFFF0004, 0x00070008, 0x0009FFFF, 0x00040006, 0x00050009,
-    0xFFFF0006, 0x0009FFFF, 0x00060008, 0x0007FFFF,
+    0x00010002, 0x0003FFFF, 0x00000002, 0x00040005, 0xFFFF0000, 0x00010003, 0x0005FFFF, 0x00000002,
+    0xFFFF0001, 0x00050006, 0x0007FFFF, 0x00010004, 0x00020007, 0xFFFF0004, 0x00070008, 0x0009FFFF,
+    0x00040006, 0x00050009, 0xFFFF0006, 0x0009FFFF, 0x00060008, 0x0007FFFF,
 };
 u32 D_80077938[6] = {
     0x00CE00CB, 0x00CA00CD, 0x00980097, 0x00950094, 0x00920091, 0x00000000,
 };
 ModelSegment D_80077950 = {
-    0x000B, 0x0000, 0x000A, 0x0008,
-    (u32) D_800778B0, (u32) D_800778E0, (u32) D_80077938,
-    (u32) D_80077868, (u32) D_800777C8, (Gfx*) D_80077880,
+    0x000B,          0x0000,          0x000A,          0x0008,          (u32)D_800778B0,
+    (u32)D_800778E0, (u32)D_80077938, (u32)D_80077868, (u32)D_800777C8, (Gfx*)D_80077880,
 };
 
 // .bss
@@ -297,11 +203,7 @@ void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, 
     *cz = (ax * by) - (ay * bx);
 }
 
-f32 func_800334C0(
-    f32 px, f32 py, f32 pz,
-    f32 ax, f32 ay, f32 az,
-    f32 bx, f32 by, f32 bz
-) {
+f32 func_800334C0(f32 px, f32 py, f32 pz, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz) {
     UNUSED s32 pad[4];
     f32 lenSq;
 
@@ -314,12 +216,8 @@ f32 func_800334C0(
     return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / lenSq;
 }
 
-f32 func_80033568(
-    f32 px, f32 py, f32 pz,
-    f32 ax, f32 ay, f32 az,
-    f32 bx, f32 by, f32 bz,
-    f32* outX, f32* outY, f32* outZ
-) {
+f32 func_80033568(f32 px, f32 py, f32 pz, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* outX, f32* outY,
+                  f32* outZ) {
     f32 dx;
     f32 dy;
     f32 dz;
@@ -355,7 +253,7 @@ f32 func_80033568(
 s16 Model_GetVertexClass(s16* table, s32 index) {
     s16 temp;
     s16 slot = table[index];
-    
+
     temp = D_800769BC[slot];
     if (temp > 0) {
         return 0;
@@ -442,7 +340,6 @@ s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1) {
 }
 
 void func_800338B0(void) {
-
 }
 
 s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1) {
@@ -530,7 +427,7 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
     }
 }
 
-void func_80033B2C(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
+void func_80033B2C(StadiumModel* model, void* arg1, void* arg2, void* arg3) {
     f32 sp4C;
     f32 sp48;
     f32 sp44;
@@ -591,7 +488,8 @@ void func_80033D1C(StadiumModel* model, MtxF* mtx) {
     func_800357F4(model);
 }
 
-void func_80033D44(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, MtxF* mtx) {
+void func_80033D44(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz,
+                   MtxF* mtx) {
     ModelSegment* segment;
     f32 cx, cy, cz;
     f32 dx, dy, dz;
@@ -613,7 +511,7 @@ void func_80033D44(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
     s16 index;
     s32 i;
 
-    segment = (ModelSegment*) Memmap_GetSegmentVaddr(model->modelSegment);
+    segment = (ModelSegment*)Memmap_GetSegmentVaddr(model->modelSegment);
     index = model->unk_02++;
 
     vx = bx - ax;
@@ -702,7 +600,7 @@ void func_80034254(StadiumModel* model) {
     indexTable = Memmap_GetSegmentVaddr(segment->remapSegment);
     temp_a1 = &model->mvtx;
     var_a2 = temp_a1;
-    for(i = 0; i < segment->vertexCount; i++) {
+    for (i = 0; i < segment->vertexCount; i++) {
         var_a2->position.nextIndex = -1;
         var_a2++;
     }
@@ -777,7 +675,7 @@ void func_80034348(ModelSegment* segment, ModelVertex* vertices) {
         ny = ((z1 - z0) * (x2 - x1)) - ((x1 - x0) * (z2 - z1));
         nz = ((x1 - x0) * (y2 - y1)) - ((y1 - y0) * (x2 - x1));
         len = sqrtf((nx * nx) + (ny * ny) + (nz * nz));
-        if ((s32) len > 0) {
+        if ((s32)len > 0) {
             scale = 120.0f / len;
             nx *= scale;
             ny *= scale;
@@ -991,7 +889,8 @@ void func_80034BD4(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVerte
             temp_fs1 = vtx->position.base.y;
             temp_fs2 = vtx->position.base.z;
             temp_s1_3 = 1 << index;
-            temp_fv0 = func_80033568(temp_fs0, temp_fs1, temp_fs2, sp180, sp17C, sp178, sp174, sp170, sp16C, &sp104, &sp100, &spFC);
+            temp_fv0 = func_80033568(temp_fs0, temp_fs1, temp_fs2, sp180, sp17C, sp178, sp174, sp170, sp16C, &sp104,
+                                     &sp100, &spFC);
             temp_v0_2 = &vtx->position;
             if ((temp_fv0 > 0.0f) && (temp_fv0 < xf->maxDist)) {
                 wt = &vtx->cmd.weights[index];
@@ -1018,9 +917,9 @@ void Model_TransformPoint(MtxF* mtx, Vec3f* out, s16 (*in)[3]) {
     f32 sp30;
     f32 sp2C;
 
-    sp34 = (f32) (*in)[0];
-    sp30 = (f32) (*in)[1];
-    sp2C = (f32) (*in)[2];
+    sp34 = (f32)(*in)[0];
+    sp30 = (f32)(*in)[1];
+    sp2C = (f32)(*in)[2];
 
     guMtxXFMF(mtx->mf, sp34, sp30, sp2C, &sp34, &sp30, &sp2C);
 
@@ -1037,9 +936,9 @@ void Model_AccumulateVertexOffset(MtxF* mtx, PosBlend* position, s16 (*target)[3
     f32 dy;
     f32 dz;
 
-    sp44 = (f32) (*target)[0];
-    sp40 = (f32) (*target)[1];
-    sp3C = (f32) (*target)[2];
+    sp44 = (f32)(*target)[0];
+    sp40 = (f32)(*target)[1];
+    sp3C = (f32)(*target)[2];
 
     guMtxXFMF(mtx->mf, sp44, sp40, sp3C, &sp44, &sp40, &sp3C);
 
@@ -1067,8 +966,8 @@ void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVert
     vtx = Memmap_GetSegmentVaddr(segment->vertexSegment);
     Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = mvtx;
-    
-    for(i = 0; i < segment->vertexCount; i++) {
+
+    for (i = 0; i < segment->vertexCount; i++) {
         position = &tmp->position;
         switch (Model_GetVertexClass(indexTable, i)) {
             case 0:
@@ -1095,7 +994,6 @@ void Model_CopyPositionBuffer(PosBlend* src, PosBlend* dst) {
 }
 
 void func_80035208_empty() {
-
 }
 
 void func_80035248(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
@@ -1110,29 +1008,30 @@ void func_80035248(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
     var_s7 = Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = mvtx;
 
-    for(i = 0; i < segment->vertexCount; i++) {
+    for (i = 0; i < segment->vertexCount; i++) {
         position = &tmp->position;
         if (i == *var_s7) {
             switch (Model_GetVertexClass(temp_s5, i)) {
-            case 0:
-                Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
-                break;
-            case 4:
-                Model_TransformPoint(mtx + Model_GetVertexMatrixClass(temp_s5, i), &position->base, &vtx->v.ob);
-                break;
-            case 1:
-                Model_AccumulateVertexOffset(mtx, position, &vtx->v.ob, D_800775D4[Model_GetVertexMergeClass(temp_s5, i)]);
-                break;
-            case 2:
-                Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
-                Model_CopyPositionBuffer(position, &D_800B2F58[Model_GetVertexTargetClass(temp_s5, i)]);
-                break;
-            case 3:
-                Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
-                Model_CopyPositionBuffer(position, &D_800B2F58[Model_GetVertexSourceClass(temp_s5, i)]);
-                break;
-            default:
-                break;
+                case 0:
+                    Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
+                    break;
+                case 4:
+                    Model_TransformPoint(mtx + Model_GetVertexMatrixClass(temp_s5, i), &position->base, &vtx->v.ob);
+                    break;
+                case 1:
+                    Model_AccumulateVertexOffset(mtx, position, &vtx->v.ob,
+                                                 D_800775D4[Model_GetVertexMergeClass(temp_s5, i)]);
+                    break;
+                case 2:
+                    Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
+                    Model_CopyPositionBuffer(position, &D_800B2F58[Model_GetVertexTargetClass(temp_s5, i)]);
+                    break;
+                case 3:
+                    Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
+                    Model_CopyPositionBuffer(position, &D_800B2F58[Model_GetVertexSourceClass(temp_s5, i)]);
+                    break;
+                default:
+                    break;
             }
         }
         vtx++;
@@ -1166,9 +1065,9 @@ f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]) {
     f32 dy;
     f32 dz;
 
-    dx = (f32) ((*a)[0] - (*b)[0]);
-    dy = (f32) ((*a)[1] - (*b)[1]);
-    dz = (f32) ((*a)[2] - (*b)[2]);
+    dx = (f32)((*a)[0] - (*b)[0]);
+    dy = (f32)((*a)[1] - (*b)[1]);
+    dz = (f32)((*a)[2] - (*b)[2]);
     return sqrtf((dx * dx) + (dy * dy) + (dz * dz));
 }
 
@@ -1321,27 +1220,28 @@ void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, 
         if (temp_v1 == -1) {
             break;
         }
-    
+
         var_a1 = temp_v0->sourceIndex;
         var_a2 = temp_v0->enableFrom;
         var_a0 = temp_v0->enableTo;
         temp_fs0 = temp_v0->blendWeight;
         temp_a3 = &vertices[temp_v1];
-    
+
         if (temp_a3->position.disabled != 0) {
             var_a2 = 0;
         }
-    
+
         temp_v0_2 = &vertices[var_a1];
         if (temp_v0_2->position.disabled != 0) {
             var_a0 = 0;
         }
-    
+
         if ((var_a0 != 0) || (var_a2 != 0)) {
-            temp_fv0 = Model_ComputeScaledDistance(&temp_a3->position.base, &temp_v0_2->position.base, &model->position);
-            Model_ExtrapolateVertexPosition(&temp_a3->position.base, &temp_v0_2->position.base, temp_fs0, temp_fv0, deltaTime);
+            temp_fv0 =
+                Model_ComputeScaledDistance(&temp_a3->position.base, &temp_v0_2->position.base, &model->position);
+            Model_ExtrapolateVertexPosition(&temp_a3->position.base, &temp_v0_2->position.base, temp_fs0, temp_fv0,
+                                            deltaTime);
         }
-        
     }
 }
 
@@ -1381,7 +1281,8 @@ void func_80035B20(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
             if ((var_a0 != 0) || (var_a2 != 0)) {
                 temp_s0 = &temp_a3->position;
                 temp_s1 = &temp_v0_2->position;
-                func_80035660(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->position), deltaTime);
+                func_80035660(temp_s0, temp_s1, temp_fs0,
+                              Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->position), deltaTime);
             }
             continue;
         }
@@ -1398,7 +1299,7 @@ void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32
     indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
     remap = Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = vertices;
-    for(i = 0; i < segment->vertexCount; i++) {
+    for (i = 0; i < segment->vertexCount; i++) {
         if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *remap)) {
             tmp->position.base.y += yOffset;
         }
@@ -1418,17 +1319,17 @@ void func_80035D08(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
     indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
     var_s2 = Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = vertices;
-    for(i = 0; i < segment->vertexCount; i++) {
+    for (i = 0; i < segment->vertexCount; i++) {
         if ((Model_GetVertexClass(indexTable, i) != 0) && (i == *var_s2)) {
             temp_v0 = Model_GetVertexHeightClass(indexTable, i);
             temp_v0_2 = &tmp->position;
             switch (temp_v0) {
-            case 1:
-                temp_v0_2->base.y += yOffset;
-                break;
-            case 2:
-                temp_v0_2->base.y += yOffset * 0.25f;
-                break;
+                case 1:
+                    temp_v0_2->base.y += yOffset;
+                    break;
+                case 2:
+                    temp_v0_2->base.y += yOffset * 0.25f;
+                    break;
             }
         }
         tmp++;
@@ -1455,16 +1356,16 @@ void func_80035E2C(ModelSegment* segment, ModelVertex* vertices, f32 arg2, Stadi
             type = Model_GetVertexHeightClass(indexTable, i);
             position = &vertex->position;
             switch (type) {
-            case 1:
-                position->base.x += zero;
-                position->base.y += arg2 * one;
-                position->base.z += zero;
-                break;
-            case 2:
-                position->base.x = position->base.x + zero;
-                position->base.y = position->base.y + (quarter * arg2 * one);
-                position->base.z = position->base.z + zero;
-                break;
+                case 1:
+                    position->base.x += zero;
+                    position->base.y += arg2 * one;
+                    position->base.z += zero;
+                    break;
+                case 2:
+                    position->base.x = position->base.x + zero;
+                    position->base.y = position->base.y + (quarter * arg2 * one);
+                    position->base.z = position->base.z + zero;
+                    break;
             }
         }
         vertex++;
@@ -1525,69 +1426,69 @@ void func_800361C4(StadiumModel* model, MtxF* mtx) {
     ModelVertex* mvtx = &model->mvtx;
     ModelSegment* segment = Memmap_GetSegmentVaddr(model->modelSegment);
     switch (segment->type) {
-    case 3:
-        func_80035248(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
-        func_80034348(segment, mvtx);
-        for(var_s0 = 0; var_s0 < model->unk_02; var_s0++) {
-            func_80034BD4(segment, &model->transforms[var_s0], var_s0, mvtx);
-        }
-        func_80035FA8(segment, mvtx);
-        Model_ApplyTransformCommands(segment, mvtx, model, 0.7f);        
-        break;
-    case 4:
-        func_80035248(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
-        func_80034348(segment, mvtx);
-        func_80035FA8(segment, mvtx);
-        break;
-    case 10:
-        func_80035248(segment, mtx, mvtx);
-        func_80035D08(segment, mvtx, model->position.y * 160.0f);
-        func_80035FA8(segment, mvtx);
-        func_80035B20(segment, mvtx, model, 1.0f);
-        break;
-    case 11:
-        func_80035248(segment, mtx, mvtx);
-        func_80035E2C(segment, mvtx, 160.0f, model);
-        func_80035FA8(segment, mvtx);
-        func_80035B20(segment, mvtx, model, 1.0f);
-        break;
-    case 1:
-        func_80035248(segment, mtx, mvtx);
-        func_80034348(segment, mvtx);
-        func_80035FA8(segment, mvtx);
-        break;
-    case 2:
-        func_80035248(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
-        func_80034348(segment, mvtx);
-        func_80035FA8(segment, mvtx);
-        break;
-    case 5:
-        func_80035248(segment, mtx, mvtx);
-        func_80034348(segment, mvtx);
-        func_80035FA8(segment, mvtx);
-        break;
-    case 6:
-        func_80035248(segment, mtx, mvtx);
-        func_80034348(segment, mvtx);
-        func_80035FA8(segment, mvtx);
-        break;
-    case 9:
-        func_80035248(segment, mtx, mvtx);
-        Model_ApplyVertexTransforms(model);
-        func_80034348(segment, mvtx);
-        break;
-    default:
-        return;
+        case 3:
+            func_80035248(segment, mtx, mvtx);
+            Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+            func_80034348(segment, mvtx);
+            for (var_s0 = 0; var_s0 < model->unk_02; var_s0++) {
+                func_80034BD4(segment, &model->transforms[var_s0], var_s0, mvtx);
+            }
+            func_80035FA8(segment, mvtx);
+            Model_ApplyTransformCommands(segment, mvtx, model, 0.7f);
+            break;
+        case 4:
+            func_80035248(segment, mtx, mvtx);
+            Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+            func_80034348(segment, mvtx);
+            func_80035FA8(segment, mvtx);
+            break;
+        case 10:
+            func_80035248(segment, mtx, mvtx);
+            func_80035D08(segment, mvtx, model->position.y * 160.0f);
+            func_80035FA8(segment, mvtx);
+            func_80035B20(segment, mvtx, model, 1.0f);
+            break;
+        case 11:
+            func_80035248(segment, mtx, mvtx);
+            func_80035E2C(segment, mvtx, 160.0f, model);
+            func_80035FA8(segment, mvtx);
+            func_80035B20(segment, mvtx, model, 1.0f);
+            break;
+        case 1:
+            func_80035248(segment, mtx, mvtx);
+            func_80034348(segment, mvtx);
+            func_80035FA8(segment, mvtx);
+            break;
+        case 2:
+            func_80035248(segment, mtx, mvtx);
+            Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+            func_80034348(segment, mvtx);
+            func_80035FA8(segment, mvtx);
+            break;
+        case 5:
+            func_80035248(segment, mtx, mvtx);
+            func_80034348(segment, mvtx);
+            func_80035FA8(segment, mvtx);
+            break;
+        case 6:
+            func_80035248(segment, mtx, mvtx);
+            func_80034348(segment, mvtx);
+            func_80035FA8(segment, mvtx);
+            break;
+        case 9:
+            func_80035248(segment, mtx, mvtx);
+            Model_ApplyVertexTransforms(model);
+            func_80034348(segment, mvtx);
+            break;
+        default:
+            return;
     }
     {
         s16* var_a0 = Memmap_GetSegmentVaddr(segment->remapSegment);
-        for(var_v1 = 0; var_v1 < segment->vertexCount; var_v1++) {
+        for (var_v1 = 0; var_v1 < segment->vertexCount; var_v1++) {
             s16 segment_2 = *var_a0;
             if (segment_2 != var_v1) {
-                 *(PosBlend*)&(var_v1 + mvtx)->position = *(PosBlend*)&mvtx[segment_2].position;
+                *(PosBlend*)&(var_v1 + mvtx)->position = *(PosBlend*)&mvtx[segment_2].position;
             }
             var_a0++;
         }
@@ -1601,12 +1502,12 @@ void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtxBuf) {
     s32 i;
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
-    if ((s32) segment->type >= 0xC) {
+    if ((s32)segment->type >= 0xC) {
         return;
     }
     mvtx = &model->mvtx;
     vtx = vtxBuf;
-    for(i = 0; i < segment->vertexCount; i++) {
+    for (i = 0; i < segment->vertexCount; i++) {
         vtx->v.ob[0] = (s16)(mvtx->position.base.x * 10.0f);
         vtx->v.ob[1] = (s16)(mvtx->position.base.y * 10.0f);
         vtx->v.ob[2] = (s16)(mvtx->position.base.z * 10.0f);
@@ -1625,7 +1526,7 @@ Gfx* Model_Draw(Gfx* gfx, StadiumModel* model, Vtx* vtxBuf) {
     ModelSegment* segment;
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
-    if ((s32) segment->type >= 0xC) {
+    if ((s32)segment->type >= 0xC) {
         return gfx;
     }
     Model_WriteVtxBuffer(model, vtxBuf);

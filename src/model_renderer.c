@@ -200,7 +200,7 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
         if (!(arg0->unk_10->flags & 4)) {
             while (Display_IsFrameReady() == 0) {}
         }
-        PokeIcon_RequestFrameLoad(arg0->unk_10, (u16) sp2A, sp2C);
+        PokeIcon_RequestFrameLoad(arg0->unk_10, (u16)sp2A, sp2C);
         arg0->uniqueStatusFlags |= 0x40;
         arg0->uniqueStatusFlags &= ~0x10;
 

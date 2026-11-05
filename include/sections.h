@@ -17,49 +17,49 @@ extern u8 fragment1_yay0_3_ROM_END[];
 extern u8 fragment1_yay0_4_ROM_START[];
 extern u8 fragment1_yay0_4_ROM_END[];
 
-// fragment 2                    
+// fragment 2
 extern u8 fragment2_TEXT_START[];
 extern u8 fragment2_ROM_START[];
 extern u8 fragment2_ROM_END[];
 extern u8 fragment2_relocs_ROM_END[];
 
-// fragment 3                    
+// fragment 3
 extern u8 fragment3_TEXT_START[];
 extern u8 fragment3_ROM_START[];
 extern u8 fragment3_ROM_END[];
 extern u8 fragment3_relocs_ROM_END[];
 
-// fragment 4                    
+// fragment 4
 extern u8 fragment4_TEXT_START[];
 extern u8 fragment4_ROM_START[];
 extern u8 fragment4_ROM_END[];
 extern u8 fragment4_relocs_ROM_END[];
 
-// fragment 5                    
+// fragment 5
 extern u8 fragment5_TEXT_START[];
 extern u8 fragment5_ROM_START[];
 extern u8 fragment5_ROM_END[];
 extern u8 fragment5_relocs_ROM_END[];
 
-// fragment 6                    
+// fragment 6
 extern u8 fragment6_TEXT_START[];
 extern u8 fragment6_ROM_START[];
 extern u8 fragment6_ROM_END[];
 extern u8 fragment6_relocs_ROM_END[];
 
-// fragment 7                    
+// fragment 7
 extern u8 fragment7_TEXT_START[];
 extern u8 fragment7_ROM_START[];
 extern u8 fragment7_ROM_END[];
 extern u8 fragment7_relocs_ROM_END[];
 
-// fragment 8                    
+// fragment 8
 extern u8 fragment8_TEXT_START[];
 extern u8 fragment8_ROM_START[];
 extern u8 fragment8_ROM_END[];
 extern u8 fragment8_relocs_ROM_END[];
 
-// fragment 9                    
+// fragment 9
 extern u8 fragment9_TEXT_START[];
 extern u8 fragment9_ROM_START[];
 extern u8 fragment9_ROM_END[];
@@ -476,14 +476,14 @@ extern u8 fragment77_ROM_END[];
 
 // Asset externs
 
-extern u8 n64_logo_texture_ROM_START[];    // 3B96B0
-extern u8 n64_logo_texture_ROM_END[];      // 3B96B0
-extern u8 fonts_ROM_START[];               // 3BA190
-extern u8 fonts_ROM_END[];                 // 3BA190
-extern u8 backgrounds_ROM_START[];         // 3CB130
-extern u8 backgrounds_ROM_END[];           // 3CB130
-extern u8 battle_headers_ROM_START[];      // 45B580
-extern u8 battle_headers_ROM_END[];        // 45B580
+extern u8 n64_logo_texture_ROM_START[]; // 3B96B0
+extern u8 n64_logo_texture_ROM_END[];   // 3B96B0
+extern u8 fonts_ROM_START[];            // 3BA190
+extern u8 fonts_ROM_END[];              // 3BA190
+extern u8 backgrounds_ROM_START[];      // 3CB130
+extern u8 backgrounds_ROM_END[];        // 3CB130
+extern u8 battle_headers_ROM_START[];   // 45B580
+extern u8 battle_headers_ROM_END[];     // 45B580
 extern u8 common_menu0_ui_ROM_START[];
 extern u8 common_menu0_ui_ROM_END[];
 extern u8 common_menu1_ui_ROM_START[];
@@ -492,32 +492,32 @@ extern u8 common_menu2_ui_ROM_START[];
 extern u8 common_menu2_ui_ROM_END[];
 extern u8 snap_mode_ui_ROM_START[];
 extern u8 snap_mode_ui_ROM_END[];
-extern u8 area_select_ui_ROM_START[];      // 4D1330
-extern u8 area_select_ui_ROM_END[];        // 4D1330
-extern u8 menu_select_ui_ROM_START[];      // 4EB0C0
-extern u8 menu_select_ui_ROM_END[];        // 4EB0C0
-extern u8 stadium_select_ui_ROM_START[];   // 5046B0
-extern u8 stadium_select_ui_ROM_END[];     // 5046B0
-extern u8 title_ui_ROM_START[];            // 52ABA0
-extern u8 title_ui_ROM_END[];              // 52ABA0
+extern u8 area_select_ui_ROM_START[];    // 4D1330
+extern u8 area_select_ui_ROM_END[];      // 4D1330
+extern u8 menu_select_ui_ROM_START[];    // 4EB0C0
+extern u8 menu_select_ui_ROM_END[];      // 4EB0C0
+extern u8 stadium_select_ui_ROM_START[]; // 5046B0
+extern u8 stadium_select_ui_ROM_END[];   // 5046B0
+extern u8 title_ui_ROM_START[];          // 52ABA0
+extern u8 title_ui_ROM_END[];            // 52ABA0
 extern u8 _52F6D0_ROM_START[];
 extern u8 _52F6D0_ROM_END[];
-extern u8 battle_portraits_ROM_START[];    // 533B20
-extern u8 battle_portraits_ROM_END[];      // 533B20
-extern u8 stadium_models_ROM_START[];      // 56E7D0
-extern u8 stadium_models_ROM_END[];        // 56E7D0
+extern u8 battle_portraits_ROM_START[]; // 533B20
+extern u8 battle_portraits_ROM_END[];   // 533B20
+extern u8 stadium_models_ROM_START[];   // 56E7D0
+extern u8 stadium_models_ROM_END[];     // 56E7D0
 extern u8 _5C7A70_ROM_START[];
 extern u8 _5C7A70_ROM_END[];
-extern u8 pokedex_area_model_ROM_START[];  // 5C7AD0
-extern u8 pokedex_area_model_ROM_END[];    // 5C7AD0
-extern u8 sushi_go_round_ROM_START[];      // 5F6790
-extern u8 sushi_go_round_ROM_END[];        // 5F6790
-extern u8 order_select_ui_ROM_START[];     // 5F92A0
-extern u8 order_select_ui_ROM_END[];       // 5F92A0
-extern u8 cup_ball_select_ui_ROM_START[];  // 5FFC30
-extern u8 cup_ball_select_ui_ROM_END[];    // 5FFC30
-extern u8 kids_club_select_ui_ROM_START[]; // 6230D0
-extern u8 kids_club_select_ui_ROM_END[];   // 6230D0
+extern u8 pokedex_area_model_ROM_START[];          // 5C7AD0
+extern u8 pokedex_area_model_ROM_END[];            // 5C7AD0
+extern u8 sushi_go_round_ROM_START[];              // 5F6790
+extern u8 sushi_go_round_ROM_END[];                // 5F6790
+extern u8 order_select_ui_ROM_START[];             // 5F92A0
+extern u8 order_select_ui_ROM_END[];               // 5F92A0
+extern u8 cup_ball_select_ui_ROM_START[];          // 5FFC30
+extern u8 cup_ball_select_ui_ROM_END[];            // 5FFC30
+extern u8 kids_club_select_ui_ROM_START[];         // 6230D0
+extern u8 kids_club_select_ui_ROM_END[];           // 6230D0
 extern u8 gym_leader_castle_clear_gfx_ROM_START[]; // 66E1D0
 extern u8 gym_leader_castle_clear_gfx_ROM_END[];   // 66E1D0
 extern u8 rental_rules_ui_ROM_START[];             // 66F540
@@ -573,10 +573,9 @@ extern u8 _798CD0_ROM_END[];
 extern u8 _7820E0_ROM_START[];
 extern u8 _7820E0_ROM_END[];
 
-
 extern u8 fragment6_misc_ROM_START[];
 
-extern u8 textdata_ROM_START[];     // 783760
-extern u8 textdata_ROM_END[];       // 783760
+extern u8 textdata_ROM_START[]; // 783760
+extern u8 textdata_ROM_END[];   // 783760
 
 #endif // _SECTIONS_H_

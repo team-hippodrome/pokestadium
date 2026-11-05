@@ -329,7 +329,8 @@ s16 Team_GetHighestPartyLevel(void) {
 
     var_v0 = &gSessionContext.battleSides[0].teamMember[0]->rosterInfo->unk_028[0];
 
-    for (i = 0; i < gSessionContext.battleSides[0].teamMember[0]->rosterInfo->numberOfPokemonCanBePicked; i++, var_v0++) {
+    for (i = 0; i < gSessionContext.battleSides[0].teamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+         i++, var_v0++) {
         if (var_v1 < var_v0->level) {
             var_v1 = var_v0->level;
         }

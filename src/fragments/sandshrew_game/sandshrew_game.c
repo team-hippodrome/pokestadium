@@ -1811,20 +1811,26 @@ void SandshrewGame_DigStateMachine(MiniActor* sandshrew) {
         case 0x3: //  diggin
             if (sandshrew->diggingAccel2 != 0) {
                 if (sParticleFrameMod4 == 0) {
-                    Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle, &gMiniFxParticleDescriptorIa8, 1, 1); //	perticles
-                    Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle, &gMiniFxParticleDescriptorIa8, 1, 2); //	particles
+                    Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle,
+                                                 &gMiniFxParticleDescriptorIa8, 1, 1); //	perticles
+                    Particle_EmitBurstFromObject(&sandshrew->unk_000, MiniFx_UpdateSurfaceCrossingGravityParticle,
+                                                 &gMiniFxParticleDescriptorIa8, 1, 2); //	particles
                 }
 
                 if (sParticleFrameMod4 == 0) {
                     if (sandshrew->totalPos.y > -10.0f) {
-                        Particle_EmitBurstAtTransform(1.0f, sandshrew->totalPos, sandshrew->totalRot, MiniFx_UpdatePalette10SlowRiseFadeParticle, &gMiniFxParticleDescriptorI4Frame,
-                                      1); //	particles
+                        Particle_EmitBurstAtTransform(1.0f, sandshrew->totalPos, sandshrew->totalRot,
+                                                      MiniFx_UpdatePalette10SlowRiseFadeParticle,
+                                                      &gMiniFxParticleDescriptorI4Frame,
+                                                      1); //	particles
                     } else {
                         sp48.x = sandshrew->totalPos.x;
                         sp48.y = -5.0f;
                         sp48.z = sandshrew->totalPos.z;
-                        Particle_EmitBurstAtTransform(1.0f, sp48, sandshrew->totalRot, MiniFx_UpdateRandomOffsetPalette10RiseFadeParticle, &gMiniFxParticleDescriptorI4Frame,
-                                      1); //	particles
+                        Particle_EmitBurstAtTransform(1.0f, sp48, sandshrew->totalRot,
+                                                      MiniFx_UpdateRandomOffsetPalette10RiseFadeParticle,
+                                                      &gMiniFxParticleDescriptorI4Frame,
+                                                      1); //	particles
                     }
                 }
 
@@ -2036,7 +2042,8 @@ void SandshrewGame_UpdateGeiser(MiniActor* geiser) {
     }
 
     if ((geiser->mainState >= 2) && (sParticleFrameMod4 == 0)) {
-        Particle_EmitBurstFromObject(&geiser->unk_000, MiniFx_UpdateCoolGravityParticle, &gMiniFxParticleDescriptorI4FrameDiv2Mod4, 4, 0xA);
+        Particle_EmitBurstFromObject(&geiser->unk_000, MiniFx_UpdateCoolGravityParticle,
+                                     &gMiniFxParticleDescriptorI4FrameDiv2Mod4, 4, 0xA);
     }
 }
 
@@ -2243,7 +2250,7 @@ void SandshrewGame_DrawTutorialText(void) {
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
     Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86F0D264, Text_GetString(NULL, 0, D_87806330, 0x4A)) / 2), 0x20,
-                  Text_GetString(NULL, 0, D_87806330, 0x4A));
+                Text_GetString(NULL, 0, D_87806330, 0x4A));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x4B));
@@ -2251,8 +2258,8 @@ void SandshrewGame_DrawTutorialText(void) {
     Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, D_87806330, 0x4D));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x4B), Text_GetString(NULL, 0, D_87806330, 0x63),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x4B),
+                           Text_GetString(NULL, 0, D_87806330, 0x63), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x63));
     Font_Printf(0xB8, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
     Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
@@ -2487,7 +2494,8 @@ void SandshrewGame_LoadAssets(void) {
     for (i = 0; i < 4; i++) {
         miniSandshrewHoles[i].unk_23C = 0x9D;
         miniSandshrewHoles[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniSandshrewHoles[i].unk_000, 0, miniSandshrewHoles[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniSandshrewHoles[i].unk_000, 0, miniSandshrewHoles[i].unk_23C,
+                                temp_s1->unk_08->unk_00[0]);
         ModelAnim_SetAnimation(&miniSandshrewHoles[i].unk_000, 0);
     }
 
@@ -2496,7 +2504,8 @@ void SandshrewGame_LoadAssets(void) {
     for (i = 0; i < 4; i++) {
         miniSandshrewGeisers[i].unk_23C = 0xA2;
         miniSandshrewGeisers[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniSandshrewGeisers[i].unk_000, 0, miniSandshrewGeisers[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniSandshrewGeisers[i].unk_000, 0, miniSandshrewGeisers[i].unk_23C,
+                                temp_s1->unk_08->unk_00[0]);
         ModelAnim_SetAnimation(&miniSandshrewGeisers[i].unk_000, 0);
     }
 }
@@ -2526,7 +2535,7 @@ s32 sandshrewMinigameLoad(s32 arg0, UNUSED s32 arg1) {
     SandshrewGame_MainLoop(); //	tutorial screen ?
     SandshrewGame_ShowResultText();
     StageContext_Deactivate();
-    Font_Free(); //	main_pool_try_free(D_800AC870);
+    Font_Free();                  //	main_pool_try_free(D_800AC870);
     Gfx_FreeDisplayListBuffers(); //	main_pool_try_free(D_800A7428.unk4); main_pool_try_free(D_800A7428.unk0);
 
     main_pool_pop_state('MINI');

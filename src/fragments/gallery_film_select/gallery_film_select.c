@@ -277,7 +277,8 @@ void Gallery_FilmSelectInit(s32 arg0) {
         D_836033BC = 0;
     }
 
-    Gallery_InitSceneGrid(&D_83603300, 0x88, 0x66, 6, 3, PokeIcon_AllocFramebuffers(5), D_836032F8, D_83402EE0, 0x18, 1);
+    Gallery_InitSceneGrid(&D_83603300, 0x88, 0x66, 6, 3, PokeIcon_AllocFramebuffers(5), D_836032F8, D_83402EE0, 0x18,
+                          1);
 
     if (D_83407AF8.unk_00 != -1) {
         Gallery_RestorePosition(&D_83603300, &D_83407AF8);
@@ -574,8 +575,8 @@ void Gallery_FilmSelectDrawActionPanel(int arg0, int arg1, s32 arg2, f32 arg3) {
                            temp_v0_2 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,
                            G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        Gfx_DrawTexturedRectClipped(arg0 + ((spFC - temp_ft2) / 2), arg1 + ((spF8 - temp_fv1) / 2) + temp_fa0, temp_ft2, temp_fv1_2,
-                      0, 0, tmp / arg3, tmp / arg3, 0);
+        Gfx_DrawTexturedRectClipped(arg0 + ((spFC - temp_ft2) / 2), arg1 + ((spF8 - temp_fv1) / 2) + temp_fa0, temp_ft2,
+                                    temp_fv1_2, 0, 0, tmp / arg3, tmp / arg3, 0);
     }
 
     temp_s3 = (spFC - Font_MeasureTextExtent(0, 0, spD8)) / 2;

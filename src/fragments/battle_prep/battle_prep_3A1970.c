@@ -120,7 +120,8 @@ void BattlePrep_TrophyModelGrow(unk_D_84B26640_010* arg0) {
     if (arg0->unk_01 == 8) {
         arg0->unk_00 = 0;
     }
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f);
+    Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f,
+                                 arg0->unk_01 * 0.125f);
 }
 
 void BattlePrep_TrophyModelShrink(unk_D_84B26640_010* arg0) {
@@ -129,7 +130,8 @@ void BattlePrep_TrophyModelShrink(unk_D_84B26640_010* arg0) {
         arg0->unk_00 = 0;
         ModelRenderer_ClearDisplayObject(arg0->unk_04);
     } else {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f);
+        Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f,
+                                     arg0->unk_01 * 0.125f);
     }
 }
 

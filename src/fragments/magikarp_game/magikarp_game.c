@@ -303,11 +303,13 @@ void MagikarpGame_InitCamera(void) {
     D_86002F38->view.targetPosition.y = 70.0f;
     D_86002F38->view.targetPosition.z = 0.0f;
 
-    Camera_ComputeEyeFromAngles(&D_86002F38->view.targetPosition, &D_86002F38->view.eyePosition, D_86002F40, D_86002F3C, D_86002F3E);
+    Camera_ComputeEyeFromAngles(&D_86002F38->view.targetPosition, &D_86002F38->view.eyePosition, D_86002F40, D_86002F3C,
+                                D_86002F3E);
 }
 
 void MagikarpGame_UpdateCameraLookAt(void) {
-    Camera_ComputeEyeFromAngles(&D_86002F38->view.targetPosition, &D_86002F38->view.eyePosition, D_86002F40, D_86002F3C, D_86002F3E);
+    Camera_ComputeEyeFromAngles(&D_86002F38->view.targetPosition, &D_86002F38->view.eyePosition, D_86002F40, D_86002F3C,
+                                D_86002F3E);
 }
 
 void MagikarpGame_DrawOverlay(s32 arg0) {

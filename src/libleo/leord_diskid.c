@@ -6,13 +6,10 @@ extern u16 LEOrw_flags;
 extern u8 LEO_TempBuffer[0xE8];
 
 // .data
-LEOCmdRead read_id_cmd = {
-    {LEO_COMMAND_READ, 0,0,0, 0,0,0,0, NULL},
-    14, 1, LEO_TempBuffer, 0
-};
+LEOCmdRead read_id_cmd = { { LEO_COMMAND_READ, 0, 0, 0, 0, 0, 0, 0, NULL }, 14, 1, LEO_TempBuffer, 0 };
 
 // .rodata
-const u8 leo_disk_id_lba[] = {14, 15};
+const u8 leo_disk_id_lba[] = { 14, 15 };
 
 void leoReadDiskId(void) {
     LEOCmdRead dummy_cmd;

@@ -241,7 +241,7 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
             arg0->unk_000C = 0;
             arg0->unk_0002 = 0xA;
             Trade_OpenInfoBox(arg0, temp_a1, arg0->unk_0004 + (arg0->unk_0018 * 0x58) + 0x2C,
-                          arg0->unk_0006 + (arg0->unk_001A * 0x3C) + 0x3A);
+                              arg0->unk_0006 + (arg0->unk_001A * 0x3C) + 0x3A);
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
         } else {
             goto block_25;
@@ -269,9 +269,11 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
                 }
 
                 if (var_v0 != 0) {
-                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0x98, NULL);
+                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0x98,
+                                                    NULL);
                 } else {
-                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0, temp_a3);
+                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0,
+                                                    temp_a3);
                 }
             }
         } else if (BTN_IS_PRESSED(controller, BTN_L) && (temp_a2->unk_004 != NULL)) {
@@ -290,9 +292,11 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
                 }
 
                 if (var_v0 != 0) {
-                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0x98, NULL);
+                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0x98,
+                                                    NULL);
                 } else {
-                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0, temp_a3_2);
+                    PokeIcon_LoadModelTextureForMon(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016 ^ 1, i), 0,
+                                                    temp_a3_2);
                 }
             }
         }
@@ -335,7 +339,8 @@ void Trade_ConfirmPickSelection(unk_D_82F144D0* arg0) {
     } else if (arg0->unk_0020 != 0) {
         arg0->unk_0000 = 5;
         arg0->unk_000C = 0xA;
-        _bcopy(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016, (arg0->unk_001A * 5) + arg0->unk_0018), arg0->unk_0028, 0xC80);
+        _bcopy(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016, (arg0->unk_001A * 5) + arg0->unk_0018),
+               arg0->unk_0028, 0xC80);
     } else {
         arg0->unk_0000 = 2;
         arg0->unk_000C = 0;
@@ -524,18 +529,20 @@ void Trade_DrawRoundedFrameSmall(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3038770, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_30386B0, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_30386F0, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -592,18 +599,20 @@ void Trade_DrawRoundedFrameLarge(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3038BF0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3038A70, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3038AF0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -757,128 +766,131 @@ void func_82F04604(unk_D_82F144D0* arg0) {
     }
 
     spF8 = 0;
-    if (spF4 > 0) do {
-        s32 sp68 = spEE * spF8;
-        unk_D_82F144D0_0CA8* sp64;
+    if (spF4 > 0)
+        do {
+            s32 sp68 = spEE * spF8;
+            unk_D_82F144D0_0CA8* sp64;
 
-        if (spF8 == 0) {
-            var_s2 = arg0->unk_0010;
-            spE8 = arg0->unk_0016;
-        } else {
-            var_s2 = arg0->unk_0012;
-            spE8 = arg0->unk_0016 ^ 1;
-        }
-
-        sp64 = &arg0->unk_0CA8[var_s2];
-        Trade_DrawPickScreenFrame((s16)(spEE * spF8) + arg0->unk_0004, arg0->unk_0006, arg0->unk_0008, arg0->unk_000A);
-
-        if ((arg0->unk_0008 == 0x1B8) && (arg0->unk_000A == 0x10C)) {
-            unk_func_82F00838_sp30_00C* ptr;
-
-            Trade_DrawPlayerBanner(var_s2, (s16)sp68 + arg0->unk_0004, arg0->unk_0006);
-
-            if (spF4 == 2) {
-                gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
+            if (spF8 == 0) {
+                var_s2 = arg0->unk_0010;
+                spE8 = arg0->unk_0016;
             } else {
-                gSPDisplayList(gDisplayListHead++, D_8006F4C0);
+                var_s2 = arg0->unk_0012;
+                spE8 = arg0->unk_0016 ^ 1;
             }
 
-            for (i = 0; i < 20; i++) {
-                idx1 = i / 5;
-                idx2 = i % 5;
+            sp64 = &arg0->unk_0CA8[var_s2];
+            Trade_DrawPickScreenFrame((s16)(spEE * spF8) + arg0->unk_0004, arg0->unk_0006, arg0->unk_0008,
+                                      arg0->unk_000A);
 
-                Trade_DrawPickSlotBackdrop((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58), arg0->unk_0006 + (idx1 * 0x3C) + 0x1C,
-                              spF4 - 1);
-            }
+            if ((arg0->unk_0008 == 0x1B8) && (arg0->unk_000A == 0x10C)) {
+                unk_func_82F00838_sp30_00C* ptr;
 
-            gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-            gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+                Trade_DrawPlayerBanner(var_s2, (s16)sp68 + arg0->unk_0004, arg0->unk_0006);
 
-            for (i = 0; i < sp64->unk_000; i++) {
-                ptr = &sp64->unk_00C[i];
-                idx1 = i / 5;
-                idx2 = i % 5;
-
-                Gfx_DrawTextureIa8((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 4, arg0->unk_0006 + (idx1 * 0x3C) + 0x3B, 8,
-                              0xA, D_302F690, 8, 0);
-
-                if ((ptr->unk_00 <= 0) || (ptr->unk_00 >= 0x98)) {
-                    var_v0 = 1;
+                if (spF4 == 2) {
+                    gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
                 } else {
-                    var_v0 = 0;
+                    gSPDisplayList(gDisplayListHead++, D_8006F4C0);
                 }
 
-                if (var_v0 == 0) {
-                    Trade_DrawDigitStrip((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0xE,
-                                  arg0->unk_0006 + (idx1 * 0x3C) + 0x39, ptr->unk_24);
-                }
-            }
+                for (i = 0; i < 20; i++) {
+                    idx1 = i / 5;
+                    idx2 = i % 5;
 
-            Font_BeginTranslucentTextRendering();
-            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_SetActive(2, 0);
-
-            for (i = 0; i < sp64->unk_000; i++) {
-                ptr = &sp64->unk_00C[i];
-                idx1 = i / 5;
-                idx2 = i % 5;
-
-                if ((ptr->unk_00 <= 0) || (ptr->unk_00 >= 0x98)) {
-                    var_v0 = 1;
-                } else {
-                    var_v0 = 0;
+                    Trade_DrawPickSlotBackdrop((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58),
+                                               arg0->unk_0006 + (idx1 * 0x3C) + 0x1C, spF4 - 1);
                 }
 
-                if (var_v0 == 0) {
-                    continue;
+                gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+                gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+
+                for (i = 0; i < sp64->unk_000; i++) {
+                    ptr = &sp64->unk_00C[i];
+                    idx1 = i / 5;
+                    idx2 = i % 5;
+
+                    Gfx_DrawTextureIa8((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 4,
+                                       arg0->unk_0006 + (idx1 * 0x3C) + 0x3B, 8, 0xA, D_302F690, 8, 0);
+
+                    if ((ptr->unk_00 <= 0) || (ptr->unk_00 >= 0x98)) {
+                        var_v0 = 1;
+                    } else {
+                        var_v0 = 0;
+                    }
+
+                    if (var_v0 == 0) {
+                        Trade_DrawDigitStrip((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0xE,
+                                             arg0->unk_0006 + (idx1 * 0x3C) + 0x39, ptr->unk_24);
+                    }
                 }
 
-                Font_Printf((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0xE, arg0->unk_0006 + (idx1 * 0x3C) + 0x3A,
-                              "??");
+                Font_BeginTranslucentTextRendering();
+                Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+                Font_SetActive(2, 0);
+
+                for (i = 0; i < sp64->unk_000; i++) {
+                    ptr = &sp64->unk_00C[i];
+                    idx1 = i / 5;
+                    idx2 = i % 5;
+
+                    if ((ptr->unk_00 <= 0) || (ptr->unk_00 >= 0x98)) {
+                        var_v0 = 1;
+                    } else {
+                        var_v0 = 0;
+                    }
+
+                    if (var_v0 == 0) {
+                        continue;
+                    }
+
+                    Font_Printf((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0xE, arg0->unk_0006 + (idx1 * 0x3C) + 0x3A,
+                                "??");
+                }
+
+                Font_EndTexturedTextRendering();
+                Font_BeginTranslucentTextRendering();
+                Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+                Font_SetActive(4, 0);
+
+                for (i = 0; i < sp64->unk_000; i++) {
+                    ptr = &sp64->unk_00C[i];
+                    idx1 = i / 5;
+                    idx2 = i % 5;
+
+                    Font_Printf((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 5, arg0->unk_0006 + (idx1 * 0x3C) + 0x46,
+                                ptr->unk_30);
+                }
+
+                Font_EndTexturedTextRendering();
+
+                gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+
+                for (i = 0; i < sp64->unk_000; i++) {
+                    idx1 = i / 5;
+                    idx2 = i % 5;
+
+                    Gfx_DrawTextureRgba16((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0x2C,
+                                          arg0->unk_0006 + (idx1 * 0x3C) + 0x1F, 0x28, 0x28,
+                                          Trade_GetPickBufferSlot(D_82F20A00, spE8, i), 0x28, 0);
+                }
+
+                if (arg0->unk_0000 == 2) {
+                    temp_s3 = (arg0->unk_0004 + (arg0->unk_001C * 0x58));
+                    temp_lo = (arg0->unk_0006 + (arg0->unk_001E * 0x3C) + 0x1C);
+
+                    temp_t0 = arg0->unk_0004 + (arg0->unk_0018 * 0x58);
+                    temp_t1 = arg0->unk_0006 + (arg0->unk_001A * 0x3C) + 0x1C;
+
+                    Trade_DrawSelectionCorners(temp_t0 - (((temp_t0 - temp_s3) * arg0->unk_000C) / 4),
+                                               temp_t1 - (((temp_t1 - temp_lo) * arg0->unk_000C) / 4), 0x58, 0x3C);
+                }
+
+                gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
             }
-
-            Font_EndTexturedTextRendering();
-            Font_BeginTranslucentTextRendering();
-            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_SetActive(4, 0);
-
-            for (i = 0; i < sp64->unk_000; i++) {
-                ptr = &sp64->unk_00C[i];
-                idx1 = i / 5;
-                idx2 = i % 5;
-
-                Font_Printf((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 5, arg0->unk_0006 + (idx1 * 0x3C) + 0x46,
-                              ptr->unk_30);
-            }
-
-            Font_EndTexturedTextRendering();
-
-            gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-
-            for (i = 0; i < sp64->unk_000; i++) {
-                idx1 = i / 5;
-                idx2 = i % 5;
-
-                Gfx_DrawTextureRgba16((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0x2C, arg0->unk_0006 + (idx1 * 0x3C) + 0x1F,
-                              0x28, 0x28, Trade_GetPickBufferSlot(D_82F20A00, spE8, i), 0x28, 0);
-            }
-
-            if (arg0->unk_0000 == 2) {
-                temp_s3 = (arg0->unk_0004 + (arg0->unk_001C * 0x58));
-                temp_lo = (arg0->unk_0006 + (arg0->unk_001E * 0x3C) + 0x1C);
-
-                temp_t0 = arg0->unk_0004 + (arg0->unk_0018 * 0x58);
-                temp_t1 = arg0->unk_0006 + (arg0->unk_001A * 0x3C) + 0x1C;
-
-                Trade_DrawSelectionCorners(temp_t0 - (((temp_t0 - temp_s3) * arg0->unk_000C) / 4),
-                              temp_t1 - (((temp_t1 - temp_lo) * arg0->unk_000C) / 4), 0x58, 0x3C);
-            }
-
-            gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
-        }
-        spF8++;
-        sp68 += spEE;
-    } while (spF8 < spF4);
+            spF8++;
+            sp68 += spEE;
+        } while (spF8 < spF4);
 
     if ((arg0->unk_0008 == 0x1B8) && (arg0->unk_000A == 0x10C)) {
         if (spE4 != 0) {

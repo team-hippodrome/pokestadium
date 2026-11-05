@@ -287,7 +287,8 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
 
     var_s1 = var_s2 + 0x76;
     for (i = 0; i < 6; i++) {
-        temp_v0->unk_02[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 - i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
+        temp_v0->unk_02[i] =
+            BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 - i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -322,7 +323,8 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 
     var_s1 = var_s2 + 0xC;
     for (i = 0; i < 6; i++) {
-        temp_v0->unk_02[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 + i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
+        temp_v0->unk_02[i] =
+            BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 + i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -398,7 +400,7 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         }
         Font_Printf(temp_s1_2, temp_s2_3 + 0x14, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
-                      arg0->unk_0018[i].level);
+                    arg0->unk_0018[i].level);
     }
 
     Font_EndTexturedTextRendering();
@@ -624,18 +626,20 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
 
     idx = PokemonType_ToDisplayIndex(sp78->unk_06);
     Gfx_SetEnvColor(D_848035FC[idx].unk_00.r, D_848035FC[idx].unk_00.g, D_848035FC[idx].unk_00.b, 0xFF);
-    Font_Printf(temp_fp + 0x7A, sp7C + 0x2F, Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_06)));
+    Font_Printf(temp_fp + 0x7A, sp7C + 0x2F,
+                Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_06)));
 
     if (sp78->unk_06 != sp78->unk_07) {
         idx = PokemonType_ToDisplayIndex(sp78->unk_07);
         Gfx_SetEnvColor(D_848035FC[idx].unk_00.r, D_848035FC[idx].unk_00.g, D_848035FC[idx].unk_00.b, 0xFF);
-        Font_Printf(temp_fp + 0x7A, sp7C + 0x43, Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_07)));
+        Font_Printf(temp_fp + 0x7A, sp7C + 0x43,
+                    Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_07)));
     }
 
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(temp_fp + 0x8C, sp7C + 7, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
-                  arg0->unk_0018[temp_s1].level);
+                arg0->unk_0018[temp_s1].level);
     Font_Printf(temp_fp + 0x52, sp7C + 0x1B, "%3d", sp78->maxHp);
     Font_Printf(temp_fp + 0xFA, sp7C + 7, "%3d", sp78->unk_28);
     Font_Printf(temp_fp + 0xFA, sp7C + 0x1B, "%3d", sp78->unk_2A);
@@ -664,7 +668,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
             break;
         }
         Gfx_DrawTextureRgba16(temp_fp + 0x136, (i * 0x14) + sp7C + 7, 0x14, 0x14,
-                      D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01].unk_04, 0x14, 0);
+                              D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01].unk_04, 0x14, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -696,7 +700,7 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Font_Printf((sp26 - (Font_MeasureTextExtent(8, 0, arg0->unk_001C->trainerName) / 2)) + 0x3B, sp24 + 5,
-                  arg0->unk_001C->trainerName);
+                arg0->unk_001C->trainerName);
     Font_EndTexturedTextRendering();
 }
 
@@ -1251,7 +1255,10 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
 }
 
 #if defined(VERSION_US_REV2)
+// asm-processor requires this import on one physical line.
+// clang-format off
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_RunOrderSelectScreen.s")
+// clang-format on
 #else
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     StageContext* sp24;

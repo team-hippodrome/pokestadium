@@ -581,9 +581,13 @@ s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_88
 }
 
 unk_D_8831A1F8 D_8831A1F8[] = {
-    LabPCList_CompareByPointer, LabPCList_CompareByPokemonColumn, LabPCList_CompareByLevelAsc, LabPCList_CompareByLevelDesc, LabPCList_CompareByHpAsc, LabPCList_CompareByHpDesc, LabPCList_CompareByAttackAsc,
-    LabPCList_CompareByAttackDesc, LabPCList_CompareByDefenseAsc, LabPCList_CompareByDefenseDesc, LabPCList_CompareBySpeedAsc, LabPCList_CompareBySpeedDesc, LabPCList_CompareBySpecialAsc, LabPCList_CompareBySpecialDesc,
-    LabPCList_CompareById, LabPCList_CompareByOtName, LabPCList_CompareByNickname, LabPCList_CompareBySpeciesDexOrder, LabPCList_CompareBySpeciesRawId,
+    LabPCList_CompareByPointer,      LabPCList_CompareByPokemonColumn, LabPCList_CompareByLevelAsc,
+    LabPCList_CompareByLevelDesc,    LabPCList_CompareByHpAsc,         LabPCList_CompareByHpDesc,
+    LabPCList_CompareByAttackAsc,    LabPCList_CompareByAttackDesc,    LabPCList_CompareByDefenseAsc,
+    LabPCList_CompareByDefenseDesc,  LabPCList_CompareBySpeedAsc,      LabPCList_CompareBySpeedDesc,
+    LabPCList_CompareBySpecialAsc,   LabPCList_CompareBySpecialDesc,   LabPCList_CompareById,
+    LabPCList_CompareByOtName,       LabPCList_CompareByNickname,      LabPCList_CompareBySpeciesDexOrder,
+    LabPCList_CompareBySpeciesRawId,
 };
 
 typedef struct unk_func_88316214 {
@@ -1039,8 +1043,8 @@ s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200
     return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
 }
 
-void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038* arg0, unk_func_8830867C_02C_1A8* arg1, unk_func_8830867C_02C_154* arg2,
-                   s32 arg3, s32 arg4) {
+void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038* arg0, unk_func_8830867C_02C_1A8* arg1,
+                             unk_func_8830867C_02C_154* arg2, s32 arg3, s32 arg4) {
     unk_func_88205880_00D0** var_s6;
     unk_func_8830867C_02C_154* var_s4;
     s32 i;

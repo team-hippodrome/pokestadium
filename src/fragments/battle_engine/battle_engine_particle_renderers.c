@@ -60,9 +60,10 @@ As well as:
 */
 
 s32 BattleAnim_DrawAsset95Ia8Billboard(Particle* arg0, CameraNode* arg1) {
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_PushBillboardMatrix(arg1, arg0->worldPosition, arg0->scale);
-    
+
     gSPDisplayList(gDisplayListHead++, gDL_PanelBackground);
 }
 
@@ -73,10 +74,10 @@ void BattleAnim_DrawFlame(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_LoadTextureIa8(sBattleAnimAssetPointers[0x76] + (arg0->textureFrame << 0xB), 0x20, 0x40);
     ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(sBattleAnimAssetPointers[0x77], 0x40, 0x40, 2, 1);
     ParticleGfx_SetAnimatedAuxTileSize(0, 0xA, 0x40, 0x40);
-    ParticleGfx_SetPrimEnvLodTextureCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha, arg0->envRed, arg0->envGreen, arg0->envBlue);
+    ParticleGfx_SetPrimEnvLodTextureCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha,
+                                            arg0->envRed, arg0->envGreen, arg0->envBlue);
     ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_8140E1F8);
 }
-
 
 /*
     Draw the flames when being *hit* by Flamethrower or dragon rage
@@ -88,7 +89,8 @@ void BattleAnim_DrawFlameHit(Particle* particle, CameraNode* camera) {
 }
 
 /*
-    Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack, or Explosion
+    Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack,
+   or Explosion
 */
 void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
@@ -123,14 +125,15 @@ s32 BattleAnim_DrawDigRocks(Particle* particle, UNUSED CameraNode* arg1) {
 }
 
 /*
-    Draws spore puffs for powder moves 
+    Draws spore puffs for powder moves
 */
 void BattleAnim_DrawSporePuffs(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha, arg0->envRed, arg0->envGreen, arg0->envBlue);
+    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha,
+                                     arg0->envRed, arg0->envGreen, arg0->envBlue);
     ParticleGfx_LoadTextureI4WrapSTNoMirror(sBattleAnimAssetPointers[0x27], 0x40, 0x40);
     ParticleGfx_SetAnimatedTileSize(2, -2, 0x40, 0x40);
     ParticleGfx_LoadTextureI4MultiBlockWrapST(sBattleAnimAssetPointers[0x28], 0x40, 0x40);
@@ -139,14 +142,15 @@ void BattleAnim_DrawSporePuffs(Particle* arg0, UNUSED CameraNode* arg1) {
 }
 
 /*
-    Draws faster spore puffs for powder moves 
+    Draws faster spore puffs for powder moves
 */
 void BattleAnim_DrawSporePuffsFast(Particle* arg0, UNUSED CameraNode* arg1) {
     ParticleGfx_Push2DTransform(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
 
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha, arg0->envRed, arg0->envGreen, arg0->envBlue);
+    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha,
+                                     arg0->envRed, arg0->envGreen, arg0->envBlue);
     ParticleGfx_LoadTextureI4WrapSTNoMirror(sBattleAnimAssetPointers[0x27], 0x40, 0x40);
     ParticleGfx_SetAnimatedTileSize(1, -3, 0x40, 0x40);
     ParticleGfx_LoadTextureI4MultiBlockWrapST(sBattleAnimAssetPointers[0x28], 0x40, 0x40);
@@ -162,7 +166,8 @@ void BattleAnim_DrawMistLightest(Particle* arg0, UNUSED CameraNode* arg1) {
 
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha, arg0->envRed, arg0->envGreen, arg0->envBlue);
+    ParticleGfx_SetPrimEnvLodCombine(0x80, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha,
+                                     arg0->envRed, arg0->envGreen, arg0->envBlue);
     ParticleGfx_LoadTextureMultiBlock4(sBattleAnimAssetPointers[0x29], 0, 0, 4, 0x20, 0x20, 1, 1, 5, 5, 2, 0);
     ParticleGfx_SetAnimatedTileSize(1, 1, 0x20, 0x20);
     ParticleGfx_LoadTextureMultiBlock4(sBattleAnimAssetPointers[0x29], 0x100, 1, 4, 0x20, 0x20, 1, 1, 5, 5, 1, 0xF);
@@ -175,14 +180,15 @@ void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg
 
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_LoadTextureI4WrapSTNoMirror(sBattleAnimAssetPointers[0x87], 0x20, 0x20);
     ParticleGfx_SetAnimatedTileSize(0, 2, 0x20, 0x20);
     ParticleGfx_DrawQuadVertices(gFullscreenQuadVtx);
 }
 
 /*
-    Draws the triple effect for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, and Slash. Called from 
+    Draws the triple effect for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, and Slash. Called from
     BattleAnim_DrawFullScreenTripleSlash or BattleAnim_DrawFullScreenSingleSlash depending on the move
 */
 void BattleAnim_DrawFullScreenSlash(Particle* arg0, u8* arg1) {
@@ -190,7 +196,8 @@ void BattleAnim_DrawFullScreenSlash(Particle* arg0, u8* arg1) {
 
     gSPDisplayList(gDisplayListHead++, D_8140DCD8);
 
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawI4TextureAtlas(arg1, D_84385C80, 0x40, 0x40, 0x40, 0x40);
 }
 
@@ -201,14 +208,12 @@ void BattleAnim_DrawFullScreenTripleSlash(Particle* particle, UNUSED CameraNode*
     BattleAnim_DrawFullScreenSlash(particle, sBattleAnimAssetPointers[0x19]);
 }
 
-
 /*
     Draws the Single slash effect for Cut, Vine Whip, and Crabhammer. Goes \ on use, and / on hit
 */
 void BattleAnim_DrawFullScreenSingleSlash(Particle* arg0, UNUSED CameraNode* arg1) {
     BattleAnim_DrawFullScreenSlash(arg0, sBattleAnimAssetPointers[0x5E]);
 }
-
 
 /*
     Draws slashes effects used at the start of Scratch,  Cut, Vine Whip, Fury Swipes, Slash being used
@@ -219,7 +224,8 @@ void BattleAnim_DrawSlashingEffect(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1A] + (arg0->textureFrame << 9), 0x20, 0x20);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawTransformedQuad(arg0->worldPosition, arg0->rotation, arg0->scale, D_8140E018);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -271,7 +277,8 @@ void BattleAnim_DrawAsset1DRotatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1D], 0x20, 0x20);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     sp40.x = arg0->rotation.x + 0x4000;
     sp40.y = arg0->rotation.y + 0x4000;
     sp40.z = arg0->rotation.z;
@@ -286,12 +293,13 @@ void BattleAnim_DrawParticleNoop(UNUSED Particle* arg0, UNUSED CameraNode* arg1)
 /*
     Draws the thin impact bolts when being hit by Hyper beam
     Also draws particular bolts during thunder shock, thunderbolt, and thunder
-*/ 
+*/
 void BattleAnim_DrawHyperBeamImpactThinBolts(Particle* arg0, UNUSED CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
 
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
@@ -305,7 +313,8 @@ void BattleAnim_DrawAsset13FrameI4YScaledQuadB(Particle* arg0, UNUSED CameraNode
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawTransformedQuadYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, D_84385D00);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -319,7 +328,8 @@ void BattleAnim_DrawBoltOfLightning(Particle* particle, UNUSED CameraNode* arg1)
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
     ParticleGfx_DrawTransformedQuadYScaled(particle->worldPosition, particle->rotation, particle->scale, D_84385D40);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -333,7 +343,8 @@ void BattleAnim_DrawLongBoltOfLightning(Particle* arg0, CameraNode* arg1) {
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawModelQuadRotatedYScaled(arg1, arg0->worldPosition, arg0->scale, D_84385CC0, arg0->rotation.z);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -341,13 +352,14 @@ void BattleAnim_DrawLongBoltOfLightning(Particle* arg0, CameraNode* arg1) {
 /*
     Draws the think impact bolts when being hit by Hyper beam
     Also draws particular bolts during thunder shock, thunderbolt, and thunder
-*/ 
+*/
 void BattleAnim_DrawHyperBeamImpactThickBolts(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawModelQuadRotatedYScaled(arg1, arg0->worldPosition, arg0->scale, D_84385D00, arg0->rotation.z);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -361,8 +373,10 @@ void BattleAnim_DrawThunderShockUnknown(Particle* particle, CameraNode* camera) 
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (sParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed, particle->envGreen, particle->envBlue, particle->primAlpha);
-    ParticleGfx_DrawModelQuadRotatedYScaled(camera, particle->worldPosition, particle->scale, D_84385D40, particle->rotation.z);
+    ParticleGfx_SetPrimEnvColorCombine(particle->primRed, particle->primGreen, particle->primBlue, particle->envRed,
+                                       particle->envGreen, particle->envBlue, particle->primAlpha);
+    ParticleGfx_DrawModelQuadRotatedYScaled(camera, particle->worldPosition, particle->scale, D_84385D40,
+                                            particle->rotation.z);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -372,7 +386,8 @@ void BattleAnim_DrawAsset1BI4TriangleA(Particle* arg0, UNUSED CameraNode* arg1) 
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1B], 0x10, 0x100);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                                       arg0->primAlpha);
     ParticleGfx_DrawTransformedTriangle(arg0->worldPosition, arg0->rotation, arg0->scale, gVtx_UI_TriangleSmall);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -383,7 +398,8 @@ void BattleAnim_DrawAsset1BI4TriangleB(Particle* arg0, UNUSED CameraNode* arg1) 
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1B], 0x10, 0x100);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                                       arg0->primAlpha);
     ParticleGfx_DrawTransformedTriangle(arg0->worldPosition, arg0->rotation, arg0->scale, gVtx_UI_TriangleLarge);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -404,7 +420,8 @@ void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_8140DD58);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x18] + (arg0->textureFrame << 9), 0x20, 0x20);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
     ParticleGfx_DrawModelQuadRotated(arg1, arg0->worldPosition, arg0->scale, D_8140E018, arg0->rotation.z);
 }
 
@@ -413,8 +430,10 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0xA9], 0x20, 0x20);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen, arg0->envBlue, arg0->primAlpha);
-    ParticleGfx_DrawTransformedQuadXYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, arg0->unk_20, gVtx_UI_RectVertical);
+    ParticleGfx_SetPrimEnvColorCombine(arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->envRed, arg0->envGreen,
+                                       arg0->envBlue, arg0->primAlpha);
+    ParticleGfx_DrawTransformedQuadXYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, arg0->unk_20,
+                                            gVtx_UI_RectVertical);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -423,5 +442,6 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
     handles drawing a single color over the entire screen that fades in and out for moves like Fire punch ands Slash
 */
 void BattleAnim_DrawFadingFullScreenColorOverlay(Particle* particle, UNUSED CameraNode* arg1) {
-    BattleAnim_DrawFullScreenColorOverlay(particle->primRed, particle->primGreen, particle->primBlue, particle->primAlpha);
+    BattleAnim_DrawFullScreenColorOverlay(particle->primRed, particle->primGreen, particle->primBlue,
+                                          particle->primAlpha);
 }

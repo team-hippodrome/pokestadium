@@ -577,7 +577,7 @@ void Trade_DrawSaveSeqMenuPanel(unk_D_82F210E0* arg0) {
                 }
                 arg2 = Font_MeasureTextExtent(0, 0, sp48[i]);
                 Font_Printf((var_s4->unk_00 + (var_s4->unk_04 / 2)) - (arg2 / 2), var_s4->unk_02 + i * 0x1C + 0x2C,
-                              sp48[i]);
+                            sp48[i]);
             }
         }
 
@@ -591,14 +591,15 @@ void Trade_DrawSaveSeqBannerPanel(unk_D_82F210E0* arg0) {
     unk_D_82F20A40_00E* temp_s0 = &arg0->unk_2C;
 
     if ((arg0->unk_2C.unk_04 != 0x210) || (arg0->unk_2C.unk_06 != 0)) {
-        Trade_DrawRoundedFrameLarge(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06, 0x1E, 0x1E, 0x82, 0xFF);
+        Trade_DrawRoundedFrameLarge(temp_s0->unk_00, temp_s0->unk_02, temp_s0->unk_04, temp_s0->unk_06, 0x1E, 0x1E,
+                                    0x82, 0xFF);
         if ((temp_s0->unk_04 == 0x210) && (temp_s0->unk_06 == 0x28)) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             sp34 = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, gTradeStrings, 0x1D)) / 2;
             Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - sp34, temp_s0->unk_02 + 8,
-                          Text_GetString(NULL, 0, gTradeStrings, 0x1D));
+                        Text_GetString(NULL, 0, gTradeStrings, 0x1D));
             Font_EndTexturedTextRendering();
         }
     }
@@ -621,7 +622,7 @@ void Trade_DrawSaveSeqSubBanner(unk_D_82F210E0* arg0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             sp40 = Text_GetString(NULL, 0, gTradeStrings, 0x1E);
             Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp40) / 2),
-                          temp_s0->unk_02 + 0x10, sp40);
+                        temp_s0->unk_02 + 0x10, sp40);
             Font_EndTexturedTextRendering();
         }
     }

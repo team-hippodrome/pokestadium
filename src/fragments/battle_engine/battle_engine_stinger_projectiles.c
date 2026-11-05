@@ -11,7 +11,7 @@ Moves covered by this file:
 void BattleAnim_InitStingerTrailColor(Particle* particle) {
     Particle_Scale_SetScaled(particle, 0.1f);
     Particle_SetPrimColor(particle, 0xFF, 0xFF, 0xFF); // #FFFFFF
-    Particle_SetEnvColor(particle, 0x64, 0xC8, 0xFF); // #64C8FF
+    Particle_SetEnvColor(particle, 0x64, 0xC8, 0xFF);  // #64C8FF
     Particle_SetPrimAlpha(particle, 0xFF);
     Particle_AdvanceLifecycle(particle);
 }
@@ -40,7 +40,7 @@ void BattleAnim_UpdateStingerProjectileLifecycle(Particle* particle) {
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* particle) {
     Particle_Scale_SetScaled(particle, 0.1f);
     Particle_SetPrimColor(particle, 0xFF, 0xFF, 0xFF); // #FFFFFF
-    Particle_SetEnvColor(particle, 0x64, 0xC8, 0xFF); // #64C8FF
+    Particle_SetEnvColor(particle, 0x64, 0xC8, 0xFF);  // #64C8FF
     Particle_SetPrimAlpha(particle, 0xFF);
     Particle_AdvanceLifecycle(particle);
 }

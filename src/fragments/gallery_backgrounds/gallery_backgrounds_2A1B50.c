@@ -141,7 +141,8 @@ s32 Gallery_BackgroundsChanged(void) {
         D_83407AC4->unk_6C &= ~2;
     }
 
-    if ((Gallery_ArraysDiffer(D_83403C60, D_83405010, 0x13B0) != 0) || (Gallery_ArraysDiffer(D_834063C0, D_83406F40, 0xB7C) != 0)) {
+    if ((Gallery_ArraysDiffer(D_83403C60, D_83405010, 0x13B0) != 0) ||
+        (Gallery_ArraysDiffer(D_834063C0, D_83406F40, 0xB7C) != 0)) {
         sp1C = 1;
     }
     return sp1C;
@@ -337,18 +338,20 @@ void Gallery_DrawRoundedFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, u
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300C4C0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300C340, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300C3C0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -475,7 +478,7 @@ void Gallery_DrawStatusIcon(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 void Gallery_InitSceneGrid(unk_D_83407B38* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, ModelLoadContext* arg5,
-                   BinArchive* arg6, unk_D_83403C60* arg7, s32 arg8, s32 arg9) {
+                           BinArchive* arg6, unk_D_83403C60* arg7, s32 arg8, s32 arg9) {
     UNUSED s32 pad;
     DepthBuffer* sp168;
     DepthBuffer* sp68[64];

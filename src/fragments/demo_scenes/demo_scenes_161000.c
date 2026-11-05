@@ -30,8 +30,8 @@ u16 Diorama_IsModelInCameraCone(CameraNode* camera, DisplayObject* arg1, s16 arg
     sp50 = (COSS((sp44 + arg2) + 0x8000) * arg4) + sp40;
     sp5C = (SINS((sp44 + arg2) + 0x8000) * arg4) + sp38;
 
-    sp6C =
-        ((sp54 - arg1->position.z) * (sp5C - arg1->position.x)) - ((sp50 - arg1->position.z) * (sp60 - arg1->position.x));
+    sp6C = ((sp54 - arg1->position.z) * (sp5C - arg1->position.x)) -
+           ((sp50 - arg1->position.z) * (sp60 - arg1->position.x));
 
     arg11 = arg1;
 
@@ -98,7 +98,8 @@ void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1) {
     sp2C = arg0->eyeDistance;
     sp28 = arg0->distance;
 
-    DioramaCamKeyframe_SetAngles(ptr, arg0->startingRotationX, arg0->startingRotationY, arg0->rotationXOffset, arg0->rotationYOffset);
+    DioramaCamKeyframe_SetAngles(ptr, arg0->startingRotationX, arg0->startingRotationY, arg0->rotationXOffset,
+                                 arg0->rotationYOffset);
     DioramaCamKeyframe_SetDistance(ptr, sp34, sp30);
     DioramaCamKeyframe_SetAtAngles(ptr, arg0->eyeRotationX, arg0->eyeRotationY, arg0->rotationX, arg0->rotationY);
     DioramaCamKeyframe_SetAtDistance(ptr, sp2C, sp28);
@@ -109,7 +110,8 @@ void Diorama_SetCameraToKeyframeStart(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* a
     CameraNode* sp2C = arg1->unk_00;
 
     Camera_ComputeEyeFromAngles(&arg0->unk_00, &sp2C->view.targetPosition, arg0->unk_18, arg0->unk_0C, arg0->unk_0E);
-    Camera_ComputeEyeFromAngles(&sp2C->view.targetPosition, &sp2C->view.eyePosition, arg0->unk_1C, arg0->unk_12, arg0->unk_14);
+    Camera_ComputeEyeFromAngles(&sp2C->view.targetPosition, &sp2C->view.eyePosition, arg0->unk_1C, arg0->unk_12,
+                                arg0->unk_14);
 }
 
 s32 Diorama_UpdateCameraKeyframe(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) {
@@ -134,7 +136,8 @@ s32 Diorama_UpdateCameraKeyframe(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) 
     arg1->unk_04.unk_68 = Math_StepToF(arg1->unk_04.unk_68, sp3C, arg0->unk_34, arg0->unk_34);
 
     Camera_ComputeEyeFromAngles(&sp58, &temp_s2->view.targetPosition, arg1->unk_04.unk_68, sp3A, sp38);
-    Camera_ComputeEyeFromAngles(&temp_s2->view.targetPosition, &temp_s2->view.eyePosition, arg0->unk_1C, arg0->unk_12, arg0->unk_14);
+    Camera_ComputeEyeFromAngles(&temp_s2->view.targetPosition, &temp_s2->view.eyePosition, arg0->unk_1C, arg0->unk_12,
+                                arg0->unk_14);
 
     arg1->unk_04.unk_6C = sp3C - arg1->unk_04.unk_68;
     if (arg1->unk_04.unk_6C <= 5.0f) {

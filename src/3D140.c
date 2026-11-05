@@ -179,14 +179,23 @@ s32 Battle_MapCategoryIdToCompactIndex(u8);
 ALDMAproc __amDmaNew(AMDMAState** state);
 
 u8 D_80077D90[4] = {
-    0x00, 0x00, 0x00, 0x00,
+    0x00,
+    0x00,
+    0x00,
+    0x00,
 };
 f32 D_80077D94 = 0.800000011920929f;
 u8 D_80077D98[4] = {
-    0x01, 0x00, 0x00, 0x00,
+    0x01,
+    0x00,
+    0x00,
+    0x00,
 };
 u8 D_80077D9C[4] = {
-    0x00, 0x00, 0x00, 0x00,
+    0x00,
+    0x00,
+    0x00,
+    0x00,
 };
 u16 D_80077DA0 = 0x0000;
 u32 D_80077DA4 = 0x00000000;
@@ -516,7 +525,6 @@ void __clearAudioDMA(void) {
 
     nextDMA = 0;
 }
-
 
 void Cry_SetEnabled(s32 arg0) {
     const f32 D_8007C7C0 = 0.8000000119f;
