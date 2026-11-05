@@ -2201,40 +2201,40 @@
     - [0x3132F0, c,      fragments/battle_engine/battle_engine_intro]
     - [0x313E00, c,      fragments/battle_engine/battle_engine_scene]
     - [0x3158D0, c,      fragments/battle_engine/battle_engine_status_animation]
-    - [0x315DF0, c,      fragments/battle_engine/battle_engine_315D50]
-    - [0x317F10, c,      fragments/battle_engine/battle_engine_317E70]
-    - [0x31A880, c,      fragments/battle_engine/battle_engine_31A7E0]
-    - [0x31AAD0, c,      fragments/battle_engine/battle_engine_31AA30]
-    - [0x31C700, c,      fragments/battle_engine/battle_engine_31C660]
-    - [0x31DA90, c,      fragments/battle_engine/battle_engine_31D9F0]
-    - [0x322450, c,      fragments/battle_engine/battle_engine_3223B0]
-    - [0x327570, c,      fragments/battle_engine/battle_engine_3274D0]
+    - [0x315DF0, c,      fragments/battle_engine/battle_engine_animation_system]
+    - [0x317F10, c,      fragments/battle_engine/battle_engine_particle_system]
+    - [0x31A880, c,      fragments/battle_engine/battle_engine_stinger_projectiles]
+    - [0x31AAD0, c,      fragments/battle_engine/battle_engine_particle_renderers]
+    - [0x31C700, c,      fragments/battle_engine/battle_engine_tint_and_alpha_effects]
+    - [0x31DA90, c,      fragments/battle_engine/battle_engine_flame_and_explosion_effects]
+    - [0x322450, c,      fragments/battle_engine/battle_engine_water_and_beam_effects]
+    - [0x327570, c,      fragments/battle_engine/battle_engine_electric_burst_effects]
     - [0x328FB0, c,      fragments/battle_engine/battle_engine_328F10]
-    - [0x32A6E0, c,      fragments/battle_engine/battle_engine_32A640]
-    - [0x32B720, c,      fragments/battle_engine/battle_engine_32B680]
-    - [0x339D40, c,      fragments/battle_engine/battle_engine_339CA0]
-    - [0x343950, c,      fragments/battle_engine/battle_engine_3438B0]
-    - [0x343C40, c,      fragments/battle_engine/battle_engine_343BA0]
-    - [0x3473D0, c,      fragments/battle_engine/battle_engine_347330]
-    - [0x34A4C0, c,      fragments/battle_engine/battle_engine_34A420]
-    - [0x34E240, c,      fragments/battle_engine/battle_engine_34E1A0]
-    - [0x34F240, c,      fragments/battle_engine/battle_engine_34F1A0]
+    - [0x32A6E0, c,      fragments/battle_engine/battle_engine_lingering_fall_particles]
+    - [0x32B720, c,      fragments/battle_engine/battle_engine_model_and_overlay_effects]
+    - [0x339D40, c,      fragments/battle_engine/battle_engine_shared_move_effects]
+    - [0x343950, c,      fragments/battle_engine/battle_engine_effect_render_pipeline]
+    - [0x343C40, c,      fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x3473D0, c,      fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
+    - [0x34A4C0, c,      fragments/battle_engine/battle_engine_lasso]
+    - [0x34E240, c,      fragments/battle_engine/battle_engine_hypnosis_screech]
+    - [0x34F240, c,      fragments/battle_engine/battle_engine_sing_ripple]
     - [0x350370, c,      fragments/battle_engine/battle_engine_3502D0]
-    - [0x351370, c,      fragments/battle_engine/battle_engine_3512D0]
-    - [0x351FC0, c,      fragments/battle_engine/battle_engine_351F20]
+    - [0x351370, c,      fragments/battle_engine/battle_engine_swift]
+    - [0x351FC0, c,      fragments/battle_engine/battle_engine_beam_renderer]
     - [0x352610, c,      fragments/battle_engine/battle_engine_352570]
-    - [0x353410, c,      fragments/battle_engine/battle_engine_353370]
+    - [0x353410, c,      fragments/battle_engine/battle_engine_spike_cannon]
     - [0x354150, c,      fragments/battle_engine/battle_engine_3540B0]
-    - [0x354D70, c,      fragments/battle_engine/battle_engine_354CD0]
-    - [0x355AA0, c,      fragments/battle_engine/battle_engine_355A00]
+    - [0x354D70, c,      fragments/battle_engine/battle_engine_petal_dance]
+    - [0x355AA0, c,      fragments/battle_engine/battle_engine_razor_leaf]
     - [0x3567D0, c,      fragments/battle_engine/battle_engine_356730]
-    - [0x357CD0, c,      fragments/battle_engine/battle_engine_357C30]
+    - [0x357CD0, c,      fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x359280, c,      fragments/battle_engine/battle_engine_3591E0]
     - [0x359850, c,      fragments/battle_engine/battle_engine_3597B0]
-    - [0x35A020, c,      fragments/battle_engine/battle_engine_359F80]
-    - [0x35A030, c,      fragments/battle_engine/battle_engine_359F90]
-    - [0x35E010, c,      fragments/battle_engine/battle_engine_35DF70]
-    - [0x3610F0, c,      fragments/battle_engine/battle_engine_361050]
+    - [0x35A020, c,      fragments/battle_engine/battle_engine_debug_strings]
+    - [0x35A030, c,      fragments/battle_engine/battle_engine_mechanics]
+    - [0x35E010, c,      fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x3610F0, c,      fragments/battle_engine/battle_engine_com_decision_logic]
 
     - [0x36ECB0, .data,   fragments/battle_engine/battle_engine_main]
     - [0x36EED0, .data,   fragments/battle_engine/battle_engine_move_animation]
@@ -2245,28 +2245,28 @@
     - [0x370340, .data,   fragments/battle_engine/battle_engine_broll]
     - [0x3704B0, .data,   fragments/battle_engine/battle_engine_camera]
     - [0x3704D0, .data,   fragments/battle_engine/battle_engine_battle_phases]
-    - [0x370510, .data,   fragments/battle_engine/battle_engine_315D50]
-    - [0x372460, .data,   fragments/battle_engine/battle_engine_32B680]
-    - [0x372920, .data,   fragments/battle_engine/battle_engine_343BA0]
-    - [0x372BE0, .data,   fragments/battle_engine/battle_engine_347330]
-    - [0x3739C0, .data,   fragments/battle_engine/battle_engine_34A420]
-    - [0x373C60, .data,   fragments/battle_engine/battle_engine_34E1A0]
-    - [0x373D90, .data,   fragments/battle_engine/battle_engine_34F1A0]
+    - [0x370510, .data,   fragments/battle_engine/battle_engine_animation_system]
+    - [0x372460, .data,   fragments/battle_engine/battle_engine_model_and_overlay_effects]
+    - [0x372920, .data,   fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x372BE0, .data,   fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
+    - [0x3739C0, .data,   fragments/battle_engine/battle_engine_lasso]
+    - [0x373C60, .data,   fragments/battle_engine/battle_engine_hypnosis_screech]
+    - [0x373D90, .data,   fragments/battle_engine/battle_engine_sing_ripple]
     - [0x373EC0, .data,   fragments/battle_engine/battle_engine_3502D0]
-    - [0x373FF0, .data,   fragments/battle_engine/battle_engine_3512D0]
-    - [0x3740E0, .data,   fragments/battle_engine/battle_engine_351F20]
+    - [0x373FF0, .data,   fragments/battle_engine/battle_engine_swift]
+    - [0x3740E0, .data,   fragments/battle_engine/battle_engine_beam_renderer]
     - [0x374210, .data,   fragments/battle_engine/battle_engine_352570]
-    - [0x374310, .data,   fragments/battle_engine/battle_engine_353370]
+    - [0x374310, .data,   fragments/battle_engine/battle_engine_spike_cannon]
     - [0x374360, .data,   fragments/battle_engine/battle_engine_3540B0]
-    - [0x3743B0, .data,   fragments/battle_engine/battle_engine_354CD0]
-    - [0x3744C0, .data,   fragments/battle_engine/battle_engine_355A00]
+    - [0x3743B0, .data,   fragments/battle_engine/battle_engine_petal_dance]
+    - [0x3744C0, .data,   fragments/battle_engine/battle_engine_razor_leaf]
     - [0x3745D0, .data,   fragments/battle_engine/battle_engine_356730]
-    - [0x374640, .data,   fragments/battle_engine/battle_engine_357C30]
+    - [0x374640, .data,   fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x3746C0, .data,   fragments/battle_engine/battle_engine_3591E0]
     - [0x3751B0, .data,   fragments/battle_engine/battle_engine_3597B0]
-    - [0x3755C0, .data,   fragments/battle_engine/battle_engine_359F90]
-    - [0x3757B0, .data,   fragments/battle_engine/battle_engine_35DF70]
-    - [0x375910, .data,   fragments/battle_engine/battle_engine_361050]
+    - [0x3755C0, .data,   fragments/battle_engine/battle_engine_mechanics]
+    - [0x3757B0, .data,   fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x375910, .data,   fragments/battle_engine/battle_engine_com_decision_logic]
 
     - [0x375A60, .rodata, fragments/battle_engine/battle_engine_move_animation]
     - [0x375B00, .rodata, fragments/battle_engine/battle_engine_move_model_transforms]
@@ -2279,36 +2279,36 @@
     - [0x3761A0, .rodata, fragments/battle_engine/battle_engine_battle_phases]
     - [0x376550, .rodata, fragments/battle_engine/battle_engine_intro]
     - [0x376580, .rodata, fragments/battle_engine/battle_engine_scene]
-    - [0x3766F0, .rodata, fragments/battle_engine/battle_engine_315D50]
-    - [0x376830, .rodata, fragments/battle_engine/battle_engine_317E70]
-    - [0x376950, .rodata, fragments/battle_engine/battle_engine_31C660]
-    - [0x376980, .rodata, fragments/battle_engine/battle_engine_31D9F0]
-    - [0x376A50, .rodata, fragments/battle_engine/battle_engine_3223B0]
-    - [0x376AB0, .rodata, fragments/battle_engine/battle_engine_3274D0]
+    - [0x3766F0, .rodata, fragments/battle_engine/battle_engine_animation_system]
+    - [0x376830, .rodata, fragments/battle_engine/battle_engine_particle_system]
+    - [0x376950, .rodata, fragments/battle_engine/battle_engine_tint_and_alpha_effects]
+    - [0x376980, .rodata, fragments/battle_engine/battle_engine_flame_and_explosion_effects]
+    - [0x376A50, .rodata, fragments/battle_engine/battle_engine_water_and_beam_effects]
+    - [0x376AB0, .rodata, fragments/battle_engine/battle_engine_electric_burst_effects]
     - [0x376AE0, .rodata, fragments/battle_engine/battle_engine_328F10]
-    - [0x376B80, .rodata, fragments/battle_engine/battle_engine_32A640]
-    - [0x376BE0, .rodata, fragments/battle_engine/battle_engine_32B680]
-    - [0x377940, .rodata, fragments/battle_engine/battle_engine_339CA0]
-    - [0x377D30, .rodata, fragments/battle_engine/battle_engine_343BA0]
-    - [0x377E40, .rodata, fragments/battle_engine/battle_engine_347330]
-    - [0x377EE0, .rodata, fragments/battle_engine/battle_engine_34A420]
-    - [0x378040, .rodata, fragments/battle_engine/battle_engine_34E1A0]
-    - [0x378060, .rodata, fragments/battle_engine/battle_engine_34F1A0]
+    - [0x376B80, .rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
+    - [0x376BE0, .rodata, fragments/battle_engine/battle_engine_model_and_overlay_effects]
+    - [0x377940, .rodata, fragments/battle_engine/battle_engine_shared_move_effects]
+    - [0x377D30, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x377E40, .rodata, fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
+    - [0x377EE0, .rodata, fragments/battle_engine/battle_engine_lasso]
+    - [0x378040, .rodata, fragments/battle_engine/battle_engine_hypnosis_screech]
+    - [0x378060, .rodata, fragments/battle_engine/battle_engine_sing_ripple]
     - [0x378080, .rodata, fragments/battle_engine/battle_engine_3502D0]
-    - [0x3780A0, .rodata, fragments/battle_engine/battle_engine_3512D0]
-    - [0x3780E0, .rodata, fragments/battle_engine/battle_engine_351F20]
+    - [0x3780A0, .rodata, fragments/battle_engine/battle_engine_swift]
+    - [0x3780E0, .rodata, fragments/battle_engine/battle_engine_beam_renderer]
     - [0x378110, .rodata, fragments/battle_engine/battle_engine_352570]
-    - [0x378150, .rodata, fragments/battle_engine/battle_engine_353370]
+    - [0x378150, .rodata, fragments/battle_engine/battle_engine_spike_cannon]
     - [0x3781A0, .rodata, fragments/battle_engine/battle_engine_3540B0]
-    - [0x3781E0, .rodata, fragments/battle_engine/battle_engine_354CD0]
-    - [0x378210, .rodata, fragments/battle_engine/battle_engine_355A00]
+    - [0x3781E0, .rodata, fragments/battle_engine/battle_engine_petal_dance]
+    - [0x378210, .rodata, fragments/battle_engine/battle_engine_razor_leaf]
     - [0x378240, .rodata, fragments/battle_engine/battle_engine_356730]
-    - [0x378250, .rodata, fragments/battle_engine/battle_engine_357C30]
+    - [0x378250, .rodata, fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x378270, .rodata, fragments/battle_engine/battle_engine_3591E0]
-    - [0x378280, .rodata, fragments/battle_engine/battle_engine_359F80]
-    - [0x378560, .rodata, fragments/battle_engine/battle_engine_359F90]
-    - [0x3785E0, .rodata, fragments/battle_engine/battle_engine_35DF70]
-    - [0x378750, .rodata, fragments/battle_engine/battle_engine_361050]
+    - [0x378280, .rodata, fragments/battle_engine/battle_engine_debug_strings]
+    - [0x378560, .rodata, fragments/battle_engine/battle_engine_mechanics]
+    - [0x3785E0, .rodata, fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x378750, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
 
     - {vram: 0x8438E440, type:  .bss, name: fragments/battle_engine/battle_engine_main}
     - {vram: 0x8438E7B0, type:  .bss, name: fragments/battle_engine/battle_engine_move_animation}
@@ -2319,25 +2319,25 @@
     - {vram: 0x843901B0, type:  .bss, name: fragments/battle_engine/battle_engine_camera}
     - {vram: 0x84390200, type:  .bss, name: fragments/battle_engine/battle_engine_battle_phases}
     - {vram: 0x84390240, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
-    - {vram: 0x843902A0, type:  .bss, name: fragments/battle_engine/battle_engine_315D50}
-    - {vram: 0x843920C0, type:  .bss, name: fragments/battle_engine/battle_engine_343BA0}
-    - {vram: 0x843925E0, type:  .bss, name: fragments/battle_engine/battle_engine_347330}
-    - {vram: 0x84397610, type:  .bss, name: fragments/battle_engine/battle_engine_34A420}
-    - {vram: 0x8439CA60, type:  .bss, name: fragments/battle_engine/battle_engine_34E1A0}
-    - {vram: 0x8439E680, type:  .bss, name: fragments/battle_engine/battle_engine_34F1A0}
+    - {vram: 0x843902A0, type:  .bss, name: fragments/battle_engine/battle_engine_animation_system}
+    - {vram: 0x843920C0, type:  .bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+    - {vram: 0x843925E0, type:  .bss, name: fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid}
+    - {vram: 0x84397610, type:  .bss, name: fragments/battle_engine/battle_engine_lasso}
+    - {vram: 0x8439CA60, type:  .bss, name: fragments/battle_engine/battle_engine_hypnosis_screech}
+    - {vram: 0x8439E680, type:  .bss, name: fragments/battle_engine/battle_engine_sing_ripple}
     - {vram: 0x843A06A0, type:  .bss, name: fragments/battle_engine/battle_engine_3502D0}
-    - {vram: 0x843A22C0, type:  .bss, name: fragments/battle_engine/battle_engine_3512D0}
+    - {vram: 0x843A22C0, type:  .bss, name: fragments/battle_engine/battle_engine_swift}
     - {vram: 0x843AA880, type:  .bss, name: fragments/battle_engine/battle_engine_352570}
-    - {vram: 0x843AB940, type:  .bss, name: fragments/battle_engine/battle_engine_353370}
+    - {vram: 0x843AB940, type:  .bss, name: fragments/battle_engine/battle_engine_spike_cannon}
     - {vram: 0x843ACA10, type:  .bss, name: fragments/battle_engine/battle_engine_3540B0}
-    - {vram: 0x843ADA80, type:  .bss, name: fragments/battle_engine/battle_engine_354CD0}
-    - {vram: 0x843B8340, type:  .bss, name: fragments/battle_engine/battle_engine_355A00}
+    - {vram: 0x843ADA80, type:  .bss, name: fragments/battle_engine/battle_engine_petal_dance}
+    - {vram: 0x843B8340, type:  .bss, name: fragments/battle_engine/battle_engine_razor_leaf}
     - {vram: 0x843C2C00, type:  .bss, name: fragments/battle_engine/battle_engine_356730}
-    - {vram: 0x843C3500, type:  .bss, name: fragments/battle_engine/battle_engine_357C30}
+    - {vram: 0x843C3500, type:  .bss, name: fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails}
     - {vram: 0x843C49C0, type:  .bss, name: fragments/battle_engine/battle_engine_3591E0}
     - {vram: 0x843C4D90, type:  .bss, name: fragments/battle_engine/battle_engine_3597B0}
-    - {vram: 0x843C4DA0, type:  .bss, name: fragments/battle_engine/battle_engine_359F90}
-    - {vram: 0x843C5310, type:  .bss, name: fragments/battle_engine/battle_engine_361050}
+    - {vram: 0x843C4DA0, type:  .bss, name: fragments/battle_engine/battle_engine_mechanics}
+    - {vram: 0x843C5310, type:  .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
 
   - name: fragment62_relocs
     type: code
