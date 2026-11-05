@@ -2076,7 +2076,7 @@ void BattleAnim_EndSleepStatusAnimation(ActivePokemon* active_pokemon);
 void BattleAnim_ClearSleepStatusAnimation(ActivePokemon* active_pokemon);
 
 
-//@src/fragments/battle_engine/battle_engine_315D50.c
+//@src/fragments/battle_engine/battle_engine_animation_system.c
 void BattleAnim_PlayMenuScrollSoundEffect(void);
 void BattleAnim_PlayMenuConfirmSoundEffect(void);
 void BattleAnim_PlayMenuBackSoundEffect(void);
@@ -2148,7 +2148,7 @@ void BattleAnim_GetCameraStoredAngles70(s16* arg0, s16* arg1);
 void BattleAnim_GetCameraStoredYaw72(s16* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_317E70.c
+//@src/fragments/battle_engine/battle_engine_particle_system.c
 void BattleAnim_InitParticleSystem(void);
 BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void);
 void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0);
@@ -2249,7 +2249,7 @@ void BattleAnim_SetGlobalTintFromParticle(Particle* arg0);
 void BattleAnim_LoadGlobalTintToParticle(Particle* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_31A7E0.c
+//@src/fragments/battle_engine/battle_engine_stinger_projectiles.c
 void BattleAnim_InitStingerTrailColor(Particle* arg0);
 void BattleAnim_UpdateStingerProjectileLifecycle(Particle* arg0);
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
@@ -2257,7 +2257,7 @@ void BattleAnim_SpawnStingerProjectile(Particle* arg0);
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
 
-//@src/fragments/battle_engine/battle_engine_31AA30.c
+//@src/fragments/battle_engine/battle_engine_particle_renderers.c
 s32 BattleAnim_DrawAsset95Ia8Billboard(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawFlame(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1);
@@ -2291,7 +2291,7 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
 void BattleAnim_DrawFadingFullScreenColorOverlay(Particle* arg0, UNUSED CameraNode* arg1);
 
 
-//@src/fragments/battle_engine/battle_engine_31C660.c
+//@src/fragments/battle_engine/battle_engine_tint_and_alpha_effects.c
 void BattleAnim_SetupBackgroundRecolor(Particle* arg0);
 void BattleAnim_RunBackgroundRecolor(Particle* arg0);
 void BattleAnim_SetupTargetHueChange(Particle* arg0);
@@ -2332,7 +2332,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
 void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_31D9F0.c
+//@src/fragments/battle_engine/battle_engine_flame_and_explosion_effects.c
 void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1);
 void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0);
 void BattleAnim_RunFireBreathFlameFading(Particle* arg0);
@@ -2412,7 +2412,7 @@ void func_843378CC(void);
 void BattleAnim_InitializeFireBlastHit(void);
 
 
-//@src/fragments/battle_engine/battle_engine_3223B0.c
+//@src/fragments/battle_engine/battle_engine_water_and_beam_effects.c
 void BattleAnim_SetupSurfHitSpark(Particle* arg0);
 void BattleAnim_RunSurfHitSpark(Particle* arg0);
 void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1);
@@ -2506,7 +2506,7 @@ void BattleAnim_InitializeSkyAttackHitSequence(void);
 void BattleAnim_InitializeTriAttackHit(void);
 
 
-//@src/fragments/battle_engine/battle_engine_3274D0.c
+//@src/fragments/battle_engine/battle_engine_electric_burst_effects.c
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0);
 void BattleAnim_RunStrongElectricSpark(Particle* arg0);
 void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0);
@@ -2564,7 +2564,7 @@ void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
 
-//@src/fragments/battle_engine/battle_engine_32A640.c
+//@src/fragments/battle_engine/battle_engine_lingering_fall_particles.c
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0);
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0);
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0);
@@ -2581,7 +2581,7 @@ void BattleAnim_InitializePetalDanceHit(void);
 void BattleAnim_InitializeWingAttackHit(void);
 
 
-//@src/fragments/battle_engine/battle_engine_32B680.c
+//@src/fragments/battle_engine/battle_engine_model_and_overlay_effects.c
 void BattleAnim_InitializeThunderWaveUse(void);
 void BattleAnim_InitializeThunderWaveHit(void);
 void BattleAnim_StartEffect1Descriptor2FPhaseFadeOut(void);
@@ -2614,7 +2614,7 @@ void BattleAnim_ApplySpeciesXZOffsetVariantA(Particle*);
 void BattleAnim_InitializeRazorWindUse(void);
 
 
-//@src/fragments/battle_engine/battle_engine_32B680.c
+//@src/fragments/battle_engine/battle_engine_model_and_overlay_effects.c
 void BattleAnim_SetupReflectiveCamera(void);
 void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1);
 void BattleAnim_CallbackInitModelAnimWait(Particle* arg0);
@@ -2895,7 +2895,7 @@ void ParticleEffect_CreateSmokeHighPriority(void);
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(Particle* arg0);
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0);
 void ParticleEffect_CreateDual(void);
-//@src/fragments/battle_engine/battle_engine_339CA0.c
+//@src/fragments/battle_engine/battle_engine_shared_move_effects.c
 void BattleAnim_SetupSlashingMoveUse(Particle* arg0);
 void BattleAnim_RunSlashingMoveUse(Particle* arg0);
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0);
@@ -3051,14 +3051,14 @@ void BattleAnim_InitializeRecoverUse(void);
 void BattleAnim_InitializeHardenUse(void);
 
 // 3438B0
-//@src/fragments/battle_engine/battle_engine_3438B0.c
+//@src/fragments/battle_engine/battle_engine_effect_render_pipeline.c
 void BattleAnim_RenderNop1(void);
 void BattleAnim_RenderNop2(void);
 void BattleAnim_DrawFullScreenColorOverlay(u8, u8, u8, u8);
 void BattleAnim_RenderEffectsFrame(CameraNode*);
 
 
-//@src/fragments/battle_engine/battle_engine_343BA0.c
+//@src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c
 void BattleAnim_NoopUpdateHook(void);
 void func_843592E8(void);
 void func_843592F0(void);
@@ -3187,7 +3187,7 @@ s32 BattleAnim_RunHyperBeamUseCombinedTrail(void);
 void BattleAnim_DrawHyperBeamUseCombinedTrail(void);
 
 
-//@src/fragments/battle_engine/battle_engine_347330.c
+//@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c
 void MistHaze_Init(void);
 void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
 void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
@@ -3204,7 +3204,7 @@ s32 SurfTerrainGrid_Update(void);
 Gfx* SurfTerrainGrid_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_34A420.c
+//@src/fragments/battle_engine/battle_engine_lasso.c
 void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
 f32 Strip400_GetTailFadeRatio(void);
 s32 LassoHit_Update(void);
@@ -3221,7 +3221,7 @@ s32 Radial20_IsComplete(void);
 Gfx* Radial20_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_34E1A0.c
+//@src/fragments/battle_engine/battle_engine_hypnosis_screech.c
 void HypnosisScreechTrail_Init(s16 arg0);
 void HypnosisScreechTrail_Start(s32 arg0, s32 arg1);
 void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1);
@@ -3230,7 +3230,7 @@ void HypnosisScreechTrail_Reset(void);
 Gfx* HypnosisScreechTrail_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_34F1A0.c
+//@src/fragments/battle_engine/battle_engine_sing_ripple.c
 void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1);
 void SingTrail_InitPool(s16 arg0);
 void SingTrail_UpdateNodes(s32 arg0, s32 arg1);
@@ -3249,7 +3249,7 @@ void Trail40GridAlt_Reset(void);
 Gfx* Trail40GridAlt_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_3512D0.c
+//@src/fragments/battle_engine/battle_engine_swift.c
 void SwiftRibbonSheet_Init(void);
 void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, s16 argB);
 void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2);
@@ -3258,7 +3258,7 @@ s32 SwiftRibbonSheet_IsComplete(void);
 Gfx* SwiftRibbonSheet_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_351F20.c
+//@src/fragments/battle_engine/battle_engine_beam_renderer.c
 Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 
 
@@ -3271,7 +3271,7 @@ s32 FourStreamTrail_IsComplete(void);
 Gfx* FourStreamTrail_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_353370.c
+//@src/fragments/battle_engine/battle_engine_spike_cannon.c
 void SpikeCannonFourStream_Init(void);
 void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
@@ -3289,7 +3289,7 @@ s32 OwnerAnchoredFourStream_IsComplete(void);
 Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_354CD0.c
+//@src/fragments/battle_engine/battle_engine_petal_dance.c
 void PetalDanceTrail_Init(void);
 void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void PetalDanceTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2);
@@ -3298,7 +3298,7 @@ s32 PetalDanceTrail_IsComplete(void);
 Gfx* PetalDanceTrail_Draw(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_355A00.c
+//@src/fragments/battle_engine/battle_engine_razor_leaf.c
 void RazorLeafTrail_Init(void);
 void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2);
@@ -3318,7 +3318,7 @@ Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1);
 Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0);
 
 
-//@src/fragments/battle_engine/battle_engine_357C30.c
+//@src/fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails.c
 void HyperBeamIceBeamTrail_ResetPool(void);
 void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F);
 void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7);
@@ -3348,11 +3348,11 @@ Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1);
 void BattleScene_DrawStripWipe(void);
 
 
-//@src/fragments/battle_engine/battle_engine_359F80.c
+//@src/fragments/battle_engine/battle_engine_debug_strings.c
 void func_8436F6C0(void);
 
 
-//@src/fragments/battle_engine/battle_engine_359F90.c
+//@src/fragments/battle_engine/battle_engine_mechanics.c
 void func_8436F6D0(void);
 u8 Battle_Random(void);
 u8 Battle_RandomAccuracy(void);
@@ -3409,7 +3409,7 @@ void Battle_ResolveMonAction(void);
 void BeginBattleForEntity(ActivePokemon* active_pokemon);
 
 
-//@src/fragments/battle_engine/battle_engine_35DF70.c
+//@src/fragments/battle_engine/battle_engine_move_mechanics.c
 u16 Battle_ApplyStatStageMultiplier(u16* arg0, u16 arg1, u8 arg2);
 void Battle_Effect_Sleep(void);
 void Battle_Effect_Poison(void);
@@ -3450,7 +3450,7 @@ void Battle_RunMoveEffect(void);
 void Battle_ExecuteMoveEffect(void);
 
 
-//@src/fragments/battle_engine/battle_engine_361050.c
+//@src/fragments/battle_engine/battle_engine_com_decision_logic.c
 void BattleAI_LoadConfiguration(s32 arg0, u32 arg1);
 void func_843767DC(void);
 s32 BattleAI_RandomBelowInclusive(s32 arg0);

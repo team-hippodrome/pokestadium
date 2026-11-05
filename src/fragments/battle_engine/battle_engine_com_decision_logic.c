@@ -4031,7 +4031,7 @@ void BattleAI_SelectRandomFallbackOrder(BattleAiTeamState* arg0, u8* arg1, s32 a
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_361050/BattleAI_SelectRandomUsableCandidate.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_com_decision_logic/BattleAI_SelectRandomUsableCandidate.s")
 #else
 s32 BattleAI_SelectRandomUsableCandidate(BattleAiTeamState* arg0) {
     s32 var_v1;

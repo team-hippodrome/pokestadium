@@ -775,7 +775,7 @@ void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
  * X rotation. Also called by SurfTerrainGrid_Draw to compare the camera-aligned
  * quad corners against the water surface.
  * //@src/fragments/battle_engine/battle_engine_2F3CB0.c
- * //@src/fragments/battle_engine/battle_engine_347330.c SurfTerrainGrid_UpdateWaves
+ * //@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c SurfTerrainGrid_UpdateWaves
  */
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
     UNUSED s32 pad1[2];
