@@ -4,6 +4,20 @@
 #include "src/matrix.h"
 #include "moves.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 typedef struct unk_D_843C4DA0 {
     /* 0x00 */ u16 unk_00;
     /* 0x02 */ u8 unk_02;

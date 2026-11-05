@@ -1,6 +1,20 @@
 #include "battle_engine.h"
 #include "src/gfx_buffer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static TexturedRibbonSheet D_843A22C0[40];
 
 static Vtx D_84389690[] = {
@@ -38,7 +52,7 @@ static Gfx D_84389720[] = {
     gsSPEndDisplayList(),
 };
 
-void TexturedRibbonSheet_Init(void) {
+void SwiftRibbonSheet_Init(void) {
     TexturedRibbonSheet* var_v0;
     TexturedRibbonSheetNode* var_a0;
     s32 i;
@@ -61,7 +75,7 @@ void TexturedRibbonSheet_Init(void) {
     }
 }
 
-void TexturedRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, s16 argB) {
     TexturedRibbonSheet* var_v1;
     TexturedRibbonSheetNode* var_s0;
@@ -120,14 +134,14 @@ void TexturedRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4,
     }
 }
 
-void TexturedRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
+void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     MtxF sp30;
 
     guRotateRPYF(sp30.mf, 90.0f, (arg0 * 360.0) / 6.2831854820251465, (arg0 * 360.0) / 6.2831854820251465);
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
-void TexturedRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
+void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
     s32 i;
     s32 j;
     Vtx* var_a1;
@@ -175,7 +189,7 @@ void TexturedRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
     }
 }
 
-s32 TexturedRibbonSheet_IsComplete(void) {
+s32 SwiftRibbonSheet_IsComplete(void) {
     s32 i;
     s32 var_s2 = 0;
     TexturedRibbonSheet* var_s0 = &D_843A22C0[0];
@@ -186,7 +200,7 @@ s32 TexturedRibbonSheet_IsComplete(void) {
             if ((var_s0->unk_006 + 0xA) < var_s0->unk_004) {
                 var_s0->unk_000 = 0;
             } else {
-                TexturedRibbonSheet_UpdateRecord(var_s0);
+                SwiftRibbonSheet_UpdateRecord(var_s0);
                 var_s2++;
             }
         }
@@ -198,7 +212,7 @@ s32 TexturedRibbonSheet_IsComplete(void) {
     return -1;
 }
 
-Gfx* TexturedRibbonSheet_Draw(Gfx* arg0) {
+Gfx* SwiftRibbonSheet_Draw(Gfx* arg0) {
     s32 i;
     TexturedRibbonSheet* var_s5;
     TexturedRibbonSheetNode* temp_s0;
@@ -248,7 +262,7 @@ Gfx* TexturedRibbonSheet_Draw(Gfx* arg0) {
                 if ((j == 0) || (var_s5->unk_004 < 2)) {
                     for (k = 0, vtx2 = &temp_s0->unk_30[0]; k < 2; k++) {
                         if (temp_s0->unk_00 <= 0.0) {
-                            TexturedRibbonSheet_Update(temp_s0->unk_08 + ((2.0 * k * 3.1415927410125732) / 2), &sp13C,
+                            SwiftRibbonSheet_Update(temp_s0->unk_08 + ((2.0 * k * 3.1415927410125732) / 2), &sp13C,
                                           (10.0f * tmp) * 0.8f);
                         }
 

@@ -2,6 +2,20 @@
 #include "src/gallery.h"
 #include "src/gfx_buffer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static Gfx D_84389780[] = {
     gsDPPipeSync(),
     gsDPSetCycleType(G_CYC_1CYCLE),

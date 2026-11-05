@@ -1,6 +1,7 @@
 #include "battle_engine.h"
 #include "src/gfx_buffer.h"
 
+
 void BattleAnim_RenderNop1(void) {
 }
 

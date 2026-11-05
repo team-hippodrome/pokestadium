@@ -974,7 +974,7 @@ void BattleAnim_SurfContinue(ActivePokemon* owner, ActivePokemon* animated_pokem
     f32 water_height;
 
     animated_pokemon->animationState++;
-    water_height = TerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
+    water_height = SurfTerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
     owner->displayObject.position.y = BattleScene_GetParticipantModelRestingHeight(animated_pokemon) + water_height;
     owner->displayObject.rotation.x = (s16)rotation_x * 182;
 

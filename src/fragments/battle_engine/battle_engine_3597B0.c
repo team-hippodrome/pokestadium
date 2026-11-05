@@ -1,5 +1,19 @@
 #include "battle_engine.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static s16 D_843C4D90;
 static s16 D_843C4D92;
 static s16 D_843C4D94;

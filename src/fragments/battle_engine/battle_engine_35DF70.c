@@ -2,6 +2,8 @@
 #include "moves.h"
 #include "src/text_system.h"
 
+/*actual battle logic*/
+
 typedef void (*MoveEffectCallback)(void);
 
 static const char D_8438DC80[] = "は" "\n" "こんらんした";

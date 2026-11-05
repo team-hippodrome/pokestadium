@@ -3,6 +3,20 @@
 #include "src/gallery.h"
 #include "src/gfx_buffer.h"
 
+/*
+This file covers these classes of moves:
+
+This file covers this {non obvious effect} for:
+    - 
+
+
+As well as effects for these specific moves:
+    - 
+
+
+
+*/
+
 static Trail40 D_843A06A0;
 
 static Lights2 D_84389560 = gdSPDefLights2(255, 255, 255, 255, 255, 255, 30, 30, 10, 255, 255, 255, 226, 30, 10);

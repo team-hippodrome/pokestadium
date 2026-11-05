@@ -94,7 +94,7 @@ Particle* Particle_New(void) {
 }
 
 /* Allocate a linked chain, returning its first particle even if a later allocation fails. */
-Particle* Particle_AllocChain(u8 arg0) {
+Particle* Particle_AllocChain(u8 count) {
     s32 i;
     Particle* sp28;
     Particle* temp_v0;
@@ -104,9 +104,9 @@ Particle* Particle_AllocChain(u8 arg0) {
 
     if ((u32)sp28 != -1) {
         var_s0 = sp28;
-        arg0--;
+        count--;
 
-        for (i = 0; i < arg0; i++) {
+        for (i = 0; i < count; i++) {
             temp_v0 = Particle_Alloc();
             if ((u32)temp_v0 == -1) {
                 break;
@@ -121,100 +121,100 @@ Particle* Particle_AllocChain(u8 arg0) {
 }
 
 /* Allocate a particle and copy its origin, rotation, callbacks, and per-emission metadata. */
-Particle* Particle_CreateAtTransform(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4,
-                              s16 arg5, s16 arg6, s16 arg7) {
+Particle* Particle_CreateAtTransform(f32 unk_28_value, Vec3f origin, Vec3s rotation, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor,
+                              s16 index, s16 anchor_id, s16 metadata) {
     Particle* sp1C = Particle_New();
 
     if ((u32)sp1C != -1) {
-        sp1C->unk_28 = arg0;
+        sp1C->unk_28 = unk_28_value;
 
-        ParticleMath_CopyVec3f(&sp1C->origin, &arg1);
-        ParticleMath_CopyVec3s(&sp1C->rotation, &arg2);
+        ParticleMath_CopyVec3f(&sp1C->origin, &origin);
+        ParticleMath_CopyVec3s(&sp1C->rotation, &rotation);
 
-        sp1C->updateCallback = arg3;
-        sp1C->descriptor = arg4;
+        sp1C->updateCallback = update_callback;
+        sp1C->descriptor = descriptor;
         sp1C->pokemon = 0;
         sp1C->displayObject = 0;
-        sp1C->unk_AC = arg5;
-        sp1C->unk_CE = arg7;
-        sp1C->unk_CD = arg6;
+        sp1C->unk_AC = index;
+        sp1C->unk_CE = metadata;
+        sp1C->unk_CD = anchor_id;
     }
     return sp1C;
 }
 
 /* Allocate at an object's position or selected anchor, copying its rotation and emission metadata. */
-Particle* Particle_CreateFromObjectTransform(DisplayObject* object, ParticleUpdateCallback arg1, ParticleDescriptor* arg2,
-                              s16 arg3, s16 arg4, s16 arg5) {
+Particle* Particle_CreateFromObjectTransform(DisplayObject* object, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor,
+                              s16 index, s16 anchor_id, s16 metadata) {
     Particle* sp1C = Particle_New();
 
     if ((u32)sp1C != -1) {
-        if (arg4 == 0xFF) {
+        if (anchor_id == 0xFF) {
             sp1C->positionOffset.x = object->position.x;
             sp1C->positionOffset.y = object->position.y;
             sp1C->positionOffset.z = object->position.z;
         } else {
-            GeoRender_FindAnchorPosition(object, arg4, &sp1C->positionOffset);
+            GeoRender_FindAnchorPosition(object, anchor_id, &sp1C->positionOffset);
         }
 
         sp1C->rotation.x = object->rotation.x;
         sp1C->rotation.y = object->rotation.y;
         sp1C->rotation.z = object->rotation.z;
 
-        sp1C->updateCallback = arg1;
-        sp1C->descriptor = arg2;
+        sp1C->updateCallback = update_callback;
+        sp1C->descriptor = descriptor;
 
         sp1C->pokemon = 0;
         sp1C->displayObject = 0;
 
-        sp1C->unk_AC = arg3;
-        sp1C->unk_CE = arg5;
-        sp1C->unk_CD = arg4;
+        sp1C->unk_AC = index;
+        sp1C->unk_CE = metadata;
+        sp1C->unk_CD = anchor_id;
     }
     return sp1C;
 }
 
 /* Create indexed particles at one transform, stopping when the pool is exhausted. */
-void Particle_EmitBurstAtTransform(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5) {
+void Particle_EmitBurstAtTransform(f32 unk_28_value, Vec3f origin, Vec3s rotation, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count) {
     s32 i;
 
-    for (i = 0; i < arg5; i++) {
-        if ((u32)Particle_CreateAtTransform(arg0, arg1, arg2, arg3, arg4, i, 0xFF, NULL) == -1) {
+    for (i = 0; i < count; i++) {
+        if ((u32)Particle_CreateAtTransform(unk_28_value, origin, rotation, update_callback, descriptor, i, 0xFF, NULL) == -1) {
             break;
         }
     }
 }
 
 /* Create indexed particles at one transform with shared extra metadata, stopping on allocation failure. */
-void Particle_EmitBurstAtTransformWithMetadata(f32 arg0, Vec3f arg1, Vec3s arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5,
-                   s16 arg6) {
+void Particle_EmitBurstAtTransformWithMetadata(f32 unk_28_value, Vec3f origin, Vec3s rotation, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count,
+                   s16 metadata) {
     s32 i;
 
-    for (i = 0; i < arg5; i++) {
-        if ((u32)Particle_CreateAtTransform(arg0, arg1, arg2, arg3, arg4, i, 0xFF, arg6) == -1) {
+    for (i = 0; i < count; i++) {
+        if ((u32)Particle_CreateAtTransform(unk_28_value, origin, rotation, update_callback, descriptor, i, 0xFF, metadata) == -1) {
             break;
         }
     }
 }
 
 /* Create indexed particles at an object or its selected anchor until the count or pool limit is reached. */
-void Particle_EmitBurstFromObject(DisplayObject* object, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3,
-                   s16 arg4) {
+void Particle_EmitBurstFromObject(DisplayObject* object, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count,
+                   s16 anchor_id) {
     s32 i;
 
-    for (i = 0; i < arg3; i++) {
-        if ((u32)Particle_CreateFromObjectTransform(object, arg1, arg2, i, arg4, 0) == -1) {
+    for (i = 0; i < count; i++) {
+        if ((u32)Particle_CreateFromObjectTransform(object, update_callback, descriptor, i, anchor_id, 0) == -1) {
             break;
         }
     }
 }
 
 /* Create indexed object/anchor particles with shared extra metadata until allocation fails or the count is reached. */
-void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* object, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3,
-                   s16 arg4, s16 arg5) {
+void Particle_EmitBurstFromObjectWithMetadata(DisplayObject* object, ParticleUpdateCallback update_callback, ParticleDescriptor* descriptor, s16 count,
+                   s16 anchor_id, s16 metadata) {
     s32 i;
 
-    for (i = 0; i < arg3; i++) {
-        if ((u32)Particle_CreateFromObjectTransform(object, arg1, arg2, i, arg4, arg5) == -1) {
+    for (i = 0; i < count; i++) {
+        if ((u32)Particle_CreateFromObjectTransform(object, update_callback, descriptor, i, anchor_id, metadata) == -1) {
             break;
         }
     }
@@ -642,221 +642,221 @@ void Particle_UpdateWorldTransform(Particle* particle) {
 }
 
 /* Set the base position offset after multiplying each input by the render context's Y scale. */
-void Particle_SetPosition(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->positionOffset.x = arg1 * sParticleRenderContext.scale.y;
-    particle->positionOffset.y = arg2 * sParticleRenderContext.scale.y;
-    particle->positionOffset.z = arg3 * sParticleRenderContext.scale.y;
+void Particle_SetPosition(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->positionOffset.x = x * sParticleRenderContext.scale.y;
+    particle->positionOffset.y = y * sParticleRenderContext.scale.y;
+    particle->positionOffset.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Set positionOffset.x, positionOffset.y, positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_SetVecFromVec3fScaled(Particle* particle, Vec3f arg1) {
-    particle->positionOffset.x = arg1.x * sParticleRenderContext.scale.y;
-    particle->positionOffset.y = arg1.y * sParticleRenderContext.scale.y;
-    particle->positionOffset.z = arg1.z * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_SetVecFromVec3fScaled(Particle* particle, Vec3f position_offset) {
+    particle->positionOffset.x = position_offset.x * sParticleRenderContext.scale.y;
+    particle->positionOffset.y = position_offset.y * sParticleRenderContext.scale.y;
+    particle->positionOffset.z = position_offset.z * sParticleRenderContext.scale.y;
 }
 
 /* Set positionOffset.x, positionOffset.y, positionOffset.z. */
-void Particle_PositionOffset_SetVec(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->positionOffset.x = arg1;
-    particle->positionOffset.y = arg2;
-    particle->positionOffset.z = arg3;
+void Particle_PositionOffset_SetVec(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->positionOffset.x = x;
+    particle->positionOffset.y = y;
+    particle->positionOffset.z = z;
 }
 
 /* Set positionOffset.x with render-context Y scaling. */
-void Particle_PositionOffset_SetXScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.x = arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_SetXScaled(Particle* particle, f32 x) {
+    particle->positionOffset.x = x * sParticleRenderContext.scale.y;
 }
 
 /* Set positionOffset.y with render-context Y scaling. */
-void Particle_PositionOffset_SetYScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.y = arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_SetYScaled(Particle* particle, f32 y) {
+    particle->positionOffset.y = y * sParticleRenderContext.scale.y;
 }
 
 /* Set positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_SetZScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.z = arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_SetZScaled(Particle* particle, f32 z) {
+    particle->positionOffset.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Set the base position offset using Particle_ComputeVectorFromRotationXYZAlt and context scaling. */
-void Particle_SetPositionFromRotationTemplate1(Particle* particle, f32 arg1) {
+void Particle_SetPositionFromRotationTemplate1(Particle* particle, f32 magnitude) {
     Vec3f sp1C;
 
-    Particle_ComputeVectorFromRotationXYZAlt(particle, arg1, &sp1C);
+    Particle_ComputeVectorFromRotationXYZAlt(particle, magnitude, &sp1C);
     Particle_PositionOffset_SetVecFromVec3fScaled(particle, sp1C);
 }
 
 /* Set the base position offset using Particle_ComputeVectorFromRotationYZVariant and context scaling. */
-void Particle_SetPositionFromRotationTemplate2(Particle* particle, f32 arg1) {
+void Particle_SetPositionFromRotationTemplate2(Particle* particle, f32 magnitude) {
     Vec3f sp1C;
 
-    Particle_ComputeVectorFromRotationYZVariant(particle, arg1, &sp1C);
+    Particle_ComputeVectorFromRotationYZVariant(particle, magnitude, &sp1C);
     Particle_PositionOffset_SetVecFromVec3fScaled(particle, sp1C);
 }
 
 /* Add to positionOffset.x, positionOffset.y, positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_AddVecScaledFromVec3f(Particle* particle, Vec3f arg1) {
-    particle->positionOffset.x += arg1.x * sParticleRenderContext.scale.y;
-    particle->positionOffset.y += arg1.y * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg1.z * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddVecScaledFromVec3f(Particle* particle, Vec3f delta) {
+    particle->positionOffset.x += delta.x * sParticleRenderContext.scale.y;
+    particle->positionOffset.y += delta.y * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += delta.z * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x, positionOffset.y, positionOffset.z. */
-void Particle_PositionOffset_AddVecFromVec3f(Particle* particle, Vec3f arg1) {
-    particle->positionOffset.x += arg1.x;
-    particle->positionOffset.y += arg1.y;
-    particle->positionOffset.z += arg1.z;
+void Particle_PositionOffset_AddVecFromVec3f(Particle* particle, Vec3f delta) {
+    particle->positionOffset.x += delta.x;
+    particle->positionOffset.y += delta.y;
+    particle->positionOffset.z += delta.z;
 }
 
 /* Add to positionOffset.x, positionOffset.y, positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_AddVecScaled(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->positionOffset.x += arg1 * sParticleRenderContext.scale.y;
-    particle->positionOffset.y += arg2 * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg3 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddVecScaled(Particle* particle, f32 delta_x, f32 delta_y, f32 delta_z) {
+    particle->positionOffset.x += delta_x * sParticleRenderContext.scale.y;
+    particle->positionOffset.y += delta_y * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x with render-context Y scaling. */
-void Particle_PositionOffset_AddXScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.x += arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddXScaled(Particle* particle, f32 delta_x) {
+    particle->positionOffset.x += delta_x * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.y with render-context Y scaling. */
-void Particle_PositionOffset_AddYScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.y += arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddYScaled(Particle* particle, f32 delta_y) {
+    particle->positionOffset.y += delta_y * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_AddZScaled(Particle* particle, f32 arg1) {
-    particle->positionOffset.z += arg1 * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddZScaled(Particle* particle, f32 delta_z) {
+    particle->positionOffset.z += delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x, positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_AddXZFromRotationY(Particle* particle, f32 arg1) {
-    particle->positionOffset.x += arg1 * SINS(particle->rotation.y) * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg1 * COSS(particle->rotation.y) * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddXZFromRotationY(Particle* particle, f32 magnitude) {
+    particle->positionOffset.x += magnitude * SINS(particle->rotation.y) * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += magnitude * COSS(particle->rotation.y) * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x, positionOffset.z with render-context Y scaling. */
-void Particle_Field38_AddXZFromField94YOffset180_08F38(Particle* particle, f32 arg1) {
-    particle->positionOffset.x += arg1 * SINS(particle->rotation.y + 0x8000) * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg1 * COSS(particle->rotation.y + 0x8000) * sParticleRenderContext.scale.y;
+void Particle_Field38_AddXZFromField94YOffset180_08F38(Particle* particle, f32 magnitude) {
+    particle->positionOffset.x += magnitude * SINS(particle->rotation.y + 0x8000) * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += magnitude * COSS(particle->rotation.y + 0x8000) * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x, positionOffset.z with render-context Y scaling. */
-void Particle_PositionOffset_AddXZFromRotationYOffset90(Particle* particle, f32 arg1) {
-    particle->positionOffset.x += arg1 * SINS(particle->rotation.y + 0x4000) * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg1 * COSS(particle->rotation.y + 0x4000) * sParticleRenderContext.scale.y;
+void Particle_PositionOffset_AddXZFromRotationYOffset90(Particle* particle, f32 magnitude) {
+    particle->positionOffset.x += magnitude * SINS(particle->rotation.y + 0x4000) * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += magnitude * COSS(particle->rotation.y + 0x4000) * sParticleRenderContext.scale.y;
 }
 
 /* Add to positionOffset.x, positionOffset.z with render-context Y scaling. */
-void Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(Particle* particle, f32 arg1) {
-    particle->positionOffset.x += arg1 * SINS(particle->rotation.y - 0x4000) * sParticleRenderContext.scale.y;
-    particle->positionOffset.z += arg1 * COSS(particle->rotation.y - 0x4000) * sParticleRenderContext.scale.y;
+void Particle_Field38_AddXZFromField94YOffsetMinus90_0901C(Particle* particle, f32 magnitude) {
+    particle->positionOffset.x += magnitude * SINS(particle->rotation.y - 0x4000) * sParticleRenderContext.scale.y;
+    particle->positionOffset.z += magnitude * COSS(particle->rotation.y - 0x4000) * sParticleRenderContext.scale.y;
 }
 
 /* Add Particle_ComputeVectorFromRotationY's result to the base position offset with context scaling. */
-void Particle_AddPositionOffsetFromRotationDirection(Particle* particle, f32 arg1) {
+void Particle_AddPositionOffsetFromRotationDirection(Particle* particle, f32 magnitude) {
     Vec3f sp1C;
 
-    Particle_ComputeVectorFromRotationY(particle, arg1, &sp1C);
+    Particle_ComputeVectorFromRotationY(particle, magnitude, &sp1C);
     particle->positionOffset.x += sp1C.x * sParticleRenderContext.scale.y;
     particle->positionOffset.y += sp1C.y * sParticleRenderContext.scale.y;
     particle->positionOffset.z += sp1C.z * sParticleRenderContext.scale.y;
 }
 
 /* Add Particle_ComputeVectorFromRotationXYZAlt's result to the base position offset with context scaling. */
-void Particle_AddPositionFromRotationTemplate1(Particle* particle, f32 arg1) {
+void Particle_AddPositionFromRotationTemplate1(Particle* particle, f32 magnitude) {
     Vec3f sp1C;
 
-    Particle_ComputeVectorFromRotationXYZAlt(particle, arg1, &sp1C);
+    Particle_ComputeVectorFromRotationXYZAlt(particle, magnitude, &sp1C);
     Particle_PositionOffset_AddVecScaledFromVec3f(particle, sp1C);
 }
 
 /* Add Particle_ComputeVectorFromRotationYZVariant's result to the base position offset with context scaling. */
-void Particle_AddPositionFromRotationTemplate2(Particle* particle, f32 arg1) {
+void Particle_AddPositionFromRotationTemplate2(Particle* particle, f32 magnitude) {
     Vec3f sp1C;
 
-    Particle_ComputeVectorFromRotationYZVariant(particle, arg1, &sp1C);
+    Particle_ComputeVectorFromRotationYZVariant(particle, magnitude, &sp1C);
     Particle_PositionOffset_AddVecScaledFromVec3f(particle, sp1C);
 }
 
 /* Rotate the input vector around Y and add it to the base position offset with context scaling. */
-void Particle_AddPositionOffsetRotatedY(Particle* particle, Vec3f arg1) {
+void Particle_AddPositionOffsetRotatedY(Particle* particle, Vec3f offset) {
     Vec3f sp24;
 
-    ParticleMath_RotateVec3fY(&sp24, arg1, particle->rotation);
+    ParticleMath_RotateVec3fY(&sp24, offset, particle->rotation);
     Particle_PositionOffset_AddVecScaledFromVec3f(particle, sp24);
 }
 
 /* Set the base position offset's X component(s) from the random sampler with context scaling. */
-void Particle_SetRandomPositionOffsetX(Particle* particle, s32 arg1) {
-    particle->positionOffset.x = ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y;
+void Particle_SetRandomPositionOffsetX(Particle* particle, s32 range) {
+    particle->positionOffset.x = ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y;
 }
 
 /* Set the base position offset's Y component(s) from the random sampler with context scaling. */
-void Particle_SetRandomPositionOffsetY(Particle* particle, s32 arg1) {
-    particle->positionOffset.y = ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y;
+void Particle_SetRandomPositionOffsetY(Particle* particle, s32 range) {
+    particle->positionOffset.y = ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y;
 }
 
 /* Set the base position offset's Z component(s) from the random sampler with context scaling. */
-void Particle_SetRandomPositionOffsetZ(Particle* particle, s32 arg1) {
-    particle->positionOffset.z = ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y;
+void Particle_SetRandomPositionOffsetZ(Particle* particle, s32 range) {
+    particle->positionOffset.z = ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y;
 }
 
 /* Set the base position offset's X component(s) from the random sampler with context scaling and an unscaled additive offset. */
-void Particle_SetRandomPositionOffsetXWithOffset(Particle* particle, s32 arg1, s32 arg2) {
-    particle->positionOffset.x = (ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y) + arg2;
+void Particle_SetRandomPositionOffsetXWithOffset(Particle* particle, s32 range, s32 offset) {
+    particle->positionOffset.x = (ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y) + offset;
 }
 
 /* Set the base position offset's Y component(s) from the random sampler with context scaling and an unscaled additive offset. */
-void Particle_SetRandomPositionOffsetYOffset(Particle* particle, s32 arg1, s32 arg2) {
-    particle->positionOffset.y = (ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y) + arg2;
+void Particle_SetRandomPositionOffsetYOffset(Particle* particle, s32 range, s32 offset) {
+    particle->positionOffset.y = (ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y) + offset;
 }
 
 /* Set the base position offset's Z component(s) from the random sampler with context scaling and an unscaled additive offset. */
-void Particle_SetRandomPositionOffsetZWithOffset(Particle* particle, s32 arg1, s32 arg2) {
-    particle->positionOffset.z = (ParticleMath_RandomSigned(arg1) * sParticleRenderContext.scale.y) + arg2;
+void Particle_SetRandomPositionOffsetZWithOffset(Particle* particle, s32 range, s32 offset) {
+    particle->positionOffset.z = (ParticleMath_RandomSigned(range) * sParticleRenderContext.scale.y) + offset;
 }
 
 /* Set the base position offset's X component(s) from the random sampler with context scaling and a sign-dependent offset. */
-void Particle_SetRandomPositionOffsetXSymmetric(Particle* particle, s32 arg1, s32 arg2) {
-    f32 temp_fv0 = ParticleMath_RandomSigned(arg1);
+void Particle_SetRandomPositionOffsetXSymmetric(Particle* particle, s32 range, s32 offset) {
+    f32 temp_fv0 = ParticleMath_RandomSigned(range);
 
     if (temp_fv0 >= 0.0f) {
-        particle->positionOffset.x = (temp_fv0 + arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.x = (temp_fv0 + offset) * sParticleRenderContext.scale.y;
     } else {
-        particle->positionOffset.x = (temp_fv0 - arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.x = (temp_fv0 - offset) * sParticleRenderContext.scale.y;
     }
 }
 
 /* Set the base position offset's Y component(s) from the random sampler with context scaling and a sign-dependent offset. */
-void Particle_SetRandomPositionOffsetYSignedOffset(Particle* particle, s32 arg1, s32 arg2) {
-    f32 temp_fv0 = ParticleMath_RandomSigned(arg1);
+void Particle_SetRandomPositionOffsetYSignedOffset(Particle* particle, s32 range, s32 offset) {
+    f32 temp_fv0 = ParticleMath_RandomSigned(range);
 
     if (temp_fv0 >= 0.0f) {
-        particle->positionOffset.y = (temp_fv0 + arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.y = (temp_fv0 + offset) * sParticleRenderContext.scale.y;
     } else {
-        particle->positionOffset.y = (temp_fv0 - arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.y = (temp_fv0 - offset) * sParticleRenderContext.scale.y;
     }
 }
 
 /* Set the base position offset's Z component(s) from the random sampler with context scaling and a sign-dependent offset. */
-void Particle_SetRandomPositionOffsetZSymmetric(Particle* particle, s32 arg1, s32 arg2) {
-    f32 temp_fv0 = ParticleMath_RandomSigned(arg1);
+void Particle_SetRandomPositionOffsetZSymmetric(Particle* particle, s32 range, s32 offset) {
+    f32 temp_fv0 = ParticleMath_RandomSigned(range);
 
     if (temp_fv0 >= 0.0f) {
-        particle->positionOffset.z = (temp_fv0 + arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.z = (temp_fv0 + offset) * sParticleRenderContext.scale.y;
     } else {
-        particle->positionOffset.z = (temp_fv0 - arg2) * sParticleRenderContext.scale.y;
+        particle->positionOffset.z = (temp_fv0 - offset) * sParticleRenderContext.scale.y;
     }
 }
 
 /* Set the base position offset's XYZ component(s) from the random sampler with context scaling. */
-void Particle_SetRandomPositionOffsetXYZ(Particle* particle, s32 arg1, s32 arg2, s32 arg3) {
+void Particle_SetRandomPositionOffsetXYZ(Particle* particle, s32 range_x, s32 range_y, s32 range_z) {
     Vec3f sp18;
 
-    sp18.x = ParticleMath_RandomSigned(arg1);
-    sp18.y = ParticleMath_RandomSigned(arg2);
-    sp18.z = ParticleMath_RandomSigned(arg3);
+    sp18.x = ParticleMath_RandomSigned(range_x);
+    sp18.y = ParticleMath_RandomSigned(range_y);
+    sp18.z = ParticleMath_RandomSigned(range_z);
 
     particle->positionOffset.x = sp18.x * sParticleRenderContext.scale.y;
     particle->positionOffset.y = sp18.y * sParticleRenderContext.scale.y;
@@ -864,12 +864,12 @@ void Particle_SetRandomPositionOffsetXYZ(Particle* particle, s32 arg1, s32 arg2,
 }
 
 /* Set the base position offset's XYZ component(s) from the random sampler with context scaling. */
-void Particle_SetRandomPositionOffsetXYZPositive(Particle* particle, s32 arg1, s32 arg2, s32 arg3) {
+void Particle_SetRandomPositionOffsetXYZPositive(Particle* particle, s32 range_x, s32 range_y, s32 range_z) {
     Vec3f sp1C;
 
-    sp1C.x = ParticleMath_RandomRange(arg1);
-    sp1C.y = ParticleMath_RandomRange(arg2);
-    sp1C.z = ParticleMath_RandomRange(arg3);
+    sp1C.x = ParticleMath_RandomRange(range_x);
+    sp1C.y = ParticleMath_RandomRange(range_y);
+    sp1C.z = ParticleMath_RandomRange(range_z);
 
     particle->positionOffset.x = sp1C.x * sParticleRenderContext.scale.y;
     particle->positionOffset.y = sp1C.y * sParticleRenderContext.scale.y;
@@ -877,12 +877,12 @@ void Particle_SetRandomPositionOffsetXYZPositive(Particle* particle, s32 arg1, s
 }
 
 /* Sample a signed XY vector, rotate it around Y, and store the context-scaled base position offset. */
-void Particle_SetRandomRotatedPositionOffsetXY(Particle* particle, s32 arg1, s32 arg2) {
+void Particle_SetRandomRotatedPositionOffsetXY(Particle* particle, s32 range_x, s32 range_y) {
     Vec3f sp2C;
     Vec3f sp20;
 
-    sp2C.x = ParticleMath_RandomSigned(arg1);
-    sp2C.y = ParticleMath_RandomSigned(arg2);
+    sp2C.x = ParticleMath_RandomSigned(range_x);
+    sp2C.y = ParticleMath_RandomSigned(range_y);
     sp2C.z = 0.0f;
 
     ParticleMath_RotateVec3fY(&sp20, sp2C, particle->rotation);
@@ -893,12 +893,12 @@ void Particle_SetRandomRotatedPositionOffsetXY(Particle* particle, s32 arg1, s32
 }
 
 /* Add independent signed random components to the base position offset with render-context scaling. */
-void Particle_AddRandomPositionOffsetXYZ(Particle* particle, s32 arg1, s32 arg2, s32 arg3) {
+void Particle_AddRandomPositionOffsetXYZ(Particle* particle, s32 range_x, s32 range_y, s32 range_z) {
     Vec3f sp24;
 
-    sp24.x = ParticleMath_RandomSigned(arg1);
-    sp24.y = ParticleMath_RandomSigned(arg2);
-    sp24.z = ParticleMath_RandomSigned(arg3);
+    sp24.x = ParticleMath_RandomSigned(range_x);
+    sp24.y = ParticleMath_RandomSigned(range_y);
+    sp24.z = ParticleMath_RandomSigned(range_z);
 
     particle->positionOffset.x += sp24.x * sParticleRenderContext.scale.y;
     particle->positionOffset.y += sp24.y * sParticleRenderContext.scale.y;
@@ -906,96 +906,96 @@ void Particle_AddRandomPositionOffsetXYZ(Particle* particle, s32 arg1, s32 arg2,
 }
 
 /* Set the unscaled origin term used in world-position composition. */
-void Particle_SetOrigin(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->origin.x = arg1;
-    particle->origin.y = arg2;
-    particle->origin.z = arg3;
+void Particle_SetOrigin(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->origin.x = x;
+    particle->origin.y = y;
+    particle->origin.z = z;
 }
 
 /* Set the secondary motion offset with render-context scaling; this term is summed directly into world position. */
-void Particle_SetMotionOffset(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->motionOffset.x = arg1 * sParticleRenderContext.scale.y;
-    particle->motionOffset.y = arg2 * sParticleRenderContext.scale.y;
-    particle->motionOffset.z = arg3 * sParticleRenderContext.scale.y;
+void Particle_SetMotionOffset(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->motionOffset.x = x * sParticleRenderContext.scale.y;
+    particle->motionOffset.y = y * sParticleRenderContext.scale.y;
+    particle->motionOffset.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Set motionOffset.x with render-context Y scaling. */
-void Particle_MotionOffset_SetXScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.x = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SetXScaled(Particle* particle, f32 x) {
+    particle->motionOffset.x = x * sParticleRenderContext.scale.y;
 }
 
 /* Set motionOffset.y with render-context Y scaling. */
-void Particle_MotionOffset_SetYScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.y = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SetYScaled(Particle* particle, f32 y) {
+    particle->motionOffset.y = y * sParticleRenderContext.scale.y;
 }
 
 /* Set motionOffset.z with render-context Y scaling. */
-void Particle_MotionOffset_SetZScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.z = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SetZScaled(Particle* particle, f32 z) {
+    particle->motionOffset.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Fill the secondary motion offset with a random-angle vector scaled by the render context. */
-void Particle_SetMotionOffsetRandomDirection(Particle* particle, f32 arg1) {
-    ParticleMath_RandomDirection(&particle->motionOffset, arg1 * sParticleRenderContext.scale.y);
+void Particle_SetMotionOffsetRandomDirection(Particle* particle, f32 magnitude) {
+    ParticleMath_RandomDirection(&particle->motionOffset, magnitude * sParticleRenderContext.scale.y);
 }
 
 /* Add to motionOffset.x, motionOffset.y, motionOffset.z with render-context Y scaling. */
-void Particle_MotionOffset_AddVecScaled(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->motionOffset.x += arg1 * sParticleRenderContext.scale.y;
-    particle->motionOffset.y += arg2 * sParticleRenderContext.scale.y;
-    particle->motionOffset.z += arg3 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_AddVecScaled(Particle* particle, f32 delta_x, f32 delta_y, f32 delta_z) {
+    particle->motionOffset.x += delta_x * sParticleRenderContext.scale.y;
+    particle->motionOffset.y += delta_y * sParticleRenderContext.scale.y;
+    particle->motionOffset.z += delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Add to motionOffset.x with render-context Y scaling. */
-void Particle_MotionOffset_AddXScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.x += arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_AddXScaled(Particle* particle, f32 delta_x) {
+    particle->motionOffset.x += delta_x * sParticleRenderContext.scale.y;
 }
 
 /* Add to motionOffset.y with render-context Y scaling. */
-void Particle_MotionOffset_AddYScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.y += arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_AddYScaled(Particle* particle, f32 delta_y) {
+    particle->motionOffset.y += delta_y * sParticleRenderContext.scale.y;
 }
 
 /* Add to motionOffset.z with render-context Y scaling. */
-void Particle_MotionOffset_AddZScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.z += arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_AddZScaled(Particle* particle, f32 delta_z) {
+    particle->motionOffset.z += delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Subtract from motionOffset.x, motionOffset.y, motionOffset.z with render-context Y scaling. */
-void Particle_MotionOffset_SubVecScaled(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->motionOffset.x -= arg1 * sParticleRenderContext.scale.y;
-    particle->motionOffset.y -= arg2 * sParticleRenderContext.scale.y;
-    particle->motionOffset.z -= arg3 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SubVecScaled(Particle* particle, f32 delta_x, f32 delta_y, f32 delta_z) {
+    particle->motionOffset.x -= delta_x * sParticleRenderContext.scale.y;
+    particle->motionOffset.y -= delta_y * sParticleRenderContext.scale.y;
+    particle->motionOffset.z -= delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Subtract from motionOffset.x with render-context Y scaling. */
-void Particle_MotionOffset_SubXScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.x -= arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SubXScaled(Particle* particle, f32 delta_x) {
+    particle->motionOffset.x -= delta_x * sParticleRenderContext.scale.y;
 }
 
 /* Subtract from motionOffset.y with render-context Y scaling. */
-void Particle_MotionOffset_SubYScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.y -= arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SubYScaled(Particle* particle, f32 delta_y) {
+    particle->motionOffset.y -= delta_y * sParticleRenderContext.scale.y;
 }
 
 /* Subtract from motionOffset.z with render-context Y scaling. */
-void Particle_MotionOffset_SubZScaled(Particle* particle, f32 arg1) {
-    particle->motionOffset.z -= arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionOffset_SubZScaled(Particle* particle, f32 delta_z) {
+    particle->motionOffset.z -= delta_z * sParticleRenderContext.scale.y;
 }
 
 /* Approach motionOffset.x, motionTarget.x using the stored or supplied target and step. */
-s32 Particle_MotionOffset_ApproachXToMotionTarget(Particle* particle, f32 arg1) {
-    return ParticleMath_ApproachFloat(&particle->motionOffset.x, arg1 * sParticleRenderContext.scale.y, particle->motionTarget.x);
+s32 Particle_MotionOffset_ApproachXToMotionTarget(Particle* particle, f32 target) {
+    return ParticleMath_ApproachFloat(&particle->motionOffset.x, target * sParticleRenderContext.scale.y, particle->motionTarget.x);
 }
 
 /* Approach motionOffset.y, motionTarget.y using the stored or supplied target and step. */
-s32 Particle_MotionOffset_ApproachYToMotionTarget(Particle* particle, f32 arg1) {
-    return ParticleMath_ApproachFloat(&particle->motionOffset.y, arg1 * sParticleRenderContext.scale.y, particle->motionTarget.y);
+s32 Particle_MotionOffset_ApproachYToMotionTarget(Particle* particle, f32 target) {
+    return ParticleMath_ApproachFloat(&particle->motionOffset.y, target * sParticleRenderContext.scale.y, particle->motionTarget.y);
 }
 
 /* Approach motionOffset.z, motionTarget.z using the stored or supplied target and step. */
-s32 Particle_MotionOffset_ApproachZToMotionTarget(Particle* particle, f32 arg1) {
-    return ParticleMath_ApproachFloat(&particle->motionOffset.z, arg1 * sParticleRenderContext.scale.y, particle->motionTarget.z);
+s32 Particle_MotionOffset_ApproachZToMotionTarget(Particle* particle, f32 target) {
+    return ParticleMath_ApproachFloat(&particle->motionOffset.z, target * sParticleRenderContext.scale.y, particle->motionTarget.z);
 }
 
 /* Set motionOffset.x, motionOffset.y, motionOffset.z. */
@@ -1134,9 +1134,9 @@ void Particle_AddVelocityXZFromRotationYPlusHalfTurn(Particle* particle) {
 }
 
 /* Evaluate the explicit trigonometric component formula and store/add the resulting motion term. */
-void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* particle, f32 arg1) {
-    particle->motionStep.x = SINS(particle->rotation.y + 0x8000) * arg1;
-    particle->motionStep.z = COSS(particle->rotation.y + 0x8000) * arg1;
+void Particle_AddVelocityXZFromRotationYPlusHalfTurnFromArgument(Particle* particle, f32 magnitude) {
+    particle->motionStep.x = SINS(particle->rotation.y + 0x8000) * magnitude;
+    particle->motionStep.z = COSS(particle->rotation.y + 0x8000) * magnitude;
 
     Particle_MotionOffset_AddXZFromMotionStep(particle);
 }
@@ -1177,87 +1177,87 @@ s32 Particle_Field74_AdvanceAndAddNegY_CheckField2CYNonPositive_09FD8(Particle* 
 }
 
 /* Set the component targets used when approaching the secondary motion offset. */
-void Particle_SetMotionOffsetTarget(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->motionTarget.x = arg1 * sParticleRenderContext.scale.y;
-    particle->motionTarget.y = arg2 * sParticleRenderContext.scale.y;
-    particle->motionTarget.z = arg3 * sParticleRenderContext.scale.y;
+void Particle_SetMotionOffsetTarget(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->motionTarget.x = x * sParticleRenderContext.scale.y;
+    particle->motionTarget.y = y * sParticleRenderContext.scale.y;
+    particle->motionTarget.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Set motionTarget.x with render-context Y scaling. */
-void Particle_MotionTarget_SetXScaled(Particle* particle, f32 arg1) {
-    particle->motionTarget.x = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionTarget_SetXScaled(Particle* particle, f32 x) {
+    particle->motionTarget.x = x * sParticleRenderContext.scale.y;
 }
 
 /* Set motionTarget.y with render-context Y scaling. */
-void Particle_MotionTarget_SetYScaled(Particle* particle, f32 arg1) {
-    particle->motionTarget.y = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionTarget_SetYScaled(Particle* particle, f32 y) {
+    particle->motionTarget.y = y * sParticleRenderContext.scale.y;
 }
 
 /* Set motionTarget.z with render-context Y scaling. */
-void Particle_MotionTarget_SetZScaled(Particle* particle, f32 arg1) {
-    particle->motionTarget.z = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionTarget_SetZScaled(Particle* particle, f32 z) {
+    particle->motionTarget.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Approach motionTarget.y using the stored or supplied target and step. */
-s32 Particle_MotionTarget_ApproachY(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->motionTarget.y, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_MotionTarget_ApproachY(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->motionTarget.y, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Return 40 percent of the supplied difference for proportional position approach. */
-f32 ParticleMath_ScaleApproachStep(f32 arg0) {
-    return arg0 * 0.4f;
+f32 ParticleMath_ScaleApproachStep(f32 delta) {
+    return delta * 0.4f;
 }
 
 /* Approach each base position-offset component by 40 percent of its difference when outside a +/-0.01 tolerance. */
-void Particle_ApproachPosition(Particle* particle, Vec3f arg1) {
+void Particle_ApproachPosition(Particle* particle, Vec3f target_position) {
     f32 sp24;
     f32 sp20;
     f32 temp_fa0;
 
-    temp_fa0 = arg1.x - particle->positionOffset.x;
-    sp20 = arg1.y - particle->positionOffset.y;
-    sp24 = arg1.z - particle->positionOffset.z;
+    temp_fa0 = target_position.x - particle->positionOffset.x;
+    sp20 = target_position.y - particle->positionOffset.y;
+    sp24 = target_position.z - particle->positionOffset.z;
 
     if (!(temp_fa0 <= 0.01f) || !(temp_fa0 >= -0.01f)) {
-        ParticleMath_ApproachFloat(&particle->positionOffset.x, arg1.x, ParticleMath_ScaleApproachStep(temp_fa0));
+        ParticleMath_ApproachFloat(&particle->positionOffset.x, target_position.x, ParticleMath_ScaleApproachStep(temp_fa0));
     }
 
     if (!(sp20 <= 0.01f) || !(sp20 >= -0.01f)) {
-        ParticleMath_ApproachFloat(&particle->positionOffset.y, arg1.y, ParticleMath_ScaleApproachStep(sp20));
+        ParticleMath_ApproachFloat(&particle->positionOffset.y, target_position.y, ParticleMath_ScaleApproachStep(sp20));
     }
 
     if (!(sp24 <= 0.01f) || !(sp24 >= -0.01f)) {
-        ParticleMath_ApproachFloat(&particle->positionOffset.z, arg1.z, ParticleMath_ScaleApproachStep(sp24));
+        ParticleMath_ApproachFloat(&particle->positionOffset.z, target_position.z, ParticleMath_ScaleApproachStep(sp24));
     }
 }
 
 /* Set rotation.x, rotation.y, rotation.z. */
-void Particle_Rotation_SetVecFromVec3s(Particle* particle, Vec3s arg1) {
-    particle->rotation.x = arg1.x;
-    particle->rotation.y = arg1.y;
-    particle->rotation.z = arg1.z;
+void Particle_Rotation_SetVecFromVec3s(Particle* particle, Vec3s rotation) {
+    particle->rotation.x = rotation.x;
+    particle->rotation.y = rotation.y;
+    particle->rotation.z = rotation.z;
 }
 
 /* Set the three binary-angle rotation components. */
-void Particle_SetRotation(Particle* particle, s16 arg1, s16 arg2, s16 arg3) {
-    particle->rotation.x = arg1;
-    particle->rotation.y = arg2;
-    particle->rotation.z = arg3;
+void Particle_SetRotation(Particle* particle, s16 rotation_x, s16 rotation_y, s16 rotation_z) {
+    particle->rotation.x = rotation_x;
+    particle->rotation.y = rotation_y;
+    particle->rotation.z = rotation_z;
 }
 
 /* Set rotation.x. */
-void Particle_Rotation_SetX(Particle* particle, s16 arg1) {
-    particle->rotation.x = arg1;
+void Particle_Rotation_SetX(Particle* particle, s16 rotation_x) {
+    particle->rotation.x = rotation_x;
 }
 
 /* Set rotation.y. */
-void Particle_Rotation_SetY(Particle* particle, s16 arg1) {
-    particle->rotation.y = arg1;
+void Particle_Rotation_SetY(Particle* particle, s16 rotation_y) {
+    particle->rotation.y = rotation_y;
 }
 
 /* Set rotation.z. */
-void Particle_Rotation_SetZ(Particle* particle, s16 arg1) {
-    particle->rotation.z = arg1;
+void Particle_Rotation_SetZ(Particle* particle, s16 rotation_z) {
+    particle->rotation.z = rotation_z;
 }
 
 /* Add to rotation.x, rotation.y, rotation.z. */
@@ -1283,54 +1283,54 @@ void Particle_Rotation_AddZConstant(Particle* particle) {
 }
 
 /* Set the auxiliary angle vector used as rotation steps by the add/approach helpers. */
-void Particle_SetRotationSpeed(Particle* particle, s16 arg1, s16 arg2, s16 arg3) {
-    particle->rotationStep.x = arg1;
-    particle->rotationStep.y = arg2;
-    particle->rotationStep.z = arg3;
+void Particle_SetRotationSpeed(Particle* particle, s16 rotation_step_x, s16 rotation_step_y, s16 rotation_step_z) {
+    particle->rotationStep.x = rotation_step_x;
+    particle->rotationStep.y = rotation_step_y;
+    particle->rotationStep.z = rotation_step_z;
 }
 
 /* Set rotationStep.x, rotationStep.y, rotationStep.z. */
-void Particle_RotationStep_SetVecFromVec3s(Particle* particle, Vec3s arg1) {
-    particle->rotationStep.x = arg1.x;
-    particle->rotationStep.y = arg1.y;
-    particle->rotationStep.z = arg1.z;
+void Particle_RotationStep_SetVecFromVec3s(Particle* particle, Vec3s rotation_step) {
+    particle->rotationStep.x = rotation_step.x;
+    particle->rotationStep.y = rotation_step.y;
+    particle->rotationStep.z = rotation_step.z;
 }
 
 /* Set rotationStep.x, rotationStep.y. */
-void Particle_RotationStep_SetXY(Particle* particle, s16 arg1, s16 arg2) {
-    particle->rotationStep.x = arg1;
-    particle->rotationStep.y = arg2;
+void Particle_RotationStep_SetXY(Particle* particle, s16 rotation_step_x, s16 rotation_step_y) {
+    particle->rotationStep.x = rotation_step_x;
+    particle->rotationStep.y = rotation_step_y;
 }
 
 /* Set rotationStep.x. */
-void Particle_RotationStep_SetX(Particle* particle, s16 arg1) {
-    particle->rotationStep.x = arg1;
+void Particle_RotationStep_SetX(Particle* particle, s16 rotation_step_x) {
+    particle->rotationStep.x = rotation_step_x;
 }
 
 /* Set rotationStep.y. */
-void Particle_RotationStep_SetY(Particle* particle, s16 arg1) {
-    particle->rotationStep.y = arg1;
+void Particle_RotationStep_SetY(Particle* particle, s16 rotation_step_y) {
+    particle->rotationStep.y = rotation_step_y;
 }
 
 /* Set rotationStep.z. */
-void Particle_RotationStep_SetZ(Particle* particle, s16 arg1) {
-    particle->rotationStep.z = arg1;
+void Particle_RotationStep_SetZ(Particle* particle, s16 rotation_step_z) {
+    particle->rotationStep.z = rotation_step_z;
 }
 
 /* Set rotationTarget.x. */
-void Particle_RotationTarget_SetX(Particle* particle, s16 arg1) {
-    particle->rotationTarget.x = arg1;
+void Particle_RotationTarget_SetX(Particle* particle, s16 rotation_target_x) {
+    particle->rotationTarget.x = rotation_target_x;
 }
 
 /* Set rotationTarget.y. */
-void Particle_RotationTarget_SetY(Particle* particle, s16 arg1) {
-    particle->rotationTarget.y = arg1;
+void Particle_RotationTarget_SetY(Particle* particle, s16 rotation_target_y) {
+    particle->rotationTarget.y = rotation_target_y;
 }
 
 /* Set the X/Y rotation targets, leaving Z unchanged. */
-void Particle_SetRotationTargetXY(Particle* particle, s16 arg1, s16 arg2) {
-    Particle_RotationTarget_SetX(particle, arg1);
-    Particle_RotationTarget_SetY(particle, arg2);
+void Particle_SetRotationTargetXY(Particle* particle, s16 rotation_target_x, s16 rotation_target_y) {
+    Particle_RotationTarget_SetX(particle, rotation_target_x);
+    Particle_RotationTarget_SetY(particle, rotation_target_y);
 }
 
 /* Copy current X/Y rotation into their targets, leaving the Z target unchanged. */
@@ -1363,60 +1363,60 @@ void Particle_Rotation_AddZFromRotationStep(Particle* particle) {
 }
 
 /* Add to rotation.x, rotation.y, rotation.z. */
-void Particle_Rotation_AddVecFromVec3s(Particle* particle, Vec3s arg1) {
-    particle->rotation.x += arg1.x;
-    particle->rotation.y += arg1.y;
-    particle->rotation.z += arg1.z;
+void Particle_Rotation_AddVecFromVec3s(Particle* particle, Vec3s delta_rotation) {
+    particle->rotation.x += delta_rotation.x;
+    particle->rotation.y += delta_rotation.y;
+    particle->rotation.z += delta_rotation.z;
 }
 
 /* Add to rotation.x, rotation.y, rotation.z. */
-void Particle_Rotation_AddVec(Particle* particle, s16 arg1, s16 arg2, s16 arg3) {
-    particle->rotation.x += arg1;
-    particle->rotation.y += arg2;
-    particle->rotation.z += arg3;
+void Particle_Rotation_AddVec(Particle* particle, s16 delta_rotation_x, s16 delta_rotation_y, s16 delta_rotation_z) {
+    particle->rotation.x += delta_rotation_x;
+    particle->rotation.y += delta_rotation_y;
+    particle->rotation.z += delta_rotation_z;
 }
 
 /* Add to rotation.x. */
-void Particle_Rotation_AddX(Particle* particle, s16 arg1) {
-    particle->rotation.x += arg1;
+void Particle_Rotation_AddX(Particle* particle, s16 delta_rotation_x) {
+    particle->rotation.x += delta_rotation_x;
 }
 
 /* Add to rotation.y. */
-void Particle_Rotation_AddY(Particle* particle, s16 arg1) {
-    particle->rotation.y += arg1;
+void Particle_Rotation_AddY(Particle* particle, s16 delta_rotation_y) {
+    particle->rotation.y += delta_rotation_y;
 }
 
 /* Add to rotation.z. */
-void Particle_Rotation_AddZ(Particle* particle, s16 arg1) {
-    particle->rotation.z += arg1;
+void Particle_Rotation_AddZ(Particle* particle, s16 delta_rotation_z) {
+    particle->rotation.z += delta_rotation_z;
 }
 
 /* Add to the stored X/Y rotation targets. */
-void Particle_AddRotationTargetXY(Particle* particle, s16 arg1, s16 arg2) {
-    particle->rotationTarget.x += arg1;
-    particle->rotationTarget.y += arg2;
+void Particle_AddRotationTargetXY(Particle* particle, s16 delta_rotation_target_x, s16 delta_rotation_target_y) {
+    particle->rotationTarget.x += delta_rotation_target_x;
+    particle->rotationTarget.y += delta_rotation_target_y;
 }
 
 /* Subtract from rotation.x, rotation.y, rotation.z. */
-void Particle_Rotation_SubVecFromVec3s(Particle* particle, Vec3s arg1) {
-    particle->rotation.x -= arg1.x;
-    particle->rotation.y -= arg1.y;
-    particle->rotation.z -= arg1.z;
+void Particle_Rotation_SubVecFromVec3s(Particle* particle, Vec3s delta_rotation) {
+    particle->rotation.x -= delta_rotation.x;
+    particle->rotation.y -= delta_rotation.y;
+    particle->rotation.z -= delta_rotation.z;
 }
 
 /* Subtract from rotation.x. */
-void Particle_Rotation_SubX(Particle* particle, s16 arg1) {
-    particle->rotation.x -= arg1;
+void Particle_Rotation_SubX(Particle* particle, s16 delta_rotation_x) {
+    particle->rotation.x -= delta_rotation_x;
 }
 
 /* Subtract from rotation.y. */
-void Particle_Rotation_SubY(Particle* particle, s16 arg1) {
-    particle->rotation.y -= arg1;
+void Particle_Rotation_SubY(Particle* particle, s16 delta_rotation_y) {
+    particle->rotation.y -= delta_rotation_y;
 }
 
 /* Subtract from rotation.z. */
-void Particle_Rotation_SubZ(Particle* particle, s16 arg1) {
-    particle->rotation.z -= arg1;
+void Particle_Rotation_SubZ(Particle* particle, s16 delta_rotation_z) {
+    particle->rotation.z -= delta_rotation_z;
 }
 
 /* Approach rotation.x, rotationTarget.x, rotationStep.x using the stored or supplied target and step. */
@@ -1448,24 +1448,24 @@ void Particle_ApproachRotationTargetXYZ(Particle* particle) {
 }
 
 /* Approach rotation.x using the stored or supplied target and step. */
-void Particle_ApproachRotationXTo(Particle* particle, s16 arg1, s16 arg2) {
-    ParticleMath_ApproachAngle(&particle->rotation.x, arg1, arg2);
+void Particle_ApproachRotationXTo(Particle* particle, s16 target, s16 step) {
+    ParticleMath_ApproachAngle(&particle->rotation.x, target, step);
 }
 
 /* Approach rotation.y using the stored or supplied target and step. */
-void Particle_ApproachRotationYTo(Particle* particle, s16 arg1, s16 arg2) {
-    ParticleMath_ApproachAngle(&particle->rotation.y, arg1, arg2);
+void Particle_ApproachRotationYTo(Particle* particle, s16 target, s16 step) {
+    ParticleMath_ApproachAngle(&particle->rotation.y, target, step);
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_Rotation_DecrementXTo(Particle* particle, s32 arg1, s32 arg2) {
+s32 Particle_Rotation_DecrementXTo(Particle* particle, s32 target, s32 step) {
     s32 var_v1 = 0;
     s32 var_v0 = particle->rotation.x;
 
-    if (arg1 < var_v0) {
-        var_v0 -= arg2;
-        if (arg1 >= var_v0) {
-            var_v0 = arg1;
+    if (target < var_v0) {
+        var_v0 -= step;
+        if (target >= var_v0) {
+            var_v0 = target;
             var_v1 = 1;
         }
         particle->rotation.x = var_v0;
@@ -1475,14 +1475,14 @@ s32 Particle_Rotation_DecrementXTo(Particle* particle, s32 arg1, s32 arg2) {
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_Rotation_DecrementYTo(Particle* particle, s32 arg1, s32 arg2) {
+s32 Particle_Rotation_DecrementYTo(Particle* particle, s32 target, s32 step) {
     s32 var_v1 = 0;
     s32 var_v0 = particle->rotation.y;
 
-    if (arg1 < var_v0) {
-        var_v0 -= arg2;
-        if (arg1 >= var_v0) {
-            var_v0 = arg1;
+    if (target < var_v0) {
+        var_v0 -= step;
+        if (target >= var_v0) {
+            var_v0 = target;
             var_v1 = 1;
         }
         particle->rotation.y = var_v0;
@@ -1492,14 +1492,14 @@ s32 Particle_Rotation_DecrementYTo(Particle* particle, s32 arg1, s32 arg2) {
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_Rotation_DecrementZTo(Particle* particle, s32 arg1, s32 arg2) {
+s32 Particle_Rotation_DecrementZTo(Particle* particle, s32 target, s32 step) {
     s32 var_v0 = particle->rotation.z;
     s32 var_v1 = 0;
 
-    if (arg1 < var_v0) {
-        var_v0 -= arg2;
-        if (arg1 >= var_v0) {
-            var_v0 = arg1;
+    if (target < var_v0) {
+        var_v0 -= step;
+        if (target >= var_v0) {
+            var_v0 = target;
             var_v1 = 1;
         }
         particle->rotation.z = var_v0;
@@ -1508,25 +1508,25 @@ s32 Particle_Rotation_DecrementZTo(Particle* particle, s32 arg1, s32 arg2) {
 }
 
 /* Add the indicated random binary-angle offsets, including any fixed half/quarter turn. */
-void Particle_AddRotationRandomSignedXY(Particle* particle, s32 arg1, s32 arg2) {
-    Particle_Rotation_AddX(particle, ParticleMath_RandomSigned(arg1));
-    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(arg2));
+void Particle_AddRotationRandomSignedXY(Particle* particle, s32 range_x, s32 range_y) {
+    Particle_Rotation_AddX(particle, ParticleMath_RandomSigned(range_x));
+    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(range_y));
 }
 
 /* Add the indicated random binary-angle offsets, including any fixed half/quarter turn. */
-void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* particle, s32 arg1, s32 arg2) {
-    Particle_Rotation_AddX(particle, ParticleMath_RandomSignedOffset(arg1, 0x8000));
-    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(arg2));
+void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* particle, s32 range_x, s32 range_y) {
+    Particle_Rotation_AddX(particle, ParticleMath_RandomSignedOffset(range_x, 0x8000));
+    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(range_y));
 }
 
 /* Add the indicated random binary-angle offsets, including any fixed half/quarter turn. */
-void Particle_AddRotationRandomSignedY(Particle* particle, s32 arg1) {
-    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(arg1));
+void Particle_AddRotationRandomSignedY(Particle* particle, s32 range) {
+    Particle_Rotation_AddY(particle, ParticleMath_RandomSigned(range));
 }
 
 /* Add the indicated random binary-angle offsets, including any fixed half/quarter turn. */
-void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* particle, s32 arg1) {
-    Particle_Rotation_AddY(particle, ParticleMath_RandomSignedOffset(arg1, 0x8000));
+void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* particle, s32 range) {
+    Particle_Rotation_AddY(particle, ParticleMath_RandomSignedOffset(range, 0x8000));
 }
 
 /* Add the indicated random binary-angle offsets, including any fixed half/quarter turn. */
@@ -1536,106 +1536,106 @@ void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* particle) 
 }
 
 /* Write a direction vector using the indicated rotation components and the supplied magnitude. */
-void Particle_ComputeVectorFromRotationY(Particle* particle, f32 arg1, Vec3f* arg2) {
-    arg2->x = SINS(particle->rotation.y) * arg1;
-    arg2->y = 0.0f;
-    arg2->z = COSS(particle->rotation.y) * arg1;
+void Particle_ComputeVectorFromRotationY(Particle* particle, f32 magnitude, Vec3f* destination) {
+    destination->x = SINS(particle->rotation.y) * magnitude;
+    destination->y = 0.0f;
+    destination->z = COSS(particle->rotation.y) * magnitude;
 }
 
 /* Write a direction vector using the indicated rotation components and the supplied magnitude. */
-void Particle_ComputeVectorFromRotationXY(Particle* particle, f32 arg1, Vec3f* arg2) {
-    arg2->x = arg1 * COSS(particle->rotation.x) * SINS(particle->rotation.y);
-    arg2->y = -arg1 * SINS(particle->rotation.x);
-    arg2->z = arg1 * COSS(particle->rotation.x) * COSS(particle->rotation.y);
+void Particle_ComputeVectorFromRotationXY(Particle* particle, f32 magnitude, Vec3f* destination) {
+    destination->x = magnitude * COSS(particle->rotation.x) * SINS(particle->rotation.y);
+    destination->y = -magnitude * SINS(particle->rotation.x);
+    destination->z = magnitude * COSS(particle->rotation.x) * COSS(particle->rotation.y);
 }
 
 /* Write a direction vector using the indicated rotation components and the supplied magnitude. */
-void Particle_ComputeVectorFromRotationXZ(Particle* particle, f32 arg1, Vec3f* arg2) {
-    arg2->x = arg1 * SINS(particle->rotation.x) * SINS(particle->rotation.z);
-    arg2->y = -arg1 * SINS(particle->rotation.x) * COSS(particle->rotation.z);
-    arg2->z = arg1 * COSS(particle->rotation.x);
+void Particle_ComputeVectorFromRotationXZ(Particle* particle, f32 magnitude, Vec3f* destination) {
+    destination->x = magnitude * SINS(particle->rotation.x) * SINS(particle->rotation.z);
+    destination->y = -magnitude * SINS(particle->rotation.x) * COSS(particle->rotation.z);
+    destination->z = magnitude * COSS(particle->rotation.x);
 }
 
 /* Write a direction vector using the indicated rotation components and the supplied magnitude. */
-void Particle_ComputeVectorFromRotationXYZAlt(Particle* particle, f32 arg1, Vec3f* arg2) {
-    arg2->x = arg1 * (SINS(particle->rotation.x) * COSS(particle->rotation.y) * SINS(particle->rotation.z) +
+void Particle_ComputeVectorFromRotationXYZAlt(Particle* particle, f32 magnitude, Vec3f* destination) {
+    destination->x = magnitude * (SINS(particle->rotation.x) * COSS(particle->rotation.y) * SINS(particle->rotation.z) +
                       COSS(particle->rotation.x) * SINS(particle->rotation.y));
-    arg2->y = -arg1 * SINS(particle->rotation.x) * COSS(particle->rotation.z);
-    arg2->z = arg1 * (COSS(particle->rotation.x) * COSS(particle->rotation.y) -
+    destination->y = -magnitude * SINS(particle->rotation.x) * COSS(particle->rotation.z);
+    destination->z = magnitude * (COSS(particle->rotation.x) * COSS(particle->rotation.y) -
                       SINS(particle->rotation.x) * SINS(particle->rotation.y) * SINS(particle->rotation.z));
 }
 
 /* Write a direction vector using the indicated rotation components and the supplied magnitude. */
-void Particle_ComputeVectorFromRotationYZVariant(Particle* particle, f32 arg1, Vec3f* arg2) {
-    arg2->x = arg1 * (SINS(particle->rotation.y) * COSS(particle->rotation.z) +
+void Particle_ComputeVectorFromRotationYZVariant(Particle* particle, f32 magnitude, Vec3f* destination) {
+    destination->x = magnitude * (SINS(particle->rotation.y) * COSS(particle->rotation.z) +
                       SINS(particle->rotation.x) * COSS(particle->rotation.y) * SINS(particle->rotation.z));
-    arg2->y = arg1 * (SINS(particle->rotation.y) * SINS(particle->rotation.z) -
+    destination->y = magnitude * (SINS(particle->rotation.y) * SINS(particle->rotation.z) -
                       SINS(particle->rotation.x) * COSS(particle->rotation.y) * COSS(particle->rotation.z));
-    arg2->z = arg1 * (COSS(particle->rotation.x) * COSS(particle->rotation.y));
+    destination->z = magnitude * (COSS(particle->rotation.x) * COSS(particle->rotation.y));
 }
 
 /* Set stepMagnitude with render-context Y scaling. */
-void Particle_StepMagnitude_SetScaled(Particle* particle, f32 arg1) {
-    particle->stepMagnitude = arg1 * sParticleRenderContext.scale.y;
+void Particle_StepMagnitude_SetScaled(Particle* particle, f32 step_magnitude) {
+    particle->stepMagnitude = step_magnitude * sParticleRenderContext.scale.y;
 }
 
 /* Set magnitudeStep with render-context Y scaling. */
-void Particle_MagnitudeStep_SetScaled(Particle* particle, f32 arg1) {
-    particle->magnitudeStep = arg1 * sParticleRenderContext.scale.y;
+void Particle_MagnitudeStep_SetScaled(Particle* particle, f32 magnitude_step) {
+    particle->magnitudeStep = magnitude_step * sParticleRenderContext.scale.y;
 }
 
 /* Approach stepMagnitude using the stored or supplied target and step. */
-s32 Particle_StepMagnitude_Approach(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->stepMagnitude, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_StepMagnitude_Approach(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->stepMagnitude, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Approach stepMagnitude, magnitudeStep using the stored or supplied target and step. */
-s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* particle, f32 arg1) {
-    return ParticleMath_ApproachFloat(&particle->stepMagnitude, arg1 * sParticleRenderContext.scale.y, particle->magnitudeStep);
+s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* particle, f32 target) {
+    return ParticleMath_ApproachFloat(&particle->stepMagnitude, target * sParticleRenderContext.scale.y, particle->magnitudeStep);
 }
 
 /* Approach magnitudeStep using the stored or supplied target and step. */
-s32 Particle_MagnitudeStep_Approach(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->magnitudeStep, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_MagnitudeStep_Approach(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->magnitudeStep, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Set motionStep.x, motionStep.y, motionStep.z with render-context Y scaling. */
-void Particle_MotionStep_SetVecScaled(Particle* particle, Vec3f arg1) {
-    particle->motionStep.x = arg1.x * sParticleRenderContext.scale.y;
-    particle->motionStep.y = arg1.y * sParticleRenderContext.scale.y;
-    particle->motionStep.z = arg1.z * sParticleRenderContext.scale.y;
+void Particle_MotionStep_SetVecScaled(Particle* particle, Vec3f motion_step) {
+    particle->motionStep.x = motion_step.x * sParticleRenderContext.scale.y;
+    particle->motionStep.y = motion_step.y * sParticleRenderContext.scale.y;
+    particle->motionStep.z = motion_step.z * sParticleRenderContext.scale.y;
 }
 
 /* Set the motion-step vector with render-context scaling; integration helpers add it to the motion offset. */
-void Particle_SetMotionStep(Particle* particle, f32 arg1, f32 arg2, f32 arg3) {
-    particle->motionStep.x = arg1 * sParticleRenderContext.scale.y;
-    particle->motionStep.y = arg2 * sParticleRenderContext.scale.y;
-    particle->motionStep.z = arg3 * sParticleRenderContext.scale.y;
+void Particle_SetMotionStep(Particle* particle, f32 x, f32 y, f32 z) {
+    particle->motionStep.x = x * sParticleRenderContext.scale.y;
+    particle->motionStep.y = y * sParticleRenderContext.scale.y;
+    particle->motionStep.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Set motionStep.x with render-context Y scaling. */
-void Particle_MotionStep_SetXScaled(Particle* particle, f32 arg1) {
-    particle->motionStep.x = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionStep_SetXScaled(Particle* particle, f32 x) {
+    particle->motionStep.x = x * sParticleRenderContext.scale.y;
 }
 
 /* Set motionStep.y with render-context Y scaling. */
-void Particle_MotionStep_SetYScaled(Particle* particle, f32 arg1) {
-    particle->motionStep.y = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionStep_SetYScaled(Particle* particle, f32 y) {
+    particle->motionStep.y = y * sParticleRenderContext.scale.y;
 }
 
 /* Set motionStep.z with render-context Y scaling. */
-void Particle_MotionStep_SetZScaled(Particle* particle, f32 arg1) {
-    particle->motionStep.z = arg1 * sParticleRenderContext.scale.y;
+void Particle_MotionStep_SetZScaled(Particle* particle, f32 z) {
+    particle->motionStep.z = z * sParticleRenderContext.scale.y;
 }
 
 /* Add to motionStep.x with render-context Y scaling. */
-s32 Particle_MotionStep_IncrementXUntilAtLeast(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_IncrementXUntilAtLeast(Particle* particle, f32 limit, f32 increment) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
-    particle->motionStep.x += arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.x += increment * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (temp_fv0 <= particle->motionStep.x) {
         particle->motionStep.x = temp_fv0;
         var_v1 = 1;
@@ -1644,13 +1644,13 @@ s32 Particle_MotionStep_IncrementXUntilAtLeast(Particle* particle, f32 arg1, f32
 }
 
 /* Add to motionStep.y with render-context Y scaling. */
-s32 Particle_MotionStep_IncrementYUntilAtLeast(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_IncrementYUntilAtLeast(Particle* particle, f32 limit, f32 increment) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
-    particle->motionStep.y += arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.y += increment * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (temp_fv0 <= particle->motionStep.y) {
         particle->motionStep.y = temp_fv0;
         var_v1 = 1;
@@ -1659,13 +1659,13 @@ s32 Particle_MotionStep_IncrementYUntilAtLeast(Particle* particle, f32 arg1, f32
 }
 
 /* Add to motionStep.z with render-context Y scaling. */
-s32 Particle_MotionStep_IncrementZUntilAtLeast(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_IncrementZUntilAtLeast(Particle* particle, f32 limit, f32 increment) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
-    particle->motionStep.z += arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.z += increment * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (temp_fv0 <= particle->motionStep.z) {
         particle->motionStep.z = temp_fv0;
         var_v1 = 1;
@@ -1674,13 +1674,13 @@ s32 Particle_MotionStep_IncrementZUntilAtLeast(Particle* particle, f32 arg1, f32
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_MotionStep_DecrementXUntilAtMost(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_DecrementXUntilAtMost(Particle* particle, f32 limit, f32 decrement) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
-    particle->motionStep.x -= arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.x -= decrement * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (particle->motionStep.x <= temp_fv0) {
         particle->motionStep.x = temp_fv0;
         var_v1 = 1;
@@ -1689,13 +1689,13 @@ s32 Particle_MotionStep_DecrementXUntilAtMost(Particle* particle, f32 arg1, f32 
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* particle, f32 limit, f32 decrement) {
     s32 var_v1 = 0;
     f32 temp_fv0;
 
-    particle->motionStep.y -= arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.y -= decrement * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (particle->motionStep.y <= temp_fv0) {
         particle->motionStep.y = temp_fv0;
         var_v1 = 1;
@@ -1704,13 +1704,13 @@ s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* particle, f32 arg1, f32 
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_MotionStep_DecrementZUntilAtMost(Particle* particle, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_DecrementZUntilAtMost(Particle* particle, f32 limit, f32 decrement) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
-    particle->motionStep.z -= arg2 * sParticleRenderContext.scale.y;
+    particle->motionStep.z -= decrement * sParticleRenderContext.scale.y;
 
-    temp_fv0 = arg1 * sParticleRenderContext.scale.y;
+    temp_fv0 = limit * sParticleRenderContext.scale.y;
     if (particle->motionStep.z <= temp_fv0) {
         particle->motionStep.z = temp_fv0;
         var_v1 = 1;
@@ -1719,15 +1719,15 @@ s32 Particle_MotionStep_DecrementZUntilAtMost(Particle* particle, f32 arg1, f32 
 }
 
 /* Scale motionStep.x, motionStep.y, motionStep.z. */
-void Particle_MotionStep_ScaleVec(Particle* particle, f32 arg1) {
-    particle->motionStep.x *= arg1;
-    particle->motionStep.y *= arg1;
-    particle->motionStep.z *= arg1;
+void Particle_MotionStep_ScaleVec(Particle* particle, f32 scale) {
+    particle->motionStep.x *= scale;
+    particle->motionStep.y *= scale;
+    particle->motionStep.z *= scale;
 }
 
 /* Approach motionStep.y using the stored or supplied target and step. */
-s32 Particle_MotionStep_ApproachY(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->motionStep.y, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_MotionStep_ApproachY(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->motionStep.y, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Evaluate the explicit trigonometric component formula and store/add the resulting motion term. */
@@ -1823,38 +1823,38 @@ void Particle_Field7C_SetVecFromField74AnglesYZVariant_0B700(Particle* particle)
 }
 
 /* Advance the auxiliary Y angle, replace the XZ motion offset, and store its change in motionStep. */
-void Particle_UpdateRotatingMotionOffsetXZ(Particle* particle, f32 arg1, s16 arg2) {
+void Particle_UpdateRotatingMotionOffsetXZ(Particle* particle, f32 radius, s16 angle_step) {
     f32 tmp1 = particle->motionOffset.x;
     f32 tmp2 = particle->motionOffset.z;
 
-    particle->rotationStep.y += arg2;
+    particle->rotationStep.y += angle_step;
 
-    particle->motionOffset.x = arg1 * sParticleRenderContext.scale.y * SINS(particle->rotationStep.y);
-    particle->motionOffset.z = arg1 * sParticleRenderContext.scale.y * COSS(particle->rotationStep.y);
+    particle->motionOffset.x = radius * sParticleRenderContext.scale.y * SINS(particle->rotationStep.y);
+    particle->motionOffset.z = radius * sParticleRenderContext.scale.y * COSS(particle->rotationStep.y);
 
     particle->motionStep.x = particle->motionOffset.x - tmp1;
     particle->motionStep.z = particle->motionOffset.z - tmp2;
 }
 
 /* Initialize ballistic motion under flag 2, subtract vertical acceleration, and integrate until phaseTimer is negative. */
-s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
+s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 initial_motion_step_y, f32 motion_step_y_decrement, f32 step_magnitude, s16 rotation_y, s16 duration) {
     s32 sp24 = 0;
 
     if (Particle_LacksFlags(particle, 2) != 0) {
         Particle_SetFlags(particle, 2);
         particle->motionOffset.x = particle->motionOffset.y = particle->motionOffset.z = 0.0f;
-        particle->stepMagnitude = arg3 * sParticleRenderContext.scale.y;
-        particle->motionStep.y = arg1 * sParticleRenderContext.scale.y;
-        particle->rotation.y = arg4;
+        particle->stepMagnitude = step_magnitude * sParticleRenderContext.scale.y;
+        particle->motionStep.y = initial_motion_step_y * sParticleRenderContext.scale.y;
+        particle->rotation.y = rotation_y;
         Particle_MotionStep_SetXZFromField74AngleY(particle);
-        particle->phaseTimer = arg5;
+        particle->phaseTimer = duration;
     }
 
     particle->phaseTimer--;
     if (particle->phaseTimer < 0) {
         sp24 = 1;
     } else {
-        particle->motionStep.y -= arg2 * sParticleRenderContext.scale.y;
+        particle->motionStep.y -= motion_step_y_decrement * sParticleRenderContext.scale.y;
         Particle_MotionOffset_AddVecFromMotionStep(particle);
     }
 
@@ -1862,33 +1862,33 @@ s32 Particle_MotionOffset_AdvanceMotionStepWithTimer(Particle* particle, f32 arg
 }
 
 /* Set particle scale after multiplying by the render context's Y scale. */
-void Particle_Scale_SetScaled(Particle* particle, f32 arg1) {
-    particle->scale = arg1 * sParticleRenderContext.scale.y;
+void Particle_Scale_SetScaled(Particle* particle, f32 scale) {
+    particle->scale = scale * sParticleRenderContext.scale.y;
 }
 
 /* Set particle scale directly, without render-context scaling. */
-void Particle_SetScale(Particle* particle, f32 arg1) {
-    particle->scale = arg1;
+void Particle_SetScale(Particle* particle, f32 scale) {
+    particle->scale = scale;
 }
 
 /* Write scaled field 0x20; the stored-scale approach helper uses this field as its target. */
-void Particle_SetScaleParameter20(Particle* particle, f32 arg1) {
-    particle->unk_20 = arg1 * sParticleRenderContext.scale.y;
+void Particle_SetScaleParameter20(Particle* particle, f32 value) {
+    particle->unk_20 = value * sParticleRenderContext.scale.y;
 }
 
 /* Write scaled field 0x24; the stored-scale approach helper uses this field as its step. */
-void Particle_SetScaleParameter24(Particle* particle, f32 arg1) {
-    particle->unk_24 = arg1 * sParticleRenderContext.scale.y;
+void Particle_SetScaleParameter24(Particle* particle, f32 value) {
+    particle->unk_24 = value * sParticleRenderContext.scale.y;
 }
 
 /* Approach scale using the stored or supplied target and step. */
-s32 Particle_Scale_Approach(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->scale, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_Scale_Approach(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->scale, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Run the field-approach helper and advance lifecycle when it reports completion. */
-s32 Particle_Scale_ApproachAndStepState(Particle* particle, f32 arg1, f32 arg2) {
-    s32 sp1C = Particle_Scale_Approach(particle, arg1, arg2);
+s32 Particle_Scale_ApproachAndStepState(Particle* particle, f32 target, f32 step) {
+    s32 sp1C = Particle_Scale_Approach(particle, target, step);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(particle);
@@ -1912,67 +1912,67 @@ s32 Particle_ApproachStoredScaleAndAdvanceLifecycle(Particle* particle) {
 }
 
 /* Approach unk_20 using the stored or supplied target and step. */
-s32 Particle_Field20_Approach_0BA84(Particle* particle, f32 arg1, f32 arg2) {
-    return ParticleMath_ApproachFloat(&particle->unk_20, arg1 * sParticleRenderContext.scale.y, arg2 * sParticleRenderContext.scale.y);
+s32 Particle_Field20_Approach_0BA84(Particle* particle, f32 target, f32 step) {
+    return ParticleMath_ApproachFloat(&particle->unk_20, target * sParticleRenderContext.scale.y, step * sParticleRenderContext.scale.y);
 }
 
 /* Set primRed, primGreen, primBlue. */
-void Particle_SetPrimColor(Particle* particle, u8 arg1, u8 arg2, u8 arg3) {
-    particle->primRed = arg1;
-    particle->primGreen = arg2;
-    particle->primBlue = arg3;
+void Particle_SetPrimColor(Particle* particle, u8 red, u8 green, u8 blue) {
+    particle->primRed = red;
+    particle->primGreen = green;
+    particle->primBlue = blue;
 }
 
 /* Approach primRed using the stored or supplied target and step. */
-s32 Particle_PrimR_Approach_0BAE4(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->primRed, arg1, arg2);
+s32 Particle_PrimR_Approach_0BAE4(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->primRed, target, step);
 }
 
 /* Approach primGreen using the stored or supplied target and step. */
-s32 Particle_PrimG_Approach_0BB14(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->primGreen, arg1, arg2);
+s32 Particle_PrimG_Approach_0BB14(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->primGreen, target, step);
 }
 
 /* Approach primBlue using the stored or supplied target and step. */
-s32 Particle_PrimB_Approach_0BB44(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->primBlue, arg1, arg2);
+s32 Particle_PrimB_Approach_0BB44(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->primBlue, target, step);
 }
 
 /* Set envRed, envGreen, envBlue. */
-void Particle_SetEnvColor(Particle* particle, u8 arg1, u8 arg2, u8 arg3) {
-    particle->envRed = arg1;
-    particle->envGreen = arg2;
-    particle->envBlue = arg3;
+void Particle_SetEnvColor(Particle* particle, u8 red, u8 green, u8 blue) {
+    particle->envRed = red;
+    particle->envGreen = green;
+    particle->envBlue = blue;
 }
 
 /* Approach envRed using the stored or supplied target and step. */
-s32 Particle_EnvR_Approach_0BB90(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->envRed, arg1, arg2);
+s32 Particle_EnvR_Approach_0BB90(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->envRed, target, step);
 }
 
 /* Approach envBlue using the stored or supplied target and step. */
-s32 Particle_ApproachEnvBlue(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->envBlue, arg1, arg2);
+s32 Particle_ApproachEnvBlue(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->envBlue, target, step);
 }
 
 /* Approach envGreen using the stored or supplied target and step. */
-s32 Particle_ApproachEnvGreen(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->envGreen, arg1, arg2);
+s32 Particle_ApproachEnvGreen(Particle* particle, u8 target, u8 step) {
+    return ParticleMath_ApproachU8(&particle->envGreen, target, step);
 }
 
 /* Set primAlpha. */
-void Particle_SetPrimAlpha(Particle* particle, u8 arg1) {
-    particle->primAlpha = arg1;
+void Particle_SetPrimAlpha(Particle* particle, u8 alpha) {
+    particle->primAlpha = alpha;
 }
 
 /* Approach primAlpha using the stored or supplied target and step. */
-s32 Particle_PrimAlpha_Approach_0BC2C(Particle* particle, u8 arg1, u8 arg2) {
-    return ParticleMath_ApproachU8(&particle->primAlpha, arg1, arg2);
+s32 Particle_PrimAlpha_Approach_0BC2C(Particle* particle, u8 target_alpha, u8 alpha_step) {
+    return ParticleMath_ApproachU8(&particle->primAlpha, target_alpha, alpha_step);
 }
 
 /* Run the field-approach helper and advance lifecycle when it reports completion. */
-s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* particle, u8 arg1, u8 arg2) {
-    s32 sp1C = Particle_PrimAlpha_Approach_0BC2C(particle, arg1, arg2);
+s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* particle, u8 target_alpha, u8 alpha_step) {
+    s32 sp1C = Particle_PrimAlpha_Approach_0BC2C(particle, target_alpha, alpha_step);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(particle);
@@ -1981,8 +1981,8 @@ s32 Particle_PrimAlpha_ApproachAndStepState_0BC5C(Particle* particle, u8 arg1, u
 }
 
 /* Set unk_A6. */
-void Particle_FieldA6_SetS16_0BCA8(Particle* particle, s16 arg1) {
-    particle->unk_A6 = arg1;
+void Particle_FieldA6_SetS16_0BCA8(Particle* particle, s16 value) {
+    particle->unk_A6 = value;
 }
 
 /* Return the particle's unk_A6 field. */
@@ -1991,25 +1991,25 @@ s16 Particle_FieldA6_GetS16_0BCBC(Particle* particle) {
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* particle, s16 arg1, s16 arg2) {
+s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* particle, s16 target, s16 step) {
     s32 var_v1 = 0;
 
-    particle->unk_A6 -= arg2;
-    if (arg1 >= particle->unk_A6) {
-        particle->unk_A6 = arg1;
+    particle->unk_A6 -= step;
+    if (target >= particle->unk_A6) {
+        particle->unk_A6 = target;
         var_v1 = 1;
     }
     return var_v1;
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* particle, s16 arg1) {
-    return Particle_FieldA6_DecrementTo_0BCC4(particle, 0, arg1);
+s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* particle, s16 step) {
+    return Particle_FieldA6_DecrementTo_0BCC4(particle, 0, step);
 }
 
 /* Run the countdown helper and advance lifecycle when it reports completion. */
-s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* particle, s16 arg1) {
-    s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(particle, 0, arg1);
+s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* particle, s16 step) {
+    s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(particle, 0, step);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(particle);
@@ -2018,8 +2018,8 @@ s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* particle, s16 a
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* particle, s16 arg1) {
-    return Particle_FieldA6_DecrementTo_0BCC4(particle, arg1, 1);
+s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* particle, s16 target) {
+    return Particle_FieldA6_DecrementTo_0BCC4(particle, target, 1);
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
@@ -2038,8 +2038,8 @@ s32 Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(Particle* particle) 
 }
 
 /* Set unk_A8. */
-void Particle_FieldA8_SetS16_0BE14(Particle* particle, s16 arg1) {
-    particle->unk_A8 = arg1;
+void Particle_FieldA8_SetS16_0BE14(Particle* particle, s16 value) {
+    particle->unk_A8 = value;
 }
 
 /* Return the particle's unk_A8 field. */
@@ -2048,12 +2048,12 @@ s16 Particle_FieldA8_GetS16_0BE28(Particle* particle) {
 }
 
 /* Decrease the selected field toward its threshold and return the completion result. */
-s32 Particle_FieldA8_DecrementTo_0BE30(Particle* particle, s16 arg1) {
+s32 Particle_FieldA8_DecrementTo_0BE30(Particle* particle, s16 target) {
     s32 var_v1 = 0;
 
     particle->unk_A8--;
-    if (arg1 >= particle->unk_A8) {
-        particle->unk_A8 = arg1;
+    if (target >= particle->unk_A8) {
+        particle->unk_A8 = target;
         var_v1 = 1;
     }
     return var_v1;
@@ -2075,58 +2075,58 @@ s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* particle) 
 }
 
 /* Set unk_CA. */
-void Particle_FieldCA_SetU8_0BECC(Particle* particle, u8 arg1) {
-    particle->unk_CA = arg1;
+void Particle_FieldCA_SetU8_0BECC(Particle* particle, u8 value) {
+    particle->unk_CA = value;
 }
 
 /* Set unk_AC. */
-void Particle_FieldAC_SetS16_0BED8(Particle* particle, s16 arg1) {
-    particle->unk_AC = arg1;
+void Particle_FieldAC_SetS16_0BED8(Particle* particle, s16 value) {
+    particle->unk_AC = value;
 }
 
 /* Set unk_CF. */
-void Particle_FieldCF_SetU8_0BEEC(Particle* particle, u8 arg1) {
-    particle->unk_CF = arg1;
+void Particle_FieldCF_SetU8_0BEEC(Particle* particle, u8 value) {
+    particle->unk_CF = value;
 }
 
 /* Set unk_CF. */
-void Particle_FieldCF_SetU8Alt_0BEF8(Particle* particle, u8 arg1) {
-    particle->unk_CF = arg1;
+void Particle_FieldCF_SetU8Alt_0BEF8(Particle* particle, u8 value) {
+    particle->unk_CF = value;
 }
 
 /* Set unk_CC. */
-void Particle_FieldCC_SetU8_0BF04(Particle* particle, u8 arg1) {
-    particle->unk_CC = arg1;
+void Particle_FieldCC_SetU8_0BF04(Particle* particle, u8 value) {
+    particle->unk_CC = value;
 }
 
 /* Set unk_AA. */
-void Particle_FieldAA_SetS16_0BF10(Particle* particle, s16 arg1) {
-    particle->unk_AA = arg1;
+void Particle_FieldAA_SetS16_0BF10(Particle* particle, s16 value) {
+    particle->unk_AA = value;
 }
 
 /* Set unk_CE. */
-void Particle_FieldCE_SetS16_0BF24(Particle* particle, s16 arg1) {
-    particle->unk_CE = arg1;
+void Particle_FieldCE_SetS16_0BF24(Particle* particle, s16 value) {
+    particle->unk_CE = value;
 }
 
 /* Set unk_CD. */
-void Particle_FieldCD_SetS16_0BF38(Particle* particle, s16 arg1) {
-    particle->unk_CD = arg1;
+void Particle_FieldCD_SetS16_0BF38(Particle* particle, s16 value) {
+    particle->unk_CD = value;
 }
 
 /* Set unk_AE. */
-void Particle_FieldAE_SetS16_0BF4C(Particle* particle, s16 arg1) {
-    particle->unk_AE = arg1;
+void Particle_FieldAE_SetS16_0BF4C(Particle* particle, s16 value) {
+    particle->unk_AE = value;
 }
 
 /* Approach unk_AE using the stored or supplied target and step. */
-s32 Particle_FieldAE_Approach_0BF60(Particle* particle, s16 arg1, s16 arg2) {
-    return ParticleMath_ApproachS16(&particle->unk_AE, arg1, arg2);
+s32 Particle_FieldAE_Approach_0BF60(Particle* particle, s16 target, s16 step) {
+    return ParticleMath_ApproachS16(&particle->unk_AE, target, step);
 }
 
 /* Run the field-approach helper and advance lifecycle when it reports completion. */
-s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* particle, s16 arg1, s16 arg2) {
-    s32 sp1C = Particle_FieldAE_Approach_0BF60(particle, arg1, arg2);
+s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* particle, s16 target, s16 step) {
+    s32 sp1C = Particle_FieldAE_Approach_0BF60(particle, target, step);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(particle);
@@ -2135,13 +2135,13 @@ s32 Particle_FieldAE_ApproachAndStepState_0BF98(Particle* particle, s16 arg1, s1
 }
 
 /* Set unk_B0. */
-void Particle_FieldB0_SetS16_0BFEC(Particle* particle, s16 arg1) {
-    particle->unk_B0 = arg1;
+void Particle_FieldB0_SetS16_0BFEC(Particle* particle, s16 value) {
+    particle->unk_B0 = value;
 }
 
 /* Approach unk_B0 using the stored or supplied target and step. */
-s32 Particle_FieldB0_Approach_0C000(Particle* particle, s16 arg1, s16 arg2) {
-    return ParticleMath_ApproachS16(&particle->unk_B0, arg1, arg2);
+s32 Particle_FieldB0_Approach_0C000(Particle* particle, s16 target, s16 step) {
+    return ParticleMath_ApproachS16(&particle->unk_B0, target, step);
 }
 
 /* Return the particle's unk_AC field. */
@@ -2176,72 +2176,72 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* particle) {
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetACIfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetACIfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        Particle_FieldAC_SetS16_0BED8(particle, arg1);
+        Particle_FieldAC_SetS16_0BED8(particle, value);
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetCFIfNotSentinel(Particle* particle, u8 arg1) {
+void Particle_SetFieldOffsetCFIfNotSentinel(Particle* particle, u8 value) {
     if ((u32)particle != -1) {
-        Particle_FieldCF_SetU8_0BEEC(particle, arg1);
+        Particle_FieldCF_SetU8_0BEEC(particle, value);
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetA6IfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetA6IfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        Particle_FieldA6_SetS16_0BCA8(particle, arg1);
+        Particle_FieldA6_SetS16_0BCA8(particle, value);
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetA8IfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetA8IfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        Particle_FieldA8_SetS16_0BE14(particle, arg1);
+        Particle_FieldA8_SetS16_0BE14(particle, value);
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetCEIfNotSentinel(Particle* particle, u8 arg1) {
+void Particle_SetFieldOffsetCEIfNotSentinel(Particle* particle, u8 value) {
     if ((u32)particle != -1) {
-        particle->unk_CE = arg1;
+        particle->unk_CE = value;
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetCDIfNotSentinel(Particle* particle, u8 arg1) {
+void Particle_SetFieldOffsetCDIfNotSentinel(Particle* particle, u8 value) {
     if ((u32)particle != -1) {
-        particle->unk_CD = arg1;
+        particle->unk_CD = value;
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetAAIfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetAAIfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        particle->unk_AA = arg1;
+        particle->unk_AA = value;
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetPrimAlphaIfNotSentinel(Particle* particle, u8 arg1) {
+void Particle_SetPrimAlphaIfNotSentinel(Particle* particle, u8 alpha) {
     if ((u32)particle != -1) {
-        Particle_SetPrimAlpha(particle, arg1);
+        Particle_SetPrimAlpha(particle, alpha);
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetAEIfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetAEIfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        particle->unk_AE = arg1;
+        particle->unk_AE = value;
     }
 }
 
 /* Store the parameter only when it differs from the field-specific sentinel. */
-void Particle_SetFieldOffsetB0IfNotSentinel(Particle* particle, s16 arg1) {
+void Particle_SetFieldOffsetB0IfNotSentinel(Particle* particle, s16 value) {
     if ((u32)particle != -1) {
-        particle->unk_B0 = arg1;
+        particle->unk_B0 = value;
     }
 }
 
@@ -2281,8 +2281,8 @@ void Particle_RenderOrthoParticles(CameraNode* camera) {
 }
 
 /* Select one of four display-list presets; unknown selectors emit no commands. */
-void Particle_SetRenderMode(s16 arg0) {
-    switch (arg0) {
+void Particle_SetRenderMode(s16 render_mode) {
+    switch (render_mode) {
         case 0:
             gSPDisplayList(gDisplayListHead++, D_8140DD58);
             break;

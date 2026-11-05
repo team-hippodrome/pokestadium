@@ -3,6 +3,8 @@
 #include "src/jpeg_stream.h"
 #include "src/gb_data.h"
 
+/*AI logic*/
+
 SpeciesLevelUpLearnset D_843C5310[18];
 u8 D_843C5550[0x14];
 AIDifficultyConfig* D_843C5564;

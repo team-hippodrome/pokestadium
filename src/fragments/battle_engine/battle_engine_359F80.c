@@ -1,5 +1,7 @@
 #include "battle_engine.h"
 
+/*debug stuff*/
+
 static const char D_8438D920[0xC] = "PROB %d\n";
 static const char D_8438D92C[0x24] = "^^^^^^^^^^POWER += POWER * %2.1f\n";
 static const char D_8438D950[0x18] = "^^^^^^^^^CRITICAL %d\n";
