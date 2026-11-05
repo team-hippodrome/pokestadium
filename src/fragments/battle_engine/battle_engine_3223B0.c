@@ -731,7 +731,7 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunInitialBeamEmanator_InitParticle(Particle* arg0) {
+void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
     Particle_Scale_SetScaled(arg0, 1.0f);
     Particle_SetScaleParameter20(arg0, 2.0f);
     Particle_SetScaleParameter24(arg0, 0.75f);
@@ -746,7 +746,7 @@ void BattleAnim_RunInitialBeamEmanator_InitParticle(Particle* arg0) {
 void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunInitialBeamEmanator_InitParticle(arg0);
+            BattleAnim_SetupInitialBeamEmanator(arg0);
             break;
 
         case 2:
@@ -931,7 +931,7 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
     Particle_Rotation_AddZFromRotationStep(arg0);
 }
 
-void BattleAnim_RunStrongOutwardMovingLargeHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_Scale_SetScaled(arg0, 1.35f);
@@ -947,7 +947,7 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark_InitParticle(Particle* arg0)
 void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunStrongOutwardMovingLargeHitSpark_InitParticle(arg0);
+            BattleAnim_SetupStrongOutwardMovingLargeHitSpark(arg0);
             break;
 
         case 2:
@@ -1173,7 +1173,7 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
 /*
     Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
 */
-void BattleAnim_RunStrongOutwardMovingSmallHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp2C = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1197,7 +1197,7 @@ void BattleAnim_RunStrongOutwardMovingSmallHitSpark_InitParticle(Particle* arg0)
 void BattleAnim_RunStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunStrongOutwardMovingSmallHitSpark_InitParticle(arg0);
+            BattleAnim_SetupStrongOutwardMovingSmallHitSpark(arg0);
             break;
 
         case 2:

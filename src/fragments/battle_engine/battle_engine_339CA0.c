@@ -7,7 +7,7 @@
 #include "pokemon.h"
 #include "moves.h"
 
-void BattleAnim_RunSlashingMoveUse_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -55,7 +55,7 @@ void BattleAnim_RunSlashingMoveUse_InitParticle(Particle* arg0) {
 void BattleAnim_RunSlashingMoveUse(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSlashingMoveUse_InitParticle(arg0);
+            BattleAnim_SetupSlashingMoveUse(arg0);
             break;
 
         case 2:
@@ -234,7 +234,7 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunSlashingMoveFullScreenFlash_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
     s16 sp26 = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     Particle_Scale_SetScaled(arg0, 1.0f);
@@ -258,7 +258,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSlashingMoveFullScreenFlash_InitParticle(arg0);
+            BattleAnim_SetupSlashingMoveFullScreenFlash(arg0);
             break;
 
         case 2:
@@ -280,7 +280,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunSlashMoveWhiteFlashOverlay_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
     s16 sp26 = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
 
     Particle_Scale_SetScaled(arg0, 1.0f);
@@ -305,7 +305,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSlashMoveWhiteFlashOverlay_InitParticle(arg0);
+            BattleAnim_SetupSlashMoveWhiteFlashOverlay(arg0);
             break;
 
         case 2:
@@ -328,7 +328,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
     Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x10);
 }
 
-void BattleAnim_RunSlashingMoveHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSlashingMoveHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
     s16 sp22 = BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner);
@@ -364,7 +364,7 @@ void BattleAnim_RunSlashingMoveHitSpark_InitParticle(Particle* arg0) {
 void BattleAnim_RunSlashingMoveHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSlashingMoveHitSpark_InitParticle(arg0);
+            BattleAnim_SetupSlashingMoveHitSpark(arg0);
             break;
 
         case 2:
@@ -474,7 +474,7 @@ void BattleAnim_CallbackEndEffects39And41And45And46And83Descriptor3DMetadataBurs
     }
 }
 
-void BattleAnim_RunSmallSand_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSmallSand(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -494,7 +494,7 @@ void BattleAnim_RunSmallSand_InitParticle(Particle* arg0) {
 void BattleAnim_RunSmallSand(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSmallSand_InitParticle(arg0);
+            BattleAnim_SetupSmallSand(arg0);
             break;
 
         case 2:
@@ -515,7 +515,7 @@ void BattleAnim_RunSmallSand(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunLargeSand_InitParticle(Particle* arg0) {
+void BattleAnim_SetupLargeSand(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -535,7 +535,7 @@ void BattleAnim_RunLargeSand_InitParticle(Particle* arg0) {
 void BattleAnim_RunLargeSand(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunLargeSand_InitParticle(arg0);
+            BattleAnim_SetupLargeSand(arg0);
             break;
 
         case 2:
@@ -808,7 +808,7 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunGroundedCircularHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
     Particle_Scale_SetScaled(arg0, 0.1f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x14);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -823,7 +823,7 @@ void BattleAnim_RunGroundedCircularHitSpark_InitParticle(Particle* arg0) {
 void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunGroundedCircularHitSpark_InitParticle(arg0);
+            BattleAnim_SetupGroundedCircularHitSpark(arg0);
             break;
 
         case 2:
@@ -876,7 +876,7 @@ void BattleAnim_CallbackUnusedGlitterVariant(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunPointyMoveHitSparkChild_InitParticle(Particle* arg0) {
+void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -913,7 +913,7 @@ void BattleAnim_RunPointyMoveHitSparkChild_InitParticle(Particle* arg0) {
 void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunPointyMoveHitSparkChild_InitParticle(arg0);
+            BattleAnim_SetupPointyMoveHitSparkChild(arg0);
             break;
 
         case 2:
@@ -934,7 +934,7 @@ void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunPhysicalHitPurpleSmoke_InitParticle(Particle* arg0) {
+void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1011,7 +1011,7 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunPhysicalHitPurpleSmoke_InitParticle(arg0);
+            BattleAnim_SetupPhysicalHitPurpleSmoke(arg0);
             break;
         case 2:
             Particle_AnimateFramesForwardAndAdvanceLifecycle(arg0, 0, 7, 1, 2, 0);
@@ -1383,7 +1383,7 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunDefaultHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -1469,7 +1469,7 @@ void BattleAnim_RunDefaultHitSpark_InitParticle(Particle* arg0) {
 void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunDefaultHitSpark_InitParticle(arg0);
+            BattleAnim_SetupDefaultHitSpark(arg0);
             break;
 
         case 2:
@@ -1489,7 +1489,7 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunStrongPurpleHitSmoke_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongPurpleHitSmoke(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
@@ -1586,7 +1586,7 @@ void BattleAnim_RunStrongPurpleHitSmoke_InitParticle(Particle* arg0) {
 void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunStrongPurpleHitSmoke_InitParticle(arg0);
+            BattleAnim_SetupStrongPurpleHitSmoke(arg0);
             break;
 
         case 2:
@@ -1615,7 +1615,7 @@ void BattleAnim_RunStrongPurpleHitSmoke(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunPointyMoveHitSpark_InitParticle(Particle* arg0) {
+void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
@@ -1649,7 +1649,7 @@ void BattleAnim_RunPointyMoveHitSpark_InitParticle(Particle* arg0) {
 s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunPointyMoveHitSpark_InitParticle(arg0);
+            BattleAnim_SetupPointyMoveHitSpark(arg0);
             break;
 
         case 2:
@@ -2582,7 +2582,7 @@ void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunQiChargeChild_InitParticle(Particle* arg0) {
+void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -2605,7 +2605,7 @@ void BattleAnim_RunQiChargeChild_InitParticle(Particle* arg0) {
 void BattleAnim_RunQiChargeChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunQiChargeChild_InitParticle(arg0);
+            BattleAnim_SetupQiChargeChild(arg0);
             break;
 
         case 2:
@@ -2636,7 +2636,7 @@ void BattleAnim_RunQiChargeChild(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunQiCharge_InitParticle(Particle* arg0) {
+void BattleAnim_SetupQiCharge(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     Particle_Rotation_SetY(arg0, ParticleMath_RandomRange(0x10000));
     Particle_MotionOffset_SetYScaled(arg0, ParticleMath_RandomSignedOffsetBySign(0x28, 0x28));
@@ -2651,7 +2651,7 @@ void BattleAnim_RunQiCharge_InitParticle(Particle* arg0) {
 void BattleAnim_RunQiCharge(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunQiCharge_InitParticle(arg0);
+            BattleAnim_SetupQiCharge(arg0);
             break;
 
         case 2:

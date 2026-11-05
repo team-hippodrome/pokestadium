@@ -2724,7 +2724,7 @@ void BattleAnim_InitializeSoftBoiledUse(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x5F, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 6);
 }
 
-void BattleAnim_RunStrongWinds_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongWinds(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModel(arg0->displayObject, 0x60);
@@ -2745,7 +2745,7 @@ void BattleAnim_RunStrongWinds_InitParticle(Particle* arg0) {
 void BattleAnim_RunStrongWinds(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunStrongWinds_InitParticle(arg0);
+            BattleAnim_SetupStrongWinds(arg0);
             break;
 
         case 2:
@@ -3318,7 +3318,7 @@ void func_84348C6C(UNUSED s32 arg0, UNUSED s32 arg1) {
 void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1) {
 }
 
-void BattleAnim_RunBitingEffect_InitParticle(Particle* arg0) {
+void BattleAnim_SetupBitingEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
     arg0->displayObject = BattleAnim_AllocParticleDisplayContext(arg0);
@@ -3351,7 +3351,7 @@ void BattleAnim_RunBitingEffect(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunBitingEffect_InitParticle(arg0);
+            BattleAnim_SetupBitingEffect(arg0);
             break;
 
         case 2:
@@ -3632,7 +3632,7 @@ void BattleAnim_CallbackStartEffect17ModelAnimFinish(Particle* arg0) {
     }
 }
 
-void BattleAnim_RunSlimePuddle_InitParticle(Particle* arg0) {
+void BattleAnim_SetupSlimePuddle(Particle* arg0) {
     s16 sp26 = Particle_FieldCD_GetU8_0C048(arg0);
 
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -3671,7 +3671,7 @@ void BattleAnim_RunSlimePuddle_InitParticle(Particle* arg0) {
 void BattleAnim_RunSlimePuddle(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunSlimePuddle_InitParticle(arg0);
+            BattleAnim_SetupSlimePuddle(arg0);
             break;
 
         case 2:
@@ -4181,7 +4181,7 @@ void BattleAnim_ApplySpeciesYOffsetVariantC(Particle* arg0) {
     Particle_PositionOffset_AddYScaled(arg0, sp1C);
 }
 
-void BattleAnim_RunPsychedelicOverlay_InitParticle(Particle* arg0) {
+void BattleAnim_SetupPsychedelicOverlay(Particle* arg0) {
     s16 sp26 = Particle_FieldCD_GetU8_0C048(arg0);
 
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -4212,7 +4212,7 @@ void BattleAnim_RunPsychedelicOverlay(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunPsychedelicOverlay_InitParticle(arg0);
+            BattleAnim_SetupPsychedelicOverlay(arg0);
             break;
 
         case 2:
@@ -4540,7 +4540,7 @@ void BattleAnim_InitializeNightShadeHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 4, 4, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 3, 9, 0, 0x18, 0xD);
 }
 
-void BattleAnim_RunConfuseRayUseSpotlight_InitParticle(Particle* arg0) {
+void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x42, 0xC2);
@@ -4563,7 +4563,7 @@ void BattleAnim_RunConfuseRayUseSpotlight(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_RunConfuseRayUseSpotlight_InitParticle(arg0);
+            BattleAnim_SetupConfuseRayUseSpotlight(arg0);
             break;
 
         case 2:
@@ -4576,7 +4576,7 @@ void BattleAnim_RunConfuseRayUseSpotlight(Particle* arg0) {
     Particle_Rotation_SetY(arg0, sp26);
 }
 
-void BattleAnim_RunConfuseRayHitSpotlight_InitParticle(Particle* arg0) {
+void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModelWithAnim(arg0->displayObject, 0x42, 0xC2);
@@ -4598,7 +4598,7 @@ void BattleAnim_RunConfuseRayHitSpotlight(Particle* arg0) {
     s16 sp1E;
 
     if (arg0->lifecycle == 1) {
-        BattleAnim_RunConfuseRayHitSpotlight_InitParticle(arg0);
+        BattleAnim_SetupConfuseRayHitSpotlight(arg0);
     }
     BattleAnim_GetCameraEyeYaw(&sp1E);
     Particle_Rotation_SetY(arg0, sp1E);
