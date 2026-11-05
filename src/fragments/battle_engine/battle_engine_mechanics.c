@@ -743,9 +743,9 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->id = sp34->unk_00.unk_00;
     sp24->displayHp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
-    sp24->roster[6] = sp34->unk_06;
-    sp24->roster[7] = sp34->unk_07;
-    sp24->roster[8] = sp34->unk_08;
+    sp24->types[0] = sp34->unk_06;
+    sp24->types[1] = sp34->unk_07;
+    sp24->unk_1E = sp34->unk_08;
 
     sp24->moves[0] = sp34->moves[0];
     sp24->moves[1] = sp34->moves[1];
@@ -1125,11 +1125,11 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
 
     var_v0 = 3;
 
-    temp_a1 = sBattleUser->roster[6];
-    temp_a3 = sBattleUser->roster[7];
+    temp_a1 = sBattleUser->types[0];
+    temp_a3 = sBattleUser->types[1];
 
-    var_v1 = sBattleTarget->roster[6];
-    temp_a0 = sBattleTarget->roster[7];
+    var_v1 = sBattleTarget->types[0];
+    temp_a0 = sBattleTarget->types[1];
 
     temp_t1 = sBattleUser->moveCache.type;
 

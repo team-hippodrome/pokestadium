@@ -208,10 +208,10 @@ void BattleAI_ClampDamageRatio(void) {
 
 void BattleAI_ApplyTypeEffectAndStab(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
     TypeEffectivenessEntry* var_v0;
-    u8 tmp1 = arg0->roster[6];
-    u8 tmp2 = arg0->roster[7];
-    u8 tmp11 = arg1->roster[6];
-    u8 tmp21 = arg1->roster[7];
+    u8 tmp1 = arg0->types[0];
+    u8 tmp2 = arg0->types[1];
+    u8 tmp11 = arg1->types[0];
+    u8 tmp21 = arg1->types[1];
     u8 tmp3 = D_843C6148.unk_03;
 
     if (D_843C6148.unk_00 != 0xA5) {
@@ -233,7 +233,7 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     MoveData* temp_v0 = &gMoveData[arg2 - 1];
 
     D_843C6148.unk_00 = temp_v0->moveId;
-    D_843C6148.effect = temp_v0->unk_01;
+    D_843C6148.unk_01 = temp_v0->effect;
     D_843C6148.unk_02 = temp_v0->power;
     D_843C6148.unk_03 = temp_v0->type;
     D_843C6148.unk_04 = temp_v0->accuracy;
@@ -480,8 +480,8 @@ u16 BattleAI_ScaleStatLow(BattleMonRuntime* arg0) {
 
 f32 Battle_GetTypeEffectiveness(u8 arg0, BattleMonRuntime* arg1) {
     TypeEffectivenessEntry* var_v0 = &sTypeEffects[0];
-    u8 temp_v1 = arg1->roster[6];
-    u8 temp_a2 = arg1->roster[7];
+    u8 temp_v1 = arg1->types[0];
+    u8 temp_a2 = arg1->types[1];
     f32 var_fv1 = 1.0f;
 
     while (var_v0->unk_00 != 0xFF) {
@@ -2306,7 +2306,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x4D:
                 temp_s3 = oppMon;
-                if ((((temp_s3->pendingStatusCondition == 0) && (temp_s3->roster[6] != 3)) && (temp_s3->roster[7] != 3)) &&
+                if ((((temp_s3->pendingStatusCondition == 0) && (temp_s3->types[0] != 3)) && (temp_s3->types[1] != 3)) &&
                     (!(temp_s3->statusCondition & 0x10))) {
                     if (arg4) {
                         if (temp_s7->unk_00 == 0x5C) {
@@ -2352,7 +2352,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x22:
                 temp_s3 = oppMon;
-                if ((((temp_s3->pendingStatusCondition == 0) && (temp_s3->roster[6] != 0x14)) && (temp_s3->roster[7] != 0x14)) &&
+                if ((((temp_s3->pendingStatusCondition == 0) && (temp_s3->types[0] != 0x14)) && (temp_s3->types[1] != 0x14)) &&
                     (!(temp_s3->statusCondition & 0x10))) {
                     if (arg4) {
                         var_s1 += spB7 * 2;
@@ -2381,8 +2381,8 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
             case 0x23:
                 temp_s3 = oppMon;
                 if (((((BattleAI_HasCandidateStatusMask(arg1, 0x20) == 0) && (temp_s3->pendingStatusCondition == 0)) &&
-                      (temp_s3->roster[6] != 0x19)) &&
-                     (temp_s3->roster[7] != 0x19)) &&
+                      (temp_s3->types[0] != 0x19)) &&
+                     (temp_s3->types[1] != 0x19)) &&
                     (!(temp_s3->statusCondition & 0x10))) {
                     if (arg4) {
                         var_s1 += spB7 * 3;
@@ -2409,7 +2409,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x24:
                 temp_s3 = oppMon;
-                if ((temp_s3->roster[6] == sp9C[0].type) || (temp_s3->roster[7] == sp9C[0].type)) {
+                if ((temp_s3->types[0] == sp9C[0].type) || (temp_s3->types[1] == sp9C[0].type)) {
                     spF8 = 1;
                     break;
                 }
@@ -2418,7 +2418,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                 temp_s3 = oppMon;
                 if (arg4) {
                     if (((temp_s3->pendingStatusCondition == 0) && (!(temp_s3->statusCondition & 0x10))) &&
-                        ((sp9C->type != 0x17) || ((temp_s3->roster[6] != 4) && (temp_s3->roster[7] != 4)))) {
+                        ((sp9C->type != 0x17) || ((temp_s3->types[0] != 4) && (temp_s3->types[1] != 4)))) {
                         if (temp_s3->speed >= temp_s6->speed) {
                             var_s1 += spB7 * 5;
                             if (BattleAI_FindHeuristicMove(temp_fp, temp_fp, 1, &sp104) == 2) {
@@ -2866,7 +2866,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
             case 0x18:
                 temp_s3 = oppMon;
                 if (arg4) {
-                    if ((temp_s3->roster[6] != temp_s6->roster[6]) || (temp_s3->roster[7] != temp_s6->roster[7])) {
+                    if ((temp_s3->types[0] != temp_s6->types[0]) || (temp_s3->types[1] != temp_s6->types[1])) {
                         var_s1 += spB4 * 3;
                         if ((Battle_GetTypeEffectiveness(gMoveData[temp_s7->unk_05 - 1].type, temp_s6) -
                              Battle_GetTypeEffectiveness(gMoveData[temp_s7->unk_05 - 1].type, temp_s3)) > 0.0) {
@@ -2876,7 +2876,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                             var_s1 -= temp_t0 * 3;
                         }
                     }
-                } else if ((temp_s3->roster[6] != temp_s6->roster[6]) || (temp_s3->roster[7] != temp_s6->roster[7])) {
+                } else if ((temp_s3->types[0] != temp_s6->types[0]) || (temp_s3->types[1] != temp_s6->types[1])) {
                     var_s1 += spB4 * 3;
                 }
                 break;
@@ -3305,7 +3305,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
             case 0x54:
                 temp_s3 = oppMon;
                 if (arg4) {
-                    if (((temp_s3->roster[6] != 0x16) && (temp_s3->roster[7] != 0x16)) && (!(temp_s3->statusCondition & 0x90))) {
+                    if (((temp_s3->types[0] != 0x16) && (temp_s3->types[1] != 0x16)) && (!(temp_s3->statusCondition & 0x90))) {
                         var_s1 += spB7 * 3;
                         var_s1 += spB6 * 3;
                         if (temp_s3->battleStatus3 & 1) {
@@ -3575,8 +3575,8 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
             arg2->unk_14[j + var_v1].unk_00 = j;
             arg2->unk_14[j + var_v1].unk_04 = 0;
             arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].unk_00.unk_00;
-            arg2->unk_14[j + var_v1].unk_12.roster[6] = temp_s7[j].unk_06;
-            arg2->unk_14[j + var_v1].unk_12.roster[7] = temp_s7[j].unk_07;
+            arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].unk_06;
+            arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].unk_07;
             arg2->unk_14[j + var_v1].unk_12.unk_26 = temp_s7[j].level;
 
             _bcopy(temp_s7[j].moves, &arg2->unk_14[j + var_v1].unk_12.moves[0], 4);
@@ -3772,8 +3772,8 @@ s32 BattleAI_GroupSharesTypeWeakness(BattleAiTeamState* arg0, u8* arg1, u8 arg2)
     TypeEffectivenessEntry* var_a3;
 
     for (j = 0; j < arg2; j++) {
-        sp28[j].unk_00 = arg0->unk_14[arg1[j]].unk_12.roster[6];
-        sp28[j].unk_01 = arg0->unk_14[arg1[j]].unk_12.roster[7];
+        sp28[j].unk_00 = arg0->unk_14[arg1[j]].unk_12.types[0];
+        sp28[j].unk_01 = arg0->unk_14[arg1[j]].unk_12.types[1];
     }
 
     for (i = 0; i < 9; i++) {
@@ -5179,7 +5179,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
         case 0x21:
         case 0x42:
         case 0x4D:
-            if ((arg1->pendingStatusCondition != 0) || (arg1->roster[6] == 3) || (arg1->roster[7] == 3) || (arg1->statusCondition & 0x10)) {
+            if ((arg1->pendingStatusCondition != 0) || (arg1->types[0] == 3) || (arg1->types[1] == 3) || (arg1->statusCondition & 0x10)) {
                 sp24 = 1;
             }
             break;
@@ -5193,7 +5193,7 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
 
         case 0x43:
             if ((arg1->pendingStatusCondition != 0) || (arg1->statusCondition & 0x10) ||
-                ((sp1C->type == 0x17) && ((arg1->roster[6] == 4) || (arg1->roster[7] == 4)))) {
+                ((sp1C->type == 0x17) && ((arg1->types[0] == 4) || (arg1->types[1] == 4)))) {
                 sp24 = 1;
             }
             break;
@@ -5275,8 +5275,8 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
         temp_s0->displayHp = temp_s2->displayHp;
         temp_s0->hp = temp_s2->hp;
         temp_s0->pendingStatusCondition = temp_s2->pendingStatusCondition;
-        temp_s0->roster[6] = temp_s2->roster[6];
-        temp_s0->roster[7] = temp_s2->roster[7];
+        temp_s0->types[0] = temp_s2->types[0];
+        temp_s0->types[1] = temp_s2->types[1];
         temp_s0->immobilizedReason = temp_s2->immobilizedReason;
         temp_s0->statusCondition = temp_s2->statusCondition;
         temp_s0->battleStatus3 = temp_s2->battleStatus3;

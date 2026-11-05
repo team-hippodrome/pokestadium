@@ -1000,7 +1000,7 @@ void BattleScene_StartHitReactionAnim(ActivePokemon* active_pokemon) {
         !(target_state->flags & ACTIVE_FREEZE)) {
         // no battle reaction for weak hits
         if (((sTypeEffectiveness < TYPE_EFFECTIVENESS_NEUTRAL) || (sBattleMoveFailed != 0)) &&
-            ((runtime->sleepTurns & 0x20) == 0)) {
+            ((runtime->pendingStatusCondition & 0x20) == 0)) {
             sCurrentAnimation = &sSideBattleCues[target_side]->idleCues;
             if (target_state->flags & ACTIVE_AIRBORNE) {
                 sCurrentAnimation = &sSideBattleCues[target_side]->flyingIdleCue;
@@ -1498,11 +1498,11 @@ void BattleScene_Row12Slot1CameraCleanup(ActivePokemon* active_pokemon) {
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
 
-    if (runtime->sleepTurns & 8) {
+    if (runtime->pendingStatusCondition & 8) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 20);
     }
 
-    if (runtime->sleepTurns & 0x10) {
+    if (runtime->pendingStatusCondition & 0x10) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 33);
     }
 

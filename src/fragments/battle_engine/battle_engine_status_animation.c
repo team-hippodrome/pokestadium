@@ -21,7 +21,7 @@ void BattleAnim_StartFreezeStatusAnimation(ActivePokemon* active_pokemon) {
         active_pokemon->displayObject.node.renderFlags &= ~0x20;
     }
 
-    if ((runtime->sleepTurns & STATUS_FREEZE) && (party_pokemon->statusCondition & STATUS_FREEZE) &&
+    if ((runtime->pendingStatusCondition & STATUS_FREEZE) && (party_pokemon->statusCondition & STATUS_FREEZE) &&
         !(pokemon_state->flags & ACTIVE_FREEZE) &&
         ((active_pokemon->displayObject.transformAnim.frameFixed >> 0x10) >= 3)) {
         ModelAnim_SetAnimation(&active_pokemon->displayObject, hit_cue->id);
@@ -63,7 +63,7 @@ void BattleAnim_ResetFreezeStatusAndRestoreAnimation(ActivePokemon* pokemon) {
 }
 
 void BattleAnim_ClearFreezeStatusAnimationIfThawed(ActivePokemon* pokemon) {
-    if ((pokemon->state.flags & ACTIVE_FREEZE) && !(pokemon->state.runtime.sleepTurns & STATUS_FREEZE)) {
+    if ((pokemon->state.flags & ACTIVE_FREEZE) && !(pokemon->state.runtime.pendingStatusCondition & STATUS_FREEZE)) {
         BattleAnim_StopOwnerCategoryParticles(1, pokemon);
         pokemon->displayObject.node.renderFlags |= 0x20;
         Battle_ClearRuntimeFlags(pokemon, ACTIVE_FREEZE);
@@ -77,7 +77,7 @@ void BattleAnim_UpdateSleepStatusAnimation(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
     if ((sBattleScene.scene->phase != BATTLE_PHASE_VOLUNTARY_SWITCH) || (sBattleScene.scene->phaseStep >= 6)) {
-        if ((party_pokemon->statusCondition & STATUS_SLEEP_MASK) && (runtime->sleepTurns & STATUS_SLEEP_MASK) &&
+        if ((party_pokemon->statusCondition & STATUS_SLEEP_MASK) && (runtime->pendingStatusCondition & STATUS_SLEEP_MASK) &&
             !(active_pokemon->state.flags & ACTIVE_SLEEP)) {
             BattleAnim_SetModelEventTrackAndState(active_pokemon, BATTLE_CUE_SLEEP_IDLE, 2);
             BattleAnim_QueueEffectList(3, active_pokemon);

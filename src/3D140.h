@@ -26,7 +26,9 @@ typedef struct BattleMonRuntime {
     /* 0x12 */ u16 unk_12;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 pendingStatusCondition;
-    /* 0x16 */ u8 roster[9];
+    /* 0x16 */ u8 roster[6];
+    /* 0x1C */ u8 types[2];
+    /* 0x1E */ u8 unk_1E;
     /* 0x1F */ u8 moves[4];
     /* 0x23 */ char unk23[0x1];
     /* 0x24 */ u16 unk_24;

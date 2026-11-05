@@ -193,8 +193,8 @@ block_9:
 void Battle_Effect_Poison(void) {
     char* buffer = sBattleMessageQueues->buffer[1];
 
-    if (!(sBattleTarget->statusCondition & STATUS_BURN) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->roster[6] != 3) &&
-        (sBattleTarget->roster[7] != 3)) {
+    if (!(sBattleTarget->statusCondition & STATUS_BURN) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->types[0] != 3) &&
+        (sBattleTarget->types[1] != 3)) {
         switch (sBattleUser->moveCache.effect) {
             case 2:
                 if (sBattleScene.scene->moveEffectKind != MOVE_PRESENTATION_MULTI_HIT) {
@@ -276,7 +276,7 @@ void Battle_Effect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_EXPLOSION;
     sBattleUser->displayHp = 0;
     sBattleUser->pendingStatusCondition = 0;
-    sBattleUser->statusCondition &= ~(STATUS_BURN | STATUS_FREEZE | STATUS_PARALYSIS);
+    sBattleUser->statusCondition &= ~0x80;
 }
 
 void Battle_Effect_SecondaryStatusChance(void) {
@@ -304,8 +304,8 @@ void Battle_Effect_SecondaryStatusChance(void) {
         return;
     }
 
-    if ((sBattleTarget->roster[6] != (*sBattleUser).moveCache.type) &&
-        (sBattleTarget->roster[7] != (*sBattleUser).moveCache.type)) {
+    if ((sBattleTarget->types[0] != (*sBattleUser).moveCache.type) &&
+        (sBattleTarget->types[1] != (*sBattleUser).moveCache.type)) {
         if ((sBattleUser->moveCache.effect < 7) ||
             ((sBattleMechanicsSetting[0] != 2) && (sBattleUser->moveCache.moveId == BLIZZARD))) {
             if (Battle_Random() >= 26) {
@@ -792,7 +792,7 @@ void Battle_Effect_Trap(void) {
 
     if (!(sBattleUser->immobilizedReason & 0x20) &&
         ((sBattleMechanicsSetting[0] != 1) || (sBattleUser->moveCache.type != 0) ||
-         ((sBattleTarget->roster[6] != 8) && (sBattleTarget->roster[7] != 8)))) {
+         ((sBattleTarget->types[0] != 8) && (sBattleTarget->types[1] != 8)))) {
         sBattleTarget->statusCondition &= 0xFFDF;
         sBattleUser->immobilizedReason |= 0x20;
         var_v1 = Battle_Random() & 3;
@@ -889,7 +889,7 @@ void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     if (sBattleTarget->pendingStatusCondition == 0) {
         if ((sBattleUser->moveCache.type != 0x17) ||
-            ((sBattleTarget->roster[6] != 4) && (sBattleTarget->roster[7] != 4))) {
+            ((sBattleTarget->types[0] != 4) && (sBattleTarget->types[1] != 4))) {
             HandleMoveEffectFlags();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->pendingStatusCondition |= 0x40;
@@ -974,7 +974,7 @@ void Battle_Effect_Mimic(void) {
 void Battle_Effect_LeechSeed(void) {
     HandleMoveEffectFlags();
 
-    if ((sBattleMoveFailed == 0) && (sBattleTarget->roster[6] != 0x16) && (sBattleTarget->roster[7] != 0x16)) {
+    if ((sBattleMoveFailed == 0) && (sBattleTarget->types[0] != 0x16) && (sBattleTarget->types[1] != 0x16)) {
         if (!(sBattleTarget->statusCondition & 0x80)) {
             sBattleTarget->statusCondition |= 0x80;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
@@ -1025,8 +1025,8 @@ void Battle_Effect_PayDay(void) {
 void Battle_Effect_Conversion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (!(sBattleTarget->immobilizedReason & 0x40)) {
-        sBattleUser->roster[6] = sBattleTarget->roster[6];
-        sBattleUser->roster[7] = sBattleTarget->roster[7];
+        sBattleUser->types[0] = sBattleTarget->types[0];
+        sBattleUser->types[1] = sBattleTarget->types[1];
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x38);
     } else {
@@ -1156,8 +1156,8 @@ void Battle_Effect_Transform(void) {
             sp20->unk_BE = sBattleTarget->id;
         }
 
-        sBattleUser->roster[6] = sBattleTarget->roster[6];
-        sBattleUser->roster[7] = sBattleTarget->roster[7];
+        sBattleUser->types[0] = sBattleTarget->types[0];
+        sBattleUser->types[1] = sBattleTarget->types[1];
         sBattleUser->moves[0] = sBattleTarget->moves[0];
         sBattleUser->moves[1] = sBattleTarget->moves[1];
         sBattleUser->moves[2] = sBattleTarget->moves[2];
