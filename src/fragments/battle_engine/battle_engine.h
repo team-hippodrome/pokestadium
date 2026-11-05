@@ -614,24 +614,24 @@ typedef struct unk_D_843847BC {
 } ThumbnailSettings; // size = 0x18
 
 typedef struct BattleCameraPreset {
-    /* 0x00 */Vec3f startingPosition;
-    /* 0x0C */s16 startingRotationX;
-    /* 0x0E */s16 startingRotationY;
-    /* 0x10 */char unk10[0x2];
-    /* 0x12 */s16 eyeRotationX;
-    /* 0x14 */s16 eyeRotationY;
-    /* 0x18 */f32 startingDistance;
-    /* 0x1C */f32 eyeDistance;
-    /* 0x20 */s16 rotationXOffset;
-    /* 0x22 */s16 rotationYOffset;
-    /* 0x24 */char unk24[0x2];
-    /* 0x26 */s16 rotationX;
-    /* 0x28 */s16 rotationY;
-    /* 0x2C */f32 distanceOffset;
-    /* 0x30 */f32 distance;
-    /* 0x34 */f32 targetZ;
-    /* 0x38 */f32 speed;
-    /* 0x3C */f32 verticalFieldOfView;
+    /* 0x00 */ Vec3f startingPosition;
+    /* 0x0C */ s16 startingRotationX;
+    /* 0x0E */ s16 startingRotationY;
+    /* 0x10 */ char unk10[0x2];
+    /* 0x12 */ s16 eyeRotationX;
+    /* 0x14 */ s16 eyeRotationY;
+    /* 0x18 */ f32 startingDistance;
+    /* 0x1C */ f32 eyeDistance;
+    /* 0x20 */ s16 rotationXOffset;
+    /* 0x22 */ s16 rotationYOffset;
+    /* 0x24 */ char unk24[0x2];
+    /* 0x26 */ s16 rotationX;
+    /* 0x28 */ s16 rotationY;
+    /* 0x2C */ f32 distanceOffset;
+    /* 0x30 */ f32 distance;
+    /* 0x34 */ f32 targetZ;
+    /* 0x38 */ f32 speed;
+    /* 0x3C */ f32 verticalFieldOfView;
 } BattleCameraPreset; // size >= 0x40
 
 typedef struct BattleBox {
@@ -1240,13 +1240,12 @@ extern u8 sBattleCritFlag;
 extern u8 D_843C4DA9;
 extern u8 D_843C4DAA;
 extern s32 sTypeEffectiveness;
-//extern unk_D_843C4E44 D_843C4E44;
+// extern unk_D_843C4E44 D_843C4E44;
 extern u8 sConfused;
 extern u8 sStatCanBeChangedFurther;
 extern u16 sBattleDamage;
 extern BattleMonRuntime* sBattleUser;
 extern BattleMonRuntime* sBattleTarget;
-
 
 extern ActivePokemon* sActivePokemon[2];
 extern ActivePokemon* sSide1ActivePokemon;
@@ -1311,8 +1310,6 @@ extern u8* sBattleAnimAssetPointers[256];
 extern s16 sBattleAnimResourceList[0x10];
 extern arg1_func_80019420* sBattleAnimResourceTablePointers[40];
 
-
-
 //@src/fragments/battle_engine/battle_engine_main.c
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light);
@@ -1364,10 +1361,12 @@ void BattleScene_ReloadMoveResourceList(ActivePokemon* active_pokemon);
 void Battle_MakeSubstitute(ActivePokemon* active_pokemon);
 void BattleScene_DestroySubstitute(ActivePokemon* active_pokemon);
 s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length);
-void Battle_MarkIllegalMoves(ActivePokemon* pokemon, u16 pokemon_id, SpeciesLearnsetBuffer* red_blue_learnset, SpeciesLearnsetBuffer* yellow_learnset);
+void Battle_MarkIllegalMoves(ActivePokemon* pokemon, u16 pokemon_id, SpeciesLearnsetBuffer* red_blue_learnset,
+                             SpeciesLearnsetBuffer* yellow_learnset);
 void Battle_InitializeMoveIllegalityMask(ActivePokemon* active_pokemon);
 void Battle_DmaLoadLevelUpLearnset(u8 species, u32 destination);
-void Battle_DmaLoadSpeciesLearnsets(s32 species_index, SpeciesLearnsetBuffer* red_blue_learnset, SpeciesLearnsetBuffer* yellow_learnset);
+void Battle_DmaLoadSpeciesLearnsets(s32 species_index, SpeciesLearnsetBuffer* red_blue_learnset,
+                                    SpeciesLearnsetBuffer* yellow_learnset);
 void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_move_illegality);
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon);
 void BattleScene_EnterRow3StartMoveAnim(ActivePokemon* active_pokemon);
@@ -1444,9 +1443,11 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon);
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* active_pokemon, UNUSED s32* secondary_models);
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon);
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams);
-void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon, s32 facing_direction);
+void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon,
+                                              s32 facing_direction);
 void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams);
-void BattleScene_UpdateParticipantsAndQueueEffects(UNUSED ActivePokemon* side1_pokemon, UNUSED ActivePokemon* side2_pokemon);
+void BattleScene_UpdateParticipantsAndQueueEffects(UNUSED ActivePokemon* side1_pokemon,
+                                                   UNUSED ActivePokemon* side2_pokemon);
 s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* session_teams);
 void func_84307414(ActivePokemon* active_pokemon);
 void BattleScene_StateRow56EnterNop(ActivePokemon* active_pokemon);
@@ -1464,7 +1465,6 @@ void func_84307474(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 void func_84307480(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 void BattleScene_StateRow7Slot4Nop(ActivePokemon* active_pokemon);
 
-
 //@src/fragments/battle_engine/battle_engine_thumbnail.c
 void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon);
 void BattleThumbnail_ClearParticipantOwnerIdleFlags(ActivePokemon* active_pokemon);
@@ -1477,12 +1477,14 @@ void BattleThumbnail_SetupOwnerCameraFraming(ActivePokemon* side1_pokemon, Activ
 void BattleThumbnail_OwnerCameraLifecycleNop(void);
 void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon);
 void BattleThumbnail_TickOwnerCameraFraming(ActivePokemon* active_pokemon);
-void BattleThumbnail_InitializeOwnerCameraFraming(CameraNode* side1_camera_node, ActivePokemon* side1_pokemon, CameraNode* side2_camera_node, ActivePokemon* side2_pokemon);
+void BattleThumbnail_InitializeOwnerCameraFraming(CameraNode* side1_camera_node, ActivePokemon* side1_pokemon,
+                                                  CameraNode* side2_camera_node, ActivePokemon* side2_pokemon);
 void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta);
 void BattleThumbnail_TickOwnerSlideOut(ActivePokemon* active_pokemon, s32 delta);
 void BattleThumbnail_TickOwnerSlideAnimation(ActivePokemon* active_pokemon);
 void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon);
-s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_camera_node, CameraNode* side2_camera_node);
+s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_camera_node,
+                                                 CameraNode* side2_camera_node);
 
 //@src/fragments/battle_engine/battle_engine_2F23A0.c
 s32 BattleScene_ByteArrayContains(u8 lookup, u8* array, s32 array_length);
@@ -1545,11 +1547,12 @@ void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon);
 void Battle_ReloadSubstituteDoll(ActivePokemon* active_pokemon);
 void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon);
 
-
 //@src/fragments/battle_engine/battle_engine_2F3CB0.c
 void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta);
-void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_pokemon, f32 height, f32 delta_y, s32 delta_theta);
-void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePokemon* animated_object, f32 target, f32 delta, s32 theta0, s32 theta1);
+void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_pokemon, f32 height, f32 delta_y,
+                                s32 delta_theta);
+void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePokemon* animated_object, f32 target,
+                                          f32 delta, s32 theta0, s32 theta1);
 void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon);
 void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon);
 void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon);
@@ -1615,13 +1618,13 @@ void BattleAnim_PlayTransformInducingAnimation(s32 side_index);
 void BattleAnim_SetOwnerSecondaryStatusFlags(ActivePokemon* arg0, u8 arg1, u8 arg2);
 void BattleAnim_ClearOwnerSecondaryStatusFlags(ActivePokemon* arg0);
 void BattleAnim_InitSecondarySwayOffset(ActivePokemon* arg0, f32 arg1, s16 arg2);
-void BattleAnim_UpdateSecondarySwayPhysics(ActivePokemon* arg0, ActivePokemon* arg1, UNUSED f32 arg2, UNUSED f32 arg3, UNUSED s32 arg4);
+void BattleAnim_UpdateSecondarySwayPhysics(ActivePokemon* arg0, ActivePokemon* arg1, UNUSED f32 arg2, UNUSED f32 arg3,
+                                           UNUSED s32 arg4);
 void BattleAnim_SecondaryStatusCaseBSub0(UNUSED ActivePokemon* arg0, ActivePokemon* arg1);
 void BattleAnim_SecondaryStatusCaseBSub1(ActivePokemon* arg0, ActivePokemon* arg1);
 void BattleAnim_SecondaryStatusCaseB(ActivePokemon* arg0, ActivePokemon* arg1);
 void BattleAnim_SecondaryStatusDefault(UNUSED ActivePokemon* arg0, UNUSED ActivePokemon* arg1);
 void BattleAnim_UpdateOwnerSecondaryStatusAnimation(s32 arg0);
-
 
 //@src/fragments/battle_engine/battle_engine_math.c
 void BattleAnim_CalculateDistanceAngles(Vec3f* from, Vec3f* to, f32* euclidean_distance, s16* elevation, s16* azimuth);
@@ -1646,7 +1649,6 @@ void BattleAnim_BSplineWeightsClampedFirst(f32* dest, f32 t);
 void BattleAnim_BSplineWeightsClampedSecond(f32* dest, f32 t);
 void BattleAnim_BSplineWeightsClampedPenultimate(f32* dest, f32 t);
 void BattleAnim_BSplineWeightsClampedLast(f32* dest, f32 t);
-
 
 //@src/fragments/battle_engine/battle_engine_action_selection.c
 void BattleScene_InitializeBattleTimers(void);
@@ -1703,12 +1705,12 @@ void BattleScene_CollectActions(void);
 void BattleScene_UpdateActionCollection(void);
 void BattleScene_UpdateActionSelectPhase(void);
 
-
 //@src/fragments/battle_engine/battle_engine_hud.c
 void func_8430FC10(void);
 void BattleHud_DrawTranslucentShadowRect(s32 x, s32 y, s32 width, s32 height, s32 alpha);
 void BattleHud_DrawGradientRect(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color, Color_RGB8* end_color);
-void Battle_DrawGradientRectWrapper(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color, Color_RGB8* end_color);
+void Battle_DrawGradientRectWrapper(s32 x, s32 y, s32 width, s32 height, Color_RGB8* start_color,
+                                    Color_RGB8* end_color);
 void func_84310360(void);
 void BattleHud_DrawHpBar(s32 x, s32 y, f32 current_hp, s32 max_hp);
 void BattleHud_Noop(void);
@@ -1716,8 +1718,11 @@ void BattleHud_DrawLevelNumber(s32 x, s32 y, s32 level);
 void BattleHud_DrawHpFractionText(s32 x, s32 y, s32 current_hp, s32 max_hp);
 void BattleHud_DrawTrainerNameLabel(s16 x, s16 y, s32 port, char* name, s32 has_illegal_move);
 void BattleHud_DrawTrainerNameLabelBlink(s16 x, s16 y, s32 port, u8* name, s32 blink_phase, s32 has_illegal_move);
-void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* pokemon, TeamRoster* pokemon_team, s16 x, s16 y, s32 port, u16 blink_phase, s32 selected_move);
-void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemon_info, StatusConditionLabel* status_label, s32 x, s32 y, s32 width, s32 length, s32 r, s32 g, s32 b, s32 alpha);
+void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* pokemon, TeamRoster* pokemon_team, s16 x, s16 y, s32 port,
+                                        u16 blink_phase, s32 selected_move);
+void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemon_info,
+                                StatusConditionLabel* status_label, s32 x, s32 y, s32 width, s32 length, s32 r, s32 g,
+                                s32 b, s32 alpha);
 s32 BattleHud_DrawBorderTile(s32 x, s32 y, s32 width, s32 height, u8* texture);
 void func_84311420(void);
 void BattleHud_DrawBoxBorder(s16 x, s16 y, s16 width, s16 height);
@@ -1725,7 +1730,8 @@ void BattleHud_DrawParticipantTimer(s16 x, s16 y);
 void BattleHud_DrawBattleTimer(s16 x, s16 y);
 void BattleHud_DrawPartyBallRow(ActivePokemon* pokemon, s16 x, s16 y);
 void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* active_pokemon, s16 x, s16 y, u16 blink_phase, s32 selected_move);
-void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* active_pokemon, s16 x, s16 y, u16 blink_phase, s32 selected_move);
+void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* active_pokemon, s16 x, s16 y, u16 blink_phase,
+                                        s32 selected_move);
 void BattleHud_DrawThreeOptionLabelBar(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawTwoOptionLabelBar(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawOneOptionLabelBar(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
@@ -1735,8 +1741,10 @@ s32 BattleHud_DrawMovePpTextRTL(s32 x, s32 y, s32 current_pp, s32 max_pp);
 void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawForfeitConfirmDialog(s16 x, s16 y, s16 port, s32 arg3);
 void BattleHud_DrawPlainText(s16 x, s16 y, char* fmt);
-void BattleHud_DrawDoublesRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x, s32 y, s32 party_slot);
-void BattleHud_DrawPartyRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x, s32 y, s32 party_slot);
+void BattleHud_DrawDoublesRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x,
+                                    s32 y, s32 party_slot);
+void BattleHud_DrawPartyRosterRow(ActivePokemon* active_pokemon, TeamRoster* roster, BattleMon* party_pokemon, s32 x,
+                                  s32 y, s32 party_slot);
 void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roster, s16 x, s16 y, s32 port);
 void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleHud_DrawCompactMonStatusBox(ActivePokemon* active_pokemon, s16 x, s16 y, s32 port);
@@ -1751,14 +1759,14 @@ s32 BattleHud_UpdateCaptionBoxPopupBlack(BattleBox* battle_box, s16 center_x, s1
 void BattleHud_DrawTextBox(s32 port, s16 x, s16 y, char* text);
 void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* pokemon, s16 x, s16 y, s32 port);
 void BattleScene_DrawStripWipeIfActive(void);
-void Battle_DrawScrollingTextureRect(s16 x, s16 y, s16 width, s16 height, s16 texture_x, s16 texture_y, s16 texture_spread_x, s16 texture_spread_y);
+void Battle_DrawScrollingTextureRect(s16 x, s16 y, s16 width, s16 height, s16 texture_x, s16 texture_y,
+                                     s16 texture_spread_x, s16 texture_spread_y);
 void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* texture, s32 load_width);
 void Battle_DrawDemoStadiumLogo(void);
 void Battle_DrawEndBattleBanner(void);
 void Battle_DrawDemoControllerWarning(void);
 void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state);
 void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state);
-
 
 //@src/fragments/battle_engine/battle_engine_messages.c
 void Battle_ClearAllMessageQueues(void);
@@ -1790,8 +1798,6 @@ void Battle_InitMessageQueues(void);
 void BattleScene_ResetMessageQueue(void);
 void Battle_RenderHud(void);
 
-
-
 //@src/fragments/battle_engine/battle_engine_broll.c
 s32 BattleScene_AreBothParticipantModelsCompact(void);
 s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* pokemon, CameraNode* camera);
@@ -1817,7 +1823,6 @@ void BattleScene_BRollCameraUpdateStaticArenaOverview(CameraNode* camera);
 void BattleScene_BRollCameraUpdateStaticCloseUp(CameraNode* camera);
 void BattleScene_UpdateBRollCameraSequence(CameraNode* camera);
 
-
 //@src/fragments/battle_engine/battle_engine_camera.c
 f32 BattleScene_ScaleCameraDistance(ActivePokemon* pokemon, f32 scale, f32 max_allowed);
 s32 BattleScene_AdvanceCameraSubstepCounter(s32 frame_limit);
@@ -1827,7 +1832,8 @@ s32 BattleScene_IsCameraFrameCounterAtLeast(s32 frame_limit);
 void BattleScene_SetActingSide(s32 side_index);
 void BattleScene_ResetCameraFrameCounter(void);
 void BattleScene_ResetCameraSubstepCounter(void);
-void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x, s16 rotation_y);
+void BattleScene_SetCameraAtAndEyeFromAngles(CameraNode* camera, f32 x, f32 y, f32 z, f32 distance, s16 rotation_x,
+                                             s16 rotation_y);
 void BattleScene_GetOwnerCameraAnchor(ActivePokemon* pokemon, Vec3f* dest);
 void BattleScene_GetOwnerBoneOrDefaultAnchor(ActivePokemon* pokemon, Vec3f* dest, s32 lookup_id);
 void BattleScene_SetCameraModeAndStep(s32 camera_mode, s32 camera_step);
@@ -1845,12 +1851,17 @@ void BattleScene_SetCameraSendOutShot(CameraNode* camera, s32 opposite_side);
 void BattleScene_ClampCameraEyeFloor(CameraNode* camera);
 void BattleScene_UpdateCameraModelOffset(ActivePokemon* pokemon, CameraNode* camera);
 void BattleScene_ClearCameraOffsetVectors(void);
-void BattleScene_SetCameraAtFromAnchor(ActivePokemon* pokemon, CameraNode* camera, Vec3f starting_position, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
-void BattleScene_SetCameraAtFromPosition(CameraNode* camera, Vec3f starting_position, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
-void BattleScene_SetCameraEyeFromPosition(CameraNode* camera, Vec3f starting_position, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
+void BattleScene_SetCameraAtFromAnchor(ActivePokemon* pokemon, CameraNode* camera, Vec3f starting_position,
+                                       s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
+void BattleScene_SetCameraAtFromPosition(CameraNode* camera, Vec3f starting_position, s16 rotation_x, s16 rotation_y,
+                                         f32 distance, f32 y_offset);
+void BattleScene_SetCameraEyeFromPosition(CameraNode* camera, Vec3f starting_position, s16 rotation_x, s16 rotation_y,
+                                          f32 distance, f32 y_offset);
 void BattleScene_SetCameraEyeFromAt(CameraNode* camera, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
-void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* camera, Vec3f starting_postion, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
-void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* camera, s16 rotation_x, s16 rotation_y, f32 distance, f32 y_offset);
+void BattleScene_SetCameraEyeAndStoreAngles(CameraNode* camera, Vec3f starting_postion, s16 rotation_x, s16 rotation_y,
+                                            f32 distance, f32 y_offset);
+void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* camera, s16 rotation_x, s16 rotation_y, f32 distance,
+                                                  f32 y_offset);
 void BattleScene_CameraHelperNop(UNUSED CameraNode* camera);
 void BattleScene_SnapFloatPair(f32* a, f32* b);
 void BattleScene_ApplyOwnerFramingAdjustments(CameraNode* camera, ActivePokemon* pokemon, UNUSED f32 arg2);
@@ -1866,11 +1877,13 @@ void BattleScene_RecenterCameraOnOwner(CameraNode* camera, ActivePokemon* pokemo
 void BattleScene_ApproachCameraTarget(CameraNode* camera, ActivePokemon* pokemon, UNUSED s32 arg2);
 void BattleScene_ApproachCameraZoom(CameraNode* camera, ActivePokemon* pokemon);
 s32 BattleScene_ApproachCloseCameraShot(CameraNode* camera, ActivePokemon* pokemon);
-s32 BattleScene_AnimateCameraPreset(CameraNode* camera, ActivePokemon* pokemon, s32 adjust_y_offset, s32 adjust_vertical_fov);
+s32 BattleScene_AnimateCameraPreset(CameraNode* camera, ActivePokemon* pokemon, s32 adjust_y_offset,
+                                    s32 adjust_vertical_fov);
 s32 BattleScene_AnimateCameraPresetToOwner(CameraNode* camera, ActivePokemon* pokemon);
 void BattleScene_CameraPresetNop(UNUSED CameraNode* camera);
 void BattleScene_ApplyCameraPreset(CameraNode* camera, ActivePokemon* pokemon, s32 update_offset);
-void BattleScene_SetCameraPresetAtAngles(s16 starting_rotation_x, s16 starting_rotation_y, s16 rotation_x_offset, s16 rotation_y_offset);
+void BattleScene_SetCameraPresetAtAngles(s16 starting_rotation_x, s16 starting_rotation_y, s16 rotation_x_offset,
+                                         s16 rotation_y_offset);
 void BattleScene_SetCameraPresetAtDistances(f32 starting_distance, f32 distance_offset);
 void BattleScene_SetCameraPresetEyeAngles(s16 eye_rotation_x, s16 eye_rotation_y, s16 rotation_x, s16 rotation_y);
 void BattleScene_SetCameraPresetEyeDistances(f32 eye_distance, f32 distance);
@@ -1889,7 +1902,8 @@ void BattleScene_SetCameraPresetOffsetClose(CameraNode* camera, ActivePokemon* p
 void BattleScene_SetCameraPresetLowClose(CameraNode* camera, ActivePokemon* pokemon, s32 update_offset);
 void BattleScene_SetCameraPresetWide(CameraNode* camera, ActivePokemon* pokemon, s32 update_offset);
 void BattleScene_SetCameraPresetWideStatic(CameraNode* camera, ActivePokemon* pokemon, s32 update_offset);
-void BattleScene_SetCameraPresetFromTable(CameraNode* camera, ActivePokemon* pokemon, s32 diorama_data_index, s32 update_offset);
+void BattleScene_SetCameraPresetFromTable(CameraNode* camera, ActivePokemon* pokemon, s32 diorama_data_index,
+                                          s32 update_offset);
 void BattleScene_CameraShotTargetStandard(CameraNode* camera, ActivePokemon* pokemon);
 void BattleScene_CameraShotTargetAngled(CameraNode* camera, ActivePokemon* pokemon);
 void BattleScene_CameraShotTargetHigh(CameraNode* camera, ActivePokemon* pokemon);
@@ -1900,7 +1914,6 @@ void BattleScene_SetCameraOwnerStandardShot(CameraNode* camera, ActivePokemon* p
 void BattleScene_SelectCameraPreset(ActivePokemon* pokemon, CameraNode* camera, s32 shot_type, s32 update_offset);
 void BattleScene_SelectCameraFollowPreset(ActivePokemon* pokemon, CameraNode* camera, s32 shot_type);
 void BattleScene_SelectCameraShot(ActivePokemon* pokemon, CameraNode* camera, s32 shot_type);
-
 
 //@src/fragments/battle_engine/battle_engine_battle_phases.c
 void BattleScene_RestoreUndergroundDiglett(ActivePokemon* pokemon);
@@ -1981,7 +1994,8 @@ void BattleScene_AnimateAirborneAction(CameraNode* camera);
 void BattleScene_ActionSetupAnimationStep(CameraNode* camera);
 void BattleScene_ResetSeismicTossFacing(ActivePokemon* pokemon);
 s32 BattleScene_IsFireSpin(ActivePokemon* pokemon);
-void BattleScene_CompleteHpUpdateTransition(CameraNode* camera, s32* side_hp_is_consistent, s32* other_side_hp_is_consistent);
+void BattleScene_CompleteHpUpdateTransition(CameraNode* camera, s32* side_hp_is_consistent,
+                                            s32* other_side_hp_is_consistent);
 void BattleScene_PresentTargetStatus(CameraNode* camera);
 void BattleScene_PresentTargetStatDrop(CameraNode* camera);
 void BattleScene_PresentDisable(CameraNode* camera);
@@ -2022,7 +2036,6 @@ void BattleScene_PhaseVoluntarySwitch(CameraNode* camera);
 void BattleScene_PhaseSendOutAfterFaint(CameraNode* camera);
 void BattleScene_UpdatePhase(CameraNode* camera);
 
-
 //@src/fragments/battle_engine/battle_engine_intro.c
 void BattleScene_IntroSetupCamera(CameraNode* camera);
 void BattleScene_IntroSendOutFirstMon(UNUSED CameraNode* camera);
@@ -2038,11 +2051,11 @@ void BattleScene_IntroStepNop(UNUSED CameraNode* camera);
 void BattleScene_IntroInitNop(void);
 void BattleScene_UpdateIntroSequence(CameraNode* camera);
 
-
 //@src/fragments/battle_engine/battle_engine_scene.c
 void BattleScene_FrameDefaultSide(CameraNode* camera);
 void BattleScene_FrameSideZero(CameraNode* camera);
-void BattleScene_InitializeMode(CameraNode* camera, UNUSED ActivePokemon* first_pokemon, UNUSED ActivePokemon* second_pokemon);
+void BattleScene_InitializeMode(CameraNode* camera, UNUSED ActivePokemon* first_pokemon,
+                                UNUSED ActivePokemon* second_pokemon);
 void BattleScene_AllocateMemory(void);
 void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* camera);
 void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* camera);
@@ -2050,8 +2063,10 @@ void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* camera);
 void BattleScene_TickCameraSubstateDefault(CameraNode* camera);
 void BattleScene_TickCameraSubstateStripWipe(CameraNode* camera);
 void BattleScene_TickCameraSubstate(CameraNode* camera);
-u16 BattleScene_IsOwnerInViewWedge(ActivePokemon* owner, CameraNode* camera, ActivePokemon* tested_pokemon, s16 half_angle, f32 wedge_length);
-u16 BattleScene_IsOwnerInViewWedgeAlt(ActivePokemon* owner, CameraNode* camera, ActivePokemon* tested_pokemon, s16 half_angle, f32 wedge_length);
+u16 BattleScene_IsOwnerInViewWedge(ActivePokemon* owner, CameraNode* camera, ActivePokemon* tested_pokemon,
+                                   s16 half_angle, f32 wedge_length);
+u16 BattleScene_IsOwnerInViewWedgeAlt(ActivePokemon* owner, CameraNode* camera, ActivePokemon* tested_pokemon,
+                                      s16 half_angle, f32 wedge_length);
 void BattleScene_UpdateBothOwnersVisibilityCulling(CameraNode* camera);
 void BattleScene_UpdateOpponentVisibilityCulling(CameraNode* camera);
 void func_8432A414(void);
@@ -2064,7 +2079,6 @@ void BattleScene_UpdateVisibilityAfterMode(CameraNode* camera);
 void BattleScene_Update(CameraNode* camera);
 s32 BattleScene_Dispatch(s32 operation, CameraNode* camera);
 
-
 //@src/fragments/battle_engine/battle_engine_status_animation.c
 void BattleAnim_StartFreezeStatusAnimation(ActivePokemon* active_pokemon);
 void BattleAnim_RestoreBaseModelAnimation(ActivePokemon* active_pokemon);
@@ -2074,7 +2088,6 @@ void BattleAnim_ClearFreezeStatusAnimationIfThawed(ActivePokemon* active_pokemon
 void BattleAnim_UpdateSleepStatusAnimation(ActivePokemon* active_pokemon);
 void BattleAnim_EndSleepStatusAnimation(ActivePokemon* active_pokemon);
 void BattleAnim_ClearSleepStatusAnimation(ActivePokemon* active_pokemon);
-
 
 //@src/fragments/battle_engine/battle_engine_animation_system.c
 void BattleAnim_PlayMenuScrollSoundEffect(void);
@@ -2101,11 +2114,16 @@ u8 BattleAnim_GetCurrentEffectList(void);
 void BattleAnim_SetQueuedResourceListId(u8 arg0);
 u8 BattleAnim_GetQueuedResourceListId(void);
 s16 BattleAnim_GetQueuedMoveId(void);
-void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor);
-void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor);
-void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor);
-void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor);
-void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternative_anchor);
+void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                s16 alternate_anchor);
+void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback,
+                                      s16 default_anchor, s16 alternate_anchor);
+void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                   s16 alternate_anchor);
+void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback,
+                                              s16 default_anchor, s16 alternate_anchor);
+void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                 s16 alternative_anchor);
 void BattleAnim_QueueEffectList6(s32 move_id, ActivePokemon* owner);
 void BattleAnim_QueueEffectList5(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_QueueEffectList6Alt(s32 arg0, ActivePokemon* arg1);
@@ -2147,15 +2165,16 @@ void BattleAnim_GetCameraStoredYaw78(s16* arg0);
 void BattleAnim_GetCameraStoredAngles70(s16* arg0, s16* arg1);
 void BattleAnim_GetCameraStoredYaw72(s16* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_particle_system.c
 void BattleAnim_InitParticleSystem(void);
 BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void);
 void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0);
 void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, s32 arg3, s32 arg4);
-void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdateCallback arg2, ParticleDescriptor* arg3, s32 arg4);
+void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdateCallback arg2,
+                                   ParticleDescriptor* arg3, s32 arg4);
 void BattleAnim_EmitParticleBurst(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3);
-void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, s16 arg5);
+void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2,
+                                              s16 arg3, s16 arg4, s16 arg5);
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3);
 void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_DestroyParticle(Particle* arg0);
@@ -2187,29 +2206,43 @@ void BattleAnim_ResetSpawnDelay(void);
 void BattleAnim_SetSpawnDelay(s32 arg0);
 void BattleAnim_AddSpawnDelay(s32 arg0);
 void BattleAnim_ResetSpawnDelayAlias(void);
-BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, ActivePokemon* arg5, s16 arg6, s16 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB);
-BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_unk_D_8140E724 arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
-BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA);
+BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3,
+                                                  ParticleDescriptor* arg4, ActivePokemon* arg5, s16 arg6, s16 arg7,
+                                                  u8 arg8, u8 arg9, u8 argA, u8 argB);
+BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_unk_D_8140E724 arg1,
+                                                                 ParticleDescriptor* arg2, s16 arg3, s16 arg4, u8 arg5,
+                                                                 u8 arg6, u8 arg7, u8 arg8);
+BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2,
+                                                                          func_unk_D_8140E724 arg3,
+                                                                          ParticleDescriptor* arg4, s16 arg5, s16 arg6,
+                                                                          u8 arg7, u8 arg8, u8 arg9, u8 argA);
 BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 arg1, u8 arg2);
 BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
+BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3,
+                                                                            s16 arg4, u8 arg5, u8 arg6);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
+BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3,
+                                                                           s16 arg4, u8 arg5, u8 arg6);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3,
+                                                                           u8 arg4, u8 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4,
+                                                                s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3,
+                                                                               s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4,
+                                                                  s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3,
+                                                                        s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2);
 BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
@@ -2248,14 +2281,12 @@ s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0);
 void BattleAnim_SetGlobalTintFromParticle(Particle* arg0);
 void BattleAnim_LoadGlobalTintToParticle(Particle* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_stinger_projectiles.c
 void BattleAnim_InitStingerTrailColor(Particle* arg0);
 void BattleAnim_UpdateStingerProjectileLifecycle(Particle* arg0);
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
 void BattleAnim_SpawnStingerProjectile(Particle* arg0);
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
-
 
 //@src/fragments/battle_engine/battle_engine_particle_renderers.c
 s32 BattleAnim_DrawAsset95Ia8Billboard(Particle* arg0, CameraNode* arg1);
@@ -2289,7 +2320,6 @@ void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* ar
 void BattleAnim_DrawAsset18FrameI4ModelQuad(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg1);
 void BattleAnim_DrawFadingFullScreenColorOverlay(Particle* arg0, UNUSED CameraNode* arg1);
-
 
 //@src/fragments/battle_engine/battle_engine_tint_and_alpha_effects.c
 void BattleAnim_SetupBackgroundRecolor(Particle* arg0);
@@ -2330,7 +2360,6 @@ void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0);
 void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0);
 void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
 void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0);
-
 
 //@src/fragments/battle_engine/battle_engine_flame_and_explosion_effects.c
 void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1);
@@ -2410,7 +2439,6 @@ void ParticleEffect_InitNoop(void);
 void BattleAnim_InitializeEggBombHit(void);
 void func_843378CC(void);
 void BattleAnim_InitializeFireBlastHit(void);
-
 
 //@src/fragments/battle_engine/battle_engine_water_and_beam_effects.c
 void BattleAnim_SetupSurfHitSpark(Particle* arg0);
@@ -2505,7 +2533,6 @@ void BattleAnim_InitializeSolarBeamHit(void);
 void BattleAnim_InitializeSkyAttackHitSequence(void);
 void BattleAnim_InitializeTriAttackHit(void);
 
-
 //@src/fragments/battle_engine/battle_engine_electric_burst_effects.c
 void BattleAnim_SetupStrongElectricSpark(Particle* arg0);
 void BattleAnim_RunStrongElectricSpark(Particle* arg0);
@@ -2536,7 +2563,6 @@ void BattleAnim_CreateBurstStreamEffect(void);
 void BattleAnim_InitializeThunderPunchUse(void);
 void BattleAnim_InitializeHyperBeamHitSequence(void);
 
-
 //@src/fragments/battle_engine/battle_engine_328F10.c
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0);
 void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0);
@@ -2563,7 +2589,6 @@ void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void);
 void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
-
 //@src/fragments/battle_engine/battle_engine_lingering_fall_particles.c
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0);
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0);
@@ -2579,7 +2604,6 @@ void func_84340AC4(void);
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void);
 void BattleAnim_InitializePetalDanceHit(void);
 void BattleAnim_InitializeWingAttackHit(void);
-
 
 //@src/fragments/battle_engine/battle_engine_model_and_overlay_effects.c
 void BattleAnim_InitializeThunderWaveUse(void);
@@ -2613,7 +2637,6 @@ void BattleAnim_InitializeStrongWind(void);
 void BattleAnim_ApplySpeciesXZOffsetVariantA(Particle*);
 void BattleAnim_InitializeRazorWindUse(void);
 
-
 //@src/fragments/battle_engine/battle_engine_model_and_overlay_effects.c
 void BattleAnim_SetupReflectiveCamera(void);
 void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1);
@@ -2623,8 +2646,11 @@ void BattleAnim_RunScaryEyes(Particle* arg0);
 void BattleAnim_RunDreamEaterUseEffect(Particle* arg0);
 void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0);
 void BattleAnim_RunFillScreenOverlay(Particle* arg0);
-Gfx* BattleAnim_BuildAnimatedTileDisplayList(Gfx* arg0, u8* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 arg9, s16 argA, s16 argB);
-Gfx* BattleAnim_BuildAnimatedTileDisplayListFromStruct(Gfx* arg0, arg1_func_8434E21C* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 arg9, s16 argA, s16 argB);
+Gfx* BattleAnim_BuildAnimatedTileDisplayList(Gfx* arg0, u8* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
+                                             s16 arg7, s16 arg8, s16 arg9, s16 argA, s16 argB);
+Gfx* BattleAnim_BuildAnimatedTileDisplayListFromStruct(Gfx* arg0, arg1_func_8434E21C* arg1, s16 arg2, s16 arg3,
+                                                       s16 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8, s16 arg9,
+                                                       s16 argA, s16 argB);
 void Gfx_SetParticlePrimEnvColors(Gfx* arg0);
 void ParticleEffect_AllocateGfxIfNeeded(s32 arg0, arg1_func_84344CE8* arg1);
 void Gfx_DrawParticleTextureWithParams(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2);
@@ -3057,7 +3083,6 @@ void BattleAnim_RenderNop2(void);
 void BattleAnim_DrawFullScreenColorOverlay(u8, u8, u8, u8);
 void BattleAnim_RenderEffectsFrame(CameraNode*);
 
-
 //@src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c
 void BattleAnim_NoopUpdateHook(void);
 void func_843592E8(void);
@@ -3186,10 +3211,10 @@ void BattleAnim_SetupHyperBeamUseCombinedTrail(void);
 s32 BattleAnim_RunHyperBeamUseCombinedTrail(void);
 void BattleAnim_DrawHyperBeamUseCombinedTrail(void);
 
-
 //@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c
 void MistHaze_Init(void);
-void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9);
+void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7,
+                        s32 arg8, s32 arg9);
 void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5);
 void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0);
 s32 MistHaze_Update(RibbonMesh* arg0);
@@ -3203,23 +3228,28 @@ void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
 s32 SurfTerrainGrid_Update(void);
 Gfx* SurfTerrainGrid_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_lasso.c
 void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
 f32 Strip400_GetTailFadeRatio(void);
 s32 LassoHit_Update(void);
 Gfx* LassoHit_Draw(Gfx* arg0);
 void Radial20_ResetPool(void);
-void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
-void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
-void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11);
-void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11);
-void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
-void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6);
+void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7,
+                                  u8 arg8, u8 arg9, u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
+void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+                       u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
+void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7,
+                                   u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10,
+                                   s16 arg11);
+void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8,
+                              u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11);
+void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+                       u8 argA, f32 argB, f32 argC, f32 argD, s16 argE);
+void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
+                                 UNUSED f32 arg6);
 void Radial20_UpdateNode(Radial20* arg0);
 s32 Radial20_IsComplete(void);
 Gfx* Radial20_Draw(Gfx* arg0);
-
 
 //@src/fragments/battle_engine/battle_engine_hypnosis_screech.c
 void HypnosisScreechTrail_Init(s16 arg0);
@@ -3228,7 +3258,6 @@ void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1);
 s32 HypnosisScreechTrail_IsComplete(void);
 void HypnosisScreechTrail_Reset(void);
 Gfx* HypnosisScreechTrail_Draw(Gfx* arg0);
-
 
 //@src/fragments/battle_engine/battle_engine_sing_ripple.c
 void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1);
@@ -3239,7 +3268,6 @@ s32 SingTrail_AdvanceTimer(void);
 void SingTrail_SetupCameraTransform(void);
 Gfx* SingTrail_BuildGfx(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_3502D0.c
 void Trail40GridAlt_Init(s16 arg0);
 void Trail40GridAlt_Start(s32 arg0, s32 arg1);
@@ -3248,68 +3276,70 @@ s32 Trail40GridAlt_IsComplete(void);
 void Trail40GridAlt_Reset(void);
 Gfx* Trail40GridAlt_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_swift.c
 void SwiftRibbonSheet_Init(void);
-void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, s16 argB);
+void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                            u8 arg9, f32 argA, s16 argB);
 void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0);
 s32 SwiftRibbonSheet_IsComplete(void);
 Gfx* SwiftRibbonSheet_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_beam_renderer.c
 Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 
-
 //@src/fragments/battle_engine/battle_engine_352570.c
 void FourStreamTrail_Init(void);
-void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
+void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                           u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3);
 void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0);
 s32 FourStreamTrail_IsComplete(void);
 Gfx* FourStreamTrail_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_spike_cannon.c
 void SpikeCannonFourStream_Init(void);
-void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
+void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                                 u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0);
 s32 SpikeCannonFourStream_IsComplete(void);
 Gfx* SpikeCannonFourStream_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_3540B0.c
 void OwnerAnchoredFourStream_Init(void);
-void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
+void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7,
+                                   u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0);
 s32 OwnerAnchoredFourStream_IsComplete(void);
 Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_petal_dance.c
 void PetalDanceTrail_Init(void);
-void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
+void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                           u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void PetalDanceTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void PetalDanceTrail_AdvanceNodes(Trail50Effect* arg0);
 s32 PetalDanceTrail_IsComplete(void);
 Gfx* PetalDanceTrail_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_razor_leaf.c
 void RazorLeafTrail_Init(void);
-void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
+void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                          u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD);
 void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void RazorLeafTrail_AdvanceNodes(Trail50Effect* arg0);
 s32 RazorLeafTrail_IsComplete(void);
 Gfx* RazorLeafTrail_Draw(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_356730.c
 void DoubleTextureTrail_InitPool(void);
-void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16, unk_D_843C2C00_024* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
+void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8,
+                              f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10,
+                              s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16,
+                              unk_D_843C2C00_024* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D,
+                              u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2);
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0);
 s32 DoubleTextureTrail_UpdateAll(void);
@@ -3317,12 +3347,17 @@ Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 a
 Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1);
 Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails.c
 void HyperBeamIceBeamTrail_ResetPool(void);
-void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F);
-void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7);
-void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
+void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8,
+                                 u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11,
+                                 f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19,
+                                 s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E,
+                                 unk_D_843C2C00_024* arg1F);
+void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4,
+                                                       f32 arg5, f32 arg6, f32 arg7);
+void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5,
+                                                f32 arg6);
 void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0);
 s32 HyperBeamIceBeamTrail_UpdateAll(void);
 Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1);
@@ -3339,7 +3374,6 @@ void func_8436EED4(void);
 void func_8436EEDC(void);
 s32 AuxEffect_GetId(s32 arg0);
 
-
 //@src/fragments/battle_engine/battle_engine_3597B0.c
 void BattleScene_SetStripWipeState(s32 arg0, s32 arg1);
 s32 BattleScene_GetStripWipeState(void);
@@ -3347,10 +3381,8 @@ void BattleScene_UpdateStripWipe(void);
 Gfx* BattleScene_BuildStripWipeDisplayList(Gfx* arg0, s32 arg1);
 void BattleScene_DrawStripWipe(void);
 
-
 //@src/fragments/battle_engine/battle_engine_debug_strings.c
 void func_8436F6C0(void);
-
 
 //@src/fragments/battle_engine/battle_engine_mechanics.c
 void func_8436F6D0(void);
@@ -3408,7 +3440,6 @@ s32 Battle_CheckFaintAfterMove(void);
 void Battle_ResolveMonAction(void);
 void BeginBattleForEntity(ActivePokemon* active_pokemon);
 
-
 //@src/fragments/battle_engine/battle_engine_move_mechanics.c
 u16 Battle_ApplyStatStageMultiplier(u16* arg0, u16 arg1, u8 arg2);
 void Battle_Effect_Sleep(void);
@@ -3449,7 +3480,6 @@ void Battle_Effect_ReflectLightScreen(void);
 void Battle_RunMoveEffect(void);
 void Battle_ExecuteMoveEffect(void);
 
-
 //@src/fragments/battle_engine/battle_engine_com_decision_logic.c
 void BattleAI_LoadConfiguration(s32 arg0, u32 arg1);
 void func_843767DC(void);
@@ -3481,7 +3511,8 @@ s32 BattleAI_IsPriorityTableMove(u8 arg0, u8 arg1);
 u8 BattleAI_ScoreCategorySetLowPP(BattleAiMonState* arg0, BattleAiMonState* arg1);
 u8 BattleAI_ScoreCategorySetReady(BattleAiMonState* arg0, BattleAiMonState* arg1);
 u8 BattleAI_HasExactlyOneUsableCandidate(BattleAiTeamState* arg0);
-void BattleAI_InitializeOrderCandidates(TeamRoster* arg0, TeamRoster* arg1, TeamRoster* arg2, unk_D_843C5568* arg3, s32 arg4);
+void BattleAI_InitializeOrderCandidates(TeamRoster* arg0, TeamRoster* arg1, TeamRoster* arg2, unk_D_843C5568* arg3,
+                                        s32 arg4);
 void BattleAI_UpdateRememberedMoveCandidate(BattleAiMonState* arg0, u8 arg1);
 u16 BattleAI_ScoreMove(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
 void BattleAI_PickBestMove(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u16* arg2, u8* arg3, u8 arg4, u8 arg5);
@@ -3491,13 +3522,16 @@ s32 BattleAI_ScoreAllCandidateMovesRatioToCurrentHp(BattleAiMonState* arg0, Batt
 void func_8437921C(void);
 u8 BattleAI_CalcStagedMovePower(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2, u8 arg3);
 void BattleAI_ApplyInverseWeightScale(u8 arg0, u8* arg1);
-void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState* arg1, s32 arg2, u8 arg3, u8 arg4, BattleAiScoredMove* arg5);
+void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState* arg1, s32 arg2, u8 arg3, u8 arg4,
+                                       BattleAiScoredMove* arg5);
 s32 BattleAI_HasScoredMoveAtValue(BattleAiScoredMove* arg0, u8 arg1, u8 arg2);
 s32 BattleAI_IsCandidateScoreBelowPeers(BattleAiScoredMove* arg0, u8 arg1, u8 arg2, u8 arg3);
 u8 BattleAI_HasOtherCandidateAtLeastScore(BattleAiScoredMove* arg0, u8 arg1, u8 arg2, u8 arg3);
-void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* arg1, u8 arg2, BattleAiScoredMove* arg3, u8 arg4);
+void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* arg1, u8 arg2, BattleAiScoredMove* arg3,
+                                  u8 arg4);
 s32 BattleAI_IsScoreBetter(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonState* arg1, u8 arg2, BattleAiScoredMove* arg3);
+s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonState* arg1, u8 arg2,
+                                  BattleAiScoredMove* arg3);
 s32 BattleAI_ChooseMoveForCandidate(void);
 u16 BattleAI_ComputeDifficultyThreshold(u8 arg0, u8 arg1);
 u8 BattleAI_GetPpWeight(u8 arg0);
@@ -3508,7 +3542,8 @@ s32 BattleAI_MeetsHpBudgetConstraint(BattleAiTeamState* arg0, u8* arg1, u8 arg2,
 s32 BattleAI_IsCandidateEligible(BattleAiTeamState* arg0, u8* arg1, u8 arg2, u8 arg3);
 s32 BattleAI_GroupSharesTypeWeakness(BattleAiTeamState* arg0, u8* arg1, u8 arg2);
 s32 BattleAI_ScoreAllTeamCandidates(BattleAiTeamState* arg0, BattleAiTeamState* arg1, u8* arg2, s32* arg3);
-s32 BattleAI_InsertRankedCandidateGroup(BattleAiTeamState* arg0, s32* arg1, s32 arg2, unk_func_8437F85C_arg3* arg3, u8* arg4, u8 arg5, u8 arg6);
+s32 BattleAI_InsertRankedCandidateGroup(BattleAiTeamState* arg0, s32* arg1, s32 arg2, unk_func_8437F85C_arg3* arg3,
+                                        u8* arg4, u8 arg5, u8 arg6);
 void BattleAI_SelectRandomFallbackOrder(BattleAiTeamState* arg0, u8* arg1, s32 arg2);
 s32 BattleAI_SelectRandomUsableCandidate(BattleAiTeamState* arg0);
 s32 BattleAI_SelectRandomUsableMoveSlot(BattleMonRuntime* arg0);
@@ -3517,12 +3552,16 @@ s32 BattleAI_SelectLeadFromScoredGroup(BattleAiTeamState* arg0, BattleAiTeamStat
 s32 BattleAI_TryBuildScoredOrder(BattleAiTeamState* arg0, BattleAiTeamState* arg1, u8* arg2, u8* arg3, s32 arg4);
 void BattleAI_UpdateTeamAdvantageBias(void);
 u8 BattleAI_SelectBestSwitchCandidateIndex(BattleAiTeamState* arg0, BattleAiTeamState* arg1);
-u8 BattleAI_SelectBestAttackTargetIndex(BattleAiMonState* arg0, s32* arg1, s32* arg2, BattleAiTeamState* arg3, u8 arg4, s32 arg5);
+u8 BattleAI_SelectBestAttackTargetIndex(BattleAiMonState* arg0, s32* arg1, s32* arg2, BattleAiTeamState* arg3, u8 arg4,
+                                        s32 arg5);
 s32 BattleAI_ScoreSwitchUrgencyFromThreatMove(BattleAiMonState* arg0, BattleAiMonState* arg1, u8 arg2);
 s32 BattleAI_ComputeAttackTargetScore(unk_func_8438220C* arg0);
-s32 BattleAI_ScoreAttackOption(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2, u8* arg3, s32* arg4, s32* arg5, s32* arg6, s32* arg7, s32* arg8);
-s32 BattleAI_ScoreAttackOptionDoubles(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2, u8* arg3, unk_func_8438220C* arg4);
-u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2, BattleAiTeamState* arg3, u8* arg4, unk_func_8438220C* arg5);
+s32 BattleAI_ScoreAttackOption(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2, u8* arg3,
+                               s32* arg4, s32* arg5, s32* arg6, s32* arg7, s32* arg8);
+s32 BattleAI_ScoreAttackOptionDoubles(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2, u8* arg3,
+                                      unk_func_8438220C* arg4);
+u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, BattleAiTeamState* arg2,
+                                BattleAiTeamState* arg3, u8* arg4, unk_func_8438220C* arg5);
 u16 BattleAI_ApplyStatStageModifier(u16* arg0, u16 arg1, u8 arg2);
 void BattleAI_SimulateStatBoostGuess(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2, u8 arg3);
 void BattleAI_BuildAllCandidateMoveScores(unk_func_8438220C* arg0);
@@ -3537,7 +3576,8 @@ s32 BattleAI_IsRestrictedRandomMove(u8 arg0);
 s32 BattleAI_IsMoveExcludedForSpecies(BattleMonRuntime* arg0, s32 arg1, u8 arg2, u8 arg3);
 s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
 void BattleAI_SyncTeamStateFromRuntime(void);
-s32 func_843831A0(TeamRoster* arg0, TeamRoster* arg1, TeamRoster* arg2, s32 ai_difficulty, u8* arg4, s32 rule_category, s32 arg6);
+s32 func_843831A0(TeamRoster* arg0, TeamRoster* arg1, TeamRoster* arg2, s32 ai_difficulty, u8* arg4, s32 rule_category,
+                  s32 arg6);
 void BattleAI_RecordUsedMove(UNUSED s32 arg0, UNUSED s32 arg1, s32 arg2);
 s32 BattleAI_ChooseAction(UNUSED s32 arg0);
 void BattleAI_InitTrainerRecords(void);

@@ -18,5 +18,4 @@ void Audio_Enable(void);
 void Audio_ThreadMain(void*);
 void Audio_StartThread(void);
 
-
 #endif // _DDC0_H_

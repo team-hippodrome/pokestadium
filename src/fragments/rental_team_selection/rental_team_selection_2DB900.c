@@ -117,8 +117,9 @@ static Gfx D_84210F08[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84210FF0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84210E48, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback, D_84210F08, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84210E48,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback,
+    D_84210F08, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84211028[] = {
     VTX(-38, 60, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),     VTX(-38, 40, 0, 0, 640, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -145,8 +146,9 @@ static Gfx D_842110E8[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_842111D0[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84211028, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback, D_842110E8, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84211028,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback,
+    D_842110E8, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84211208[] = {
     VTX(-50, 64, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),     VTX(-50, 48, 0, 0, 512, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -178,8 +180,9 @@ static Gfx D_84211308[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84211430[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84211208, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback, D_84211308, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84211208,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback,
+    D_84211308, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84211468[] = {
     VTX(-36, 12, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -198,8 +201,9 @@ static Gfx D_842114A8[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84211510[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84211468, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback, D_842114A8, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84211468,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, TeamSelection_TrainerSlots_GraphCallback,
+    D_842114A8, 0x06000000, 0x01000000,
 };
 
 s16 D_84211544[] = { 0x46, 0x28, 0x1E, 0x1E, 0x1E, 0x1E, 0x28, 0x3C, 0x5A, 0x78, 0x6E, 0x64 };
@@ -277,11 +281,11 @@ void TeamSelection_TrainerSlots_DrawEntry(s32 arg0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(8, 0);
             Font_Printf(((arg0 * 128) - (Font_MeasureTextExtent(8, 0, D_8423E518[arg0].unk_06) / 2)) + 0x80, 0x5C,
-                          D_8423E518[arg0].unk_06);
+                        D_8423E518[arg0].unk_06);
             Gfx_SetEnvColor(0xFF, 0xBE, 0xFF, 0xFF);
             Font_SetActive(4, 0);
             Font_Printf(((arg0 * 128) - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x80, 0x73, "ID  %05d",
-                          D_8423E518[arg0].unk_04);
+                        D_8423E518[arg0].unk_04);
         } else {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(8, 0);
@@ -723,9 +727,10 @@ void TeamSelection_TrainerSlots_InitializeModels(void) {
         if (D_84210DA0[i].unk_00 != 0) {
             Model_InitDisplayObject(D_8423D408[0] + i, 0, 0, D_8423E4E8[i]);
             Model_InitDisplayObject(D_8423D408[1] + i, 0, 0, D_8423E500);
-            Vec3f_SetComponentsDuplicate(&D_8423D408[0][i].position, D_84210DA0[i].unk_02 - 0x140, 0xF0 - D_84210DA0[i].unk_04, -579.f);
-            Vec3f_SetComponentsDuplicate(&D_8423D408[1][i].position, D_84210DA0[i].unk_02 - 0x140, 0xE4 - D_84210DA0[i].unk_04,
-                          -579.0f);
+            Vec3f_SetComponentsDuplicate(&D_8423D408[0][i].position, D_84210DA0[i].unk_02 - 0x140,
+                                         0xF0 - D_84210DA0[i].unk_04, -579.f);
+            Vec3f_SetComponentsDuplicate(&D_8423D408[1][i].position, D_84210DA0[i].unk_02 - 0x140,
+                                         0xE4 - D_84210DA0[i].unk_04, -579.0f);
             D_8423D408[1][i].lodFraction = 0xB4;
         }
     }

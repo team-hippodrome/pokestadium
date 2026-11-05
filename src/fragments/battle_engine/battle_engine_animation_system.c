@@ -950,42 +950,243 @@ ParticleDescriptor gBattleAnimParticleDescriptors[] = {
 };
 
 static func_D_84390320 sMoveAnimEffectStartInitFuncs[] = {
-    BattleAnim_EffectStartNop, BattleAnim_StartEffect1Descriptor2FPhaseFadeOut, BattleAnim_DispatchNormalMegaKickAnimation, BattleAnim_InitializeFocusEnergyUse, BattleAnim_InitializePsybeamUse, BattleAnim_EffectStartNop, BattleAnim_InitializeWaterGunUse,
-    BattleAnim_InitializeSwiftUse, BattleAnim_InitializeLeechSeedUse, BattleAnim_EffectStartNop, BattleAnim_InitializeStrongWind, BattleAnim_InitializeRazorLeafUse, BattleAnim_InitializeAmnesiaUse, BattleAnim_InitializeScratchSlashUse,
-    BattleAnim_InitializeScreenMove, BattleAnim_StartMegaPunchEffect, BattleAnim_InitializeFlashUse, BattleAnim_InitializeSlimeMove, BattleAnim_InitializeThunderThunderboltUse, BattleAnim_EffectStartNop, func_843378CC,
-    ParticleEffect_WaterAnimBurst, BattleAnim_InitializeEmberUse, BattleAnim_InitializeFireBlastFlamethrowerUseSmoke, BattleAnim_CreateDrainingMoveOverlay, BattleAnim_EffectStartNop, BattleAnim_InitializeAuroraBeamUse, BattleAnim_EffectStartNop,
-    BattleAnim_InitializeSmokeScreenHazePoisonGasUse, BattleAnim_InitializeMimicConversionUse, BattleAnim_InitializeHardenUse, BattleAnim_InitializeSandAttackUse, BattleAnim_EffectStartNop, BattleAnim_EffectStartNop, BattleAnim_InitializeBlizzardUse,
-    BattleAnim_InitializeDragonRageUse, BattleAnim_InitializeSurfUse, BattleAnim_InitializeEarthquakeFissureUse, BattleAnim_InitializeThunderWaveUse, BattleAnim_InitializeHyperBeamUse, BattleAnim_InitializeFlyUse, BattleAnim_InitializeIcePunchUse,
-    BattleAnim_EffectStartNop, BattleAnim_EffectStartNop, BattleAnim_EffectStartNop, BattleAnim_InitializeSonicBoomUse, BattleAnim_EffectStartNop, BattleAnim_InitializeIceBeamUse, BattleAnim_InitializeBubbleUse,
-    BattleAnim_InitializePsywaveUse, BattleAnim_InitializeBoomUse, BattleAnim_EffectStartNop, BattleAnim_InitializeDigUse, BattleAnim_InitializeMistUse, BattleAnim_EffectStartNop, BattleAnim_InitializeKinesisUse,
-    BattleAnim_InitializeFirePunchUse, BattleAnim_InitializePetalDanceUse, BattleAnim_InitializeHydroPumpUse, BattleAnim_InitializeThunderShockUse, BattleAnim_InitializeMimicConversionUse, BattleAnim_InitializeCutSlashScratchEffect, BattleAnim_EffectStartNop,
-    ParticleEffect_RegisterHandlers_Default, BattleAnim_InitializeEggBombUse, ParticleEffect_RegisterParticleNodes, BattleAnim_InitializeSoftBoiledUse, BattleAnim_EffectStartNop, BattleAnim_InitializeSwordsDanceUse, BattleAnim_StartEffect69ModelPhaseWaitAndFallingParticles,
-    BattleAnim_InitializeSolarBeamUse1, BattleAnim_InitializeClampViceGripUse, BattleAnim_InitializeRazorWindUse, BattleAnim_InitializeThunderPunchUse, BattleAnim_InitializeBitingMoveUse, BattleAnim_InitializeStrengthUse, BattleAnim_InitializeSmogUse,
-    BattleAnim_InitializeBubbleBeamUse, BattleAnim_InitializeTriAttackUse, BattleAnim_InitializeBoneClubUse, BattleAnim_InitializeBonemerangUse, BattleAnim_InitializeAcidArmorUse, BattleAnim_InitializeBoomUse, BattleAnim_InitializeGlareLeerUse,
-    BattleAnim_InitializeFireSpinUseSmoke, BattleAnim_InitializeBideRageUse, BattleAnim_InitializeTeleportUse, BattleAnim_InitializeDefenseCurlUse, BattleAnim_InitializeSharpenUse, BattleAnim_InitializeSubstituteTransformUse, BattleAnim_InitializeSpeedLines,
-    BattleAnim_InitializeWithdrawUse, BattleAnim_InitializeLickUse, BattleAnim_InitializeConfuseRayUse, BattleAnim_InitializeLovelyKissUse, BattleAnim_InitializeDreamEaterUse, BattleAnim_InitializeMeditateUse, BattleAnim_InitializeNightShadeUse,
-    BattleAnim_EffectStartNop, BattleAnim_InitializeWaterfallUse, BattleAnim_InitializeCrabhammerUse, BattleAnim_InitializeBarrageUse, BattleAnim_DisableEffectSpawningAlias, BattleAnim_InitializeSkyAttackUse2, BattleAnim_InitializeSkyAttackUse1,
-    BattleAnim_InitializeSolarBeamUse2, BattleAnim_InitializePsychicUse, BattleAnim_InitializeConfusionUse, BattleAnim_InitializeSubmissionUse, BattleAnim_InitializeGrowthUse, BattleAnim_InitializeRecoverUse, BattleAnim_InitializeGuillotineUse,
-    BattleAnim_InitializeSkullBashUse, BattleAnim_InitializeDrillPeckUse, BattleAnim_InitializeStruggleThrashUse, BattleAnim_InitializeDoubleEdgeTakeDownUse, BattleAnim_InitializeBodySlamUse, BattleAnim_InitializeVineWhipUse, BattleAnim_InitializeFuryAttackPeckUse,
-    BattleAnim_InitializeHornAttackUse, BattleAnim_InitializeBubbleBeamUse, BattleAnim_InitializeHornDrillUse, BattleAnim_StartEffect122GlobalAndOwnerTintFade, BattleAnim_InitializeFurySwipesUse1, BattleAnim_InitializeFurySwipesUse2, ParticleEffect_RegisterCallbacks,
-    func_8433765C, BattleAnim_StartEffect127Descriptor39ScaleFade, BattleAnim_StartEffect128Descriptor39ScaleFade, ParticleEffect_CreateTypeX, ParticleEffect_CreateSmoke, ParticleEffect_CreateSmokeHighPriority, ParticleEffect_CreateDual,
-    BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup, BattleAnim_StartEffect134ModeOrbitAndMetadataBurst, BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade, BattleAnim_EffectStartNop, BattleAnim_StartEffect137Descriptor3FRisingFade, ParticleEffect_TextureNodeSetup, BattleAnim_StartEffect139DualRepeatingSparks,
-    BattleAnim_StartEffect140StartEffect139Alias, BattleAnim_StartEffect141GridRiseAndFallingBurst, BattleAnim_StartEffect142StartEffect141Alias, BattleAnim_StartEffect143ModeOrbitAndMetadataBurst, BattleAnim_EffectStartNop,
+    BattleAnim_EffectStartNop,
+    BattleAnim_StartEffect1Descriptor2FPhaseFadeOut,
+    BattleAnim_DispatchNormalMegaKickAnimation,
+    BattleAnim_InitializeFocusEnergyUse,
+    BattleAnim_InitializePsybeamUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeWaterGunUse,
+    BattleAnim_InitializeSwiftUse,
+    BattleAnim_InitializeLeechSeedUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeStrongWind,
+    BattleAnim_InitializeRazorLeafUse,
+    BattleAnim_InitializeAmnesiaUse,
+    BattleAnim_InitializeScratchSlashUse,
+    BattleAnim_InitializeScreenMove,
+    BattleAnim_StartMegaPunchEffect,
+    BattleAnim_InitializeFlashUse,
+    BattleAnim_InitializeSlimeMove,
+    BattleAnim_InitializeThunderThunderboltUse,
+    BattleAnim_EffectStartNop,
+    func_843378CC,
+    ParticleEffect_WaterAnimBurst,
+    BattleAnim_InitializeEmberUse,
+    BattleAnim_InitializeFireBlastFlamethrowerUseSmoke,
+    BattleAnim_CreateDrainingMoveOverlay,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeAuroraBeamUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeSmokeScreenHazePoisonGasUse,
+    BattleAnim_InitializeMimicConversionUse,
+    BattleAnim_InitializeHardenUse,
+    BattleAnim_InitializeSandAttackUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeBlizzardUse,
+    BattleAnim_InitializeDragonRageUse,
+    BattleAnim_InitializeSurfUse,
+    BattleAnim_InitializeEarthquakeFissureUse,
+    BattleAnim_InitializeThunderWaveUse,
+    BattleAnim_InitializeHyperBeamUse,
+    BattleAnim_InitializeFlyUse,
+    BattleAnim_InitializeIcePunchUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_EffectStartNop,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeSonicBoomUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeIceBeamUse,
+    BattleAnim_InitializeBubbleUse,
+    BattleAnim_InitializePsywaveUse,
+    BattleAnim_InitializeBoomUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeDigUse,
+    BattleAnim_InitializeMistUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeKinesisUse,
+    BattleAnim_InitializeFirePunchUse,
+    BattleAnim_InitializePetalDanceUse,
+    BattleAnim_InitializeHydroPumpUse,
+    BattleAnim_InitializeThunderShockUse,
+    BattleAnim_InitializeMimicConversionUse,
+    BattleAnim_InitializeCutSlashScratchEffect,
+    BattleAnim_EffectStartNop,
+    ParticleEffect_RegisterHandlers_Default,
+    BattleAnim_InitializeEggBombUse,
+    ParticleEffect_RegisterParticleNodes,
+    BattleAnim_InitializeSoftBoiledUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeSwordsDanceUse,
+    BattleAnim_StartEffect69ModelPhaseWaitAndFallingParticles,
+    BattleAnim_InitializeSolarBeamUse1,
+    BattleAnim_InitializeClampViceGripUse,
+    BattleAnim_InitializeRazorWindUse,
+    BattleAnim_InitializeThunderPunchUse,
+    BattleAnim_InitializeBitingMoveUse,
+    BattleAnim_InitializeStrengthUse,
+    BattleAnim_InitializeSmogUse,
+    BattleAnim_InitializeBubbleBeamUse,
+    BattleAnim_InitializeTriAttackUse,
+    BattleAnim_InitializeBoneClubUse,
+    BattleAnim_InitializeBonemerangUse,
+    BattleAnim_InitializeAcidArmorUse,
+    BattleAnim_InitializeBoomUse,
+    BattleAnim_InitializeGlareLeerUse,
+    BattleAnim_InitializeFireSpinUseSmoke,
+    BattleAnim_InitializeBideRageUse,
+    BattleAnim_InitializeTeleportUse,
+    BattleAnim_InitializeDefenseCurlUse,
+    BattleAnim_InitializeSharpenUse,
+    BattleAnim_InitializeSubstituteTransformUse,
+    BattleAnim_InitializeSpeedLines,
+    BattleAnim_InitializeWithdrawUse,
+    BattleAnim_InitializeLickUse,
+    BattleAnim_InitializeConfuseRayUse,
+    BattleAnim_InitializeLovelyKissUse,
+    BattleAnim_InitializeDreamEaterUse,
+    BattleAnim_InitializeMeditateUse,
+    BattleAnim_InitializeNightShadeUse,
+    BattleAnim_EffectStartNop,
+    BattleAnim_InitializeWaterfallUse,
+    BattleAnim_InitializeCrabhammerUse,
+    BattleAnim_InitializeBarrageUse,
+    BattleAnim_DisableEffectSpawningAlias,
+    BattleAnim_InitializeSkyAttackUse2,
+    BattleAnim_InitializeSkyAttackUse1,
+    BattleAnim_InitializeSolarBeamUse2,
+    BattleAnim_InitializePsychicUse,
+    BattleAnim_InitializeConfusionUse,
+    BattleAnim_InitializeSubmissionUse,
+    BattleAnim_InitializeGrowthUse,
+    BattleAnim_InitializeRecoverUse,
+    BattleAnim_InitializeGuillotineUse,
+    BattleAnim_InitializeSkullBashUse,
+    BattleAnim_InitializeDrillPeckUse,
+    BattleAnim_InitializeStruggleThrashUse,
+    BattleAnim_InitializeDoubleEdgeTakeDownUse,
+    BattleAnim_InitializeBodySlamUse,
+    BattleAnim_InitializeVineWhipUse,
+    BattleAnim_InitializeFuryAttackPeckUse,
+    BattleAnim_InitializeHornAttackUse,
+    BattleAnim_InitializeBubbleBeamUse,
+    BattleAnim_InitializeHornDrillUse,
+    BattleAnim_StartEffect122GlobalAndOwnerTintFade,
+    BattleAnim_InitializeFurySwipesUse1,
+    BattleAnim_InitializeFurySwipesUse2,
+    ParticleEffect_RegisterCallbacks,
+    func_8433765C,
+    BattleAnim_StartEffect127Descriptor39ScaleFade,
+    BattleAnim_StartEffect128Descriptor39ScaleFade,
+    ParticleEffect_CreateTypeX,
+    ParticleEffect_CreateSmoke,
+    ParticleEffect_CreateSmokeHighPriority,
+    ParticleEffect_CreateDual,
+    BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup,
+    BattleAnim_StartEffect134ModeOrbitAndMetadataBurst,
+    BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade,
+    BattleAnim_EffectStartNop,
+    BattleAnim_StartEffect137Descriptor3FRisingFade,
+    ParticleEffect_TextureNodeSetup,
+    BattleAnim_StartEffect139DualRepeatingSparks,
+    BattleAnim_StartEffect140StartEffect139Alias,
+    BattleAnim_StartEffect141GridRiseAndFallingBurst,
+    BattleAnim_StartEffect142StartEffect141Alias,
+    BattleAnim_StartEffect143ModeOrbitAndMetadataBurst,
+    BattleAnim_EffectStartNop,
 };
 static func_D_84390320 sMoveAnimEffectEndInitFuncs[] = {
-    BattleAnim_EffectEndNop, BattleAnim_EffectEndNop, BattleAnim_InitializeWaterGunHit, BattleAnim_InitializeRazorWindHit, BattleAnim_InitializeRazorLeafHit, BattleAnim_InitializeScratchSlashHit, BattleAnim_InitializeDizzyPunchHit,
-    ParticleEffect_PaletteMultiBurst, BattleAnim_InitializeThunderShockThunderboltHit, BattleAnim_EffectEndNop, BattleAnim_InitializeRockSlideRockThrowHit, BattleAnim_EffectEndNop, BattleAnim_EffectEndNop, BattleAnim_InitializePayDayHit,
-    BattleAnim_RunStrongContactMoveHitSpark, BattleAnim_InitializeDragonRageHit, BattleAnim_InitializeSurfHit, BattleAnim_InitializeThunderWaveHit, BattleAnim_InitializePowderSporeGasMoveHit, BattleAnim_EffectEndNop, InitParticleComboVariant,
-    ParticleEffect_RegisterModeSpecific, BattleAnim_InitializeFlamethrowerHit, BattleAnim_InitializeBlizzardHit, BattleAnim_EffectEndNop, BattleAnim_InitializeSkyAttackHit, BattleAnim_InitializePetalDanceHit, BattleAnim_InitializeHydroPumpHit,
-    BattleAnim_CreateBurstStreamEffect, BattleAnim_InitializeFireSpinHitFlames, BattleAnim_InitializeSlashMoveWhiteFlashOverlay, BattleAnim_InitializeLeechSeedHit, BattleAnim_EffectEndNop, BattleAnim_EffectEndNop, BattleAnim_InitializeBubbleHit,
-    BattleAnim_InitializeUniqueSharedHitSpark, BattleAnim_InitializeLowKickHit, BattleAnim_InitializePointyMoveHitSparks, BattleAnim_InitializePoisonStingTwineedleHit, BattleAnim_InitializeStompHit, BattleAnim_InitializeEggBombHit, BattleAnim_InitializeBitingMoveHit,
-    BattleAnim_InitializeIcePunchHit, BattleAnim_InitializeThunderPunchHit, BattleAnim_InitializeDefaultLimbForMove, BattleAnim_InitializeGroundedCircularHitSpark, BattleAnim_InitializeSubmissionHit, BattleAnim_InitializeFuryAttackGustHit, BattleAnim_EffectEndNop,
-    ParticleEffect_RegisterColorAnim, BattleAnim_InitializeStrengthHit, ParticleEffect_WaterAnimBurstTintFadeOnly, BattleAnim_InitializeSwiftHit, BattleAnim_InitializeBubbleBeamHit, BattleAnim_InitializeFirePunchHit, BattleAnim_InitializeSandAttackHit,
-    BattleAnim_InitializeEmberHit, BattleAnim_InitializeFlashHit, BattleAnim_InitializeEarthquakeFissureHit, BattleAnim_InitializeFireBlastHit, BattleAnim_InitializeConfuseRayHit, BattleAnim_InitializeLovelyKissHit, BattleAnim_InitializeDreamEaterHit,
-    BattleAnim_InitializeNightShadeHit, BattleAnim_InitializeWaterfallHit, BattleAnim_InitializeBarrageHit, BattleAnim_InitializePsywaveHit, BattleAnim_InitializeIceBeamHit, BattleAnim_InitializePsybeamHit, BattleAnim_InitializeAuroraBeamHit,
-    BattleAnim_InitializeHyperBeamHit, BattleAnim_InitializeSolarBeamHit, BattleAnim_InitializeThunderHit, BattleAnim_InitializeConfusionHit, BattleAnim_InitializePsychicHit, BattleAnim_InitializeEarthquakeHit, BattleAnim_InitializeLargePhysicalHitSpark,
-    BattleAnim_InitializeDrillPeckHit, BattleAnim_InitializeDigHit, BattleAnim_InitializeVerticalLandingHitSpark, BattleAnim_InitializeSpecialLimbForMove, BattleAnim_InitializeBoomHit, BattleAnim_InitializeBoomHit, BattleAnim_InitializeGuillotineHit,
-    BattleAnim_InitializeHornDrillHit, BattleAnim_InitializeVineWhipHit, BattleAnim_InitializeTriAttackHit, BattleAnim_InitializeWingAttackHit, BattleAnim_InitializeFurySwipesHit, BattleAnim_EffectEndNop,
+    BattleAnim_EffectEndNop,
+    BattleAnim_EffectEndNop,
+    BattleAnim_InitializeWaterGunHit,
+    BattleAnim_InitializeRazorWindHit,
+    BattleAnim_InitializeRazorLeafHit,
+    BattleAnim_InitializeScratchSlashHit,
+    BattleAnim_InitializeDizzyPunchHit,
+    ParticleEffect_PaletteMultiBurst,
+    BattleAnim_InitializeThunderShockThunderboltHit,
+    BattleAnim_EffectEndNop,
+    BattleAnim_InitializeRockSlideRockThrowHit,
+    BattleAnim_EffectEndNop,
+    BattleAnim_EffectEndNop,
+    BattleAnim_InitializePayDayHit,
+    BattleAnim_RunStrongContactMoveHitSpark,
+    BattleAnim_InitializeDragonRageHit,
+    BattleAnim_InitializeSurfHit,
+    BattleAnim_InitializeThunderWaveHit,
+    BattleAnim_InitializePowderSporeGasMoveHit,
+    BattleAnim_EffectEndNop,
+    InitParticleComboVariant,
+    ParticleEffect_RegisterModeSpecific,
+    BattleAnim_InitializeFlamethrowerHit,
+    BattleAnim_InitializeBlizzardHit,
+    BattleAnim_EffectEndNop,
+    BattleAnim_InitializeSkyAttackHit,
+    BattleAnim_InitializePetalDanceHit,
+    BattleAnim_InitializeHydroPumpHit,
+    BattleAnim_CreateBurstStreamEffect,
+    BattleAnim_InitializeFireSpinHitFlames,
+    BattleAnim_InitializeSlashMoveWhiteFlashOverlay,
+    BattleAnim_InitializeLeechSeedHit,
+    BattleAnim_EffectEndNop,
+    BattleAnim_EffectEndNop,
+    BattleAnim_InitializeBubbleHit,
+    BattleAnim_InitializeUniqueSharedHitSpark,
+    BattleAnim_InitializeLowKickHit,
+    BattleAnim_InitializePointyMoveHitSparks,
+    BattleAnim_InitializePoisonStingTwineedleHit,
+    BattleAnim_InitializeStompHit,
+    BattleAnim_InitializeEggBombHit,
+    BattleAnim_InitializeBitingMoveHit,
+    BattleAnim_InitializeIcePunchHit,
+    BattleAnim_InitializeThunderPunchHit,
+    BattleAnim_InitializeDefaultLimbForMove,
+    BattleAnim_InitializeGroundedCircularHitSpark,
+    BattleAnim_InitializeSubmissionHit,
+    BattleAnim_InitializeFuryAttackGustHit,
+    BattleAnim_EffectEndNop,
+    ParticleEffect_RegisterColorAnim,
+    BattleAnim_InitializeStrengthHit,
+    ParticleEffect_WaterAnimBurstTintFadeOnly,
+    BattleAnim_InitializeSwiftHit,
+    BattleAnim_InitializeBubbleBeamHit,
+    BattleAnim_InitializeFirePunchHit,
+    BattleAnim_InitializeSandAttackHit,
+    BattleAnim_InitializeEmberHit,
+    BattleAnim_InitializeFlashHit,
+    BattleAnim_InitializeEarthquakeFissureHit,
+    BattleAnim_InitializeFireBlastHit,
+    BattleAnim_InitializeConfuseRayHit,
+    BattleAnim_InitializeLovelyKissHit,
+    BattleAnim_InitializeDreamEaterHit,
+    BattleAnim_InitializeNightShadeHit,
+    BattleAnim_InitializeWaterfallHit,
+    BattleAnim_InitializeBarrageHit,
+    BattleAnim_InitializePsywaveHit,
+    BattleAnim_InitializeIceBeamHit,
+    BattleAnim_InitializePsybeamHit,
+    BattleAnim_InitializeAuroraBeamHit,
+    BattleAnim_InitializeHyperBeamHit,
+    BattleAnim_InitializeSolarBeamHit,
+    BattleAnim_InitializeThunderHit,
+    BattleAnim_InitializeConfusionHit,
+    BattleAnim_InitializePsychicHit,
+    BattleAnim_InitializeEarthquakeHit,
+    BattleAnim_InitializeLargePhysicalHitSpark,
+    BattleAnim_InitializeDrillPeckHit,
+    BattleAnim_InitializeDigHit,
+    BattleAnim_InitializeVerticalLandingHitSpark,
+    BattleAnim_InitializeSpecialLimbForMove,
+    BattleAnim_InitializeBoomHit,
+    BattleAnim_InitializeBoomHit,
+    BattleAnim_InitializeGuillotineHit,
+    BattleAnim_InitializeHornDrillHit,
+    BattleAnim_InitializeVineWhipHit,
+    BattleAnim_InitializeTriAttackHit,
+    BattleAnim_InitializeWingAttackHit,
+    BattleAnim_InitializeFurySwipesHit,
+    BattleAnim_EffectEndNop,
 };
 static u8 sD_8438682C[] = {
     0x3F, 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00,
@@ -4267,14 +4468,18 @@ void BattleScene_ConfigureAudioChannelGroupCounts(void) {
     port_team_sizes[2] = 0;
     port_team_sizes[3] = 0;
 
-    port_team_sizes[side1_pokemon->sessionTeams->teamMember[0]->controllerPort] = BattleScene_GetRosterTeamSize(side1_pokemon->sessionTeams->teamMember[0]);
+    port_team_sizes[side1_pokemon->sessionTeams->teamMember[0]->controllerPort] =
+        BattleScene_GetRosterTeamSize(side1_pokemon->sessionTeams->teamMember[0]);
     if (side1_pokemon->sessionTeams->tagTeamSize == 2) {
-        port_team_sizes[side1_pokemon->sessionTeams->teamMember[1]->controllerPort] = BattleScene_GetRosterTeamSize(side1_pokemon->sessionTeams->teamMember[1]);
+        port_team_sizes[side1_pokemon->sessionTeams->teamMember[1]->controllerPort] =
+            BattleScene_GetRosterTeamSize(side1_pokemon->sessionTeams->teamMember[1]);
     }
 
-    port_team_sizes[side2_pokemon->sessionTeams->teamMember[0]->controllerPort] = BattleScene_GetRosterTeamSize(side2_pokemon->sessionTeams->teamMember[0]);
+    port_team_sizes[side2_pokemon->sessionTeams->teamMember[0]->controllerPort] =
+        BattleScene_GetRosterTeamSize(side2_pokemon->sessionTeams->teamMember[0]);
     if (side2_pokemon->sessionTeams->tagTeamSize == 2) {
-        port_team_sizes[side2_pokemon->sessionTeams->teamMember[1]->controllerPort] = BattleScene_GetRosterTeamSize(side2_pokemon->sessionTeams->teamMember[1]);
+        port_team_sizes[side2_pokemon->sessionTeams->teamMember[1]->controllerPort] =
+            BattleScene_GetRosterTeamSize(side2_pokemon->sessionTeams->teamMember[1]);
     }
     Audio_SetChannelGroupCounts(port_team_sizes[0], port_team_sizes[1], port_team_sizes[2], port_team_sizes[3]);
 }
@@ -4711,12 +4916,14 @@ void BattleAnim_ProcessQueuedEffects(void) {
     }
 
     if (sBattleAnimQueuedAlternatePending != 0) {
-        BattleAnim_RunEffectList(sBattleAnimQueuedAlternateMoveId, sBattleAnimQueuedAlternateList, sBattleAnimQueuedAlternatePending);
+        BattleAnim_RunEffectList(sBattleAnimQueuedAlternateMoveId, sBattleAnimQueuedAlternateList,
+                                 sBattleAnimQueuedAlternatePending);
         sBattleAnimQueuedAlternatePending = 0;
     }
 
     if (sBattleAnimQueuedExtraPending != 0) {
-        BattleAnim_RunEffectList(sBattleAnimQueuedExtraMoveId, sBattleAnimQueuedExtraList, sBattleAnimQueuedExtraPending);
+        BattleAnim_RunEffectList(sBattleAnimQueuedExtraMoveId, sBattleAnimQueuedExtraList,
+                                 sBattleAnimQueuedExtraPending);
         sBattleAnimQueuedExtraPending = 0;
     }
 
@@ -4753,7 +4960,8 @@ s16 BattleAnim_GetQueuedMoveId(void) {
     return sBattleAnimQueuedMoveId;
 }
 
-void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
+void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                s16 alternate_anchor) {
     BattleAnim_SetQueuedEffectList(0);
     sBattleAnimQueuedEffectListMode = BATTLE_ANIMATION_QUEUE_START;
     sBattleAnimQueuedMoveId = move_id;
@@ -4765,23 +4973,27 @@ void BattleAnim_QueueMoveEffect(s32 move_id, ActivePokemon* user, ActivePokemon*
     gBattleAnimTertiaryOwner = user_fallback;
 }
 
-void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
+void BattleAnim_QueueMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback,
+                                      s16 default_anchor, s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
 }
 
-void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
+void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                   s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
     BattleAnim_SetQueuedEffectList(2);
     gBattleAnimCurrentOwner = user_fallback;
     sBattleAnimQueuedEffectListMode = BATTLE_ANIMATION_QUEUE_END;
 }
 
-void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
+void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback,
+                                              s16 default_anchor, s16 alternate_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternate_anchor);
     BattleAnim_SetQueuedEffectList(1);
 }
 
-void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternative_anchor) {
+void BattleAnim_QueueEffectList3(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor,
+                                 s16 alternative_anchor) {
     BattleAnim_QueueMoveEffect(move_id, user, user_fallback, default_anchor, alternative_anchor);
     BattleAnim_SetQueuedEffectList(3);
 }
@@ -5069,8 +5281,10 @@ void BattleAnim_UpdateCamera(CameraNode* camera) {
     ParticleMath_CopyVec3f(&sParticleCameraState->targetPosition, &camera->view.targetPosition);
     BattleAnim_GetCameraLookAngles(&sParticleCameraState->unk_70, &sParticleCameraState->unk_72);
     BattleAnim_GetCameraEyeAngles(&sParticleCameraState->unk_76, &sParticleCameraState->unk_78);
-    ParticleMath_NormalizedDirection(&sParticleCameraState->lookDirection, sParticleCameraState->eyePosition, sParticleCameraState->targetPosition);
-    ParticleMath_NormalizedDirection(&sParticleCameraState->eyeDirection, sParticleCameraState->targetPosition, sParticleCameraState->eyePosition);
+    ParticleMath_NormalizedDirection(&sParticleCameraState->lookDirection, sParticleCameraState->eyePosition,
+                                     sParticleCameraState->targetPosition);
+    ParticleMath_NormalizedDirection(&sParticleCameraState->eyeDirection, sParticleCameraState->targetPosition,
+                                     sParticleCameraState->eyePosition);
 }
 
 s32 BattleAnim_DispatchPresentation(s32 arg0, CameraNode* arg1) {

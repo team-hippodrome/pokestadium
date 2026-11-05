@@ -330,8 +330,8 @@ void UI_DrawClippedTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4,
         sp30.right += 1;
         sp30.bottom += 1;
 
-        gSPTextureRectangle(gDisplayListHead++, sp30.left << 2, sp30.top << 2, sp30.right << 2, sp30.bottom << 2, G_TX_RENDERTILE,
-                            arg4, arg5, arg6, arg7);
+        gSPTextureRectangle(gDisplayListHead++, sp30.left << 2, sp30.top << 2, sp30.right << 2, sp30.bottom << 2,
+                            G_TX_RENDERTILE, arg4, arg5, arg6, arg7);
     }
 }
 

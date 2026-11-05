@@ -61,7 +61,8 @@ static Color_RGBA8 D_889011CC = { 0xFF, 0xF1, 0x78, 0xFF };
 static char D_889011D0[] = "";
 static char D_889011D4[] = "";
 
-void LabUI_DrawConfirmOptionLabel(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4, UNUSED unk_func_88200FA0_030_030* arg5) {
+void LabUI_DrawConfirmOptionLabel(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4,
+                                  UNUSED unk_func_88200FA0_030_030* arg5) {
     Color_RGBA8 sp24;
     UNUSED s32 pad;
     s32 var_v0 = (arg4 & 4) ? 1 : 0;
@@ -76,7 +77,7 @@ void LabUI_DrawConfirmOptionLabel(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg
 }
 
 void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 arg1, WidgetAnimatedPanel* arg2, WidgetNode* arg3,
-                   char** arg4, MemoryPool* arg5) {
+                              char** arg4, MemoryPool* arg5) {
     UNUSED s32 pad[3];
     s32 i;
     s32 sp7C;
@@ -123,27 +124,32 @@ void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 arg1, WidgetAnimatedP
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00);
 
     temp_s0 = mem_pool_alloc(arg5, sizeof(unk_func_8850B254));
-    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s0, 0, 0, var_s1, 0x2C, D_889011A8, D_889011AC);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00, &temp_s0->unk_00.unk_00);
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(temp_s0, 0, 0, var_s1, 0x2C, D_889011A8,
+                                                                              D_889011AC);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &temp_s0->unk_00.unk_00);
 
     arg0->unk_40 = mem_pool_alloc(arg5, sizeof(unk_func_88500994));
     ((func88500994)Memmap_GetFragmentVaddr(WidgetTree_InitPagedContainer))(arg0->unk_40, 0, 0);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0->unk_00.unk_00, &arg0->unk_40->unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0->unk_00.unk_00,
+                                                                    &arg0->unk_40->unk_00.unk_00);
 
     temp_s0_2 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_2, 8, 0, Text_GetString(NULL, 0, arg4, 0), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_2, 8, 0, Text_GetString(NULL, 0, arg4, 0),
+                                                                      8);
     temp_s0_2->unk_3C = 0x18;
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &temp_s0_2->unk_00);
 
     temp_s0_3 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_3, 8, 0, Text_GetString(NULL, 0, arg4, 1), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_3, 8, 0, Text_GetString(NULL, 0, arg4, 1),
+                                                                      8);
     temp_s0_3->unk_3C = 0x18;
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &temp_s0_3->unk_00);
 
     temp_s0_4 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
     sp60 = Text_GetString(NULL, 0, arg4, 2);
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_4, (var_s1 - Font_MeasureTextExtent(0x10, 0, sp60)) / 2, 0xA,
-                                                           sp60, 0x10);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        temp_s0_4, (var_s1 - Font_MeasureTextExtent(0x10, 0, sp60)) / 2, 0xA, sp60, 0x10);
     temp_s0_4->unk_30 = (0, D_889011B0);
     temp_s0_4->unk_44 = temp_s0_4->unk_44;
     temp_s0_4->unk_34 = (0, D_889011B4);
@@ -151,19 +157,23 @@ void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 arg1, WidgetAnimatedP
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &temp_s0_4->unk_00);
 
     temp_s0_5 = mem_pool_alloc(arg5, sizeof(unk_func_885012A4));
-    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(temp_s0_5, 0, 0x30, var_s1, sp7C - 0x30, D_889011B8);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00, &temp_s0_5->unk_00.unk_00);
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(temp_s0_5, 0, 0x30, var_s1, sp7C - 0x30,
+                                                                       D_889011B8);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &temp_s0_5->unk_00.unk_00);
 
     arg0->unk_30 = mem_pool_alloc(arg5, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabUI_DrawConfirmOptionLabel, var_s1, 0x1C,
-                                                           arg0->unk_34.unk_08, 1, arg5);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabUI_DrawConfirmOptionLabel,
+                                                                      var_s1, 0x1C, arg0->unk_34.unk_08, 1, arg5);
     ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_34, arg5);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0_5->unk_00.unk_00, &arg0->unk_30->unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0_5->unk_00.unk_00,
+                                                                    &arg0->unk_30->unk_00.unk_00);
 
     if (arg3 != NULL) {
         temp_s0_6 = mem_pool_alloc(arg5, sizeof(unk_func_88503298));
         ((func88503298)Memmap_GetFragmentVaddr(WidgetTree_InitVisibilityGateBridge))(temp_s0_6, arg0->unk_2C, arg3);
-        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &temp_s0_6->unk_00.unk_00);
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00,
+                                                                        &temp_s0_6->unk_00.unk_00);
     }
 
     arg0->unk_44 = mem_pool_alloc(arg5, sizeof(unk_func_889000C4_044));
@@ -281,7 +291,8 @@ void LabUI_ShowSavingPrompt(unk_func_889000C4* arg0, s32 arg1) {
     GbSave_RequirePakPresent(arg1);
 }
 
-void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk_func_889000C4* arg2, MemoryPool* arg3) {
+void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk_func_889000C4* arg2,
+                                   MemoryPool* arg3) {
     UNUSED s32 pad[2];
     s32 sp54;
     unk_func_885012A4* sp50;
@@ -312,7 +323,7 @@ void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk
     sp4C = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     sp54 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, arg1, 6));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp4C, (0x1A0 - sp54) / 2, 0x30,
-                                                           Text_GetString(NULL, 0, arg1, 6), 0x10);
+                                                                      Text_GetString(NULL, 0, arg1, 6), 0x10);
     sp4C->unk_30 = (0, D_889011C8);
     sp4C->unk_44 = sp4C->unk_44;
     sp4C->unk_34 = (0, D_889011CC);
@@ -330,7 +341,7 @@ void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk
     sp44 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     sp54 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, arg1, 7));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp44, (0x1A0 - sp54) / 2, 0x30,
-                                                           Text_GetString(NULL, 0, arg1, 7), 0x10);
+                                                                      Text_GetString(NULL, 0, arg1, 7), 0x10);
     sp44->unk_30 = (0, D_889011C8);
     sp44->unk_44 = sp44->unk_44;
     sp44->unk_34 = (0, D_889011CC);
@@ -340,7 +351,7 @@ void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk
     sp40 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     sp54 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, arg1, 8));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp40, (0x1A0 - sp54) / 2, 0xC,
-                                                           Text_GetString(NULL, 0, arg1, 8), 0x10);
+                                                                      Text_GetString(NULL, 0, arg1, 8), 0x10);
     sp40->unk_3C = 0x1C;
     sp40->unk_30 = (0, D_889011C8);
     sp40->unk_44 = sp40->unk_44;
@@ -351,14 +362,16 @@ void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_34, (0x1A0 - sp54) / 2, 0x78,
-                                                           Text_GetString(NULL, 0, arg1, 9), 0x10);
+                                                                      Text_GetString(NULL, 0, arg1, 9), 0x10);
     arg0->unk_34->unk_3C = 0x24;
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00, &arg0->unk_34->unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &arg0->unk_34->unk_00.unk_00);
 
     arg0->unk_38 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_38, 0xC, 0x78, D_889011D4, 0x10);
     arg0->unk_38->unk_3C = 0x24;
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00, &arg0->unk_38->unk_00.unk_00);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &arg0->unk_38->unk_00.unk_00);
 }
 
 void LabUI_ShowSavingStatusWidget(unk_func_889000C4_044* arg0) {

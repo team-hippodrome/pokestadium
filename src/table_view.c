@@ -273,9 +273,12 @@ void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32)) {
         var_a2 = (base + n) - 1;
         if (n >= 0x29) {
             temp_v0_2 = n / 8;
-            var_s2 = (void**)Sort_SelectMedianPointer((s32*)base, (s32*)(base + temp_v0_2), (s32*)(base + temp_v0_2 * 2), cmp);
-            sp8C = (void**)Sort_SelectMedianPointer((s32*)(sp8C - temp_v0_2), (s32*)sp8C, (s32*)(sp8C + temp_v0_2), cmp);
-            var_a2 = (void**)Sort_SelectMedianPointer((s32*)(var_a2 - temp_v0_2 * 2), (s32*)(var_a2 - temp_v0_2), (s32*)var_a2, cmp);
+            var_s2 = (void**)Sort_SelectMedianPointer((s32*)base, (s32*)(base + temp_v0_2),
+                                                      (s32*)(base + temp_v0_2 * 2), cmp);
+            sp8C =
+                (void**)Sort_SelectMedianPointer((s32*)(sp8C - temp_v0_2), (s32*)sp8C, (s32*)(sp8C + temp_v0_2), cmp);
+            var_a2 = (void**)Sort_SelectMedianPointer((s32*)(var_a2 - temp_v0_2 * 2), (s32*)(var_a2 - temp_v0_2),
+                                                      (s32*)var_a2, cmp);
         }
         sp8C = (void**)Sort_SelectMedianPointer((s32*)var_s2, (s32*)sp8C, (s32*)var_a2, cmp);
     }
@@ -358,7 +361,7 @@ void PointerList_Sort(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
 }
 
 void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1,
-                   s32 (*arg2)(unk_func_8830867C_02C_0CC_000*, s32*), s32* arg3) {
+                        s32 (*arg2)(unk_func_8830867C_02C_0CC_000*, s32*), s32* arg3) {
     s32 var_s2;
     unk_func_8830867C_02C_0CC_000** var_s0;
     unk_func_8830867C_02C_0CC_000** var_s1;

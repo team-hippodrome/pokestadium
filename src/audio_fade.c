@@ -22,10 +22,10 @@ extern u8 D_80078A20[16];
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;  // animation variant; only Charizard (6) sets it
+    /* 0x02 */ u8 unk_02; // animation variant; only Charizard (6) sets it
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-} unk_D_80078700;  // size = 0x05
+} unk_D_80078700; // size = 0x05
 
 // Effect_TriggerMoveVisual reads unk_02 through the biased symbol D_800786FD (= D_80078700 - 3).
 unk_D_80078700 D_80078700[151] = {
@@ -246,9 +246,30 @@ s32 Effect_TriggerMoveVisual(u32 move_id, u32 species, u32 sound_kind) {
 
         case 1:
             switch (move_id) {
-                case 0x14: case 0x23: case 0x2B: case 0x30: case 0x32: case 0x35: case 0x3B: case 0x3D:
-                case 0x3E: case 0x3F: case 0x47: case 0x48: case 0x4B: case 0x50: case 0x51: case 0x52:
-                case 0x66: case 0x6D: case 0x7E: case 0x84: case 0x86: case 0x89: case 0x8A: case 0x8D:
+                case 0x14:
+                case 0x23:
+                case 0x2B:
+                case 0x30:
+                case 0x32:
+                case 0x35:
+                case 0x3B:
+                case 0x3D:
+                case 0x3E:
+                case 0x3F:
+                case 0x47:
+                case 0x48:
+                case 0x4B:
+                case 0x50:
+                case 0x51:
+                case 0x52:
+                case 0x66:
+                case 0x6D:
+                case 0x7E:
+                case 0x84:
+                case 0x86:
+                case 0x89:
+                case 0x8A:
+                case 0x8D:
                 case 0xA0:
                     if (Audio_IsSoundPlaying(D_800789F4) != 0) {
                         Audio_QueueFadeSoundCommand(D_800789F4, 0x3C);
@@ -263,10 +284,36 @@ s32 Effect_TriggerMoveVisual(u32 move_id, u32 species, u32 sound_kind) {
                     }
                     break;
 
-                case 0xB: case 0xC: case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D:
-                case 0x4E: case 0x4F: case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x65:
-                case 0x67: case 0x6C: case 0x72: case 0x78: case 0x7B: case 0x7F: case 0x80: case 0x81:
-                case 0x8B: case 0x8E: case 0x93: case 0x94: case 0x95: case 0x99:
+                case 0xB:
+                case 0xC:
+                case 0xD:
+                case 0x10:
+                case 0x12:
+                case 0x2F:
+                case 0x39:
+                case 0x4D:
+                case 0x4E:
+                case 0x4F:
+                case 0x54:
+                case 0x55:
+                case 0x56:
+                case 0x57:
+                case 0x5F:
+                case 0x65:
+                case 0x67:
+                case 0x6C:
+                case 0x72:
+                case 0x78:
+                case 0x7B:
+                case 0x7F:
+                case 0x80:
+                case 0x81:
+                case 0x8B:
+                case 0x8E:
+                case 0x93:
+                case 0x94:
+                case 0x95:
+                case 0x99:
                     break;
             }
             var = 1;
@@ -278,18 +325,59 @@ s32 Effect_TriggerMoveVisual(u32 move_id, u32 species, u32 sound_kind) {
                 D_800789F4 = 0;
             }
             switch (move_id) {
-                case 0xE: case 0x36: case 0x4A: case 0x60: case 0x61: case 0x66: case 0x68: case 0x69:
-                case 0x6A: case 0x6B: case 0x6E: case 0x6F: case 0x70: case 0x71: case 0x72: case 0x73:
-                case 0x74: case 0x85: case 0x87: case 0x90: case 0x97: case 0x9C: case 0x9F: case 0xA4:
+                case 0xE:
+                case 0x36:
+                case 0x4A:
+                case 0x60:
+                case 0x61:
+                case 0x66:
+                case 0x68:
+                case 0x69:
+                case 0x6A:
+                case 0x6B:
+                case 0x6E:
+                case 0x6F:
+                case 0x70:
+                case 0x71:
+                case 0x72:
+                case 0x73:
+                case 0x74:
+                case 0x85:
+                case 0x87:
+                case 0x90:
+                case 0x97:
+                case 0x9C:
+                case 0x9F:
+                case 0xA4:
                     return 0;
 
-                case 0x1: case 0x2: case 0x3: case 0x4: case 0x6: case 0xA: case 0xB: case 0xC:
-                case 0xF: case 0x15: case 0x16: case 0x17: case 0x20: case 0x2C: case 0x44: case 0x7D:
-                case 0x80: case 0x9A: case 0x9E: case 0xA2: case 0xA3:
+                case 0x1:
+                case 0x2:
+                case 0x3:
+                case 0x4:
+                case 0x6:
+                case 0xA:
+                case 0xB:
+                case 0xC:
+                case 0xF:
+                case 0x15:
+                case 0x16:
+                case 0x17:
+                case 0x20:
+                case 0x2C:
+                case 0x44:
+                case 0x7D:
+                case 0x80:
+                case 0x9A:
+                case 0x9E:
+                case 0xA2:
+                case 0xA3:
                     var = 2;
                     break;
 
-                case 0x35: case 0x52: case 0x53:
+                case 0x35:
+                case 0x52:
+                case 0x53:
                     if (D_800786FD[species * 5] == 1) {
                         var = 0;
                     } else {
@@ -323,10 +411,32 @@ s32 Effect_TriggerMoveVisual(u32 move_id, u32 species, u32 sound_kind) {
 
         case 5:
             switch (move_id) {
-                case 0xD: case 0x10: case 0x12: case 0x2F: case 0x39: case 0x4D: case 0x4E: case 0x4F:
-                case 0x54: case 0x55: case 0x56: case 0x57: case 0x5F: case 0x67: case 0x6C: case 0x6D:
-                case 0x72: case 0x78: case 0x7B: case 0x80: case 0x81: case 0x8B: case 0x8E: case 0x93:
-                case 0x94: case 0x99:
+                case 0xD:
+                case 0x10:
+                case 0x12:
+                case 0x2F:
+                case 0x39:
+                case 0x4D:
+                case 0x4E:
+                case 0x4F:
+                case 0x54:
+                case 0x55:
+                case 0x56:
+                case 0x57:
+                case 0x5F:
+                case 0x67:
+                case 0x6C:
+                case 0x6D:
+                case 0x72:
+                case 0x78:
+                case 0x7B:
+                case 0x80:
+                case 0x81:
+                case 0x8B:
+                case 0x8E:
+                case 0x93:
+                case 0x94:
+                case 0x99:
                     return 0;
 
                 default:
@@ -387,8 +497,8 @@ s32 Effect_TriggerMoveVisual(u32 move_id, u32 species, u32 sound_kind) {
     }
 }
 void Audio_FadeAndClearStoredSounds(void) {
-  Audio_QueueFadeSoundCommand(D_800789F8, 0x5A);
-  Audio_QueueFadeSoundCommand(D_800789F4, 0x5A);
-  D_800789F8 = 0;
-  D_800789F4 = 0;
+    Audio_QueueFadeSoundCommand(D_800789F8, 0x5A);
+    Audio_QueueFadeSoundCommand(D_800789F4, 0x5A);
+    D_800789F8 = 0;
+    D_800789F4 = 0;
 }

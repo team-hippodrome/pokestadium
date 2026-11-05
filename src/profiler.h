@@ -1,5 +1,5 @@
 #ifndef _PROFILER_H_
-#define	_PROFILER_H_
+#define _PROFILER_H_
 
 /*
  * This struct contains time values per frame which is kept up by profiler.c. The game has
@@ -26,23 +26,11 @@ struct Profiler {
 }; // size = 0x260
 
 // thread event IDs
-enum ProfilerGameEvent {
-    THREAD5_START,
-    UNK_EVENT_1,
-    UNK_EVENT_2,
-    THREAD5_END
-};
+enum ProfilerGameEvent { THREAD5_START, UNK_EVENT_1, UNK_EVENT_2, THREAD5_END };
 
-enum ProfilerGfxEvent {
-    TASKS_QUEUED,
-    RSP_COMPLETE,
-    RDP_COMPLETE
-};
+enum ProfilerGfxEvent { TASKS_QUEUED, RSP_COMPLETE, RDP_COMPLETE };
 
-enum SetGetTimeDiff {
-    SET_TIME = 1,
-    GET_TIME_DIFF = 2
-};
+enum SetGetTimeDiff { SET_TIME = 1, GET_TIME_DIFF = 2 };
 
 void profiler_log_thread5_time(enum ProfilerGameEvent eventID);
 void profiler_log_thread4_time(void);

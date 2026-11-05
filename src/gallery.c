@@ -57,45 +57,247 @@ s32 Gallery_SetSceneGraphNode();
 s32 func_800303C8();
 
 u32 D_80075FA0[115] = {
-    0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x014000F0, 0x0000000F,
-    0x00000000, 0x00000000, 0x08000000, Gallery_ConfigurePhotoCamera, 0x00000000, 0x05000000,
-    0x0D000000, 0x05000000, 0x13FFFFFF, 0x03C003E8, 0x08000000, Gallery_SetSceneRenderState,
-    0x00000000, 0x14000000, 0x002D0019, 0xFFFFFF28, 0x08000000, Gallery_SetCameraAngleOffsets,
-    0x00000000, 0x14000000, 0x002D0019, 0x80808028, 0x08000000, Gallery_SetCameraAngleOffsetsAlternate,
-    0x00000000, 0x16646464, 0x0F000002, 0x05000000, 0x1F00FFFF, 0x00000000,
-    0x00000000, 0x00000000, 0x00640064, 0x00640000, 0x05000000, 0x09000000,
-    0x08000000, Gallery_SetSceneGraphNode, 0x00000000, 0x06000000, 0x06000000, 0x0F000003,
-    0x05000000, 0x1F00FFFF, 0x00000000, 0x00000000, 0x00000000, 0x00640064,
-    0x00640000, 0x05000000, 0x09000000, 0x08000000, Gallery_SetSceneGraphNode, 0x00000001,
-    0x06000000, 0x06000000, 0x0F000002, 0x05000000, 0x1F00FFFF, 0x00000000,
-    0x00000000, 0x00000000, 0x00640064, 0x00640000, 0x05000000, 0x09000000,
-    0x08000000, Gallery_SetSceneGraphNode, 0x00000002, 0x06000000, 0x06000000, 0x0F000003,
-    0x05000000, 0x1F000000, 0x00000000, 0x00000000, 0xFF060000, 0x00640064,
-    0x00640000, 0x08000000, Gallery_SetSceneModelNode, 0x00000000, 0x06000000, 0x06000000,
-    0x06000000, 0x0B00002D, 0x00000000, 0x014000F0, 0x00000000, 0xFDBD0000,
-    0x00000243, 0x08000000, Gallery_SetScenePoseCamera, 0x00000000, 0x05000000, 0x0D000000,
-    0x05000000, 0x0F000002, 0x05000000, 0x22010000, 0x00000000, 0x08000000,
-    func_800303C8, 0x00000000, 0x06000000, 0x06000000, 0x06000000, 0x06000000,
+    0x0C00FFFF,
+    0x05000000,
+    0x0B00001E,
+    0x00000000,
+    0x014000F0,
+    0x0000000F,
+    0x00000000,
+    0x00000000,
+    0x08000000,
+    Gallery_ConfigurePhotoCamera,
+    0x00000000,
+    0x05000000,
+    0x0D000000,
+    0x05000000,
+    0x13FFFFFF,
+    0x03C003E8,
+    0x08000000,
+    Gallery_SetSceneRenderState,
+    0x00000000,
+    0x14000000,
+    0x002D0019,
+    0xFFFFFF28,
+    0x08000000,
+    Gallery_SetCameraAngleOffsets,
+    0x00000000,
+    0x14000000,
+    0x002D0019,
+    0x80808028,
+    0x08000000,
+    Gallery_SetCameraAngleOffsetsAlternate,
+    0x00000000,
+    0x16646464,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x05000000,
+    0x09000000,
+    0x08000000,
+    Gallery_SetSceneGraphNode,
+    0x00000000,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x05000000,
+    0x09000000,
+    0x08000000,
+    Gallery_SetSceneGraphNode,
+    0x00000001,
+    0x06000000,
+    0x06000000,
+    0x0F000002,
+    0x05000000,
+    0x1F00FFFF,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00640064,
+    0x00640000,
+    0x05000000,
+    0x09000000,
+    0x08000000,
+    Gallery_SetSceneGraphNode,
+    0x00000002,
+    0x06000000,
+    0x06000000,
+    0x0F000003,
+    0x05000000,
+    0x1F000000,
+    0x00000000,
+    0x00000000,
+    0xFF060000,
+    0x00640064,
+    0x00640000,
+    0x08000000,
+    Gallery_SetSceneModelNode,
+    0x00000000,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x0B00002D,
+    0x00000000,
+    0x014000F0,
+    0x00000000,
+    0xFDBD0000,
+    0x00000243,
+    0x08000000,
+    Gallery_SetScenePoseCamera,
+    0x00000000,
+    0x05000000,
+    0x0D000000,
+    0x05000000,
+    0x0F000002,
+    0x05000000,
+    0x22010000,
+    0x00000000,
+    0x08000000,
+    func_800303C8,
+    0x00000000,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x06000000,
     0x01000000,
 };
 u32 D_8007616C[17] = {
-    0x00000000, 0x00000001, 0x00000003, 0x00000004, 0x00000005, 0x00000006,
-    0x00000007, 0x00000008, 0x00000009, 0x0000000A, 0x0000000B, 0x0000000C,
-    0x0000000D, 0x0000000E, 0x0000000F, 0x00000011, 0x00000000,
+    0x00000000, 0x00000001, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007, 0x00000008, 0x00000009,
+    0x0000000A, 0x0000000B, 0x0000000C, 0x0000000D, 0x0000000E, 0x0000000F, 0x00000011, 0x00000000,
 };
 unk_D_800761B0 D_800761B0[12] = {
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
-    { 0, 0, -579, 0, 0, 0, 127, -256, },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
+    {
+        0,
+        0,
+        -579,
+        0,
+        0,
+        0,
+        127,
+        -256,
+    },
 };
 
 void Gallery_ClearActiveScene(void);
@@ -276,13 +478,13 @@ void Gallery_ClearPhotoRenderTarget(void) {
 }
 
 s32 Gallery_GetPhotoPoseIndex(unk_D_83403C60* arg0) {
-    return ((s32) arg0->unk_6C >> 2) & 3;
+    return ((s32)arg0->unk_6C >> 2) & 3;
 }
 
 f32 Gallery_GetPhotoScaleIndex(unk_D_83403C60* arg0) {
     s32 index;
     f32* table;
-    index = ((s32) arg0->unk_6C >> 1) & 1;
+    index = ((s32)arg0->unk_6C >> 1) & 1;
     table = (f32*)Util_ConvertAddrToVirtAddr(&D_80075F88);
     return table[index];
 }
@@ -299,15 +501,15 @@ s32 Gallery_GetScenePoseIndex(s32 arg0) {
 
     var_a1 = NULL;
     switch (arg0) {
-    case 0:
-        var_a1 = D_80075F80;
-        break;
-    case 2:
-        var_a1 = D_80075F84;
-        break;
-    case 5:
-        var_a1 = D_80075F84;
-        break;
+        case 0:
+            var_a1 = D_80075F80;
+            break;
+        case 2:
+            var_a1 = D_80075F84;
+            break;
+        case 5:
+            var_a1 = D_80075F84;
+            break;
     }
     sp1C = var_a1;
     if (Gallery_IsSceneReady(var_a1) != 0) {
@@ -348,9 +550,10 @@ s32 Gallery_SetCameraAngleOffsets(s32 arg0, unk_func_8003013C_arg1* arg1) {
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
-        arg1->unk_1C = (s16) (sp26 + 0x2000);
-        arg1->unk_1E = (s16) (sp24 - 0x2000);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
+        arg1->unk_1C = (s16)(sp26 + 0x2000);
+        arg1->unk_1E = (s16)(sp24 - 0x2000);
     }
     return 0;
 }
@@ -362,9 +565,10 @@ s32 Gallery_SetCameraAngleOffsetsAlternate(s32 arg0, unk_func_8003013C_arg1* arg
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
-        arg1->unk_1C = (s16) (-0x2000 - sp26);
-        arg1->unk_1E = (s16) (sp24 + 0x6000);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
+        arg1->unk_1C = (s16)(-0x2000 - sp26);
+        arg1->unk_1E = (s16)(sp24 + 0x6000);
     }
     return 0;
 }
@@ -388,16 +592,16 @@ s32 Gallery_SetSceneGraphNode(s32 arg0, GraphNode* arg1) {
 
     if (arg0 == 0) {
         temp_v0 = arg1->callbackArg;
-        switch (temp_v0) {                          /* irregular */
-        case 0:
-            D_80075F80->unk_28 = arg1;
-            break;
-        case 1:
-            D_80075F80->unk_2C = arg1;
-            break;
-        case 2:
-            D_80075F80->unk_30 = arg1;
-            break;
+        switch (temp_v0) { /* irregular */
+            case 0:
+                D_80075F80->unk_28 = arg1;
+                break;
+            case 1:
+                D_80075F80->unk_2C = arg1;
+                break;
+            case 2:
+                D_80075F80->unk_30 = arg1;
+                break;
         }
         arg1->callbackArg = 0;
     }
@@ -419,7 +623,7 @@ void Gallery_InitializePhotoGrid(s32 arg0, s32 arg1) {
     temp_v1 = arg0 + 0xC8;
     temp_a2 = arg1 + 0x2B;
     temp_a3 = arg1 - 0x2B;
-    for(i = 0; i < 12; i+=2) {
+    for (i = 0; i < 12; i += 2) {
         D_800761B0[i].unk_00 = temp_v0;
         D_800761B0[i].unk_08 = 0;
         D_800761B0[i + 1].unk_00 = temp_v1;
@@ -464,31 +668,41 @@ s32 func_800303C8(s32 arg0, UNUSED GraphNode* arg1) {
 
         if (temp_v0 == 1) {
             for (i = 0; i < 2; i++) {
-                gDPLoadTextureTile(gDisplayListHead++, D_5001950, G_IM_FMT_RGBA, G_IM_SIZ_16b, 100, 0, 0, (i * 15), 99, ((i + 1) * 15) - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-                gSPTextureRectangle(gDisplayListHead++, 0, (i * 15) << 2, 100 << 2, ((i + 1) * 15) << 2, 0, 0, (i * 15) << 5, 1 << 10, 1 << 10);
-                gSPTextureRectangle(gDisplayListHead++, 100 << 2, (i * 15) << 2, 200 << 2, ((i + 1) * 15) << 2, 0, 100 << 5, (i * 15) << 5, -(1 << 10), 1 << 10);
+                gDPLoadTextureTile(gDisplayListHead++, D_5001950, G_IM_FMT_RGBA, G_IM_SIZ_16b, 100, 0, 0, (i * 15), 99,
+                                   ((i + 1) * 15) - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
+                                   G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+                gSPTextureRectangle(gDisplayListHead++, 0, (i * 15) << 2, 100 << 2, ((i + 1) * 15) << 2, 0, 0,
+                                    (i * 15) << 5, 1 << 10, 1 << 10);
+                gSPTextureRectangle(gDisplayListHead++, 100 << 2, (i * 15) << 2, 200 << 2, ((i + 1) * 15) << 2, 0,
+                                    100 << 5, (i * 15) << 5, -(1 << 10), 1 << 10);
             }
-            gDPLoadTextureTile(gDisplayListHead++, D_5001950, G_IM_FMT_RGBA, G_IM_SIZ_16b, 100, 0, 0, 30, 99, 42, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureTile(gDisplayListHead++, D_5001950, G_IM_FMT_RGBA, G_IM_SIZ_16b, 100, 0, 0, 30, 99, 42, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(gDisplayListHead++, 0, 30 << 2, 100 << 2, 43 << 2, 0, 0, 30 << 5, 1 << 10, 1 << 10);
-            gSPTextureRectangle(gDisplayListHead++, 100 << 2, 30 << 2, 200 << 2, 43 << 2, 0, 100 << 5, 30 << 5, -(1 << 10), 1 << 10);
+            gSPTextureRectangle(gDisplayListHead++, 100 << 2, 30 << 2, 200 << 2, 43 << 2, 0, 100 << 5, 30 << 5,
+                                -(1 << 10), 1 << 10);
             Font_BeginTranslucentTextRendering();
             Font_EnableTwoCycleTexturing();
             Gfx_SetEnvColor(0xF0, 0x78, 0x6E, 0xFF);
             Gfx_SetPrimColor(0xF0, 0xF0, 0x78, 0xFF);
             Font_SetActive(0x10, 0);
-            Font_Printf(0x64 - ((s32) D_80075F9C / 2), 5, sp16C);
+            Font_Printf(0x64 - ((s32)D_80075F9C / 2), 5, sp16C);
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         } else {
-            gDPLoadTextureTile(gDisplayListHead++, D_5003AE8, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 40, 0, 0, 31, 39, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadTextureTile(gDisplayListHead++, D_5003AE8, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 40, 0, 0, 31, 39, 0,
+                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                               G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(gDisplayListHead++, 16 << 2, 0 << 2, 152 << 2, 40 << 2, 0, 0, 0, 1 << 10, 1 << 10);
-            gSPTextureRectangle(gDisplayListHead++, 152 << 2, 0 << 2, 185 << 2, 40 << 2, 0, 32 << 5, 0, -(1 << 10), 1 << 10);
+            gSPTextureRectangle(gDisplayListHead++, 152 << 2, 0 << 2, 185 << 2, 40 << 2, 0, 32 << 5, 0, -(1 << 10),
+                                1 << 10);
             Font_BeginTranslucentTextRendering();
             Font_EnableTwoCycleTexturing();
             Gfx_SetEnvColor(0xDC, 0xFF, 0xDC, 0xFF);
             Gfx_SetPrimColor(0x78, 0xB4, 0xFF, 0xFF);
             Font_SetActive(0x10, 0);
-            Font_Printf(0x64 - ((s32) D_80075F9C / 2), 7, sp16C);
+            Font_Printf(0x64 - ((s32)D_80075F9C / 2), 7, sp16C);
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         }
@@ -501,10 +715,14 @@ s32 func_800303C8(s32 arg0, UNUSED GraphNode* arg1) {
         gSPMatrix(gDisplayListHead++, &gIdentityMtx, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
         gSPVertex(gDisplayListHead++, D_800761B0, 12, 0);
         for (i = 0; i < 10; i += 2) {
-            gDPLoadMultiTile(gDisplayListHead++, D_80075F90->img_p, 0, 0, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_80075F94, D_80075F98, 0, i * 5, D_80075F94 - 1, (i + 2) * 5 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+            gDPLoadMultiTile(gDisplayListHead++, D_80075F90->img_p, 0, 0, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_80075F94,
+                             D_80075F98, 0, i * 5, D_80075F94 - 1, (i + 2) * 5 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSP2Triangles(gDisplayListHead++, i, 2 + i, 1 + i, i, 1 + i, 2 + i, 3 + i, i);
         }
-        gDPLoadMultiTile(gDisplayListHead++, D_80075F90->img_p, 0, 0, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_80075F94, D_80075F98, 0, 40, D_80075F94 - 1, D_80075F98 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadMultiTile(gDisplayListHead++, D_80075F90->img_p, 0, 0, G_IM_FMT_RGBA, G_IM_SIZ_16b, D_80075F94,
+                         D_80075F98, 0, 40, D_80075F94 - 1, D_80075F98 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSP2Triangles(gDisplayListHead++, 9, 8, 10, 0, 11, 9, 10, 0);
         gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
     }
@@ -556,7 +774,7 @@ void Geo_LoadSceneGraphNode(unk_func_80031270* arg0, UNUSED s16 arg1, UNUSED s16
 }
 
 unk_func_80031270* Geo_CreateSceneInstance(s16 arg0, s16 arg1, DepthBuffer* arg2, DepthBuffer* arg3,
-                                 ModelLoadContext* arg4, BinArchive* arg5, unk_D_83403C60* arg6) {
+                                           ModelLoadContext* arg4, BinArchive* arg5, unk_D_83403C60* arg6) {
     UNUSED DepthBuffer* var_v0;
     unk_func_80031270* temp_v0 = main_pool_alloc(sizeof(unk_func_80031270), 0);
 
@@ -705,16 +923,16 @@ void Gallery_LoadPhotoSceneGraph(unk_func_80031270* arg0) {
     temp_v0_4 = sp20(4, 0);
     if (temp_v0_4 == NULL) {
         temp_v1 = arg0->unk_24;
-        temp_v1->unk_01 = (u8) (temp_v1->unk_01 & 0xFFFE);
+        temp_v1->unk_01 = (u8)(temp_v1->unk_01 & 0xFFFE);
         arg0->unk_24->unk_14 = 0;
         return;
     }
-    arg0->unk_24->unk_18 = (s16) temp_v0_4->unk_00;
-    arg0->unk_24->unk_1A = (s16) temp_v0_4->unk_02;
-    arg0->unk_24->unk_1C = (s32) temp_v0_4->unk_04;
+    arg0->unk_24->unk_18 = (s16)temp_v0_4->unk_00;
+    arg0->unk_24->unk_1A = (s16)temp_v0_4->unk_02;
+    arg0->unk_24->unk_1C = (s32)temp_v0_4->unk_04;
     arg0->unk_24->unk_14 = 1;
     temp_v1 = arg0->unk_24;
-    temp_v1->unk_01 = (u8) (temp_v1->unk_01 | 1);
+    temp_v1->unk_01 = (u8)(temp_v1->unk_01 | 1);
 }
 
 u8* Gallery_ProcessSceneInstance(unk_func_80031270* arg0) {
@@ -748,7 +966,6 @@ u8* Gallery_ProcessSceneInstance(unk_func_80031270* arg0) {
             default:
                 break;
         }
- 
     }
     switch (arg0->unk_00) {
         case 0:

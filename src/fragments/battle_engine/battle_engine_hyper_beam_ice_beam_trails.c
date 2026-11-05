@@ -8,11 +8,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -56,10 +56,11 @@ void HyperBeamIceBeamTrail_ResetPool(void) {
     }
 }
 
-void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
-                   s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C,
-                   s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F) {
+void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8,
+                                 u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11,
+                                 f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19,
+                                 s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E,
+                                 unk_D_843C2C00_024* arg1F) {
     unk_D_843C3508* var_v0;
     unk_D_843C3508_0A4* var_v1_2;
     s32 i;
@@ -125,8 +126,8 @@ void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
     }
 }
 
-void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6,
-                   UNUSED f32 arg7) {
+void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4,
+                                                       UNUSED f32 arg5, UNUSED f32 arg6, UNUSED f32 arg7) {
     UNUSED s32 pad[36];
     CameraNode* temp_v0 = BattleAnim_GetCameraContext();
     f32 sp6C;
@@ -166,7 +167,8 @@ void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Ve
     }
 }
 
-void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
+void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5,
+                                                f32 arg6) {
     UNUSED Mtx sp70;
     Mtx sp30;
     UNUSED s32 pad;
@@ -336,15 +338,16 @@ Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
                     switch (var_s6->unk_002) {
                         case 0:
                             if (var_s0->unk_00 <= 0.0) {
-                                HyperBeamIceBeamTrail_ComputeRotatedOffset(var_s0->unk_08 + ((k % 2) * 3.1415927f), &var_s0->unk_18, &spF0,
-                                              var_s0->unk_04, 1.0f, 0.0f, 0.0f);
+                                HyperBeamIceBeamTrail_ComputeRotatedOffset(var_s0->unk_08 + ((k % 2) * 3.1415927f),
+                                                                           &var_s0->unk_18, &spF0, var_s0->unk_04, 1.0f,
+                                                                           0.0f, 0.0f);
                             }
                             break;
 
                         case 1:
                             if (var_s0->unk_00 <= 0.0) {
-                                HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(k % 2, &var_s0->unk_18, &var_s0->unk_0C, &spF0, var_s0->unk_04, 1.0f,
-                                              0.0f, 0.0f);
+                                HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(
+                                    k % 2, &var_s0->unk_18, &var_s0->unk_0C, &spF0, var_s0->unk_04, 1.0f, 0.0f, 0.0f);
                             }
                             break;
                     }

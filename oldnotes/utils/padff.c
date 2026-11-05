@@ -23,64 +23,60 @@
 #include <stdlib.h>
 #include <string.h>
 
-void
-putuint32BE(uint32_t n, FILE *f)
-{
-	fputc(n >> 24, f);
-	fputc(n >> 16, f);
-	fputc(n >> 8, f);
-	fputc(n, f);
+void putuint32BE(uint32_t n, FILE* f) {
+    fputc(n >> 24, f);
+    fputc(n >> 16, f);
+    fputc(n >> 8, f);
+    fputc(n, f);
 }
 
-int
-main(int argc, char *argv[])
-{
-	bool efflag, sameptrflag;
-	int i, runsum, numptrs;
-	long size, cursize;
-	uint32_t *ptrs, *runsums;
-	FILE *f;
-	uint8_t buf[8192];
-	char *ep;
+int main(int argc, char* argv[]) {
+    bool efflag, sameptrflag;
+    int i, runsum, numptrs;
+    long size, cursize;
+    uint32_t *ptrs, *runsums;
+    FILE* f;
+    uint8_t buf[8192];
+    char* ep;
 
-	if (argc != 3) {
-		errx(1, "Usage: padff size file");
-	}
+    if (argc != 3) {
+        errx(1, "Usage: padff size file");
+    }
 
-	size = strtol(argv[1], &ep, 0);
-	if (argv[1][0] == '\0' || *ep != '\0') {
-		errx(1, "invalid size '%s'", argv[1]);
-	}
-	if (errno == ERANGE && (size == LONG_MAX || size == LONG_MIN)) {
-		errx(1, "invalid size '%s'", argv[1]);
-	}
+    size = strtol(argv[1], &ep, 0);
+    if (argv[1][0] == '\0' || *ep != '\0') {
+        errx(1, "invalid size '%s'", argv[1]);
+    }
+    if (errno == ERANGE && (size == LONG_MAX || size == LONG_MIN)) {
+        errx(1, "invalid size '%s'", argv[1]);
+    }
 
-	f = fopen(argv[2], "rb");
-	if (f == NULL) {
-		err(1, "Could not open file '%s'", argv[2]);
-	}
+    f = fopen(argv[2], "rb");
+    if (f == NULL) {
+        err(1, "Could not open file '%s'", argv[2]);
+    }
 
-	fseek(f, 0, SEEK_END);
-	cursize = ftell(f);
+    fseek(f, 0, SEEK_END);
+    cursize = ftell(f);
 
-	if (cursize > size) {
-		errx(1, "size %d is smaller than current filesize", size);
-	}
+    if (cursize > size) {
+        errx(1, "size %d is smaller than current filesize", size);
+    }
 
-	fseek(f, 0, SEEK_SET);
-	for (i = 0; i < cursize; ++i) {
-		fputc(fgetc(f), stdout);
-	}
-	int padspace;
-	padspace = size - ftell(stdout);
-	for (i = 0; i < sizeof buf; ++i) {
-		buf[i] = 0xff;
-	}
-	while (padspace > sizeof buf) {
-		fwrite(buf, sizeof *buf, sizeof buf, stdout);
-		padspace -= sizeof buf;
-	}
-	fwrite(buf, sizeof *buf, padspace, stdout);
+    fseek(f, 0, SEEK_SET);
+    for (i = 0; i < cursize; ++i) {
+        fputc(fgetc(f), stdout);
+    }
+    int padspace;
+    padspace = size - ftell(stdout);
+    for (i = 0; i < sizeof buf; ++i) {
+        buf[i] = 0xff;
+    }
+    while (padspace > sizeof buf) {
+        fwrite(buf, sizeof *buf, sizeof buf, stdout);
+        padspace -= sizeof buf;
+    }
+    fwrite(buf, sizeof *buf, padspace, stdout);
 
-	return 0;
+    return 0;
 }

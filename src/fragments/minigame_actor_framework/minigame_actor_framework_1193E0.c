@@ -83,7 +83,8 @@ void miniUpdateCamera(void) {
     D_87906054->view.targetPosition.y = miniCameraCoords.y;
     D_87906054->view.targetPosition.z = miniCameraCoords.z;
 
-    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, miniCameraDistance, miniCameraXRot, miniCameraYRot);
+    Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, miniCameraDistance,
+                                miniCameraXRot, miniCameraYRot);
 }
 
 s32 minigameDebuggModeControl(void) {

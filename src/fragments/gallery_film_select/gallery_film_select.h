@@ -3,6 +3,4 @@
 
 #include "global.h"
 
-
-
 #endif // _FRAGMENT45_H_

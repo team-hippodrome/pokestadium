@@ -13,7 +13,6 @@
 extern "C" {
 #endif
 
-
 typedef struct RabbitizerLoPairingInfo {
     int instrOffset;
     int64_t value; // could be either an unsigned 32 bits number or a signed one, so use 64 bits to ensure it fits
@@ -22,10 +21,8 @@ typedef struct RabbitizerLoPairingInfo {
     bool isGpGot;
 } RabbitizerLoPairingInfo;
 
-
 NON_NULL(1)
 void RabbitizerLoPairingInfo_Init(RabbitizerLoPairingInfo *self);
-
 
 #ifdef __cplusplus
 }

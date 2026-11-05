@@ -322,7 +322,8 @@ static DioramaObjectDef sDioramaObjDefFinaleGroup[] = {
 static s32 pad_D_86B0C4BC[3] = { 0, 0, 0 };
 
 DioramaObjectDef* sDioramaObjectDefs[] = {
-    sDioramaObjDef0, sDioramaObjDef1, sDioramaObjDefFlyingGroup, sDioramaObjDefWaterGroup, sDioramaObjDefFinaleGroup, NULL,
+    sDioramaObjDef0,          sDioramaObjDef1,           sDioramaObjDefFlyingGroup,
+    sDioramaObjDefWaterGroup, sDioramaObjDefFinaleGroup, NULL,
 };
 
 static u32 sDioramaLandTileData[] = {
@@ -465,14 +466,49 @@ static unk_D_86002F34_000_014 sDioramaTileAttrSet = {
 };
 
 static u32 sDioramaLandTileLayout[] = {
-    0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x13000005, 0x03E303E8,
-    0x2309FFFF, (u32)sDioramaLandGfxSetupDL, 0x0000FFFF, 0xFFFFFFFF, 0x22050000, 0x00000000, 0x08000000, 0x810001D0,
-    (u32)&sDioramaTileAttrSet, 0x22050000, (u32)sDioramaLandTileDrawDL, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
+    0x09000000,
+    0x05000000,
+    0x09000000,
+    0x05000000,
+    0x09000000,
+    0x05000000,
+    0x13000005,
+    0x03E303E8,
+    0x2309FFFF,
+    (u32)sDioramaLandGfxSetupDL,
+    0x0000FFFF,
+    0xFFFFFFFF,
+    0x22050000,
+    0x00000000,
+    0x08000000,
+    0x810001D0,
+    (u32)&sDioramaTileAttrSet,
+    0x22050000,
+    (u32)sDioramaLandTileDrawDL,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x04000000,
 };
 
 u32 sDioramaLandStageLayout[] = {
-    0x17000001, 0x00000010, &sDioramaLandGfxTileParams, 0x00000000, sDioramaLandTileVerts, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
-    0x00008000, 0x05000000, 0x03000000,  sDioramaLandTileLayout, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000001,
+    0x00000010,
+    &sDioramaLandGfxTileParams,
+    0x00000000,
+    sDioramaLandTileVerts,
+    0x05000000,
+    0x1C000000,
+    0x00008000,
+    0x00008000,
+    0x00008000,
+    0x05000000,
+    0x03000000,
+    sDioramaLandTileLayout,
+    0x06000000,
+    0x06000000,
+    0x01000000,
+    0x00000000,
 };
 
 static u32 sDioramaSeaTileData[] = {
@@ -604,13 +640,48 @@ static unk_D_86002F34_000_014 sDioramaSeaTileAttrSet = {
     sDioramaTileAttrTable3,
 };
 static u32 sDioramaSeaTileLayout[] = {
-    0x09000000,  0x05000000, 0x09000000, 0x05000000, 0x09000000, 0x05000000, 0x13000005, 0x03E303E8,
-    0x2306FFFF,  sDioramaSeaGfxSetupDL, 0x0000FFFF, 0xFFFFFFFF, 0x22010000, 0x00000000, 0x08000000, 0x810001D0,
-    &sDioramaSeaTileAttrSet, 0x22010000, sDioramaSeaTileDrawDL, 0x06000000, 0x06000000, 0x06000000, 0x04000000,
+    0x09000000,
+    0x05000000,
+    0x09000000,
+    0x05000000,
+    0x09000000,
+    0x05000000,
+    0x13000005,
+    0x03E303E8,
+    0x2306FFFF,
+    sDioramaSeaGfxSetupDL,
+    0x0000FFFF,
+    0xFFFFFFFF,
+    0x22010000,
+    0x00000000,
+    0x08000000,
+    0x810001D0,
+    &sDioramaSeaTileAttrSet,
+    0x22010000,
+    sDioramaSeaTileDrawDL,
+    0x06000000,
+    0x06000000,
+    0x06000000,
+    0x04000000,
 };
 u32 sDioramaSeaStageLayout[] = {
-    0x17000001, 0x00000010, &sDioramaSeaGfxTileParams, 0x00000000, sDioramaSeaTileVerts, 0x05000000, 0x1C000000, 0x00008000, 0x00008000,
-    0x00008000, 0x05000000, 0x03000000,  sDioramaSeaTileLayout, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000001,
+    0x00000010,
+    &sDioramaSeaGfxTileParams,
+    0x00000000,
+    sDioramaSeaTileVerts,
+    0x05000000,
+    0x1C000000,
+    0x00008000,
+    0x00008000,
+    0x00008000,
+    0x05000000,
+    0x03000000,
+    sDioramaSeaTileLayout,
+    0x06000000,
+    0x06000000,
+    0x01000000,
+    0x00000000,
 };
 static GfxTileParams sDioramaTileParams[] = {
     { {
@@ -731,10 +802,23 @@ static unk_D_86B0DBCC sDioramaObjPresetTable[] = {
 };
 
 static u32 sCompletionGeoLayout[] = {
-    0x0C00FFFF,  0x05000000, 0x0B00001E, 0x00000000,    0x014000F0, 0x0000000F, 0x00000000,    0x00000000, 0x05000000,
-    0x0D000000,  0x05000000, 0x14000000, 0x002D0019,    0xFFFFFF28, 0x08000000, Completion_LightAngleCallbackA, 0x00000000, 0x14000000,
-    0x002D0019,  0x80808028, 0x08000000, Completion_LightAngleCallbackB, 0x00000000, 0x16646464, 0x0F000003,    0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000,    0x06000000, 0x01000000,
+    0x0C00FFFF, 0x05000000,
+    0x0B00001E, 0x00000000,
+    0x014000F0, 0x0000000F,
+    0x00000000, 0x00000000,
+    0x05000000, 0x0D000000,
+    0x05000000, 0x14000000,
+    0x002D0019, 0xFFFFFF28,
+    0x08000000, Completion_LightAngleCallbackA,
+    0x00000000, 0x14000000,
+    0x002D0019, 0x80808028,
+    0x08000000, Completion_LightAngleCallbackB,
+    0x00000000, 0x16646464,
+    0x0F000003, 0x05000000,
+    0x0A000000, &D_800AC840,
+    0x06000000, 0x06000000,
+    0x06000000, 0x06000000,
+    0x01000000,
 };
 
 static GraphNode* D_86B0EBC0;
@@ -760,7 +844,8 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
         ptr->unk_1C = sp26 + 0x2000;
         ptr->unk_1E = sp24 - 0x2000;
     }
@@ -774,7 +859,8 @@ s32 Completion_LightAngleCallbackB(s32 arg0, GraphNode* arg1) {
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
         ptr->unk_1C = -0x2000 - sp26;
         ptr->unk_1E = sp24 + 0x6000;
     }
@@ -898,7 +984,8 @@ void Completion_InitCamera(void) {
     D_86B0EBCC = 120.0f;
 
     Vec3f_SetComponentsDuplicate(&D_86B0EBC4->view.targetPosition, 0.0f, 132.5f, -225.0f);
-    Camera_ComputeEyeFromAngles(&D_86B0EBC4->view.targetPosition, &D_86B0EBC4->view.eyePosition, D_86B0EBCC, D_86B0EBC8, D_86B0EBCA);
+    Camera_ComputeEyeFromAngles(&D_86B0EBC4->view.targetPosition, &D_86B0EBC4->view.eyePosition, D_86B0EBCC, D_86B0EBC8,
+                                D_86B0EBCA);
 
     D_86B0EBC4->perspective.nearPlane = 10.0f;
     D_86B0EBC4->perspective.farPlane = 6400.0f;
@@ -980,10 +1067,10 @@ void Completion_ResetDialogText(void) {
 }
 
 void Completion_DrawDialogBox(void) {
-    FirstClearBonus_DrawDialogFrame(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2), D_86B0EBE0->unk_08,
-                  D_86B0EBE0->unk_0C, 0x14, 0x14, 0xB4, 0x80);
-    UI_DrawAlphaQuad(D_86B0EBE0->unk_16 - 2, (D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2)) - 2, D_86B0EBE0->unk_08 + 4,
-                  D_86B0EBE0->unk_0C + 4, 0);
+    FirstClearBonus_DrawDialogFrame(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2),
+                                    D_86B0EBE0->unk_08, D_86B0EBE0->unk_0C, 0x14, 0x14, 0xB4, 0x80);
+    UI_DrawAlphaQuad(D_86B0EBE0->unk_16 - 2, (D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2)) - 2,
+                     D_86B0EBE0->unk_08 + 4, D_86B0EBE0->unk_0C + 4, 0);
 }
 
 void Completion_UpdateGiftDialogFirstTime(void) {
@@ -1225,46 +1312,55 @@ void Completion_UpdateGiftDialogWithExisting(void) {
 }
 
 void Completion_DrawLogoBanner(void) {
-    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0, 0, 0x50, 0x30, 0x4F, 0,
-                  &D_86B0EBD8->unk_1C, 0);
-    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00 + 0x50, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0x50, 0, 0xA0, 0x30,
-                  0x9F, 0x50, &D_86B0EBD8->unk_1C, 0);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0, 0, 0x40, 0x30, 0x3F, 0,
-                  &D_86B0EBD8->unk_1C, 1);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x40, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x40, 0, 0x80, 0x30,
-                  0x7F, 0x40, &D_86B0EBD8->unk_1C, 1);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x80, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x80, 0, 0xC0, 0x30,
-                  0xBF, 0x80, &D_86B0EBD8->unk_1C, 1);
+    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0, 0, 0x50,
+                              0x30, 0x4F, 0, &D_86B0EBD8->unk_1C, 0);
+    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00 + 0x50, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0x50, 0,
+                              0xA0, 0x30, 0x9F, 0x50, &D_86B0EBD8->unk_1C, 0);
+    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0, 0, 0x40,
+                              0x30, 0x3F, 0, &D_86B0EBD8->unk_1C, 1);
+    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x40, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x40, 0,
+                              0x80, 0x30, 0x7F, 0x40, &D_86B0EBD8->unk_1C, 1);
+    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x80, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x80, 0,
+                              0xC0, 0x30, 0xBF, 0x80, &D_86B0EBD8->unk_1C, 1);
 }
 
 s32 Completion_AnimateLogoBannerColor(void) {
-    D_86B0EBD8->unk_1C.unk_00.unk_00 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00);
-    D_86B0EBD8->unk_1C.unk_00.unk_02 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02);
-    D_86B0EBD8->unk_1C.unk_00.unk_04 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04);
-    D_86B0EBD8->unk_1C.unk_00.unk_06 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06);
-    D_86B0EBD8->unk_1C.unk_00.unk_08 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08);
-    D_86B0EBD8->unk_1C.unk_00.unk_0A = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A);
-    D_86B0EBD8->unk_1C.unk_00.unk_0C = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C);
-    D_86B0EBD8->unk_1C.unk_00.unk_0E = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E);
-    D_86B0EBD8->unk_1C.unk_00.unk_10 = Math_StepToS32(
-        D_86B0EBD8->unk_1C.unk_00.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10,
-        sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10);
+    D_86B0EBD8->unk_1C.unk_00.unk_00 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00);
+    D_86B0EBD8->unk_1C.unk_00.unk_02 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02);
+    D_86B0EBD8->unk_1C.unk_00.unk_04 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04);
+    D_86B0EBD8->unk_1C.unk_00.unk_06 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06);
+    D_86B0EBD8->unk_1C.unk_00.unk_08 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08);
+    D_86B0EBD8->unk_1C.unk_00.unk_0A =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A);
+    D_86B0EBD8->unk_1C.unk_00.unk_0C =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C);
+    D_86B0EBD8->unk_1C.unk_00.unk_0E =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E);
+    D_86B0EBD8->unk_1C.unk_00.unk_10 =
+        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10,
+                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10);
 
     if ((D_86B0EBD8->unk_1C.unk_00.unk_00 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00) &&
         (D_86B0EBD8->unk_1C.unk_00.unk_02 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02) &&
@@ -1297,7 +1393,7 @@ Gfx* Completion_DrawBlinkingCursorIcon(void) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
         Gfx_DrawTextureRgba32(D_86B0EBE0->unk_16 + 0x9E, D_86B0EBE0->unk_14 + 9, 0x10, 0x10,
-                      sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00, 0x10, 0);
+                              sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00, 0x10, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
@@ -1334,7 +1430,8 @@ s32 Completion_MoveCameraToFront(void) {
     tmp.y = 30.0f;
     tmp.z = 100.0f;
 
-    D_86B0EBC4->view.targetPosition.y = Math_StepToF(D_86B0EBC4->view.targetPosition.y, 45.0f, tmp.x / 65.0f, tmp.x / 65.0f);
+    D_86B0EBC4->view.targetPosition.y =
+        Math_StepToF(D_86B0EBC4->view.targetPosition.y, 45.0f, tmp.x / 65.0f, tmp.x / 65.0f);
     D_86B0EBC4->view.eyePosition.y = Math_StepToF(D_86B0EBC4->view.eyePosition.y, 50.0f, tmp.y / 65.0f, tmp.y / 65.0f);
     D_86B0EBC4->view.eyePosition.z = Math_StepToF(D_86B0EBC4->view.eyePosition.z, 190.0f, tmp.z / 60.0f, tmp.z / 60.0f);
 

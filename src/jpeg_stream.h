@@ -9,8 +9,8 @@
 #include "src/memory.h"
 
 typedef struct ret_func_8000484C {
-	/* 0x00 */ char unk00[0x90];
-	/* 0x90 */ s32 unk_90;
+    /* 0x00 */ char unk00[0x90];
+    /* 0x90 */ s32 unk_90;
 } ret_func_8000484C; // size >= 0x94
 
 typedef struct PERSSZP {
@@ -23,7 +23,7 @@ typedef struct PERSSZP {
 
 typedef struct PRESJPEG {
     /* 0x00 */ char magic[0x8]; // PRESJPEG
-    /* 0x08 */ u32 unk_08; // header size? always 0x10
+    /* 0x08 */ u32 unk_08;      // header size? always 0x10
     /* 0x0C */ u32 unk_0C;
 } PRESJPEG; // size = 0x10
 

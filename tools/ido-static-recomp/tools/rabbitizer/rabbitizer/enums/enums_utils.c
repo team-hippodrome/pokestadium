@@ -3,7 +3,6 @@
 
 #include "enums_utils.h"
 
-
 int rabbitizer_EnumMetadata_Initialize(PyObject *submodule, RabbitizerEnumMetadata *enumValues) {
     for (size_t i = 0; enumValues[i].enumType != 0; i++) {
         PyObject *args;
@@ -13,7 +12,7 @@ int rabbitizer_EnumMetadata_Initialize(PyObject *submodule, RabbitizerEnumMetada
             goto error;
         }
 
-        enumValues[i].instance = PyObject_CallObject((PyObject*)&rabbitizer_type_Enum_TypeObject, args);
+        enumValues[i].instance = PyObject_CallObject((PyObject *)&rabbitizer_type_Enum_TypeObject, args);
         Py_DECREF(args);
         if (enumValues[i].instance == NULL) {
             goto error;

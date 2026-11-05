@@ -50,8 +50,9 @@ void SushiGame_NameTagGeoCallback(s32 arg0, UNUSED s32 arg1);
 static u32 D_86807078[] = {
     // The two addresses are the US ones written out; naming the symbols instead lets the
     // linker place them per region (the Japanese build has both 0x1A0 lower).
-    0x17000000, 0x00000000, 0x00000000, 0x00000000, (u32)D_86806FD0, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, (u32)SushiGame_NameTagGeoCallback, 0x00000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, (u32)D_86806FD0,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, (u32)SushiGame_NameTagGeoCallback,
+    0x00000000, 0x06000000, 0x01000000,
 };
 static Controller** D_868070AC[] = {
     &gPlayer1Controller,
@@ -139,8 +140,8 @@ void SushiGame_NameTagGeoCallback(s32 arg0, UNUSED s32 arg1) {
                              AA_EN | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA | ALPHA_CVG_SEL | G_RM_PASS,
                              AA_EN | Z_CMP | Z_UPD | CVG_DST_FULL | ZMODE_OPA | CVG_X_ALPHA | ALPHA_CVG_SEL |
                                  GBL_c2(G_BL_CLR_IN, G_BL_A_IN, G_BL_CLR_MEM, G_BL_A_MEM));
-            gDPSetEnvColor(gDisplayListHead++, D_8006F09C->textureTint.r, D_8006F09C->textureTint.g, D_8006F09C->textureTint.b,
-                           D_8006F09C->lodFraction);
+            gDPSetEnvColor(gDisplayListHead++, D_8006F09C->textureTint.r, D_8006F09C->textureTint.g,
+                           D_8006F09C->textureTint.b, D_8006F09C->lodFraction);
             gSPDisplayList(gDisplayListHead++, D_86807010);
 
             GeoRender_SetRenderMode();
@@ -1014,7 +1015,9 @@ void func_86803C6C(unk_D_86807558* arg0) {
             if (arg0->unk_060 == 2) {
                 arg0->unk_0D0.g = arg0->unk_0D0.b = 255.0f * spB8;
                 if (!(arg0->unk_006 & 0xF)) {
-                    Particle_EmitBurstAtTransform(1.0f, arg0->unk_0E4.anchors[5].position, D_8006F05C, MiniFx_UpdateRandomOffsetPalette10RiseFadeParticle, &gMiniFxParticleDescriptorI4Frame, 4);
+                    Particle_EmitBurstAtTransform(1.0f, arg0->unk_0E4.anchors[5].position, D_8006F05C,
+                                                  MiniFx_UpdateRandomOffsetPalette10RiseFadeParticle,
+                                                  &gMiniFxParticleDescriptorI4Frame, 4);
                 }
             } else {
                 arg0->unk_0D0.r = arg0->unk_0D0.b = 255.0f * spB8;
@@ -1771,7 +1774,8 @@ void SushiGame_InitCamera(void) {
     D_86808498.unk_1A = 0x16A8;
     D_86808498.unk_1C = 880.0f;
 
-    Camera_ComputeEyeFromAngles(&D_86808498.unk_00, &D_86808498.unk_0C, D_86808498.unk_1C, D_86808498.unk_1A, D_86808498.unk_18);
+    Camera_ComputeEyeFromAngles(&D_86808498.unk_00, &D_86808498.unk_0C, D_86808498.unk_1C, D_86808498.unk_1A,
+                                D_86808498.unk_18);
     SushiGame_UpdateCameraBasis(&D_86808498);
 
     D_86808490->perspective.nearPlane = 50.0f;
@@ -1779,7 +1783,8 @@ void SushiGame_InitCamera(void) {
 }
 
 void SushiGame_UpdateCamera(void) {
-    Camera_ComputeEyeFromAngles(&D_86808498.unk_00, &D_86808498.unk_0C, D_86808498.unk_1C, D_86808498.unk_1A, D_86808498.unk_18);
+    Camera_ComputeEyeFromAngles(&D_86808498.unk_00, &D_86808498.unk_0C, D_86808498.unk_1C, D_86808498.unk_1A,
+                                D_86808498.unk_18);
     SushiGame_UpdateCameraBasis(&D_86808498);
     D_86808490->view.eyePosition = D_86808498.unk_0C;
     D_86808490->view.targetPosition = D_86808498.unk_00;

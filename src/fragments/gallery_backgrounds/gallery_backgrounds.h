@@ -81,7 +81,7 @@ void Gallery_DrawPhotoThumbnail(u16* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg
 void Gallery_DrawSelectionCorners(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void Gallery_DrawStatusIcon(s32 arg0, s32 arg1, s32 arg2);
 void Gallery_InitSceneGrid(unk_D_83407B38* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, ModelLoadContext* arg5,
-    BinArchive* arg6, unk_D_83403C60* arg7, s32 arg8, s32 arg9);
+                           BinArchive* arg6, unk_D_83403C60* arg7, s32 arg8, s32 arg9);
 void Gallery_ProcessSceneGrid(unk_D_83407B38* arg0);
 void Gallery_FinishActiveScene(void);
 s32 Gallery_CountReadyScenesOnPage(unk_D_83407B38* arg0, s32 arg1);

@@ -265,14 +265,18 @@ void AreaSelect_AdvanceMagnemiteTrail(void) {
 
     for (trail_index = 0; trail_index < 3; trail_index++) {
         for (history_index = 4; history_index >= 0; history_index--) {
-            sAreaSelectMagnemiteTrails[trail_index].afterimages[history_index + 1] = sAreaSelectMagnemiteTrails[trail_index].afterimages[history_index];
+            sAreaSelectMagnemiteTrails[trail_index].afterimages[history_index + 1] =
+                sAreaSelectMagnemiteTrails[trail_index].afterimages[history_index];
         }
 
         scaled_radius = (sAreaSelectMagnemiteTrails[0].scalePercent * sAreaSelectMagnemiteTrails[0].orbitRadius) / 100;
 
-        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].x = sAreaSelectMagnemiteTrails[0].centerX + (COSS((orbit_angle)) * scaled_radius);
-        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].y = sAreaSelectMagnemiteTrails[0].centerY + (SINS((orbit_angle)) * scaled_radius);
-        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].diameter = (sAreaSelectMagnemiteTrails[0].scalePercent * 72) / 100;
+        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].x =
+            sAreaSelectMagnemiteTrails[0].centerX + (COSS((orbit_angle)) * scaled_radius);
+        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].y =
+            sAreaSelectMagnemiteTrails[0].centerY + (SINS((orbit_angle)) * scaled_radius);
+        sAreaSelectMagnemiteTrails[trail_index].afterimages[0].diameter =
+            (sAreaSelectMagnemiteTrails[0].scalePercent * 72) / 100;
 
         orbit_angle -= 21845;
     }
@@ -302,10 +306,14 @@ Vtx* AreaSelect_BuildMagnemiteQuadVerts(s16 x, s16 y, s16 diameter, Color_RGBA8 
     if (vertices != NULL) {
         half_extent = diameter / 2;
 
-        Gfx_SetVertexAttributes(&vertices[0], x - half_extent, y - half_extent, -1, 0, 0, color.r, color.g, color.b, color.a);
-        Gfx_SetVertexAttributes(&vertices[1], x - half_extent, y + half_extent, -1, 0, 1152, color.r, color.g, color.b, color.a);
-        Gfx_SetVertexAttributes(&vertices[2], x + half_extent, y + half_extent, -1, 1152, 1152, color.r, color.g, color.b, color.a);
-        Gfx_SetVertexAttributes(&vertices[3], x + half_extent, y - half_extent, -1, 1152, 0, color.r, color.g, color.b, color.a);
+        Gfx_SetVertexAttributes(&vertices[0], x - half_extent, y - half_extent, -1, 0, 0, color.r, color.g, color.b,
+                                color.a);
+        Gfx_SetVertexAttributes(&vertices[1], x - half_extent, y + half_extent, -1, 0, 1152, color.r, color.g, color.b,
+                                color.a);
+        Gfx_SetVertexAttributes(&vertices[2], x + half_extent, y + half_extent, -1, 1152, 1152, color.r, color.g,
+                                color.b, color.a);
+        Gfx_SetVertexAttributes(&vertices[3], x + half_extent, y - half_extent, -1, 1152, 0, color.r, color.g, color.b,
+                                color.a);
     }
 
     return vertices;
@@ -389,7 +397,8 @@ void AreaSelect_DrawNameBanner(s16 x, s16 y, s16 alpha, s16 area) {
             Gfx_DrawTextureRgba16(x, y + (i * 4), 196, 4, area_name_banner_texture + (i * 1568), 196, 0);
         }
 
-        if ((gSessionContext.inRound2 != 0) && ((area == AREA_STADIUM) || (area == AREA_GYM_LEADER_CASTLE) || (area == AREA_VS_MEWTWO))) {
+        if ((gSessionContext.inRound2 != 0) &&
+            ((area == AREA_STADIUM) || (area == AREA_GYM_LEADER_CASTLE) || (area == AREA_VS_MEWTWO))) {
             Gfx_DrawTextureRgba16(x - 32, y + 13, 36, 36, gRound2BadgeTexture, 36, 0);
         }
 
@@ -411,8 +420,10 @@ void AreaSelect_DrawNameBannerCrossfade(s16 menu_state, s16 x, s16 y) {
 
     if (menu_state == AREA_SELECT_MOVE) {
         crossfade_alpha = (sAreaSelectTransitionFrame * 42) + 3;
-        AreaSelect_DrawNameBanner(x, (y + (sAreaSelectBannerBobOffset / 4)) - 5, 0xFF - crossfade_alpha, sAreaSelectPreviousIndex);
-        AreaSelect_DrawNameBanner(x, (y + (sAreaSelectBannerBobOffset / 4)) - 5, crossfade_alpha, sAreaSelectSelectedIndex);
+        AreaSelect_DrawNameBanner(x, (y + (sAreaSelectBannerBobOffset / 4)) - 5, 0xFF - crossfade_alpha,
+                                  sAreaSelectPreviousIndex);
+        AreaSelect_DrawNameBanner(x, (y + (sAreaSelectBannerBobOffset / 4)) - 5, crossfade_alpha,
+                                  sAreaSelectSelectedIndex);
     } else if ((menu_state != AREA_SELECT_REVEAL_MEWTWO) && (menu_state != AREA_SELECT_INTRO)) {
         AreaSelect_DrawNameBanner(x, (y + (sAreaSelectBannerBobOffset / 4)) - 5, 0xFF, sAreaSelectSelectedIndex);
     }
@@ -450,8 +461,8 @@ void AreaSelect_DrawMewtwoMarker(s16 x, s16 y) {
             gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
         }
 
-        gDPLoadTextureBlock_4b(gDisplayListHead++, sAreaSelectMarkerTextures[sAreaSelectMarkerFrame], G_IM_FMT_I, 48, 40, 0,
-                               G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+        gDPLoadTextureBlock_4b(gDisplayListHead++, sAreaSelectMarkerTextures[sAreaSelectMarkerFrame], G_IM_FMT_I, 48,
+                               40, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                G_TX_NOLOD, G_TX_NOLOD);
 
         Gfx_DrawTexturedRectClipped(x - 40, y - 40, 80, 80, 0, 0, 0x200, 0x200, 0);
@@ -466,12 +477,14 @@ void AreaSelect_DrawGlowCircle(s16 x, s16 y, s16 diameter) {
     }
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPLoadTextureBlock_4b(gDisplayListHead++, sAreaSelectGlowCircleTexture, G_IM_FMT_I, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP,
-                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, sAreaSelectGlowCircleTexture, G_IM_FMT_I, 64, 64, 0,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                           G_TX_NOLOD);
 
     if (1) {} // karodo
 
-    Gfx_DrawTexturedRectClipped(x - (diameter / 2), y - (diameter / 2), diameter, diameter, 0, 0, 0x10000 / diameter, 0x10000 / diameter, 0);
+    Gfx_DrawTexturedRectClipped(x - (diameter / 2), y - (diameter / 2), diameter, diameter, 0, 0, 0x10000 / diameter,
+                                0x10000 / diameter, 0);
 }
 
 void AreaSelect_DrawInfoPanel(s16 x, s16 y, s16 width, s16 height, u8 r, u8 g, u8 b, u8 alpha) {
@@ -500,23 +513,26 @@ void AreaSelect_DrawInfoPanel(s16 x, s16 y, s16 width, s16 height, u8 r, u8 g, u
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(x, y, corner_width, corner_height, 0, 0, 0x2000 / corner_width, 0x2000 / corner_height, 0);
+    Gfx_DrawTexturedRectClipped(x, y, corner_width, corner_height, 0, 0, 0x2000 / corner_width, 0x2000 / corner_height,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((x + width) - corner_width, y, corner_width, corner_height, 0, 0, 0x2000 / corner_width, 0x2000 / corner_height, 0);
+    Gfx_DrawTexturedRectClipped((x + width) - corner_width, y, corner_width, corner_height, 0, 0, 0x2000 / corner_width,
+                                0x2000 / corner_height, 0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(x, (y + height) - corner_height, corner_width, corner_height, 0, 0, 0x2000 / corner_width, 0x2000 / corner_height, 0);
+    Gfx_DrawTexturedRectClipped(x, (y + height) - corner_height, corner_width, corner_height, 0, 0,
+                                0x2000 / corner_width, 0x2000 / corner_height, 0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((x + width) - corner_width, (y + height) - corner_height, corner_width, corner_height, 0, 0, 0x2000 / corner_width,
-                  0x2000 / corner_height, 0);
+    Gfx_DrawTexturedRectClipped((x + width) - corner_width, (y + height) - corner_height, corner_width, corner_height,
+                                0, 0, 0x2000 / corner_width, 0x2000 / corner_height, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -618,7 +634,8 @@ s16 AreaSelect_UpdateCursorMove(void) {
 
     sAreaSelectMagnemiteTrails->centerX = (((selected_x - previous_x) * sAreaSelectTransitionFrame) / 6) + previous_x;
     sAreaSelectMagnemiteTrails->centerY = (((selected_y - previous_y) * sAreaSelectTransitionFrame) / 6) + previous_y;
-    sAreaSelectMagnemiteTrails->orbitRadius = (((selected_radius - previous_radius) * sAreaSelectTransitionFrame) / 6) + previous_radius;
+    sAreaSelectMagnemiteTrails->orbitRadius =
+        (((selected_radius - previous_radius) * sAreaSelectTransitionFrame) / 6) + previous_radius;
     sAreaSelectMagnemiteTrails->scalePercent = 100;
     sAreaSelectMagnemiteTrails->orbitAngle += 0x800;
 
@@ -717,7 +734,8 @@ void AreaSelect_SetupOrthoProjection(void) {
     gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
     gSPPerspNormalize(gDisplayListHead++, 0xFFFF);
     gSPViewport(gDisplayListHead++, (u32)&sAreaSelectViewport & 0x1FFFFFFF);
-    gSPMatrix(gDisplayListHead++, (u32)&sAreaSelectProjectionMtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gDisplayListHead++, (u32)&sAreaSelectProjectionMtx & 0x1FFFFFFF,
+              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, (u32)&gIdentityMtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 }
 
@@ -730,7 +748,8 @@ void AreaSelect_Draw(s16 menu_state) {
     } else if (sAreaSelectBackgroundFadeAlpha == 0xFF) {
         Gfx_DrawTiledRgba16Image(sAreaSelectNextBackground);
     } else {
-        AreaSelect_DrawCrossfadeBackground(sAreaSelectCurrentBackground, sAreaSelectNextBackground, sAreaSelectBackgroundFadeAlpha);
+        AreaSelect_DrawCrossfadeBackground(sAreaSelectCurrentBackground, sAreaSelectNextBackground,
+                                           sAreaSelectBackgroundFadeAlpha);
     }
 
     AreaSelect_DrawMewtwoMarker(300, 65);
@@ -845,12 +864,15 @@ void AreaSelect_LoadBackgroundArt(void) {
             sAreaSelectCurrentBackground = BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_DAY_DODRIO);
             sAreaSelectNextBackground = BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_NIGHT_DODRIO);
         } else {
-            sAreaSelectNextBackground = sAreaSelectCurrentBackground = BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_NIGHT_DODRIO);
+            sAreaSelectNextBackground = sAreaSelectCurrentBackground =
+                BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_NIGHT_DODRIO);
         }
     } else if (sAreaSelectGameOptions.gbTowerUnlockTier == 1) {
-        sAreaSelectNextBackground = sAreaSelectCurrentBackground = BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_DAY_DODUO);
+        sAreaSelectNextBackground = sAreaSelectCurrentBackground =
+            BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_DAY_DODUO);
     } else {
-        sAreaSelectNextBackground = sAreaSelectCurrentBackground = BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_DAY_NORMAL);
+        sAreaSelectNextBackground = sAreaSelectCurrentBackground =
+            BinArchive_GetFile(sAreaSelectBackgroundArchive, AREA_BACKGROUND_DAY_NORMAL);
     }
 }
 
@@ -876,8 +898,7 @@ s32 AreaSelect_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     AreaSelect_LoadBackgroundArt();
     sAreaSelectSelectedIndex = AREA_NONE;
 
-    if ((sAreaSelectModeSettings.mewtwoUnlocked != 0) &&
-        !(gSessionContext.sessionFlags & SESSION_FLAG_REVEAL_MEWTWO) &&
+    if ((sAreaSelectModeSettings.mewtwoUnlocked != 0) && !(gSessionContext.sessionFlags & SESSION_FLAG_REVEAL_MEWTWO) &&
         !(sAreaSelectModeSettings.clearedModes & (1 << RULE_CATEGORY_VS_MEWTWO))) {
         sAreaSelectBackgroundFadeAlpha = 0xFF;
     }

@@ -123,7 +123,8 @@ s16 GeoRender_NormalizeTextureFormat(s16 arg0);
 void GeoRender_SubmitMaterial(s16 arg0, MtxF* arg1);
 void GeoRender_SubmitDisplayList(Gfx* arg0, s32 arg1);
 void GeoRender_SetMaterialParams(Color_RGBA8_u32 arg0, u8 arg1, u32 arg2);
-void GeoRender_SetMaterialTexture(s32 arg0, Color_RGBA8_u32 arg1, unk_D_86002F34_alt11_018* arg2, unk_D_86002F34_alt11_018* arg3, s32 arg4);
+void GeoRender_SetMaterialTexture(s32 arg0, Color_RGBA8_u32 arg1, unk_D_86002F34_alt11_018* arg2,
+                                  unk_D_86002F34_alt11_018* arg3, s32 arg4);
 void GeoRender_InitMaterialState(s32 arg0, s32 arg1);
 void GeoRender_FlushMaterialSlots(void);
 

@@ -5,16 +5,13 @@
 
 #include "analysis/RabbitizerRegistersTracker.h"
 
-
 typedef struct PyRabbitizerRegistersTracker {
-    PyObject_HEAD
-    RabbitizerRegistersTracker tracker;
+    PyObject_HEAD RabbitizerRegistersTracker tracker;
 } PyRabbitizerRegistersTracker;
-
 
 static void rabbitizer_type_RegistersTracker_dealloc(PyRabbitizerRegistersTracker *self) {
     RabbitizerRegistersTracker_destroy(&self->tracker);
-    Py_TYPE(self)->tp_free((PyObject *) self);
+    Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 static int rabbitizer_type_RegistersTracker_init(PyRabbitizerRegistersTracker *self, PyObject *args, PyObject *kwds) {
@@ -34,7 +31,6 @@ static int rabbitizer_type_RegistersTracker_init(PyRabbitizerRegistersTracker *s
 
     return 0;
 }
-
 
 static PyObject *rabbitizer_type_RegistersTracker_moveRegisters(PyRabbitizerRegistersTracker *self, PyObject *args, PyObject *kwds) {
     static char *kwlist[] = { "instr", NULL };
@@ -69,7 +65,8 @@ static PyObject *rabbitizer_type_RegistersTracker_unsetRegistersAfterFuncCall(Py
     PyRabbitizerInstruction *instr;
     PyRabbitizerInstruction *prevInstr;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!O!", kwlist, &rabbitizer_type_Instruction_TypeObject, &instr, &rabbitizer_type_Instruction_TypeObject, &prevInstr)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!O!", kwlist, &rabbitizer_type_Instruction_TypeObject, &instr, &rabbitizer_type_Instruction_TypeObject,
+                                     &prevInstr)) {
         return NULL;
     }
 
@@ -119,7 +116,8 @@ static PyObject *rabbitizer_type_RegistersTracker_processLui(PyRabbitizerRegiste
     PyRabbitizerInstruction *pyPrevInstr = NULL;
     RabbitizerInstruction *prevInstr = NULL;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!i|O!", kwlist, &rabbitizer_type_Instruction_TypeObject, &instr, &instrOffset, &rabbitizer_type_Instruction_TypeObject, &pyPrevInstr)) {
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "O!i|O!", kwlist, &rabbitizer_type_Instruction_TypeObject, &instr, &instrOffset,
+                                     &rabbitizer_type_Instruction_TypeObject, &pyPrevInstr)) {
         return NULL;
     }
 
@@ -204,7 +202,7 @@ static PyObject *rabbitizer_type_RegistersTracker_preprocessLoAndGetInfo(PyRabbi
         return NULL;
     }
 
-    ret = PyObject_CallObject((PyObject*)&rabbitizer_type_LoPairingInfo_TypeObject, NULL);
+    ret = PyObject_CallObject((PyObject *)&rabbitizer_type_LoPairingInfo_TypeObject, NULL);
     if (ret == NULL) {
         PyErr_SetString(PyExc_RuntimeError, "Internal error: not able to instance LoPairingInfo object");
         return NULL;
@@ -244,9 +242,10 @@ static PyObject *rabbitizer_type_RegistersTracker_hasLoButNoHi(PyRabbitizerRegis
     Py_RETURN_FALSE;
 }
 
-
-#define METHOD_NO_ARGS(name, docs)  { #name, (PyCFunction)rabbitizer_type_RegistersTracker_##name, METH_NOARGS,                  PyDoc_STR(docs) }
-#define METHOD_ARGS(name, docs)     { #name, (PyCFunction)rabbitizer_type_RegistersTracker_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
+#define METHOD_NO_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_type_RegistersTracker_##name, METH_NOARGS, PyDoc_STR(docs) }
+#define METHOD_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_type_RegistersTracker_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
 
 static PyMethodDef rabbitizer_type_RegistersTracker_methods[] = {
     METHOD_ARGS(moveRegisters, ""),
@@ -266,8 +265,7 @@ static PyMethodDef rabbitizer_type_RegistersTracker_methods[] = {
     { 0 },
 };
 
-
-PyObject *rabbitizer_type_RegistersTracker___getitem__(PyRabbitizerRegistersTracker* self, Py_ssize_t index) {
+PyObject *rabbitizer_type_RegistersTracker___getitem__(PyRabbitizerRegistersTracker *self, Py_ssize_t index) {
     RabbitizerTrackedRegisterState *state;
     PyObject *args;
     PyRabbitizerTrackedRegisterState *pyState;
@@ -285,7 +283,7 @@ PyObject *rabbitizer_type_RegistersTracker___getitem__(PyRabbitizerRegistersTrac
         return NULL;
     }
 
-    pyState = PyObject_CallObject((PyObject*)&rabbitizer_type_TrackedRegisterState_TypeObject, args);
+    pyState = PyObject_CallObject((PyObject *)&rabbitizer_type_TrackedRegisterState_TypeObject, args);
     Py_DECREF(args);
     if (pyState == NULL) {
         PyErr_SetString(PyExc_RuntimeError, "Internal error: not able to instance TrackedRegisterState object");
@@ -296,22 +294,14 @@ PyObject *rabbitizer_type_RegistersTracker___getitem__(PyRabbitizerRegistersTrac
     return pyState;
 }
 
-
 static PySequenceMethods example_classSeqMethods = {
-	.sq_item = (ssizeargfunc)rabbitizer_type_RegistersTracker___getitem__, // sq_item
+    .sq_item = (ssizeargfunc)rabbitizer_type_RegistersTracker___getitem__, // sq_item
 };
 
-
 PyTypeObject rabbitizer_type_RegistersTracker_TypeObject = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "rabbitizer.RegistersTracker",
-    .tp_doc = PyDoc_STR("RegistersTracker"),
-    .tp_basicsize = sizeof(PyRabbitizerRegistersTracker),
-    .tp_itemsize = 0,
-    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-    .tp_new = PyType_GenericNew,
-    .tp_init = (initproc) rabbitizer_type_RegistersTracker_init,
-    .tp_dealloc = (destructor) rabbitizer_type_RegistersTracker_dealloc,
+    PyVarObject_HEAD_INIT(NULL, 0).tp_name = "rabbitizer.RegistersTracker", .tp_doc = PyDoc_STR("RegistersTracker"),
+    .tp_basicsize = sizeof(PyRabbitizerRegistersTracker), .tp_itemsize = 0, .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, .tp_new = PyType_GenericNew,
+    .tp_init = (initproc)rabbitizer_type_RegistersTracker_init, .tp_dealloc = (destructor)rabbitizer_type_RegistersTracker_dealloc,
     // .tp_repr = (reprfunc) rabbitizer_type_RegistersTracker_repr,
     .tp_as_sequence = &example_classSeqMethods,
     // .tp_str = (reprfunc) rabbitizer_type_RegistersTracker_str,

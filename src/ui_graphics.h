@@ -23,8 +23,7 @@ void Ui_DrawBorderStyleB(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_DrawBorderStyleC(s32 x1, s32 y1, s32 width, s32 height);
 void Ui_FillInsetRectangleA(s32 x1, s32 y1, s32 width, s32 height, u16 color);
 void Ui_FillInsetRectangleB(s32 x1, s32 y1, s32 width, s32 height, u16 color);
-void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color,
-                              Color_RGB8* bottom_color);
+void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color, Color_RGB8* bottom_color);
 void Ui_DrawBorderedPanel(s32 x1, s32 y1, s32 width, s32 height, u16 color);
 void Ui_DrawGradientPanel(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color, Color_RGB8* bottom_color);
 void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color);

@@ -38,8 +38,8 @@ static char D_86301634[] = {
 };
 
 static u32 D_86301650[] = {
-    0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x014000F0, 0x0000000F, 0x00000000, 0x00000000, 0x05000000,
-    0x0D000000, 0x05000000, 0x0F000002, 0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003, 0x05000000,
+    0x0C00FFFF, 0x05000000,  0x0B00001E, 0x00000000, 0x014000F0, 0x0000000F, 0x00000000, 0x00000000, 0x05000000,
+    0x0D000000, 0x05000000,  0x0F000002, 0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003, 0x05000000,
     0x0A000000, &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
 };
 
@@ -121,7 +121,8 @@ void JigglypuffGame_InitCamera(void) {
     D_86301718->view.targetPosition.y = 70.0f;
     D_86301718->view.targetPosition.z = 0.0f;
 
-    Camera_ComputeEyeFromAngles(&D_86301718->view.targetPosition, &D_86301718->view.eyePosition, D_86301720, D_8630171C, D_8630171E);
+    Camera_ComputeEyeFromAngles(&D_86301718->view.targetPosition, &D_86301718->view.eyePosition, D_86301720, D_8630171C,
+                                D_8630171E);
 }
 
 void JigglypuffGame_UpdateEffects(void) {
@@ -183,7 +184,7 @@ void JigglypuffGame_DrawHud(s32 arg0) {
             Font_SetActive(2, -2);
             Gfx_SetEnvColor(0xFF, 0xFF, 5, 0xFA);
             Font_Printf(0x64, 0xD9, "TIME %02d:%02d.%02d", (D_86301D40 * 2) / 3600, ((D_86301D40 * 2) / 60) % 60,
-                          (((D_86301D40 * 2) % 60) * 0x64) / 60);
+                        (((D_86301D40 * 2) % 60) * 0x64) / 60);
 
             if ((D_86301D4C == 1) && ((D_86301D4E % 30) >= 0xF)) {
                 Font_SetActive(0x20, -2);

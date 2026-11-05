@@ -15,7 +15,6 @@
 extern "C" {
 #endif
 
-
 typedef struct RabbitizerTrackedRegisterState {
     int registerNum;
 
@@ -33,7 +32,6 @@ typedef struct RabbitizerTrackedRegisterState {
 
     uint32_t value;
 } RabbitizerTrackedRegisterState;
-
 
 NON_NULL(1)
 void RabbitizerTrackedRegisterState_init(RabbitizerTrackedRegisterState *self, int registerNum);
@@ -64,14 +62,11 @@ void RabbitizerTrackedRegisterState_deref(RabbitizerTrackedRegisterState *self, 
 NON_NULL(1, 2)
 void RabbitizerTrackedRegisterState_dereferenceState(RabbitizerTrackedRegisterState *self, const RabbitizerTrackedRegisterState *other, int offset);
 
-NODISCARD NON_NULL(1) PURE
-bool RabbitizerTrackedRegisterState_hasAnyValue(const RabbitizerTrackedRegisterState *self);
-NODISCARD NON_NULL(1) PURE
-bool RabbitizerTrackedRegisterState_wasSetInCurrentOffset(const RabbitizerTrackedRegisterState *self, int offset);
+NODISCARD NON_NULL(1) PURE bool RabbitizerTrackedRegisterState_hasAnyValue(const RabbitizerTrackedRegisterState *self);
+NODISCARD NON_NULL(1) PURE bool RabbitizerTrackedRegisterState_wasSetInCurrentOffset(const RabbitizerTrackedRegisterState *self, int offset);
 
 NON_NULL(1)
-void RabbitizerTrackedRegisterState_fprint(const RabbitizerTrackedRegisterState *self, FILE* outFile);
-
+void RabbitizerTrackedRegisterState_fprint(const RabbitizerTrackedRegisterState *self, FILE *outFile);
 
 #ifdef __cplusplus
 }

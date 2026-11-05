@@ -30,17 +30,20 @@ void func_80018C40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1) {
         if (var_s2->unk_00 == 0) {
             if (var_s2->type == unk_D_86002F34_018_GFX_TYPE_2) {
                 u16* var_s1 = (u16*)var_s2->texture;
-                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
+                for (j = 0; j < var_s2->num_texels; j++, var_s1++)
+                    *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
             }
             if (var_s2->type == unk_D_86002F34_018_GFX_TYPE_3) {
                 u32* var_s1 = var_s2->texture;
-                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGBA8(*var_s1, arg1);
+                for (j = 0; j < var_s2->num_texels; j++, var_s1++)
+                    *var_s1 = Color_AdjustRGBA8(*var_s1, arg1);
             }
         }
     }
     for (i = 0; i < arg0->unk_25; i++, var_s4++) {
         u16* var_s1 = var_s4->unk_04;
-        for (j = 0; j < var_s4->unk_00; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
+        for (j = 0; j < var_s4->unk_00; j++, var_s1++)
+            *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
     }
 }
 
@@ -134,13 +137,15 @@ void Fragment_RelocateAndCommit(MainPoolState* arg0, u32 arg1, Fragment* arg2) {
     MainPool_ResetStateToOffset(arg0, ((u32)arg2 + arg2->sizeInRam) - (u32)arg0->listHeadR);
 }
 
-Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
+Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3,
+                                          s32 arg4) {
     s32 temp_a1 = arg1->unk_04 + arg2->offset;
 
     return Fragment_LoadFromRomRange(arg0, temp_a1, arg2->size + temp_a1, arg3, arg4);
 }
 
-Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
+Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3,
+                                          s32 arg4) {
     unk_func_800041C0 sp1C;
 
     Storage_SetByteRange(&sp1C, arg1->unk_04, arg2->offset, arg2->size);
@@ -240,7 +245,8 @@ void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
     var_s0 = arg0->unk_0C;
 
     while (*var_s0 != -1) {
-        temp_v0 = BinArchive_LoadFileToPool(temp_s3, D_800ABE10.unk_A04.unk_04, *var_s0, D_800ABE10.unk_A04.unk_08, 0x28000);
+        temp_v0 =
+            BinArchive_LoadFileToPool(temp_s3, D_800ABE10.unk_A04.unk_04, *var_s0, D_800ABE10.unk_A04.unk_08, 0x28000);
         if (temp_v0 == NULL) {
             break;
         }
@@ -361,7 +367,8 @@ s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010C
             sp18->unk_14 = 0x3C000;
             sp18->unk_18 = arg2;
 
-            if ((arg0->loadedModel != NULL) && (arg0->loadedModel->modelId == arg1) && (arg0->colorVariant.raw == sp18->unk_18.raw)) {
+            if ((arg0->loadedModel != NULL) && (arg0->loadedModel->modelId == arg1) &&
+                (arg0->colorVariant.raw == sp18->unk_18.raw)) {
                 osSendMesg(sp18->unk_04, sp18, 1);
             } else {
                 osSendMesg(&D_800ABE10.unk_9D0, sp18, 1);
@@ -539,7 +546,8 @@ arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0) {
     return sp20;
 }
 
-Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4, s32 arg5) {
+Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4,
+                                               s32 arg5) {
     Fragment* sp24 = Fragment_LoadFromRomRange(arg0, arg2, arg3, arg4, arg5);
 
     if (sp24 != NULL) {

@@ -128,8 +128,10 @@ typedef struct unk_func_888044BC {
 
 void Pokedex_DrawCheckboxIcon(s32 arg0, s32 arg1, s32 arg2);
 s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2);
-void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4, unk_func_888044BC_038_02C* arg5);
-void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, MemoryPool* arg5);
+void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4,
+                                unk_func_888044BC_038_02C* arg5);
+void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
+                                    MemoryPool* arg5);
 s32 Pokedex_GetSelectedSpeciesIndex(unk_func_888044BC_038_02C* arg0);
 void Pokedex_ToggleListSortOrder(unk_func_888044BC_038_02C* arg0);
 void Pokedex_BuildSpeciesListPanel(unk_func_888044BC_038* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
@@ -142,7 +144,8 @@ void Pokedex_BuildTrainerInfoPanel(unk_func_888044BC_03C* arg0, s32 arg1, s32 ar
 void Pokedex_InitSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
 s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
 void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0);
-void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4, unk_func_88200FA0_030_030* arg5);
+void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4,
+                               unk_func_88200FA0_030_030* arg5);
 void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040* arg0, Controller* arg1);
 void Pokedex_InitDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
@@ -172,7 +175,6 @@ void Pokedex_RunEntryFlow(void);
 s32 Pokedex_GetHighestSeenSpeciesIndex(void);
 void Pokedex_InitFramebuffers(void);
 s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1);
-
 
 s32 Pokedex_FindNextMapArea(s32 arg0);
 s32 Pokedex_FindPrevMapArea(s32 arg0);

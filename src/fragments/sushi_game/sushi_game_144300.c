@@ -29,11 +29,11 @@ typedef struct unk_D_86806E20 {
 } unk_D_86806E20; // size = 0x8
 
 static u32 D_86806CD0[] = {
-    0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x014000F0, 0x0000000F, 0x00000000, 0x00000000,
-    0x05000000, 0x0D000000, 0x05000000, 0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003,
-    0x05000000, 0x1F00FFFF, 0x00000000, 0x00000000, 0xFFFF0000, 0x00640064, 0x00640000, 0x05000000,
+    0x0C00FFFF, 0x05000000,          0x0B00001E, 0x00000000, 0x014000F0, 0x0000000F, 0x00000000,  0x00000000,
+    0x05000000, 0x0D000000,          0x05000000, 0x14000000, 0x002B0012, 0xFFFFFF32, 0x16FFFFFF,  0x0F000003,
+    0x05000000, 0x1F00FFFF,          0x00000000, 0x00000000, 0xFFFF0000, 0x00640064, 0x00640000,  0x05000000,
     0x00000000, &D_87000000[0x6D00], 0x06000000, 0x06000000, 0x05000000, 0x0A000000, &D_800AC840, 0x06000000,
-    0x06000000, 0x06000000, 0x03000000, D_87806398, 0x06000000, 0x01000000,
+    0x06000000, 0x06000000,          0x03000000, D_87806398, 0x06000000, 0x01000000,
 };
 
 static Controller** D_86806D68 = &gPlayer1Controller;
@@ -314,7 +314,7 @@ void func_86800B38(void) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
         Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86807504, Text_GetString(NULL, 0, D_87806330, 0xC)) / 2), 0x20,
-                      Text_GetString(NULL, 0, D_87806330, 0xC));
+                    Text_GetString(NULL, 0, D_87806330, 0xC));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetLineHeight(0xC);
@@ -332,8 +332,8 @@ void func_86800B38(void) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
         Font_Printf(0x9A, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
-        Widget_MeasureLabelBox(&spA4, &spA0, Text_GetString(NULL, 0, D_87806330, 0x32), Text_GetString(NULL, 0, D_87806330, 0x5F),
-                      0xC);
+        Widget_MeasureLabelBox(&spA4, &spA0, Text_GetString(NULL, 0, D_87806330, 0x32),
+                               Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
         Font_Printf(spA4 + 0x28, spA0 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x5F));
@@ -350,7 +350,7 @@ void func_86800B38(void) {
             sp98 = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, D_87806330, i + 0x36));
 
             Font_Printf((((var_v0 * pad1) + sp9C) - sp98) + 0x46, ((i / 4) << 5) + 0x72,
-                          Text_GetString(NULL, 0, D_87806330, i + 0x36));
+                        Text_GetString(NULL, 0, D_87806330, i + 0x36));
         }
     }
 
@@ -382,8 +382,7 @@ void func_86800B38(void) {
 
                         if (ptr->unk_03E < 5) {
                             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, ptr->unk_040.unk_18);
-                            Gfx_SetPrimColor(D_86806F44[i].r, D_86806F44[i].g, D_86806F44[i].b,
-                                          ptr->unk_040.unk_18);
+                            Gfx_SetPrimColor(D_86806F44[i].r, D_86806F44[i].g, D_86806F44[i].b, ptr->unk_040.unk_18);
                         } else {
                             SushiGame_InterpolateColorCycle(spD8, D_86806F68, 4, 4, 0);
                             Gfx_SetEnvColor(spD8[0].r, spD8[0].g, spD8[0].b, ptr->unk_040.unk_18);
@@ -391,8 +390,7 @@ void func_86800B38(void) {
                         }
 
                         Font_Printf((s16)ptr->unk_040.unk_08 + (D_86806D78[i] + var_s7),
-                                      (D_86806D80[i] + var_s4) - (s16)ptr->unk_040.unk_0C, "x%d",
-                                      ptr->unk_03E);
+                                    (D_86806D80[i] + var_s4) - (s16)ptr->unk_040.unk_0C, "x%d", ptr->unk_03E);
                     }
                 }
             }
@@ -423,8 +421,7 @@ void func_86800B38(void) {
                     var_s4 = 0x1E;
                 }
 
-                if ((ptr->unk_028 == 1) && (ptr->unk_018 == ptr->unk_01C) &&
-                    (ptr->unk_018 > 0)) {
+                if ((ptr->unk_028 == 1) && (ptr->unk_018 == ptr->unk_01C) && (ptr->unk_018 > 0)) {
                     SushiGame_InterpolateColorCycle(&spD8, &D_86806F50, 3, 4, 0);
                     Gfx_SetEnvColor(spD8[0].r, spD8[0].g, spD8[0].b, 0xFF);
                     SushiGame_InterpolateColorCycle(&spD8, &D_86806F5C, 3, 4, 0);
@@ -436,7 +433,7 @@ void func_86800B38(void) {
 
                 Text_SetNumberToken(6, ptr->unk_01C);
                 Font_Printf(D_86806D78[i] + var_s7, D_86806D80[i] + var_s4,
-                              Text_GetString(&sp78, 0x20, D_87806330, 0x5E));
+                            Text_GetString(&sp78, 0x20, D_87806330, 0x5E));
             }
             break;
     }

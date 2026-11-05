@@ -246,7 +246,7 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.nickname);
             Font_SetActive(4, 0);
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 0x17, "%s%d", TeamSelection_GetInstructionText(0x15),
-                          arg3->unk_0000[i].unk_004.level);
+                        arg3->unk_0000[i].unk_004.level);
         }
     }
 
@@ -543,8 +543,8 @@ void Rental_CarouselConfirmMon(RentalCarouselState* arg0) {
 
         tmp1 = arg0->unk_00010 + (arg0->unk_0000C * 0x84) + 0x20;
         tmp2 = arg0->unk_00012 + (arg0->unk_0000E * 0x2C) + 0x1C;
-        tmp1 = TeamSelection_Preview_StartFull(arg0->unk_1360C, arg0->unk_00003, 0x30, 0xEC, tmp1, tmp2, &sp3C->unk_0000[arg0->unk_0000C],
-                             var_t1);
+        tmp1 = TeamSelection_Preview_StartFull(arg0->unk_1360C, arg0->unk_00003, 0x30, 0xEC, tmp1, tmp2,
+                                               &sp3C->unk_0000[arg0->unk_0000C], var_t1);
 
         if (tmp1 != 0) {
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
@@ -563,8 +563,8 @@ void Rental_CarouselCursorUp(RentalCarouselState* arg0) {
             arg0->unk_0001A = -4;
             arg0->unk_00001 = 0xA;
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        } else if ((arg0->unk_00006 > 0) &&
-                   (Rental_FillPageFromRoster(arg0, arg0->unk_00140->unk_268C, arg0->unk_00006 - 1, arg0->unk_0013C) != 0)) {
+        } else if ((arg0->unk_00006 > 0) && (Rental_FillPageFromRoster(arg0, arg0->unk_00140->unk_268C,
+                                                                       arg0->unk_00006 - 1, arg0->unk_0013C) != 0)) {
             arg0->unk_00006--;
             arg0->unk_00140 = arg0->unk_00140->unk_268C;
             arg0->unk_00018 = -1;
@@ -586,7 +586,8 @@ void Rental_CarouselCursorDown(RentalCarouselState* arg0) {
             arg0->unk_0001A = 4;
             arg0->unk_00001 = 0xA;
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        } else if (Rental_FillPageFromRoster(arg0, Rental_GetPage(arg0->unk_00140, 4), arg0->unk_00006 + 4, arg0->unk_0013C) != 0) {
+        } else if (Rental_FillPageFromRoster(arg0, Rental_GetPage(arg0->unk_00140, 4), arg0->unk_00006 + 4,
+                                             arg0->unk_0013C) != 0) {
             arg0->unk_00006++;
             arg0->unk_00140 = arg0->unk_00140->unk_2688;
             arg0->unk_00018 = 1;
@@ -857,8 +858,8 @@ s32 Rental_BuildBoxFilterIndex(RentalCarouselState* arg0, s16 arg1, s16 arg2) {
     return ptr->unk_00;
 }
 
-s32 Rental_PrimeCarousel(RentalCarouselState* arg0, RentalTeamTray* arg1, unk_D_8423D3A8* arg2, s16 arg3, s16 arg4, s16 arg5,
-                  s16 arg6, s16 arg7, RentalRoster* arg8) {
+s32 Rental_PrimeCarousel(RentalCarouselState* arg0, RentalTeamTray* arg1, unk_D_8423D3A8* arg2, s16 arg3, s16 arg4,
+                         s16 arg5, s16 arg6, s16 arg7, RentalRoster* arg8) {
     s16 i;
 
     arg0->unk_00000 = arg3;
@@ -993,7 +994,7 @@ void Rental_CarouselSkipToSelectableMon(RentalCarouselState* arg0) {
 
     for (i = 0; i < 12; i++) {
         if (Rental_CanAddMonToTeam(arg0->unk_13608,
-                          &Rental_GetPage(arg0->unk_00140, arg0->unk_0000E)->unk_0000[arg0->unk_0000C]) != 0) {
+                                   &Rental_GetPage(arg0->unk_00140, arg0->unk_0000E)->unk_0000[arg0->unk_0000C]) != 0) {
             break;
         }
 

@@ -8,7 +8,6 @@
 #include "common/Utils.h"
 #include "instructions/RabbitizerInstrId.h"
 
-
 typedef enum ModuleAttributeCategory {
     MODULE_ATTRIBUTE_CAT_TYPE,
     MODULE_ATTRIBUTE_CAT_INIT, // submodules
@@ -27,10 +26,14 @@ typedef struct ModuleAttribute {
     PyObject *instance;
 } ModuleAttributes;
 
-#define MODULE_ATTRIBUTE_TYPE(name)   { {.type   = &rabbitizer_type_##name##_TypeObject},   MODULE_ATTRIBUTE_CAT_TYPE,   #name, false, NULL }
-#define MODULE_ATTRIBUTE_INIT(name)   { {.init   = rabbitizer_submodule_##name##_Init},     MODULE_ATTRIBUTE_CAT_INIT,   #name, false, NULL }
-#define MODULE_ATTRIBUTE_ENUM(name)   { {.init   = rabbitizer_enum_##name##_Init},          MODULE_ATTRIBUTE_CAT_INIT,   #name, false, NULL }
-#define MODULE_ATTRIBUTE_GLOBAL(name) { {.global = &rabbitizer_global_##name##_TypeObject}, MODULE_ATTRIBUTE_CAT_GLOBAL, #name, false, NULL }
+#define MODULE_ATTRIBUTE_TYPE(name) \
+    { { .type = &rabbitizer_type_##name##_TypeObject }, MODULE_ATTRIBUTE_CAT_TYPE, #name, false, NULL }
+#define MODULE_ATTRIBUTE_INIT(name) \
+    { { .init = rabbitizer_submodule_##name##_Init }, MODULE_ATTRIBUTE_CAT_INIT, #name, false, NULL }
+#define MODULE_ATTRIBUTE_ENUM(name) \
+    { { .init = rabbitizer_enum_##name##_Init }, MODULE_ATTRIBUTE_CAT_INIT, #name, false, NULL }
+#define MODULE_ATTRIBUTE_GLOBAL(name) \
+    { { .global = &rabbitizer_global_##name##_TypeObject }, MODULE_ATTRIBUTE_CAT_GLOBAL, #name, false, NULL }
 
 static ModuleAttributes rabbitizer_module_attributes[] = {
     MODULE_ATTRIBUTE_INIT(Utils),
@@ -76,7 +79,7 @@ static int rabbitizer_module_attributes_Initialize(PyObject *module) {
     for (size_t i = 0; i < ARRAY_COUNT(rabbitizer_module_attributes); i++) {
         switch (rabbitizer_module_attributes[i].cat) {
             case MODULE_ATTRIBUTE_CAT_TYPE:
-                rabbitizer_module_attributes[i].instance = (PyObject*) rabbitizer_module_attributes[i].type;
+                rabbitizer_module_attributes[i].instance = (PyObject *)rabbitizer_module_attributes[i].type;
                 Py_INCREF(rabbitizer_module_attributes[i].instance);
                 break;
 
@@ -88,7 +91,7 @@ static int rabbitizer_module_attributes_Initialize(PyObject *module) {
                 break;
 
             case MODULE_ATTRIBUTE_CAT_GLOBAL:
-                rabbitizer_module_attributes[i].instance = PyObject_CallObject((PyObject*)rabbitizer_module_attributes[i].global, NULL);
+                rabbitizer_module_attributes[i].instance = PyObject_CallObject((PyObject *)rabbitizer_module_attributes[i].global, NULL);
                 if (rabbitizer_module_attributes[i].instance == NULL) {
                     goto error;
                 }
@@ -112,7 +115,6 @@ error:
     }
     return -1;
 }
-
 
 static PyModuleDef rabbitizer_module = {
     PyModuleDef_HEAD_INIT,

@@ -747,7 +747,8 @@ typedef void (*func88504F98)(unk_func_8820E99C_030_044*, s32, s32, s32, s32);
 typedef void (*func885054D8)(WidgetAnimatedPanelVariantB*, s32, s32, s32, s32, Color_RGBA8);
 typedef void (*func88505E2C)(WidgetTextList*, s32, s32, s32, s32, s32, Color_RGBA8, FontContext*);
 typedef void (*func88506074)(WidgetTextList*, char*);
-typedef void (*func885060BC)(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32, MemoryPool*);
+typedef void (*func885060BC)(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32,
+                             MemoryPool*);
 typedef void (*func88506238)(unk_func_88200FA0_030_030*, s32, MemoryPool*);
 typedef void (*func8850628C)(unk_func_88200FA0_030_030*);
 typedef void (*func8850633C)(unk_func_88200FA0_030_030_1CEA00*, unk_func_8830867C_02C_0CC*);
@@ -855,7 +856,8 @@ void WidgetTree_InitTextList(WidgetTextList*, s32, s32, s32, s32, s32, Color_RGB
 s32 WidgetTree_UpdateTextList(WidgetTextList*);
 s32 WidgetTree_DrawTextList(WidgetTextList*, s32, s32);
 void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1);
-void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32, MemoryPool*);
+void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32,
+                              MemoryPool*);
 void WidgetTree_AllocateEntryFlags(unk_func_88200FA0_030_030*, s32, MemoryPool*);
 void WidgetTree_ClearEntryFlags(unk_func_88200FA0_030_030*);
 void WidgetTree_SetPagedGridState(unk_func_88200FA0_030_030*, s32);
@@ -867,7 +869,8 @@ s32 WidgetTree_DrawPagedGrid(unk_func_88200FA0_030_030*, s32, s32);
 s32 func_885065E0(unk_func_88200FA0_030_030*, Controller*);
 void WidgetTree_SetPagedGridSelection(unk_func_88200FA0_030_030*, s32);
 s32 WidgetTree_FindSelectableGridEntry(unk_func_88200FA0_030_030*);
-void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, MemoryPool*);
+void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32,
+                                   MemoryPool*);
 void WidgetTree_BindScrollableGridData(unk_func_8820BE14_02C_038*, unk_func_88200FA0_030_038*);
 void WidgetTree_BindScrollableGridPage(unk_func_8830867C_02C_034*, unk_func_88200FA0_030_038*, MemoryPool*);
 void WidgetTree_BindScrollableGridStridedData(unk_func_8821421C_038_034*, unk_func_8821421C_038_050**);

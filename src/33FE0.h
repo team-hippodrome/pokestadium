@@ -40,33 +40,33 @@ typedef struct ModelTransformCmd {
 } ModelTransformCmd; // size = 0x5C
 
 typedef struct ModelVertex {
-    /* 0x00 */ s16 jointIndex;      // bone / transform index
-    /* 0x02 */ s16 parentIndex;     // parent bone index
-    /* 0x04 */ s16 childIndex;      // child / next transform
+    /* 0x00 */ s16 jointIndex;  // bone / transform index
+    /* 0x02 */ s16 parentIndex; // parent bone index
+    /* 0x04 */ s16 childIndex;  // child / next transform
     /* 0x06 */ u16 pad06;
     /* 0x08 */ ModelTransformCmd cmd;
     /* 0x64 */ PosBlend position;
-} ModelVertex;                      // size = 0x94
+} ModelVertex; // size = 0x94
 
 typedef struct StadiumTransform {
-    /* 0x00 */ s16  unk_00;
-    /* 0x02 */ s16  unk_02;
-    /* 0x04 */ f32  maxDist;
-    /* 0x08 */ f32  x0;
-    /* 0x0C */ f32  y0;
-    /* 0x10 */ f32  z0;
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ f32 maxDist;
+    /* 0x08 */ f32 x0;
+    /* 0x0C */ f32 y0;
+    /* 0x10 */ f32 z0;
 
-    /* 0x14 */ f32  x1;
-    /* 0x18 */ f32  y1;
-    /* 0x1C */ f32  z1;
+    /* 0x14 */ f32 x1;
+    /* 0x18 */ f32 y1;
+    /* 0x1C */ f32 z1;
 
-    /* 0x20 */ f32  x2;
-    /* 0x24 */ f32  y2;
-    /* 0x28 */ f32  z2;
+    /* 0x20 */ f32 x2;
+    /* 0x24 */ f32 y2;
+    /* 0x28 */ f32 z2;
 
-    /* 0x2C */ f32  x3;
-    /* 0x30 */ f32  y3;
-    /* 0x34 */ f32  z3;
+    /* 0x2C */ f32 x3;
+    /* 0x30 */ f32 y3;
+    /* 0x34 */ f32 z3;
 
     /* 0x38 */ MtxF* mtx;
 } StadiumTransform; // size = 0x3C
@@ -85,9 +85,9 @@ typedef struct ModelSegment {
 } ModelSegment; // size = 20
 
 typedef struct StadiumModel {
-    /* 0x00 */  s16 unk_00;
-    /* 0x02 */  s16 unk_02;
-    /* 0x04 */  StadiumTransform transforms[5];
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ StadiumTransform transforms[5];
     /* 0x130 */ u32 modelSegment;
     /* 0x134 */ s8 pad134[0x4];
     /* 0x138 */ u32 unkSegment;

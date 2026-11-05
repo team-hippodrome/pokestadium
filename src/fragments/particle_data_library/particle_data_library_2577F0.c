@@ -6,7 +6,8 @@
 // .data
 static Gfx D_81004170[] = {
     gsDPPipeSync(),
-    gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0, COMBINED, 0, PRIM_LOD_FRAC, 0),
+    gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0,
+                       COMBINED, 0, PRIM_LOD_FRAC, 0),
     gsDPSetEnvColor(0xFF, 0xFF, 0xFF, 0x64),
     gsSPEndDisplayList(),
 };

@@ -40,13 +40,18 @@ static u8* D_84B0FB10[] = {
     D_3016300,
 };
 static u32 D_84B0FB20[] = {
-    0x0C000000, 0x05000000,    0x0B00002D, 0x00000000, 0x014000F0, 0x00000000,  0xFEDF0000,  0x00000121,  0x05000000,
-    0x0D000000, 0x05000000,    0x0F000000, 0x05000000, 0x20050000, 0x00000000,  0x00000000,  0x00000000,  0x00000000,
-    0x08000000, BattlePrep_StarfieldGeoCallback, D_84B19910, 0x06000000, 0x0F000002, 0x05000000,  0x0A000000,  &D_800AC840, 0x06000000,
-    0x06000000, 0x0D000001,    0x05000000, 0x0F000002, 0x05000000, 0x0A000000,  &D_800AC840, 0x06000000,  0x06000000,
-    0x0D000002, 0x05000000,    0x0F000000, 0x05000000, 0x0A000000, &D_800AC840, 0x06000000,  0x06000000,  0x0D000003,
-    0x05000000, 0x14000000,    0x002B0012, 0xFFFFFF32, 0x16FFFFFF, 0x0F000003,  0x05000000,  0x0A000000,  &D_800AC840,
-    0x06000000, 0x06000000,    0x06000000, 0x06000000, 0x01000000,
+    0x0C000000,  0x05000000,  0x0B00002D, 0x00000000,  0x014000F0,
+    0x00000000,  0xFEDF0000,  0x00000121, 0x05000000,  0x0D000000,
+    0x05000000,  0x0F000000,  0x05000000, 0x20050000,  0x00000000,
+    0x00000000,  0x00000000,  0x00000000, 0x08000000,  BattlePrep_StarfieldGeoCallback,
+    D_84B19910,  0x06000000,  0x0F000002, 0x05000000,  0x0A000000,
+    &D_800AC840, 0x06000000,  0x06000000, 0x0D000001,  0x05000000,
+    0x0F000002,  0x05000000,  0x0A000000, &D_800AC840, 0x06000000,
+    0x06000000,  0x0D000002,  0x05000000, 0x0F000000,  0x05000000,
+    0x0A000000,  &D_800AC840, 0x06000000, 0x06000000,  0x0D000003,
+    0x05000000,  0x14000000,  0x002B0012, 0xFFFFFF32,  0x16FFFFFF,
+    0x0F000003,  0x05000000,  0x0A000000, &D_800AC840, 0x06000000,
+    0x06000000,  0x06000000,  0x06000000, 0x01000000,
 };
 
 void BattlePrep_SaveVictoryPalaceRecords(void) {
@@ -122,7 +127,8 @@ void BattlePrep_MarkNewRoundRecord(void) {
             D_84B26670.nintendoCupClears = gSessionContext.modeSelection + 1;
             gSessionContext.transitionFlags |= 0x400;
         }
-    } else if ((gSessionContext.mode == 6) && (gSessionContext.modeSelection >= D_84B26670.primeCupClears) && (gSessionContext.modeSelection < 4)) {
+    } else if ((gSessionContext.mode == 6) && (gSessionContext.modeSelection >= D_84B26670.primeCupClears) &&
+               (gSessionContext.modeSelection < 4)) {
         D_84B26670.primeCupClears = gSessionContext.modeSelection + 1;
         gSessionContext.transitionFlags |= 0x400;
     }
@@ -199,18 +205,20 @@ void BattlePrep_DrawBorderedRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_30150C0, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3015000, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3015040, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -247,11 +255,15 @@ void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8*
             Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30, 0x200000);
         } else {
             if (temp_v1->teamMember[0]->controllerPort < temp_v1->teamMember[1]->controllerPort) {
-                Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30, 0x200000);
-                Gfx_DrawTextureRgba16(8, 0x14, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[1]->controllerPort], 0x30, 0x200000);
+                Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30,
+                                      0x200000);
+                Gfx_DrawTextureRgba16(8, 0x14, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[1]->controllerPort], 0x30,
+                                      0x200000);
             } else {
-                Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[1]->controllerPort], 0x30, 0x200000);
-                Gfx_DrawTextureRgba16(8, 0x14, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30, 0x200000);
+                Gfx_DrawTextureRgba16(8, 4, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[1]->controllerPort], 0x30,
+                                      0x200000);
+                Gfx_DrawTextureRgba16(8, 0x14, 0x30, 0x10, D_84B0FB10[temp_v1->teamMember[0]->controllerPort], 0x30,
+                                      0x200000);
             }
         }
 

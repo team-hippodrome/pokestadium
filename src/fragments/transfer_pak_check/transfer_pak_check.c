@@ -108,9 +108,9 @@ static char* D_82D065D4_jp[] = {
 };
 #endif
 static u32 D_82D06FA4[] = {
-    0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243, 0x05000000,
-    0x0D000000,  0x05000000, 0x14000000, 0x00000000, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002, 0x05000000, 0x0A000000,
-    &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
+    0x0C000000, 0x05000000, 0x0B00002D,  0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243,
+    0x05000000, 0x0D000000, 0x05000000,  0x14000000, 0x00000000, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002,
+    0x05000000, 0x0A000000, &D_800AC840, 0x06000000, 0x06000000, 0x06000000, 0x06000000, 0x01000000,
 };
 static Vtx D_82D07008[] = {
     VTX(-64, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -249,8 +249,9 @@ static Gfx D_82D07348[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D07710[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D07008, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderPartyCardTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D07008,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderPartyCardTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_82D07748[] = {
     VTX(0, 50, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -550,8 +551,9 @@ static Gfx D_82D07E48[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D08648[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D07748, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderIconPanelTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D07748,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderIconPanelTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_82D08680[] = {
     VTX(0, 22, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -590,8 +592,9 @@ static Gfx D_82D08740[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D08838[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D08680, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderBannerTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D08680,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderBannerTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_82D08870[] = {
     VTX(0, 76, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -769,8 +772,9 @@ static Gfx D_82D08C70[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D09108[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D08870, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderMenuIconTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D08870,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderMenuIconTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 #if !defined(VERSION_JP)
 static Vtx D_82D09140[] = {
@@ -862,8 +866,9 @@ static Gfx D_82D09340[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D09598[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D09140, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderMenuIconTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D09140,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderMenuIconTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 #endif
 static Vtx D_82D095D0[] = {
@@ -979,8 +984,9 @@ static Gfx D_82D09850[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D09B38[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D095D0, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderMenuIconTexture, 0x00000000, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D095D0,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderMenuIconTexture,
+    0x00000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_82D09B70[] = {
     VTX(0, 24, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -1053,8 +1059,9 @@ static Gfx D_82D09CF0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_82D09EB8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_82D09B70, 0x05000000, 0x22040000,
-    0x00000000, 0x08000000, PakUi_RenderMenuIconTexture, 0x00000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_82D09B70,
+    0x05000000, 0x22040000, 0x00000000, 0x08000000, PakUi_RenderMenuIconTexture,
+    0x00000000, 0x06000000, 0x01000000,
 };
 
 s32 Pak_CheckPiIntegrity(s32 arg0) {
@@ -1139,18 +1146,20 @@ void PakUi_DrawThickBoxBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300F500, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300F380, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_300F400, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -1197,18 +1206,20 @@ void PakUi_DrawThinBoxBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_3022A60, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_30229A0, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_30229E0, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -1796,18 +1807,20 @@ void PakUi_DrawDataPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+                                0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                  0x4000 / var_s2, 0);
+                                0x4000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -2416,9 +2429,21 @@ void PakUi_OpenStatusPopup(PakUi_StatusPopup* arg0, s16 arg1, s16 arg2) {
 s32 PakUi_RenderMenuIconTexture(s32 arg0, UNUSED unk_func_80011B94* arg1) {
     static Gfx* D_82D09EF8[] = {
 #if defined(VERSION_JP)
-        D_82D08C70, D_82D09850, D_82D09CF0, D_82D09CF0, D_82D09850, D_82D09CF0, D_82D09CF0,
+        D_82D08C70,
+        D_82D09850,
+        D_82D09CF0,
+        D_82D09CF0,
+        D_82D09850,
+        D_82D09CF0,
+        D_82D09CF0,
 #else
-        D_82D08C70, D_82D09850, D_82D09CF0, D_82D09340, D_82D09850, D_82D09CF0, D_82D09CF0,
+        D_82D08C70,
+        D_82D09850,
+        D_82D09CF0,
+        D_82D09340,
+        D_82D09850,
+        D_82D09CF0,
+        D_82D09CF0,
 #endif
     };
 
@@ -2463,12 +2488,9 @@ static u8 D_82D09F14[] = {
 #if defined(VERSION_JP)
 // Entry 3 has no neighbours: JP has no menu icon in that slot.
 static unk_D_82D09F1C D_82D09F1C[] = {
-    { 240, 120, 160, 140, 0xFF, 0x02, 0x04, 0x01 },
-    { 424, 180, 160, 80, 0xFF, 0xFF, 0x00, 0xFF },
-    { 240, 284, 160, 36, 0x00, 0xFF, 0xFF, 0xFF },
-    { 424, 284, 160, 36, 0xFF, 0xFF, 0xFF, 0xFF },
-    { 56, 180, 160, 80, 0xFF, 0xFF, 0xFF, 0x00 },
-    { 56, 224, 160, 36, 0xFF, 0x06, 0xFF, 0xFF },
+    { 240, 120, 160, 140, 0xFF, 0x02, 0x04, 0x01 }, { 424, 180, 160, 80, 0xFF, 0xFF, 0x00, 0xFF },
+    { 240, 284, 160, 36, 0x00, 0xFF, 0xFF, 0xFF },  { 424, 284, 160, 36, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 56, 180, 160, 80, 0xFF, 0xFF, 0xFF, 0x00 },   { 56, 224, 160, 36, 0xFF, 0x06, 0xFF, 0xFF },
     { 56, 276, 160, 36, 0x05, 0xFF, 0xFF, 0xFF },
 };
 #else
@@ -2628,8 +2650,7 @@ void PakUi_DrawBodyProgressBar(s32 arg0) {
 
         progress = arg0 * 0x64;
         temp_lo_2 = progress / 10;
-        PakUi_DrawThinBoxBorder(0x38, (s16)((0x64 - temp_lo_2) / 2) + 0x154, 0x210, temp_lo_2, 0x1E, 0x1E, 0x82,
-                                0x96);
+        PakUi_DrawThinBoxBorder(0x38, (s16)((0x64 - temp_lo_2) / 2) + 0x154, 0x210, temp_lo_2, 0x1E, 0x1E, 0x82, 0x96);
         if ((progress == 1000) && (D_82D06FA0 < 7)) {
             if (D_82D06FA0 < 5) {
                 sp32 = D_82D06FA0;
@@ -3145,8 +3166,7 @@ s32 TransferPak_MenuHandleInput(void) {
         sp24 = D_82D09F1C[D_82D06FA0].unk_0A;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DRIGHT)) {
         sp24 = D_82D09F1C[D_82D06FA0].unk_0B;
-    } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_CRIGHT) &&
-               (D_82D0AB90.clearedModes == PAKUI_ALL_MODES_CLEARED)) {
+    } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_CRIGHT) && (D_82D0AB90.clearedModes == PAKUI_ALL_MODES_CLEARED)) {
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
         var_a3 = -1;
         gSessionContext.inRound2 ^= 1;

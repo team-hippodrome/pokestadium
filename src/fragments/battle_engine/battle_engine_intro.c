@@ -28,7 +28,8 @@ void BattleScene_IntroSetupCamera(CameraNode* camera) {
 }
 
 void BattleScene_IntroSendOutFirstMon(UNUSED CameraNode* camera) {
-    if ((BattleScene_AdvanceCameraFrameCounterUntil(0xA) != 0) && (BattleAnim_TryRegisterAssetTables(sActivePokemon[0]) != 0)) {
+    if ((BattleScene_AdvanceCameraFrameCounterUntil(0xA) != 0) &&
+        (BattleAnim_TryRegisterAssetTables(sActivePokemon[0]) != 0)) {
         sActivePokemon[0]->displayObject.node.flags &= ~1;
         sActivePokemon[1]->displayObject.node.flags &= ~1;
         BattleScene_SetParticipantModelTransform(sActivePokemon[0], BATTLE_MODEL_TRANSFORM_POKEBALL_THROW, 0);
@@ -62,7 +63,8 @@ void BattleScene_IntroNarrowFov(CameraNode* camera) {
         BattleAnim_QueueEffectList3(0xB, sActivePokemon[0], sActivePokemon[0], 0xFF, 0xFF);
         Vec3f_SetComponentsDuplicate(&starting_position, -150.0f, 5.0f, 0.0f);
         BattleScene_SetCameraAtFromAnchor(sActivePokemon[0], camera, starting_position, 0, 0, 0.0f, 0.0f);
-        BattleScene_SetCameraEyeFromPosition(camera, starting_position, sBattleScene.scene->rotationX = 0x71C, 0x4000, sBattleScene.scene->introEyeDistance = 300.0f, 0.0f);
+        BattleScene_SetCameraEyeFromPosition(camera, starting_position, sBattleScene.scene->rotationX = 0x71C, 0x4000,
+                                             sBattleScene.scene->introEyeDistance = 300.0f, 0.0f);
         sBattleScene.scene->phaseStep += 1;
     }
 }
@@ -75,7 +77,8 @@ void BattleScene_IntroPanCamera(CameraNode* camera) {
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->introEyeDistance, 40.0f, 0.1f);
     BattleAnim_StepToS16(&sBattleScene.scene->rotationX, 0xB6, 0x1E);
-    BattleScene_SetCameraEyeFromPosition(camera, starting_position, sBattleScene.scene->rotationX, 0x4000, sBattleScene.scene->introEyeDistance, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, starting_position, sBattleScene.scene->rotationX, 0x4000,
+                                         sBattleScene.scene->introEyeDistance, 0.0f);
 
     if ((sBattleScene.scene->rotationX >= 0x2E) && (sActivePokemon[0]->pokeBall.position.y == 2.5f)) {
         Audio_PlayCommand(2, 0, 0);
@@ -137,7 +140,8 @@ void BattleScene_IntroFirstMonSettle(CameraNode* camera) {
 
 void BattleScene_IntroRevealSecondMon(CameraNode* camera) {
     ActivePokemonState* second_pokemon_state = &sActivePokemon[1]->state;
-    TeamRoster* second_trainer_roster = sActivePokemon[1]->sessionTeams->teamMember[second_pokemon_state->ownerTeamMemberIndex];
+    TeamRoster* second_trainer_roster =
+        sActivePokemon[1]->sessionTeams->teamMember[second_pokemon_state->ownerTeamMemberIndex];
 
     sActivePokemon[1]->thumbnail.camera->node.flags |= 1;
     sActivePokemon[1]->thumbnail.displayObject.node.flags |= 1;

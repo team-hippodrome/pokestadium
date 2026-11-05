@@ -7,10 +7,9 @@
 #include "instructions/RabbitizerInstructionR5900.h"
 #include "common/RabbitizerConfig.h"
 
-
 static void rabbitizer_type_Instruction_dealloc(PyRabbitizerInstruction *self) {
     RabbitizerInstruction_destroy(&self->instr);
-    Py_TYPE(self)->tp_free((PyObject *) self);
+    Py_TYPE(self)->tp_free((PyObject *)self);
 }
 
 static int rabbitizer_type_Instruction_init(PyRabbitizerInstruction *self, PyObject *args, PyObject *kwds) {
@@ -35,7 +34,7 @@ static int rabbitizer_type_Instruction_init(PyRabbitizerInstruction *self, PyObj
             return -1;
         }
 
-        instrCategory = ((PyRabbitizerEnum*)category)->value;
+        instrCategory = ((PyRabbitizerEnum *)category)->value;
     }
 
     switch (instrCategory) {
@@ -59,48 +58,47 @@ static int rabbitizer_type_Instruction_init(PyRabbitizerInstruction *self, PyObj
     return 0;
 }
 
-static PyMemberDef rabbitizer_type_Instruction_members[] = {
-    { "vram", T_UINT, offsetof(PyRabbitizerInstruction, instr.vram), 0, "vram description" },
-    { "inHandwrittenFunction", T_BOOL, offsetof(PyRabbitizerInstruction, instr.inHandwrittenFunction), 0, "inHandwrittenFunction description" },
+static PyMemberDef rabbitizer_type_Instruction_members[] = { { "vram", T_UINT, offsetof(PyRabbitizerInstruction, instr.vram), 0, "vram description" },
+                                                             { "inHandwrittenFunction", T_BOOL, offsetof(PyRabbitizerInstruction, instr.inHandwrittenFunction),
+                                                               0, "inHandwrittenFunction description" },
 
-    { 0 }
-};
+                                                             { 0 } };
 
-
-#define DEF_MEMBER_GET_UINT(name) \
+#define DEF_MEMBER_GET_UINT(name)                                                                                                 \
     static PyObject *rabbitizer_type_Instruction_member_get_##name(PyRabbitizerInstruction *self, PyObject *Py_UNUSED(ignored)) { \
-        return PyLong_FromUnsignedLong(RAB_INSTR_GET_##name(&self->instr)); \
+        return PyLong_FromUnsignedLong(RAB_INSTR_GET_##name(&self->instr));                                                       \
     }
 
-#define DEF_MEMBER_GET_REGGPR(name) \
+#define DEF_MEMBER_GET_REGGPR(name)                                                                                           \
     static PyObject *rabbitizer_type_Instruction_member_get_##name(PyRabbitizerInstruction *self, UNUSED PyObject *closure) { \
-        uint32_t reg; \
-        PyObject *enumInstance = NULL; \
-        \
-        if (!RabbitizerInstruction_hasOperandAlias(&self->instr, RAB_OPERAND_cpu_##name)) { \
-            PyErr_Format(PyExc_RuntimeError, "'%s' instruction does not reference register '" #name "'", RabbitizerInstrId_getOpcodeName(self->instr.uniqueId)); \
-            return NULL; \
-        } \
-        \
-        reg = RAB_INSTR_GET_##name(&self->instr); \
-        switch (RabbitizerConfig_Cfg.regNames.gprAbiNames) { \
-            case RABBITIZER_ABI_N32: \
-            case RABBITIZER_ABI_N64: \
-                enumInstance = rabbitizer_enum_RegGprN32_enumvalues[reg].instance; \
-                break; \
-        \
-            default: \
-                enumInstance = rabbitizer_enum_RegGprO32_enumvalues[reg].instance; \
-                break; \
-        } \
-        \
-        if (enumInstance == NULL) { \
-            PyErr_SetString(PyExc_RuntimeError, "Internal error: invalid RegGpr enum value"); \
-            return NULL; \
-        } \
-        \
-        Py_INCREF(enumInstance); \
-        return enumInstance; \
+        uint32_t reg;                                                                                                         \
+        PyObject *enumInstance = NULL;                                                                                        \
+                                                                                                                              \
+        if (!RabbitizerInstruction_hasOperandAlias(&self->instr, RAB_OPERAND_cpu_##name)) {                                   \
+            PyErr_Format(PyExc_RuntimeError, "'%s' instruction does not reference register '" #name "'",                      \
+                         RabbitizerInstrId_getOpcodeName(self->instr.uniqueId));                                              \
+            return NULL;                                                                                                      \
+        }                                                                                                                     \
+                                                                                                                              \
+        reg = RAB_INSTR_GET_##name(&self->instr);                                                                             \
+        switch (RabbitizerConfig_Cfg.regNames.gprAbiNames) {                                                                  \
+            case RABBITIZER_ABI_N32:                                                                                          \
+            case RABBITIZER_ABI_N64:                                                                                          \
+                enumInstance = rabbitizer_enum_RegGprN32_enumvalues[reg].instance;                                            \
+                break;                                                                                                        \
+                                                                                                                              \
+            default:                                                                                                          \
+                enumInstance = rabbitizer_enum_RegGprO32_enumvalues[reg].instance;                                            \
+                break;                                                                                                        \
+        }                                                                                                                     \
+                                                                                                                              \
+        if (enumInstance == NULL) {                                                                                           \
+            PyErr_SetString(PyExc_RuntimeError, "Internal error: invalid RegGpr enum value");                                 \
+            return NULL;                                                                                                      \
+        }                                                                                                                     \
+                                                                                                                              \
+        Py_INCREF(enumInstance);                                                                                              \
+        return enumInstance;                                                                                                  \
     }
 
 DEF_MEMBER_GET_REGGPR(rs)
@@ -121,30 +119,29 @@ static PyObject *rabbitizer_type_Instruction_member_get_uniqueId(PyRabbitizerIns
     return enumInstance;
 }
 
-#define MEMBER_GET(name, docs, closure)      { #name, (getter) rabbitizer_type_Instruction_member_get_##name, (setter) NULL,                                          PyDoc_STR(docs), closure }
-#define MEMBER_SET(name, docs, closure)      { #name, (getter) NULL,                                          (setter) rabbitizer_type_Instruction_member_set_##name, PyDoc_STR(docs), closure }
-#define MEMBER_GET_SET(name, docs, closure)  { #name, (getter) rabbitizer_type_Instruction_member_get_##name, (setter) rabbitizer_type_Instruction_member_set_##name, PyDoc_STR(docs), closure }
+#define MEMBER_GET(name, docs, closure) \
+    { #name, (getter)rabbitizer_type_Instruction_member_get_##name, (setter)NULL, PyDoc_STR(docs), closure }
+#define MEMBER_SET(name, docs, closure) \
+    { #name, (getter)NULL, (setter)rabbitizer_type_Instruction_member_set_##name, PyDoc_STR(docs), closure }
+#define MEMBER_GET_SET(name, docs, closure) \
+    { #name, (getter)rabbitizer_type_Instruction_member_get_##name, (setter)rabbitizer_type_Instruction_member_set_##name, PyDoc_STR(docs), closure }
 
+static PyGetSetDef rabbitizer_type_Instruction_getsetters[] = { MEMBER_GET(rs, "", NULL),
+                                                                MEMBER_GET(rt, "", NULL),
+                                                                MEMBER_GET(rd, "", NULL),
+                                                                MEMBER_GET(sa, "", NULL),
+                                                                MEMBER_GET(uniqueId, "", NULL),
 
-static PyGetSetDef rabbitizer_type_Instruction_getsetters[] = {
-    MEMBER_GET(rs, "", NULL),
-    MEMBER_GET(rt, "", NULL),
-    MEMBER_GET(rd, "", NULL),
-    MEMBER_GET(sa, "", NULL),
-    MEMBER_GET(uniqueId, "", NULL),
+                                                                { 0 } };
 
-    { 0 }
-};
-
-
-#define DEF_METHOD_GET_UINT(name) \
+#define DEF_METHOD_GET_UINT(name)                                                                                      \
     static PyObject *rabbitizer_type_Instruction_##name(PyRabbitizerInstruction *self, PyObject *Py_UNUSED(ignored)) { \
-        return PyLong_FromUnsignedLong(RabbitizerInstruction_##name(&self->instr)); \
+        return PyLong_FromUnsignedLong(RabbitizerInstruction_##name(&self->instr));                                    \
     }
 
-#define DEF_METHOD_GET_INT(name) \
+#define DEF_METHOD_GET_INT(name)                                                                                       \
     static PyObject *rabbitizer_type_Instruction_##name(PyRabbitizerInstruction *self, PyObject *Py_UNUSED(ignored)) { \
-        return PyLong_FromLong(RabbitizerInstruction_##name(&self->instr)); \
+        return PyLong_FromLong(RabbitizerInstruction_##name(&self->instr));                                            \
     }
 
 DEF_METHOD_GET_UINT(getRaw)
@@ -173,13 +170,12 @@ static PyObject *rabbitizer_type_Instruction_blankOut(PyRabbitizerInstruction *s
     Py_RETURN_NONE;
 }
 
-
-#define DEF_METHOD_BOOL(name) \
+#define DEF_METHOD_BOOL(name)                                                                                          \
     static PyObject *rabbitizer_type_Instruction_##name(PyRabbitizerInstruction *self, PyObject *Py_UNUSED(ignored)) { \
-        if (RabbitizerInstruction_##name(&self->instr)) { \
-            Py_RETURN_TRUE; \
-        } \
-        Py_RETURN_FALSE; \
+        if (RabbitizerInstruction_##name(&self->instr)) {                                                              \
+            Py_RETURN_TRUE;                                                                                            \
+        }                                                                                                              \
+        Py_RETURN_FALSE;                                                                                               \
     }
 
 DEF_METHOD_BOOL(isImplemented)
@@ -229,12 +225,12 @@ static PyObject *rabbitizer_type_Instruction_sameOpcodeButDifferentArguments(PyR
 
 DEF_METHOD_BOOL(isValid)
 
-#define DEF_DESCRIPTOR_METHOD_BOOL(name) \
+#define DEF_DESCRIPTOR_METHOD_BOOL(name)                                                                               \
     static PyObject *rabbitizer_type_Instruction_##name(PyRabbitizerInstruction *self, PyObject *Py_UNUSED(ignored)) { \
-        if (RabbitizerInstrDescriptor_##name(self->instr.descriptor)) { \
-            Py_RETURN_TRUE; \
-        } \
-        Py_RETURN_FALSE; \
+        if (RabbitizerInstrDescriptor_##name(self->instr.descriptor)) {                                                \
+            Py_RETURN_TRUE;                                                                                            \
+        }                                                                                                              \
+        Py_RETURN_FALSE;                                                                                               \
     }
 
 DEF_DESCRIPTOR_METHOD_BOOL(isUnknownType)
@@ -263,9 +259,8 @@ DEF_DESCRIPTOR_METHOD_BOOL(isPseudo)
 // TODO: create an enum type for architectureVersion
 // architectureVersion
 
-
 static PyObject *rabbitizer_type_Instruction_disassemble(PyRabbitizerInstruction *self, PyObject *args, PyObject *kwds) {
-    static char *kwlist[] = {"immOverride", "extraLJust", NULL};
+    static char *kwlist[] = { "immOverride", "extraLJust", NULL };
     const char *immOverride = NULL;
     size_t immOverrideLength = 0;
     int extraLJust = 0;
@@ -283,7 +278,7 @@ static PyObject *rabbitizer_type_Instruction_disassemble(PyRabbitizerInstruction
 
     bufferSize = RabbitizerInstruction_getSizeForBuffer(&self->instr, immOverrideLength, extraLJust);
 
-    buffer = malloc(bufferSize+1);
+    buffer = malloc(bufferSize + 1);
     if (buffer == NULL) {
         // TODO: signal an exception?
         return NULL;
@@ -295,7 +290,6 @@ static PyObject *rabbitizer_type_Instruction_disassemble(PyRabbitizerInstruction
     free(buffer);
     return ret;
 }
-
 
 // To allow piclking the object
 static PyObject *rabbitizer_type_Instruction___reduce__(PyRabbitizerInstruction *self, UNUSED PyObject *closure) {
@@ -310,13 +304,13 @@ static PyObject *rabbitizer_type_Instruction___reduce__(PyRabbitizerInstruction 
 
     args = PyTuple_Pack(3, word, vram, category);
 
-    return PyTuple_Pack(2, (PyObject*)&rabbitizer_type_Instruction_TypeObject, args);
+    return PyTuple_Pack(2, (PyObject *)&rabbitizer_type_Instruction_TypeObject, args);
 }
 
-
-#define METHOD_NO_ARGS(name, docs)  { #name, (PyCFunction)rabbitizer_type_Instruction_##name, METH_NOARGS,                  PyDoc_STR(docs) }
-#define METHOD_ARGS(name, docs)     { #name, (PyCFunction)rabbitizer_type_Instruction_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
-
+#define METHOD_NO_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_type_Instruction_##name, METH_NOARGS, PyDoc_STR(docs) }
+#define METHOD_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_type_Instruction_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
 
 static PyMethodDef rabbitizer_type_Instruction_methods[] = {
     METHOD_NO_ARGS(getRaw, ""),
@@ -375,7 +369,6 @@ static PyMethodDef rabbitizer_type_Instruction_methods[] = {
     { 0 },
 };
 
-
 static PyObject *rabbitizer_type_Instruction_repr(PyRabbitizerInstruction *self) {
     PyObject *ret;
     size_t disasmBufferSize;
@@ -389,7 +382,7 @@ static PyObject *rabbitizer_type_Instruction_repr(PyRabbitizerInstruction *self)
 
     disasmBufferSize = RabbitizerInstruction_getSizeForBuffer(&self->instr, 0, 0);
 
-    buffer = bufferStart = malloc(disasmBufferSize+1 + typeNameLength + extraSize);
+    buffer = bufferStart = malloc(disasmBufferSize + 1 + typeNameLength + extraSize);
     if (buffer == NULL) {
         // TODO: signal an exception?
         return NULL;
@@ -417,19 +410,17 @@ static PyObject *rabbitizer_type_Instruction_str(PyRabbitizerInstruction *self) 
     return rabbitizer_type_Instruction_disassemble(self, Py_BuildValue("()"), Py_BuildValue("{}"));
 }
 
-
 PyTypeObject rabbitizer_type_Instruction_TypeObject = {
-    PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name = "rabbitizer.Instruction",
+    PyVarObject_HEAD_INIT(NULL, 0).tp_name = "rabbitizer.Instruction",
     .tp_doc = PyDoc_STR("Instruction"),
     .tp_basicsize = sizeof(PyRabbitizerInstruction),
     .tp_itemsize = 0,
     .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
     .tp_new = PyType_GenericNew,
-    .tp_init = (initproc) rabbitizer_type_Instruction_init,
-    .tp_dealloc = (destructor) rabbitizer_type_Instruction_dealloc,
-    .tp_repr = (reprfunc) rabbitizer_type_Instruction_repr,
-    .tp_str = (reprfunc) rabbitizer_type_Instruction_str,
+    .tp_init = (initproc)rabbitizer_type_Instruction_init,
+    .tp_dealloc = (destructor)rabbitizer_type_Instruction_dealloc,
+    .tp_repr = (reprfunc)rabbitizer_type_Instruction_repr,
+    .tp_str = (reprfunc)rabbitizer_type_Instruction_str,
     .tp_members = rabbitizer_type_Instruction_members,
     .tp_methods = rabbitizer_type_Instruction_methods,
     .tp_getset = rabbitizer_type_Instruction_getsetters,

@@ -139,7 +139,7 @@ void JpegUtils_SetHuffmanTableOld(u8* data, JpegHuffmanTableOld* ht, u8* codesLe
 }
 
 u32 JpegUtils_ProcessHuffmanTableImplOld(u8* dht, JpegHuffmanTableOld* ht, u8* codesLengths, u16* codes) {
-     u8 isAc = *dht++ >> 4;
+    u8 isAc = *dht++ >> 4;
     s16 count2;
     s32 count;
 

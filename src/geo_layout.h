@@ -6,26 +6,21 @@
 #include "src/geo_node.h"
 
 #define GEO_CMD_FLAGS_RESET 0
-#define GEO_CMD_FLAGS_SET   1
+#define GEO_CMD_FLAGS_SET 1
 #define GEO_CMD_FLAGS_CLEAR 2
 
-#define CMD_SIZE_SHIFT (sizeof(void *) >> 3)
-#define CMD_PROCESS_OFFSET(offset) (((offset) & 3) | (((offset) & ~3) << CMD_SIZE_SHIFT))
+#define CMD_SIZE_SHIFT (sizeof(void*) >> 3)
+#define CMD_PROCESS_OFFSET(offset) (((offset)&3) | (((offset) & ~3) << CMD_SIZE_SHIFT))
 
-#define cur_geo_cmd_u8(offset) \
-    (gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
+#define cur_geo_cmd_u8(offset) (gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
-#define cur_geo_cmd_s16(offset) \
-    (*(s16 *) &gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
+#define cur_geo_cmd_s16(offset) (*(s16*)&gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
-#define cur_geo_cmd_s32(offset) \
-    (*(s32 *) &gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
+#define cur_geo_cmd_s32(offset) (*(s32*)&gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
-#define cur_geo_cmd_u32(offset) \
-    (*(u32 *) &gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
+#define cur_geo_cmd_u32(offset) (*(u32*)&gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
-#define cur_geo_cmd_ptr(offset) \
-    (*(void **) &gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
+#define cur_geo_cmd_ptr(offset) (*(void**)&gGeoLayoutCommand[CMD_PROCESS_OFFSET(offset)])
 
 typedef void (*GeoLayoutCommandProc)(void);
 
@@ -312,45 +307,45 @@ typedef struct unk_D_800ABE00_cmd26 {
     /* 0x13 */ u8 a;
 } unk_D_800ABE00_cmd26; // size = 0x14
 
-void geo_layout_cmd_branch_and_link(void); // cmd  0
-void geo_layout_cmd_end(void); // cmd  1
-void geo_layout_cmd_jump(void); // cmd  2
-void geo_layout_cmd_branch(void); // cmd  3
-void geo_layout_cmd_return(void); // cmd  4
-void geo_layout_cmd_open_node(void); // cmd  5
-void geo_layout_cmd_close_node(void); // cmd  6
-void geo_layout_cmd_attach_node(void); // cmd  7
-void geo_layout_cmd_set_callback(void); // cmd  8
-void geo_layout_cmd_create_container(void); // cmd  9
-void geo_layout_cmd_create_reference(void); // cmd 10
-void geo_layout_cmd_create_camera(void); // cmd 11
-void geo_layout_cmd_create_type3(void); // cmd 12
-void geo_layout_cmd_create_type4(void); // cmd 13
-void geo_layout_cmd_create_ortho(void); // cmd 14
-void geo_layout_cmd_create_perspective(void); // cmd 15
-void geo_layout_cmd_create_background(void); // cmd 16
-void geo_layout_cmd_create_clear_depth(void); // cmd 17
-void geo_layout_cmd_noop(void); // cmd 18
-void geo_layout_cmd_create_fog(void); // cmd 19
-void geo_layout_cmd_create_light(void); // cmd 20
-void geo_layout_cmd_skip(void); // cmd 21
-void geo_layout_cmd_create_ambient_light(void); // cmd 22
-void geo_layout_cmd_create_shadow_context(void); // cmd 23
-void geo_layout_cmd_create_shadow(void); // cmd 24
-void geo_layout_cmd_create_cull_distance(void); // cmd 25
-void geo_layout_cmd_create_switch_case(void); // cmd 26
-void geo_layout_cmd_create_translate_rotate(void); // cmd 27
-void geo_layout_cmd_create_translate(void); // cmd 28
-void geo_layout_cmd_create_animated_part(void); // cmd 29
-void geo_layout_cmd_create_display_list_part(void); // cmd 30
-void geo_layout_cmd_create_model_part(void); // cmd 31
+void geo_layout_cmd_branch_and_link(void);            // cmd  0
+void geo_layout_cmd_end(void);                        // cmd  1
+void geo_layout_cmd_jump(void);                       // cmd  2
+void geo_layout_cmd_branch(void);                     // cmd  3
+void geo_layout_cmd_return(void);                     // cmd  4
+void geo_layout_cmd_open_node(void);                  // cmd  5
+void geo_layout_cmd_close_node(void);                 // cmd  6
+void geo_layout_cmd_attach_node(void);                // cmd  7
+void geo_layout_cmd_set_callback(void);               // cmd  8
+void geo_layout_cmd_create_container(void);           // cmd  9
+void geo_layout_cmd_create_reference(void);           // cmd 10
+void geo_layout_cmd_create_camera(void);              // cmd 11
+void geo_layout_cmd_create_type3(void);               // cmd 12
+void geo_layout_cmd_create_type4(void);               // cmd 13
+void geo_layout_cmd_create_ortho(void);               // cmd 14
+void geo_layout_cmd_create_perspective(void);         // cmd 15
+void geo_layout_cmd_create_background(void);          // cmd 16
+void geo_layout_cmd_create_clear_depth(void);         // cmd 17
+void geo_layout_cmd_noop(void);                       // cmd 18
+void geo_layout_cmd_create_fog(void);                 // cmd 19
+void geo_layout_cmd_create_light(void);               // cmd 20
+void geo_layout_cmd_skip(void);                       // cmd 21
+void geo_layout_cmd_create_ambient_light(void);       // cmd 22
+void geo_layout_cmd_create_shadow_context(void);      // cmd 23
+void geo_layout_cmd_create_shadow(void);              // cmd 24
+void geo_layout_cmd_create_cull_distance(void);       // cmd 25
+void geo_layout_cmd_create_switch_case(void);         // cmd 26
+void geo_layout_cmd_create_translate_rotate(void);    // cmd 27
+void geo_layout_cmd_create_translate(void);           // cmd 28
+void geo_layout_cmd_create_animated_part(void);       // cmd 29
+void geo_layout_cmd_create_display_list_part(void);   // cmd 30
+void geo_layout_cmd_create_model_part(void);          // cmd 31
 void geo_layout_cmd_create_display_list_matrix(void); // cmd 32
-void geo_layout_cmd_create_scale(void); // cmd 33
-void geo_layout_cmd_create_display_list(void); // cmd 34
-void geo_layout_cmd_create_shadow_texture(void); // cmd 35
-void geo_layout_cmd_create_anchor(void); // cmd 36
-void geo_layout_cmd_set_node_flag4(void); // cmd 37
-void geo_layout_cmd_create_group(void); // cmd 38
+void geo_layout_cmd_create_scale(void);               // cmd 33
+void geo_layout_cmd_create_display_list(void);        // cmd 34
+void geo_layout_cmd_create_shadow_texture(void);      // cmd 35
+void geo_layout_cmd_create_anchor(void);              // cmd 36
+void geo_layout_cmd_set_node_flag4(void);             // cmd 37
+void geo_layout_cmd_create_group(void);               // cmd 38
 GraphNode* process_geo_layout(MemoryBlock*, void*);
 
 #endif // _18480_H_

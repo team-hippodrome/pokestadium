@@ -30,14 +30,14 @@ void BattlePrep_DrawStarfield(unk_D_84B19910* arg0) {
         temp_v0_12 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
         if (temp_v0_12 != NULL) {
             ptr2 = &(i + ((void)0, arg0))->unk_02;
-            Gfx_SetVertexAttributes(&temp_v0_12[0], ptr2->unk_00 - 8, ptr2->unk_02 + 8, ptr2->unk_04, 0, 0, 0xFF, 0xFF, 0x96,
-                          0xFF);
-            Gfx_SetVertexAttributes(&temp_v0_12[1], ptr2->unk_00 - 8, ptr2->unk_02 - 8, ptr2->unk_04, 0, 0x400, 0xFF, 0xFF, 0x96,
-                          0xFF);
-            Gfx_SetVertexAttributes(&temp_v0_12[2], ptr2->unk_00 + 8, ptr2->unk_02 - 8, ptr2->unk_04, 0x400, 0x400, 0xFF, 0xFF,
-                          0x96, 0xFF);
-            Gfx_SetVertexAttributes(&temp_v0_12[3], ptr2->unk_00 + 8, ptr2->unk_02 + 8, ptr2->unk_04, 0x400, 0, 0xFF, 0xFF, 0x96,
-                          0xFF);
+            Gfx_SetVertexAttributes(&temp_v0_12[0], ptr2->unk_00 - 8, ptr2->unk_02 + 8, ptr2->unk_04, 0, 0, 0xFF, 0xFF,
+                                    0x96, 0xFF);
+            Gfx_SetVertexAttributes(&temp_v0_12[1], ptr2->unk_00 - 8, ptr2->unk_02 - 8, ptr2->unk_04, 0, 0x400, 0xFF,
+                                    0xFF, 0x96, 0xFF);
+            Gfx_SetVertexAttributes(&temp_v0_12[2], ptr2->unk_00 + 8, ptr2->unk_02 - 8, ptr2->unk_04, 0x400, 0x400,
+                                    0xFF, 0xFF, 0x96, 0xFF);
+            Gfx_SetVertexAttributes(&temp_v0_12[3], ptr2->unk_00 + 8, ptr2->unk_02 + 8, ptr2->unk_04, 0x400, 0, 0xFF,
+                                    0xFF, 0x96, 0xFF);
 
             gSPVertex(gDisplayListHead++, temp_v0_12, 4, 0);
             gSP2Triangles(gDisplayListHead++, 0, 1, 2, 0, 0, 2, 3, 0);

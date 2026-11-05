@@ -5,11 +5,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -83,8 +83,8 @@ void PetalDanceTrail_Init(void) {
     }
 }
 
-void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   f32 argA, f32 argB, f32 argC, s16 argD) {
+void PetalDanceTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8,
+                           u8 arg9, f32 argA, f32 argB, f32 argC, s16 argD) {
     Trail50Effect* var_v1;
     Trail50EffectNode* var_s0;
     s32 i;
@@ -249,8 +249,8 @@ Gfx* PetalDanceTrail_Draw(Gfx* arg0) {
     s16 var_s3;
     f32 tmp;
 
-    gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0x1E], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                        G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0x1E], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     var_s5 = &D_843ADA80[0];
     for (i = 0; i < 50; i++, var_s5++) {

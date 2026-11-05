@@ -30,7 +30,6 @@ extern u16 D_8780FC94;
 extern u16 D_8780FC96;
 extern u16 D_8780FC98;
 
-
 void Widget_Init(void);
 void Widget_DrawControllerDisconnectBanner(void);
 void Rand_Advance(void);
@@ -69,9 +68,11 @@ s32 Widget_PauseMenuCheckHyperUnlock(void);
 void Widget_PauseMenuFindLeaders(void);
 s32 Widget_PauseMenuGetResult(void);
 void Widget_DrawPanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5);
-void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA);
+void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
+                                f32 arg8, f32 arg9, f32 argA);
 void Widget_PauseMenuDrawWinIcons(s16 arg0);
-void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, f32 arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD, f32 argE);
+void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
+                                  f32 arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD, f32 argE);
 void func_87803EAC(u32* arg0, u16 arg1, UNUSED u16 arg2, u16 arg3, u16 arg4, u8 arg5, u8 arg6);
 void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4);
 void Widget_PauseMenuDrawPlayerIcons(s16 arg0);

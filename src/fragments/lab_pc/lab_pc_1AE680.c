@@ -205,7 +205,8 @@ static Color_RGBA8 D_88217DF0 = { 0xF0, 0xF0, 0x00, 0xFF };
 const char D_88224E90[] = "%d";
 const char D_88224E94[] = " 00";
 
-void LabPC_DrawBoxNumberCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030* arg5) {
+void LabPC_DrawBoxNumberCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32 arg3, s32 arg4,
+                             unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88217DF4 = { 0x6C, 0x6C, 0x7E, 0xFF };
     Color_RGBA8 sp64;
     s32 pad60[1];
@@ -224,22 +225,24 @@ void LabPC_DrawBoxNumberCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, (arg5->unk_3C + arg0) - 1, (arg1 + arg5->unk_3E) - 1);
     Font_BeginTranslucentTextRendering();
     if (arg4 & 0x100) {
-        sp64 = *(Color_RGBA8 *)&D_88217DF0;
+        sp64 = *(Color_RGBA8*)&D_88217DF0;
     } else if (arg4 & 4) {
-        sp64 = *(Color_RGBA8 *)&D_88217DEC;
+        sp64 = *(Color_RGBA8*)&D_88217DEC;
     } else {
-        sp64 = *(Color_RGBA8 *)&D_88217DE8;
+        sp64 = *(Color_RGBA8*)&D_88217DE8;
     }
     Gfx_SetEnvColor(sp64.r, sp64.g, sp64.b, sp64.a);
     Font_SetActive(8, 0);
 
     Font_Printf(arg0 + 8, arg1 + 2, sp5C);
     sprintf(sp58, D_88224E90, (int)arg3 + 1);
-    Font_Printf(((arg0 + Font_MeasureTextExtent(0, 0, sp5C) + Font_MeasureTextExtent(0, 0, D_88224E94)) - Font_MeasureTextExtent(0, 0, sp58)) + 8, arg1 + 2, sp58);
+    Font_Printf(((arg0 + Font_MeasureTextExtent(0, 0, sp5C) + Font_MeasureTextExtent(0, 0, D_88224E94)) -
+                 Font_MeasureTextExtent(0, 0, sp58)) +
+                    8,
+                arg1 + 2, sp58);
     Font_EndTexturedTextRendering();
     LabPC_DrawPageCounterDigits((arg5->unk_3C + arg0) - 0x35, arg1 + 8, arg2->unk_0C, arg2->unk_08, 2);
 }
-
 
 static u8 D_88217DF8[] = {
     0x18,
@@ -250,7 +253,8 @@ static Color_RGBA8 D_88217DFC = { 0xF0, 0xF0, 0xF0, 0xFF };
 static Color_RGBA8 D_88217E00 = { 0xF0, 0xF0, 0xF0, 0x4D };
 static Color_RGBA8 D_88217E04 = { 0xF0, 0xF0, 0x00, 0xFF };
 
-void LabPC_DrawBoxTypeCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030* arg5) {
+void LabPC_DrawBoxTypeCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32 arg3, s32 arg4,
+                           unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88217E08 = { 0x6C, 0x6C, 0x7E, 0xFF };
     unk_func_8820634C_arg2_unk0* temp_v0_7;
     Color_RGBA8 sp48;
@@ -266,11 +270,11 @@ void LabPC_DrawBoxTypeCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32
     gDPFillRectangle(gDisplayListHead++, arg0, arg1, (arg5->unk_3C + arg0) - 1, (arg1 + arg5->unk_3E) - 1);
     Font_BeginTranslucentTextRendering();
     if (arg4 & 0x100) {
-        sp48 = *(Color_RGBA8 *)&D_88217E04;
+        sp48 = *(Color_RGBA8*)&D_88217E04;
     } else if (arg4 & 4) {
-        sp48 = *(Color_RGBA8 *)&D_88217E00;
+        sp48 = *(Color_RGBA8*)&D_88217E00;
     } else {
-        sp48 = *(Color_RGBA8 *)&D_88217DFC;
+        sp48 = *(Color_RGBA8*)&D_88217DFC;
     }
     Gfx_SetEnvColor(sp48.r, sp48.g, sp48.b, sp48.a);
     Font_SetActive(8, 0);
@@ -337,7 +341,8 @@ void LabPC_InitBoxNumberSelector(unk_func_8820BE14_02C_078_034* arg0, s32 arg1, 
     s32 sp4C = LabPC_MeasureBoxNumberWidth() + 0x10;
     UNUSED s32 pad[2];
 
-    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_8820BE14_02C_078_034));
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00,
+                                                                   sizeof(unk_func_8820BE14_02C_078_034));
 
     arg0->unk_00.unk_20 = LabPC_BoxNumberSelectorInput;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -353,7 +358,8 @@ void LabPC_InitBoxNumberSelector(unk_func_8820BE14_02C_078_034* arg0, s32 arg1, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabPC_DrawBoxNumberCell, sp4C, 0x18, 0xC, 1, arg3);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabPC_DrawBoxNumberCell, sp4C,
+                                                                      0x18, 0xC, 1, arg3);
     ((func88506238)Memmap_GetFragmentVaddr(WidgetTree_AllocateEntryFlags))(arg0->unk_30, 0xC, arg3);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_30);
 }
@@ -380,8 +386,8 @@ s32 LabPC_MeasureBoxTypeLabelWidth(void) {
     return var_s1;
 }
 
-void LabPC_InitBoxTypeSelector(unk_func_8820BE14_02C_078* arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_8820BE14_06C_000* arg4,
-                   s32 arg5, MemoryPool* arg6) {
+void LabPC_InitBoxTypeSelector(unk_func_8820BE14_02C_078* arg0, s32 arg1, s32 arg2, s32 arg3,
+                               unk_func_8820BE14_06C_000* arg4, s32 arg5, MemoryPool* arg6) {
     UNUSED s32 pad;
     s32 sp48 = LabPC_MeasureBoxTypeLabelWidth() + 0x10;
     UNUSED s32 pad2;
@@ -405,7 +411,8 @@ void LabPC_InitBoxTypeSelector(unk_func_8820BE14_02C_078* arg0, s32 arg1, s32 ar
     TableView_Initialize(&arg0->unk_38, arg4, 0x10, 3, 3);
 
     arg0->unk_30 = mem_pool_alloc(arg6, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabPC_DrawBoxTypeCell, sp48, 0x1C, 3, 1, arg6);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabPC_DrawBoxTypeCell, sp48,
+                                                                      0x1C, 3, 1, arg6);
     ((func88506404)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridStridedPage))(arg0->unk_30, &arg0->unk_38, arg6);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_30);
 
@@ -458,8 +465,8 @@ s32 LabPC_BoxTypeSelectorInput(unk_func_8820BE14_02C_078* arg0, Controller* arg1
                 } else {
                     sp20 = 0;
 
-                    ((func885063B8)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridStridedData))(arg0->unk_34->unk_30,
-                                                                           &arg0->unk_38.unk_00[arg0->unk_30->unk_38]);
+                    ((func885063B8)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridStridedData))(
+                        arg0->unk_34->unk_30, &arg0->unk_38.unk_00[arg0->unk_30->unk_38]);
 
                     if (arg0->unk_4C != 0) {
                         arg0->unk_34->unk_00.unk_10.unk_00 = -arg0->unk_34->unk_2C->unk_00.unk_14.unk_00;
@@ -480,7 +487,8 @@ s32 LabPC_BoxTypeSelectorInput(unk_func_8820BE14_02C_078* arg0, Controller* arg1
                         }
                     }
 
-                    ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(arg0->unk_34->unk_30, sp20);
+                    ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(arg0->unk_34->unk_30,
+                                                                                              sp20);
 
                     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 
@@ -552,7 +560,8 @@ void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s3
     Font_EndTexturedTextRendering();
 }
 
-void LabPC_DrawSwapBoxLabel(s32 arg0, s32 arg1, unk_func_88205880_00D0* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030* arg5) {
+void LabPC_DrawSwapBoxLabel(s32 arg0, s32 arg1, unk_func_88205880_00D0* arg2, s32 arg3, s32 arg4,
+                            unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88217E18 = { 0x40, 0x40, 0x74, 0xFF };
     static Color_RGBA8 D_88217E1C[] = {
         { 0x78, 0x78, 0xF1, 0xFF },
@@ -562,19 +571,18 @@ void LabPC_DrawSwapBoxLabel(s32 arg0, s32 arg1, unk_func_88205880_00D0* arg2, s3
     };
     Color_RGBA8 spD4;
     s32 sp94;
-    
 
     if (arg2 != 0) {
         if (arg4 & 2) {
             spD4 = Color_ScaleRgb(D_88217E18, 1.4f);
         } else {
-            spD4 = *(Color_RGBA8 *)&D_88217E18;
+            spD4 = *(Color_RGBA8*)&D_88217E18;
         }
         gDPPipeSync(gDisplayListHead++);
         gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);
         gDPSetRenderMode(gDisplayListHead++, 0, 0);
         {
-            
+
             s32 color = GPACK_RGBA5551(spD4.r, spD4.g, spD4.b, 1);
             gDPPipeSync(gDisplayListHead++);
             gDPSetFillColor(gDisplayListHead++, (color << 16) | color);
@@ -597,7 +605,7 @@ void LabPC_DrawSwapBoxLabel(s32 arg0, s32 arg1, unk_func_88205880_00D0* arg2, s3
         }
     } else {
         if (arg4 & 1) {
-            spD4 = *(Color_RGBA8 *)&D_88217E18;
+            spD4 = *(Color_RGBA8*)&D_88217E18;
             gDPPipeSync(gDisplayListHead++);
             gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);
             gDPSetRenderMode(gDisplayListHead++, 0, 0);
@@ -634,7 +642,6 @@ void LabPC_DrawSwapBoxLabel(s32 arg0, s32 arg1, unk_func_88205880_00D0* arg2, s3
     }
 }
 
-
 void LabPC_InitMonNameLevelWidget(unk_func_882079D8* arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_882079D8));
 
@@ -658,7 +665,7 @@ s32 LabPC_MonNameLevelWidget_Draw(unk_func_882079D8* arg0, s32 arg1, s32 arg2) {
 }
 
 void LabPC_InitSwapMenu(unk_func_8820B12C_02C* arg0, unk_func_8820B12C_02C_020* arg1, unk_func_8820B12C_02C_020* arg2,
-                   unk_func_88217740* arg3, unk_func_88509F48* arg4, s32 arg5, MemoryPool* arg6) {
+                        unk_func_88217740* arg3, unk_func_88509F48* arg4, s32 arg5, MemoryPool* arg6) {
     static Color_RGBA8 D_88217E2C = { 0xF0, 0xF0, 0xF0, 0xFF };
 
     s32 i;
@@ -681,8 +688,8 @@ void LabPC_InitSwapMenu(unk_func_8820B12C_02C* arg0, unk_func_8820B12C_02C_020* 
     for (i = 0; i < 6; i++) {
         arg0->unk_5C[i] = mem_pool_alloc(arg6, sizeof(unk_func_8850878C));
 
-        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_5C[i], 0, 0,
-                                                               Text_GetString(NULL, 0, D_88224FB4, i + 0xB), 0x10);
+        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+            arg0->unk_5C[i], 0, 0, Text_GetString(NULL, 0, D_88224FB4, i + 0xB), 0x10);
 
         arg0->unk_5C[i]->unk_30 = D_88217E2C;
         arg0->unk_5C[i]->unk_44 = arg0->unk_5C[i]->unk_44;
@@ -739,7 +746,8 @@ void LabPC_SwapMenu_SwapSides(unk_func_8820B12C_02C* arg0) {
     arg0->unk_34 = !arg0->unk_34;
 }
 
-void LabPC_SwapMenu_GetSelectedMons(unk_func_8820B12C_02C* arg0, unk_func_88205880_00D0** arg1, unk_func_88205880_00D0** arg2) {
+void LabPC_SwapMenu_GetSelectedMons(unk_func_8820B12C_02C* arg0, unk_func_88205880_00D0** arg1,
+                                    unk_func_88205880_00D0** arg2) {
     switch (arg0->unk_28) {
         case 0:
         case 3:
@@ -992,13 +1000,17 @@ s32 LabPC_SwapMenuInput(unk_func_8820B12C_02C* arg0, Controller* arg1) {
                     if (!(var_v1 & 2) && (var_v1 & 4)) {
                         if (arg0->unk_20[0]->unk_00.unk_2C->unk_08 == 0) {
                             Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_3C, arg0->unk_5C[0], 0, 0);
-                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C, arg1);
+                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(
+                                arg0->unk_3C, arg0->unk_5C[0], 0, 0);
+                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C,
+                                                                                                         arg1);
                             var_v1 = 1;
                         } else if (arg0->unk_20[1]->unk_00.unk_2C->unk_08 >= arg0->unk_20[1]->unk_00.unk_2C->unk_04) {
                             Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_3C, arg0->unk_5C[5], 0, 0);
-                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C, arg1);
+                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(
+                                arg0->unk_3C, arg0->unk_5C[5], 0, 0);
+                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C,
+                                                                                                         arg1);
                             var_v1 = 1;
                         } else {
                             LabPC_SwapMenu_SetPhase(arg0, 1);
@@ -1011,8 +1023,10 @@ s32 LabPC_SwapMenuInput(unk_func_8820B12C_02C* arg0, Controller* arg1) {
                     if (!(var_v1 & 2) && (var_v1 & 4)) {
                         if (arg0->unk_20[0]->unk_00.unk_2C->unk_08 == 0) {
                             Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_3C, arg0->unk_5C[1], 0, 0);
-                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C, arg1);
+                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(
+                                arg0->unk_3C, arg0->unk_5C[1], 0, 0);
+                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C,
+                                                                                                         arg1);
                             var_v1 = 1;
                         } else {
                             LabPC_SwapMenu_SetPhase(arg0, 2);
@@ -1026,8 +1040,10 @@ s32 LabPC_SwapMenuInput(unk_func_8820B12C_02C* arg0, Controller* arg1) {
                         if ((arg0->unk_20[0]->unk_00.unk_2C->unk_08 == 0) ||
                             (arg0->unk_20[1]->unk_00.unk_2C->unk_08 == 0)) {
                             Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_3C, arg0->unk_5C[2], 0, 0);
-                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C, arg1);
+                            ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(
+                                arg0->unk_3C, arg0->unk_5C[2], 0, 0);
+                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C,
+                                                                                                         arg1);
                             var_v1 = 1;
                         } else {
                             LabPC_SwapMenu_SetPhase(arg0, 3);
@@ -1047,7 +1063,8 @@ s32 LabPC_SwapMenuInput(unk_func_8820B12C_02C* arg0, Controller* arg1) {
                                 var_v0 = 3;
                             }
                             temp_v1(arg0->unk_3C, arg0->unk_5C[var_v0], 0, 0);
-                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C, arg1);
+                            ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_3C,
+                                                                                                         arg1);
                             var_v1 = 1;
                         } else {
                             LabPC_PerformReleaseOrReceive(arg0);
@@ -1335,7 +1352,7 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
         Gfx_SetEnvColor(D_88217E3C.r, D_88217E3C.g, D_88217E3C.b, D_88217E3C.a);
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 8, arg2 + 8,
-                      Text_GetString(NULL, 0, D_88224FB8, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
+                    Text_GetString(NULL, 0, D_88224FB8, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
 
         Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].maxHp);
         Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_28);
@@ -1346,7 +1363,7 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
 
     for (i = 0; i < spB0; i++) {
         LabPC_DrawMoveName(D_88217E40[i].unk_00 + arg1, D_88217E40[i].unk_04 + arg2,
-                      Move_GetDisplayInfo(arg0->unk_002C->unk_000[0].moves[i]), D_88217E40[i].unk_08);
+                           Move_GetDisplayInfo(arg0->unk_002C->unk_000[0].moves[i]), D_88217E40[i].unk_08);
     }
 
     Font_EndTexturedTextRendering();
@@ -1817,18 +1834,20 @@ s32 LabPC_SwapScreen_UpdatePageSelection(unk_func_8820BE14_02C* arg0) {
         case 0:
             if ((arg0->unk_74->unk_28->unk_20 == 0x100) && (arg0->unk_74->unk_28->unk_24 < 2)) {
                 ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_64, 1);
-                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_6C,
-                                                                       (arg0->unk_74->unk_28->unk_24 == 0) ? 0 : 1);
+                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(
+                    arg0->unk_6C, (arg0->unk_74->unk_28->unk_24 == 0) ? 0 : 1);
             } else {
                 ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_64, 0);
-                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_68, arg0->unk_74->unk_28->unk_24);
+                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_68,
+                                                                               arg0->unk_74->unk_28->unk_24);
             }
             break;
 
         case 1:
             if (LabPC_BoxLocationWidget_GetSelection(arg0->unk_30[0]) == 0x30000) {
                 ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_64, 0);
-                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_68, arg0->unk_74->unk_28->unk_24);
+                ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_68,
+                                                                               arg0->unk_74->unk_28->unk_24);
             } else {
                 LabPC_InfoCard_SetMon(arg0->unk_70, LabPC_GetHighlightedMon(arg0->unk_74->unk_2C));
                 ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_64, 2);
@@ -2163,20 +2182,23 @@ s32 LabPC_SwapControllerInput(unk_func_8820B12C* arg0, Controller* arg1) {
                             sp64 = 1;
                         }
                         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
-                        LabPC_BoxTypeSelector_SetSlotASelection(arg0->unk_00.unk_24->unk_78[sp64],
-                                      LabPC_BoxLocationWidget_GetSelection(arg0->unk_00.unk_24->unk_30[sp64]));
-                        LabPC_BoxTypeSelector_SetSlotBSelection(arg0->unk_00.unk_24->unk_78[sp64],
-                                      LabPC_BoxLocationWidget_GetSelection(arg0->unk_00.unk_24->unk_30[1 - sp64]));
+                        LabPC_BoxTypeSelector_SetSlotASelection(
+                            arg0->unk_00.unk_24->unk_78[sp64],
+                            LabPC_BoxLocationWidget_GetSelection(arg0->unk_00.unk_24->unk_30[sp64]));
+                        LabPC_BoxTypeSelector_SetSlotBSelection(
+                            arg0->unk_00.unk_24->unk_78[sp64],
+                            LabPC_BoxLocationWidget_GetSelection(arg0->unk_00.unk_24->unk_30[1 - sp64]));
 
                         arg0->unk_28->unk_14(arg0->unk_28, 0x100);
 
                         if (LabPC_RunBoxTypeSelectorModal(arg0->unk_00.unk_24->unk_78[sp64], arg1) == 1) {
                             sp60 = LabPC_BoxTypeSelector_GetSlotSelection(arg0->unk_00.unk_24->unk_78[sp64]);
                             LabPC_BoxLocationWidget_SetSelection(arg0->unk_00.unk_24->unk_30[sp64], sp60);
-                            LabPC_BindGridDeckData(arg0->unk_00.unk_24->unk_38[sp64],
-                                          (u8*)arg0->unk_00.unk_24->unk_8C[sp60 >> 0x10].unk_00 +
-                                              (arg0->unk_00.unk_24->unk_8C[sp60 >> 0x10].unk_0C * (sp60 & 0xFFFF)),
-                                          sp60);
+                            LabPC_BindGridDeckData(
+                                arg0->unk_00.unk_24->unk_38[sp64],
+                                (u8*)arg0->unk_00.unk_24->unk_8C[sp60 >> 0x10].unk_00 +
+                                    (arg0->unk_00.unk_24->unk_8C[sp60 >> 0x10].unk_0C * (sp60 & 0xFFFF)),
+                                sp60);
                         }
                         arg0->unk_28->unk_14(arg0->unk_28, 1);
                         var_s1 = 1;
@@ -2262,8 +2284,8 @@ s32 LabPC_SwapControllerInput(unk_func_8820B12C* arg0, Controller* arg1) {
         Text_SetStringToken(0x25, &sp30);
         Text_GetString(arg0->unk_00.unk_24->unk_88->unk_40, 0x80, D_88224FB4, 0x11);
 
-        ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_00.unk_24->unk_80, arg0->unk_00.unk_24->unk_88,
-                                                               2, 0);
+        ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_00.unk_24->unk_80,
+                                                                                arg0->unk_00.unk_24->unk_88, 2, 0);
         ((func8850A3EC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelSilent))(arg0->unk_00.unk_24->unk_80, arg1);
 
         Audio_PlaySoundEffectById(0x29);

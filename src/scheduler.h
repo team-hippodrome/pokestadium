@@ -80,5 +80,4 @@ void Sched_WaitForTaskMessage(UnkStruct80001380* arg0);
 void Sched_RemoveClient(unk_D_800AA660* arg0);
 void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1);
 
-
 #endif // _5580_H_

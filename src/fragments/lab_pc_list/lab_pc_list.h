@@ -744,7 +744,8 @@ void BattleInfoWidget_OpenSelectionAt(unk_func_8830867C_030* arg0, s32 arg1);
 void BattleInfoWidget_CloseSelection(unk_func_8830867C_030* arg0);
 u32 BattleInfoWidget_RunEntryModal(unk_func_8830867C_030* arg0, Controller* arg1, s32 arg2);
 void BattleInfoWidget_DrawStatusMenuLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_BuildStatusMenu(unk_func_8830867C_038* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                      MemoryPool* arg4);
 void BattleInfoWidget_SetStatusSelection(unk_func_8830867C_038* arg0, s32 arg1);
 s32 BattleInfoWidget_HandleStatusInput(unk_func_8830867C_038* arg0, Controller* arg1);
 s32 BattleInfoWidget_RunStatusModal(unk_func_8830867C_038* arg0, Controller* arg1);
@@ -753,7 +754,8 @@ void BattleInfoWidget_InitNumberSelectorDigits(unk_func_8830867C_044_038* arg0, 
 void BattleInfoWidget_SetNumberSelectorState(unk_func_8830867C_044_038* arg0, s32 arg1);
 s32 BattleInfoWidget_DrawNumberSelector(unk_func_8830867C_044_038* arg0, s32 arg1, s32 arg2);
 s32 BattleInfoWidget_HandleNumberSelectorInput(unk_func_8830867C_044_038* arg0, Controller* arg1);
-void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_BuildLevelRangeMenu(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                          MemoryPool* arg4);
 void BattleInfoWidget_SetLevelRange(unk_func_8830867C_044* arg0, s32 arg1, s32 arg2, s32 arg3);
 void BattleInfoWidget_SetLevelRangeState(unk_func_8830867C_044* arg0, s32 arg1);
 s32 BattleInfoWidget_HandleLevelRangeInput(unk_func_8830867C_044* arg0, Controller* arg1);
@@ -761,7 +763,8 @@ s32 BattleInfoWidget_RunLevelRangeModal(unk_func_8830867C_044* arg0, Controller*
 void BattleInfoWidget_InitLevelRangeSelectionProxy(unk_func_8830867C_044_040* arg0, unk_func_8830867C_044* arg1);
 s32 BattleInfoWidget_LevelRangeSelectionInput(unk_func_8830867C_044_040* arg0, Controller* arg1);
 void BattleInfoWidget_CenterLabel(unk_func_8830867C_03C* arg0, unk_func_8850878C* arg1, char* arg2);
-void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_BuildTypePanel(unk_func_8830867C_03C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                     MemoryPool* arg4);
 void BattleInfoWidget_SetTypeEntries(unk_func_8830867C_03C* arg0, unk_func_8830867C_02C_C54_01C* arg1);
 void BattleInfoWidget_GetTypeEntries(unk_func_8830867C_03C* arg0, unk_func_8830867C_02C_C54_01C* arg1);
 void BattleInfoWidget_SetTypePanelState(unk_func_8830867C_03C* arg0, s32 arg1);
@@ -772,7 +775,8 @@ s32 BattleInfoWidget_HandleTypeSelectionProxyInput(unk_func_8830867C_03C_04C* ar
 void func_8830FA10(void);
 void func_8830FA18(void);
 void BattleInfoWidget_CenterTypeLabel(unk_func_8830867C_040* arg0, unk_func_8850878C* arg1, char* arg2);
-void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_BuildMovePanel(unk_func_8830867C_040* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                     MemoryPool* arg4);
 void BattleInfoWidget_SetMoveSlots(unk_func_8830867C_040* arg0, unk_func_8830867C_02C_C54_024* arg1);
 void BattleInfoWidget_GetMoveSlots(unk_func_8830867C_040* arg0, unk_func_8830867C_02C_C54_024* arg1);
 void BattleInfoWidget_SetMovePanelState(unk_func_8830867C_040* arg0, s32 arg1);
@@ -780,9 +784,11 @@ s32 BattleInfoWidget_HandleMovePanelInput(unk_func_8830867C_040* arg0, Controlle
 s32 BattleInfoWidget_RunMovePanelModal(unk_func_8830867C_040* arg0, Controller* arg1);
 void BattleInfoWidget_InitMoveSelectionProxy(unk_func_8830867C_040_05C* arg0, unk_func_8830867C_040* arg1);
 s32 func_88310854(unk_func_8830867C_040_05C* arg0, Controller* arg1);
-void BattleInfoWidget_InitGamePakSlotLabel(unk_func_88310B70* arg0, s32 arg1, s32 arg2, unk_func_8830867C_04C_030* arg3, MemoryPool* arg4);
+void BattleInfoWidget_InitGamePakSlotLabel(unk_func_88310B70* arg0, s32 arg1, s32 arg2, unk_func_8830867C_04C_030* arg3,
+                                           MemoryPool* arg4);
 s32 BattleInfoWidget_DrawGamePakSlotLabel(unk_func_88310B70* arg0);
-void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_BuildItemMenu(unk_func_8830867C_04C* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                    MemoryPool* arg4);
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
 s32 LabPCList_CheckTmHmIneligibility(s32 arg0, unk_func_8830867C_02C_0CC_000_008* arg1);
 s32 LabPCList_CheckPpUpIneligibility(unk_func_8830867C_02C_0CC_000_008* arg0);
@@ -803,11 +809,15 @@ s32 BattleInfoWidget_ItemMenuHandleContainerInput(unk_func_8830867C_04C* arg0, C
 void BattleInfoWidget_OpenItemMenu(unk_func_8830867C_04C* arg0);
 void BattleInfoWidget_CloseItemMenu(unk_func_8830867C_04C* arg0);
 s32 BattleInfoWidget_RunItemMenuModal(unk_func_8830867C_04C* arg0, Controller* arg1);
-void BattleInfoWidget_DrawSlotEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030_1CEA00* arg5);
-void BattleInfoWidget_DrawLocationEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030_1CEA00* arg5);
-void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+void BattleInfoWidget_DrawSlotEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4,
+                                    unk_func_88200FA0_030_030_1CEA00* arg5);
+void BattleInfoWidget_DrawLocationEntry(s32 arg0, s32 arg1, unk_func_88309160_arg2* arg2, s32 arg3, s32 arg4,
+                                        unk_func_88200FA0_030_030_1CEA00* arg5);
+void BattleInfoWidget_BuildMoveDestinationMenu(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2, WidgetNode* arg3,
+                                               MemoryPool* arg4);
 void BattleInfoWidget_BindMoveDestinationData(unk_func_8830867C_048* arg0, unk_func_8830867C_02C_144* arg1);
-void BattleInfoWidget_MarkFullBoxSlots(unk_func_88200FA0_030_030_1CEA00* arg0, unk_func_8830867C_02C_0CC_000* arg1, unk_func_88313894_020* arg2);
+void BattleInfoWidget_MarkFullBoxSlots(unk_func_88200FA0_030_030_1CEA00* arg0, unk_func_8830867C_02C_0CC_000* arg1,
+                                       unk_func_88313894_020* arg2);
 void BattleInfoWidget_MarkIneligibleDestinations(unk_func_8830867C_048* arg0, unk_func_8830867C_02C_0CC_000* arg1);
 void BattleInfoWidget_FormatLocationName(char* arg0, s32 arg1, s32 arg2);
 void BattleInfoWidget_SetMoveDestinationTitle(unk_func_8830867C_048* arg0, s32 arg1, s32 arg2);
@@ -874,8 +884,8 @@ void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
-void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
+void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32,
+                             s32);
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000*);
-
 
 #endif // _FRAGMENT24_H_

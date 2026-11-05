@@ -434,83 +434,83 @@ void ParticleGfx_NoopStub9(void) {
 }
 
 /* Append a 32-bit texture block load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureBlock32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                    s32 shifts, s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
 /* Append a 32-bit texture tile load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureTile32(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_32b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
 /* Append a 16-bit texture block load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureBlock16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                    s32 shifts, s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, height, 0, cms, cmt, masks, maskt,
                         shifts, shiftt);
 }
 
 /* Append a 16-bit texture tile load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureTile16(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_16b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
 /* Append a 8-bit texture block load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureBlock8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, height, 0, cms, cmt, masks, maskt, shifts,
                         shiftt);
 }
 
 /* Append a 8-bit texture tile load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureTile8(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                  s32 shifts, s32 shiftt) {
     gDPLoadTextureTile(gDisplayListHead++, texture, fmt, G_IM_SIZ_8b, width, 0, 0, 0, width - 1, height - 1, 0, cms,
                        cmt, masks, maskt, shifts, shiftt);
 }
 
 /* Append a 4-bit texture block load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureBlock4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                   s32 shifts, s32 shiftt) {
     gDPLoadTextureBlock_4b(gDisplayListHead++, texture, fmt, width, height, 0, cms, cmt, masks, maskt, shifts, shiftt);
 }
 
 /* Append a 4-bit texture tile load with caller-supplied format and addressing. */
-void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt, s32 shifts,
-                   s32 shiftt) {
+void ParticleGfx_LoadTextureTile4(u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
+                                  s32 shifts, s32 shiftt) {
     gDPLoadTextureTile_4b(gDisplayListHead++, texture, fmt, width, 0, 0, 0, width - 1, height - 1, 0, cms, cmt, masks,
                           maskt, shifts, shiftt);
 }
 
 /* Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering. */
-void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks,
-                   s32 maskt, s32 shifts, s32 shiftt) {
+void ParticleGfx_LoadTextureMultiBlock4(u8* texture, s32 tmem, s32 rtile, s32 fmt, s32 width, s32 height, s32 cms,
+                                        s32 cmt, s32 masks, s32 maskt, s32 shifts, s32 shiftt) {
     gDPLoadMultiBlock_4b(gDisplayListHead++, texture, tmem, rtile, fmt, width, height, 0, cms, cmt, masks, maskt,
                          shifts, shiftt);
 }
 
 /* Append an RGBA32 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureRgba32(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                   G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA32 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileRgba32(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile32(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA16 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureRgba16(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                   G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering. */
@@ -528,16 +528,16 @@ void ParticleGfx_LoadTextureRgba16Dual(u8* texture1, u8* texture2, s32 width, s3
 void ParticleGfx_LoadTextureRgba16WrapS(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
 
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
-                  G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP,
+                                   G_TX_NOMIRROR | G_TX_CLAMP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA16 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureRgba16WrapT(u8* texture, s32 width, s32 height) {
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_MIRROR | G_TX_WRAP,
-                  G_TX_NOMASK, maskt, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                   G_TX_MIRROR | G_TX_WRAP, G_TX_NOMASK, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA16 texture block load with the specified addressing modes. */
@@ -545,44 +545,44 @@ void ParticleGfx_LoadTextureRgba16WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, masks, maskt,
-                  G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP,
+                                   G_TX_MIRROR | G_TX_WRAP, masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA16 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureRgba16WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
-                  G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_MIRROR | G_TX_WRAP,
+                                   G_TX_NOMIRROR | G_TX_CLAMP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an RGBA16 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileRgba16(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA16 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureIa16(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                   G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA16 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileIa16(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile16(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA8 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureIa8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA8 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileIa8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA8 texture block load with the specified addressing modes. */
@@ -590,14 +590,14 @@ void ParticleGfx_LoadTextureIa8WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, masks, maskt,
-                  G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
+                                  masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I8 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureI8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I8 texture block load with the specified addressing modes. */
@@ -605,14 +605,14 @@ void ParticleGfx_LoadTextureI8WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, masks, maskt,
-                  G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
+                                  masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I8 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileI8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Forward the texture and dimensions to the matching texture-load wrapper. */
@@ -627,26 +627,26 @@ void ParticleGfx_LoadTextureTileI8Alias(u8* texture, s32 width, s32 height) {
 
 /* Append an IA4 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileIa4(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I4 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileI4(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an IA4 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureIa4(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I4 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureI4(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I4 texture block load with the specified addressing modes. */
@@ -654,8 +654,8 @@ void ParticleGfx_LoadTextureI4WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP, masks, maskt,
-                  G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_MIRROR | G_TX_WRAP,
+                                  masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Forward the texture and dimensions to the matching texture-load wrapper. */
@@ -672,8 +672,8 @@ void ParticleGfx_LoadTextureTileI4Alias(u8* texture, s32 width, s32 height) {
 void ParticleGfx_LoadTextureI4WrapS(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
 
-    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
-                  G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_MIRROR | G_TX_WRAP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an I4 texture block load with the specified addressing modes. */
@@ -681,8 +681,8 @@ void ParticleGfx_LoadTextureI4WrapSTNoMirror(u8* texture, s32 width, s32 height)
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, masks,
-                  maskt, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP,
+                                  G_TX_NOMIRROR | G_TX_WRAP, masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering. */
@@ -692,8 +692,8 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapST(u8* texture, s32 width, s32 heigh
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureMultiBlock4(texture, tmem, rtile, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                  masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureMultiBlock4(texture, tmem, rtile, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP,
+                                       G_TX_NOMIRROR | G_TX_WRAP, masks, maskt, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering. */
@@ -703,26 +703,26 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(u8* texture, s32 width, 
     s32 masks = ParticleGfx_TextureSizeLog2(width);
     s32 maskt = ParticleGfx_TextureSizeLog2(height);
 
-    ParticleGfx_LoadTextureMultiBlock4(texture, tmem, rtile, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
-                  masks, maskt, shifts, shiftt);
+    ParticleGfx_LoadTextureMultiBlock4(texture, tmem, rtile, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_WRAP,
+                                       G_TX_NOMIRROR | G_TX_WRAP, masks, maskt, shifts, shiftt);
 }
 
 /* Append an CI8 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureCi8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an CI8 texture block load with the specified addressing modes. */
 void ParticleGfx_LoadTextureCi8WrapSWithMask(u8* texture, s32 width, s32 height, s32 masks) {
-    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_MIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, masks,
-                  G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_CI, width, height, G_TX_MIRROR | G_TX_WRAP,
+                                  G_TX_NOMIRROR | G_TX_CLAMP, masks, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Append an CI8 texture tile load with the specified addressing modes. */
 void ParticleGfx_LoadTextureTileCi8(u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureTile8(texture, G_IM_FMT_CI, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering. */
@@ -810,7 +810,8 @@ void ParticleGfx_DrawModelQuadYScaled(CameraNode* camera, Vec3f position, f32 sc
 }
 
 /* Load a camera-facing transform, then draw the selected quad or triangle vertices. */
-void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* camera, Vec3f position, f32 scale_y, Vtx* vtx, s16 rotation_z) {
+void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* camera, Vec3f position, f32 scale_y, Vtx* vtx,
+                                             s16 rotation_z) {
     ParticleGfx_PushBillboardRotatedMatrixYScaled(camera, position, scale_y, rotation_z);
 
     gSPVertex(gDisplayListHead++, vtx, 4, 0);
@@ -922,7 +923,8 @@ void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 atlas_width, s32 
 }
 
 /* Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices. */
-void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width, s32 height) {
+void ParticleGfx_DrawI4TextureAtlasTiled(u8* texture, Vtx* vtx, s32 atlas_width, s32 atlas_height, s32 width,
+                                         s32 height) {
     s32 i;
     s32 j;
     s32 var_s4 = 0;
@@ -1001,7 +1003,8 @@ void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b, u8 env_a) {
+void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b,
+                                             u8 env_a) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_r, prim_g, prim_b, prim_a);
     gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, env_a);
@@ -1010,7 +1013,8 @@ void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
+void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g,
+                                      u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, lod_frac, prim_r, prim_g, prim_b, prim_a);
     gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, 0);
@@ -1019,7 +1023,8 @@ void ParticleGfx_SetPrimEnvLodCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim
 }
 
 /* Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner. */
-void ParticleGfx_SetPrimEnvLodTextureCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
+void ParticleGfx_SetPrimEnvLodTextureCombine(u8 lod_frac, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r,
+                                             u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetPrimColor(gDisplayListHead++, 0, lod_frac, prim_r, prim_g, prim_b, prim_a);
     gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, 0);
@@ -1050,25 +1055,29 @@ u32 ParticleGfx_GetFrameDivisor(s32 divisor) {
 
 /* Write bounds for the render tile, scrolling S positively and T negatively with the particle clock. */
 void ParticleGfx_SetAnimatedTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
-    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
-                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2, (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
+    gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter,
+                   -scroll_t * sParticleFrameCounter, (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock. */
 void ParticleGfx_SetAnimatedAuxTileSize(s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
     gDPSetTileSize(gDisplayListHead++, 1, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
-                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2, (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
+                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+                   (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for the render tile, scrolling S positively and T negatively with the particle clock. */
 void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
-    gDPSetTileSize(gfx, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter, (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+    gDPSetTileSize(gfx, G_TX_RENDERTILE, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
+                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
                    (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
 /* Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock. */
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 scroll_s, s32 scroll_t, s32 width, s32 height) {
-    gDPSetTileSize(gfx, 1, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter, (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
+    gDPSetTileSize(gfx, 1, scroll_s * sParticleFrameCounter, -scroll_t * sParticleFrameCounter,
+                   (((scroll_s * sParticleFrameCounter) + width) - 1) << 2,
                    (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
@@ -1084,8 +1093,10 @@ void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 start_s, s32 scro
                    (((-scroll_t * sParticleFrameCounter) + height) - 1) << 2);
 }
 
-/* Write scrolling bounds for the render tile, using the selected divided clock and the supplied origin, steps, and dimensions. */
-void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor) {
+/* Write scrolling bounds for the render tile, using the selected divided clock and the supplied origin, steps, and
+ * dimensions. */
+void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width,
+                                         s32 height, s32 clock_divisor) {
     u32 temp_v0 = ParticleGfx_GetFrameDivisor(clock_divisor);
     s32 temp_v1 = start_s + (step_s * temp_v0);
     s32 temp_a0 = start_t - (step_t * temp_v0);
@@ -1093,8 +1104,10 @@ void ParticleGfx_SetFrameIndexedTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32
     gDPSetTileSize(gfx, G_TX_RENDERTILE, temp_v1, temp_a0, ((temp_v1 + width) - 1) << 2, ((temp_a0 + height) - 1) << 2);
 }
 
-/* Write scrolling bounds for auxiliary tile 1, using the selected divided clock and the supplied origin, steps, and dimensions. */
-void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width, s32 height, s32 clock_divisor) {
+/* Write scrolling bounds for auxiliary tile 1, using the selected divided clock and the supplied origin, steps, and
+ * dimensions. */
+void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, s32 step_s, s32 step_t, s32 width,
+                                            s32 height, s32 clock_divisor) {
     u32 temp_v0 = ParticleGfx_GetFrameDivisor(clock_divisor);
     s32 temp_v1 = start_s + (step_s * temp_v0);
     s32 temp_a0 = start_t - (step_t * temp_v0);
@@ -1104,16 +1117,16 @@ void ParticleGfx_SetFrameIndexedAuxTileSize(Gfx* gfx, s32 start_s, s32 start_t, 
 }
 
 /* Append a 4-bit texture block load to the supplied cursor and return the advanced cursor. */
-Gfx* ParticleGfx_LoadTextureBlock4ToList(Gfx* gfx, u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt, s32 masks, s32 maskt,
-                   s32 shifts, s32 shiftt) {
+Gfx* ParticleGfx_LoadTextureBlock4ToList(Gfx* gfx, u8* texture, s32 fmt, s32 width, s32 height, s32 cms, s32 cmt,
+                                         s32 masks, s32 maskt, s32 shifts, s32 shiftt) {
     gDPLoadTextureBlock_4b(gfx++, texture, fmt, width, height, 0, cms, cmt, masks, maskt, shifts, shiftt);
     return gfx;
 }
 
 /* Write a clamped I4 texture block load at the supplied cursor; the caller's pointer is passed by value. */
 void ParticleGfx_LoadTextureI4ToList(Gfx* gfx, u8* texture, s32 width, s32 height) {
-    ParticleGfx_LoadTextureBlock4ToList(gfx, texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
-                  G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    ParticleGfx_LoadTextureBlock4ToList(gfx, texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP,
+                                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 }
 
 /* Load the descriptor's supported RGBA16, IA8/16, or I4/8 image into the requested TMEM/tile. */
@@ -1122,10 +1135,12 @@ Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* gfx, u8* texture, ParticleTexture* d
         case G_IM_FMT_RGBA:
             switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_16b:
-                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_RGBA, G_IM_SIZ_16b, descriptor->unk_04->width,
-                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
-                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
-                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
+                    gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_RGBA, G_IM_SIZ_16b,
+                                     descriptor->unk_04->width, descriptor->unk_04->height, 0, 0,
+                                     descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT,
+                                     descriptor->unk_04->maskS, descriptor->unk_04->maskT, descriptor->unk_04->shiftS,
+                                     descriptor->unk_04->shiftT);
                     break;
             }
             break;
@@ -1134,16 +1149,18 @@ Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* gfx, u8* texture, ParticleTexture* d
             switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_8b:
                     gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_8b, descriptor->unk_04->width,
-                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
-                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
-                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1,
+                                     descriptor->unk_04->height - 1, 0, descriptor->unk_04->addressModeS,
+                                     descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
+                                     descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
 
                 case G_IM_SIZ_16b:
                     gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_IA, G_IM_SIZ_16b, descriptor->unk_04->width,
-                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
-                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
-                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1,
+                                     descriptor->unk_04->height - 1, 0, descriptor->unk_04->addressModeS,
+                                     descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
+                                     descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
             }
             break;
@@ -1151,17 +1168,19 @@ Gfx* ParticleGfx_LoadDescriptorTexture(Gfx* gfx, u8* texture, ParticleTexture* d
         case G_IM_FMT_I:
             switch (descriptor->unk_04->texelSize) {
                 case G_IM_SIZ_4b:
-                    gDPLoadMultiTile_4b(gfx++, texture, tmem, rtile, G_IM_FMT_I, descriptor->unk_04->width,
-                                        descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1,
-                                        0, descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
-                                        descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
+                    gDPLoadMultiTile_4b(
+                        gfx++, texture, tmem, rtile, G_IM_FMT_I, descriptor->unk_04->width, descriptor->unk_04->height,
+                        0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
+                        descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
+                        descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
 
                 case G_IM_SIZ_8b:
                     gDPLoadMultiTile(gfx++, texture, tmem, rtile, G_IM_FMT_I, G_IM_SIZ_8b, descriptor->unk_04->width,
-                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1, descriptor->unk_04->height - 1, 0,
-                                     descriptor->unk_04->addressModeS, descriptor->unk_04->addressModeT, descriptor->unk_04->maskS, descriptor->unk_04->maskT,
-                                     descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
+                                     descriptor->unk_04->height, 0, 0, descriptor->unk_04->width - 1,
+                                     descriptor->unk_04->height - 1, 0, descriptor->unk_04->addressModeS,
+                                     descriptor->unk_04->addressModeT, descriptor->unk_04->maskS,
+                                     descriptor->unk_04->maskT, descriptor->unk_04->shiftS, descriptor->unk_04->shiftT);
                     break;
             }
             break;
@@ -1190,13 +1209,17 @@ Gfx* ParticleGfx_LoadDescriptorTextureAndTile(Gfx* gfx, ParticleTexture* descrip
     if (descriptor->unk_08 != NULL) {
         switch (rtile) {
             case G_TX_RENDERTILE:
-                ParticleGfx_SetFrameIndexedTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT, descriptor->unk_08->stepS,
-                              descriptor->unk_08->stepT, descriptor->unk_04->width, descriptor->unk_04->height, descriptor->unk_08->clockDivisor);
+                ParticleGfx_SetFrameIndexedTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT,
+                                                    descriptor->unk_08->stepS, descriptor->unk_08->stepT,
+                                                    descriptor->unk_04->width, descriptor->unk_04->height,
+                                                    descriptor->unk_08->clockDivisor);
                 break;
 
             case 1:
-                ParticleGfx_SetFrameIndexedAuxTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT, descriptor->unk_08->stepS,
-                              descriptor->unk_08->stepT, descriptor->unk_04->width, descriptor->unk_04->height, descriptor->unk_08->clockDivisor);
+                ParticleGfx_SetFrameIndexedAuxTileSize(gfx++, descriptor->unk_08->startS, descriptor->unk_08->startT,
+                                                       descriptor->unk_08->stepS, descriptor->unk_08->stepT,
+                                                       descriptor->unk_04->width, descriptor->unk_04->height,
+                                                       descriptor->unk_08->clockDivisor);
                 break;
         }
     }
@@ -1222,13 +1245,16 @@ Gfx* ParticleGfx_LoadSecondaryDescriptorTexture(Gfx* gfx, ParticleMaterial* mate
 /* Pack the descriptor's sixteen color/alpha mux selectors into an RDP combine command. */
 void ParticleGfx_SetCombineModeFromDescriptor(Gfx* gfx, ParticleCombineMux* combine_mux) {
     gDPSetCombine(gfx++,
-                  GCCc0w0(combine_mux->colorA0, combine_mux->colorC0, combine_mux->alphaA0, combine_mux->alphaC0) | GCCc1w0(combine_mux->colorA1, combine_mux->colorC1),
+                  GCCc0w0(combine_mux->colorA0, combine_mux->colorC0, combine_mux->alphaA0, combine_mux->alphaC0) |
+                      GCCc1w0(combine_mux->colorA1, combine_mux->colorC1),
 
                   GCCc0w1(combine_mux->colorB0, combine_mux->colorD0, combine_mux->alphaB0, combine_mux->alphaD0) |
-                      GCCc1w1(combine_mux->colorB1, combine_mux->alphaA1, combine_mux->alphaC1, combine_mux->colorD1, combine_mux->alphaB1, combine_mux->alphaD1));
+                      GCCc1w1(combine_mux->colorB1, combine_mux->alphaA1, combine_mux->alphaC1, combine_mux->colorD1,
+                              combine_mux->alphaB1, combine_mux->alphaD1));
 }
 
-/* Append descriptor-driven combine, color, texture-generation, and texture-load commands; return the advanced cursor. */
+/* Append descriptor-driven combine, color, texture-generation, and texture-load commands; return the advanced cursor.
+ */
 Gfx* ParticleGfx_AppendDescriptorMaterial(Gfx* gfx, ParticleMaterial* material) {
     ParticleMaterialState* var_a3;
     ParticleTexture* sp20;

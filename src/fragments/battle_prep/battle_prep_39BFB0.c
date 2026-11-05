@@ -38,8 +38,9 @@ static Gfx D_84B14CE0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B14DC8[] = {
-    0x17000000, 0x00000000, 0x00000000,    0x00000000, D_84B14C20, 0x05000000, 0x22050000,
-    0x00000000, 0x08000000, BattlePrepTeamIcons_DrawActiveTeamBadge, D_84B14CE0, 0x06000000, 0x01000000, 0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14C20,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawActiveTeamBadge,
+    D_84B14CE0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B14E00[] = {
     VTX(-32, 48, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),       VTX(-32, 16, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -162,8 +163,10 @@ static Gfx D_84B15618[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B15688[] = {
-    0x17000000, 0x00000000,    0x00000000, 0x00000000, D_84B14E00, 0x05000000, 0x22050000, 0x00000000,
-    0x08000000, BattlePrepTeamIcons_DrawIconSingle, D_84B15200, 0x22050000, D_84B15618, 0x25000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14E00,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconSingle,
+    D_84B15200, 0x22050000, D_84B15618, 0x25000000, 0x06000000,
+    0x01000000,
 };
 static Vtx D_84B156C8[] = {
     VTX(-32, 48, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),       VTX(-32, 16, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -218,8 +221,10 @@ static Gfx D_84B159B0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B15A20[] = {
-    0x17000000, 0x00000000,    0x00000000, 0x00000000, D_84B156C8, 0x05000000, 0x22050000, 0x00000000,
-    0x08000000, BattlePrepTeamIcons_DrawIconDouble, D_84B15848, 0x22050000, D_84B159B0, 0x25000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B156C8,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconDouble,
+    D_84B15848, 0x22050000, D_84B159B0, 0x25000000, 0x06000000,
+    0x01000000,
 };
 static Vtx D_84B15A60[] = {
     VTX(-32, 24, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),      VTX(-32, 0, 0, 0, 768, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -298,14 +303,18 @@ static Gfx D_84B15EE0[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B15F50[] = {
-    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60, 0x05000000, 0x1B000000,    0x00000000,
-    0x00000000, 0x00180000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle, D_84B15CA0,
-    0x22050000, D_84B15EE0, 0x25000000, 0x06000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60,
+    0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00180000,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle,
+    D_84B15CA0, 0x22050000, D_84B15EE0, 0x25000000, 0x06000000,
+    0x06000000, 0x01000000,
 };
 static u32 D_84B15FA8[] = {
-    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60, 0x05000000, 0x1B000000,    0x00000000,
-    0x00000000, 0xFFE80000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle, D_84B15CA0,
-    0x22050000, D_84B15EE0, 0x25000000, 0x06000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60,
+    0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0xFFE80000,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle,
+    D_84B15CA0, 0x22050000, D_84B15EE0, 0x25000000, 0x06000000,
+    0x06000000, 0x01000000,
 };
 static Vtx D_84B16000[] = {
     VTX(-32, 24, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),       VTX(-32, 0, 0, 0, 768, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -355,14 +364,18 @@ static Gfx D_84B16268[] = {
     gsSPEndDisplayList(),
 };
 static u32 D_84B162D8[] = {
-    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000, 0x05000000, 0x1B000000,    0x00000000,
-    0x00000000, 0x00180000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble, D_84B16140,
-    0x22050000, D_84B16268, 0x25000000, 0x06000000, 0x06000000, 0x01000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000,
+    0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00180000,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble,
+    D_84B16140, 0x22050000, D_84B16268, 0x25000000, 0x06000000,
+    0x06000000, 0x01000000,
 };
 static u32 D_84B16330[] = {
-    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000, 0x05000000, 0x1B000000,    0x00000000,
-    0x00000000, 0xFFE80000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble, D_84B16140,
-    0x22050000, D_84B16268, 0x25000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,    0x00000000,
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000,
+    0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0xFFE80000,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble,
+    D_84B16140, 0x22050000, D_84B16268, 0x25000000, 0x06000000,
+    0x06000000, 0x01000000, 0x00000000, 0x00000000,
 };
 
 s32 BattlePrepTeamIcons_DrawActiveTeamBadge(s32 arg0, unk_func_80011B94* arg1) {
@@ -832,7 +845,8 @@ void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1) {
         }
 
         for (i = 0; i < 3; i++) {
-            if ((i >= gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought) || (temp_s5[i].unk_25 == 0)) {
+            if ((i >= gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought) ||
+                (temp_s5[i].unk_25 == 0)) {
                 Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_08);
             } else {
                 Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_10);
@@ -840,7 +854,8 @@ void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1) {
         }
 
         for (i = 0; i < 3; i++) {
-            if ((i >= gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought) || (temp_s6[i].unk_25 == 0)) {
+            if ((i >= gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought) ||
+                (temp_s6[i].unk_25 == 0)) {
                 Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_08);
             } else {
                 Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_10);
@@ -1046,11 +1061,13 @@ void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0) {
     PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0xC0, 1));
 
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, 0);
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00,
+                      0);
     }
 
     for (count = 3, i = 0; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, 0);
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00,
+                      0);
     }
 }
 
@@ -1063,22 +1080,26 @@ void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0) {
     PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
 
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, 0);
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00,
+                      0);
     }
 
     for (count = 6, i = 0; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, 0);
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00,
+                      0);
     }
 
     if (gSessionContext.battleSides[0].teamMember[1] != NULL) {
         for (count = 3, i = 0; i < gSessionContext.battleSides[0].teamMember[1]->numberOfPokemonBrought; count++, i++) {
-            func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].teamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
+            func_8001A324(arg0->unk_1C, count,
+                          gSessionContext.battleSides[0].teamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
         }
     }
 
     if (gSessionContext.battleSides[1].teamMember[1] != NULL) {
         for (count = 9, i = 0; i < gSessionContext.battleSides[1].teamMember[1]->numberOfPokemonBrought; count++, i++) {
-            func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].teamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
+            func_8001A324(arg0->unk_1C, count,
+                          gSessionContext.battleSides[1].teamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
         }
     }
 }
@@ -1132,11 +1153,13 @@ void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0) {
     s32 count;
 
     for (i = 0, count = 0; i < gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        PokeIcon_LoadModelTextureForMon(arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+        PokeIcon_LoadModelTextureForMon(
+            arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
     }
 
     for (i = 0, count = 3; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        PokeIcon_LoadModelTextureForMon(arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+        PokeIcon_LoadModelTextureForMon(
+            arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
     }
 }
 
@@ -1145,22 +1168,28 @@ void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
     s32 count;
 
     for (i = 0, count = 0; i < gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        PokeIcon_LoadModelTextureForMon(&arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+        PokeIcon_LoadModelTextureForMon(
+            &arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
     }
 
     for (i = 0, count = 6; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; count++, i++) {
-        PokeIcon_LoadModelTextureForMon(&arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+        PokeIcon_LoadModelTextureForMon(
+            &arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
     }
 
     if (gSessionContext.battleSides[0].teamMember[1] != NULL) {
         for (i = 0, count = 3; i < gSessionContext.battleSides[0].teamMember[1]->numberOfPokemonBrought; count++, i++) {
-            PokeIcon_LoadModelTextureForMon(&arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[1]->pokemonPicked[i].unk_00.unk_00, NULL);
+            PokeIcon_LoadModelTextureForMon(
+                &arg0->unk_20[count], gSessionContext.battleSides[0].teamMember[1]->pokemonPicked[i].unk_00.unk_00,
+                NULL);
         }
     }
 
     if (gSessionContext.battleSides[1].teamMember[1] != NULL) {
         for (i = 0, count = 9; i < gSessionContext.battleSides[1].teamMember[1]->numberOfPokemonBrought; count++, i++) {
-            PokeIcon_LoadModelTextureForMon(&arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[1]->pokemonPicked[i].unk_00.unk_00, NULL);
+            PokeIcon_LoadModelTextureForMon(
+                &arg0->unk_20[count], gSessionContext.battleSides[1].teamMember[1]->pokemonPicked[i].unk_00.unk_00,
+                NULL);
         }
     }
 }
@@ -1175,7 +1204,8 @@ void BattlePrepTeamIcons_Init(unk_D_84B25A58* arg0) {
     arg0->unk_24 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
     arg0->unk_28 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
 
-    if ((gSessionContext.ruleCategory == 8) && (gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought >= 4)) {
+    if ((gSessionContext.ruleCategory == 8) &&
+        (gSessionContext.battleSides[0].teamMember[0]->numberOfPokemonBrought >= 4)) {
         arg0->unk_02 = 1;
     }
 

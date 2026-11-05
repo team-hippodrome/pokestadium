@@ -82,10 +82,10 @@ void DrowzeeGame_UpdatePlayerTimingWindows(void) {
             continue;
         }
 
-        D_864052C8->unk_008 =
-            D_8640284C[D_864052CC->unk_000][2] + DrowzeeGame_ComputeAITimingBias(D_864052CC->unk_000, D_864052C8->unk_000);
-        D_864052C8->unk_00A =
-            D_8640284C[D_864052CC->unk_000][6] + DrowzeeGame_ComputeAITimingBias(D_864052CC->unk_000, D_864052C8->unk_000);
+        D_864052C8->unk_008 = D_8640284C[D_864052CC->unk_000][2] +
+                              DrowzeeGame_ComputeAITimingBias(D_864052CC->unk_000, D_864052C8->unk_000);
+        D_864052C8->unk_00A = D_8640284C[D_864052CC->unk_000][6] +
+                              DrowzeeGame_ComputeAITimingBias(D_864052CC->unk_000, D_864052C8->unk_000);
     }
 }
 
@@ -631,7 +631,7 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
         Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, D_87806330, 0x28)) / 2), 0x20,
-                      Text_GetString(NULL, 0, D_87806330, 0x28));
+                    Text_GetString(NULL, 0, D_87806330, 0x28));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(0x28, 0x34, temp_s2);
@@ -825,7 +825,8 @@ void DrowzeeGame_InitCamera(void) {
 
     D_87B000EC->view.targetPosition.y = 25.0f;
 
-    Camera_ComputeEyeFromAngles(&D_87B000EC->view.targetPosition, &D_87B000EC->view.eyePosition, D_87B000F4, D_87B000F0, D_87B000F2);
+    Camera_ComputeEyeFromAngles(&D_87B000EC->view.targetPosition, &D_87B000EC->view.eyePosition, D_87B000F4, D_87B000F0,
+                                D_87B000F2);
 }
 
 void DrowzeeGame_InitPlayerOverlays(void) {

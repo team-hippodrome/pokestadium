@@ -54,7 +54,7 @@ void MiniFx_FreeEmitter(ParticleEmitter* arg0) {
 }
 
 s32 MiniFx_ConfigureEmitter(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4, Vec3s arg7, ParticleUpdateCallback arg9,
-                  ParticleDescriptor* argA, s32 argB, u8 argC, s16 argD, u8 argE, u8 argF, u8 arg10) {
+                            ParticleDescriptor* argA, s32 argB, u8 argC, s16 argD, u8 argE, u8 argF, u8 arg10) {
     ParticleEmitter* temp_v0 = (ParticleEmitter*)MiniFx_AllocEmitter();
 
     if ((s32)temp_v0 != -1) {
@@ -85,8 +85,8 @@ s32 MiniFx_ConfigureEmitter(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4, V
     return (s32)temp_v0;
 }
 
-void MiniFx_ConfigureOneShotEmitter(s32 arg0, f32 arg1, Vec3f arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5,
-                   u8 arg6, u8 arg7) {
+void MiniFx_ConfigureOneShotEmitter(s32 arg0, f32 arg1, Vec3f arg2, ParticleUpdateCallback arg3,
+                                    ParticleDescriptor* arg4, s16 arg5, u8 arg6, u8 arg7) {
     Vec3s sp50;
 
     sp50.x = sp50.y = sp50.z = 0;
@@ -94,8 +94,9 @@ void MiniFx_ConfigureOneShotEmitter(s32 arg0, f32 arg1, Vec3f arg2, ParticleUpda
     MiniFx_ConfigureEmitter(arg0, 0, 1, arg1, arg2, sp50, arg3, arg4, 0, 0, arg5, arg6, arg7, 0);
 }
 
-void MiniFx_ConfigureEmitterWithPeriodAndRepeat(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4, ParticleUpdateCallback arg7,
-                   ParticleDescriptor* arg8, s16 arg9, u8 argA, u8 argB) {
+void MiniFx_ConfigureEmitterWithPeriodAndRepeat(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4,
+                                                ParticleUpdateCallback arg7, ParticleDescriptor* arg8, s16 arg9,
+                                                u8 argA, u8 argB) {
     Vec3s sp50;
 
     sp50.x = sp50.y = sp50.z = 0;
@@ -205,7 +206,8 @@ void MiniFx_UpdateParticles(void) {
 
 void MiniFx_DrawParticles(void) {
     gSPPerspNormalize(gDisplayListHead++, D_87906054->perspective.unk_04);
-    gSPMatrix(gDisplayListHead++, D_87906054->perspective.projectionMatrix, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
+    gSPMatrix(gDisplayListHead++, D_87906054->perspective.projectionMatrix,
+              G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, D_87906054->view.fixedMatrix, G_MTX_NOPUSH | G_MTX_MUL | G_MTX_PROJECTION);
 
     sParticleMatrixPool = Gfx_AllocDisplayList(sizeof(ParticleMatrixPool));
@@ -541,7 +543,8 @@ void MiniFx_InitCoolGravityParticle(Particle* arg0) {
 
     Particle_Rotation_AddVecFromVec3s(arg0, sp30);
 
-    Particle_PositionOffset_AddVecScaled(arg0, ParticleMath_RandomSigned(0xA) * 0.1f, ParticleMath_RandomRange(0xA) * 0.25f, ParticleMath_RandomSigned(0xA) * 0.1f);
+    Particle_PositionOffset_AddVecScaled(arg0, ParticleMath_RandomSigned(0xA) * 0.1f,
+                                         ParticleMath_RandomRange(0xA) * 0.25f, ParticleMath_RandomSigned(0xA) * 0.1f);
     Particle_StepMagnitude_SetScaled(arg0, (ParticleMath_RandomRange(5) * 0.35f) + 4.0f);
     Particle_MotionStep_SetVecFromField74AnglesXY(arg0);
     Particle_SetPrimAlpha(arg0, 0xFF);

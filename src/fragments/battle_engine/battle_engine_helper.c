@@ -19,7 +19,8 @@ s32 BattleScene_ByteArrayContains(u8 lookup, u8* array, s32 array_length) {
 }
 
 BattleMon* BattleScene_GetParticipantSessionMon(ActivePokemon* active_pokemon) {
-    BattleMon* pokemon = &active_pokemon->sessionTeams->teamMember[active_pokemon->state.ownerTeamMemberIndex]->pokemonPicked[active_pokemon->state.rosterIndex];
+    BattleMon* pokemon = &active_pokemon->sessionTeams->teamMember[active_pokemon->state.ownerTeamMemberIndex]
+                              ->pokemonPicked[active_pokemon->state.rosterIndex];
 
     return pokemon;
 }
@@ -52,30 +53,42 @@ f32 BattleScene_GetParticipantCameraTargetOffsetY(ActivePokemon* active_pokemon)
 void BattleScene_PositionParticipantModel(ActivePokemon* active_pokemon) {
     if (BattleScene_GetParticipantSideIndex(active_pokemon) == 0) {
         if (active_pokemon->displayObject.objectType == GYARADOS) {
-            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -225.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
-        } else if ((active_pokemon->displayObject.objectType == VENUSAUR) || (active_pokemon->displayObject.objectType == LAPRAS)) {
-            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -175.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -225.0f,
+                                         BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+        } else if ((active_pokemon->displayObject.objectType == VENUSAUR) ||
+                   (active_pokemon->displayObject.objectType == LAPRAS)) {
+            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -175.0f,
+                                         BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
         } else if (active_pokemon->displayObject.objectType == ONIX) {
-            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -225.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 7.5000005f);
+            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -225.0f,
+                                         BattleScene_GetParticipantModelRestingHeight(active_pokemon), 7.5000005f);
         } else {
-            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -150.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+            Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, -150.0f,
+                                         BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
         }
-    } else if ((active_pokemon->displayObject.objectType == GYARADOS) || (active_pokemon->displayObject.objectType == ONIX)) {
-        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 225.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
-    } else if ((active_pokemon->displayObject.objectType == VENUSAUR) || (active_pokemon->displayObject.objectType == LAPRAS)) {
-        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 175.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+    } else if ((active_pokemon->displayObject.objectType == GYARADOS) ||
+               (active_pokemon->displayObject.objectType == ONIX)) {
+        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 225.0f,
+                                     BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+    } else if ((active_pokemon->displayObject.objectType == VENUSAUR) ||
+               (active_pokemon->displayObject.objectType == LAPRAS)) {
+        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 175.0f,
+                                     BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
     } else {
-        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 150.0f, BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
+        Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.position, 150.0f,
+                                     BattleScene_GetParticipantModelRestingHeight(active_pokemon), 0.0f);
     }
 }
 
 f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
     if (BattleScene_GetParticipantSideIndex(active_pokemon) == 0) {
-        if ((active_pokemon->displayObject.objectType == GYARADOS) || (active_pokemon->displayObject.objectType == ONIX)) {
+        if ((active_pokemon->displayObject.objectType == GYARADOS) ||
+            (active_pokemon->displayObject.objectType == ONIX)) {
             return -200.0f;
         }
 
-        if ((active_pokemon->displayObject.objectType == VENUSAUR) || (active_pokemon->displayObject.objectType == LAPRAS)) {
+        if ((active_pokemon->displayObject.objectType == VENUSAUR) ||
+            (active_pokemon->displayObject.objectType == LAPRAS)) {
             return -175.0f;
         }
         return -150.0f;
@@ -85,7 +98,8 @@ f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
         return 200.0f;
     }
 
-    if ((active_pokemon->displayObject.objectType == VENUSAUR) || (active_pokemon->displayObject.objectType == LAPRAS)) {
+    if ((active_pokemon->displayObject.objectType == VENUSAUR) ||
+        (active_pokemon->displayObject.objectType == LAPRAS)) {
         return 175.0f;
     }
 
@@ -119,7 +133,8 @@ u8 BattleScene_GetMoveCueDefaultAnchor(ActivePokemon* active_pokemon) {
     UNUSED s32 pad;
     UNUSED s16 pad2;
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
-    MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
+    MovePresentationCue* move_cue =
+        &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
     return move_cue->defaultAnchor;
 }
@@ -128,7 +143,8 @@ u8 BattleScene_GetMoveCueAlternateAnchor(ActivePokemon* active_pokemon) {
     UNUSED s32 pad;
     UNUSED s16 pad2;
     s16 move_index = active_pokemon->state.runtime.usedMove - 1;
-    MovePresentationCue* move_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
+    MovePresentationCue* move_cue =
+        &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[move_index];
 
     return move_cue->alternateAnchor;
 }
@@ -146,7 +162,8 @@ s32 BattleScene_GetHitCueAlternateAnchor(ActivePokemon* active_pokemon) {
 }
 
 f32 BattleScene_GetParticipantModelBoundsHeight(ActivePokemon* active_pokemon) {
-    return ((BattleScene_GetParticipantModelHeight(active_pokemon) * 2) / 50.0f) * active_pokemon->displayObject.scale.y;
+    return ((BattleScene_GetParticipantModelHeight(active_pokemon) * 2) / 50.0f) *
+           active_pokemon->displayObject.scale.y;
 }
 
 f32 BattleScene_GetParticipantUnscaledBoundsHeight(ActivePokemon* active_pokemon) {
@@ -201,14 +218,16 @@ void BattleScene_GetParticipantModelPosition(ActivePokemon* pokemon, Vec3f* dest
 void BattleAnim_GetOwnerDefaultAnchorPosition(ActivePokemon* pokemon, Vec3f* anchor_position) {
     f32 y_offset = 0.0f;
 
-    //guess: these are pokemon where their wins are higher than their head in their idle animation
+    // guess: these are pokemon where their wins are higher than their head in their idle animation
     if (BattleScene_ByteArrayContains(pokemon->displayObject.objectType, &sAerodactyl, 1) != 0) {
         y_offset = BattleAnim_GetOwnerModelHeight(pokemon) / 1.5f;
     } else if (BattleScene_ByteArrayContains(pokemon->displayObject.objectType, &sFearow, 1) != 0) {
         y_offset = BattleAnim_GetOwnerModelHeight(pokemon) * 0.5f;
-    } else if ((BattleScene_ByteArrayContains(pokemon->displayObject.objectType, &sFarfetchD, 1) != 0) && (pokemon->state.flags & ACTIVE_AIRBORNE)) {
+    } else if ((BattleScene_ByteArrayContains(pokemon->displayObject.objectType, &sFarfetchD, 1) != 0) &&
+               (pokemon->state.flags & ACTIVE_AIRBORNE)) {
         y_offset = 2.0f * BattleAnim_GetOwnerModelHeight(pokemon);
-    } else if ((BattleScene_ByteArrayContains(pokemon->displayObject.objectType, sDoduoEvoLine, 2) != 0) && (pokemon->state.flags & ACTIVE_AIRBORNE)) {
+    } else if ((BattleScene_ByteArrayContains(pokemon->displayObject.objectType, sDoduoEvoLine, 2) != 0) &&
+               (pokemon->state.flags & ACTIVE_AIRBORNE)) {
         y_offset = BattleAnim_GetOwnerModelHeight(pokemon) * 1.5f;
     }
 
@@ -234,7 +253,8 @@ void BattleScene_GetParticipantRestingPosition(ActivePokemon* pokemon, Vec3f* de
         } else if ((pokemon->displayObject.objectType == VENUSAUR) || (pokemon->displayObject.objectType == LAPRAS)) {
             Vec3f_SetComponentsDuplicate(dest, -175.0f, BattleScene_GetParticipantModelRestingHeight(pokemon), 0.0f);
         } else if (pokemon->displayObject.objectType == ONIX) {
-            Vec3f_SetComponentsDuplicate(dest, -225.0f, BattleScene_GetParticipantModelRestingHeight(pokemon), 7.5000005f);
+            Vec3f_SetComponentsDuplicate(dest, -225.0f, BattleScene_GetParticipantModelRestingHeight(pokemon),
+                                         7.5000005f);
         } else {
             Vec3f_SetComponentsDuplicate(dest, -150.0f, BattleScene_GetParticipantModelRestingHeight(pokemon), 0.0f);
         }
@@ -300,11 +320,14 @@ void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePoke
     sleep_idle_cue = &sSideBattleCues[idx]->sleepIdleCue;
 
     if (!(pokemon_state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE))) {
-        if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
+        if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) &&
+            (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
             (ModelAnim_IsFinished(&animated_pokemon->displayObject) == 1)) {
             if (pokemon_state->flags & ACTIVE_AIRBORNE) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, flying_cue->id);
-            } else if ((pokemon_state->flags & ACTIVE_SLEEP) && (BattleScene_ByteArrayContains(animated_pokemon->displayObject.objectType, sPokemonWithAlternateSleepIdle, 8) != 0)) {
+            } else if ((pokemon_state->flags & ACTIVE_SLEEP) &&
+                       (BattleScene_ByteArrayContains(animated_pokemon->displayObject.objectType,
+                                                      sPokemonWithAlternateSleepIdle, 8) != 0)) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, sleep_idle_cue->id);
             } else {
                 if (animated_pokemon->displayObject.objectType == DITTO) {
@@ -339,11 +362,14 @@ void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = &sSideBattleCues[idx]->sleepIdleCue;
 
-    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
+    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) &&
+        (active_pokemon->displayObject.transformAnim.animationId != -1)) {
         ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
         if (state->flags & ACTIVE_AIRBORNE) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, flying_idle_cue->id);
-        } else if ((state->flags & ACTIVE_SLEEP) && (BattleScene_ByteArrayContains(active_pokemon->displayObject.objectType, sPokemonWithAlternateSleepIdle, 8) != 0)) {
+        } else if ((state->flags & ACTIVE_SLEEP) &&
+                   (BattleScene_ByteArrayContains(active_pokemon->displayObject.objectType,
+                                                  sPokemonWithAlternateSleepIdle, 8) != 0)) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, sleep_idle_cue->id);
         } else {
             if (active_pokemon->displayObject.objectType == DITTO) {
@@ -398,7 +424,8 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_FREEZE) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_FREEZE) &&
+            (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
@@ -425,7 +452,8 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) &&
+            (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
@@ -433,7 +461,8 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
     if (active_pokemon->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
             pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
-            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
+            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) &&
+                (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }
         }
@@ -445,7 +474,8 @@ s32 BattleScene_GetCombinedTeamSize(ActivePokemon* active_pokemon) {
     if (active_pokemon->sessionTeams->tagTeamSize != 2) {
         return active_pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought;
     }
-    return active_pokemon->sessionTeams->teamMember[1]->numberOfPokemonBrought + active_pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought;
+    return active_pokemon->sessionTeams->teamMember[1]->numberOfPokemonBrought +
+           active_pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought;
 }
 
 u8 BattleScene_GetRosterTeamSize(TeamRoster* roster) {
@@ -456,7 +486,8 @@ s32 BattleScene_GetParticipantDisplayPlayerNumber(ActivePokemon* active_pokemon)
     return active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam]->controllerPort + 1;
 }
 
-void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s32 object_type, s32 mark_move_illegality) {
+void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s32 object_type,
+                                            s32 mark_move_illegality) {
     UNUSED s32 pad;
     ModelNodeView* model_node = Battle_GetLoadedModelNode(owner, 0);
 

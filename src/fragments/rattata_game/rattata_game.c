@@ -183,23 +183,23 @@ void RattataGame_DrawRankBanners(void) {
         if (D_86204590->unk_19E == 2) {
             switch (D_86204590->unk_1B2) {
                 case 0:
-                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f, 30.0f, 0.25f,
-                                                     &D_4000008, 0x20, 0x20);
+                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f,
+                                                                30.0f, 0.25f, &D_4000008, 0x20, 0x20);
                     break;
 
                 case 1:
-                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f, 30.0f, 0.25f,
-                                                     &D_4000810, 0x20, 0x20);
+                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f,
+                                                                30.0f, 0.25f, &D_4000810, 0x20, 0x20);
                     break;
 
                 case 2:
-                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f, 30.0f, 0.25f,
-                                                     &D_4001018, 0x20, 0x20);
+                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f,
+                                                                30.0f, 0.25f, &D_4001018, 0x20, 0x20);
                     break;
 
                 case 3:
-                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f, 30.0f, 0.25f,
-                                                     &D_4001820, 0x20, 0x20);
+                    gDisplayListHead = MiniGfx_DrawTexturedQuad(gDisplayListHead, &sp98, -(i - 1.5f) * 40.0f, 5.0f,
+                                                                30.0f, 0.25f, &D_4001820, 0x20, 0x20);
                     break;
             }
         }
@@ -284,7 +284,8 @@ void RattataGame_InitCamera(void) {
     D_86203E3C->view.targetPosition.y = 0.0f;
     D_86203E3C->view.targetPosition.z = 5.0f;
 
-    Camera_ComputeEyeFromAngles(&D_86203E3C->view.targetPosition, &D_86203E3C->view.eyePosition, D_86203E44, D_86203E40, D_86203E42);
+    Camera_ComputeEyeFromAngles(&D_86203E3C->view.targetPosition, &D_86203E3C->view.eyePosition, D_86203E44, D_86203E40,
+                                D_86203E42);
 }
 
 void RattataGame_UpdateCamera(void) {
@@ -369,7 +370,8 @@ void RattataGame_UpdateCamera(void) {
         D_86203E44 = 0x32;
     }
 
-    Camera_ComputeEyeFromAngles(&D_86203E3C->view.targetPosition, &D_86203E3C->view.eyePosition, D_86203E44, D_86203E40, D_86203E42);
+    Camera_ComputeEyeFromAngles(&D_86203E3C->view.targetPosition, &D_86203E3C->view.eyePosition, D_86203E44, D_86203E40,
+                                D_86203E42);
 }
 
 void func_86200938(void) {
@@ -409,8 +411,8 @@ void RattataGame_DrawTutorialScreen(s32 arg0) {
             Font_SetLineHeight(0xC);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86204714, Text_GetString(NULL, 0, D_87806330, 0x23)) / 2), 0x20,
-                          Text_GetString(NULL, 0, D_87806330, 0x23));
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86204714, Text_GetString(NULL, 0, D_87806330, 0x23)) / 2),
+                        0x20, Text_GetString(NULL, 0, D_87806330, 0x23));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x24));
@@ -652,7 +654,8 @@ s32 RattataGame_CheckHurdleCollision(RattataRacer* arg0, RattataHurdleMarker* ar
     }
 
     if (arg0->unk_19C == 1) {
-        if ((arg0->unk_008.transformAnim.frameFixed >= 0x20001) && (arg0->unk_008.transformAnim.frameFixed < 0x100000)) {
+        if ((arg0->unk_008.transformAnim.frameFixed >= 0x20001) &&
+            (arg0->unk_008.transformAnim.frameFixed < 0x100000)) {
             return 0;
         }
     }

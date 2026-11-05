@@ -19,7 +19,8 @@ static unk_D_82F21160 D_82F21160[2];
 static unk_D_82F211A0 D_82F211A0[2];
 static unk_D_82F21238 D_82F21238;
 
-void TradeCable_DrawScissoredTexRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8) {
+void TradeCable_DrawScissoredTexRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
+                                     s32 arg8) {
     gSPScisTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg0 + arg2) << 2, (arg1 + arg3) << 2, 0, arg4,
                             arg5, arg6, arg7);
 }
@@ -220,7 +221,7 @@ void TradeCable_DrawBalls(void) {
                         var_s0 = -var_s0;
                     }
                     Gfx_DrawTexturedRectClipped(var_s4->unk_02 + var_s0, var_s4->unk_04 + j, 0x3C, 1, 0,
-                                  ROUND_MAX((j * 32.0f) / 1.5f), 0x2AB, 0x2AB, 0);
+                                                ROUND_MAX((j * 32.0f) / 1.5f), 0x2AB, 0x2AB, 0);
                 }
             } else {
                 Gfx_DrawTexturedRectClipped(var_s4->unk_02, var_s4->unk_04, 0x3C, 0x3C, 0, 0, 0x2AB, 0x2AB, 0);
@@ -238,8 +239,8 @@ void TradeCable_DrawBalls(void) {
                     gDPPipeSync(gDisplayListHead++);
                     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, tmp);
 
-                    Gfx_DrawTexturedRectClipped(var_s4->unk_10[j].unk_00, var_s4->unk_10[j].unk_02, 0x3C, 0x3C, 0, 0, 0x2AB, 0x2AB,
-                                  0);
+                    Gfx_DrawTexturedRectClipped(var_s4->unk_10[j].unk_00, var_s4->unk_10[j].unk_02, 0x3C, 0x3C, 0, 0,
+                                                0x2AB, 0x2AB, 0);
                 }
             }
         }
@@ -1522,10 +1523,13 @@ void func_82F10BB4(s16 arg0, s16 arg1, f32 arg2) {
     temp_ft3 = ROUND_MAX(-1024.0f / arg2);
 
     for (i = 0; i < 11; i++, var_s6 += 0x876) {
-        gDPLoadTextureTile_4b(gDisplayListHead++, var_s6, G_IM_FMT_I, 228, 0, 0, 0, 227, 18, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gDPLoadTextureTile_4b(gDisplayListHead++, var_s6, G_IM_FMT_I, 228, 0, 0, 0, 227, 18, 0,
+                              G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                              G_TX_NOLOD, G_TX_NOLOD);
 
         TradeCable_DrawScissoredTexRect(arg0, arg1 + i * temp_ft1, temp_ft2, temp_ft1, 0, 0, temp_ft0, temp_ft0, 0);
-        TradeCable_DrawScissoredTexRect(arg0 + temp_ft2, arg1 + i * temp_ft1, temp_ft2, temp_ft1, 0x1C60, 0, temp_ft3, temp_ft0, 0);
+        TradeCable_DrawScissoredTexRect(arg0 + temp_ft2, arg1 + i * temp_ft1, temp_ft2, temp_ft1, 0x1C60, 0, temp_ft3,
+                                        temp_ft0, 0);
     }
 }
 
@@ -1637,8 +1641,10 @@ void TradeCable_DrawTubeSparkBandDim(s16 arg0, s16 arg1, f32 arg2, s16 arg3, s16
 
         i -= var_t3;
         temp_ft0 = var_t3 * arg2;
-        TradeCable_DrawScissoredTexRect(arg0 + temp_fa0, arg1 + temp_fa0_2 + var_s4, spB6, temp_ft0, 0, 0, temp_ft1, temp_ft1, 0);
-        TradeCable_DrawScissoredTexRect(arg0 + temp_fv1_2, arg1 + temp_fa0_2 + var_s4, spB6, temp_ft0, 0xC60, 0, sp60, temp_ft1, 0);
+        TradeCable_DrawScissoredTexRect(arg0 + temp_fa0, arg1 + temp_fa0_2 + var_s4, spB6, temp_ft0, 0, 0, temp_ft1,
+                                        temp_ft1, 0);
+        TradeCable_DrawScissoredTexRect(arg0 + temp_fv1_2, arg1 + temp_fa0_2 + var_s4, spB6, temp_ft0, 0xC60, 0, sp60,
+                                        temp_ft1, 0);
         var_s5 += 0xE10;
         var_s4 += temp_ft0;
     }
@@ -1702,8 +1708,10 @@ void TradeCable_DrawTubeSparkBandBright(s16 arg0, s16 arg1, f32 arg2, s16 arg3, 
                             0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
 
-        TradeCable_DrawScissoredTexRect(arg0 + temp_fv1_2, arg1 + temp_fv1_3 + var_s6, spE6, temp_ft0, 0, 0, sp6C, sp6C, 0x100000);
-        TradeCable_DrawScissoredTexRect(arg0 + temp_fa0, arg1 + temp_fv1_3 + var_s6, spE6, temp_ft0, 0xC60, 0, sp60, sp6C, 0x100000);
+        TradeCable_DrawScissoredTexRect(arg0 + temp_fv1_2, arg1 + temp_fv1_3 + var_s6, spE6, temp_ft0, 0, 0, sp6C, sp6C,
+                                        0x100000);
+        TradeCable_DrawScissoredTexRect(arg0 + temp_fa0, arg1 + temp_fv1_3 + var_s6, spE6, temp_ft0, 0xC60, 0, sp60,
+                                        sp6C, 0x100000);
         var_s7 += 0x640;
         var_fp += 0x640;
         var_s6 += temp_ft0;

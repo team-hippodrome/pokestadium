@@ -8,8 +8,8 @@
 
 #define FORNEXT_DEPTH 4
 
-#define MUSFLAG_EFFECTS	1
-#define MUSFLAG_SONGS	2
+#define MUSFLAG_EFFECTS 1
+#define MUSFLAG_SONGS 2
 
 #define FX_PRIORITY 3
 
@@ -43,7 +43,7 @@ typedef struct envelope_t {
 
 typedef struct fx_metadata_t {
     /* 0x00 */ u8 params[4]; // [3] = default priority
-} fx_metadata_t; // size = 0x4
+} fx_metadata_t;             // size = 0x4
 
 typedef struct song_t {
     /* 0x00 */ u32 num_channels;

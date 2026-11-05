@@ -21,7 +21,8 @@ void BattleAnim_StartFreezeStatusAnimation(ActivePokemon* active_pokemon) {
         active_pokemon->displayObject.node.renderFlags &= ~0x20;
     }
 
-    if ((runtime->unk_15 & STATUS_FREEZE) && (party_pokemon->statusCondition & STATUS_FREEZE) && !(pokemon_state->flags & ACTIVE_FREEZE) &&
+    if ((runtime->unk_15 & STATUS_FREEZE) && (party_pokemon->statusCondition & STATUS_FREEZE) &&
+        !(pokemon_state->flags & ACTIVE_FREEZE) &&
         ((active_pokemon->displayObject.transformAnim.frameFixed >> 0x10) >= 3)) {
         ModelAnim_SetAnimation(&active_pokemon->displayObject, hit_cue->id);
         ModelAnim_SetFrame(&active_pokemon->displayObject, 4);
@@ -76,7 +77,8 @@ void BattleAnim_UpdateSleepStatusAnimation(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
     if ((sBattleScene.scene->phase != BATTLE_PHASE_VOLUNTARY_SWITCH) || (sBattleScene.scene->phaseStep >= 6)) {
-        if ((party_pokemon->statusCondition & STATUS_SLEEP_MASK) && (runtime->unk_15 & STATUS_SLEEP_MASK) && !(active_pokemon->state.flags & ACTIVE_SLEEP)) {
+        if ((party_pokemon->statusCondition & STATUS_SLEEP_MASK) && (runtime->unk_15 & STATUS_SLEEP_MASK) &&
+            !(active_pokemon->state.flags & ACTIVE_SLEEP)) {
             BattleAnim_SetModelEventTrackAndState(active_pokemon, BATTLE_CUE_SLEEP_IDLE, 2);
             BattleAnim_QueueEffectList(3, active_pokemon);
             BattleAnim_PlayBattleSequenceById(active_pokemon, 0x32);

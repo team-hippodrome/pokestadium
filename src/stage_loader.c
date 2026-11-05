@@ -387,13 +387,13 @@ void StageLoader_FillFrame(void) {
     gDPSetRenderMode(gDisplayListHead++, G_RM_OPA_SURF, G_RM_OPA_SURF2);
     gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);
     gDPSetFillColor(gDisplayListHead++, (stage->clearColor << 0x10) | stage->clearColor);
-    gDPFillRectangle(gDisplayListHead++, stage->clearLeft, stage->clearTop, stage->clearRight,
-                     stage->clearBottom);
+    gDPFillRectangle(gDisplayListHead++, stage->clearLeft, stage->clearTop, stage->clearRight, stage->clearBottom);
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
 }
 
-StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets) {
+StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4,
+                                    s32 allocate_render_targets) {
     StageContext* temp_v0 = main_pool_alloc(sizeof(StageContext), 0);
 
     if (temp_v0 != NULL) {

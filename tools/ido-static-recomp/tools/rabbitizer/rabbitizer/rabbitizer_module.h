@@ -17,22 +17,17 @@
 
 // TODO: clean up this...
 
-
 typedef struct PyRabbitizerInstruction {
-    PyObject_HEAD
-    RabbitizerInstruction instr;
+    PyObject_HEAD RabbitizerInstruction instr;
 } PyRabbitizerInstruction;
 
 typedef struct PyRabbitizerTrackedRegisterState {
-    PyObject_HEAD
-    RabbitizerTrackedRegisterState registerState;
+    PyObject_HEAD RabbitizerTrackedRegisterState registerState;
 } PyRabbitizerTrackedRegisterState;
 
 typedef struct PyRabbitizerLoPairingInfo {
-    PyObject_HEAD
-    RabbitizerLoPairingInfo pairingInfo;
+    PyObject_HEAD RabbitizerLoPairingInfo pairingInfo;
 } PyRabbitizerLoPairingInfo;
-
 
 PyObject *rabbitizer_submodule_Utils_Init(void);
 

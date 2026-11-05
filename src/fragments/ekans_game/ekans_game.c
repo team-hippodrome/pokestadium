@@ -2130,7 +2130,8 @@ void EkansGame_CompAimAtDiglett(MiniActor* compEkans) {
     sp3C.x = tempDiglett->totalPos.x - compEkans->totalPos.x;
     sp3C.z = tempDiglett->totalPos.z - compEkans->totalPos.z;
 
-    compEkans->unk_222 = EkansGame_ClampAimRotation(compEkans, ParticleMath_Atan2ZX(sp3C) + ParticleMath_RandomSigned(sp36) + 0x8000);
+    compEkans->unk_222 =
+        EkansGame_ClampAimRotation(compEkans, ParticleMath_Atan2ZX(sp3C) + ParticleMath_RandomSigned(sp36) + 0x8000);
     compEkans->ySpinSpeed = Rand_Range(sp32) + sp34;
 }
 
@@ -2342,7 +2343,8 @@ void checkCollitionWithDigletts(MiniActor* ekans, s32 nPlayer) {
     if ((ekans->ekansIsMidAir) && (ekans->midAirState < 2)) {
         for (i = 0; i < 3; i++) {
             if ((activeDigletts[i].unk_06 != 0) && (activeDigletts[i].gotHoop == false)) {
-                GeoRender_FindAnchorPosition(&miniDigletts[activeDigletts[i].diglettId].unk_000, 0xA, &tempDiglettHitboxPos);
+                GeoRender_FindAnchorPosition(&miniDigletts[activeDigletts[i].diglettId].unk_000, 0xA,
+                                             &tempDiglettHitboxPos);
                 distance2d = ParticleMath_DistanceXZ(tempEkansHitboxPos, tempDiglettHitboxPos);
 
                 xDist = tempEkansHitboxPos.x - tempDiglettHitboxPos.x;
@@ -2548,8 +2550,10 @@ void miniGetCloser2Diglett(MiniActor* ekans, s32 nPlayer) {
 
 void EkansGame_ApplyPullbackOffset(MiniActor* ekans) {
     if (ekans->stickMagnitude1 > 5.0f) {
-        ParticleMath_ApproachFloat(&ekans->position_2.x, (-SINS(ekans->totalRot.y) * ekans->stickMagnitude1) / 3.0f, 4.0f);
-        ParticleMath_ApproachFloat(&ekans->position_2.z, (-COSS(ekans->totalRot.y) * ekans->stickMagnitude1) / 3.0f, 4.0f);
+        ParticleMath_ApproachFloat(&ekans->position_2.x, (-SINS(ekans->totalRot.y) * ekans->stickMagnitude1) / 3.0f,
+                                   4.0f);
+        ParticleMath_ApproachFloat(&ekans->position_2.z, (-COSS(ekans->totalRot.y) * ekans->stickMagnitude1) / 3.0f,
+                                   4.0f);
     } else {
         ekans->position_2.x = 0.0f;
         ekans->position_2.z = 0.0f;
@@ -3170,7 +3174,7 @@ void EkansGame_DrawTutorialText(void) {
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
     Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86C12000, Text_GetString(NULL, 0, D_87806330, 0x3E)) / 2), 0x20,
-                  Text_GetString(NULL, 0, D_87806330, 0x3E));
+                Text_GetString(NULL, 0, D_87806330, 0x3E));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x3F));
@@ -3178,14 +3182,14 @@ void EkansGame_DrawTutorialText(void) {
     Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, D_87806330, 0x41));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F), Text_GetString(NULL, 0, D_87806330, 0x61),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F),
+                           Text_GetString(NULL, 0, D_87806330, 0x61), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x61));
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F), Text_GetString(NULL, 0, D_87806330, 0x62),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F),
+                           Text_GetString(NULL, 0, D_87806330, 0x62), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x62));
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x41), Text_GetString(NULL, 0, D_87806330, 0x62),
-                  0xC);
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x41),
+                           Text_GetString(NULL, 0, D_87806330, 0x62), 0xC);
     Font_Printf(sp38 + 0x28, sp34 + 0x70, Text_GetString(NULL, 0, D_87806330, 0x62));
     Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
     Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x5C));
@@ -3239,8 +3243,8 @@ void miniEkansDrawCountdown(void) {
     UNUSED s32 pad;
     s32 textPosition;
 #endif
-    Gfx_SetEnvColor(0xFF, 0xC8, 0x32, 0xFF);                               // set color
-    Font_SetActive(8, 0);                                                 // set style
+    Gfx_SetEnvColor(0xFF, 0xC8, 0x32, 0xFF); // set color
+    Font_SetActive(8, 0);                    // set style
 #if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
     sprintf(countdownText, "%s99", Text_GetString(NULL, 0, D_87806330, 0x5D));
     textPosition = (320 - Font_MeasureTextExtent(0, 0, countdownText)) / 2;
@@ -3323,7 +3327,8 @@ void EkansGame_DrawShadows(void) {
         if (ekans->mainState == 2) {
             gSPDisplayList(gDisplayListHead++, D_8140DD58);
 
-            ParticleGfx_SetPrimColorTextureCombine(playerColors[i].r, playerColors[i].g, playerColors[i].b, (ekans->unk_000.lodFraction / 2) & 0xFF);
+            ParticleGfx_SetPrimColorTextureCombine(playerColors[i].r, playerColors[i].g, playerColors[i].b,
+                                                   (ekans->unk_000.lodFraction / 2) & 0xFF);
             GeoRender_FindAnchorPosition(&ekans->unk_000, 0xA, &sp7C);
 
             sp7C.y = 5.0f;
@@ -3490,7 +3495,8 @@ void EkansGame_LoadAssets(void) {
     for (i = 0; i < 9; i++) {
         miniDiglettHoles[i].unk_23C = 0xA3;
         miniDiglettHoles[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniDiglettHoles[i].unk_000, 0, miniDiglettHoles[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniDiglettHoles[i].unk_000, 0, miniDiglettHoles[i].unk_23C,
+                                temp_s1->unk_08->unk_00[0]);
     }
 }
 
@@ -3523,7 +3529,7 @@ s32 ekansMinigameLoad(s32 arg0, UNUSED s32 arg1) {
     miniEkansTutoScreenControls();
     ekansMinigameUpdate();
     StageContext_Deactivate();
-    Font_Free(); //	main_pool_try_free(D_800AC870);
+    Font_Free();                  //	main_pool_try_free(D_800AC870);
     Gfx_FreeDisplayListBuffers(); //	main_pool_try_free(D_800A7428.unk4); main_pool_try_free(D_800A7428.unk0);
 
     main_pool_pop_state('MINI');

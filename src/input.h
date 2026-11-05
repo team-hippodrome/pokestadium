@@ -8,5 +8,4 @@ void Input_ResetRepeatState(void);
 void Input_SetRepeatController(Controller*);
 s32 Input_GetRepeatedDPad(void);
 
-
 #endif // _20330_H_

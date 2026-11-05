@@ -3,8 +3,8 @@
 #include "src/gfx_buffer.h"
 #include "src/gfx_rect.h"
 
-void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 width, u8 height, u8 uls, u8 ult, u8 lrs,
-                   u8 lrt, u8 argB, u8 argC, GfxTileParams* argD, s32 argE) {
+void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 width, u8 height, u8 uls, u8 ult,
+                               u8 lrs, u8 lrt, u8 argB, u8 argC, GfxTileParams* argD, s32 argE) {
     DepthBuffer* temp_s1 = GfxImage_GetCurrent();
     Vtx* temp_s6 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
     Mtx* spD4 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
@@ -17,22 +17,22 @@ void UI_DrawSplitGradientPanel(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
     guOrtho(spD4, 0.5f, temp_s1->width - 0.5f, temp_s1->height - 0.5f, 0.5f, -2.0f, 2.0f, 1.0f);
     if (argE != 0) {
         Gfx_SetVertexAttributes(&temp_s6[0], arg1, arg2, -1, argC << 5, 0, argD->unk_00.unk_12, argD->unk_00.unk_14,
-                      argD->unk_00.unk_16, 0xFF);
-        Gfx_SetVertexAttributes(&temp_s6[1], arg1 + arg3, arg2, -1, argB << 5, 0, argD->unk_00.unk_12, argD->unk_00.unk_14,
-                      argD->unk_00.unk_16, 0xFF);
+                                argD->unk_00.unk_16, 0xFF);
+        Gfx_SetVertexAttributes(&temp_s6[1], arg1 + arg3, arg2, -1, argB << 5, 0, argD->unk_00.unk_12,
+                                argD->unk_00.unk_14, argD->unk_00.unk_16, 0xFF);
         Gfx_SetVertexAttributes(&temp_s6[2], arg1, arg2 + arg4, -1, argC << 5, height << 5, argD->unk_00.unk_0C,
-                      argD->unk_00.unk_0E, argD->unk_00.unk_10, 0xFF);
+                                argD->unk_00.unk_0E, argD->unk_00.unk_10, 0xFF);
         Gfx_SetVertexAttributes(&temp_s6[3], arg1 + arg3, arg2 + arg4, -1, argB << 5, height << 5, argD->unk_00.unk_0C,
-                      argD->unk_00.unk_0E, argD->unk_00.unk_10, 0xFF);
+                                argD->unk_00.unk_0E, argD->unk_00.unk_10, 0xFF);
     } else {
         Gfx_SetVertexAttributes(&temp_s6[0], arg1, arg2, -1, argC << 5, 0, argD->unk_00.unk_0C, argD->unk_00.unk_0E,
-                      argD->unk_00.unk_10, 0xFF);
-        Gfx_SetVertexAttributes(&temp_s6[1], arg1 + arg3, arg2, -1, argB << 5, 0, argD->unk_00.unk_0C, argD->unk_00.unk_0E,
-                      argD->unk_00.unk_10, 0xFF);
+                                argD->unk_00.unk_10, 0xFF);
+        Gfx_SetVertexAttributes(&temp_s6[1], arg1 + arg3, arg2, -1, argB << 5, 0, argD->unk_00.unk_0C,
+                                argD->unk_00.unk_0E, argD->unk_00.unk_10, 0xFF);
         Gfx_SetVertexAttributes(&temp_s6[2], arg1, arg2 + arg4, -1, argC << 5, height << 5, argD->unk_00.unk_12,
-                      argD->unk_00.unk_14, argD->unk_00.unk_16, 0xFF);
+                                argD->unk_00.unk_14, argD->unk_00.unk_16, 0xFF);
         Gfx_SetVertexAttributes(&temp_s6[3], arg1 + arg3, arg2 + arg4, -1, argB << 5, height << 5, argD->unk_00.unk_12,
-                      argD->unk_00.unk_14, argD->unk_00.unk_16, 0xFF);
+                                argD->unk_00.unk_14, argD->unk_00.unk_16, 0xFF);
     }
 
     gDPPipeSync(gDisplayListHead++);

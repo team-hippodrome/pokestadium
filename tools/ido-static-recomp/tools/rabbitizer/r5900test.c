@@ -8,7 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 int main() {
     uint32_t word;
     RabbitizerInstruction instr;

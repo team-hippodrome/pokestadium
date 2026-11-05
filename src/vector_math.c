@@ -18,8 +18,10 @@ void Mtx_BuildDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4
 
     temp_fa1 = arg4 - arg1;
     temp_fa0 = arg6 - arg3;
-    sp140 = (f32) (((f64) (f32) MathUtil_Atan2s(temp_fa0, temp_fa1) * 360.0) / 65535.0);
-    sp144 = (f32) (((f64) (f32) MathUtil_Atan2s(arg5 - arg2, sqrtf((temp_fa1 * temp_fa1) + (temp_fa0 * temp_fa0))) * 360.0) / 65535.0);
+    sp140 = (f32)(((f64)(f32)MathUtil_Atan2s(temp_fa0, temp_fa1) * 360.0) / 65535.0);
+    sp144 =
+        (f32)(((f64)(f32)MathUtil_Atan2s(arg5 - arg2, sqrtf((temp_fa1 * temp_fa1) + (temp_fa0 * temp_fa0))) * 360.0) /
+              65535.0);
     guRotate(&spB0, sp140, 0.0f, 1.0f, 0.0f);
     guRotate(&sp70, sp144, 0.0f, 0.0f, 1.0f);
     guMtxCatL(&spB0, &sp70, &spF0);
@@ -33,7 +35,8 @@ f32 Math_AbsF32(f32 arg0) {
     return arg0;
 }
 
-void Vec3f_CrossProductComponents(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32* arg6, f32* arg7, f32* arg8) {
+void Vec3f_CrossProductComponents(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32* arg6, f32* arg7,
+                                  f32* arg8) {
     *arg6 = (arg1 * arg5) - (arg2 * arg4);
     *arg7 = (arg2 * arg3) - (arg0 * arg5);
     *arg8 = (arg0 * arg4) - (arg1 * arg3);
@@ -113,8 +116,10 @@ void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3
 
     temp_fa1 = arg4 - arg1;
     temp_fv0 = arg6 - arg3;
-    sp108 = (f32) (((f64) (f32) MathUtil_Atan2s(-temp_fv0, temp_fa1) * 360.0) / 65535.0);
-    sp10C = (f32) (((f64) (f32) MathUtil_Atan2s(-(arg5 - arg2), sqrtf((temp_fa1 * temp_fa1) + (temp_fv0 * temp_fv0))) * 360.0) / 65535.0);
+    sp108 = (f32)(((f64)(f32)MathUtil_Atan2s(-temp_fv0, temp_fa1) * 360.0) / 65535.0);
+    sp10C = (f32)(((f64)(f32)MathUtil_Atan2s(-(arg5 - arg2), sqrtf((temp_fa1 * temp_fa1) + (temp_fv0 * temp_fv0))) *
+                   360.0) /
+                  65535.0);
     guTranslate(&spB8, arg1, arg2, arg3);
     guRotate(&sp78, sp108, 0.0f, -1.0f, 0.0f);
     guMtxCatL(&sp78, &spB8, &spB8);
@@ -123,12 +128,8 @@ void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3
     *mtx = spB8;
 }
 
-void Math_ProjectPointOntoLine(
-    f32 px, f32 py, f32 pz,
-    f32 ax, f32 ay, f32 az,
-    f32 bx, f32 by, f32 bz,
-    f32* outX, f32* outY, f32* outZ
-) {
+void Math_ProjectPointOntoLine(f32 px, f32 py, f32 pz, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* outX,
+                               f32* outY, f32* outZ) {
     f32 dx;
     f32 dy;
     f32 dz;
@@ -145,7 +146,6 @@ void Math_ProjectPointOntoLine(
         return;
     }
 
-    
     dx = bx - ax;
     dy = by - ay;
     dz = bz - az;

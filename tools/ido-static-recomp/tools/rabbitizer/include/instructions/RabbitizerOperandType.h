@@ -9,9 +9,7 @@
 extern "C" {
 #endif
 
-
-#define RAB_DEF_OPERAND(prefix, operand) \
-    RAB_OPERAND_##prefix##_##operand,
+#define RAB_DEF_OPERAND(prefix, operand) RAB_OPERAND_##prefix##_##operand,
 
 typedef enum RabbitizerOperandType {
     RAB_DEF_OPERAND(ALL, INVALID)
@@ -20,11 +18,10 @@ typedef enum RabbitizerOperandType {
 #include "operands/RabbitizerOperandType_rsp.inc"
 #include "operands/RabbitizerOperandType_r5900.inc"
 
-    RAB_DEF_OPERAND(ALL, MAX)
+        RAB_DEF_OPERAND(ALL, MAX)
 } RabbitizerOperandType;
 
 #undef RAB_DEF_OPERAND
-
 
 #ifdef __cplusplus
 }

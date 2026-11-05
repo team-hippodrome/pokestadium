@@ -63,19 +63,19 @@ typedef struct unk_D_83406EB0 {
 
 typedef struct unk_D_83407B00 {
     /* 0x00 */ union {
-                    struct {
-                        s16 unk_00s;
-                        s16 unk_02s;
-                    };
-                    s32 unk_00;
-                };
+        struct {
+            s16 unk_00s;
+            s16 unk_02s;
+        };
+        s32 unk_00;
+    };
     /* 0x04 */ union {
-                    struct {
-                        s16 unk_04s;
-                        s16 unk_06s;
-                    };
-                    s32 unk_04;
-                };
+        struct {
+            s16 unk_04s;
+            s16 unk_06s;
+        };
+        s32 unk_04;
+    };
 } unk_D_83407B00; // size = 0x8
 
 typedef struct unk_func_800314BC_temp_v4 {
@@ -138,7 +138,8 @@ void Gallery_ResetActiveScene(void);
 void Gallery_ClearPhotoRenderTarget(void);
 void Gallery_CopyPhotoMonFromBattleMon(unk_D_83402EE0_070*, BattleMon*);
 void Gallery_CopyBattleMonFromPhotoMon(BattleMon*, unk_D_83407AC8*);
-unk_func_80031270* Geo_CreateSceneInstance(s16, s16, DepthBuffer*, DepthBuffer*, ModelLoadContext*, BinArchive*, unk_D_83403C60*);
+unk_func_80031270* Geo_CreateSceneInstance(s16, s16, DepthBuffer*, DepthBuffer*, ModelLoadContext*, BinArchive*,
+                                           unk_D_83403C60*);
 u8* Gallery_ProcessSceneInstance(unk_func_80031270*);
 s32 Gallery_IsSceneReady(unk_func_80031270*);
 s32 Gallery_FindReadyScene(unk_func_80031270**, s32);

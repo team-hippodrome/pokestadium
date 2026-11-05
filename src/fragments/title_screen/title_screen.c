@@ -49,27 +49,27 @@ s32 Title_ResolveStartPressState(void) {
 
             case 1:
                 var_v1 = 0x80;
-            break;
+                break;
 
             case 2:
                 var_v1 = 0x81;
-            break;
+                break;
 
             case 3:
                 var_v1 = 0x82;
-            break;
+                break;
 
             case 4:
                 var_v1 = 0x20;
-            break;
+                break;
 
             case 5:
                 var_v1 = 0x25;
-            break;
+                break;
 
             case 6:
                 var_v1 = 0x11;
-            break;
+                break;
         }
     }
 
@@ -230,7 +230,8 @@ void Title_PickDemoMatchup(u8* arg0) {
         sp38 = MathUtil_Random_ZeroOne() * sp2C;
     } while (temp_s0 == sp38);
 
-    Session_SetupDemoBattle(arg0[0], arg0[1], Title_FindEligibleDemoEntry(temp_s0, arg0[2]), Title_FindEligibleDemoEntry(sp38, arg0[2]));
+    Session_SetupDemoBattle(arg0[0], arg0[1], Title_FindEligibleDemoEntry(temp_s0, arg0[2]),
+                            Title_FindEligibleDemoEntry(sp38, arg0[2]));
 }
 
 static u8 gTitleAttractDemoScenarios[2][4] = {

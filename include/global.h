@@ -175,16 +175,16 @@ struct GraphNode;
 typedef s32 (*GraphNodeCallback)(s32 event, struct GraphNode* node);
 
 typedef struct GraphNode {
-    /* 0x00 */ u8 type; // Index into the geometry-node renderer dispatch table.
-    /* 0x01 */ u8 flags; // Bit 0 enables rendering; initialized to 0x11.
+    /* 0x00 */ u8 type;        // Index into the geometry-node renderer dispatch table.
+    /* 0x01 */ u8 flags;       // Bit 0 enables rendering; initialized to 0x11.
     /* 0x02 */ u8 renderFlags; // Type-dependent rendering options, not universal flags.
     /* 0x03 */ u8 renderLayer; // Material/render-slot selector; may be remapped by material state.
     /* 0x04 */ struct GraphNode* prevSibling;
     /* 0x08 */ struct GraphNode* nextSibling;
     /* 0x0C */ struct CameraNode* children; // Circular list of graph nodes through a legacy camera view.
-    /* 0x10 */ GraphNodeCallback callback; // Events: 0 on installation, 2 on traversal, 5 on DL submission.
-    /* 0x14 */ void* callbackArg; // Callback-owned data or selector, accessed through the node.
-} GraphNode; // size = 0x18
+    /* 0x10 */ GraphNodeCallback callback;  // Events: 0 on installation, 2 on traversal, 5 on DL submission.
+    /* 0x14 */ void* callbackArg;           // Callback-owned data or selector, accessed through the node.
+} GraphNode;                                // size = 0x18
 
 // Geo_NodeCamera converts this pixel rectangle into an RSP viewport and RDP scissor.
 //@src/geo_render.c
@@ -631,7 +631,7 @@ typedef struct unk_D_8122B2C0 {
     /* 0x05DCF */ u8 unk_5DCF;
     /* 0x05DD0 */ u8 unk_5DD0;
     /* 0x05DD1 */ u8 unk05DD1[0x15287];
-  } unk_D_8122B2C0; // size = 0x1B058
+} unk_D_8122B2C0; // size = 0x1B058
 
 #define GB_HEADER(emu, offset) (((u8*)(emu)->unk_53BC)[offset])
 

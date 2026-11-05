@@ -2473,7 +2473,8 @@ s32 Lab_DrawTiledBackgroundWidget(WidgetNode* arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-void Lab_DrawDualLayerIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5, Color_RGBA8 arg6, Color_RGBA8 arg7) {
+void Lab_DrawDualLayerIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5, Color_RGBA8 arg6,
+                           Color_RGBA8 arg7) {
     gDPPipeSync(gDisplayListHead++);
 
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
@@ -2500,7 +2501,7 @@ void Lab_DrawDualLayerIcon(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8*
 }
 
 void Lab_InitDualLayerIconWidget(unk_func_8800071C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5, u8* arg6,
-                   Color_RGBA8 arg7, Color_RGBA8 arg8) {
+                                 Color_RGBA8 arg7, Color_RGBA8 arg8) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8800071C));
 
     arg0->unk_00.unk_18 = Lab_DrawDualLayerIconWidget;
@@ -2518,7 +2519,7 @@ s32 Lab_DrawDualLayerIconWidget(WidgetNode* arg0, s32 arg1, s32 arg2) {
     unk_func_8800071C* ptr = (unk_func_8800071C*)arg0;
 
     Lab_DrawDualLayerIcon(ptr->unk_00.unk_10.unk_00, ptr->unk_00.unk_10.unk_02, ptr->unk_00.unk_14.unk_00,
-                  ptr->unk_00.unk_14.unk_02, ptr->unk_2C, ptr->unk_30, ptr->unk_34, ptr->unk_38);
+                          ptr->unk_00.unk_14.unk_02, ptr->unk_2C, ptr->unk_30, ptr->unk_34, ptr->unk_38);
     return 0;
 }
 
@@ -2586,8 +2587,8 @@ void Lab_SetFrameTimerState(WidgetMainMenu* arg0, s32 arg1) {
     arg0->unk_00.unk_2A = arg1;
 }
 
-void Lab_InitAnimatedIconWidget(unk_func_88000CC8* arg0, s32 arg1, s32 arg2, unk_func_88500020* arg3, u8* arg4, u8* arg5, u8* arg6,
-                   u8* arg7, u8* arg8, WidgetTextList* arg9) {
+void Lab_InitAnimatedIconWidget(unk_func_88000CC8* arg0, s32 arg1, s32 arg2, unk_func_88500020* arg3, u8* arg4,
+                                u8* arg5, u8* arg6, u8* arg7, u8* arg8, WidgetTextList* arg9) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88000CC8));
 
     arg0->unk_00.unk_18 = Lab_DrawAnimatedIconWidget;
@@ -2681,11 +2682,12 @@ void Lab_ShowMenuItemDescription(WidgetMainMenu* arg0) {
             break;
     }
 
-    ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, var_a3));
+    ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
+                                                                    Text_GetString(NULL, 0, D_88016CF4, var_a3));
 }
 
 void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, FontContext* arg5,
-                   MemoryPool* arg6) {
+                       MemoryPool* arg6) {
     s32 i;
     unk_func_88500E34* sp78;
     WidgetAnimatedFrame* temp_s0_3;
@@ -2758,12 +2760,13 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_2C->unk_00);
 
     temp_s0 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedPanelVariantB));
-    ((func885054D8)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanelVariantB))(temp_s0, 0x28, 0x30, 0x140, 0x28, D_88002878);
+    ((func885054D8)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanelVariantB))(temp_s0, 0x28, 0x30, 0x140, 0x28,
+                                                                                  D_88002878);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_s0->unk_00);
 
     sp68 = mem_pool_alloc(arg6, sizeof(unk_func_88509A2C));
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp68, 0xE, 8, GbSave_GetActivePort(),
-                                                           Text_GetString(NULL, 0, D_88016CF0, 0));
+                                                                          Text_GetString(NULL, 0, D_88016CF0, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0->unk_00, &sp68->unk_00.unk_00);
 
     temp_v0_6 = mem_pool_alloc(arg6, sizeof(unk_func_88000C18));
@@ -2797,8 +2800,8 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s0);
 
         arg0->unk_38 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedPanel));
-        ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_38, 0, 0, temp_s0->unk_14.unk_00,
-                                                               temp_s0->unk_14.unk_02);
+        ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(
+            arg0->unk_38, 0, 0, temp_s0->unk_14.unk_00, temp_s0->unk_14.unk_02);
         arg0->unk_38->unk_00.unk_28 |= 0x200;
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0, arg0->unk_38);
 
@@ -2810,7 +2813,8 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     }
 
     temp_s0_3 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedFrame));
-    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_3, 0, 0, 0x10, 0x10, D_88002880);
+    ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_3, 0, 0, 0x10, 0x10,
+                                                                                  D_88002880);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, temp_s0_3);
     arg0->unk_3C->unk_1C = temp_s0_3;
 
@@ -2825,16 +2829,19 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     }
 
     arg0->unk_30 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedPanelVariantB));
-    ((func885054D8)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanelVariantB))(arg0->unk_30, 0x37, 0x154, 0x212, 0x64, D_88002884);
+    ((func885054D8)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanelVariantB))(arg0->unk_30, 0x37, 0x154, 0x212,
+                                                                                  0x64, D_88002884);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &arg0->unk_30->unk_00);
 
     arg0->unk_34 = mem_pool_alloc(arg6, sizeof(WidgetTextList));
-    ((func88505E2C)Memmap_GetFragmentVaddr(WidgetTree_InitTextList))(arg0->unk_34, 0x9D, 0xA, 0x10, -1, 0x1C, D_88002888, arg5);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_30->unk_00, &arg0->unk_34->unk_00.unk_00);
+    ((func88505E2C)Memmap_GetFragmentVaddr(WidgetTree_InitTextList))(arg0->unk_34, 0x9D, 0xA, 0x10, -1, 0x1C,
+                                                                     D_88002888, arg5);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_30->unk_00,
+                                                                    &arg0->unk_34->unk_00.unk_00);
 
     temp_v0_16 = mem_pool_alloc(arg6, sizeof(unk_func_88000CC8));
-    Lab_InitAnimatedIconWidget(temp_v0_16, 0xA, -0x2B, &D_8800CA98, D_8800CAB0, D_8800DAB8, D_8800FAC8, D_88010AD0, D_8800EAC0,
-                  arg0->unk_34);
+    Lab_InitAnimatedIconWidget(temp_v0_16, 0xA, -0x2B, &D_8800CA98, D_8800CAB0, D_8800DAB8, D_8800FAC8, D_88010AD0,
+                               D_8800EAC0, arg0->unk_34);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_30->unk_00, &temp_v0_16->unk_00.unk_00);
 }
 
@@ -2880,16 +2887,16 @@ s32 Lab_HandleMainMenuInput(WidgetMainMenu* arg0) {
             switch (arg0->unk_3C->unk_24) {
                 case 4:
                     if (GbSave_GetSaveState(arg0->unk_40) != 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 7));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 7));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_HasPokedex(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 0xA));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 0xA));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_SavedAtPokemonCenter(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 8));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 8));
                         var_s1 |= 0x80000101;
                     } else {
                         Audio_PlaySoundEffectById(0x1C);
@@ -2907,12 +2914,12 @@ s32 Lab_HandleMainMenuInput(WidgetMainMenu* arg0) {
 
                 case 7:
                     if (GbSave_GetSaveState(arg0->unk_40) != 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 7));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 7));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_HasPokedex(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 9));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 9));
                         var_s1 |= 0x80000101;
                     } else {
                         Audio_PlaySoundEffectById(0x1C);
@@ -2924,20 +2931,20 @@ s32 Lab_HandleMainMenuInput(WidgetMainMenu* arg0) {
 
                 case 5:
                     if (GbSave_GetSaveState(arg0->unk_40) != 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 7));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 7));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_HasPokedex(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 0xA));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 0xA));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_SavedAtPokemonCenter(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 8));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 8));
                         var_s1 |= 0x80000101;
                     } else if (Lab_CountConnectedCarts() < 2) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 0xB));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 0xB));
                         var_s1 |= 0x80000101;
                     } else {
                         Audio_PlaySoundEffectById(0x1C);
@@ -2948,20 +2955,20 @@ s32 Lab_HandleMainMenuInput(WidgetMainMenu* arg0) {
 
                 case 3:
                     if (GbSave_GetSaveState(arg0->unk_40) != 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 7));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 7));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_HasPokedex(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 0xA));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 0xA));
                         var_s1 |= 0x80000101;
                     } else if (GbSave_SavedAtPokemonCenter(arg0->unk_40) == 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 8));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 8));
                         var_s1 |= 0x80000101;
                     } else if (arg0->unk_50 != 0) {
-                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
-                                                                               Text_GetString(NULL, 0, D_88016CF4, 0xC));
+                        ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(
+                            arg0->unk_34, Text_GetString(NULL, 0, D_88016CF4, 0xC));
                         var_s1 |= 0x80000101;
                     } else {
                         Audio_PlaySoundEffectById(0x1C);

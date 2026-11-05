@@ -7,7 +7,10 @@
 static MiniActor* D_87906120;
 
 #if defined(VERSION_US_REV2)
+// asm-processor requires this import on one physical line.
+// clang-format off
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/minigame_actor_framework/minigame_actor_framework_11BF90/miniRankingActorsInit.s")
+// clang-format on
 #else
 void miniRankingActorsInit(void) {
     s32 i;
@@ -49,7 +52,8 @@ void miniRankingActorsUpdate(void) {
     }
 }
 
-void miniRankingActorSetup(MiniActor* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s16 arg5, s16 arg6, s16 arg7, s16 arg8) {
+void miniRankingActorSetup(MiniActor* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s16 arg5, s16 arg6, s16 arg7,
+                           s16 arg8) {
     arg0->scale.x = arg1;
     arg0->scale.y = arg1;
     arg0->scale.z = arg1;
@@ -170,8 +174,6 @@ Gfx* MiniFx_BuildNodeColorRampDisplayList(Gfx* gfx, arg1_func_87903D64_014* arg1
             sp20 = &arg1->unk_18[sp34];
             break;
     }
-
-
 
     tmp1 = ((sp28->unk_00[0] * sp30) + (sp2C->unk_00[0] * (0x100 - sp30))) >> 8;
     tmp2 = ((sp28->unk_00[1] * sp30) + (sp2C->unk_00[1] * (0x100 - sp30))) >> 8;

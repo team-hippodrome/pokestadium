@@ -122,7 +122,8 @@ void Gallery_SetupPhotoModel(void);
 void Gallery_FinalizeBackgroundLoad(void);
 void Gallery_LoadBackgroundSet(s32 arg0);
 void Gallery_InitBackgroundScene(void);
-void GalleryCamera_ComputeFrameCornerPos(f32* arg0, f32* arg1, s16* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, s16 arg7);
+void GalleryCamera_ComputeFrameCornerPos(f32* arg0, f32* arg1, s16* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6,
+                                         s16 arg7);
 void GalleryCamera_InitIntroSequence(void);
 void GalleryCamera_CopyControllerState(Controller* arg0, Controller* arg1);
 void func_86900A14(void);
@@ -173,6 +174,5 @@ void Gallery_DrawPhotoCounterReel(void);
 void Gallery_DrawPhotoCounterReelExit(void);
 void Gallery_DrawFrameMarkers(void);
 void Gallery_DrawTutorialTextBox(void);
-
 
 #endif // _FRAGMENT15_H_

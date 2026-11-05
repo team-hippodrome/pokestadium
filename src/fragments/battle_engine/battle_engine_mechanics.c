@@ -8,11 +8,11 @@
 This file covers these classes of moves:
 
 This file covers this {non obvious effect} for:
-    - 
+    -
 
 
 As well as effects for these specific moves:
-    - 
+    -
 
 
 
@@ -978,8 +978,8 @@ void Battle_IncrementMoveUsage(void) {
     ActivePokemonState* temp_a1;
 
     ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
-    temp_a0 =
-        &sActivePokemon[sBattleScene.scene->actingSide]->teamRoster->pokemonPicked[sActivePokemon[sBattleScene.scene->actingSide]->state.rosterIndex];
+    temp_a0 = &sActivePokemon[sBattleScene.scene->actingSide]
+                   ->teamRoster->pokemonPicked[sActivePokemon[sBattleScene.scene->actingSide]->state.rosterIndex];
     temp_a1 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
     sBattleUser->pp[temp_a1->selectedMoveIndex]++;
@@ -1475,7 +1475,7 @@ void ProcessBattleTurn(void) {
         D_843C4DB5 = 0;
         D_843C4DA9 = 0;
         D_843C4DB3 = 0xA;
-    
+
         switch (Battle_CheckMonCanAct()) {
             case 2:
                 Battle_ExecuteMoveAnimation();
@@ -1483,14 +1483,14 @@ void ProcessBattleTurn(void) {
                     sBattleUser->immobilizedReason &= ~(0x40 | 0x10);
                     Battle_SetRuntimeFlags(sActivePokemon[sBattleScene.scene->actingSide], 8);
                 } else {
-            block_5:
+                block_5:
                     switch (sBattleUser->moveCache.unk_01) {
                         case 0x27:
                         case 0x2B:
                             if (D_8438AC60[0] == 1) {
                                 sBattleDamage = 0;
                             }
-                
+
                             Battle_ExecuteMoveEffect();
                             sBattleUser->lastMove = sBattleUser->usedMove;
                             return;
@@ -1558,10 +1558,10 @@ void ProcessBattleTurn(void) {
                             Battle_ExecuteMoveEffect();
                             return;
                         }
-        
+
                         if (sBattleMoveFailed != 0) {
                             Battle_QueueMoveFailureAndApplyRecoil();
-            
+
                             if (sBattleUser->moveCache.unk_01 != 7) {
                                 break;
                             }

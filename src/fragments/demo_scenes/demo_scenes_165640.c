@@ -156,17 +156,50 @@ static TeamRoster* D_86B10690;
 static BattleSessionTeams* D_86B10694;
 
 static u32 sMiniCameraLayout[] = {
-    0x0C00FFFF, 0x05000000,    0x0B00001E,  0x00000000,    0x014000F0,  0x0000000F,  0x00000000, 0x00000000,
-    0x05000000, 0x0D000000,    0x05000000,  0x07000000,    &D_86B0F9D0, 0x14000000,  0x002D0019, 0xFFFFFF28,
-    0x08000000, Intro_LightAngleCallbackA, 0x00000000,  0x14000000,    0x002D0019,  0x80808028,  0x08000000, Intro_LightAngleCallbackB,
-    0x00000000, 0x16646464,    0x0F000002,  0x05000000,    0x1F00FFFF,  0x00000000,  0x00000000, 0x00000000,
-    0x00640064, 0x00640000,    0x08000000,  Intro_FogColorCallback, 0x00000000,  0x05000000,  0x07000000, &D_86B0F9F0,
-    0x06000000, 0x06000000,    0x0F000003,  0x05000000,    0x1F00FFFF,  0x00000000,  0x00000000, 0x00000000,
-    0x00640064, 0x00640000,    0x08000000,  Intro_FogColorCallback, 0x00000000,  0x05000000,  0x07000000, &D_86B0FA08,
-    0x06000000, 0x06000000,    0x0F000002,  0x05000000,    0x1F00FFFF,  0x00000000,  0x00000000, 0x00000000,
-    0x00640064, 0x00640000,    0x08000000,  Intro_FogColorCallback, 0x00000000,  0x05000000,  0x07000000, &D_86B0FA20,
-    0x06000000, 0x06000000,    0x0F000003,  0x05000000,    0x0A000000,  &D_800AC840, 0x06000000, 0x0F000002,
-    0x05000000, 0x0A000000,    &D_800AC858, 0x06000000,    0x09000000,  0x06000000,  0x06000000, 0x06000000,
+    0x0C00FFFF,  0x05000000,
+    0x0B00001E,  0x00000000,
+    0x014000F0,  0x0000000F,
+    0x00000000,  0x00000000,
+    0x05000000,  0x0D000000,
+    0x05000000,  0x07000000,
+    &D_86B0F9D0, 0x14000000,
+    0x002D0019,  0xFFFFFF28,
+    0x08000000,  Intro_LightAngleCallbackA,
+    0x00000000,  0x14000000,
+    0x002D0019,  0x80808028,
+    0x08000000,  Intro_LightAngleCallbackB,
+    0x00000000,  0x16646464,
+    0x0F000002,  0x05000000,
+    0x1F00FFFF,  0x00000000,
+    0x00000000,  0x00000000,
+    0x00640064,  0x00640000,
+    0x08000000,  Intro_FogColorCallback,
+    0x00000000,  0x05000000,
+    0x07000000,  &D_86B0F9F0,
+    0x06000000,  0x06000000,
+    0x0F000003,  0x05000000,
+    0x1F00FFFF,  0x00000000,
+    0x00000000,  0x00000000,
+    0x00640064,  0x00640000,
+    0x08000000,  Intro_FogColorCallback,
+    0x00000000,  0x05000000,
+    0x07000000,  &D_86B0FA08,
+    0x06000000,  0x06000000,
+    0x0F000002,  0x05000000,
+    0x1F00FFFF,  0x00000000,
+    0x00000000,  0x00000000,
+    0x00640064,  0x00640000,
+    0x08000000,  Intro_FogColorCallback,
+    0x00000000,  0x05000000,
+    0x07000000,  &D_86B0FA20,
+    0x06000000,  0x06000000,
+    0x0F000003,  0x05000000,
+    0x0A000000,  &D_800AC840,
+    0x06000000,  0x0F000002,
+    0x05000000,  0x0A000000,
+    &D_800AC858, 0x06000000,
+    0x09000000,  0x06000000,
+    0x06000000,  0x06000000,
     0x01000000,
 };
 
@@ -177,7 +210,8 @@ s32 Intro_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
         ptr->unk_1C = sp26 + 0x2000;
         ptr->unk_1E = sp24 - 0x2000;
     }
@@ -192,7 +226,8 @@ s32 Intro_LightAngleCallbackB(s32 arg0, GraphNode* arg1) {
     s16 sp24;
 
     if (arg0 == 2) {
-        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26, &sp24);
+        Vec3f_CalculateDistanceAngles(&D_8006F088->view.targetPosition, &D_8006F088->view.eyePosition, &sp28, &sp26,
+                                      &sp24);
         ptr->unk_1C = -0x2000 - sp26;
         ptr->unk_1E = sp24 + 0x6000;
     }
@@ -302,7 +337,8 @@ void Intro_SetupStaticCamera(void) {
     D_86B0FA7C->unk_00->perspective.farPlane = 6400.0f;
 
     Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA78->unk_004.position.x,
-                  sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
+                                 sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y,
+                                 D_86B0FA78->unk_004.position.z);
 
     if ((D_86B0FA44 == 4) || (D_86B0FA44 == 5)) {
         Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.eyePosition, 0, 100.0f, 328.0f);
@@ -363,7 +399,8 @@ s32 Intro_UpdateModelLanding(void) {
     }
 
     Vec3f_SetComponentsDuplicate(&D_86B0FA7C->unk_00->view.targetPosition, D_86B0FA78->unk_004.position.x,
-                  sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y, D_86B0FA78->unk_004.position.z);
+                                 sMonsterSpawnInfo[D_86B0FA44].unk_04 + D_86B0FA78->unk_004.position.y,
+                                 D_86B0FA78->unk_004.position.z);
 
     if (D_86B0FA78->unk_004.position.y <= 0.5f) {
         return 1;
@@ -381,25 +418,37 @@ void Intro_EmitLandingParticles(void) {
 
     if (D_86B0FA78->unk_178 & 1) {
         Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                      sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
-        Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
+                                     sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14),
+                                     D_86B0FA78->unk_004.position.z);
+        Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation,
+                                      MiniFx_UpdatePalette17DelayedRevealFallParticle,
+                                      &gMiniFxParticleDescriptorIa8Variant, 1);
 
         if ((D_86B0FA78->unk_178 >= 0xA) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
-            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
+                                         sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14),
+                                         D_86B0FA78->unk_004.position.z);
+            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation,
+                                          MiniFx_UpdatePalette17DelayedRevealFallParticle,
+                                          &gMiniFxParticleDescriptorIa8Variant, 1);
         }
 
         if ((D_86B0FA78->unk_178 >= 0x14) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
-            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
+                                         sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14),
+                                         D_86B0FA78->unk_004.position.z);
+            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation,
+                                          MiniFx_UpdatePalette17DelayedRevealFallParticle,
+                                          &gMiniFxParticleDescriptorIa8Variant, 1);
         }
 
         if ((D_86B0FA78->unk_178 >= 0x1E) && (D_86B0FA78->unk_178 & 1)) {
             Vec3f_SetComponentsDuplicate(&sp44, D_86B0FA78->unk_004.position.x,
-                          sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14), D_86B0FA78->unk_004.position.z);
-            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation, MiniFx_UpdatePalette17DelayedRevealFallParticle, &gMiniFxParticleDescriptorIa8Variant, 1);
+                                         sMonsterSpawnInfo[D_86B0FA44].unk_08 + (MathUtil_RandomU16Range(0x28) - 0x14),
+                                         D_86B0FA78->unk_004.position.z);
+            Particle_EmitBurstAtTransform(1.0f, sp44, D_86B0FA78->unk_004.rotation,
+                                          MiniFx_UpdatePalette17DelayedRevealFallParticle,
+                                          &gMiniFxParticleDescriptorIa8Variant, 1);
         }
     }
 }
@@ -627,7 +676,8 @@ s32 Intro_UpdateShowcaseSequence(void) {
             }
             if (D_86B0FA78->unk_178++ >= 0x41) {
                 D_86B0FA64 = 0;
-                Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, &D_86B0FA6C, &D_86B0FA66, &D_86B0FA68);
+                Vec3f_CalculateDistanceAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition,
+                                              &D_86B0FA6C, &D_86B0FA66, &D_86B0FA68);
                 D_86B0FA78->unk_16C++;
             }
             break;
@@ -649,7 +699,8 @@ s32 Intro_UpdateShowcaseSequence(void) {
 
             D_86B0FA64 = Math_StepToS32(D_86B0FA64, 0x3C, 1, 1);
             D_86B0FA68 += D_86B0FA64;
-            Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_86B0FA6C, D_86B0FA66, D_86B0FA68);
+            Camera_ComputeEyeFromAngles(&D_87906054->view.targetPosition, &D_87906054->view.eyePosition, D_86B0FA6C,
+                                        D_86B0FA66, D_86B0FA68);
             break;
     }
 
@@ -719,42 +770,48 @@ void Intro_DrawTextPanels(void) {
             case 1:
                 Intro_StepPanelBounce(D_86B0FA54, 0.25f, 0.0f, 3.0f, 0xA3 - (D_86B0FA54->unk_9E / 2), 1.7f);
                 UI_DrawGradientTexture(D_86B0FA54->unk_80, D_86B0FA54->unk_98, D_86B0FA54->unk_9C, D_86B0FA54->unk_9E,
-                              D_86B0FA54->unk_A0, &D_86B0FA54->unk_B0);
+                                       D_86B0FA54->unk_A0, &D_86B0FA54->unk_B0);
                 D_86B0FA58->unk_84 =
                     Intro_StepPanelBounce(D_86B0FA58, 0.25f, 0.0f, 3.0f, 0xA3 - (D_86B0FA58->unk_9E / 2), 1.7f);
                 UI_DrawGradientTexture(D_86B0FA58->unk_80, D_86B0FA58->unk_98, D_86B0FA58->unk_9C, D_86B0FA58->unk_9E,
-                              D_86B0FA58->unk_A0, &D_86B0FA54->unk_B0);
+                                       D_86B0FA58->unk_A0, &D_86B0FA54->unk_B0);
 
                 if (gSessionContext.inRound2 == 1) {
                     UI_DrawTextureRgba16(D_86B0FA60->unk_80, (s16)D_86B0FA58->unk_98 + D_86B0FA58->unk_9E,
-                                  D_86B0FA58->unk_9C - 2, D_86B0FA60->unk_9E, D_86B0FA60->unk_A0);
+                                         D_86B0FA58->unk_9C - 2, D_86B0FA60->unk_9E, D_86B0FA60->unk_A0);
                 }
 
                 if ((D_86B0FA44 != 4) && (D_86B0FA44 != 5)) {
                     Intro_StepPanelBounce(D_86B0FA5C, 0.25f, 0.0f, 3.0f, 0xA3 - (D_86B0FA5C->unk_9E / 2), 1.7f);
-                    UI_DrawGradientTexture(D_86B0FA5C->unk_80, D_86B0FA5C->unk_98, D_86B0FA5C->unk_9C, D_86B0FA5C->unk_9E,
-                                  D_86B0FA5C->unk_A0, &D_86B0FA54->unk_B0);
+                    UI_DrawGradientTexture(D_86B0FA5C->unk_80, D_86B0FA5C->unk_98, D_86B0FA5C->unk_9C,
+                                           D_86B0FA5C->unk_9E, D_86B0FA5C->unk_A0, &D_86B0FA54->unk_B0);
                 }
 
                 if (D_86B0FA58->unk_84 != 0) {
-                    D_86B0FA54->unk_B0.unk_00 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_00, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_00,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C);
-                    D_86B0FA54->unk_B0.unk_02 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_02, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_02,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E);
-                    D_86B0FA54->unk_B0.unk_04 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_04, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_04,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10);
-                    D_86B0FA54->unk_B0.unk_06 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_06, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_06,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12);
-                    D_86B0FA54->unk_B0.unk_08 = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_08, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_08,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14);
-                    D_86B0FA54->unk_B0.unk_0A = Math_StepToS32(
-                        D_86B0FA54->unk_B0.unk_0A, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0A,
-                        sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16);
+                    D_86B0FA54->unk_B0.unk_00 =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_00, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_00,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0C);
+                    D_86B0FA54->unk_B0.unk_02 =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_02, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_02,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0E);
+                    D_86B0FA54->unk_B0.unk_04 =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_04, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_04,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_10);
+                    D_86B0FA54->unk_B0.unk_06 =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_06, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_06,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_12);
+                    D_86B0FA54->unk_B0.unk_08 =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_08, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_08,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_14);
+                    D_86B0FA54->unk_B0.unk_0A =
+                        Math_StepToS32(D_86B0FA54->unk_B0.unk_0A, sUIElementColors[D_86B0FA54->unk_88 + 1].unk_0A,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16,
+                                       sUIElementColors[D_86B0FA54->unk_88 + 1].unk_16);
                     if ((D_86B0FA54->unk_B0.unk_00 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_00) &&
                         (D_86B0FA54->unk_B0.unk_02 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_02) &&
                         (D_86B0FA54->unk_B0.unk_04 == sUIElementColors[D_86B0FA54->unk_88 + 1].unk_04) &&
@@ -772,18 +829,18 @@ void Intro_DrawTextPanels(void) {
 
             case 2:
                 UI_DrawGradientTexture(D_86B0FA54->unk_80, D_86B0FA54->unk_98, D_86B0FA54->unk_9C, D_86B0FA54->unk_9E,
-                              D_86B0FA54->unk_A0, sUIElementColorFlat);
+                                       D_86B0FA54->unk_A0, sUIElementColorFlat);
                 UI_DrawGradientTexture(D_86B0FA58->unk_80, D_86B0FA58->unk_98, D_86B0FA58->unk_9C, D_86B0FA58->unk_9E,
-                              D_86B0FA58->unk_A0, sUIElementColorFlat);
+                                       D_86B0FA58->unk_A0, sUIElementColorFlat);
 
                 if (gSessionContext.inRound2 == 1) {
                     UI_DrawTextureRgba16(D_86B0FA60->unk_80, (s16)D_86B0FA58->unk_98 + D_86B0FA58->unk_9E,
-                                  D_86B0FA58->unk_9C - 2, D_86B0FA60->unk_9E, D_86B0FA60->unk_A0);
+                                         D_86B0FA58->unk_9C - 2, D_86B0FA60->unk_9E, D_86B0FA60->unk_A0);
                 }
 
                 if ((D_86B0FA44 != 4) && (D_86B0FA44 != 5)) {
-                    UI_DrawGradientTexture(D_86B0FA5C->unk_80, D_86B0FA5C->unk_98, D_86B0FA5C->unk_9C, D_86B0FA5C->unk_9E,
-                                  D_86B0FA5C->unk_A0, sUIElementColorFlat);
+                    UI_DrawGradientTexture(D_86B0FA5C->unk_80, D_86B0FA5C->unk_98, D_86B0FA5C->unk_9C,
+                                           D_86B0FA5C->unk_9E, D_86B0FA5C->unk_A0, sUIElementColorFlat);
                 }
                 break;
         }
@@ -809,7 +866,7 @@ void Intro_DrawTextPanels(void) {
                 Gfx_SetEnvColor(0xC8, 0xFF, 0xFF, 0xFF);
                 Intro_StepPanelBounce(D_86B0FA50, 0.35f, 0.0f, 4.0f, 160.0f, 1.4f);
                 Font_Printf((s32)D_86B0FA50->unk_98 - (Font_MeasureTextExtent(0x10, 0, D_86B0FA50->unk00) / 2),
-                              D_86B0FA50->unk_9C, D_86B0FA50->unk00);
+                            D_86B0FA50->unk_9C, D_86B0FA50->unk00);
                 Font_DisableTwoCycleTexturing();
                 Font_EndTexturedTextRendering();
                 break;

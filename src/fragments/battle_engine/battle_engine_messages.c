@@ -20,12 +20,12 @@ static u8 D_84385990[] = { SWORDS_DANCE, GROWTH };
 static u8 D_84385994[] = { MEDITATE, RECOVER, BIDE, SELFDESTRUCT, AMNESIA };
 static u8 D_8438599C[] = { AGILITY, TELEPORT, MIMIC, DOUBLE_TEAM, BARRAGE };
 static u8 D_843859A4[] = {
-    POUND,        SCRATCH,    VICEGRIP,     WING_ATTACK, FLY,          BIND,         SLAM,       HORN_ATTACK,
-    BODY_SLAM,    WRAP,       THRASH,       TAIL_WHIP,   LEER,         BITE,         GROWL,      ROAR,
-    SING,         PECK,       COUNTER,      STRENGTH,    ABSORB,       STRING_SHOT,  EARTHQUAKE, FISSURE,
-    DIG,          TOXIC,      SCREECH,      HARDEN,      MINIMIZE,     WITHDRAW,     DEFENSE_CURL, METRONOME,
-    LICK,         CLAMP,      CONSTRICT,    POISON_GAS,  LEECH_LIFE,   BUBBLE,       FLASH,      SPLASH,
-    ACID_ARMOR,   FURY_SWIPES, REST,        SHARPEN,     SLASH,        SUBSTITUTE,
+    POUND,      SCRATCH,     VICEGRIP,  WING_ATTACK, FLY,        BIND,        SLAM,         HORN_ATTACK,
+    BODY_SLAM,  WRAP,        THRASH,    TAIL_WHIP,   LEER,       BITE,        GROWL,        ROAR,
+    SING,       PECK,        COUNTER,   STRENGTH,    ABSORB,     STRING_SHOT, EARTHQUAKE,   FISSURE,
+    DIG,        TOXIC,       SCREECH,   HARDEN,      MINIMIZE,   WITHDRAW,    DEFENSE_CURL, METRONOME,
+    LICK,       CLAMP,       CONSTRICT, POISON_GAS,  LEECH_LIFE, BUBBLE,      FLASH,        SPLASH,
+    ACID_ARMOR, FURY_SWIPES, REST,      SHARPEN,     SLASH,      SUBSTITUTE,
 };
 
 void Battle_ClearAllMessageQueues(void) {
@@ -119,7 +119,8 @@ void Battle_QueueStatusText(char* text, s32 side) {
     UNUSED s32 pad2[2];
 
     Battle_ClearMessageCursor();
-    sBattleMessageQueues->controllerPort = sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
+    sBattleMessageQueues->controllerPort =
+        sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
     Battle_SimpleStringFormat(sBattleMessageQueues->buffer[0], text + 1);
     *text = 0;
 }
@@ -132,8 +133,10 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* pokemon2 = sActivePokemon[1];
 
     if ((gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->transitionStep == 0)) {
-        BattleHud_DrawCompactMonStatusBox(pokemon1, 21, 15, pokemon1->sessionTeams->teamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
-        BattleHud_DrawCompactMonStatusBox(pokemon2, 225, 15, pokemon2->sessionTeams->teamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(
+            pokemon1, 21, 15, pokemon1->sessionTeams->teamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(
+            pokemon2, 225, 15, pokemon2->sessionTeams->teamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
     }
 }
 
@@ -274,7 +277,8 @@ void Battle_QueueMetronomeMoveMessage(void) {
     if (runtime->usedMove == METRONOME) {
         do {
             metronome_selected_move = Battle_Random();
-        } while ((metronome_selected_move == 0) || (metronome_selected_move >= STRUGGLE) || metronome_selected_move == METRONOME);
+        } while ((metronome_selected_move == 0) || (metronome_selected_move >= STRUGGLE) ||
+                 metronome_selected_move == METRONOME);
 
         runtime->usedMove = metronome_selected_move;
 
@@ -412,66 +416,78 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
     UNUSED s32 pad;
     s32 time_limit_text_length;
 
-    if (1) {}// karodo
+    if (1) {} // karodo
 
     switch (box->openingProgress) {
         case 0:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
             break;
 
         case 3:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
             break;
 
         case 1:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if ((box->lineCount < 3) &&
-                (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0)) {
+            if ((box->lineCount < 3) && (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4,
+                                                                   y + (box->lineCount * 12) + 3) != 0)) {
                 box->lineCount += 1;
             }
             break;
 
         case 2:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) != 0) {
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) !=
+                0) {
                 box->lineCount += 1;
             }
             break;
@@ -511,8 +527,10 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
             break;
 
         case 13:
-            time_limit_text_length = Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
-            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 161 - time_limit_text_length, 113);
+            time_limit_text_length =
+                Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
+            Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 161 - time_limit_text_length,
+                                      113);
             break;
 
         case 14:
@@ -535,7 +553,8 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
 
     switch (box->openingProgress) {
         case 0:
-            if ((sBattleMessageQueues->buffer[2][1] == 0) && (sBattleMessageQueues->buffer[13][1] == 0) && (sBattleMessageQueues->buffer[5][1] == 0)) {
+            if ((sBattleMessageQueues->buffer[2][1] == 0) && (sBattleMessageQueues->buffer[13][1] == 0) &&
+                (sBattleMessageQueues->buffer[5][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -563,8 +582,9 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[14]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[11]);
-            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0) &&
-                (sBattleMessageQueues->buffer[14][1] == 0) && (sBattleMessageQueues->buffer[11][1] == 0)) {
+            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) &&
+                (sBattleMessageQueues->buffer[7][1] == 0) && (sBattleMessageQueues->buffer[14][1] == 0) &&
+                (sBattleMessageQueues->buffer[11][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -576,7 +596,8 @@ s32 BattleBox_SelectMessage(BattleBox* box) {
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[1]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[4]);
             BattleBox_PlayTextBlip(sBattleMessageQueues->buffer[7]);
-            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) && (sBattleMessageQueues->buffer[7][1] == 0)) {
+            if ((sBattleMessageQueues->buffer[1][1] == 0) && (sBattleMessageQueues->buffer[4][1] == 0) &&
+                (sBattleMessageQueues->buffer[7][1] == 0)) {
                 box->visibility = 0xFF;
                 return 1;
             }
@@ -707,7 +728,8 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
 }
 
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
-    sBattleMessageQueues->controllerPort = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    sBattleMessageQueues->controllerPort =
+        pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
     pokemon->captionState.active = 1;
     Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
     Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
@@ -717,12 +739,14 @@ void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
     TeamRoster* team_member_index = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex];
 
     if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
-        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
+            pokemon->captionState.unk_48[pokemon->captionState.unk_04];
         pokemon->captionState.unk_04++;
     }
 
     if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
-        pokemon->captionState.unk_08[pokemon->captionState.unk_04] = pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+        pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
+            pokemon->captionState.unk_48[pokemon->captionState.unk_04];
         pokemon->captionState.unk_04++;
     }
 

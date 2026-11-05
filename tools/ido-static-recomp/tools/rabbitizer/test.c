@@ -8,7 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 int main() {
     uint32_t word;
     RabbitizerInstruction instr;
@@ -18,7 +17,7 @@ int main() {
     size_t disassembledSize;
 
     word = 0x8D4A7E18; // lw
-    //word = 0x00004010; // mfhi
+    // word = 0x00004010; // mfhi
 
     RabbitizerInstruction_init(&instr, word, 0x80000000);
 

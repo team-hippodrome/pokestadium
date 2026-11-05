@@ -367,7 +367,8 @@ void Trade_ResetSaveSeq(void);
 void Trade_UpdateSaveSeq(void);
 void Trade_DrawSaveSeq(void);
 
-void TradeCable_DrawScissoredTexRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7, s32 arg8);
+void TradeCable_DrawScissoredTexRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
+                                     s32 arg8);
 void TradeCable_ResetBalls(void);
 void TradeCable_SetBallState(s32 arg0, s16 arg1);
 void TradeCable_UpdateBallFadeIn(unk_D_82F211A0* arg0);

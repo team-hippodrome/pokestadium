@@ -8,17 +8,70 @@ typedef u8* (*api_func_t)(u8*);
 static s32 mus_song_stop_countdown = -1;
 static u8 mus_voice_start_immediate_mode = 0;
 static command_func_t command_func_jumptable[] = {
-    Audio_ClearVoicePlaybackState, Audio_SetVoiceSampleIndex, Audio_EnableVoicePitchSlide, Audio_DisableVoicePitchSlide, Audio_SetVoiceVolumeEnvelope, Audio_SetVoiceSequenceTempo, Audio_SetVoiceFixedDuration,
-    Audio_SetVoiceReleaseDuration, Audio_EnableVoiceVibrato, Audio_EnableVoiceVibratoDown, Audio_DisableVoiceVibrato, Audio_SetVoiceDurationOverride, Audio_EnableVoiceVariableDuration, Audio_SetVoiceDetune,
-    Audio_ApplyVoiceDetuneOnce, Audio_SetVoiceFinePitch, Audio_SetVoiceEnvelopeFromTable, Audio_SetVoiceFlagED, Audio_ClearVoiceFlagED, Audio_SetVoiceFlagEE, Audio_ClearVoiceFlagEE,
-    Audio_PushVoiceLoopState, Audio_PopVoiceLoopState, Audio_SetVoicePeriodicPitchModulation, Audio_DisableVoicePeriodicPitchModulation, Audio_EnableVoiceVelocityFromStream, Audio_DisableVoiceVelocityFromStream, Audio_SetVoiceDefaultVelocity,
-    Audio_SetVoicePan, Audio_SkipVoiceCommandWord, Audio_SetVoiceSubEnvelopePointer, Audio_ClearVoiceSubEnvelopePointer, Audio_SkipVoiceCommandByte, Audio_SetVoiceEnvelopePointers, Audio_SetVoiceFxMix,
-    Audio_SetRandomVoiceDetune, Audio_SetRandomVoiceVolume, Audio_SetRandomVoicePan, Audio_SetVoiceVolume, Audio_AllocateSubVoiceFromCommand, Audio_SetVoiceVolumeScale, Audio_SetVoicePanModulation,
-    NULL,          NULL,          NULL,          NULL,          NULL,          NULL,          Audio_AllocateVoiceFromCommand,
+    Audio_ClearVoicePlaybackState,
+    Audio_SetVoiceSampleIndex,
+    Audio_EnableVoicePitchSlide,
+    Audio_DisableVoicePitchSlide,
+    Audio_SetVoiceVolumeEnvelope,
+    Audio_SetVoiceSequenceTempo,
+    Audio_SetVoiceFixedDuration,
+    Audio_SetVoiceReleaseDuration,
+    Audio_EnableVoiceVibrato,
+    Audio_EnableVoiceVibratoDown,
+    Audio_DisableVoiceVibrato,
+    Audio_SetVoiceDurationOverride,
+    Audio_EnableVoiceVariableDuration,
+    Audio_SetVoiceDetune,
+    Audio_ApplyVoiceDetuneOnce,
+    Audio_SetVoiceFinePitch,
+    Audio_SetVoiceEnvelopeFromTable,
+    Audio_SetVoiceFlagED,
+    Audio_ClearVoiceFlagED,
+    Audio_SetVoiceFlagEE,
+    Audio_ClearVoiceFlagEE,
+    Audio_PushVoiceLoopState,
+    Audio_PopVoiceLoopState,
+    Audio_SetVoicePeriodicPitchModulation,
+    Audio_DisableVoicePeriodicPitchModulation,
+    Audio_EnableVoiceVelocityFromStream,
+    Audio_DisableVoiceVelocityFromStream,
+    Audio_SetVoiceDefaultVelocity,
+    Audio_SetVoicePan,
+    Audio_SkipVoiceCommandWord,
+    Audio_SetVoiceSubEnvelopePointer,
+    Audio_ClearVoiceSubEnvelopePointer,
+    Audio_SkipVoiceCommandByte,
+    Audio_SetVoiceEnvelopePointers,
+    Audio_SetVoiceFxMix,
+    Audio_SetRandomVoiceDetune,
+    Audio_SetRandomVoiceVolume,
+    Audio_SetRandomVoicePan,
+    Audio_SetVoiceVolume,
+    Audio_AllocateSubVoiceFromCommand,
+    Audio_SetVoiceVolumeScale,
+    Audio_SetVoicePanModulation,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    Audio_AllocateVoiceFromCommand,
 };
 static api_func_t api_func_jumptable[] = {
-    Audio_PlayMusicSequenceHandler, Audio_PlaySoundEffectHandler, Audio_ApplyVoiceDetuneCommand, Audio_ApplyVoiceVolumeCommand, Audio_ApplyVoiceVolumeScaleCommand, Audio_ApplyVoicePanCommand, Audio_ApplyVoiceFxMixCommand,
-    Audio_FadeSoundHandler, Audio_FadeCategoryHandler, Audio_SetChannelVolumeHandler, Audio_SetMonoOutputHandler, Audio_PlayMusicSequenceLoopedHandler, NULL,
+    Audio_PlayMusicSequenceHandler,
+    Audio_PlaySoundEffectHandler,
+    Audio_ApplyVoiceDetuneCommand,
+    Audio_ApplyVoiceVolumeCommand,
+    Audio_ApplyVoiceVolumeScaleCommand,
+    Audio_ApplyVoicePanCommand,
+    Audio_ApplyVoiceFxMixCommand,
+    Audio_FadeSoundHandler,
+    Audio_FadeCategoryHandler,
+    Audio_SetChannelVolumeHandler,
+    Audio_SetMonoOutputHandler,
+    Audio_PlayMusicSequenceLoopedHandler,
+    NULL,
 };
 
 static ALPlayer plr_player;
@@ -350,13 +403,13 @@ u8* Audio_ClearVoiceSubEnvelopePointer(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_SkipVoiceCommandByte(UNUSED channel_t* cp, u8* ptr) {
-    #ifdef _AUDIODEBUG
-        osSyncPrintf("PLAYER_COMMANDS.C: Audio_SkipVoiceCommandByte -  %d (channel frame=%d)\n", *ptr++,  cp->channel_frame);
-        return ptr;
-    #else
-        ptr++;
-        return ptr;
-    #endif
+#ifdef _AUDIODEBUG
+    osSyncPrintf("PLAYER_COMMANDS.C: Audio_SkipVoiceCommandByte -  %d (channel frame=%d)\n", *ptr++, cp->channel_frame);
+    return ptr;
+#else
+    ptr++;
+    return ptr;
+#endif
 }
 
 u8* Audio_SetVoiceEnvelopePointers(channel_t* cp, u8* ptr) {
@@ -487,7 +540,7 @@ void Audio_WriteU32BE(u8* dst, u32 value) {
     *dst++ = (value >> 0x18) & 0xFF;
     *dst++ = (value >> 0x10) & 0xFF;
     *dst++ = (value >> 8) & 0xFF;
-    *dst++ = (value) & 0xFF;
+    *dst++ = (value)&0xFF;
 }
 
 /**
@@ -555,7 +608,7 @@ s32 Audio_InitializeVoiceManager(musConfig* config) {
     mus_song_stop_countdown = -1;
     mus_sound_effect_blocked = 0;
     mus_voice_start_immediate_mode = 1;
-    
+
     plr_player.next = NULL;
     plr_player.handler = Audio_PlayerFrameHandler;
     plr_player.clientData = &plr_player;
@@ -595,7 +648,7 @@ void Audio_QueueSetVolumeCommand(s32 volume_type_flags, u32 master_volume_level)
 }
 
 /**
- * Queue load song command (returns handle) 
+ * Queue load song command (returns handle)
  */
 s32 Audio_PlayMusicSequence(SoundBank* sample_bank_ptr, song_t* song_data) {
     u8* queue;
@@ -639,7 +692,8 @@ s32 Audio_PlayMusicSequence(SoundBank* sample_bank_ptr, song_t* song_data) {
 /**
  * Queue start FX command with priority (returns handle)
  */
-s32 Audio_PlaySoundEffect(SoundBank* sample_bank_ptr, fx_t* fx_bank_ptr, s32 effect_id, s32 effect_priority, u32 effect_sweep_amount, s32 effect_volume_scale) {
+s32 Audio_PlaySoundEffect(SoundBank* sample_bank_ptr, fx_t* fx_bank_ptr, s32 effect_id, s32 effect_priority,
+                          u32 effect_sweep_amount, s32 effect_volume_scale) {
     u32 effect_handle;
     UNUSED s32 pad[2];
     u32 mask;
@@ -1027,7 +1081,7 @@ void Audio_StopAllSoundEffects(void) {
         }
 
         ptr->voice->env_phase = 4;
-        ptr->voice-> release_end_frame = mus_current_frame_counter + 2;
+        ptr->voice->release_end_frame = mus_current_frame_counter + 2;
 
         n_alSynSetVol(&ptr->voice->voice, 0, mus_next_frame_time * 2);
 
@@ -1671,7 +1725,6 @@ s32 Audio_PlayerFrameHandler(UNUSED void* node) {
 
         ptr->wobble_frame = (u32)(ptr->channel_frame - ptr->note_start_frame) / 256;
 
-
         if (ptr->playing != 0) {
             if (var_fs0 != 0.0f) {
                 n_alSynSetPitch(&ptr->voice->voice, var_fs0);
@@ -1919,7 +1972,7 @@ void Audio_ReleaseVoice(channel_t* arg0) {
             if (temp_ft4 == 0) {
                 temp_ft4++;
             }
-            arg0->voice-> release_end_frame = mus_current_frame_counter + temp_ft4 + 1;
+            arg0->voice->release_end_frame = mus_current_frame_counter + temp_ft4 + 1;
 
             n_alSynSetVol(&arg0->voice->voice, 0, mus_next_frame_time * temp_ft4);
 

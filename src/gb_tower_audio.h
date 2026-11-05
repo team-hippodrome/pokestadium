@@ -4,8 +4,8 @@
 #include "global.h"
 
 typedef struct unk_D_800AA664 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
+    /* 0x0000 */ OSThread thread;
+    /* 0x01B0 */ char unk01B0[0x2030];
 } unk_D_800AA664; // size = 0x21E0
 
 extern unk_D_800AA660* D_800AA660;

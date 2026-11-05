@@ -19,193 +19,178 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-uint16_t
-getint16BE(FILE *f)
-{
-	uint16_t n;
-	n  = fgetc(f) << 8;
-	n |= fgetc(f);
+uint16_t getint16BE(FILE* f) {
+    uint16_t n;
+    n = fgetc(f) << 8;
+    n |= fgetc(f);
 
-	return n;
+    return n;
 }
 
-uint32_t
-getint32BE(FILE *f)
-{
-	uint32_t n;
-	n  = fgetc(f) << 24;
-	n |= fgetc(f) << 16;
-	n |= fgetc(f) << 8;
-	n |= fgetc(f);
+uint32_t getint32BE(FILE* f) {
+    uint32_t n;
+    n = fgetc(f) << 24;
+    n |= fgetc(f) << 16;
+    n |= fgetc(f) << 8;
+    n |= fgetc(f);
 
-	return n;
+    return n;
 }
 
-void
-printpng(uint16_t **pixels, int height, int width)
-{
-	png_structp png_ptr;
-	png_infop info_ptr;
-	int x, y;
-	png_byte **row_pointers;
-	int pixel_size;
-	int depth;
+void printpng(uint16_t** pixels, int height, int width) {
+    png_structp png_ptr;
+    png_infop info_ptr;
+    int x, y;
+    png_byte** row_pointers;
+    int pixel_size;
+    int depth;
 
-	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL,
-	    NULL);
-	if (png_ptr == NULL) {
-		errx(1, "Could not create PNG write struct");
-	}
-    
-	info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == NULL) {
-		png_destroy_write_struct(&png_ptr, NULL);
-		errx(1, "Could not create PNG info struct");
-	}
-    
-	if (setjmp (png_jmpbuf (png_ptr))) {
-		png_destroy_write_struct(&png_ptr, &info_ptr);
-		errx(1, "Internal PNG error");
-	}
-    
-	depth = 8;
-	png_set_IHDR(png_ptr, info_ptr, width, height, depth,
-	    PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
-	     PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-    
-	pixel_size = 3;
-	row_pointers = png_malloc(png_ptr, height * sizeof (png_byte *));
-	for (y = 0; y < height; ++y) {
-		png_byte *row = png_malloc(png_ptr,
-		    sizeof(uint8_t) * width * pixel_size);
-		row_pointers[y] = row;
-		for (x = 0; x < width; ++x) {
-			*row++ = (pixels[x][y] >> 11) << 3;
-			*row++ = ((pixels[x][y] >> 6) & 0x1f) << 3;
-			*row++ = ((pixels[x][y] >> 1) & 0x1f) << 3;
-		}
-	}
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    if (png_ptr == NULL) {
+        errx(1, "Could not create PNG write struct");
+    }
 
-	png_init_io(png_ptr, stdout);
-	png_set_rows(png_ptr, info_ptr, row_pointers);
-	png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+    info_ptr = png_create_info_struct(png_ptr);
+    if (info_ptr == NULL) {
+        png_destroy_write_struct(&png_ptr, NULL);
+        errx(1, "Could not create PNG info struct");
+    }
 
-	for (y = 0; y < height; y++) {
-		png_free(png_ptr, row_pointers[y]);
-	}
+    if (setjmp(png_jmpbuf(png_ptr))) {
+        png_destroy_write_struct(&png_ptr, &info_ptr);
+        errx(1, "Internal PNG error");
+    }
 
-	png_free(png_ptr, row_pointers);
-	png_destroy_write_struct(&png_ptr, &info_ptr);
+    depth = 8;
+    png_set_IHDR(png_ptr, info_ptr, width, height, depth, PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+    pixel_size = 3;
+    row_pointers = png_malloc(png_ptr, height * sizeof(png_byte*));
+    for (y = 0; y < height; ++y) {
+        png_byte* row = png_malloc(png_ptr, sizeof(uint8_t) * width * pixel_size);
+        row_pointers[y] = row;
+        for (x = 0; x < width; ++x) {
+            *row++ = (pixels[x][y] >> 11) << 3;
+            *row++ = ((pixels[x][y] >> 6) & 0x1f) << 3;
+            *row++ = ((pixels[x][y] >> 1) & 0x1f) << 3;
+        }
+    }
+
+    png_init_io(png_ptr, stdout);
+    png_set_rows(png_ptr, info_ptr, row_pointers);
+    png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+
+    for (y = 0; y < height; y++) {
+        png_free(png_ptr, row_pointers[y]);
+    }
+
+    png_free(png_ptr, row_pointers);
+    png_destroy_write_struct(&png_ptr, &info_ptr);
 }
 
 /*
  * read a face from offset in f and store it into pixels.
  */
-void
-getface(FILE *f, long offset, int height, int width, uint16_t **pixels,
-    int inset)
-{
-	/*
-	 * In the original format, on every other line, every other pair of
-	 * pixels is swapped. Here we transpose it into top-bottom left-right.
-	 */
-	uint16_t q[4];
-	int x, y;
+void getface(FILE* f, long offset, int height, int width, uint16_t** pixels, int inset) {
+    /*
+     * In the original format, on every other line, every other pair of
+     * pixels is swapped. Here we transpose it into top-bottom left-right.
+     */
+    uint16_t q[4];
+    int x, y;
 
-	fseek(f, offset, SEEK_SET);
+    fseek(f, offset, SEEK_SET);
 
-	for (y = 0; y < height; ++y) {
-		for (x = inset; x < width + inset; ++x) {
-			if (y % 2 == 0) {
-				pixels[x][y] = fgetc(f) << 8;
-				pixels[x][y] |= fgetc(f);
-			} else {
-				q[x % 4] = fgetc(f) << 8;
-				q[x % 4] |= fgetc(f);
-				if (x % 4 == 3) {
-					pixels[x - 3][y] = q[2];
-					pixels[x - 2][y] = q[3];
-					pixels[x - 1][y] = q[0];
-					pixels[x][y] = q[1];
-				}
-			}
-		}
-	}
+    for (y = 0; y < height; ++y) {
+        for (x = inset; x < width + inset; ++x) {
+            if (y % 2 == 0) {
+                pixels[x][y] = fgetc(f) << 8;
+                pixels[x][y] |= fgetc(f);
+            } else {
+                q[x % 4] = fgetc(f) << 8;
+                q[x % 4] |= fgetc(f);
+                if (x % 4 == 3) {
+                    pixels[x - 3][y] = q[2];
+                    pixels[x - 2][y] = q[3];
+                    pixels[x - 1][y] = q[0];
+                    pixels[x][y] = q[1];
+                }
+            }
+        }
+    }
 }
 
-int
-main(int argc, char *argv[])
-{
-	FILE *f;
-	int x, y;
-	uint16_t **pixels;
-	int height, width;
-	uint32_t nfaces;
-	uint32_t *offsets;
-	uint16_t *heights, *widths;
-	int inset;
+int main(int argc, char* argv[]) {
+    FILE* f;
+    int x, y;
+    uint16_t** pixels;
+    int height, width;
+    uint32_t nfaces;
+    uint32_t* offsets;
+    uint16_t *heights, *widths;
+    int inset;
 
-	if (argc != 2) {
-		errx(1, "Usage: face2png file");
-	}
+    if (argc != 2) {
+        errx(1, "Usage: face2png file");
+    }
 
-	f = fopen(argv[1], "rb");
-	if (f == NULL) {
-		err(1, "Could not open file '%s'", argv[1]);
-	}
+    f = fopen(argv[1], "rb");
+    if (f == NULL) {
+        err(1, "Could not open file '%s'", argv[1]);
+    }
 
-	nfaces = getint32BE(f);
-	offsets = reallocarray(NULL, nfaces, sizeof *offsets);
-	heights = reallocarray(NULL, nfaces, sizeof *heights);
-	widths = reallocarray(NULL, nfaces, sizeof *widths);
-	if (offsets == NULL || heights == NULL || widths == NULL) {
-		err(1, "Could not allocate memory");
-	}
+    nfaces = getint32BE(f);
+    offsets = reallocarray(NULL, nfaces, sizeof *offsets);
+    heights = reallocarray(NULL, nfaces, sizeof *heights);
+    widths = reallocarray(NULL, nfaces, sizeof *widths);
+    if (offsets == NULL || heights == NULL || widths == NULL) {
+        err(1, "Could not allocate memory");
+    }
 
-	for (y = 0; y < nfaces; ++y) {
-		offsets[y] = getint32BE(f);
-	}
-	height = 0;
-	width = 0;
-	for (y = 0; y < nfaces; ++y) {
-		fseek(f, offsets[y] - 8, SEEK_SET);
+    for (y = 0; y < nfaces; ++y) {
+        offsets[y] = getint32BE(f);
+    }
+    height = 0;
+    width = 0;
+    for (y = 0; y < nfaces; ++y) {
+        fseek(f, offsets[y] - 8, SEEK_SET);
 
-		/*
-		 * XXX
-		 * check whether height follows width or width follows height
-		 */
-		heights[y] = getint16BE(f);
-		widths[y] = getint16BE(f);
+        /*
+         * XXX
+         * check whether height follows width or width follows height
+         */
+        heights[y] = getint16BE(f);
+        widths[y] = getint16BE(f);
 
-		getint32BE(f);
+        getint32BE(f);
 
-		/* height equals the largest height */
-		height = heights[y] > height ? heights[y] : height;
-		/* width equals the sum of the widths */
-		width += widths[y];
-	}
+        /* height equals the largest height */
+        height = heights[y] > height ? heights[y] : height;
+        /* width equals the sum of the widths */
+        width += widths[y];
+    }
 
-	pixels = reallocarray(NULL, width, sizeof *pixels);
-	if (pixels == NULL) {
-		err(1, "Could not allocate memory");
-	}
-	for (x = 0; x < width; ++x) {
-		pixels[x] = reallocarray(NULL, height, sizeof
-		    *pixels[x]);
-		if (pixels[x] == NULL) {
-			err(1, "Could not allocate memory");
-		}
-	}
+    pixels = reallocarray(NULL, width, sizeof *pixels);
+    if (pixels == NULL) {
+        err(1, "Could not allocate memory");
+    }
+    for (x = 0; x < width; ++x) {
+        pixels[x] = reallocarray(NULL, height, sizeof *pixels[x]);
+        if (pixels[x] == NULL) {
+            err(1, "Could not allocate memory");
+        }
+    }
 
-	inset = 0;
-	for (y = 0; y < nfaces; ++y) {
-		getface(f, offsets[y], heights[y], widths[y], pixels, inset);
-		inset += widths[y];
-	}
+    inset = 0;
+    for (y = 0; y < nfaces; ++y) {
+        getface(f, offsets[y], heights[y], widths[y], pixels, inset);
+        inset += widths[y];
+    }
 
-	printpng(pixels, height, width);
+    printpng(pixels, height, width);
 
-	fclose(f);
+    fclose(f);
 
-	return 0;
+    return 0;
 }

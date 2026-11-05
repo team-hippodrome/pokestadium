@@ -80,7 +80,8 @@ void FirstClearBonus_InitCamera(void) {
     D_86B10BCA = 0;
     D_86B10BCC = 0x78;
 
-    Camera_ComputeEyeFromAngles(&D_86B109B8->view.targetPosition, &D_86B109B8->view.eyePosition, D_86B10BCC, D_86B10BC8, D_86B10BCA);
+    Camera_ComputeEyeFromAngles(&D_86B109B8->view.targetPosition, &D_86B109B8->view.eyePosition, D_86B10BCC, D_86B10BC8,
+                                D_86B10BCA);
 
     D_86B109B8->perspective.nearPlane = 50.0f;
     D_86B109B8->perspective.farPlane = 6400.0f;
@@ -128,18 +129,20 @@ void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelTopRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomLeftTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3, 0x2000 / var_s2,
+                                0);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP,
-                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gUiPanelBottomRightTexture, G_IM_FMT_I, 16, 8, 0,
+                           G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x2000 / var_s3,
-                  0x2000 / var_s2, 0);
+                                0x2000 / var_s2, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
@@ -205,7 +208,8 @@ s32 FirstClearBonus_RevealNextChar(void) {
 #endif
 
 void FirstClearBonus_DrawDialogBox(void) {
-    FirstClearBonus_DrawDialogFrame(0x3C, 0xBE - (D_86B10BE0.unk_10 / 2), D_86B10BE0.unk_0C, D_86B10BE0.unk_10, 0x50, 0x50, 0xF0, 0x80);
+    FirstClearBonus_DrawDialogFrame(0x3C, 0xBE - (D_86B10BE0.unk_10 / 2), D_86B10BE0.unk_0C, D_86B10BE0.unk_10, 0x50,
+                                    0x50, 0xF0, 0x80);
 }
 
 void FirstClearBonus_DrawDialogText(void) {

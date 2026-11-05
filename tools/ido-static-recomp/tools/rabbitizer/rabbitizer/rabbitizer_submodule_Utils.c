@@ -5,7 +5,6 @@
 
 #include "common/Utils.h"
 
-
 static PyObject *rabbitizer_submodule_Utils_from2Complement(UNUSED PyObject *self, PyObject *args, PyObject *kwds) {
     static char *kwlist[] = { "number", "bits", NULL };
     uint32_t number = 0;
@@ -49,9 +48,10 @@ static PyObject *rabbitizer_submodule_Utils_escapeString(UNUSED PyObject *self, 
     return ret;
 }
 
-
-#define METHOD_NO_ARGS(name, docs)  { #name, (PyCFunction) rabbitizer_submodule_Utils_##name, METH_NOARGS,                  PyDoc_STR(docs) }
-#define METHOD_ARGS(name, docs)     { #name, (PyCFunction) rabbitizer_submodule_Utils_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
+#define METHOD_NO_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_submodule_Utils_##name, METH_NOARGS, PyDoc_STR(docs) }
+#define METHOD_ARGS(name, docs) \
+    { #name, (PyCFunction)rabbitizer_submodule_Utils_##name, METH_VARARGS | METH_KEYWORDS, PyDoc_STR(docs) }
 
 static PyMethodDef rabbitizer_submodule_Utils_methods[] = {
     METHOD_ARGS(from2Complement, ""),
@@ -60,13 +60,8 @@ static PyMethodDef rabbitizer_submodule_Utils_methods[] = {
     { 0 },
 };
 
-
 static PyModuleDef rabbitizer_submodule_Utils_module = {
-    PyModuleDef_HEAD_INIT,
-    .m_name = "rabbitizer.Utils",
-    .m_doc = "",
-    .m_size = -1,
-    .m_methods = rabbitizer_submodule_Utils_methods,
+    PyModuleDef_HEAD_INIT, .m_name = "rabbitizer.Utils", .m_doc = "", .m_size = -1, .m_methods = rabbitizer_submodule_Utils_methods,
 };
 
 PyObject *rabbitizer_submodule_Utils_Init(void) {

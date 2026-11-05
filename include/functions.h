@@ -3,8 +3,8 @@
 
 #include "ultra64.h"
 
-void func_80057FD0(void *, int);
-s32 func_8005A990(OSPiHandle *);
+void func_80057FD0(void*, int);
+s32 func_8005A990(OSPiHandle*);
 
 // 517A0.s
 void func_80050BA0(s32, void*);

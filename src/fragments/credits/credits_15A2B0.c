@@ -3220,8 +3220,12 @@ void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 arg1, s8 arg2, u8 a
     D_86A06220 = 0;
     D_86A06222 = arg1;
 
-    Camera_ComputeEyeFromAngles(&ptr->unk_00, &sp3C, 720.0f, (((s32) D_86A04328[arg2 - 1][arg3 - 3].unk_0C) << 0xF) / 180, (((s32) D_86A04328[arg2 - 1][arg3 - 3].unk_10) << 0xF) / 180);
-    Camera_ComputeEyeFromAngles(&ptr->unk_14, &sp30, 720.0f, (((s32) D_86A04328[arg2 - 1][arg3 - 3].unk_20) << 0xF) / 180, (((s32) D_86A04328[arg2 - 1][arg3 - 3].unk_24) << 0xF) / 180);
+    Camera_ComputeEyeFromAngles(&ptr->unk_00, &sp3C, 720.0f,
+                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_0C) << 0xF) / 180,
+                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_10) << 0xF) / 180);
+    Camera_ComputeEyeFromAngles(&ptr->unk_14, &sp30, 720.0f,
+                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_20) << 0xF) / 180,
+                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_24) << 0xF) / 180);
 
     D_86A06254->view.eyePosition = ptr->unk_00;
     D_86A06254->view.targetPosition = sp3C;
@@ -3298,10 +3302,14 @@ void func_86A01CF0(s16* arg0, s16* arg1, s16* arg2, CameraNode* arg3, u16 arg4, 
             if (D_86A03D40[arg5 - 2][(s32)arg6].unk_00 < D_86A03D40[arg5 - 2][(s32)arg6].unk_02) {
                 D_86A06258 = (D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) / arg4;
             } else {
-                D_86A06258 = ((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0x10000) / arg4;
+                D_86A06258 =
+                    ((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0x10000) /
+                    arg4;
             }
         } else if (D_86A03D40[arg5 - 2][(s32)arg6].unk_00 < D_86A03D40[arg5 - 2][(s32)arg6].unk_02) {
-            D_86A06258 = (s32)((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 + D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0xFFFF0000) / arg4;
+            D_86A06258 =
+                (s32)((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 + D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0xFFFF0000) /
+                arg4;
         } else {
             D_86A06258 = (D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) / arg4;
         }

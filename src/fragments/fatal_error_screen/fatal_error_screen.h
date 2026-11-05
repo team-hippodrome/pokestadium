@@ -3,5 +3,4 @@
 
 #include "global.h"
 
-
 #endif // _FRAGMENT32_H_

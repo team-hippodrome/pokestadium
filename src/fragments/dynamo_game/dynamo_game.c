@@ -255,7 +255,8 @@ void DynamoGame_UpdatePlayerAnimState(void) {
                 } else if (var_s1 == 2) {
                     ModelAnim_SetFrame(&D_8650AB28->unk_014, D_8650AB28->unk_014.transformAnim.frameFixed >> 0x10);
                     if (D_8650AB28->unk_008 != 0) {
-                        ModelAnim_SetEventFrame(&D_8650AB28->unk_014, D_8650AB28->unk_014.transformAnim.frameFixed >> 0x10);
+                        ModelAnim_SetEventFrame(&D_8650AB28->unk_014,
+                                                D_8650AB28->unk_014.transformAnim.frameFixed >> 0x10);
                     }
                 } else {
                     ModelAnim_SetFrame(&D_8650AB28->unk_014, 0);
@@ -488,7 +489,7 @@ void DynamoGame_DrawTutorialScreen(s32 arg0) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
         Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, D_87806330, 0x2C)) / 2), 0x20,
-                      Text_GetString(NULL, 0, D_87806330, 0x2C));
+                    Text_GetString(NULL, 0, D_87806330, 0x2C));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(0x28, 0x34, sp40);
@@ -724,7 +725,8 @@ void DynamoGame_InitCamera(void) {
 
     D_87B000EC->view.targetPosition.y = 51.0f;
 
-    Camera_ComputeEyeFromAngles(&D_87B000EC->view.targetPosition, &D_87B000EC->view.eyePosition, D_87B000F4, D_87B000F0, D_87B000F2);
+    Camera_ComputeEyeFromAngles(&D_87B000EC->view.targetPosition, &D_87B000EC->view.eyePosition, D_87B000F4, D_87B000F0,
+                                D_87B000F2);
 }
 
 void DynamoGame_LoadAssets(void) {

@@ -15,11 +15,11 @@ typedef struct GameOptions {
 typedef struct ModeSettings {
     /* 0x00 */ u16 clearedModes; // Bit (1 << session mode); Mewtwo victory is bit 8.
     /* 0x02 */ char unk02[0x2];
-    /* 0x04 */ u8 castleClears; // Highest completed castle location + 1, capped at 8.
+    /* 0x04 */ u8 castleClears;      // Highest completed castle location + 1, capped at 8.
     /* 0x05 */ u8 nintendoCupClears; // Highest completed division + 1, capped at 4.
-    /* 0x06 */ u8 primeCupClears; // Highest completed division + 1, capped at 4.
-    /* 0x07 */ u8 mewtwoUnlocked; // Set when clearedModes reaches 0xF8.
-} ModeSettings; // size = 0x8
+    /* 0x06 */ u8 primeCupClears;    // Highest completed division + 1, capped at 4.
+    /* 0x07 */ u8 mewtwoUnlocked;    // Set when clearedModes reaches 0xF8.
+} ModeSettings;                      // size = 0x8
 
 typedef struct SessionContinueData {
     /* 0x00 */ u8 unk_00;

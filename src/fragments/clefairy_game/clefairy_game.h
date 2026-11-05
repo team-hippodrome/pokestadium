@@ -5,5 +5,4 @@
 
 void ClefairyGame_DrawOverlay(s32 arg0);
 
-
 #endif // _FRAGMENT7_H_

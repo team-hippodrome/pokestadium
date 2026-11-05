@@ -7,24 +7,24 @@
 #include "src/controller.h"
 
 typedef struct MiniActor {
-    /* 0x000 */ DisplayObject unk_000;		// collider ? model ?
+    /* 0x000 */ DisplayObject unk_000; // collider ? model ?
     /* 0x168 */ unk_D_86002F30* unk_168;
     /* 0x16C */ Vec3f scale;
-    /* 0x178 */ char unk178[0x18];	//	unused
-    /* 0x190 */ Vec3f totalPos;		//	all positions
-    /* 0x19C */ Vec3f totalPos_alt;	//	all positions + height/2
+    /* 0x178 */ char unk178[0x18];  //	unused
+    /* 0x190 */ Vec3f totalPos;     //	all positions
+    /* 0x19C */ Vec3f totalPos_alt; //	all positions + height/2
     /* 0x1A8 */ Vec3f position_1;
-    /* 0x1B4 */ Vec3f closestDiglettPos;//				**	ekans only
+    /* 0x1B4 */ Vec3f closestDiglettPos; //				**	ekans only
     /* 0x1C0 */ Vec3f position_2;
-    /* 0x1CC */ f32 dist2DiglettLevelX;	//	1,2,4
-    /* 0x1D0 */ f32 dist2DiglettLevelY;	//	unused
-    /* 0x1D4 */ f32 dist2DiglettLevelZ;	//	1,2,4
-    /* 0x1D8 */ Vec3f unk_1D8;		//	also position, unused
+    /* 0x1CC */ f32 dist2DiglettLevelX; //	1,2,4
+    /* 0x1D0 */ f32 dist2DiglettLevelY; //	unused
+    /* 0x1D4 */ f32 dist2DiglettLevelZ; //	1,2,4
+    /* 0x1D8 */ Vec3f unk_1D8;          //	also position, unused
     /* 0x1E4 */ f32 middleHeight;
-    /* 0x1E8 */ char unk1E8[0x4];	//	unused ?
-    /* 0x1EC */ f32 unk_1EC;		//	always zero
-    /* 0x1F0 */ f32 unk_1F0;		//	always zero
-    /* 0x1F4 */ f32 unk_1F4;		//	always zero
+    /* 0x1E8 */ char unk1E8[0x4]; //	unused ?
+    /* 0x1EC */ f32 unk_1EC;      //	always zero
+    /* 0x1F0 */ f32 unk_1F0;      //	always zero
+    /* 0x1F4 */ f32 unk_1F4;      //	always zero
     /* 0x1F8 */ f32 xSpeed;
     /* 0x1FC */ f32 ySpeed;
     /* 0x200 */ f32 zSpeed;
@@ -36,90 +36,90 @@ typedef struct MiniActor {
     /* 0x21A */ s16 xRot_1;
     /* 0x21C */ s16 yRot_1;
     /* 0x21E */ s16 zRot_1;
-    /* 0x220 */ s16 unk_220;		//	x something
-    /* 0x222 */ s16 unk_222;		//	y something ; ??? ; stick direction on sandshrew (?)
-    /* 0x224 */ s16 unk_224;		//	z something
+    /* 0x220 */ s16 unk_220; //	x something
+    /* 0x222 */ s16 unk_222; //	y something ; ??? ; stick direction on sandshrew (?)
+    /* 0x224 */ s16 unk_224; //	z something
     /* 0x226 */ s16 xRot_2;
-    /* 0x228 */ s16 yRot_2;			//	throwing direction on ekans
+    /* 0x228 */ s16 yRot_2; //	throwing direction on ekans
     /* 0x22A */ s16 zRot_2;
-    /* 0x22C */ s16 unk_22C;		//	zero, x spinning speed ?
-    /* 0x22E */ s16 ySpinSpeed;		//  y spinning speed on ekans
-    /* 0x230 */ s16 unk_230;		//	zero, z spinning speed ?
+    /* 0x22C */ s16 unk_22C;    //	zero, x spinning speed ?
+    /* 0x22E */ s16 ySpinSpeed; //  y spinning speed on ekans
+    /* 0x230 */ s16 unk_230;    //	zero, z spinning speed ?
     /* 0x232 */ s16 xRot_3;
     /* 0x234 */ s16 yRot_3;
     /* 0x236 */ s16 zRot_3;
-    /* 0x238 */ s16 unk_238;		//	always zero
-    /* 0x23A */ s16 unk_23A;		//	always zero
-    /* 0x23C */ s16 unk_23C;		//	??? some value to send to unk_000->unk_018
+    /* 0x238 */ s16 unk_238; //	always zero
+    /* 0x23A */ s16 unk_23A; //	always zero
+    /* 0x23C */ s16 unk_23C; //	??? some value to send to unk_000->unk_018
     /* 0x23E */ s16 mainState;
-    /* 0x240 */ s16 isSquashed;		//	on metapod
+    /* 0x240 */ s16 isSquashed; //	on metapod
     /* 0x242 */ s16 compState;
-    /* 0x244 */ s16 unk_244;		//	something metapod comp AI RNG
-    /* 0x246 */ char unk246[0x2];	//	unused
-    /* 0x248 */ s16 unk_248;		//	animation something 0,1,2
-    /* 0x24A */ s16 unk_24A;		//	animation id or state?
-    /* 0x24C */ s16 unk_24C;		//	texture animation ?
-    /* 0x24E */ char unk24E[0x6];	//	unused
-    /* 0x254 */ s32 unk_254;		//	always zero
+    /* 0x244 */ s16 unk_244;      //	something metapod comp AI RNG
+    /* 0x246 */ char unk246[0x2]; //	unused
+    /* 0x248 */ s16 unk_248;      //	animation something 0,1,2
+    /* 0x24A */ s16 unk_24A;      //	animation id or state?
+    /* 0x24C */ s16 unk_24C;      //	texture animation ?
+    /* 0x24E */ char unk24E[0x6]; //	unused
+    /* 0x254 */ s32 unk_254;      //	always zero
     /* 0x258 */ s16 miniHealth;
-    /* 0x25A */ s16 damageTimer;	//	** metapod only
-    /* 0x25C */ s16 miniMaxHealth;	//	400 instead of 100 on metapod
-    /* 0x25E */ s16 ekansAbbleToHoop;							//		**	ekans only
-    /* 0x260 */ s16 midAirState;	//  mid air state, ekanses and falling rocks
-    /* 0x262 */ s16 ekansIsMidAir;	//	ekans is in mid air				**	ekans only
-    /* 0x264 */ s16 unk_264;        //  always zero
+    /* 0x25A */ s16 damageTimer;      //	** metapod only
+    /* 0x25C */ s16 miniMaxHealth;    //	400 instead of 100 on metapod
+    /* 0x25E */ s16 ekansAbbleToHoop; //		**	ekans only
+    /* 0x260 */ s16 midAirState;      //  mid air state, ekanses and falling rocks
+    /* 0x262 */ s16 ekansIsMidAir;    //	ekans is in mid air				**	ekans only
+    /* 0x264 */ s16 unk_264;          //  always zero
     /* 0x266 */ s16 collidingActorId;
-    /* 0x268 */ s16 collidingActorId_alt;							//	**	ekans only
-    /* 0x26A */ s16 unk_26A;        //	some flag related to collisions
-    /* 0x26C */ s16 unk_26C;        //	animation something
-    /* 0x26E */ s16 unk_26E;		//	animation something
-    /* 0x270 */ s16 unk_270;		//	???								**	metapod only
-    /* 0x272 */ s16 unk_272;        //  colliding with a rock on metapod's minigame ? ;
-    /* 0x274 */ union{
-    			f32 unk_274;
-    			f32 diggingSpeed;
-    			f32 launchForce;
-    		};
-    /* 0x278 */ char unk278[0x4];	//	unused
-    /* 0x27C */ f32 diggingAccel2;	//
+    /* 0x268 */ s16 collidingActorId_alt; //	**	ekans only
+    /* 0x26A */ s16 unk_26A;              //	some flag related to collisions
+    /* 0x26C */ s16 unk_26C;              //	animation something
+    /* 0x26E */ s16 unk_26E;              //	animation something
+    /* 0x270 */ s16 unk_270;              //	???								**	metapod only
+    /* 0x272 */ s16 unk_272;              //  colliding with a rock on metapod's minigame ? ;
+    /* 0x274 */ union {
+        f32 unk_274;
+        f32 diggingSpeed;
+        f32 launchForce;
+    };
+    /* 0x278 */ char unk278[0x4];  //	unused
+    /* 0x27C */ f32 diggingAccel2; //
     /* 0x280 */ union {
-    			f32 unk_280;
-    			f32 stickMagnitude1;
-    			f32 diggingAccel1;
-    		};
-    /* 0x284 */ f32 stickMagnitude2;    //	launch forse on ekans
-    /* 0x288 */ f32 cubeRadio;		//	bottom of the hitbox / bounding box ?
+        f32 unk_280;
+        f32 stickMagnitude1;
+        f32 diggingAccel1;
+    };
+    /* 0x284 */ f32 stickMagnitude2; //	launch forse on ekans
+    /* 0x288 */ f32 cubeRadio;       //	bottom of the hitbox / bounding box ?
     /* 0x28C */ f32 halfHeight;
-    /* 0x290 */ s16 unk_290;		//	always zero
-    /* 0x292 */ s16 unk_292;		//	always zero
-    /* 0x294 */ s16 unk_294;		//	always zero
+    /* 0x290 */ s16 unk_290; //	always zero
+    /* 0x292 */ s16 unk_292; //	always zero
+    /* 0x294 */ s16 unk_294; //	always zero
     /* 0x296 */ s16 unk_296;
-    /* 0x298 */ s16 unk_298;		// timer after bouncin on digletts on ekans
+    /* 0x298 */ s16 unk_298; // timer after bouncin on digletts on ekans
     /* 0x29A */ union {
-    			s16 unk_29A;
-    			s16 sandshrewLastDir;
-    			s16 ekansDiglettHitScore;
-    			s16 metapodInputLockTimer;
-    		};
-    /* 0x29C */ s16 diglettIsGold;						//	**	diglett only
-    /* 0x29E */ s16 unk_29E;	// something comp AI RNG	maybe timer to launch
+        s16 unk_29A;
+        s16 sandshrewLastDir;
+        s16 ekansDiglettHitScore;
+        s16 metapodInputLockTimer;
+    };
+    /* 0x29C */ s16 diglettIsGold; //	**	diglett only
+    /* 0x29E */ s16 unk_29E;       // something comp AI RNG	maybe timer to launch
     /* 0x2A0 */ union {
-    			s16 unk_2A0;
-    			s16 leftRightTimer;	//	on sandshrew, 20 to 0
-    			s16 leftRightCount;	//	on ekans
-    		};
-    /* 0x2A2 */ s16 ekansScore;							//	**	ekans only
+        s16 unk_2A0;
+        s16 leftRightTimer; //	on sandshrew, 20 to 0
+        s16 leftRightCount; //	on ekans
+    };
+    /* 0x2A2 */ s16 ekansScore; //	**	ekans only
     /* 0x2A4 */ s16 unk_2A4;
-    /* 0x2A6 */ s16 unk_2A6;		//	metapod state ?
+    /* 0x2A6 */ s16 unk_2A6; //	metapod state ?
     /* 0x2A8 */ s16 isWinner;
     /* 0x2AA */ s16 unk_2AA;
     /* 0x2AC */ s16 isComp;
-    /* 0x2AE */ s16 unk_2AE;		//	???					**	metapod only
-    /* 0x2B0 */ s16 sandshrewFailChances;	//	3,2,1,0		**	sandsrew only
+    /* 0x2AE */ s16 unk_2AE;              //	???					**	metapod only
+    /* 0x2B0 */ s16 sandshrewFailChances; //	3,2,1,0		**	sandsrew only
     /* 0x2B2 */ s16 unk_2B2;
 } MiniActor; // size = 0x2B4
 
-// Possibly unk_D_86002F34_alt7, unk_D_86002F34_alt8, 
+// Possibly unk_D_86002F34_alt7, unk_D_86002F34_alt8,
 // unk_D_86002F34_alt9 or unk_D_86002F34_alt2
 typedef struct arg1_func_87902F80 {
     /* 0x00 */ struct GraphNode node;
@@ -160,7 +160,7 @@ extern s16 miniShowHUB;
 extern s16 miniDifficulty;
 extern s16 D_87906048;
 extern s16 D_8790604A;
-extern CameraNode* D_87906050;      // geo layout
+extern CameraNode* D_87906050; // geo layout
 extern CameraNode* D_87906054;
 extern s16 miniCameraXRot;
 extern s16 miniCameraYRot;
@@ -234,8 +234,11 @@ void minigameDebuggVectorEditor(void);
 void MiniFx_Init(void);
 s32 MiniFx_AllocEmitter(void);
 void MiniFx_FreeEmitter(ParticleEmitter* arg0);
-void MiniFx_ConfigureOneShotEmitter(s32 arg0, f32 arg1, Vec3f arg2, ParticleUpdateCallback arg3, ParticleDescriptor* arg4, s16 arg5, u8 arg6, u8 arg7);
-void MiniFx_ConfigureEmitterWithPeriodAndRepeat(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4, ParticleUpdateCallback arg7, ParticleDescriptor* arg8, s16 arg9, u8 argA, u8 argB);
+void MiniFx_ConfigureOneShotEmitter(s32 arg0, f32 arg1, Vec3f arg2, ParticleUpdateCallback arg3,
+                                    ParticleDescriptor* arg4, s16 arg5, u8 arg6, u8 arg7);
+void MiniFx_ConfigureEmitterWithPeriodAndRepeat(s32 arg0, s32 arg1, s8 arg2, f32 arg3, Vec3f arg4,
+                                                ParticleUpdateCallback arg7, ParticleDescriptor* arg8, s16 arg9,
+                                                u8 argA, u8 argB);
 void MiniFx_ApplyEmitterToParticle(Particle* arg0, ParticleEmitter* arg1, s16 arg2);
 void MiniFx_EmitParticles(ParticleEmitter* arg0);
 void MiniFx_TryEmit(ParticleEmitter* arg0);

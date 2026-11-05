@@ -4,11 +4,11 @@
 #include "enums_utils.h"
 #include "instructions/RabbitizerInstruction.h"
 
-
-#define RABBITIZER_DEF_INSTR_CATEGORY(name) { "InstrCategory", #name, RABBITIZER_INSTRCAT_##name, false, NULL }
+#define RABBITIZER_DEF_INSTR_CATEGORY(name) \
+    { "InstrCategory", #name, RABBITIZER_INSTRCAT_##name, false, NULL }
 
 RabbitizerEnumMetadata rabbitizer_enum_InstrCategory_enumvalues[] = {
-    #include "instructions/InstrCategory.inc"
+#include "instructions/InstrCategory.inc"
     RABBITIZER_DEF_INSTR_CATEGORY(MAX),
 
     { 0 },

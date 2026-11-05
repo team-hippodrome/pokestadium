@@ -16,7 +16,7 @@ as well as a specific "flash" effect (descriptor25) used by these moves:
     - psybeam
     - Aurora beam
     - hyper beam
-    - solarbeam 
+    - solarbeam
     - thunder shock
     - Thunderbolt
     - thunder
@@ -29,7 +29,7 @@ as well as a specific "flash" effect (descriptor25) used by these moves:
     - self-destruct
     - egg bomb
     - bone club
-    - flash 
+    - flash
     - crabhammer
     - explosion
     - tri attack
@@ -126,7 +126,8 @@ void BattleAnim_RunTargetHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -176,7 +177,8 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -205,7 +207,8 @@ void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -250,7 +253,8 @@ void BattleAnim_RunBeamBoomWaterfallHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -278,7 +282,8 @@ void BattleAnim_CallbackOwnerModelTintPaletteApproach(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -320,7 +325,8 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* particle) {
     }
 
     if (Particle_IsRunning(particle) != 0) {
-        Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen, particle->primBlue, particle->unk_AE);
+        Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen,
+                               particle->primBlue, particle->unk_AE);
     }
 }
 
@@ -352,7 +358,8 @@ void BattleAnim_CallbackOwnerModelTintPaletteApproachRampDown(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -396,7 +403,8 @@ void BattleAnim_RunDrainFlameHueChange(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->unk_AE);
+        Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                               arg0->unk_AE);
     }
 }
 
@@ -425,14 +433,15 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->unk_AA);
                 Particle_FieldCF_SetU8_0BEEC(arg0, sParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
-            Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
+            Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                                   arg0->primAlpha);
             break;
     }
 }
 
 /*
     Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
-*/ 
+*/
 void BattleAnim_SetupRainbowHueChange(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, sParticlePaletteSetA[0]);
     Particle_FieldAE_SetS16_0BF4C(particle, 1);
@@ -449,7 +458,7 @@ void BattleAnim_SetupRainbowHueChange(Particle* particle) {
 
 /*
     Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
-*/ 
+*/
 void BattleAnim_RunRainbowHueChange(Particle* particle) {
     switch (particle->lifecycle) {
         case 1:
@@ -464,14 +473,16 @@ void BattleAnim_RunRainbowHueChange(Particle* particle) {
                 Particle_FieldCF_SetU8_0BEEC(particle, sParticlePaletteSetA[particle->unk_AE]);
             }
             ParticleGfx_ApproachPrimPalette(particle, particle->unk_CF, particle->unk_AA);
-            Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen, particle->primBlue, particle->primAlpha);
+            Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen,
+                                   particle->primBlue, particle->primAlpha);
             break;
 
         case 3:
             if (Particle_PrimAlpha_Approach_0BC2C(particle, 0, 8) != 0) {
                 Particle_AdvanceLifecycle(particle);
             }
-            Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen, particle->primBlue, particle->primAlpha);
+            Model_SetMaterialColor(&particle->pokemon->displayObject, particle->primRed, particle->primGreen,
+                                   particle->primBlue, particle->primAlpha);
             break;
 
         case 4:
@@ -482,8 +493,8 @@ void BattleAnim_RunRainbowHueChange(Particle* particle) {
 
 /*
     Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
-    These moves do not replace the user's model like transform or substitute and do not have unique animation varients like withdrawal;
-    which are not covered by this function.
+    These moves do not replace the user's model like transform or substitute and do not have unique animation varients
+   like withdrawal; which are not covered by this function.
 */
 void BattleAnim_SetupInvisibility(Particle* arg0) {
     arg0->primAlpha = arg0->unk_A6;
@@ -492,8 +503,8 @@ void BattleAnim_SetupInvisibility(Particle* arg0) {
 
 /*
     Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
-    These moves do not replace the user's model like transform or substitute and do not have unique animation varients like withdrawal;
-    which are not covered by this function.
+    These moves do not replace the user's model like transform or substitute and do not have unique animation varients
+   like withdrawal; which are not covered by this function.
 */
 void BattleAnim_RunInvisibility(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -540,7 +551,8 @@ void BattleAnim_CallbackStartEffect125OwnerColorAlphaFade(Particle* arg0) {
             break;
     }
 
-    Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue, arg0->primAlpha);
+    Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->primRed, arg0->primGreen, arg0->primBlue,
+                           arg0->primAlpha);
 }
 
 /*
