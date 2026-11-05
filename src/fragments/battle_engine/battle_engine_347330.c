@@ -4,7 +4,6 @@
 #include "src/math_util.h"
 #include "include/math.h"
 
-// RibbonMesh -> MistHaze
 
 typedef struct unk_D_843951D0_1010 {
     /* 0x00 */ f32 unk_00;
@@ -35,16 +34,16 @@ static s16 D_843975E4;
 static unk_D_843975E8 D_843975E8;
 
 func_D_84390320 gMoveAnimEffectStartFuncs[] = {
-    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupPsybeamUseDoubleTextureTrail, BattleAnim_Effect5RibbonMesh_Init, BattleAnim_DefaultStartEffect_Init,
+    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupPsybeamUseDoubleTextureTrail, BattleAnim_SetupMistUseRibbonMesh, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_SetupSwiftUseRibbonSheet, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupRazorLeafUseTrail, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
-    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_StartEffect19Radial20_Init, BattleAnim_DefaultStartEffect_Init,
+    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_StartTrappingLassoMove_Init, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupAuroraBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupStringShotUseRadial, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupSurfUseTerrainGrid, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupHyperBeamUseCombinedTrail, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
-    BattleAnim_SetupHypnosisScreechUseTrail, BattleAnim_SetupSingUseTrail, BattleAnim_StartEffect44Trail40GridAlt_Init, BattleAnim_StartEffect45FourStreamTrail_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_Init,
+    BattleAnim_SetupHypnosisScreechUseTrail, BattleAnim_SetupSingUseTrail, BattleAnim_SetupKinesisSupersonicUseTrail, BattleAnim_SetupSonicBoomUseFourStream, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupHazeUseRibbonMesh, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupPetalDanceUseTrail, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_SetupSpikeCannonUseFourStream,
-    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_StartEffect67OwnerAnchoredFourStream_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
+    BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_StingerMoves_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_SetupSolarBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_StartEffect77DoubleTextureTrail_Init, BattleAnim_SetupTriAttackUseRadial, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
     BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init, BattleAnim_DefaultStartEffect_Init,
@@ -66,7 +65,7 @@ func_D_84390320 gMoveAnimEffectEndFuncs[] = {
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init,
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_SetupStringShotHitRadial, BattleAnim_SetupDisableHitRadial, BattleAnim_DefaultEndEffect_Init,
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init,
-    BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_Effect5RibbonMesh_Init,
+    BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_SetupMistUseRibbonMesh,
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init,
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init,
     BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init, BattleAnim_DefaultEndEffect_Init,
@@ -78,16 +77,16 @@ func_D_84390320 gMoveAnimEffectEndFuncs[] = {
 };
 
 func_D_84390320 gMoveAnimEffectStartUpdateFuncs[] = {
-    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunPsybeamUseDoubleTextureTrail, BattleAnim_Effect5RibbonMesh_Update, BattleAnim_DefaultStartEffect_CompleteImmediately,
+    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunPsybeamUseDoubleTextureTrail, BattleAnim_RunMistUseRibbonMesh, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_RunSwiftUseRibbonSheet, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunRazorLeafUseTrail, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
-    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_StartEffect19Radial20_Update, BattleAnim_DefaultStartEffect_CompleteImmediately,
+    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_StartTrappingLassoMove_Update, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunAuroraBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunStringShotUseRadial, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunSurfUseTerrainGrid, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunHyperBeamUseCombinedTrail, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
-    BattleAnim_RunHypnosisScreechUseTrail, BattleAnim_RunSingUseTrail, BattleAnim_StartEffect44Trail40GridAlt_Update, BattleAnim_StartEffect45FourStreamTrail_Update, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_CompleteImmediately,
+    BattleAnim_RunHypnosisScreechUseTrail, BattleAnim_RunSingUseTrail, BattleAnim_RunKinesisSupersonicUseTrail, BattleAnim_RunSonicBoomUseFourStream, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunHazeUseRibbonMesh, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunPetalDanceUseTrail, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_RunSpikeCannonUseFourStream,
-    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_StartEffect67OwnerAnchoredFourStream_Update, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
+    BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_StingerMoves_Update, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_RunSolarBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_StartEffect77DoubleTextureTrail_Update, BattleAnim_RunTriAttackUseRadial, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
     BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately, BattleAnim_DefaultStartEffect_CompleteImmediately,
@@ -105,11 +104,11 @@ func_D_84390320 gMoveAnimEffectStartUpdateFuncs[] = {
 func_D_84390320 gMoveAnimEffectEndUpdateFuncs[] = {
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_EndEffect1RibbonMesh_Update, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_EndEffect9Radial20_Update, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
-    BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_EndEffect16_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_EndEffect19RibbonMesh_Update, BattleAnim_DefaultEndEffect_CompleteImmediately,
+    BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_SurfCompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_EndEffect19RibbonMesh_Update, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_RunStringShotHitRadial, BattleAnim_RunDisableHitRadial, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
-    BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_Effect5RibbonMesh_Update,
+    BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_RunMistUseRibbonMesh,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
     BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately, BattleAnim_DefaultEndEffect_CompleteImmediately,
@@ -121,16 +120,16 @@ func_D_84390320 gMoveAnimEffectEndUpdateFuncs[] = {
 };
 
 func_D_84390320 gMoveAnimEffectStartDrawFuncs[] = {
-    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawPsybeamUseDoubleTextureTrail, BattleAnim_Effect5RibbonMesh_Draw, BattleAnim_DefaultStartEffect_Draw,
+    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawPsybeamUseDoubleTextureTrail, BattleAnim_DrawMistUseRibbonMesh, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DrawSwiftUseRibbonSheet, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawRazorLeafUseTrail, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
-    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_StartEffect19Radial20_Draw, BattleAnim_DefaultStartEffect_Draw,
+    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_StartTrappingLassoMove_Draw, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawAuroraBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawStringShotUseRadial, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawSurfUseTerrainGrid, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawHyperBeamUseCombinedTrail, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
-    BattleAnim_DrawHypnosisScreechUseTrail, BattleAnim_DrawSingUseTrail, BattleAnim_StartEffect44Trail40GridAlt_Draw, BattleAnim_StartEffect45FourStreamTrail_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_Draw,
+    BattleAnim_DrawHypnosisScreechUseTrail, BattleAnim_DrawSingUseTrail, BattleAnim_DrawKinesisSupersonicUseTrail, BattleAnim_DrawSonicBoomUseFourStream, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawIceBeamUseSixSlotTrail, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawHazeUseRibbonMesh, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawPetalDanceUseTrail, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DrawSpikeCannonUseFourStream,
-    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
+    BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_StingerMoves_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DrawSolarBeamUseDoubleTextureTrail, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_StartEffect77DoubleTextureTrail_Draw, BattleAnim_DrawTriAttackUseRadial, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
     BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw, BattleAnim_DefaultStartEffect_Draw,
@@ -152,7 +151,7 @@ func_D_84390320 gMoveAnimEffectEndDrawFuncs[] = {
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw,
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DrawStringShotHitRadial, BattleAnim_DrawDisableHitRadial, BattleAnim_DefaultEndEffect_Draw,
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw,
-    BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_Effect5RibbonMesh_Draw,
+    BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DrawMistUseRibbonMesh,
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw,
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw,
     BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw, BattleAnim_DefaultEndEffect_Draw,
@@ -178,7 +177,11 @@ static Gfx D_84388E40[] = {
     gsSPEndDisplayList(),
 };
 
-void RibbonMesh_Init(void) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+void MistHaze_Init(void) {
     RibbonMesh* ptr = &D_843925E0[0];
     s32 i;
 
@@ -188,8 +191,8 @@ void RibbonMesh_Init(void) {
     }
 }
 
-void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
-                   s32 arg9) {
+void MistHaze_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+                        s32 arg9) {
     arg0->unk_028 = arg1;
     arg0->unk_02C = arg2;
     arg0->unk_030 = arg3;
@@ -201,7 +204,11 @@ void RibbonMesh_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
     arg0->unk_044 = arg9;
 }
 
-void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+void MistHaze_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
     RibbonMesh* ptr;
     RibbonMeshVertexState* ptr1;
     RibbonMeshVertexState* ptr2;
@@ -244,7 +251,7 @@ void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->unk_008 = (arg4 * 0.0) + arg1;
             ptr->unk_01A = 0x3C;
             ptr->unk_020 = 1.5f;
-            RibbonMesh_Configure(&D_843925E0[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
+            MistHaze_Configure(&D_843925E0[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
             ptr->unk_01E = AuxiliaryEffect_Alloc();
             break;
 
@@ -253,7 +260,7 @@ void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->unk_01A = 0x78;
             ptr->unk_008 = (arg4 * 100.0) + arg1;
             ptr->unk_020 = 1.5f;
-            RibbonMesh_Configure(&D_843925E0[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
+            MistHaze_Configure(&D_843925E0[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
             break;
 
         default:
@@ -354,7 +361,11 @@ void RibbonMesh_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
     }
 }
 
-void RibbonMesh_UpdateEnvAlpha(RibbonMesh* arg0) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+void MistHaze_UpdateEnvAlpha(RibbonMesh* arg0) {
     s32 var_v0;
 
     if (arg0->unk_01C >= 0) {
@@ -374,7 +385,11 @@ void RibbonMesh_UpdateEnvAlpha(RibbonMesh* arg0) {
     }
 }
 
-s32 RibbonMesh_Update(RibbonMesh* arg0) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+s32 MistHaze_Update(RibbonMesh* arg0) {
     RibbonMeshVertexState* temp_s0;
     RibbonMeshVertexState* temp_s1;
     RibbonMeshVertexState* ptr;
@@ -409,7 +424,7 @@ s32 RibbonMesh_Update(RibbonMesh* arg0) {
     sp84 = arg0->unk_020 * tmp;
 
     var_s2 = &arg0->unk_050[0];
-    RibbonMesh_UpdateEnvAlpha(arg0);
+    MistHaze_UpdateEnvAlpha(arg0);
 
     var_s5 = 0;
     sp94 = 0.0f;
@@ -526,7 +541,11 @@ s32 RibbonMesh_Update(RibbonMesh* arg0) {
     return 0;
 }
 
-s32 RibbonMesh_UpdatePool(void) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+s32 MistHaze_UpdatePool(void) {
     s32 i;
     s32 var_s2;
     RibbonMesh* ptr = &D_843925E0[0];
@@ -537,7 +556,7 @@ s32 RibbonMesh_UpdatePool(void) {
 
     for (i = 0; i < 4; i++, ptr++) {
         if (ptr->unk_000 == 1) {
-            if (RibbonMesh_Update(ptr) == 0) {
+            if (MistHaze_Update(ptr) == 0) {
                 var_s2 = 0;
             } else {
                 ptr->unk_000 = 0;
@@ -548,7 +567,11 @@ s32 RibbonMesh_UpdatePool(void) {
     return var_s2;
 }
 
-Gfx* RibbonMesh_Draw(Gfx* arg0, RibbonMesh* arg1) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+Gfx* MistHaze_Draw(Gfx* arg0, RibbonMesh* arg1) {
     s32 i;
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 62);
     Vtx* vtx = temp_v0;
@@ -569,7 +592,11 @@ Gfx* RibbonMesh_Draw(Gfx* arg0, RibbonMesh* arg1) {
     return arg0;
 }
 
-Gfx* RibbonMesh_DrawPool(Gfx* arg0) {
+/*
+    Moves: Haze (use), Mist (use)
+    TODO: Human contributor add screenshot
+*/
+Gfx* MistHaze_DrawPool(Gfx* arg0) {
     static Gfx D_84388E88[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_2CYCLE),
@@ -632,12 +659,12 @@ Gfx* RibbonMesh_DrawPool(Gfx* arg0) {
             gSPClearGeometryMode(arg0++, G_CULL_BACK);
             gSPSetGeometryMode(arg0++, G_CULL_FRONT);
 
-            arg0 = RibbonMesh_Draw(arg0, ptr);
+            arg0 = MistHaze_Draw(arg0, ptr);
 
             gSPClearGeometryMode(arg0++, G_CULL_FRONT);
             gSPSetGeometryMode(arg0++, G_CULL_BACK);
 
-            arg0 = RibbonMesh_Draw(arg0, ptr);
+            arg0 = MistHaze_Draw(arg0, ptr);
         }
     }
 

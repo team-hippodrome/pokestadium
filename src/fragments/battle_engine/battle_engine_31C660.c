@@ -39,13 +39,24 @@ Also:
     - pokeball flash effect (hue change)
 */
 
-// better name: BattleAnim_SetupBackgroundRecolor
-void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
+/*
+    Moves: Absorb (use), Aurora Beam (use/hit), Barrier (use), Bide (use), Blizzard (use/hit), Bubble Beam
+    (use/hit), Confuse Ray (use/hit), Confusion (use/hit), Conversion (use), Double-Edge (use), Dragon Rage
+    (use), Dream Eater (use), Earthquake (use), Explosion (use/hit), Fire Blast (use/hit), Fire Spin (use),
+    Fissure (use), Flamethrower (use), Flash (use/hit), Focus Energy (use), Glare (use), Guillotine (use), Horn
+    Drill (use), Hydro Pump (use), Hyper Beam (use), Ice Beam (use/hit), Leech Life (use), Leer (use), Light
+    Screen (use), Lovely Kiss (use), Mega Drain (use), Mimic (use), Night Shade (use), Petal Dance (use),
+    Psybeam (use/hit), Psychic (use/hit), Psywave (use), Rage (use), Razor Leaf (use/hit), Recover (use),
+    Reflect (use), Self-Destruct (use/hit), Skull Bash (use), Sky Attack (use/hit), Solar Beam (use/hit), Sonic
+    Boom (use), Swift (use), Take Down (use), Thunder (use/hit), Thunder Shock (use/hit), Thunder Wave (hit),
+    Thunderbolt (use/hit), Tri Attack (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
     BattleAnim_LoadGlobalTintToParticle(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunBackgroundRecolor
 /*
     recolors background (everything but the pokemon)
     Examples:
@@ -53,10 +64,10 @@ void BattleAnim_SetupGlobalTintColorFadeDetach(Particle* arg0) {
         - ice beam -> aqua
         - earthquake -> red
 */
-void BattleAnim_CallbackGlobalTintColorFadeDetach(Particle* arg0) {
+void BattleAnim_RunBackgroundRecolor(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupGlobalTintColorFadeDetach(arg0);
+            BattleAnim_SetupBackgroundRecolor(arg0);
             break;
 
         case 2:
@@ -73,14 +84,21 @@ void BattleAnim_CallbackGlobalTintColorFadeDetach(Particle* arg0) {
     BattleAnim_SetGlobalTintFromParticle(arg0);
 }
 
-// better name: BattleAnim_SetupTargetHueChange
-void BattleAnim_SetupOwnerModelTintRampDetach(Particle* arg0) {
+/*
+    Moves: Acid (hit), Acid Armor (use), Confuse Ray (use/hit), Confusion (hit), Defense Curl (use), Dragon Rage
+    (hit), Ember (hit), Explosion (use/hit), Fire Punch (hit), Flamethrower (hit), Flash (use/hit), Guillotine
+    (hit), Harden (use), Horn Drill (hit), Hyper Beam (use/hit), Ice Punch (hit), Lick (hit), Mega Kick (hit),
+    Mega Punch (hit), Night Shade (hit), Psychic (hit), Self-Destruct (use/hit), Sharpen (use), Skull Bash
+    (hit), Sky Attack (use), Sludge (hit), Solar Beam (use), Substitute (use), Thunder Punch (hit), Toxic (hit),
+    Transform (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_A6);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunTargetHueChange
 /*
     handles changing the hue for the target
     examples:
@@ -90,10 +108,10 @@ void BattleAnim_SetupOwnerModelTintRampDetach(Particle* arg0) {
         - acid -> light green
     Also handles move changes when target faints from a move
 */
-void BattleAnim_CallbackOwnerModelTintRampDetach(Particle* arg0) {
+void BattleAnim_RunTargetHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintRampDetach(arg0);
+            BattleAnim_SetupTargetHueChange(arg0);
             break;
 
         case 2:
@@ -112,23 +130,28 @@ void BattleAnim_CallbackOwnerModelTintRampDetach(Particle* arg0) {
     }
 }
 
-// better name: BattleAnim_SetupUserHueChange
-void BattleAnim_SetupOwnerModelTintPulseDetach(Particle* arg0) {
+/*
+    Moves: Barrier (use), Bide (use), Confusion (use), Focus Energy (use), Growth (use), Light Screen (use),
+    Lovely Kiss (hit), Poison Gas (hit), Poison Powder (hit), Psychic (use), Psywave (hit), Rage (use), Reflect
+    (use), Sleep Powder (hit), Smog (hit), Soft-Boiled (use), Spore (hit), Struggle (use), Stun Spore (hit),
+    Thrash (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_FieldAE_SetS16_0BF4C(arg0, arg0->unk_CE);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunUserHueChange
 /*
     Changes User's Hue. Examples:
         - Thrash -> red
         - Recover -> rainbow
 */
-void BattleAnim_CallbackOwnerModelTintPulseDetach(Particle* arg0) {
+void BattleAnim_RunUserHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPulseDetach(arg0);
+            BattleAnim_SetupUserHueChange(arg0);
             break;
 
         case 2:
@@ -163,7 +186,7 @@ void func_8433209C(void) {
 void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintPulseDetach(arg0);
+            BattleAnim_SetupUserHueChange(arg0);
             break;
 
         case 2:
@@ -560,27 +583,32 @@ void BattleAnim_RunWhiteHueChange(Particle* particle) {
     }
 }
 
-// better name: BattleAnim_SetupFullScreenHueChange
-void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(Particle* arg0) {
+/*
+    Moves: Bone Club (use), Confuse Ray (use/hit), Confusion (hit), Crabhammer (use/hit), Cut (use/hit), Egg
+    Bomb (hit), Ember (use/hit), Explosion (use), Fire Punch (hit), Flash (use/hit), Fury Swipes (use/hit),
+    Night Shade (use/hit), Psychic (hit), Scratch (use/hit), Self-Destruct (use), Slash (use/hit), Thunder
+    (use/hit), Thunder Punch (hit), Thunder Shock (use/hit), Thunderbolt (use/hit), Vine Whip (use/hit)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupFullScreenHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, arg0->unk_CD);
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunFullScreenHueChange
 /*
     handles full screen hue overlay changes to a single color. Examples:
         - Vine whip -> green
         - Slash -> red
         - Fire punch -> white
 
-    BattleAnim_DrawParticleFullScreenColorOverlay in @battle_engine_31AA30.c is the equivalent for moves
+    BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_31AA30.c is the equivalent for moves
     that change both the full screen hue and the pokemon hue at the same time
 */
-void BattleAnim_CallbackDescriptor25AlphaHoldFadeOut(Particle* arg0) {
+void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupDescriptor25AlphaHoldFadeOut(arg0);
+            BattleAnim_SetupFullScreenHueChange(arg0);
             break;
 
         case 2:
@@ -601,11 +629,10 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunPokemonAndFullScreenHueChange
 /*
     Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
 */
-void BattleAnim_CallbackDescriptor25AlphaFadeInHold(Particle* arg0) {
+void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupDescriptor25AlphaFadeInHold(arg0);

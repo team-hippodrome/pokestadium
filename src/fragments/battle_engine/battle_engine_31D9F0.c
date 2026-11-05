@@ -823,8 +823,11 @@ void BattleAnim_GetExplosionParticleColor(Particle* particle, u8 arg1) {
 void func_84334B04(void) {
 }
 
-// better name: BattleAnim_FirePunchEmberEggBombColorChange
-void BattleAnim_ApproachParticleColorFromVariantIndex(Particle* particle) {
+/*
+    Moves: Egg Bomb (hit), Ember (hit), Fire Punch (hit)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_FirePunchEmberEggBombColorChange(Particle* particle) {
     UNUSED u16 pad;
     u16 palette_index;
     u16 step;
@@ -1078,7 +1081,7 @@ void BattleAnim_RunSecondaryBombExplosion(Particle* arg0) {
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x20);
             Particle_AddMotionOffsetFromRotationTemplate1(arg0);
             Particle_PositionOffset_AddYScaled(arg0, 0.4f);
-            BattleAnim_ApproachParticleColorFromVariantIndex(arg0);
+            BattleAnim_FirePunchEmberEggBombColorChange(arg0);
             if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 0x10) != 0)) {
                 Particle_AdvanceLifecycle(arg0);
             }
@@ -1238,7 +1241,7 @@ void BattleAnim_RunFirePunchLingeringHitSpark(Particle* arg0) {
             Particle_PrimR_Approach_0BAE4(arg0, 0, 0xC);
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x20);
             Particle_Scale_Approach(arg0, 1.5f, 0.15f);
-            BattleAnim_ApproachParticleColorFromVariantIndex(arg0);
+            BattleAnim_FirePunchEmberEggBombColorChange(arg0);
             Particle_AddMotionOffsetFromRotationTemplate1(arg0);
             Particle_PositionOffset_AddYScaled(arg0, 0.4f);
             if ((Particle_FieldA6_DecrementToZeroStep1_0BDAC(arg0) != 0) && (Particle_PrimAlpha_Approach_0BC2C(arg0, 0x20, 0x10) != 0)) {
@@ -1753,8 +1756,8 @@ void BattleAnim_InitializeFlamethrowerHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &gBattleAnimParticleDescriptors[0x4E], 0, 0xC, 0x11, 9, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xE, 8, 5, BattleAnim_RunFireBlastHitFrontFlames, &gBattleAnimParticleDescriptors[0x3D], 0, 2, 0x11, 9, 0, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0x10, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x33, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_RunSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_RunSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x33, 0);
 }
 
 void BattleAnim_InitializeDragonRageUse(void) {
@@ -1771,8 +1774,8 @@ void BattleAnim_InitializeDragonRageHit(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &gBattleAnimParticleDescriptors[0x4E], 0, 0xC, 0x11, 9, 1, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xE, 8, 5, BattleAnim_RunFireBlastHitFrontFlames, &gBattleAnimParticleDescriptors[0x3D], 0, 2, 0x11, 9, 1, 0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0x2E, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x18, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3A, 2, 2, BattleAnim_RunSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0x3C, 2, 2, BattleAnim_RunSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, 0x18, 0);
 }
 
 // initialize smoke that appears under the pokemon being hit by fire spin 

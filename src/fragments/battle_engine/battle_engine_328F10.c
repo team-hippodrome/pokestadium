@@ -346,7 +346,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor38MetadataBurstEmit
 
         case 3:
             Particle_Scale_Approach(arg0, 0.25f, 0.5f);
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
             if (Particle_TickDelayAndAdvanceLifecycle(arg0, 6) != 0) {
                 Particle_FieldCC_SetU8_0BF04(arg0, 9);
             }
@@ -355,7 +355,7 @@ void BattleAnim_CallbackStartEffects133And134And143Descriptor38MetadataBurstEmit
         case 4:
             Particle_MotionOffset_AddYScaled(arg0, 15.0f);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 0xA);
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
             break;
 
         case 5:
@@ -407,7 +407,7 @@ void BattleAnim_StartEffect140StartEffect139Alias(void) {
 }
 
 void BattleAnim_StartEffect141GridRiseAndFallingBurst(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xB, 1, 5, BattleAnim_CallbackSharedDescriptors42And44ScaleFall, &gBattleAnimParticleDescriptors[0x42], 0, 5, 0x1E, 0, BattleAnim_GetSessionModeEffectParam(), 8);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xB, 1, 5, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 5, 0x1E, 0, BattleAnim_GetSessionModeEffectParam(), 8);
     BattleAnim_SpawnDescriptor25AlphaFadeInHold(0xA, 2, 0x16, 7, 0xFF);
     BattleAnim_SetSpawnDelay(0x10);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade, &gBattleAnimParticleDescriptors[0x1C], 0, 0x40, 0x1E, 0, 0xA, 0);

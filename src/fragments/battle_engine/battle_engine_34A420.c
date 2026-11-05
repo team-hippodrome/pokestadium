@@ -58,8 +58,11 @@ static u32 D_84389068[] = {
     0x6F6F6F6F, 0x6F6F6F6F, 0x2F2F2F2F, 0x2F2F2F2F, 0x0D0D0D0D, 0x0D0D0D0D, 0x08080808, 0x08080808,
 };
 
-// LassoUse_init
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+/*
+    Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+    TODO: Human contributor add screenshot
+*/
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
     Strip400Node* ptr2;
     s32 i;
@@ -111,8 +114,11 @@ f32 Strip400_GetTailFadeRatio(void) {
     return tmp;
 }
 
-// LassoUse
-s32 Radial20_Update(void) {
+/*
+    Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+    TODO: Human contributor add screenshot
+*/
+s32 LassoHit_Update(void) {
     s32 i;
     f32 spB8;
     f32 temp_fs0_2;
@@ -216,8 +222,11 @@ s32 Radial20_Update(void) {
     return 0;
 }
 
-// LassoHit_Draw
-Gfx* Strip400_Draw(Gfx* arg0) {
+/*
+    Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+    TODO: Human contributor add screenshot
+*/
+Gfx* LassoHit_Draw(Gfx* arg0) {
     static Gfx D_843890E8[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_1CYCLE),
@@ -495,9 +504,12 @@ void StringShotRadial_EmitVariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
     }
 }
 
-// LassoMoveDefaultRaial20
-void Radial20_VariantD(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
-                   u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11) {
+/*
+    Moves: Bind (use), Constrict (use), Disable (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+void LassoMoveDefaultRadial20(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+                              u8 argA, u8 argB, u8 argC, u8 argD, f32 argE, f32 argF, f32 arg10, s16 arg11) {
     Radial20* var_v0;
     Radial20Node* var_s0;
     s32 i;
