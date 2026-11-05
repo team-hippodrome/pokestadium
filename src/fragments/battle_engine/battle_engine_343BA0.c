@@ -120,10 +120,15 @@ f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcVectorAtToDm.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcMoveAimingVectors.s")
 #else
-// BattleAnim_CalcMoveAimingVectors
-void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
+/*
+    Moves: Aurora Beam (use), Bind (use), Constrict (use), Disable (use), Hyper Beam (use), Ice Beam (use), Pin
+    Missile (use), Poison Sting (use), Psybeam (use), Solar Beam (use), Spike Cannon (use), String Shot (use),
+    Tri Attack (use), Twineedle (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
     f32 sp3C;
@@ -159,10 +164,13 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
 #endif
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcVectorAtToDm2.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_343BA0/BattleAnim_CalcSwiftAimVectors.s")
 #else
-// BattleAnim_CalcSwiftAimVectors
-void BattleAnim_CalcVectorAtToDm2(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
+/*
+    Moves: Swift (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_CalcSwiftAimVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5) {
     Vec3f sp4C;
     Vec3f sp40;
     f32 sp3C;
@@ -207,26 +215,37 @@ void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_84392588, 0.0f, 0.0f, 0.0f);
 }
 
-void BattleAnim_Effect5RibbonMesh_Init(void) {
+/*
+    Moves: Mist (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupMistUseRibbonMesh(void) {
     Vec3f sp24;
     f32 sp20;
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
 }
 
-s32 BattleAnim_Effect5RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+/*
+    Moves: Mist (use)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_RunMistUseRibbonMesh(void) {
+    return MistHaze_UpdatePool();
 }
 
-// these BattleAnim_Effect5RibbonMesh functions only touch Mist
-void BattleAnim_Effect5RibbonMesh_Draw(void) {
+/*
+    Moves: Mist (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_DrawMistUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_EndEffect1RibbonMesh_Init(void) {
@@ -236,18 +255,18 @@ void BattleAnim_EndEffect1RibbonMesh_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 1);
 }
 
 s32 BattleAnim_EndEffect1RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+    return MistHaze_UpdatePool();
 }
 
 void BattleAnim_EndEffect1RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Init(void) {
@@ -257,19 +276,19 @@ void BattleAnim_EndEffect19RibbonMesh_Init(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectTertiaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
 s32 BattleAnim_EndEffect19RibbonMesh_Update(void) {
-    return RibbonMesh_UpdatePool();
+    return MistHaze_UpdatePool();
 }
 
 void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_SetupHazeUseRibbonMesh(void) {
@@ -279,19 +298,19 @@ void BattleAnim_SetupHazeUseRibbonMesh(void) {
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp24);
     sp20 = BattleAnim_EffectSecondaryOwnerModelScale();
-    RibbonMesh_Init();
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
-    RibbonMesh_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
+    MistHaze_Init();
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 40.0f, sp20, 0);
+    MistHaze_Spawn(sp24.x, sp24.y, sp24.z, 38.0f, sp20, 1);
 }
 
 s32 BattleAnim_RunHazeUseRibbonMesh(void) {
-    return RibbonMesh_UpdatePool();
+    return MistHaze_UpdatePool();
 }
 
 void BattleAnim_DrawHazeUseRibbonMesh(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = RibbonMesh_DrawPool(gDisplayListHead);
+    gDisplayListHead = MistHaze_DrawPool(gDisplayListHead);
 }
 
 void BattleAnim_SetupSurfUseTerrainGrid(void) {
@@ -320,15 +339,22 @@ void BattleAnim_DrawSurfUseTerrainGrid(void) {
 void BattleAnim_EndEffect16_NoOpInit(void) {
 }
 
-// BattleAnim_SurfCompleteImmediately
-s32 BattleAnim_EndEffect16_CompleteImmediately(void) {
+/*
+    Moves: Surf (hit)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_SurfCompleteImmediately(void) {
     return -1;
 }
 
 void BattleAnim_EndEffect16_NoOpDraw(void) {
 }
 
-void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
+/*
+    Moves: Bind (use), Constrict (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_StartTrappingLassoMove_EmitVariantD(void) {
     f32 sp74;
     f32 sp70;
     f32 sp6C;
@@ -339,39 +365,50 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     UNUSED s32 pad;
     s32 sp54;
 
-    BattleAnim_CalcVectorAtToDm(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
+    BattleAnim_CalcMoveAimingVectors(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
     sp68 *= 8.0f;
     sp64 *= 4.0f;
     sp60 = 0.0f;
     sp64 += 6.0f;
     sp5C = BattleAnim_EffectSecondaryOwnerModelScale();
     sp54 = guRandom();
-    Radial20_VariantD(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
+    LassoMoveDefaultRadial20(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
                   (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0x64, 0xC8, 0xFF, 0xC8, 0, 0x64, 0xC8, 0.1f, sp5C,
                   4.0f * sp5C, 0x3C);
 }
 
-// Effect19Radial20 -> TrappingLassoMove
-void BattleAnim_StartEffect19Radial20_Init(void) {
+/*
+    Moves: Bind (use), Constrict (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_StartTrappingLassoMove_Init(void) {
     D_843925CE = 0;
     BattleAnim_ResetSharedEffectMatrix();
     Radial20_ResetPool();
-    BattleAnim_StartEffect19Radial20_EmitVariantD();
+    BattleAnim_StartTrappingLassoMove_EmitVariantD();
 }
 
-s32 BattleAnim_StartEffect19Radial20_Update(void) {
+/*
+    Moves: Bind (use), Constrict (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_StartTrappingLassoMove_Update(void) {
     D_843925CE++;
     if (D_843925CE >= 0xB5) {
         return -1;
     }
 
     if ((D_843925CE < 0x78) && ((D_843925CE % 7) == 0)) {
-        BattleAnim_StartEffect19Radial20_EmitVariantD();
+        BattleAnim_StartTrappingLassoMove_EmitVariantD();
     }
     return Radial20_IsComplete();
 }
 
-void BattleAnim_StartEffect19Radial20_Draw(void) {
+/*
+    Moves: Bind (use), Constrict (use), Wrap (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_StartTrappingLassoMove_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
@@ -385,17 +422,17 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
     BattleAnim_EffectTertiaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0x64, 0xC8, 0xFF, 0, 0x64, 0xC8);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x64, 0xC8, 0xFF, 0, 0x64, 0xC8);
 }
 
 s32 BattleAnim_EndEffect9Radial20_Update(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 void BattleAnim_EndEffect9Radial20_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Strip400_Draw(gDisplayListHead);
+    gDisplayListHead = LassoHit_Draw(gDisplayListHead);
 }
 
 void BattleAnim_EmitSwiftUseRibbonSheet(void) {
@@ -409,7 +446,7 @@ void BattleAnim_EmitSwiftUseRibbonSheet(void) {
     f32 sp40;
 
     sp40 = BattleAnim_EffectSecondaryOwnerModelScale();
-    BattleAnim_CalcVectorAtToDm2(&sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
+    BattleAnim_CalcSwiftAimVectors(&sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
     sp4C *= 20.0f;
     sp48 *= 20.0f;
     sp44 *= 20.0f;
@@ -456,7 +493,7 @@ void BattleAnim_EmitStringShotUseRadial(void) {
     UNUSED s32 pad;
     s32 sp54;
 
-    BattleAnim_CalcVectorAtToDm(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
+    BattleAnim_CalcMoveAimingVectors(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
     sp68 *= 8.0f;
     sp64 *= 4.0f;
     sp60 = 0.0f;
@@ -502,17 +539,17 @@ void BattleAnim_SetupStringShotHitRadial(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0x64, 0x96, 0x96);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0x64, 0x96, 0x96);
 }
 
 s32 BattleAnim_RunStringShotHitRadial(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 void BattleAnim_DrawStringShotHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Strip400_Draw(gDisplayListHead);
+    gDisplayListHead = LassoHit_Draw(gDisplayListHead);
 }
 
 void BattleAnim_SetupDisableHitRadial(void) {
@@ -523,17 +560,17 @@ void BattleAnim_SetupDisableHitRadial(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    Radial20_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x64, 0x96, 0x96, 0);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x64, 0x96, 0x96, 0);
 }
 
 s32 BattleAnim_RunDisableHitRadial(void) {
-    return Radial20_Update();
+    return LassoHit_Update();
 }
 
 void BattleAnim_DrawDisableHitRadial(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
-    gDisplayListHead = Strip400_Draw(gDisplayListHead);
+    gDisplayListHead = LassoHit_Draw(gDisplayListHead);
 }
 
 void BattleAnim_EmitDisableUseRadial(void) {
@@ -547,14 +584,14 @@ void BattleAnim_EmitDisableUseRadial(void) {
     UNUSED s32 pad;
     s32 sp54;
 
-    BattleAnim_CalcVectorAtToDm(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
+    BattleAnim_CalcMoveAimingVectors(&sp74, &sp70, &sp6C, &sp68, &sp64, &sp60);
     sp68 *= 8.0f;
     sp64 *= 4.0f;
     sp60 = 0.0f;
     sp64 += 6.0f;
     sp5C = BattleAnim_EffectSecondaryOwnerModelScale();
     sp54 = guRandom();
-    Radial20_VariantD(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
+    LassoMoveDefaultRadial20(sp74, sp70, sp6C, sp68, (((sp54 % 4) * 0.01f) + sp64) - 0.02f,
                   (sp60 - ((guRandom() % 5) * 0.3f)) + 0.6f, 3, 0xFF, 0xFF, 0x64, 0xFF, 0x96, 0x96, 0, 0.1f, sp5C,
                   4.0f * sp5C, 0x3C);
 }
@@ -699,8 +736,11 @@ void BattleAnim_DrawSingUseTrail(void) {
     gDisplayListHead = SingTrail_BuildGfx(gDisplayListHead);
 }
 
-// These BattleAnim_StartEffect44Trail40GridAlt only affect Kinesis and Supersonic
-void BattleAnim_StartEffect44Trail40GridAlt_Init(void) {
+/*
+    Moves: Kinesis (use), Supersonic (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupKinesisSupersonicUseTrail(void) {
     Vec3f sp1C;
 
     BattleAnim_ResetSharedEffectMatrix();
@@ -708,24 +748,39 @@ void BattleAnim_StartEffect44Trail40GridAlt_Init(void) {
     Trail40GridAlt_Init(0x708);
 }
 
-s32 BattleAnim_StartEffect44Trail40GridAlt_Update(void) {
+/*
+    Moves: Kinesis (use), Supersonic (use)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_RunKinesisSupersonicUseTrail(void) {
     return Trail40GridAlt_IsComplete();
 }
 
-void BattleAnim_StartEffect44Trail40GridAlt_Draw(void) {
+/*
+    Moves: Kinesis (use), Supersonic (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_DrawKinesisSupersonicUseTrail(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = Trail40GridAlt_Draw(gDisplayListHead);
 }
 
-// These BattleAnim_StartEffect45FourStreamTrail functions only touch Sonic Boom
-void BattleAnim_StartEffect45FourStreamTrail_Init(void) {
+/*
+    Moves: Sonic Boom (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_SetupSonicBoomUseFourStream(void) {
     D_84392580 = 0;
     BattleAnim_ResetSharedEffectMatrix();
     FourStreamTrail_Init();
 }
 
-s32 BattleAnim_StartEffect45FourStreamTrail_Update(void) {
+/*
+    Moves: Sonic Boom (use)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_RunSonicBoomUseFourStream(void) {
     s32 var_v1;
     Vec3f sp68;
     f32 sp64;
@@ -769,7 +824,11 @@ s32 BattleAnim_StartEffect45FourStreamTrail_Update(void) {
     return var_v1;
 }
 
-void BattleAnim_StartEffect45FourStreamTrail_Draw(void) {
+/*
+    Moves: Sonic Boom (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_DrawSonicBoomUseFourStream(void) {
     if (D_84392580 >= 2) {
         gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
@@ -795,7 +854,7 @@ s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
 
     D_84392582++;
     if (((D_84392582 >> 2) < 4) && !(D_84392582 & 3)) {
-        BattleAnim_CalcVectorAtToDm(&sp60, &sp5C, &sp58, &sp54, &sp50, &sp4C);
+        BattleAnim_CalcMoveAimingVectors(&sp60, &sp5C, &sp58, &sp54, &sp50, &sp4C);
         sp48 = ((2 - (((D_84392582 >> 2) + 2) % 3)) * 0.5235988f) + 0.34906587f;
         sp54 *= 7.0f * __cosf(sp48);
         sp50 = __sinf(sp48) * 10.0f;
@@ -819,7 +878,11 @@ void BattleAnim_DrawSpikeCannonUseFourStream(void) {
     }
 }
 
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
+/*
+    Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_StingerMoves_Init(void) {
     Vec3f sp5C;
     f32 sp58;
     f32 sp54;
@@ -831,7 +894,7 @@ void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
     D_843925C8 = 0;
     BattleAnim_ResetSharedEffectMatrix();
     OwnerAnchoredFourStream_Init();
-    BattleAnim_CalcVectorAtToDm(&sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
+    BattleAnim_CalcMoveAimingVectors(&sp58, &sp54, &sp50, &sp4C, &sp48, &sp44);
     sp4C *= 5.0;
     sp48 *= 5.0;
     sp44 *= 5.0;
@@ -842,7 +905,11 @@ void BattleAnim_StartEffect67OwnerAnchoredFourStream_Init(void) {
     BattleAnim_SpawnSecondaryOwnerParticle(sp5C, 1);
 }
 
-s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void) {
+/*
+    Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+    TODO: Human contributor add screenshot
+*/
+s32 BattleAnim_StingerMoves_Update(void) {
     D_843925C8++;
     if (D_843925C8 >= 0x32) {
         return -1;
@@ -851,8 +918,11 @@ s32 BattleAnim_StartEffect67OwnerAnchoredFourStream_Update(void) {
     return OwnerAnchoredFourStream_IsComplete();
 }
 
-// StartEffect67OwnerAnchoredFourStream -> StingerMoves
-void BattleAnim_StartEffect67OwnerAnchoredFourStream_Draw(void) {
+/*
+    Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_StingerMoves_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_84392588, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
     gDisplayListHead = OwnerAnchoredFourStream_Draw(gDisplayListHead);
@@ -866,7 +936,7 @@ void BattleAnim_EmitTriAttackUseRadial(void) {
     f32 sp4C;
     f32 sp48;
 
-    BattleAnim_CalcVectorAtToDm(&sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48);
+    BattleAnim_CalcMoveAimingVectors(&sp5C, &sp58, &sp54, &sp50, &sp4C, &sp48);
     sp50 *= 6.0f;
     sp4C *= 6.0f;
     sp48 *= 6.0f;
@@ -907,7 +977,7 @@ void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
     f32 spA4;
     f32 spA0;
 
-    BattleAnim_CalcVectorAtToDm(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
+    BattleAnim_CalcMoveAimingVectors(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
@@ -945,7 +1015,7 @@ void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
     f32 sp94;
     f32 sp90;
 
-    BattleAnim_CalcVectorAtToDm(&spA4, &spA0, &sp9C, &sp98, &sp94, &sp90);
+    BattleAnim_CalcMoveAimingVectors(&spA4, &spA0, &sp9C, &sp98, &sp94, &sp90);
     sp94 += 0.2f * __cosf((RAND(10) * M_PI_F) / 10.0f);
     sp90 += 0.2f * __cosf((RAND(10) * M_PI_F) / 10.0f);
 
@@ -991,7 +1061,7 @@ void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
     f32 spA4;
     f32 spA0;
 
-    BattleAnim_CalcVectorAtToDm(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
+    BattleAnim_CalcMoveAimingVectors(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
@@ -1032,7 +1102,7 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
     f32 spA4;
     f32 spA0;
 
-    BattleAnim_CalcVectorAtToDm(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
+    BattleAnim_CalcMoveAimingVectors(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
@@ -1071,7 +1141,7 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
     f32 spA4;
     f32 spA0;
 
-    BattleAnim_CalcVectorAtToDm(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
+    BattleAnim_CalcMoveAimingVectors(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
     spA8 *= 10.0f;
     spA4 *= 10.0f;
     spA0 *= 10.0f;
@@ -1117,7 +1187,7 @@ void BattleAnim_SeedHyperBeamUseDoubleTextureTrail(void) {
     f32 spA4;
     f32 spA0;
 
-    BattleAnim_CalcVectorAtToDm(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
+    BattleAnim_CalcMoveAimingVectors(&spB4, &spB0, &spAC, &spA8, &spA4, &spA0);
     spA8 *= 12.0f;
     spA4 *= 12.0f;
     spA0 *= 12.0f;
@@ -1144,7 +1214,7 @@ void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
     f32 sp94;
     f32 sp90;
 
-    BattleAnim_CalcVectorAtToDm(&spA4, &spA0, &sp9C, &sp98, &sp94, &sp90);
+    BattleAnim_CalcMoveAimingVectors(&spA4, &spA0, &sp9C, &sp98, &sp94, &sp90);
 
     sp94 += (0.4f * __cosf((RAND(10) * M_PI_F) / 10));
     sp90 += (0.4f * __cosf((RAND(10) * M_PI_F) / 10));

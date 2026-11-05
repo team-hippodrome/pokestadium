@@ -731,7 +731,7 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
     }
 }
 
-void BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
     Particle_Scale_SetScaled(arg0, 1.0f);
     Particle_SetScaleParameter20(arg0, 2.0f);
     Particle_SetScaleParameter24(arg0, 0.75f);
@@ -739,15 +739,14 @@ void BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade_InitParticle(Particl
     Particle_AdvanceLifecycle(arg0);
 }
 
-// better name: BattleAnim_RunInitialBeamEmanator
 /*
     Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack.
     Most Beam mosts switch to the Pulsing emanator after a few frames
 */
-void BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade(Particle* arg0) {
+void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade_InitParticle(arg0);
+            BattleAnim_SetupInitialBeamEmanator(arg0);
             break;
 
         case 2:
@@ -932,7 +931,7 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
     Particle_Rotation_AddZFromRotationStep(arg0);
 }
 
-void BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_FieldAC_GetS16_0C038(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_Scale_SetScaled(arg0, 1.35f);
@@ -942,14 +941,13 @@ void BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion_InitParticle(Partic
     Particle_AdvanceLifecycle(arg0);
 }
 
-// Better name: BattleAnim_RunStrongOutwardMovingLargeHitSpark
 /*
     Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
 */
-void BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion(Particle* arg0) {
+void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion_InitParticle(arg0);
+            BattleAnim_SetupStrongOutwardMovingLargeHitSpark(arg0);
             break;
 
         case 2:
@@ -1172,11 +1170,10 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
     }
 }
 
-// Better name: BattleAnim_RunStrongOutwardMovingSmallHitSpark
 /*
     Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
 */
-void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade_InitParticle(Particle* arg0) {
+void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp2C = Particle_FieldCF_GetS16_0C058(arg0);
 
@@ -1192,10 +1189,15 @@ void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade_InitParticle(P
 }
 
 // handles some shared hit effect between Hydro Pump, Ice Beam, Aurora Beam, Solar Beam, Waterfall, Sky Attack
-void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* arg0) {
+/*
+    Moves: Aurora Beam (hit), Hydro Pump (hit), Ice Beam (hit), Sky Attack (hit), Solar Beam (hit), Waterfall
+    (hit)
+    TODO: Human contributor add screenshot
+*/
+void BattleAnim_RunStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade_InitParticle(arg0);
+            BattleAnim_SetupStrongOutwardMovingSmallHitSpark(arg0);
             break;
 
         case 2:
@@ -1545,7 +1547,7 @@ void BattleAnim_InitializeBubbleUse(void) {
 
 // initializes being hit by bubble
 void BattleAnim_InitializeBubbleHit(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor34DelayedFrameMotion, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBubbleBubbleBeamSharedEffect, &gBattleAnimParticleDescriptors[0x45], 0, 0x10, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunBubbleBubbleBeamSharedEffect, &gBattleAnimParticleDescriptors[0x45], 0, 0x10, 0x11, 9, 0, 0);
 }
@@ -1577,8 +1579,8 @@ void BattleAnim_InitializeHydroPumpUse(void) {
 void BattleAnim_InitializeHydroPumpHit(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0xA, 0x35, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x35, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 1, 8, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 3, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 1, 8, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 3, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0xC, BattleAnim_RunHydroPumpColorShiftFade, &gBattleAnimParticleDescriptors[0x4B], 0, 1, 0xA, 0, 0x4C, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(2, 1, 0x10, BattleAnim_RunHydroPumpWaterGunProjectileHit, &gBattleAnimParticleDescriptors[0xA], 0, 4, 0x11, gBattleAnimCurrentAnchor, 0x4C, 0);
 }
@@ -1587,7 +1589,7 @@ void BattleAnim_InitializeHydroPumpHit(void) {
 void BattleAnim_InitializeIceBeamUse(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x35);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x40, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x40, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunPulsingBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0x6E, 1, 0x10, gBattleAnimCurrentAnchor, 0x40, 1);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x1E, BattleAnim_RunIceBeamColdBreath, &gBattleAnimParticleDescriptors[0x4A], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0x13, 0);
 }
@@ -1596,7 +1598,7 @@ void BattleAnim_InitializeIceBeamUse(void) {
 void BattleAnim_InitializePsybeamUse(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunPulsingBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0x46, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 1);
 }
 
@@ -1610,7 +1612,7 @@ void BattleAnim_InitializeBubbleBeamUse(void) {
 void BattleAnim_InitializeAuroraBeamUse(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x41, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x41, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunPulsingBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0x46, 1, 0x10, gBattleAnimCurrentAnchor, 0x41, 1);
 }
 
@@ -1619,7 +1621,7 @@ void BattleAnim_InitializeHyperBeamUse(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x10);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 0x10);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x2C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x2C, 0);
     BattleAnim_InitializeHyperBeamUseSequence();
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunPulsingBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0x46, 1, 0x10, gBattleAnimCurrentAnchor, 0x2C, 1);
 }
@@ -1628,7 +1630,7 @@ void BattleAnim_InitializeHyperBeamUse(void) {
 void BattleAnim_InitializeSolarBeamUse1(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x22);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunPulsingBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0x46, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 1);
 }
 
@@ -1636,23 +1638,23 @@ void BattleAnim_InitializeSolarBeamUse1(void) {
 void BattleAnim_InitializeTriAttackUse(void) {
     BattleAnim_SpawnWhiteHueChange(0, 0, 0x20, 0xA, 0xA0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 0x22);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackSharedDescriptor53ScaleGrowAnimFade, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunInitialBeamEmanator, &gBattleAnimParticleDescriptors[0x53], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
 }
 
 void InitParticleComboVariant(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0xA, 0x35, 0xC, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x35, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xA, 1, 3, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
 }
 
 // sets being hit by ice beam
 void BattleAnim_InitializeIceBeamHit(void) {
     BattleAnim_SpawnIceBeamBlizzardHitHueChange(0, 0xA, 0x35, 0x10, 0xDC, 0x20);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x35, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 3, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x26, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 4, 2, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x54], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x33, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x26, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xE, 4, 2, BattleAnim_RunIceBeamIcePunchEffect, &gBattleAnimParticleDescriptors[0x3D], 0, 6, 0x10, 0x64, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 6, BattleAnim_RunIceBeamHitEffect, &gBattleAnimParticleDescriptors[0x42], 0, 8, 0x11, 9, 0x18, 0xB);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0xA);
@@ -1682,7 +1684,7 @@ void BattleAnim_InitializeAuroraBeamHit(void) {
     BattleAnim_SpawnRainbowHueChange(4, 0x32, 0x20, 0xA0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunAuroraBeamHitSpark, &gBattleAnimParticleDescriptors[0x54], 0, 9, 0x10, gBattleAnimCurrentAnchor, 0, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_RunWeakBeamHitEffect, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x39, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x39, 0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x16, 0x20, 0xA);
 }
 
@@ -1695,7 +1697,7 @@ void BattleAnim_InitializeHyperBeamHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x19, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x2C, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 1, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x54], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x2C, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 2, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0xF, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 2, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0xF, 0);
     BattleAnim_InitializeHyperBeamHitSequence();
 }
 
@@ -1707,8 +1709,8 @@ void BattleAnim_InitializeSolarBeamHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 4, 1, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x54], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x17, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x17, 0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x16, 0x20, 0xA);
 }
 
@@ -1720,8 +1722,8 @@ void BattleAnim_InitializeSkyAttackHitSequence(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x29, 0);
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 4, 1, BattleAnim_RunStrongBeamHitEffect, &gBattleAnimParticleDescriptors[0x54], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x29, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &gBattleAnimParticleDescriptors[4], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x29, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x29, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_RunStrongOutwardMovingLargeHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x29, 0);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0xC, 1, 3, BattleAnim_RunStrongOutwardMovingSmallHitSpark, &gBattleAnimParticleDescriptors[0x19], 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x29, 0);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0x16, 0x20, 0xA);
 }
 
