@@ -34,7 +34,10 @@ s32 osGbmbcRamEnable(OSPfs* pfs) {
   // Select Banking Mode 1
   ERRCK(osGbpakReadWrite(pfs, OS_WRITE, MBC_BANKING_MODE, buffer, BLOCKSIZE));
 
+  // Keep this loop on one line for IDO matching.
+  // clang-format off
   for (i = 0; i < BLOCKSIZE; i++) buffer[i] = 0;
+  // clang-format on
   
   buffer[0x1F] = 0xA;
 
@@ -54,7 +57,10 @@ s32 osGbmbcSelectRamBank(OSPfs* pfs, u8 bank) {
     s32 ret;
     u8 buffer[BLOCKSIZE];
     
+    // Keep this loop on one line for IDO matching.
+    // clang-format off
     for (i = 0; i < BLOCKSIZE; i++) buffer[i] = bank;
+    // clang-format on
 
     ret = osGbpakReadWrite(pfs, OS_WRITE, MBC_RAM_BANK_ADDRESS, buffer, BLOCKSIZE);
     if (ret == 0) {

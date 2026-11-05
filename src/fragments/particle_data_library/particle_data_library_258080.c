@@ -142,7 +142,10 @@ void DisplayList_InitPulsingRectSegment(s32 arg0, DisplayListState* state) {
         temp_a1 = D_81004190 * 3;
         temp_a2 = D_81004190 * -6;
         state->gfx = gfx;
+        // Keep expanded GBI commands on one line for IDO matching.
+        // clang-format off
         {    Gfx *_gfx = (Gfx *)(gfx++); _gfx->words.w0 = (((temp_a1 & 0xFFF) << 0xC) | 0xF2000000 | (temp_a2 & 0xFFF));    _gfx->words.w1 = ((((0x27F << (temp_a1 + 2)) & 0xFFF) << 0xC) | ((0x7F << (temp_a2 + 2)) & 0xFFF));    }
+        // clang-format on
         gSPEndDisplayList(gfx++);
         D_81004190++;
         D_81004190 &= 0x7F;
@@ -200,6 +203,8 @@ void DisplayList_InitColorCycleBoxSegment(s32 arg0, DisplayListState* state) {
 void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
     s32 temp_a3;
 
+    // Keep expanded GBI commands on one line for IDO matching.
+    // clang-format off
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDE000000;    _gfx->words.w1 = &D_810041D0;    }
     temp_a3 = ((s32) ((D_800AF770[5]) * 0x55) / 255) + 0xAA;
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = ((temp_a3 & 0xFF) | 0xFA000000);    _gfx->words.w1 = -0x3701;    }
@@ -215,6 +220,7 @@ void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xE7000000;    _gfx->words.w1 = 0;    }
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xF5680800;    _gfx->words.w1 = 0x94260;    }
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xF2000000;    _gfx->words.w1 = 0x7C03C;    }
+    // clang-format on
     gSPEndDisplayList(gfx++);
     D_81004BB0 = 0;
 }
