@@ -869,10 +869,10 @@ void Battle_Effect_Recoil(void) {
 }
 
 void Battle_Effect_ConfuseChance(void) {
-    if (!(sBattleTarget->statusCondition & 0x10) && (Battle_Random() < 0x1A) && !(sBattleTarget->immobilizedReason & 0x80)) {
+    if (!(sBattleTarget->statusCondition & STATUS_BURN) && (Battle_Random() < 26) && !(sBattleTarget->immobilizedReason & IMMOBILIZED_CONFUSED)) {
         sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_SECONDARY;
         sStatCanBeChangedFurther = 0;
-        sBattleTarget->immobilizedReason |= 0x80;
+        sBattleTarget->immobilizedReason |= IMMOBILIZED_CONFUSED;
         sBattleTarget->unk_50 = (Battle_Random() & 3) + 2;
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x46);
@@ -896,6 +896,7 @@ void Battle_Effect_Confuse(void) {
     }
 
     if (D_843C4DA9 == 0) {
+        // But, it failed!
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x44);
     }
 }
