@@ -3,13 +3,13 @@
 # Undocumented code
 
 <!-- AUTO_UNDOCUMENTED:START -->
-- Functions defined in `src/` with a `/* ... */` comment: **1,079 / 7,484 (14.4%)**
+- Functions defined in `src/` with a `/* ... */` comment: **1,171 / 7,484 (15.6%)**
 - Functions with a real name: **7,332 / 7,794 (94.1%)** (462 still `func_XXXXXXXX`)
-- Variables with a real name: **1,573 / 6,269 (25.1%)** (4,696 still `D_XXXXXXXX` / `jtbl_XXXXXXXX`)
-- Functions still using m2c `temp_*` / `var_*` locals: **1,729**
-- Functions with generic `arg0`, `arg1`, ... parameters: **3,822 / 7,484 (51.1%)**
-- Structs with generic fields (`unk_XX`, `pad`, `field_XX`): **823 / 1,041**
-- Struct fields with a real name: **1,760 / 6,687 (26.3%)**
+- Variables with a real name: **1,573 / 6,268 (25.1%)** (4,695 still `D_XXXXXXXX` / `jtbl_XXXXXXXX`)
+- Functions still using m2c `temp_*` / `var_*` locals: **1,718**
+- Functions with generic `arg0`, `arg1`, ... parameters: **3,821 / 7,484 (51.1%)**
+- Structs with generic fields (`unk_XX`, `pad`, `field_XX`): **820 / 1,041**
+- Struct fields with a real name: **1,789 / 6,688 (26.7%)**
 - Raw `*(T *)(base + 0xNN)` offset accesses that bypass a struct field: **0**
 <!-- AUTO_UNDOCUMENTED:END -->
 
@@ -32,7 +32,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 | 99 | 4 | 76 | 38 | 98 | 0 |
 | `src/fragments/lab_pc_list/lab_pc_list_1CEA00.c` | 92 | 92 | 3 | 58 | 33 | 91 | 0 |
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 | 49 | 2 | 171 | 25 | 25 | 0 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 | 91 | 4 | 33 | 59 | 82 | 0 |
+| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 | 91 | 4 | 32 | 59 | 82 | 0 |
 | `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 | 57 | 0 | 131 | 28 | 38 | 0 |
 | `src/pokemon_stats.c` | 101 | 101 | 4 | 14 | 38 | 97 | 0 |
 | `src/3D140_2.c` | 32 | 30 | 1 | 177 | 11 | 23 | 0 |
@@ -50,7 +50,6 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/clefairy_game/clefairy_game.c` | 58 | 58 | 1 | 78 | 14 | 10 | 0 |
 | `src/fragments/sandshrew_game/sandshrew_game.c` | 41 | 41 | 0 | 99 | 5 | 10 | 0 |
 | `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 | 41 | 2 | 50 | 22 | 36 | 0 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 | 54 | 4 | 51 | 23 | 17 | 0 |
 | `src/fragments/victory_palace/victory_palace.c` | 44 | 44 | 7 | 69 | 9 | 17 | 0 |
 | `src/fragments/event_battle/event_battle.c` | 56 | 56 | 0 | 20 | 15 | 52 | 0 |
 | `src/gb_data.c` | 27 | 27 | 1 | 91 | 1 | 23 | 0 |
@@ -82,6 +81,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/libnumus/player.c` | 104 | 68 | 0 | 0 | 13 | 18 | 0 |
 | `src/fragments/magikarp_game/magikarp_game.c` | 30 | 30 | 2 | 50 | 7 | 9 | 0 |
 | `src/fragments/widget_toolkit/widget_toolkit.c` | 21 | 21 | 0 | 53 | 6 | 18 | 0 |
+| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 | 0 | 4 | 50 | 23 | 17 | 0 |
 | `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 | 86 | 0 | 7 | 0 | 0 | 0 |
 | `src/status_icons.c` | 2 | 2 | 0 | 88 | 0 | 2 | 0 |
 | `src/fragments/61/fragment61_2DD710.c` | 39 | 39 | 0 | 2 | 12 | 38 | 0 |
@@ -105,7 +105,6 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/gallery.c` | 29 | 29 | 4 | 12 | 10 | 23 | 0 |
 | `src/gb_save.c` | 27 | 27 | 0 | 19 | 8 | 24 | 0 |
 | `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AFDB0.c` | 30 | 30 | 1 | 7 | 11 | 28 | 0 |
-| `src/fragments/battle_engine/battle_engine_move_mechanics.c` | 38 | 38 | 0 | 24 | 12 | 1 | 0 |
 | `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | 25 | 0 | 32 | 11 | 7 | 0 |
 | `src/graphics_textures.c` | 46 | 46 | 1 | 5 | 9 | 14 | 0 |
 | `src/display_object_textures.c` | 31 | 31 | 1 | 1 | 11 | 28 | 0 |
@@ -191,6 +190,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/gallery_debugger/gallery_debugger.c` | 12 | 12 | 1 | 9 | 2 | 1 | 0 |
 | `src/fragments/rental_hub/rental_hub.c` | 17 | 17 | 0 | 4 | 2 | 2 | 0 |
 | `src/fragments/snap_print_club_background_select/snap_print_club_background_select.c` | 10 | 10 | 1 | 9 | 2 | 3 | 0 |
+| `src/fragments/battle_engine/battle_engine_move_mechanics.c` | 38 | 0 | 0 | 23 | 1 | 0 | 0 |
 | `src/fragments/dynamo_game/dynamo_game_1.c` | 2 | 2 | 0 | 19 | 2 | 1 | 0 |
 | `src/fragments/minigame_sample7_viewer/minigame_sample7_viewer.c` | 10 | 10 | 0 | 10 | 1 | 3 | 0 |
 | `src/fragments/minigame_sample8_viewer/minigame_sample8_viewer.c` | 10 | 10 | 0 | 10 | 1 | 3 | 0 |
@@ -372,7 +372,6 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `unk_func_8830867C_02C` | `src/fragments/lab_pc_list/lab_pc_list.h` | 63 | 63 |
 | `MiniActor` | `src/fragments/minigame_actor_framework/minigame_actor_framework.h` | 102 | 45 |
 | `unk_D_86807558` | `src/fragments/sushi_game/sushi_game.h` | 41 | 41 |
-| `BattleMonRuntime` | `src/3D140.h` | 50 | 35 |
 | `GbApuChannelState` | `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 34 | 34 |
 | `GbSaveMainData` | `src/gb_data.h` | 31 | 31 |
 | `GbSaveMainData` | `src/gb_data.h` | 31 | 31 |
@@ -403,6 +402,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `unk_D_843C3508` | `src/fragments/battle_engine/battle_engine.h` | 20 | 20 |
 | `unk_D_861054C0` | `src/fragments/clefairy_game/clefairy_game.c` | 20 | 20 |
 | `unk_func_8830867C` | `src/fragments/lab_pc_list/lab_pc_list.h` | 20 | 20 |
+| `BattleMonRuntime` | `src/3D140.h` | 51 | 19 |
 | `unk_D_86404778` | `src/fragments/drowzee_game/drowzee_game.h` | 19 | 19 |
 | `unk_func_88203ED8` | `src/fragments/widget_tree/widget_tree.h` | 18 | 18 |
 | `unk_func_888044BC_038_02C_000` | `src/fragments/pokedex/pokedex.h` | 18 | 18 |
