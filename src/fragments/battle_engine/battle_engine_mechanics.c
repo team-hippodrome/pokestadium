@@ -219,7 +219,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
     }
 
     temp_v1->unk_28 = temp_a2_2->displayHp;
-    sp18 = (temp_a2_2->displayHp * 0x19) / (temp_a2_2->Basehp >> 2);
+    sp18 = (temp_a2_2->displayHp * 0x19) / (temp_a2_2->maxHp >> 2);
 
     Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->actionChosen].nickname);
 
@@ -264,9 +264,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->Basehp >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->Basehp >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
@@ -785,7 +785,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     }
 
     sp24->unk_26 = sp34->level;
-    sp24->Basehp = sp34->maxHp;
+    sp24->maxHp = sp34->maxHp;
     sp24->modifiedAttack = sp34->unk_28;
     sp24->modifiedDefense = sp34->unk_2A;
     sp24->modifiedSpeed = sp34->unk_2C;
@@ -1012,7 +1012,7 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         sBattleUser->unk_0E = sBattleUser->displayHp;
     }
 
-    var_a0 = (sBattleUser->Basehp >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1042,7 +1042,7 @@ void Battle_ApplyLeechSeedDamage(void) {
         }
     }
 
-    var_a0 = (sBattleUser->Basehp >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->maxHp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1062,8 +1062,8 @@ void Battle_ApplyLeechSeedDamage(void) {
     sBattleTarget->unk_10 = sBattleTarget->displayHp;
     sBattleTarget->unk_10 += var_a0;
 
-    if (sBattleTarget->Basehp < sBattleTarget->unk_10) {
-        sBattleTarget->unk_10 = sBattleTarget->Basehp;
+    if (sBattleTarget->maxHp < sBattleTarget->unk_10) {
+        sBattleTarget->unk_10 = sBattleTarget->maxHp;
     }
 }
 
