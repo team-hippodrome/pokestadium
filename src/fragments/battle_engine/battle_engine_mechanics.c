@@ -316,11 +316,11 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
         return 0;
     }
 
-    if (other_runtime->modifiedspeed < runtime->modifiedspeed) {
+    if (other_runtime->modifiedSpeed < runtime->modifiedSpeed) {
         return 0;
     }
 
-    if (runtime->modifiedspeed < other_runtime->modifiedspeed) {
+    if (runtime->modifiedSpeed < other_runtime->modifiedSpeed) {
         return 1;
     }
 
@@ -473,7 +473,7 @@ void InitBattleParameters(void) {
 
             if (sBattleCritFlag != 0) {
                 D_843C4DCA = sBattleTarget->unmodifiedDefense;
-                D_843C4DC8 = sBattleUser->attack;
+                D_843C4DC8 = sBattleUser->unmodifiedAttack;
             } else {
                 D_843C4DC8 = sBattleUser->modifiedAttack;
             }
@@ -710,9 +710,9 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
     if (arg0->state.runtime.pendingStatusCondition & 0x40) {
-        temp_v0->modifiedspeed >>= 2;
-        if (temp_v0->modifiedspeed == 0) {
-            temp_v0->modifiedspeed = 1;
+        temp_v0->modifiedSpeed >>= 2;
+        if (temp_v0->modifiedSpeed == 0) {
+            temp_v0->modifiedSpeed = 1;
         }
     }
 }
@@ -788,14 +788,14 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->hp = sp34->maxHp;
     sp24->modifiedAttack = sp34->unk_28;
     sp24->modifiedDefense = sp34->unk_2A;
-    sp24->modifiedspeed = sp34->unk_2C;
+    sp24->modifiedSpeed = sp34->unk_2C;
     sp24->modifiedSpecial = sp34->unk_2E;
 
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
     sp24->unk_36 = gBaseStats[sp24->id].baseHP;
-    sp24->attack = sp34->unk_28;
+    sp24->unmodifiedAttack = sp34->unk_28;
     sp24->unmodifiedDefense = sp34->unk_2A;
     sp24->unmodifiedSpeed = sp34->unk_2C;
     sp24->unmodifiedSpecial = sp34->unk_2E;

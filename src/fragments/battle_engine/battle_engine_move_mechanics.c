@@ -453,7 +453,7 @@ void Battle_Effect_RaiseOwnStat(void) {
     move_effect_index = sBattleUser->moveCache.effect - EFFECT_ATTACK_UP1;
     if (move_effect_index >= (EFFECT_ATTACK_UP1 - 2)) {
         increase_amount = 2;
-        move_effect_index -= (EFFECT_ATTACK_UP1 - EFFECT_ATTACK_UP2);
+        move_effect_index -= (EFFECT_ATTACK_UP2 - EFFECT_ATTACK_UP1);
     }
 
     if (sBattleUser->statChanges[move_effect_index] != 0xD) {
@@ -568,7 +568,7 @@ void Battle_Effect_LowerStat(void) {
         move_effect_index -= EFFECT_ATTACK_DOWN1;
         if (move_effect_index >= (EFFECT_ATTACK_UP1 - 1)) {
             sp20 = 2;
-            move_effect_index -= (EFFECT_ATTACK_UP1 - EFFECT_ATTACK_UP2);
+            move_effect_index -= (EFFECT_ATTACK_UP2 - EFFECT_ATTACK_UP1);
         }
 
     block_14:
