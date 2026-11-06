@@ -50,17 +50,17 @@ typedef struct BattleMonRuntime {
     /* 0x4B */ u8 unk_4B;
     /* 0x4C */ u8 immobilizedReason;
     /* 0x4D */ u8 statusCondition;
-    /* 0x4E */ u8 battleStatus3;
+    /* 0x4E */ u8 uniqueStatusFlags;
     /* 0x4F */ u8 isTrapped;
-    /* 0x50 */ u8 unk_50;
+    /* 0x50 */ u8 confusedCounter;
     /* 0x51 */ u8 unk_51;
     /* 0x52 */ u8 movesDisabled;
     /* 0x53 */ u8 unk_53;
     /* 0x54 */ u16 multihitCount;
     /* 0x56 */ u8 scaleResize;
-    /* 0x57 */ u8 unk_57;
+    /* 0x57 */ u8 disabledMove;
     /* 0x58 */ u8 lastMove;
-    /* 0x59 */ u8 unk_59;
+    /* 0x59 */ u8 substituteHp;
     /* 0x5A */ u8 usedMove;
     /* 0x5B */ u8 unk_5B;
     /* 0x5C */ u8 statChanges[6]; // 7 = no changes

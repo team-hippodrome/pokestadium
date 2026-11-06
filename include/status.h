@@ -32,6 +32,7 @@
  * BattleMon.statusCondition
  *
  * Bits 0–2 hold a sleep counter, not independent status flags.
+    ^probably AI hallucination but can't be sure because idk where the sleep turns are actually tracked
  * Toxic uses STATUS_POISON plus separate runtime state.
  * Fainting is not encoded as a status bit here.
  * Keep the struct member u8.
@@ -44,8 +45,11 @@
 #define STATUS_BURN 0x10
 #define STATUS_FREEZE 0x20
 #define STATUS_PARALYSIS 0x40
+#define STATUS_LEECH_SEED 0x80
+#define UNIQUE_STATUS_TRANSFORM 8
+#define UNIQUE_STATUS_REFLECT 2
+#define UNIQUE_STATUS_LIGHT_SCREEN 2
 
-/* 0x80: unassigned. */
 
 /*
  * BattleMonRuntime.immobilizedReason (offset 0x4C)

@@ -248,9 +248,9 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     sp1C->unk_4B = 0;
     sp1C->immobilizedReason = 0;
     sp1C->statusCondition = 0;
-    sp1C->battleStatus3 = 0;
+    sp1C->uniqueStatusFlags = 0;
     sp1C->movesDisabled = 0;
-    sp1C->unk_57 = 0;
+    sp1C->disabledMove = 0;
     sp1C->scaleResize = 0;
     sp18->immobilizedReason &= ~0x20;
     D_843C4DA3 = 1;
@@ -467,7 +467,7 @@ void InitBattleParameters(void) {
     if (D_843C4DC6) {
         if (sBattleUser->moveCache.type < 0x14) {
             D_843C4DCA = sBattleTarget->modifiedDefense;
-            if (sBattleTarget->battleStatus3 & 4) {
+            if (sBattleTarget->uniqueStatusFlags & 4) {
                 D_843C4DCA *= 2;
             }
 
@@ -479,7 +479,7 @@ void InitBattleParameters(void) {
             }
         } else {
             D_843C4DCA = sBattleTarget->modifiedSpecial;
-            if (sBattleTarget->battleStatus3 & 2) {
+            if (sBattleTarget->uniqueStatusFlags & 2) {
                 D_843C4DCA *= 2;
             }
 
@@ -542,7 +542,7 @@ void Battle_ApplyDamage(void) {
         if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CONFUSION_SELF_HIT) {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2B);
-            if (sBattleTarget->unk_59 < sBattleDamage) {
+            if (sBattleTarget->substituteHp < sBattleDamage) {
                 sBattleTarget->statusCondition &= 0xFFEF;
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2C);
@@ -558,12 +558,12 @@ void Battle_ApplyDamage(void) {
 
                 Battle_SetRuntimeFlags(sActivePokemon[sBattleScene.scene->actingSide], 0x1000);
             } else {
-                sBattleTarget->unk_59 -= sBattleDamage;
+                sBattleTarget->substituteHp -= sBattleDamage;
             }
         } else {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2B);
-            if (sBattleTarget->unk_59 < sBattleDamage) {
+            if (sBattleTarget->substituteHp < sBattleDamage) {
                 sBattleTarget->statusCondition &= 0xFFEF;
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2C);
@@ -579,7 +579,7 @@ void Battle_ApplyDamage(void) {
 
                 Battle_SetRuntimeFlags(sActivePokemon[!sBattleScene.scene->actingSide], 0x1000);
             } else {
-                sBattleTarget->unk_59 -= sBattleDamage;
+                sBattleTarget->substituteHp -= sBattleDamage;
             }
         }
     } else if (D_84390288 == 0) {
@@ -603,7 +603,7 @@ void Battle_DecrementPP(s32 arg0) {
 
     if ((temp_v0->usedMove != 0xA5) && !(temp_v0->immobilizedReason & 7) && !(temp_v0->statusCondition & 0x40)) {
         temp_v0->pp[temp_a1->selectedMoveIndex]--;
-        if (!(temp_v0->battleStatus3 & 8)) {
+        if (!(temp_v0->uniqueStatusFlags & 8)) {
             temp_a2->pp[temp_a1->selectedMoveIndex] -= 1;
         }
     }
@@ -984,7 +984,7 @@ void Battle_IncrementMoveUsage(void) {
     temp_a1 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
     sBattleUser->pp[temp_a1->selectedMoveIndex]++;
-    if (!(ptr->battleStatus3 & 8)) {
+    if (!(ptr->uniqueStatusFlags & 8)) {
         temp_a0->pp[temp_a1->selectedMoveIndex]++;
     }
 }
@@ -1017,7 +1017,7 @@ void Battle_ApplyPoisonOrBurnDamage(void) {
         var_a0++;
     }
 
-    if (sBattleUser->battleStatus3 & 1) {
+    if (sBattleUser->uniqueStatusFlags & 1) {
         sBattleUser->unk_51++;
         var_a0 *= sBattleUser->unk_51;
     }
@@ -1047,7 +1047,7 @@ void Battle_ApplyLeechSeedDamage(void) {
         var_a0++;
     }
 
-    if (sBattleUser->battleStatus3 & 1) {
+    if (sBattleUser->uniqueStatusFlags & 1) {
         sBattleUser->unk_51++;
         var_a0 *= sBattleUser->unk_51;
     }
@@ -1342,15 +1342,15 @@ s32 Battle_CheckMonCanAct(void) {
         sBattleUser->movesDisabled--;
         if (!(sBattleUser->movesDisabled & 0xF)) {
             sBattleUser->movesDisabled = 0;
-            sBattleUser->unk_57 = 0;
+            sBattleUser->disabledMove = 0;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0xB);
         }
     }
 
     if (sBattleUser->immobilizedReason & 0x80) {
-        sBattleUser->unk_50--;
-        if (sBattleUser->unk_50 == 0) {
+        sBattleUser->confusedCounter--;
+        if (sBattleUser->confusedCounter == 0) {
             sBattleUser->immobilizedReason &= 0xFF7F;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[5], 0xC);
@@ -1388,7 +1388,7 @@ s32 Battle_CheckMonCanAct(void) {
         }
     }
 
-    if ((sBattleUser->unk_57 != 0) && (sBattleUser->unk_57 == sBattleUser->usedMove)) {
+    if ((sBattleUser->disabledMove != 0) && (sBattleUser->disabledMove == sBattleUser->usedMove)) {
         sBattleUser->immobilizedReason &= 0xFFEF;
         Text_SetStringToken(0x1D, gMoveDisplayInfo[sBattleUser->usedMove - 1].unk_04);
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0xF);
@@ -1448,7 +1448,7 @@ s32 Battle_CheckMonCanAct(void) {
         Battle_QueueMessage(sBattleMessageQueues->buffer[5], -0x45);
         sBattleUser->immobilizedReason &= 0xFFFD;
         sBattleUser->immobilizedReason |= 0x80;
-        sBattleUser->unk_50 = (Battle_Random() & 3) + 2;
+        sBattleUser->confusedCounter = (Battle_Random() & 3) + 2;
         return 4;
     }
 
@@ -1636,9 +1636,9 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
     temp_a11->unk_4B = 0;
     temp_a11->immobilizedReason = 0;
     temp_a11->statusCondition &= 0x80;
-    temp_a11->battleStatus3 = 0;
+    temp_a11->uniqueStatusFlags = 0;
     temp_a11->movesDisabled = 0;
-    temp_a11->unk_57 = 0;
+    temp_a11->disabledMove = 0;
     temp_a11->scaleResize = 0;
     temp_a11->lastMove = 0;
 

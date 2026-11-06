@@ -2633,9 +2633,9 @@ void BattleScene_PhaseTransform(CameraNode* camera) {
             BattleScene_SelectActionCameraPresetFromTiming(camera, 0);
             BattleScene_RecenterCameraOnOwner(camera, sActingPokemon);
             if (acting_pokemon_runtime->statusCondition & 0x10) {
-                if (non_acting_pokemon_runtime->battleStatus3 & 8) {
+                if (non_acting_pokemon_runtime->uniqueStatusFlags & 8) {
                     acting_pokemon_state->model = sActingPokemon->sessionTeams->displayModel =
-                        non_acting_pokemon_state->unk_BE;
+                        non_acting_pokemon_state->transformedIntoSpecies;
                 } else if (sNonActingPokemon->sessionTeams->displayModel == SUBSTITUTE_DOLL) {
                     acting_pokemon_state->model = sActingPokemon->sessionTeams->displayModel =
                         non_acting_pokemon_runtime->id;
@@ -2643,8 +2643,8 @@ void BattleScene_PhaseTransform(CameraNode* camera) {
                     acting_pokemon_state->model = sActingPokemon->sessionTeams->displayModel =
                         sNonActingPokemon->sessionTeams->displayModel;
                 }
-            } else if (non_acting_pokemon_runtime->battleStatus3 & 8) {
-                sActingPokemon->sessionTeams->displayModel = non_acting_pokemon_state->unk_BE;
+            } else if (non_acting_pokemon_runtime->uniqueStatusFlags & 8) {
+                sActingPokemon->sessionTeams->displayModel = non_acting_pokemon_state->transformedIntoSpecies;
             } else if (sNonActingPokemon->sessionTeams->displayModel == SUBSTITUTE_DOLL) {
                 sActingPokemon->sessionTeams->displayModel = non_acting_pokemon_runtime->id;
             } else {

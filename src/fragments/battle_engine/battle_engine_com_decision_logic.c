@@ -244,7 +244,7 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
     if (D_843C613C) {
         if (D_843C6148.unk_03 < 0x14) {
             D_843C6140 = arg1->modifiedDefense;
-            if (arg1->battleStatus3 & 4) {
+            if (arg1->uniqueStatusFlags & 4) {
                 D_843C6140 *= 2;
             }
 
@@ -256,7 +256,7 @@ void BattleAI_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
             }
         } else {
             D_843C6140 = arg1->modifiedSpecial;
-            if (arg1->battleStatus3 & 2) {
+            if (arg1->uniqueStatusFlags & 2) {
                 D_843C6140 *= 2;
             }
 
@@ -339,7 +339,7 @@ void BattleAI_ResetTeamState(BattleAiMonState* arg0) {
 
     temp_v0->immobilizedReason = 0;
     temp_v0->statusCondition = 0;
-    temp_v0->battleStatus3 = 0;
+    temp_v0->uniqueStatusFlags = 0;
 }
 
 s32 BattleAI_ScaleSignedRatio(s32 arg0, s32 arg1) {
@@ -2047,7 +2047,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                 var_v1 = 1;
             }
 
-            if (var_s0->battleStatus3 & 1) {
+            if (var_s0->uniqueStatusFlags & 1) {
                 var_v1 *= var_s0->unk_51;
             }
             var_s2->unk_16 += var_v1;
@@ -2060,7 +2060,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                 var_v0 = 1;
             }
 
-            if (var_s3->battleStatus3 & 1) {
+            if (var_s3->uniqueStatusFlags & 1) {
                 var_v0 *= var_s3->unk_51;
             }
             var_s2->unk_0E += var_v0;
@@ -2073,7 +2073,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                 var_v1 = var_s0->maxHp >> 4;
             }
 
-            if (var_s0->battleStatus3 & 1) {
+            if (var_s0->uniqueStatusFlags & 1) {
                 var_v1 *= var_s0->unk_51 + 1;
             }
 
@@ -2088,7 +2088,7 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
                 var_v0 = var_s3->maxHp >> 4;
             }
 
-            if (var_s3->battleStatus3 & 1) {
+            if (var_s3->uniqueStatusFlags & 1) {
                 var_v0 *= var_s3->unk_51 + 1;
             }
 
@@ -2101,8 +2101,8 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
         }
 
         if (var_s3->statusCondition & 0x10) {
-            if (var_s3->unk_59 < var_s1) {
-                var_s1 = var_s3->unk_59;
+            if (var_s3->substituteHp < var_s1) {
+                var_s1 = var_s3->substituteHp;
             }
         }
 
@@ -2658,7 +2658,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                         if ((temp_s6->pendingStatusCondition & 8) || (temp_s6->statusCondition & 0x80)) {
                             var_s1 /= 2;
                         }
-                        if (temp_s6->battleStatus3 & 1) {
+                        if (temp_s6->uniqueStatusFlags & 1) {
                             var_s1 /= 2;
                         }
                         if ((BattleAI_HasExactlyOneUsableCandidate(arg1) != 0) && (temp_s3->pendingStatusCondition & 0x20)) {
@@ -2889,7 +2889,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                         switch (temp_s6->pendingStatusCondition) {
                             case 0x8:
                                 var_s1 += spB6 * 2;
-                                if (temp_s6->battleStatus3 & 1) {
+                                if (temp_s6->uniqueStatusFlags & 1) {
                                     var_s1 += spB6;
                                 }
                                 goto case_20;
@@ -2917,7 +2917,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                         switch (temp_s6->pendingStatusCondition) {
                             case 8:
                                 var_s1 -= spB7 * 2;
-                                if (temp_s6->battleStatus3 & 1) {
+                                if (temp_s6->uniqueStatusFlags & 1) {
                                     var_s1 -= spB7 / 2;
                                 }
                                 break;
@@ -3168,10 +3168,10 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x39:
                 temp_s3 = oppMon;
-                if (((temp_s3->battleStatus3 & 8) != 0) || (temp_s3->id == 0x84)) {
-                    if ((temp_s3->battleStatus3 & 8) != 0) {
-                        if (((temp_s3 == D_843C60B8) ? ((sActivePokemon[0]->state.unk_BE ^ 0x84) != 0)
-                                                     : ((sActivePokemon[1]->state.unk_BE ^ 0x84) != 0)) == 0) {
+                if (((temp_s3->uniqueStatusFlags & 8) != 0) || (temp_s3->id == 0x84)) {
+                    if ((temp_s3->uniqueStatusFlags & 8) != 0) {
+                        if (((temp_s3 == D_843C60B8) ? ((sActivePokemon[0]->state.transformedIntoSpecies ^ 0x84) != 0)
+                                                     : ((sActivePokemon[1]->state.transformedIntoSpecies ^ 0x84) != 0)) == 0) {
                             break;
                         }
                     } else {
@@ -3183,7 +3183,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x40:
                 if (arg4) {
-                    if (!(temp_s6->battleStatus3 & 2)) {
+                    if (!(temp_s6->uniqueStatusFlags & 2)) {
                         var_s1 += spB6 * 7;
                         if (gMoveData[temp_s7->unk_05 - 1].type >= 0xB) {
                             var_s1 += spB6 * 7;
@@ -3214,7 +3214,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
 
             case 0x41:
                 if (arg4) {
-                    if (!(temp_s6->battleStatus3 & 4)) {
+                    if (!(temp_s6->uniqueStatusFlags & 4)) {
                         var_s1 += spB6 * 6;
                         if (gMoveData[temp_s7->unk_05 - 1].type < 0xA) {
                             var_s1 += spB6 * 6;
@@ -3308,7 +3308,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                     if (((temp_s3->types[0] != 0x16) && (temp_s3->types[1] != 0x16)) && (!(temp_s3->statusCondition & 0x90))) {
                         var_s1 += spB7 * 3;
                         var_s1 += spB6 * 3;
-                        if (temp_s3->battleStatus3 & 1) {
+                        if (temp_s3->uniqueStatusFlags & 1) {
                             var_s1 += spBA * 3;
                         }
                         if ((temp_s7->unk_14 >= 0x9A) && (BattleAI_HasExactlyOneUsableCandidate(arg0) != 0)) {
@@ -3337,7 +3337,7 @@ void BattleAI_ApplyTypeResistance(BattleAiTeamState* arg0, BattleAiTeamState* ar
                 break;
 
             case 0x56:
-                if ((arg4 != 0) && (temp_s4->unk_12.unk_57 != 0)) {
+                if ((arg4 != 0) && (temp_s4->unk_12.disabledMove != 0)) {
                     spF8 = 1;
                 }
                 break;
@@ -3455,7 +3455,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
     var_s4 = 0x80000002;
     var_s5 = 0x80000002;
     sp6C = 0;
-    sp70 = ptr->unk_57 * 0;
+    sp70 = ptr->disabledMove * 0;
 
     D_843C60C0[D_843C60E8].unk_02 = arg2;
 
@@ -3463,7 +3463,7 @@ s32 BattleAI_SelectBestScoredMove(BattleAiMonState* arg0, UNUSED BattleAiMonStat
     for (i = 0; i < arg2; i++) {
         D_843C60C0[D_843C60E8].unk_04[i] = arg3[i].unk_28;
 
-        if ((ptr->pp[i] > 0) && (arg3[i].unk_00 != ptr->unk_57)) {
+        if ((ptr->pp[i] > 0) && (arg3[i].unk_00 != ptr->disabledMove)) {
             if (BattleAI_IsScoreBetter(arg3[i].unk_28, var_s5, arg3[i].unk_0A, var_s3) != 0) {
                 var_s4 = var_s5;
                 var_s2 = var_s3;
@@ -4799,7 +4799,7 @@ u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, 
                     sp6C += BattleAI_ClassifyMoveAvailability(arg0, arg1, 0x8A) * 0x34;
                 }
 
-                if (sp40->battleStatus3 & 1) {
+                if (sp40->uniqueStatusFlags & 1) {
                     sp6C += sp40->unk_51 * 0x4D;
                     if (sp40->statusCondition & 0x80) {
                         sp6C *= 2;
@@ -4819,11 +4819,11 @@ u8 BattleAI_ScoreAttackVsSwitch(BattleAiMonState* arg0, BattleAiMonState* arg1, 
                 sp6C -= sp40->statChanges[5] * 0x1A;
                 sp6C += 0xB6;
 
-                if (sp40->battleStatus3 & 4) {
+                if (sp40->uniqueStatusFlags & 4) {
                     sp6C -= 0x34;
                 }
 
-                if (sp40->battleStatus3 & 2) {
+                if (sp40->uniqueStatusFlags & 2) {
                     sp6C -= 0x34;
                 }
 
@@ -5279,20 +5279,20 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
         temp_s0->types[1] = temp_s2->types[1];
         temp_s0->immobilizedReason = temp_s2->immobilizedReason;
         temp_s0->statusCondition = temp_s2->statusCondition;
-        temp_s0->battleStatus3 = temp_s2->battleStatus3;
+        temp_s0->uniqueStatusFlags = temp_s2->uniqueStatusFlags;
         temp_s0->isTrapped = temp_s2->isTrapped;
-        temp_s0->unk_50 = temp_s2->unk_50;
+        temp_s0->confusedCounter = temp_s2->confusedCounter;
         temp_s0->unk_51 = temp_s2->unk_51;
         temp_s0->movesDisabled = temp_s2->movesDisabled;
         temp_s0->multihitCount = temp_s2->multihitCount;
-        temp_s0->unk_57 = temp_s2->unk_57;
+        temp_s0->disabledMove = temp_s2->disabledMove;
         temp_s0->lastMove = temp_s2->lastMove;
-        temp_s0->unk_59 = temp_s2->unk_59;
+        temp_s0->substituteHp = temp_s2->substituteHp;
 
         _bcopy(temp_s2->moves, temp_s0->moves, 4);
         _bcopy(temp_s2->statChanges, temp_s0->statChanges, 6);
 
-        if ((temp_s2->battleStatus3 & 8) && (temp_s2->usedMove == 0x90)) {
+        if ((temp_s2->uniqueStatusFlags & 8) && (temp_s2->usedMove == 0x90)) {
             gBattleAI_ActivePokemon[1 - i].unk_016[gBattleAI_ActivePokemon[1 - i].unk_012].unk_01 = 15;
 
             temp_s0->modifiedAttack = temp_s2->modifiedAttack;
@@ -5723,8 +5723,8 @@ s32 BattleAI_ResolveRandomMove(s32 arg0, s32 arg1) {
         return arg1;
     }
 
-    if (temp_s4->battleStatus3 & 8) {
-        var_s3 = sActivePokemon[arg0]->state.unk_BE;
+    if (temp_s4->uniqueStatusFlags & 8) {
+        var_s3 = sActivePokemon[arg0]->state.transformedIntoSpecies;
     } else {
         var_s3 = temp_s4->id;
     }
