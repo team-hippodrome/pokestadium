@@ -330,7 +330,7 @@
 #define ABC_STRUGGLE 164     // わるあがき
 
 #define EFFECT_NO_ADDITIONAL             0x00
-#define EFFECT_UNUSED_01                 0x01
+#define EFFECT_SLEEP_UNUSED_01           0x01
 #define EFFECT_POISON_20_PERCENT         0x02
 #define EFFECT_DRAIN_HP                  0x03
 #define EFFECT_BURN_10_PERCENT           0x04
@@ -401,7 +401,7 @@
 #define EFFECT_DEFENSE_DOWN_33_PERCENT   0x45
 #define EFFECT_SPEED_DOWN_33_PERCENT     0x46
 #define EFFECT_SPECIAL_DOWN_33_PERCENT   0x47
-/* 0x48–0x4B are skipped. */
+/* 0x48-0x4B also dispatch to BattleEffect_LowerStat; no move uses them. */
 #define EFFECT_CONFUSION_10_PERCENT      0x4C
 #define EFFECT_TWINEEDLE                 0x4D
 /* 0x4E is skipped. */

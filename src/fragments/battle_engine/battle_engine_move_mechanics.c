@@ -4,7 +4,13 @@
 #include "status.h"
 #include "types.h"
 
-/*actual battle logic*/
+/*
+ * Move-effect dispatch and runtime mutations. Effect IDs come from gMoveData;
+ * the table below is indexed by effect - 1, including unused dispatch slots.
+ * //@src/gb_data.c
+ * Turn continuations and damage application live in battle_engine_mechanics.c.
+ * //@src/fragments/battle_engine/battle_engine_mechanics.c
+ */
 #define STADIUM 1
 
 typedef void (*MoveEffectCallback)(void);
@@ -123,8 +129,9 @@ static MoveEffectCallback sMoveEffectHandlers[] = {
     NULL,
 };
 
-u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat_index) {
-    *stat_ptr = (stat_stage_delta * sStatStageMultipliers[stat_index - 1].multiplier) / sStatStageMultipliers[stat_index - 1].devisor;
+/* Rebuild one modified stat from its base value and 1-based stage, clamped to 1-999. */
+u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 base_stat, u8 stat_stage) {
+    *stat_ptr = (base_stat * sStatStageMultipliers[stat_stage - 1].multiplier) / sStatStageMultipliers[stat_stage - 1].divisor;
 
     if (*stat_ptr == 0) {
         *stat_ptr = 1;
@@ -137,16 +144,17 @@ u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u
     return *stat_ptr;
 }
 
+/* Apply a sleep duration, checking the sleep clause and the target's recharge state. */
 void BattleEffect_Sleep(void) {
-    s32 is_frozen;
+    s32 was_recharging;
     s32 sleep_turns;
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
-    is_frozen = sBattleTarget->statusCondition & STATUS_FREEZE;
-    sBattleTarget->statusCondition &= ~STATUS_FREEZE;
+    was_recharging = sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_RECHARGE;
+    sBattleTarget->volatileStatusFlags &= ~VOLATILE_STATUS_RECHARGE;
 
-    if (is_frozen == 0) {
-        if (sBattleTarget->pendingStatusCondition & 7) {
+    if (was_recharging == 0) {
+        if (sBattleTarget->pendingStatusCondition & STATUS_SLEEP_MASK) {
             sConfused = 0;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x80);
@@ -174,8 +182,8 @@ block_9:
         sConfused = 0;
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x7F);
-        if ((is_frozen != 0) && (sBattleMechanicsSetting[0] == 1)) {
-            sBattleTarget->statusCondition |= STATUS_FREEZE;
+        if ((was_recharging != 0) && (sBattleMechanicsSetting[0] == 1)) {
+            sBattleTarget->volatileStatusFlags |= VOLATILE_STATUS_RECHARGE;
         }
     } else {
         do {
@@ -192,13 +200,14 @@ block_9:
     }
 }
 
+/* Apply poison or Toxic, or roll the secondary poison chance of a damaging move. */
 void BattleEffect_Poison(void) {
     char* buffer = sBattleMessageQueues->buffer[1];
 
-    if (!(sBattleTarget->statusCondition & STATUS_BURN) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->types[0] != 3) &&
-        (sBattleTarget->types[1] != 3)) {
+    if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->types[0] != POISON) &&
+        (sBattleTarget->types[1] != POISON)) {
         switch (sBattleUser->moveCache.effect) {
-            case 2:
+            case EFFECT_POISON_20_PERCENT:
                 if (sBattleScene.scene->moveEffectKind != MOVE_PRESENTATION_MULTI_HIT) {
                     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NORMAL;
                     buffer = sBattleMessageQueues->buffer[7];
@@ -211,7 +220,7 @@ void BattleEffect_Poison(void) {
                 }
                 break;
 
-            case 33:
+            case EFFECT_POISON_40_PERCENT:
                 sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NORMAL;
                 buffer = sBattleMessageQueues->buffer[7];
                 if (Battle_Random() >= 103) {
@@ -232,17 +241,17 @@ void BattleEffect_Poison(void) {
                 break;
         }
 
-        sBattleTarget->pendingStatusCondition |= 8;
+        sBattleTarget->pendingStatusCondition |= STATUS_POISON;
         if (sBattleUser->moveCache.moveId == TOXIC) {
-            sBattleTarget->uniqueStatusFlags |= 1;
-            sBattleTarget->unk_51 = 0;
+            sBattleTarget->uniqueStatusFlags |= UNIQUE_STATUS_TOXIC;
+            sBattleTarget->toxicCounter = 0;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(buffer, -0x7C);
         } else {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(buffer, -0x7B);
         }
-    } else if (sBattleUser->moveCache.effect == 0x42) {
+    } else if (sBattleUser->moveCache.effect == EFFECT_POISON) {
         if (sBattleScene.scene->moveEffectKind != MOVE_PRESENTATION_MULTI_HIT) {
             sBattleMoveFailed = 1;
             sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
@@ -253,6 +262,7 @@ void BattleEffect_Poison(void) {
     }
 }
 
+/* Restore half the dealt damage, at least one HP, for draining moves and Dream Eater. */
 void BattleEffect_DrainHP(void) {
     sBattleDamage /= 2;
     if (sBattleDamage == 0) {
@@ -265,7 +275,7 @@ void BattleEffect_DrainHP(void) {
         sBattleUser->displayHp += sBattleDamage;
     }
 
-    if (sBattleUser->moveCache.effect == 8) {
+    if (sBattleUser->moveCache.effect == EFFECT_DREAM_EATER) {
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x79);
     } else {
@@ -274,23 +284,25 @@ void BattleEffect_DrainHP(void) {
     }
 }
 
+/* Faint the user of Explosion/Self-Destruct and clear its major status and Leech Seed. */
 void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_EXPLOSION;
     sBattleUser->displayHp = 0;
     sBattleUser->pendingStatusCondition = 0;
-    sBattleUser->statusCondition &= ~STATUS_LEECH_SEED;
+    sBattleUser->volatileStatusFlags &= ~VOLATILE_STATUS_LEECH_SEED;
 }
 
+/* Roll burn/freeze/paralysis, or thaw a frozen target hit by a Fire-type move. */
 void BattleEffect_SecondaryStatusChance(void) {
     BattleMonRuntime* runtime = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
 
-    if (sBattleTarget->statusCondition & STATUS_BURN) {
+    if (sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) {
         return;
     }
 
     if (sBattleTarget->pendingStatusCondition != 0) {
-        if ((sBattleTarget->pendingStatusCondition & STATUS_FREEZE) && (sBattleUser->moveCache.type == 0x14)) {
+        if ((sBattleTarget->pendingStatusCondition & STATUS_FREEZE) && (sBattleUser->moveCache.type == FIRE)) {
             sBattleTarget->pendingStatusCondition = 0;
             if (state->moveIndex != 4) {
                 runtime->usedMove = runtime->moves[state->selectedMoveIndex];
@@ -329,8 +341,8 @@ void BattleEffect_SecondaryStatusChance(void) {
             case EFFECT_FREEZE_10_PERCENT:
             case EFFECT_FREEZE_30_PERCENT:
                 if (Battle_FreezeClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
-                    sBattleTarget->statusCondition &= ~STATUS_FREEZE;
-                    sBattleTarget->pendingStatusCondition = 0x20;
+                    sBattleTarget->volatileStatusFlags &= ~VOLATILE_STATUS_RECHARGE;
+                    sBattleTarget->pendingStatusCondition = STATUS_FREEZE;
                     Text_SetStringToken(0x19,
                                         Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x75);
@@ -348,6 +360,7 @@ void BattleEffect_SecondaryStatusChance(void) {
     }
 }
 
+/* Apply the Rage follow-up stat boost, using its separate message queue. */
 void BattleEffect_ApplyStatBoost(void) {
     s32 attack_modified;
     s32 speed_modified;
@@ -368,6 +381,7 @@ void BattleEffect_ApplyStatBoost(void) {
     if (sBattleUser->statChanges[move_effect_index] != 13) {
         sBattleUser->statChanges[move_effect_index] += increase_amount;
         if (sBattleUser->statChanges[move_effect_index] >= 14) {
+            //!bug The original code clamps increase_amount's entry instead of move_effect_index's.
             sBattleUser->statChanges[increase_amount] = 13;
         }
 
@@ -401,7 +415,7 @@ void BattleEffect_ApplyStatBoost(void) {
 
             if (*stat_value != 999) {
                 *stat_value = (*unmodified_stat_value * sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].multiplier) /
-                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].devisor;
+                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].divisor;
                 if (*stat_value >= 1000) {
                     *stat_value = 999;
                 }
@@ -436,6 +450,7 @@ void BattleEffect_ApplyStatBoost(void) {
     }
 }
 
+/* Raise the user's selected stat stage, update its value and reapply status penalties. */
 void BattleEffect_RaiseOwnStat(void) {
     s32 attack_modified;
     s32 speed_modified;
@@ -493,7 +508,7 @@ void BattleEffect_RaiseOwnStat(void) {
 
             if (*modified_stat_value != 999) {
                 *modified_stat_value = (*unmodified_stat_value * sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].multiplier) /
-                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].devisor;
+                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].divisor;
                 if (*modified_stat_value >= 1000) {
                     *modified_stat_value = 999;
                 }
@@ -529,6 +544,7 @@ void BattleEffect_RaiseOwnStat(void) {
     }
 }
 
+/* Lower a target stat directly or by secondary-effect chance, with stage/value limits. */
 void BattleEffect_LowerStat(void) {
     s32 attack_modified;
     s32 speed_modified;
@@ -543,7 +559,7 @@ void BattleEffect_LowerStat(void) {
         sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_SECONDARY;
     }
 
-    if (sBattleTarget->statusCondition & STATUS_BURN) {
+    if (sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) {
         goto move_failed;
     }
 
@@ -609,7 +625,7 @@ void BattleEffect_LowerStat(void) {
 
                 if (*modified_stat_value != 1) {
                     *modified_stat_value = (*unmodified_stat_value * sStatStageMultipliers[sBattleTarget->statChanges[move_effect_index] - 1].multiplier) /
-                            sStatStageMultipliers[sBattleTarget->statChanges[move_effect_index] - 1].devisor;
+                            sStatStageMultipliers[sBattleTarget->statChanges[move_effect_index] - 1].divisor;
                     if (*modified_stat_value == 0) {
                         *modified_stat_value = 1;
                     }
@@ -659,23 +675,25 @@ move_failed:
     }
 }
 
+/* Start Bide with a cleared damage accumulator and a two- or three-turn duration. */
 void BattleEffect_Bide(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_BIDE;
     sBattleUser->moveCache.effect = 0;
-    sBattleUser->immobilizedReason |= 1;
-    sBattleUser->multihitCount = 0;
-    sBattleUser->isTrapped = (Battle_Random() & 1) + 2;
+    sBattleUser->immobilizedReason |= IMMOBILIZED_BIDING;
+    sBattleUser->effectCounter = 0;
+    sBattleUser->effectTurnsLeft = (Battle_Random() & 1) + 2;
 }
 
+/* Lock Thrash/Petal Dance into a two- or three-turn continuation. */
 void BattleEffect_Thrash(void) {
     sBattleUser->moveCache.effect = 0;
-    sBattleUser->immobilizedReason |= 2;
-    sBattleUser->isTrapped = (Battle_Random() & 1) + 2;
+    sBattleUser->immobilizedReason |= IMMOBILIZED_THRASHING;
+    sBattleUser->effectTurnsLeft = (Battle_Random() & 1) + 2;
 }
 
 /*
-    Handles Teleport, Roar, and Whirlwind which do nothing in stadium 
-    since the moves only have effect in wild battles in gen 1
+    Queue the trainer-battle failure response for Teleport, Roar and Whirlwind.
+    Teleport has a separate presentation kind and message from the other two.
 */
 void BattleEffect_WildBattleOnlyMoves(void) {
     if (sBattleUser->moveCache.moveId == TELEPORT) {
@@ -689,6 +707,7 @@ void BattleEffect_WildBattleOnlyMoves(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x52);
 }
 
+/* Initialize total/remaining hits; Twineedle then uses the secondary poison effect. */
 void BattleEffect_MultiHit(void) {
     s32 rng;
 
@@ -700,8 +719,8 @@ void BattleEffect_MultiHit(void) {
                 sBattleUser->moveCache.effect = EFFECT_POISON_20_PERCENT;
 
             case EFFECT_ATTACK_TWICE:
-                sBattleUser->multihitCount = 2;
-                sBattleUser->isTrapped = sBattleUser->multihitCount;
+                sBattleUser->effectCounter = 2;
+                sBattleUser->effectTurnsLeft = sBattleUser->effectCounter;
                 break;
 
             default:
@@ -709,19 +728,18 @@ void BattleEffect_MultiHit(void) {
                 if (rng >= 2) {
                     rng = Battle_Random() & 3;
                 }
-                sBattleUser->isTrapped = sBattleUser->multihitCount = rng + 2;
+                sBattleUser->effectTurnsLeft = sBattleUser->effectCounter = rng + 2;
                 break;
         }
 
-        sMultihitCount = sBattleUser->multihitCount - 1;
+        sMultihitCount = sBattleUser->effectCounter - 1;
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_MULTI_HIT;
     }
 }
 
+/* Roll flinching unless Substitute blocks it; non-Stadium rules also clear recharge. */
 void BattleEffect_Flinch(void) {
-    // Burnt Pokemon can't be flinched?
-    // Maybe handles it so burn damage still applies?
-    if (!(sBattleTarget->statusCondition & STATUS_BURN)) {
+    if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE)) {
         if (sBattleMechanicsSetting[0] == STADIUM) {
             if (sBattleUser->moveCache.effect == EFFECT_FLINCH_10_PERCENT) {
                 if (Battle_Random() >= 26) {
@@ -731,7 +749,7 @@ void BattleEffect_Flinch(void) {
                 return;
             }
         } else {
-            sBattleTarget->statusCondition &= ~STATUS_FREEZE;
+            sBattleTarget->volatileStatusFlags &= ~VOLATILE_STATUS_RECHARGE;
             if (sBattleUser->moveCache.effect == EFFECT_FLINCH_10_PERCENT) {
                 if (Battle_Random() >= 26) {
                     return;
@@ -744,6 +762,7 @@ void BattleEffect_Flinch(void) {
     }
 }
 
+/* Reject a slower OHKO user, otherwise set the damage sentinel and OHKO result. */
 void BattleEffect_OHKO(void) {
     sBattleDamage = 0;
     sBattleCritFlag = 0xFF;
@@ -755,6 +774,7 @@ void BattleEffect_OHKO(void) {
     sBattleCritFlag = 2;
 }
 
+/* Start a charge turn, mark Fly/Dig semi-invulnerability and queue the move's message. */
 void BattleEffect_TwoTurnMove(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_CHARGE;
     sBattleUser->immobilizedReason |= IMMOBILIZED_CHARGING;
@@ -799,46 +819,50 @@ void BattleEffect_TwoTurnMove(void) {
     }
 }
 
+/* Start a trapping continuation, clearing target recharge and checking Normal/Ghost immunity. */
 void BattleEffect_Trap(void) {
     s32 rng;
 
-    if (!(sBattleUser->immobilizedReason & STATUS_FREEZE) &&
+    if (!(sBattleUser->immobilizedReason & IMMOBILIZED_TRAPPING) &&
         ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleUser->moveCache.type != NORMAL) ||
          ((sBattleTarget->types[0] != GHOST) && (sBattleTarget->types[1] != GHOST)))) {
-        sBattleTarget->statusCondition &= (0xFFFF & ~STATUS_FREEZE);
-        sBattleUser->immobilizedReason |= STATUS_FREEZE;
+        sBattleTarget->volatileStatusFlags &= (0xFFFF & ~VOLATILE_STATUS_RECHARGE);
+        sBattleUser->immobilizedReason |= IMMOBILIZED_TRAPPING;
         rng = Battle_Random() & 3;
         if (rng >= 2) {
             rng = Battle_Random() & 3;
         }
-        sBattleUser->isTrapped = rng + 1;
+        sBattleUser->effectTurnsLeft = rng + 1;
     }
 }
 
+/* Set Mist on the user, or queue failure when it is already active. */
 void BattleEffect_Mist(void) {
-    if (sBattleUser->statusCondition & STATUS_MIST) {
+    if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_MIST) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
         // But, it failed!
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x4B);
         return;
     }
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
-    sBattleUser->statusCondition |= STATUS_MIST;
+    sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_MIST;
     Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x4A);
 }
 
+/* Set Focus Energy on the user, or queue failure when it is already active. */
 void BattleEffect_FocusEnergy(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
-    if (sBattleUser->statusCondition & STATUS_FOCUS_ENERGY) {
+    if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_FOCUS_ENERGY) {
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x49);
         return;
     }
-    sBattleUser->statusCondition |= STATUS_FOCUS_ENERGY;
+    sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_FOCUS_ENERGY;
     Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x48);
 }
 
+/* Stage recoil HP loss: half damage for Struggle, otherwise one quarter, at least one HP. */
 void BattleEffect_Recoil(void) {
     s32 recoil_amount;
 
@@ -866,27 +890,29 @@ void BattleEffect_Recoil(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_RECOIL;
 }
 
+/* Roll secondary confusion and initialize its duration unless Substitute blocks it. */
 void BattleEffect_ConfuseChance(void) {
-    if (!(sBattleTarget->statusCondition & STATUS_BURN) && (Battle_Random() < 26) && !(sBattleTarget->immobilizedReason & IMMOBILIZED_CONFUSED)) {
+    if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) && (Battle_Random() < 26) && !(sBattleTarget->immobilizedReason & IMMOBILIZED_CONFUSED)) {
         sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_SECONDARY;
         sStatCanBeChangedFurther = 0;
         sBattleTarget->immobilizedReason |= IMMOBILIZED_CONFUSED;
-        sBattleTarget->confusedCounter = (Battle_Random() & 3) + 2;
+        sBattleTarget->confusionTurnsLeft = (Battle_Random() & 3) + 2;
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x46);
     }
 }
 
+/* Apply direct confusion after move-success checks, or queue its failure response. */
 void BattleEffect_Confuse(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     sConfused = 0;
 
-    if (!(sBattleTarget->statusCondition & STATUS_BURN)) {
+    if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE)) {
         HandleMoveEffectFlags();
         if ((sBattleMoveFailed == 0) && !(sBattleTarget->immobilizedReason & IMMOBILIZED_CONFUSED)) {
             sConfused = 1;
             sBattleTarget->immobilizedReason |= IMMOBILIZED_CONFUSED;
-            sBattleTarget->confusedCounter = (Battle_Random() & 3) + 2;
+            sBattleTarget->confusionTurnsLeft = (Battle_Random() & 3) + 2;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x45);
             return;
@@ -899,6 +925,7 @@ void BattleEffect_Confuse(void) {
     }
 }
 
+/* Apply paralysis and its Speed cut, with the Electric/Ground immunity check. */
 void BattleEffect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     if (sBattleTarget->pendingStatusCondition == 0) {
@@ -926,11 +953,12 @@ void BattleEffect_Paralyze(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x41);
 }
 
+/* Spend one quarter of maximum HP to create a Substitute when enough HP remains. */
 void BattleEffect_Substitute(void) {
     s32 substitute_health;
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
-    if (sBattleUser->statusCondition & STATUS_BURN) {
+    if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) {
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_EXISTS);
         return;
@@ -945,19 +973,22 @@ void BattleEffect_Substitute(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SUBSTITUTE;
     sBattleUser->substituteHp = substitute_health;
     sBattleUser->displayHp -= substitute_health;
-    sBattleUser->statusCondition |= STATUS_BURN;
+    sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_SUBSTITUTE;
     Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_CREATED);
 }
 
+/* Mark the user as needing a recharge turn; Battle_CheckMonCanAct consumes the flag. */
 void BattleEffect_Recharge(void) {
-    sBattleUser->statusCondition |= STATUS_FREEZE;
+    sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_RECHARGE;
 }
 
+/* Enable Rage's move lock and subsequent Attack boosts. */
 void BattleEffect_Rage(void) {
-    sBattleUser->statusCondition |= STATUS_PARALYSIS;
+    sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_RAGE;
 }
 
+/* Replace the selected move slot with a randomly chosen nonempty target move. */
 void BattleEffect_Mimic(void) {
     ActivePokemonState* sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     s32 var_t0;
@@ -985,12 +1016,13 @@ void BattleEffect_Mimic(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3F);
 }
 
+/* Seed a non-Grass target after move-success checks unless already seeded. */
 void BattleEffect_LeechSeed(void) {
     HandleMoveEffectFlags();
 
     if ((sBattleMoveFailed == 0) && (sBattleTarget->types[0] != GRASS) && (sBattleTarget->types[1] != GRASS)) {
-        if (!(sBattleTarget->statusCondition & STATUS_LEECH_SEED)) {
-            sBattleTarget->statusCondition |= STATUS_LEECH_SEED;
+        if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_LEECH_SEED)) {
+            sBattleTarget->volatileStatusFlags |= VOLATILE_STATUS_LEECH_SEED;
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3E);
             return;
@@ -1002,11 +1034,13 @@ void BattleEffect_LeechSeed(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3D);
 }
 
+/* Select the self-target presentation and queue Splash's no-effect message. */
 void BattleEffect_Splash(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3C);
 }
 
+/* Disable a random nonempty target move, packing its slot and duration into one byte. */
 void BattleEffect_Disable(void) {
     s32 move_slot_to_disable;
     s32 disable_duration;
@@ -1015,12 +1049,12 @@ void BattleEffect_Disable(void) {
 
     if (sBattleMoveFailed == 0) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_DISABLE;
-        if (sBattleTarget->movesDisabled == 0) {
+        if (sBattleTarget->disabledMoveState == 0) {
             do {
                 move_slot_to_disable = Battle_Random() & 3;
             } while (sBattleTarget->moves[move_slot_to_disable] == 0);
             disable_duration = (Battle_Random() & 7) + 1;
-            sBattleTarget->movesDisabled = (move_slot_to_disable * 0x10) + disable_duration;
+            sBattleTarget->disabledMoveState = (move_slot_to_disable * 0x10) + disable_duration;
             sBattleTarget->disabledMove = sBattleTarget->moves[move_slot_to_disable];
             Text_SetStringToken(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->disabledMove - 1));
             Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3B);
@@ -1032,10 +1066,12 @@ void BattleEffect_Disable(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3A);
 }
 
+/* Queue Pay Day's effect message; this handler does not update a money total. */
 void BattleEffect_PayDay(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x39);
 }
 
+/* Copy both target types to the user unless the target is semi-invulnerable. */
 void BattleEffect_Conversion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (!(sBattleTarget->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE)) {
@@ -1048,6 +1084,7 @@ void BattleEffect_Conversion(void) {
     }
 }
 
+/* Reset stages/stats on both sides and clear the rule-dependent status/effect subsets. */
 void BattleEffect_Haze(void) {
     s32 i;
     BattleMonRuntime* pokemon_runtime1 = &sActivePokemon[0]->state.runtime;
@@ -1078,20 +1115,21 @@ void BattleEffect_Haze(void) {
     if (sBattleMechanicsSetting[0] == 1) { sBattleUser->pendingStatusCondition = 0; }
     // clang-format on
 
-    pokemon_runtime1->movesDisabled = pokemon_runtime2->movesDisabled = 0;
+    pokemon_runtime1->disabledMoveState = pokemon_runtime2->disabledMoveState = 0;
     pokemon_runtime1->disabledMove = pokemon_runtime2->disabledMove = 0;
     pokemon_runtime1->immobilizedReason &= ~IMMOBILIZED_CONFUSED;
-    pokemon_runtime1->statusCondition &= (STATUS_POISON | STATUS_FREEZE | STATUS_BURN | STATUS_PARALYSIS);
-    pokemon_runtime1->uniqueStatusFlags &= 8;
+    pokemon_runtime1->volatileStatusFlags &= (0x08 | VOLATILE_STATUS_RECHARGE | VOLATILE_STATUS_SUBSTITUTE | VOLATILE_STATUS_RAGE);
+    pokemon_runtime1->uniqueStatusFlags &= UNIQUE_STATUS_TRANSFORM;
     pokemon_runtime2->immobilizedReason &= ~IMMOBILIZED_CONFUSED;
-    pokemon_runtime2->statusCondition &= (STATUS_POISON | STATUS_FREEZE | STATUS_BURN | STATUS_PARALYSIS);
-    pokemon_runtime2->uniqueStatusFlags &= 8;
+    pokemon_runtime2->volatileStatusFlags &= (0x08 | VOLATILE_STATUS_RECHARGE | VOLATILE_STATUS_SUBSTITUTE | VOLATILE_STATUS_RAGE);
+    pokemon_runtime2->uniqueStatusFlags &= UNIQUE_STATUS_TRANSFORM;
     sBattleUser->scaleResize = 0;
     sBattleTarget->scaleResize = 0;
 
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x36);
 }
 
+/* Heal half maximum HP, or apply Rest's sleep and full heal, capped at maximum HP. */
 void BattleEffect_Heal(void) {
     u8 pending_status_condition;
     ActivePokemonState* state;
@@ -1110,7 +1148,7 @@ void BattleEffect_Heal(void) {
 
             if (pending_status_condition != 0) {
                 if (sBattleMechanicsSetting[0] == 1) {
-                    sBattleUser->uniqueStatusFlags &= ~1;
+                    sBattleUser->uniqueStatusFlags &= ~UNIQUE_STATUS_TOXIC;
                     BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedAttack, sBattleUser->unmodifiedAttack, sBattleUser->statChanges[0]);
                     BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedSpeed, sBattleUser->unmodifiedSpeed, sBattleUser->statChanges[2]);
                 }
@@ -1139,6 +1177,7 @@ void BattleEffect_Heal(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x32);
 }
 
+/* Copy the target's battle form, moves, stats and stages while preserving the user's HP. */
 void BattleEffect_Transform(void) {
     s32 i;
     ActivePokemonState* pokemon1_state;
@@ -1157,7 +1196,7 @@ void BattleEffect_Transform(void) {
     }
 
     user = sBattleUser;
-    if (!(user->immobilizedReason & STATUS_PARALYSIS) &&
+    if (!(user->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) &&
         ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleTarget->moves[0] != TRANSFORM) || (sBattleTarget->moves[1] != 0))) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TRANSFORM;
         Text_SetStringToken(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
@@ -1204,6 +1243,7 @@ void BattleEffect_Transform(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_FAILED);
 }
 
+/* Set the appropriate independent screen bit, or queue the already-active response. */
 void BattleEffect_ReflectLightScreen(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (sBattleUser->moveCache.effect == EFFECT_LIGHT_SCREEN) {
@@ -1223,6 +1263,7 @@ void BattleEffect_ReflectLightScreen(void) {
     }
 }
 
+/* Dispatch the cached effect through its 1-based handler slot; NULL slots do nothing. */
 void BattleEffect_RunMoveEffect(void) {
     BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     s32 idx = runtime->moveCache.effect;
@@ -1232,6 +1273,7 @@ void BattleEffect_RunMoveEffect(void) {
     }
 }
 
+/* Entry point used by the turn engine to invoke the cached move-effect handler. */
 void BattleEffect_ExecuteMoveEffect(void) {
     BattleEffect_RunMoveEffect();
 }

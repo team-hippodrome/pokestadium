@@ -1,3 +1,6 @@
+#ifndef POKEMON_TYPES_H
+#define POKEMON_TYPES_H
+
 // Physical Types
 #define NORMAL 0x00
 #define FIGHTING 0x01
@@ -19,3 +22,5 @@
 #define STEEL 0x09
 #define DARK 0x1B
 #define FAIRY 0x1C
+
+#endif /* POKEMON_TYPES_H */
