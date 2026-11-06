@@ -55,7 +55,7 @@ typedef struct ActivePokemonState {
     /* 0x9C */ unk_D_84390010_654_09C unk_9C;
     /* 0xAC */ unk_D_84390010_654_0AC unk_AC;
     /* 0xBC */ s16 model;
-    /* 0xBE */ s16 unk_BE;
+    /* 0xBE */ s16 transformedIntoSpecies;
     /* 0xC0 */ char unkC0[1];
     /* 0xC1 */ u8 moveSlotIllegality[4];
     /* 0xC8 */ Controller* controller;
@@ -213,7 +213,7 @@ typedef struct PokemonBattleCues {
 #define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
 
 // BattleScene.moveEffectKind selects presentation, not moveCache.unk_01's
-// gameplay effect. Producers: Battle_Effect_* and Battle_CheckMonCanAct.
+// gameplay effect. Producers: BattleEffect_* and Battle_CheckMonCanAct.
 #define MOVE_PRESENTATION_NORMAL 0
 #define MOVE_PRESENTATION_SELF_TARGET 7
 #define MOVE_PRESENTATION_FAILED 8
@@ -279,7 +279,7 @@ typedef struct PokemonBattleCues {
 #define BATTLE_ACTION_SECOND 1
 #define BATTLE_ACTION_COMPLETE 3
 
-// Producers: Battle_ApplyDamageAnimation, ProcessBattleTurn and secondary effects.
+// Producers: Battle_ResolveMoveDamage, ProcessBattleTurn and secondary effects.
 #define BATTLE_HIT_REACTION_NONE 0
 #define BATTLE_HIT_REACTION_MULTI_HIT 1
 #define BATTLE_HIT_REACTION_SUBSTITUTE 2
@@ -1037,8 +1037,8 @@ typedef struct unk_D_843C3508 {
 } unk_D_843C3508; // size = 0x374
 
 typedef struct StatStageMultiplier {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x00 */ u8 multiplier;
+    /* 0x01 */ u8 divisor;
 } StatStageMultiplier; // size = 0x2
 
 typedef struct TypeEffectivenessEntry {
@@ -1228,8 +1228,8 @@ extern func_D_84390320 gMoveAnimEffectEndDrawFuncs[];
 extern Gfx D_84389AE0[];
 extern u32 D_8438A648[];
 extern Gfx D_8438A980[];
-extern u8 D_8438AC60[];
-extern StatStageMultiplier gStatStageMultipliers[];
+extern u8 sBattleMechanicsSetting[];
+extern StatStageMultiplier sStatStageMultipliers[];
 extern u8 D_8438ACD4[];
 extern u8 sTypeEffects[];
 extern u8* sSide1PokemonThumbnailImage;
@@ -3390,7 +3390,7 @@ u8 Battle_Random(void);
 u8 Battle_RandomAccuracy(void);
 void ShowDamageMessage(s32 arg0, s32 arg1);
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1);
-void Battle_ResetEntityState(ActivePokemon* active_pokemon);
+void Battle_QueueDamageSummary(ActivePokemon* active_pokemon);
 void Battle_ApplyDamageRandomFactor(void);
 u16 Battle_DetermineMoveOrder(ActivePokemon* arg0, ActivePokemon* arg1);
 s32 IsByteInArray(u8 arg0, u8* arg1, s32 arg2);
@@ -3405,20 +3405,20 @@ void Battle_DecrementPP(s32 arg0);
 void ApplyAccuracyStageMultipliers(void);
 void MarkAttackFailed(void);
 void HandleMoveEffectFlags(void);
-void Battle_ApplyAnimStateEffects(ActivePokemon* active_pokemon);
+void Battle_StoreMajorStatus(ActivePokemon* active_pokemon);
 void ApplyParalysisSpeedCut(ActivePokemon* active_pokemon);
 void ApplyBurnAttackCut(ActivePokemon* active_pokemon);
 void Battle_InitPokemonRuntimeState(ActivePokemon* active_pokemon);
 s32 Battle_IsPartyMemberAlive(ActivePokemon* active_pokemon);
 void func_84370E70(void);
 void func_84370E78(void);
-void Battle_ExecuteMoveAnimation(void);
+void Battle_LoadMoveCache(void);
 void Battle_ApplyRageContinuation(void);
-void Battle_UpdateBattleLog(void);
-void Battle_PlayMoveSound(void);
-void Battle_ApplyDamageAnimation(void);
+void Battle_QueueEffectivenessMessage(void);
+void Battle_QueueCriticalHitMessage(void);
+void Battle_ResolveMoveDamage(void);
 void Battle_QueueMoveFailureAndApplyRecoil(void);
-void Battle_IncrementMoveUsage(void);
+void Battle_RefundSelectedMovePP(void);
 s32 Battle_Effect_Metronome(void);
 void Battle_ApplyPoisonOrBurnDamage(void);
 void Battle_ApplyLeechSeedDamage(void);
@@ -3431,54 +3431,54 @@ s32 Battle_CheckCriticalHit(void);
 s32 Battle_CheckMonCanAct(void);
 void ProcessBattleTurn(void);
 void Battle_HandleFaint(ActivePokemon* active_pokemon);
-void Battle_CheckAllBroughtFainted_HP(ActivePokemon* active_pokemon);
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* active_pokemon);
-void Battle_CheckAllBroughtFainted_PP(ActivePokemon* active_pokemon);
-void Battle_CheckAllBroughtFainted_Level(ActivePokemon* active_pokemon);
+void Battle_CheckDefeatAtStatusHp(ActivePokemon* active_pokemon);
+void Battle_CheckDefeatAtSeedHp(ActivePokemon* active_pokemon);
+void Battle_CheckDefeatAtCurrentHp(ActivePokemon* active_pokemon);
+void Battle_CheckDefeatAtDisplayHp(ActivePokemon* active_pokemon);
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* active_pokemon);
 s32 Battle_CheckFaintAfterMove(void);
 void Battle_ResolveMonAction(void);
 void BeginBattleForEntity(ActivePokemon* active_pokemon);
 
 //@src/fragments/battle_engine/battle_engine_move_mechanics.c
-u16 Battle_ApplyStatStageMultiplier(u16* arg0, u16 arg1, u8 arg2);
-void Battle_Effect_Sleep(void);
-void Battle_Effect_Poison(void);
-void Battle_Effect_DrainHP(void);
-void Battle_Effect_Explosion(void);
-void Battle_Effect_SecondaryStatusChance(void);
-void Battle_ApplyRageStatBoost(void);
-void Battle_Effect_RaiseOwnStat(void);
-void Battle_Effect_LowerStat(void);
-void Battle_Effect_Bide(void);
-void Battle_Effect_Thrash(void);
-void Battle_Effect_ForceSwitchOrFlee(void);
-void Battle_Effect_MultiHit(void);
-void Battle_Effect_Flinch(void);
-void Battle_Effect_OHKO(void);
-void Battle_Effect_TwoTurnMove(void);
-void Battle_Effect_Trap(void);
-void Battle_Effect_Mist(void);
-void Battle_Effect_FocusEnergy(void);
-void Battle_Effect_Recoil(void);
-void Battle_Effect_ConfuseChance(void);
-void Battle_Effect_Confuse(void);
-void Battle_Effect_Paralyze(void);
-void Battle_Effect_Substitute(void);
-void Battle_Effect_Recharge(void);
-void Battle_Effect_Rage(void);
-void Battle_Effect_Mimic(void);
-void Battle_Effect_LeechSeed(void);
-void Battle_Effect_Splash(void);
-void Battle_Effect_Disable(void);
-void Battle_Effect_PayDay(void);
-void Battle_Effect_Conversion(void);
-void Battle_Effect_Haze(void);
-void Battle_Effect_Heal(void);
-void Battle_Effect_Transform(void);
-void Battle_Effect_ReflectLightScreen(void);
-void Battle_RunMoveEffect(void);
-void Battle_ExecuteMoveEffect(void);
+u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 base_stat, u8 stat_stage);
+void BattleEffect_Sleep(void);
+void BattleEffect_Poison(void);
+void BattleEffect_DrainHP(void);
+void BattleEffect_Explosion(void);
+void BattleEffect_SecondaryStatusChance(void);
+void BattleEffect_ApplyStatBoost(void);
+void BattleEffect_RaiseOwnStat(void);
+void BattleEffect_LowerStat(void);
+void BattleEffect_Bide(void);
+void BattleEffect_Thrash(void);
+void BattleEffect_WildBattleOnlyMoves(void);
+void BattleEffect_MultiHit(void);
+void BattleEffect_Flinch(void);
+void BattleEffect_OHKO(void);
+void BattleEffect_TwoTurnMove(void);
+void BattleEffect_Trap(void);
+void BattleEffect_Mist(void);
+void BattleEffect_FocusEnergy(void);
+void BattleEffect_Recoil(void);
+void BattleEffect_ConfuseChance(void);
+void BattleEffect_Confuse(void);
+void BattleEffect_Paralyze(void);
+void BattleEffect_Substitute(void);
+void BattleEffect_Recharge(void);
+void BattleEffect_Rage(void);
+void BattleEffect_Mimic(void);
+void BattleEffect_LeechSeed(void);
+void BattleEffect_Splash(void);
+void BattleEffect_Disable(void);
+void BattleEffect_PayDay(void);
+void BattleEffect_Conversion(void);
+void BattleEffect_Haze(void);
+void BattleEffect_Heal(void);
+void BattleEffect_Transform(void);
+void BattleEffect_ReflectLightScreen(void);
+void BattleEffect_RunMoveEffect(void);
+void BattleEffect_ExecuteMoveEffect(void);
 
 //@src/fragments/battle_engine/battle_engine_com_decision_logic.c
 void BattleAI_LoadConfiguration(s32 arg0, u32 arg1);

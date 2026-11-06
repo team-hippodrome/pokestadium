@@ -256,11 +256,11 @@ void BattleScene_SyncActiveHpToPartyState(void) {
     pokemon2 = &sActivePokemon[1]->teamRoster->pokemonPicked[state2->rosterIndex];
 
     if (D_84390288 != 0) {
-        sCurrentPokemonHp[0] = runtime1->displayHp = runtime1->hp;
-        sCurrentPokemonHp[1] = runtime2->displayHp = runtime2->hp;
+        sCurrentPokemonHp[0] = runtime1->displayHp = runtime1->maxHp;
+        sCurrentPokemonHp[1] = runtime2->displayHp = runtime2->maxHp;
 
-        pokemon1->hp = runtime1->hp;
-        pokemon2->hp = runtime2->hp;
+        pokemon1->hp = runtime1->maxHp;
+        pokemon2->hp = runtime2->maxHp;
     }
 }
 
@@ -274,9 +274,9 @@ s32 BattleScene_SelectFallbackWhenNoUsableMoves(ActivePokemon* pokemon) {
     runtime = &pokemon->state.runtime;
     num_usable_moves = 0;
 
-    if (pokemon->state.runtime.movesDisabled != 0) {
+    if (pokemon->state.runtime.disabledMoveState != 0) {
         for (i = 0; i < 4; i++) {
-            if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
+            if (((runtime->disabledMoveState >> 4) != i) && (runtime->moves[i] != 0)) {
                 num_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
@@ -304,7 +304,7 @@ s32 BattleScene_IsMoveUnavailable(ActivePokemon* pokemon, s32 move) {
         return 1;
     }
 
-    if ((runtime->movesDisabled & 0xF) && (move == (runtime->movesDisabled >> 4))) {
+    if ((runtime->disabledMoveState & 0xF) && (move == (runtime->disabledMoveState >> 4))) {
         return 1;
     }
 
@@ -401,9 +401,9 @@ s32 BattleScene_CpuHasNoUsableMoves(ActivePokemon* pokemon) {
     s32 i;
     s32 has_usable_moves = 0;
 
-    if (runtime->movesDisabled != 0) {
+    if (runtime->disabledMoveState != 0) {
         for (i = 0; i < 4; i++) {
-            if (((runtime->movesDisabled >> 4) != i) && (runtime->moves[i] != 0)) {
+            if (((runtime->disabledMoveState >> 4) != i) && (runtime->moves[i] != 0)) {
                 has_usable_moves |= runtime->pp[i] & 0x3F;
             }
         }
@@ -593,7 +593,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* pokemon1, ActivePokemon* pokemon
         return 0;
     }
 
-    if (!(runtime1->unk_4D & 0x60)) {
+    if (!(runtime1->volatileStatusFlags & 0x60)) {
         runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
 
@@ -613,7 +613,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* pokemon1, ActivePokemon* pokemon
                 return 0;
             }
 
-            if (!(runtime1->unk_15 & 0x27)) {
+            if (!(runtime1->pendingStatusCondition & 0x27)) {
                 if (!(runtime1->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
                     if (runtime2->immobilizedReason & IMMOBILIZED_TRAPPING) {
                         BattleScene_CompleteCpuMoveAction(pokemon1, pokemon2);
@@ -892,8 +892,8 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* pokemon) {
     controller = pokemon->state.controller;
     num_usable_moves = 0;
 
-    if (runtime->movesDisabled != 0) {
-        temp_a1 = runtime->movesDisabled >> 4;
+    if (runtime->disabledMoveState != 0) {
+        temp_a1 = runtime->disabledMoveState >> 4;
         for (i = 0; i < 4; i++) {
             if ((temp_a1 != i) && (runtime->moves[i] != 0)) {
                 num_usable_moves |= runtime->pp[i] & 0x3F;
@@ -941,7 +941,7 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* pokemon) {
         return 1;
     }
 
-    if ((runtime->movesDisabled & 0xF) && (state->moveIndex == (runtime->movesDisabled >> 4))) {
+    if ((runtime->disabledMoveState & 0xF) && (state->moveIndex == (runtime->disabledMoveState >> 4))) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(pokemon);
         BattleScene_BuildParticipantMessage(pokemon, 2);
@@ -1192,7 +1192,7 @@ void BattleScene_CheckForcedActionCondition(ActivePokemon* pokemon1, ActivePokem
     BattleMonRuntime* runtime1 = &pokemon1->state.runtime;
     BattleMonRuntime* runtime2 = &pokemon2->state.runtime;
 
-    if (!(pokemon1->state.runtime.unk_4D & 0x60)) {
+    if (!(pokemon1->state.runtime.volatileStatusFlags & 0x60)) {
         runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
         if (runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED) {
@@ -1262,12 +1262,12 @@ void BattleScene_CollectPlayerAction(ActivePokemon* pokemon1, ActivePokemon* pok
     BattleMonRuntime* runtime2 = &pokemon2->state.runtime;
 
     if (BattleScene_HandlePlayerForcedActionState(pokemon1, pokemon2) == 0) {
-        if (!(runtime1->unk_4D & 0x60)) {
+        if (!(runtime1->volatileStatusFlags & 0x60)) {
             runtime1->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
             runtime2->immobilizedReason &= ~IMMOBILIZED_FLINCHED;
             if (!(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
                 if (BattleScene_HandlePlayerActionInput(pokemon1) == 0) {
-                    if (!(runtime1->unk_15 & 0x27)) {
+                    if (!(runtime1->pendingStatusCondition & 0x27)) {
                         if (!(runtime1->immobilizedReason & (IMMOBILIZED_BIDING | IMMOBILIZED_TRAPPING))) {
                             if (runtime2->immobilizedReason & IMMOBILIZED_TRAPPING) {
                                 BattleScene_HandlePlayerMoveSelectionLocked(pokemon1, pokemon1->state.controller);
@@ -1337,12 +1337,12 @@ void BattleScene_CollectActions(void) {
             Battle_StartTurn();
         }
     } else {
-        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->unk_4D & 0x60) &&
+        if (!(sActivePokemon[0]->teamRoster->isHuman & 2) && !(runtime1->volatileStatusFlags & 0x60) &&
             !(runtime1->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(0);
         }
 
-        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->unk_4D & 0x60) &&
+        if (!(sActivePokemon[1]->teamRoster->isHuman & 2) && !(runtime2->volatileStatusFlags & 0x60) &&
             !(runtime2->immobilizedReason & IMMOBILIZED_ACTION_LOCKED)) {
             BattleScene_HandleActionSelectionCancel(1);
         }

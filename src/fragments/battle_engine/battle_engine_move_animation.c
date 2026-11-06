@@ -691,10 +691,10 @@ void BattleScene_TickRow3PlayMoveEffectScript(ActivePokemon* active_pokemon) {
                (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
         if (sBattleScene.scene->moveEffectKind == MOVE_PRESENTATION_CONFUSION_SELF_HIT) {
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
-        } else if (pokemon_runtime->moveCache.lastMove == DIG) {
+        } else if (pokemon_runtime->moveCache.moveId == DIG) {
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         } else {
-            if (pokemon_runtime->moveCache.lastMove == WITHDRAW) {
+            if (pokemon_runtime->moveCache.moveId == WITHDRAW) {
                 // Special Withdraw Animations
                 if ((species != WARTORTLE_OB1) && (species != BLASTOISE_OB1) && (species != CLOYSTER_OB1) &&
                     (species != SQUIRTLE_OB1)) {
@@ -702,15 +702,15 @@ void BattleScene_TickRow3PlayMoveEffectScript(ActivePokemon* active_pokemon) {
                     BattleAnim_PlayMoveEffectScript(active_pokemon, pokemon_runtime->usedMove);
                 }
             } else {
-                if (pokemon_runtime->moveCache.lastMove == SEISMIC_TOSS) {
+                if (pokemon_runtime->moveCache.moveId == SEISMIC_TOSS) {
                     BattleScene_SetParticipantModelTransform(active_pokemon, 8, 0);
-                } else if (pokemon_runtime->moveCache.lastMove == SURF) {
+                } else if (pokemon_runtime->moveCache.moveId == SURF) {
                     BattleScene_SetParticipantModelTransform(active_pokemon, 10, 0);
-                } else if (pokemon_runtime->moveCache.lastMove == MEDITATE) {
+                } else if (pokemon_runtime->moveCache.moveId == MEDITATE) {
                     BattleScene_SetParticipantModelTransform(active_pokemon, 13, 0);
-                } else if (pokemon_runtime->moveCache.lastMove == WATERFALL) {
+                } else if (pokemon_runtime->moveCache.moveId == WATERFALL) {
                     BattleScene_SetParticipantModelTransform(active_pokemon, 14, 0);
-                } else if (pokemon_runtime->moveCache.lastMove == MINIMIZE) {
+                } else if (pokemon_runtime->moveCache.moveId == MINIMIZE) {
                     BattleScene_SetParticipantModelTransform(active_pokemon, 9, 0);
                 } else {
                     BattleScene_SetParticipantModelTransform(active_pokemon, sCurrentAnimation->flags1, 0);
@@ -914,9 +914,9 @@ void BattleScene_TickRow19PlayMoveEffectScript(ActivePokemon* active_pokemon) {
             BattleAnim_PlayMoveEffectScript(active_pokemon, runtime->usedMove);
         }
 
-        if (runtime->moveCache.lastMove == SEISMIC_TOSS) {
+        if (runtime->moveCache.moveId == SEISMIC_TOSS) {
             BattleScene_SetParticipantModelTransform(active_pokemon, 8, 0);
-        } else if (runtime->moveCache.lastMove == SURF) {
+        } else if (runtime->moveCache.moveId == SURF) {
             BattleScene_SetParticipantModelTransform(active_pokemon, 10, 0);
         } else {
             BattleScene_SetParticipantModelTransform(active_pokemon, sCurrentAnimation->flags1, 0);
@@ -1000,7 +1000,7 @@ void BattleScene_StartHitReactionAnim(ActivePokemon* active_pokemon) {
         !(target_state->flags & ACTIVE_FREEZE)) {
         // no battle reaction for weak hits
         if (((sTypeEffectiveness < TYPE_EFFECTIVENESS_NEUTRAL) || (sBattleMoveFailed != 0)) &&
-            ((runtime->unk_15 & 0x20) == 0)) {
+            ((runtime->pendingStatusCondition & 0x20) == 0)) {
             sCurrentAnimation = &sSideBattleCues[target_side]->idleCues;
             if (target_state->flags & ACTIVE_AIRBORNE) {
                 sCurrentAnimation = &sSideBattleCues[target_side]->flyingIdleCue;
@@ -1027,8 +1027,8 @@ void BattleScene_StartHitReactionAnim(ActivePokemon* active_pokemon) {
         ModelAnim_SetAnimation(&sActivePokemon[target_side]->displayObject, sCurrentAnimation->id);
 
         // These moves distort the target's body a bit
-        if ((runtime->moveCache.lastMove == STOMP) || (runtime->moveCache.lastMove == BODY_SLAM) ||
-            (runtime->moveCache.lastMove == SEISMIC_TOSS)) {
+        if ((runtime->moveCache.moveId == STOMP) || (runtime->moveCache.moveId == BODY_SLAM) ||
+            (runtime->moveCache.moveId == SEISMIC_TOSS)) {
             BattleScene_SetParticipantModelTransform(sActivePokemon[target_side], 0x0F, 0);
         }
     }
@@ -1051,15 +1051,15 @@ void BattleScene_HandleLassoMoves(ActivePokemon* active_pokemon) {
     if (sActivePokemon[side == 0]->animationTimer == (sCurrentAnimation->endFrame + 1)) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
             BattleAnim_CleanupEffects(1);
-            if (runtime->moveCache.lastMove == STRING_SHOT) {
+            if (runtime->moveCache.moveId == STRING_SHOT) {
                 if ((sStatCanBeChangedFurther != 0) && (sConfused != 0)) {
                     BattleAnim_PlayMoveEffectEnd(sActivePokemon[side == 0], runtime->usedMove);
                     BattleScene_SetParticipantModelTransform(sActivePokemon[side == 0], 16, 0);
                 }
             } else {
                 BattleAnim_PlayMoveEffectEnd(sActivePokemon[side == 0], runtime->usedMove);
-                if ((runtime->moveCache.lastMove == BIND) || (runtime->moveCache.lastMove == WRAP) ||
-                    (runtime->moveCache.lastMove == CONSTRICT)) {
+                if ((runtime->moveCache.moveId == BIND) || (runtime->moveCache.moveId == WRAP) ||
+                    (runtime->moveCache.moveId == CONSTRICT)) {
                     BattleScene_SetParticipantModelTransform(sActivePokemon[side == 0], 16, 0);
                 }
             }
@@ -1498,11 +1498,11 @@ void BattleScene_Row12Slot1CameraCleanup(ActivePokemon* active_pokemon) {
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
 
-    if (runtime->unk_15 & 8) {
+    if (runtime->pendingStatusCondition & 8) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 20);
     }
 
-    if (runtime->unk_15 & 0x10) {
+    if (runtime->pendingStatusCondition & 0x10) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 33);
     }
 
@@ -1644,8 +1644,8 @@ void BattleScene_EnterRow11StartHitReactionAnim(ActivePokemon* active_pokemon) {
         ModelAnim_SetFrame(&sActivePokemon[target_side]->displayObject, 0);
         ModelAnim_SetAnimation(&sActivePokemon[target_side]->displayObject, sCurrentAnimation->id);
 
-        if ((runtime->moveCache.lastMove == STOMP) || (runtime->moveCache.lastMove == BODY_SLAM) ||
-            (runtime->moveCache.lastMove == SEISMIC_TOSS)) {
+        if ((runtime->moveCache.moveId == STOMP) || (runtime->moveCache.moveId == BODY_SLAM) ||
+            (runtime->moveCache.moveId == SEISMIC_TOSS)) {
             BattleScene_SetParticipantModelTransform(sActivePokemon[target_side], 15, 0);
         }
     }

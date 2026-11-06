@@ -4,12 +4,12 @@
 #include "global.h"
 
 typedef struct CachedMoveData {
-    /* 0x00 */ u8 lastMove;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x00 */ u8 moveId;
+    /* 0x01 */ u8 effect;
+    /* 0x02 */ u8 power;
+    /* 0x03 */ u8 type;
+    /* 0x04 */ u8 accuracy;
+    /* 0x05 */ u8 pp;
 } CachedMoveData; // size = 0x6
 
 typedef struct BattleMonRuntime {
@@ -23,46 +23,47 @@ typedef struct BattleMonRuntime {
     /* 0x0C */ u16 displayHp;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u16 unk_10;
-    /* 0x12 */ u16 unk_12;
+    /* 0x12 */ u16 currentHp;
     /* 0x14 */ u8 unk_14;
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ u8 roster[9];
+    /* 0x15 */ u8 pendingStatusCondition;
+    /* 0x16 */ u8 roster[6];
+    /* 0x1C */ u8 types[2];
+    /* 0x1E */ u8 unk_1E;
     /* 0x1F */ u8 moves[4];
     /* 0x23 */ char unk23[0x1];
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ u8 unk_26;
-    /* 0x28 */ u16 hp;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 speed;
-    /* 0x30 */ u16 unk_30;
+    /* 0x24 */ u16 unk_24; // Packed determinant values; copied by Transform.
+    /* 0x26 */ u8 unk_26; // Level used by damage calculation.
+    /* 0x28 */ u16 maxHp;
+    /* 0x2A */ u16 modifiedAttack;
+    /* 0x2C */ u16 modifiedDefense;
+    /* 0x2E */ u16 modifiedSpeed;
+    /* 0x30 */ u16 modifiedSpecial;
     /* 0x32 */ u8 pp[4];
     /* 0x36 */ u16 unk_36;
-    /* 0x38 */ u16 unk_38;
-    /* 0x3A */ u16 unk_3A;
-    /* 0x3C */ u16 unk_3C;
-    /* 0x3E */ u16 unk_3E;
+    /* 0x38 */ u16 unmodifiedAttack;
+    /* 0x3A */ u16 unmodifiedDefense;
+    /* 0x3C */ u16 unmodifiedSpeed;
+    /* 0x3E */ u16 unmodifiedSpecial;
     /* 0x40 */ char unk40[0x4];
     /* 0x44 */ CachedMoveData moveCache;
     /* 0x4A */ u8 unk_4A;
     /* 0x4B */ u8 unk_4B;
     /* 0x4C */ u8 immobilizedReason;
-    /* 0x4D */ u8 unk_4D;
-    /* 0x4E */ u8 battleStatus3;
-    /* 0x4F */ u8 isTrapped;
-    /* 0x50 */ u8 unk_50;
-    /* 0x51 */ u8 unk_51;
-    /* 0x52 */ u8 movesDisabled;
+    /* 0x4D */ u8 volatileStatusFlags;
+    /* 0x4E */ u8 uniqueStatusFlags;
+    /* 0x4F */ u8 effectTurnsLeft; // Shared by Bide, Thrash, trapping and multi-hit.
+    /* 0x50 */ u8 confusionTurnsLeft;
+    /* 0x51 */ u8 toxicCounter; // Also used by Leech Seed while Toxic is active.
+    /* 0x52 */ u8 disabledMoveState; // High nibble: slot + 1; low nibble: turns left.
     /* 0x53 */ u8 unk_53;
-    /* 0x54 */ u16 unk_54;
+    /* 0x54 */ u16 effectCounter; // Bide damage accumulator or total multi-hit count.
     /* 0x56 */ u8 scaleResize;
-    /* 0x57 */ u8 unk_57;
+    /* 0x57 */ u8 disabledMove;
     /* 0x58 */ u8 lastMove;
-    /* 0x59 */ u8 unk_59;
+    /* 0x59 */ u8 substituteHp;
     /* 0x5A */ u8 usedMove;
     /* 0x5B */ u8 unk_5B;
-    /* 0x5C */ u8 unk_5C[6];
-    /* 0x62 */ char unk62[0x2];
+    /* 0x5C */ u8 statChanges[8]; // Six named stages, then two unnamed entries; 7 = neutral.
 } BattleMonRuntime; // size = 0x64
 
 typedef struct amConfig {

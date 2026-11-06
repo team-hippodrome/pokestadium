@@ -1,0 +1,26 @@
+#ifndef POKEMON_TYPES_H
+#define POKEMON_TYPES_H
+
+// Physical Types
+#define NORMAL 0x00
+#define FIGHTING 0x01
+#define FLYING 0x02
+#define POISON 0x03
+#define GROUND 0x04
+#define ROCK 0x05
+#define BUG 0x07
+#define GHOST 0x08
+// Special Types
+#define FIRE 0x14
+#define WATER 0x15
+#define GRASS 0x16
+#define ELECTRIC 0x17
+#define PSYCHIC 0x18
+#define ICE 0x19
+#define DRAGON 0x1A
+// unused, but could be useful for ports
+#define STEEL 0x09
+#define DARK 0x1B
+#define FAIRY 0x1C
+
+#endif /* POKEMON_TYPES_H */

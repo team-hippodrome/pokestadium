@@ -1206,7 +1206,7 @@ void BattleScene_SetCameraOwnerShot(CameraNode* camera, ActivePokemon* pokemon) 
     sBattleScene.scene->cameraAnchor.x = BattleScene_GetParticipantModelXOffset(pokemon);
     sBattleScene.scene->cameraAnchor.z = 0.0f;
 
-    if (pokemon->state.runtime.moveCache.lastMove == WITHDRAW) {
+    if (pokemon->state.runtime.moveCache.moveId == WITHDRAW) {
         gCameraDistTarget = BattleScene_ScaleCameraDistance(pokemon, 4.5f, 300.0f);
         if (gCameraDistTarget <= 100.0f) {
             gCameraDistTarget = 100.0f;

@@ -1004,7 +1004,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
     BattleHud_DrawBoxBorder(x, y, 199, 56);
 
     for (i = 0; i < 4; i++) {
-        if (runtime->battleStatus3 & 8) {
+        if (runtime->uniqueStatusFlags & 8) {
             moves_max_pp[i] = gMoveData[runtime->moves[i] - 1].pp / 5;
             if (moves_max_pp[i] >= 8) {
                 moves_max_pp[i] = 7;
@@ -1020,7 +1020,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
         }
     }
 
-    if (runtime->battleStatus3 & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if ((runtime->moves[0] != 0) && (runtime->moves[0] < (NUMBER_OF_MOVES_IN_GAME))) {
             move_pp[0] = BattleHud_DrawMovePpTextRTL(x + 82, y + 15, runtime->pp[0], moves_max_pp[0]);
         }
@@ -1064,7 +1064,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    if (runtime->battleStatus3 & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if ((runtime->moves[0] != 0) && (runtime->moves[0] < NUMBER_OF_MOVES_IN_GAME)) {
             Gfx_DrawTextureRgba16(move_pp[0] - 25, y + 14, 32, 9, sTypeLabels[gMoveData[runtime->moves[0] - 1].type],
                                   32, 0);
@@ -1107,7 +1107,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
 
-    if (runtime->battleStatus3 & 8) {
+    if (runtime->uniqueStatusFlags & 8) {
         if ((runtime->moves[0] != 0) && (runtime->moves[0] < NUMBER_OF_MOVES_IN_GAME)) {
             if (active_pokemon->state.moveSlotIllegality[0] == 1) {
                 Gfx_SetEnvColor(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
