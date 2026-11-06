@@ -34,16 +34,16 @@ typedef struct BattleMonRuntime {
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ u8 unk_26;
     /* 0x28 */ u16 hp;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 speed;
-    /* 0x30 */ u16 unk_30;
+    /* 0x2A */ u16 modifiedAttack;
+    /* 0x2C */ u16 modifiedDefense;
+    /* 0x2E */ u16 modifiedSpeed;
+    /* 0x30 */ u16 modifiedSpecial;
     /* 0x32 */ u8 pp[4];
     /* 0x36 */ u16 unk_36;
-    /* 0x38 */ u16 unk_38;
-    /* 0x3A */ u16 unk_3A;
-    /* 0x3C */ u16 unk_3C;
-    /* 0x3E */ u16 unk_3E;
+    /* 0x38 */ u16 unmodifiedAttack;
+    /* 0x3A */ u16 unmodifiedDefense;
+    /* 0x3C */ u16 unmodifiedSpeed;
+    /* 0x3E */ u16 unmodifiedSpecial;
     /* 0x40 */ char unk40[0x4];
     /* 0x44 */ CachedMoveData moveCache;
     /* 0x4A */ u8 unk_4A;
@@ -63,7 +63,7 @@ typedef struct BattleMonRuntime {
     /* 0x59 */ u8 unk_59;
     /* 0x5A */ u8 usedMove;
     /* 0x5B */ u8 unk_5B;
-    /* 0x5C */ u8 unk_5C[6];
+    /* 0x5C */ u8 statChanges[6]; // 7 = no changes
     /* 0x62 */ char unk62[0x2];
 } BattleMonRuntime; // size = 0x64
 

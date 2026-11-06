@@ -2836,14 +2836,14 @@ u32 Battle_EstimateMoveDamage(u32 moveId, BattleMonRuntime* attacker, BattleMonR
         return -2;
     }
 
-    if (attacker->unk_2A != 0) {
-        var_f2 = attacker->unk_2A;
+    if (attacker->modifiedAttack != 0) {
+        var_f2 = attacker->modifiedAttack;
     } else {
         var_f2 = 1.0f;
     }
 
-    if (defender->unk_2C != 0) {
-        var_f0 = defender->unk_2C;
+    if (defender->modifiedDefense != 0) {
+        var_f0 = defender->modifiedDefense;
     } else {
         var_f0 = 1.0f;
     }

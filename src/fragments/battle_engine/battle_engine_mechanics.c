@@ -316,11 +316,11 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
         return 0;
     }
 
-    if (other_runtime->speed < runtime->speed) {
+    if (other_runtime->modifiedspeed < runtime->modifiedspeed) {
         return 0;
     }
 
-    if (runtime->speed < other_runtime->speed) {
+    if (runtime->modifiedspeed < other_runtime->modifiedspeed) {
         return 1;
     }
 
@@ -466,28 +466,28 @@ void InitBattleParameters(void) {
     D_843C4DC6 = sBattleUser->moveCache.power;
     if (D_843C4DC6) {
         if (sBattleUser->moveCache.type < 0x14) {
-            D_843C4DCA = sBattleTarget->unk_2C;
+            D_843C4DCA = sBattleTarget->modifiedDefense;
             if (sBattleTarget->battleStatus3 & 4) {
                 D_843C4DCA *= 2;
             }
 
             if (sBattleCritFlag != 0) {
-                D_843C4DCA = sBattleTarget->unk_3A;
-                D_843C4DC8 = sBattleUser->unk_38;
+                D_843C4DCA = sBattleTarget->unmodifiedDefense;
+                D_843C4DC8 = sBattleUser->attack;
             } else {
-                D_843C4DC8 = sBattleUser->unk_2A;
+                D_843C4DC8 = sBattleUser->modifiedAttack;
             }
         } else {
-            D_843C4DCA = sBattleTarget->unk_30;
+            D_843C4DCA = sBattleTarget->modifiedSpecial;
             if (sBattleTarget->battleStatus3 & 2) {
                 D_843C4DCA *= 2;
             }
 
             if (sBattleCritFlag != 0) {
-                D_843C4DCA = sBattleTarget->unk_3E;
-                D_843C4DC8 = sBattleUser->unk_3E;
+                D_843C4DCA = sBattleTarget->unmodifiedSpecial;
+                D_843C4DC8 = sBattleUser->unmodifiedSpecial;
             } else {
-                D_843C4DC8 = sBattleUser->unk_30;
+                D_843C4DC8 = sBattleUser->modifiedSpecial;
             }
         }
 
@@ -621,8 +621,8 @@ void ApplyAccuracyStageMultipliers(void) {
         var_v0 = sStatStageMultipliers;
     }
 
-    idx = sBattleUser->unk_5C[4];
-    idx2 = sBattleTarget->unk_5C[5];
+    idx = sBattleUser->statChanges[4];
+    idx2 = sBattleTarget->statChanges[5];
     idx2 = 0xE - idx2;
 
     var_a2 = (sBattleUser->moveCache.accuracy * var_v0[idx - 1].multiplier) / var_v0[idx - 1].devisor;
@@ -710,9 +710,9 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
     if (arg0->state.runtime.pendingStatusCondition & 0x40) {
-        temp_v0->speed >>= 2;
-        if (temp_v0->speed == 0) {
-            temp_v0->speed = 1;
+        temp_v0->modifiedspeed >>= 2;
+        if (temp_v0->modifiedspeed == 0) {
+            temp_v0->modifiedspeed = 1;
         }
     }
 }
@@ -721,9 +721,9 @@ void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
     if (arg0->state.runtime.pendingStatusCondition & 0x10) {
-        temp_v0->unk_2A >>= 1;
-        if (temp_v0->unk_2A == 0) {
-            temp_v0->unk_2A = 1;
+        temp_v0->modifiedAttack >>= 1;
+        if (temp_v0->modifiedAttack == 0) {
+            temp_v0->modifiedAttack = 1;
         }
     }
 }
@@ -786,22 +786,22 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp24->unk_26 = sp34->level;
     sp24->hp = sp34->maxHp;
-    sp24->unk_2A = sp34->unk_28;
-    sp24->unk_2C = sp34->unk_2A;
-    sp24->speed = sp34->unk_2C;
-    sp24->unk_30 = sp34->unk_2E;
+    sp24->modifiedAttack = sp34->unk_28;
+    sp24->modifiedDefense = sp34->unk_2A;
+    sp24->modifiedspeed = sp34->unk_2C;
+    sp24->modifiedSpecial = sp34->unk_2E;
 
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
     sp24->unk_36 = gBaseStats[sp24->id].baseHP;
-    sp24->unk_38 = sp34->unk_28;
-    sp24->unk_3A = sp34->unk_2A;
-    sp24->unk_3C = sp34->unk_2C;
-    sp24->unk_3E = sp34->unk_2E;
+    sp24->attack = sp34->unk_28;
+    sp24->unmodifiedDefense = sp34->unk_2A;
+    sp24->unmodifiedSpeed = sp34->unk_2C;
+    sp24->unmodifiedSpecial = sp34->unk_2E;
 
     // clang-format off
-    for (i = 0; i < 8; i++) { sp24->unk_5C[i] = 7; }
+    for (i = 0; i < 8; i++) { sp24->statChanges[i] = 7; }
     // clang-format on
 }
 
@@ -830,7 +830,7 @@ void Battle_ExecuteMoveAnimation(void) {
 void Battle_ApplyRageContinuation(void) {
     BattleMonRuntime* sp24;
 
-    if ((sBattleTarget->statusCondition & 0x40) && ((sBattleTarget->unk_5C[0]) != 0xD)) {
+    if ((sBattleTarget->statusCondition & 0x40) && ((sBattleTarget->statChanges[0]) != 0xD)) {
         sp24 = sBattleUser;
 
         sBattleUser = sBattleTarget;
@@ -1365,8 +1365,8 @@ s32 Battle_CheckMonCanAct(void) {
                 sBattleUser->immobilizedReason &= 0x80;
                 Battle_QueueMessage(sBattleMessageQueues->buffer[4], 0xE);
 
-                sp26 = sBattleTarget->unk_2C;
-                sBattleTarget->unk_2C = sBattleUser->unk_2C;
+                sp26 = sBattleTarget->modifiedDefense;
+                sBattleTarget->modifiedDefense = sBattleUser->modifiedDefense;
                 sp25 = sBattleUser->moveCache.effect;
                 sBattleUser->moveCache.effect = 0;
                 sBattleCritFlag = 0;
@@ -1375,7 +1375,7 @@ s32 Battle_CheckMonCanAct(void) {
                 InitBattleParameters();
                 Battle_CalcDamage();
                 sBattleUser->moveCache.effect = sp25;
-                sBattleTarget->unk_2C = sp26;
+                sBattleTarget->modifiedDefense = sp26;
 
                 sp2C = sBattleUser;
                 sBattleUser = sBattleTarget;

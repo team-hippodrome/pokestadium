@@ -316,16 +316,16 @@ void Battle_Effect_SecondaryStatusChance(void) {
         }
 
         switch (sBattleUser->moveCache.effect) {
-            case 4:
-            case 34:
+            case EFFECT_BURN_10_PERCENT:
+            case EFFECT_BURN_30_PERCENT:
                 sBattleTarget->pendingStatusCondition = STATUS_BURN;
                 ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x76);
                 break;
 
-            case 5:
-            case 35:
+            case EFFECT_FREEZE_10_PERCENT:
+            case EFFECT_FREEZE_30_PERCENT:
                 if (Battle_FreezeClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
                     sBattleTarget->statusCondition &= ~STATUS_FREEZE;
                     sBattleTarget->pendingStatusCondition = 0x20;
@@ -335,9 +335,9 @@ void Battle_Effect_SecondaryStatusChance(void) {
                 }
                 break;
 
-            case 6:
-            case 36:
-                sBattleTarget->pendingStatusCondition = 0x40;
+            case EFFECT_PARALYZE_10_PERCENT:
+            case EFFECT_PARALYZE_30_PERCENT:
+                sBattleTarget->pendingStatusCondition = STATUS_PARALYSIS;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x74);
@@ -346,66 +346,66 @@ void Battle_Effect_SecondaryStatusChance(void) {
     }
 }
 
+// better name: BattleEffect_ApplyStatBoost
 void Battle_ApplyRageStatBoost(void) {
-    s32 sp2C;
-    s32 sp28;
-    s32 sp24;
-    s32 var_a3;
-    u16* sp1C;
-    u16* sp18;
+    s32 attack_modified;
+    s32 speed_modified;
+    s32 move_effect_index;
+    s32 increase_amount;
+    u16* stat_value;
+    u16* unmodified_stat_value;
 
     sBattleScene.scene->rageFollowupPhase = BATTLE_PHASE_RAGE;
 
-    var_a3 = 1;
-    sp24 = sBattleUser->moveCache.effect - 0xA;
-
-    if (sp24 >= 8) {
-        var_a3 = 2;
-        sp24 -= 0x28;
+    increase_amount = 1;
+    move_effect_index = sBattleUser->moveCache.effect - EFFECT_ATTACK_UP1;
+    if (move_effect_index >= (EFFECT_ATTACK_UP1 - 2)) {
+        increase_amount = 2;
+        move_effect_index -= (EFFECT_ATTACK_UP2 - EFFECT_ATTACK_UP1);
     }
 
-    if (sBattleUser->unk_5C[sp24] != 0xD) {
-        sBattleUser->unk_5C[sp24] += var_a3;
-        if (sBattleUser->unk_5C[sp24] >= 0xE) {
-            sBattleUser->unk_5C[var_a3] = 0xD;
+    if (sBattleUser->statChanges[move_effect_index] != 13) {
+        sBattleUser->statChanges[move_effect_index] += increase_amount;
+        if (sBattleUser->statChanges[move_effect_index] >= 14) {
+            sBattleUser->statChanges[increase_amount] = 13;
         }
 
-        sp28 = 0;
-        sp2C = 0;
+        speed_modified = 0;
+        attack_modified = 0;
 
-        if (sp24 < 4) {
-            switch (sp24) {
+        if (move_effect_index < 4) {
+            switch (move_effect_index) {
                 case 0:
-                    sp18 = &sBattleUser->unk_38;
-                    sp1C = &sBattleUser->unk_2A;
-                    sp2C = 1;
+                    unmodified_stat_value = &sBattleUser->unmodifiedAttack;
+                    stat_value = &sBattleUser->modifiedAttack;
+                    attack_modified = 1;
                     break;
 
                 case 1:
-                    sp18 = &sBattleUser->unk_3A;
-                    sp1C = &sBattleUser->unk_2C;
+                    unmodified_stat_value = &sBattleUser->unmodifiedDefense;
+                    stat_value = &sBattleUser->modifiedDefense;
                     break;
 
                 case 2:
-                    sp18 = &sBattleUser->unk_3C;
-                    sp1C = &sBattleUser->speed;
-                    sp28 = 1;
+                    unmodified_stat_value = &sBattleUser->unmodifiedSpeed;
+                    stat_value = &sBattleUser->modifiedSpeed;
+                    speed_modified = 1;
                     break;
 
                 case 3:
-                    sp18 = &sBattleUser->unk_3E;
-                    sp1C = &sBattleUser->unk_30;
+                    unmodified_stat_value = &sBattleUser->unmodifiedSpecial;
+                    stat_value = &sBattleUser->modifiedSpecial;
                     break;
             }
 
-            if (*sp1C != 0x3E7) {
-                *sp1C = (*sp18 * sStatStageMultipliers[sBattleUser->unk_5C[sp24] - 1].multiplier) /
-                        sStatStageMultipliers[sBattleUser->unk_5C[sp24] - 1].devisor;
-                if (*sp1C >= 0x3E8) {
-                    *sp1C = 0x3E7;
+            if (*stat_value != 999) {
+                *stat_value = (*unmodified_stat_value * sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].multiplier) /
+                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].devisor;
+                if (*stat_value >= 1000) {
+                    *stat_value = 999;
                 }
             } else {
-                goto block_29;
+                goto nothing_happens;
             }
         }
 
@@ -413,34 +413,35 @@ void Battle_ApplyRageStatBoost(void) {
             sBattleUser->scaleResize = 1;
         }
 
-        if (var_a3 == 2) {
+        if (increase_amount == 2) {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[10], sp24 + 0x8D);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[10], move_effect_index + 0x8D);
         } else {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[10], sp24 + 0x93);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[10], move_effect_index + 0x93);
         }
 
-        if ((sp28 != 0) || (sBattleMechanicsSetting[0] != 1)) {
+        if ((speed_modified != 0) || (sBattleMechanicsSetting[0] != 1)) {
             ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
         }
 
-        if ((sp2C != 0) || (sBattleMechanicsSetting[0] != 1)) {
+        if ((attack_modified != 0) || (sBattleMechanicsSetting[0] != 1)) {
             ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
         }
     } else {
-    block_29:
+    nothing_happens:
+        // Nothing Happened!
         Battle_QueueMessage(sBattleMessageQueues->buffer[10], -0x67);
     }
 }
 
 void Battle_Effect_RaiseOwnStat(void) {
-    s32 sp2C;
-    s32 sp28;
-    s32 sp24;
-    s32 var_a3;
-    u16* sp1C;
-    u16* sp18;
+    s32 attack_increased;
+    s32 speed_increased;
+    s32 move_effect_index;
+    s32 increase_amount;
+    u16* modified_stat_value;
+    u16* unmodified_stat_value;
 
     if (sBattleUser->moveCache.moveId == WITHDRAW) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_WITHDRAW;
@@ -448,55 +449,55 @@ void Battle_Effect_RaiseOwnStat(void) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     }
 
-    var_a3 = 1;
-    sp24 = sBattleUser->moveCache.effect - 0xA;
-    if (sp24 >= 8) {
-        var_a3 = 2;
-        sp24 -= 0x28;
+    increase_amount = 1;
+    move_effect_index = sBattleUser->moveCache.effect - EFFECT_ATTACK_UP1;
+    if (move_effect_index >= (EFFECT_ATTACK_UP1 - 2)) {
+        increase_amount = 2;
+        move_effect_index -= (EFFECT_ATTACK_UP1 - EFFECT_ATTACK_UP2);
     }
 
-    if (sBattleUser->unk_5C[sp24] != 0xD) {
-        sBattleUser->unk_5C[sp24] += var_a3;
-        if (sBattleUser->unk_5C[sp24] >= 0xE) {
-            sBattleUser->unk_5C[sp24] = 0xD;
+    if (sBattleUser->statChanges[move_effect_index] != 0xD) {
+        sBattleUser->statChanges[move_effect_index] += increase_amount;
+        if (sBattleUser->statChanges[move_effect_index] >= 0xE) {
+            sBattleUser->statChanges[move_effect_index] = 0xD;
         }
 
-        sp28 = 0;
-        sp2C = 0;
+        speed_increased = 0;
+        attack_increased = 0;
 
-        if (sp24 < 4) {
-            switch (sp24) {
+        if (move_effect_index < 4) {
+            switch (move_effect_index) {
                 case 0:
-                    sp18 = &sBattleUser->unk_38;
-                    sp1C = &sBattleUser->unk_2A;
-                    sp2C = 1;
+                    unmodified_stat_value = &sBattleUser->unmodifiedAttack;
+                    modified_stat_value = &sBattleUser->modifiedAttack;
+                    attack_increased = 1;
                     break;
 
                 case 1:
-                    sp18 = &sBattleUser->unk_3A;
-                    sp1C = &sBattleUser->unk_2C;
+                    unmodified_stat_value = &sBattleUser->unmodifiedDefense;
+                    modified_stat_value = &sBattleUser->modifiedDefense;
                     break;
 
                 case 2:
-                    sp18 = &sBattleUser->unk_3C;
-                    sp1C = &sBattleUser->speed;
-                    sp28 = 1;
+                    unmodified_stat_value = &sBattleUser->unmodifiedSpeed;
+                    modified_stat_value = &sBattleUser->modifiedSpeed;
+                    speed_increased = 1;
                     break;
 
                 case 3:
-                    sp18 = &sBattleUser->unk_3E;
-                    sp1C = &sBattleUser->unk_30;
+                    unmodified_stat_value = &sBattleUser->unmodifiedSpecial;
+                    modified_stat_value = &sBattleUser->modifiedSpecial;
                     break;
             }
 
-            if (*sp1C != 0x3E7) {
-                *sp1C = (*sp18 * sStatStageMultipliers[sBattleUser->unk_5C[sp24] - 1].multiplier) /
-                        sStatStageMultipliers[sBattleUser->unk_5C[sp24] - 1].devisor;
-                if (*sp1C >= 0x3E8) {
-                    *sp1C = 0x3E7;
+            if (*modified_stat_value != 999) {
+                *modified_stat_value = (*unmodified_stat_value * sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].multiplier) /
+                        sStatStageMultipliers[sBattleUser->statChanges[move_effect_index] - 1].devisor;
+                if (*modified_stat_value >= 1000) {
+                    *modified_stat_value = 999;
                 }
             } else {
-                goto block_32;
+                goto nothing_happened;
             }
         }
 
@@ -504,24 +505,25 @@ void Battle_Effect_RaiseOwnStat(void) {
             sBattleUser->scaleResize = 1;
         }
 
-        if (var_a3 == 2) {
+        if (increase_amount == 2) {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], sp24 + 0x8D);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[1], move_effect_index + 0x8D);
         } else {
             Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], sp24 + 0x93);
+            Battle_QueueMessage(sBattleMessageQueues->buffer[1], move_effect_index + 0x93);
         }
 
-        if ((sp28 != 0) || (sBattleMechanicsSetting[0] != 1)) {
+        if ((speed_increased != 0) || (sBattleMechanicsSetting[0] != 1)) {
             ApplyParalysisSpeedCut(sActivePokemon[sBattleScene.scene->actingSide]);
         }
 
-        if ((sp2C != 0) || (sBattleMechanicsSetting[0] != 1)) {
+        if ((attack_increased != 0) || (sBattleMechanicsSetting[0] != 1)) {
             ApplyBurnAttackCut(sActivePokemon[sBattleScene.scene->actingSide]);
         }
     } else {
-    block_32:
+    nothing_happened:
         sStatCanBeChangedFurther = 0;
+        // Nothing Happened!
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x67);
     }
 }
@@ -529,84 +531,84 @@ void Battle_Effect_RaiseOwnStat(void) {
 void Battle_Effect_LowerStat(void) {
     s32 sp2C;
     s32 sp28;
-    s32 sp24;
+    s32 move_effect_index;
     s32 sp20;
     u16* sp1C;
     u16* sp18;
 
-    if (sBattleUser->moveCache.effect < 0x44) {
+    if (sBattleUser->moveCache.effect < EFFECT_ATTACK_DOWN_33_PERCENT) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STAT_DROP;
     } else {
         sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_SECONDARY;
     }
 
-    if (sBattleTarget->statusCondition & 0x10) {
-        goto end;
+    if (sBattleTarget->statusCondition & STATUS_BURN) {
+        goto move_failed;
     }
 
-    sp24 = sBattleUser->moveCache.effect;
+    move_effect_index = sBattleUser->moveCache.effect;
     sp20 = 1;
 
-    if (sp24 >= 0x44) {
-        if (Battle_Random() < 0x55) {
-            sp24 -= 0x44;
+    if (move_effect_index >= EFFECT_ATTACK_DOWN_33_PERCENT) {
+        if (Battle_Random() < 85) {
+            move_effect_index -= EFFECT_ATTACK_DOWN_33_PERCENT;
             goto block_14;
         }
     } else {
         HandleMoveEffectFlags();
 
         if (sBattleMoveFailed != 0) {
-            goto end;
+            goto move_failed;
         }
 
-        if (sBattleTarget->immobilizedReason & 0x40) {
-            goto end;
+        if (sBattleTarget->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) {
+            goto move_failed;
         }
 
-        sp24 -= 0x12;
-        if (sp24 >= 9) {
+        move_effect_index -= EFFECT_ATTACK_DOWN1;
+        if (move_effect_index >= (EFFECT_ATTACK_UP1 - 1)) {
             sp20 = 2;
-            sp24 -= 0x28;
+            move_effect_index -= (EFFECT_ATTACK_UP1 - EFFECT_ATTACK_UP2);
         }
 
     block_14:
-        if (sBattleTarget->unk_5C[sp24] != 1) {
-            sBattleTarget->unk_5C[sp24] -= sp20;
-            if (sBattleTarget->unk_5C[sp24] <= 0) {
-                sBattleTarget->unk_5C[sp24] = 1;
+        if (sBattleTarget->statChanges[move_effect_index] != 1) {
+            sBattleTarget->statChanges[move_effect_index] -= sp20;
+            if (sBattleTarget->statChanges[move_effect_index] <= 0) {
+                sBattleTarget->statChanges[move_effect_index] = 1;
             }
 
             sp28 = 0;
             sp2C = 0;
 
-            if (sp24 < 4) {
-                switch (sp24) {
+            if (move_effect_index < 4) {
+                switch (move_effect_index) {
                     case 0:
                         sp2C = 1;
-                        sp18 = &sBattleTarget->unk_38;
-                        sp1C = &sBattleTarget->unk_2A;
+                        sp18 = &sBattleTarget->unmodifiedAttack;
+                        sp1C = &sBattleTarget->modifiedAttack;
                         break;
 
                     case 1:
-                        sp18 = &sBattleTarget->unk_3A;
-                        sp1C = &sBattleTarget->unk_2C;
+                        sp18 = &sBattleTarget->unmodifiedDefense;
+                        sp1C = &sBattleTarget->modifiedDefense;
                         break;
 
                     case 2:
                         sp28 = 1;
-                        sp18 = &sBattleTarget->unk_3C;
-                        sp1C = &sBattleTarget->speed;
+                        sp18 = &sBattleTarget->unmodifiedSpeed;
+                        sp1C = &sBattleTarget->modifiedSpeed;
                         break;
 
                     case 3:
-                        sp18 = &sBattleTarget->unk_3E;
-                        sp1C = &sBattleTarget->unk_30;
+                        sp18 = &sBattleTarget->unmodifiedSpecial;
+                        sp1C = &sBattleTarget->modifiedSpecial;
                         break;
                 }
 
                 if (*sp1C != 1) {
-                    *sp1C = (*sp18 * sStatStageMultipliers[sBattleTarget->unk_5C[sp24] - 1].multiplier) /
-                            sStatStageMultipliers[sBattleTarget->unk_5C[sp24] - 1].devisor;
+                    *sp1C = (*sp18 * sStatStageMultipliers[sBattleTarget->statChanges[move_effect_index] - 1].multiplier) /
+                            sStatStageMultipliers[sBattleTarget->statChanges[move_effect_index] - 1].devisor;
                     if (*sp1C == 0) {
                         *sp1C = 1;
                     }
@@ -617,10 +619,10 @@ void Battle_Effect_LowerStat(void) {
 
             if (sp20 == 2) {
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], sp24 + 0x9A);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[7], move_effect_index + 0x9A);
             } else {
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], sp24 + 0xA0);
+                Battle_QueueMessage(sBattleMessageQueues->buffer[7], move_effect_index + 0xA0);
             }
 
             if ((sp28 != 0) || (sBattleMechanicsSetting[0] != 1)) {
@@ -642,7 +644,7 @@ block_39:
         return;
     }
 
-end:
+move_failed:
     if (sBattleUser->moveCache.effect < 0x44) {
         sConfused = 0;
         sStatCanBeChangedFurther = 0;
@@ -735,7 +737,7 @@ void Battle_Effect_Flinch(void) {
 void Battle_Effect_OHKO(void) {
     sBattleDamage = 0;
     sBattleCritFlag = 0xFF;
-    if (sBattleUser->speed < sBattleTarget->speed) {
+    if (sBattleUser->modifiedSpeed < sBattleTarget->modifiedSpeed) {
         sBattleMoveFailed = 1;
         return;
     }
@@ -1042,18 +1044,18 @@ void Battle_Effect_Haze(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_HAZE;
 
     for (i = 0; i < 8; i++) {
-        temp_t0->unk_5C[i] = 7;
-        temp_a3->unk_5C[i] = 7;
+        temp_t0->statChanges[i] = 7;
+        temp_a3->statChanges[i] = 7;
     }
 
-    temp_t0->unk_2A = temp_t0->unk_38;
-    temp_t0->unk_2C = temp_t0->unk_3A;
-    temp_t0->speed = temp_t0->unk_3C;
-    temp_t0->unk_30 = temp_t0->unk_3E;
-    temp_a3->unk_2A = temp_a3->unk_38;
-    temp_a3->unk_2C = temp_a3->unk_3A;
-    temp_a3->speed = temp_a3->unk_3C;
-    temp_a3->unk_30 = temp_a3->unk_3E;
+    temp_t0->modifiedAttack = temp_t0->unmodifiedAttack;
+    temp_t0->modifiedDefense = temp_t0->unmodifiedDefense;
+    temp_t0->modifiedSpeed = temp_t0->unmodifiedSpeed;
+    temp_t0->modifiedSpecial = temp_t0->unmodifiedSpecial;
+    temp_a3->modifiedAttack = temp_a3->unmodifiedAttack;
+    temp_a3->modifiedDefense = temp_a3->unmodifiedDefense;
+    temp_a3->modifiedSpeed = temp_a3->unmodifiedSpeed;
+    temp_a3->modifiedSpecial = temp_a3->unmodifiedSpecial;
 
     if ((sBattleTarget->pendingStatusCondition & 0x27) && !(sBattleTarget->immobilizedReason & 0x10)) {
         sBattleTarget->usedMove = 0xFE;
@@ -1097,8 +1099,8 @@ void Battle_Effect_Heal(void) {
             if (temp_v0 != 0) {
                 if (sBattleMechanicsSetting[0] == 1) {
                     sBattleUser->battleStatus3 &= ~1;
-                    Battle_ApplyStatStageMultiplier(&sBattleUser->unk_2A, sBattleUser->unk_38, sBattleUser->unk_5C[0]);
-                    Battle_ApplyStatStageMultiplier(&sBattleUser->speed, sBattleUser->unk_3C, sBattleUser->unk_5C[2]);
+                    Battle_ApplyStatStageMultiplier(&sBattleUser->modifiedAttack, sBattleUser->unmodifiedAttack, sBattleUser->statChanges[0]);
+                    Battle_ApplyStatStageMultiplier(&sBattleUser->modifiedSpeed, sBattleUser->unmodifiedSpeed, sBattleUser->statChanges[2]);
                 }
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x35);
@@ -1163,10 +1165,10 @@ void Battle_Effect_Transform(void) {
         sBattleUser->moves[2] = sBattleTarget->moves[2];
         sBattleUser->moves[3] = sBattleTarget->moves[3];
         sBattleUser->unk_24 = sBattleTarget->unk_24;
-        sBattleUser->unk_2A = sBattleTarget->unk_2A;
-        sBattleUser->unk_2C = sBattleTarget->unk_2C;
-        sBattleUser->speed = sBattleTarget->speed;
-        sBattleUser->unk_30 = sBattleTarget->unk_30;
+        sBattleUser->modifiedAttack = sBattleTarget->modifiedAttack;
+        sBattleUser->modifiedDefense = sBattleTarget->modifiedDefense;
+        sBattleUser->modifiedSpeed = sBattleTarget->modifiedSpeed;
+        sBattleUser->modifiedSpecial = sBattleTarget->modifiedSpecial;
 
         for (i = 0; i < 4; i++) {
             if (sBattleTarget->moves[i] == 0) {
@@ -1175,13 +1177,13 @@ void Battle_Effect_Transform(void) {
             sBattleUser->pp[i] = 5;
         }
 
-        sBattleUser->unk_38 = sBattleTarget->unk_38;
-        sBattleUser->unk_3A = sBattleTarget->unk_3A;
-        sBattleUser->unk_3C = sBattleTarget->unk_3C;
-        sBattleUser->unk_3E = sBattleTarget->unk_3E;
+        sBattleUser->unmodifiedAttack = sBattleTarget->unmodifiedAttack;
+        sBattleUser->unmodifiedDefense = sBattleTarget->unmodifiedDefense;
+        sBattleUser->unmodifiedSpeed = sBattleTarget->unmodifiedSpeed;
+        sBattleUser->unmodifiedSpecial = sBattleTarget->unmodifiedSpecial;
 
         for (i = 0; i < 8; i++) {
-            sBattleUser->unk_5C[i] = sBattleTarget->unk_5C[i];
+            sBattleUser->statChanges[i] = sBattleTarget->statChanges[i];
         }
         return;
     }
