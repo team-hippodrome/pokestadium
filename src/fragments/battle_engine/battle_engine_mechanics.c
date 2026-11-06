@@ -346,7 +346,7 @@ void Battle_SetActiveMoveFromSlotIndex(void) {
 }
 
 s32 Battle_CheckMoveSuccess(void) {
-    Battle_ExecuteMoveEffect();
+    BattleEffect_ExecuteMoveEffect();
 
     if (sBattleMoveFailed == 1) {
         return 0;
@@ -548,7 +548,7 @@ void Battle_ApplyDamage(void) {
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2C);
 
                 if ((sBattleMechanicsSetting[0] == 1) && (sBattleUser->moveCache.effect == 0x1D)) {
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                     sBattleUser->isTrapped = 1;
                 }
 
@@ -569,7 +569,7 @@ void Battle_ApplyDamage(void) {
                 Battle_QueueMessage(sBattleMessageQueues->buffer[7], 0x2C);
 
                 if ((sBattleMechanicsSetting[0] == 1) && (sBattleUser->moveCache.effect == 0x1D)) {
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                     sBattleUser->isTrapped = 1;
                 }
 
@@ -839,7 +839,7 @@ void Battle_ApplyRageContinuation(void) {
 
         Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         Battle_QueueMessage(sBattleMessageQueues->buffer[12], 0x1F);
-        Battle_ApplyRageStatBoost();
+        BattleEffect_ApplyStatBoost();
 
         sBattleUser->moveCache.moveId = RAGE;
         sBattleUser->moveCache.effect = 0;
@@ -1492,7 +1492,7 @@ void ProcessBattleTurn(void) {
                                 sBattleDamage = 0;
                             }
 
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                             sBattleUser->lastMove = sBattleUser->usedMove;
                             return;
                     }
@@ -1505,12 +1505,12 @@ void ProcessBattleTurn(void) {
                         sBattleDamage = 0;
                     }
 
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                     return;
                 }
 
                 if (IsByteInArray(sBattleUser->moveCache.effect, D_8438ADFC, 1) != 0) {
-                    Battle_ExecuteMoveEffect();
+                    BattleEffect_ExecuteMoveEffect();
                 }
             case 4:
                 if (IsByteInArray(sBattleUser->moveCache.effect, D_8438AE00, 2) == 0) {
@@ -1556,7 +1556,7 @@ void ProcessBattleTurn(void) {
                         goto block_5;
                     default:
                         if (IsByteInArray(sBattleUser->moveCache.effect, D_8438AE04, 0x1B) != 0) {
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                             return;
                         }
 
@@ -1573,7 +1573,7 @@ void ProcessBattleTurn(void) {
                             D_843C4DA9 = 1;
                         }
                         if (IsByteInArray(sBattleUser->moveCache.effect, D_8438AE20, 0xA) != 0) {
-                            Battle_ExecuteMoveEffect();
+                            BattleEffect_ExecuteMoveEffect();
                         }
                         if (sBattleTarget->displayHp == 0) {
                             if (sBattleMechanicsSetting[0] != 1) {
@@ -1607,7 +1607,7 @@ void ProcessBattleTurn(void) {
                         if (IsByteInArray(sBattleUser->moveCache.effect, D_8438AE2C, 0xF) != 0) {
                             break;
                         }
-                        Battle_ExecuteMoveEffect();
+                        BattleEffect_ExecuteMoveEffect();
                         break;
                 }
                 break;

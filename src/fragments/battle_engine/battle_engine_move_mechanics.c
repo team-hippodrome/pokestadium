@@ -34,96 +34,96 @@ static const char D_8438DDC8[] = "******** spAttackMainEnd ********\n";
 
 static char* D_8438AE50 = D_8438DC80;
 static MoveEffectCallback sMoveEffectHandlers[] = {
-    Battle_Effect_Sleep,
-    Battle_Effect_Poison,
-    Battle_Effect_DrainHP,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_Explosion,
-    Battle_Effect_DrainHP,
+    BattleEffect_Sleep,
+    BattleEffect_Poison,
+    BattleEffect_DrainHP,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_Explosion,
+    BattleEffect_DrainHP,
     NULL,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_PayDay,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_PayDay,
     NULL,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_Conversion,
-    Battle_Effect_Haze,
-    Battle_Effect_Bide,
-    Battle_Effect_Thrash,
-    Battle_Effect_ForceSwitchOrFlee,
-    Battle_Effect_MultiHit,
-    Battle_Effect_MultiHit,
-    Battle_Effect_Flinch,
-    Battle_Effect_Sleep,
-    Battle_Effect_Poison,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_SecondaryStatusChance,
-    Battle_Effect_Flinch,
-    Battle_Effect_OHKO,
-    Battle_Effect_TwoTurnMove,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_Conversion,
+    BattleEffect_Haze,
+    BattleEffect_Bide,
+    BattleEffect_Thrash,
+    BattleEffect_WildBattleOnlyMoves,
+    BattleEffect_MultiHit,
+    BattleEffect_MultiHit,
+    BattleEffect_Flinch,
+    BattleEffect_Sleep,
+    BattleEffect_Poison,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_SecondaryStatusChance,
+    BattleEffect_Flinch,
+    BattleEffect_OHKO,
+    BattleEffect_TwoTurnMove,
     NULL,
     NULL,
-    Battle_Effect_Trap,
-    Battle_Effect_TwoTurnMove,
-    Battle_Effect_MultiHit,
+    BattleEffect_Trap,
+    BattleEffect_TwoTurnMove,
+    BattleEffect_MultiHit,
     NULL,
-    Battle_Effect_Mist,
-    Battle_Effect_FocusEnergy,
-    Battle_Effect_Recoil,
-    Battle_Effect_Confuse,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_RaiseOwnStat,
-    Battle_Effect_Heal,
-    Battle_Effect_Transform,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_ReflectLightScreen,
-    Battle_Effect_ReflectLightScreen,
-    Battle_Effect_Poison,
-    Battle_Effect_Paralyze,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_LowerStat,
-    Battle_Effect_ConfuseChance,
-    Battle_Effect_MultiHit,
+    BattleEffect_Mist,
+    BattleEffect_FocusEnergy,
+    BattleEffect_Recoil,
+    BattleEffect_Confuse,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_RaiseOwnStat,
+    BattleEffect_Heal,
+    BattleEffect_Transform,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_ReflectLightScreen,
+    BattleEffect_ReflectLightScreen,
+    BattleEffect_Poison,
+    BattleEffect_Paralyze,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_LowerStat,
+    BattleEffect_ConfuseChance,
+    BattleEffect_MultiHit,
     NULL,
-    Battle_Effect_Substitute,
-    Battle_Effect_Recharge,
-    Battle_Effect_Rage,
-    Battle_Effect_Mimic,
+    BattleEffect_Substitute,
+    BattleEffect_Recharge,
+    BattleEffect_Rage,
+    BattleEffect_Mimic,
     NULL,
-    Battle_Effect_LeechSeed,
-    Battle_Effect_Splash,
-    Battle_Effect_Disable,
+    BattleEffect_LeechSeed,
+    BattleEffect_Splash,
+    BattleEffect_Disable,
     NULL,
 };
 
-u16 Battle_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat_index) {
+u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat_index) {
     *stat_ptr = (stat_stage_delta * sStatStageMultipliers[stat_index - 1].multiplier) / sStatStageMultipliers[stat_index - 1].devisor;
 
     if (*stat_ptr == 0) {
@@ -137,7 +137,7 @@ u16 Battle_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat
     return *stat_ptr;
 }
 
-void Battle_Effect_Sleep(void) {
+void BattleEffect_Sleep(void) {
     s32 is_frozen;
     s32 sleep_turns;
 
@@ -192,7 +192,7 @@ block_9:
     }
 }
 
-void Battle_Effect_Poison(void) {
+void BattleEffect_Poison(void) {
     char* buffer = sBattleMessageQueues->buffer[1];
 
     if (!(sBattleTarget->statusCondition & STATUS_BURN) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->types[0] != 3) &&
@@ -253,7 +253,7 @@ void Battle_Effect_Poison(void) {
     }
 }
 
-void Battle_Effect_DrainHP(void) {
+void BattleEffect_DrainHP(void) {
     sBattleDamage /= 2;
     if (sBattleDamage == 0) {
         sBattleDamage = 1;
@@ -274,14 +274,14 @@ void Battle_Effect_DrainHP(void) {
     }
 }
 
-void Battle_Effect_Explosion(void) {
+void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_EXPLOSION;
     sBattleUser->displayHp = 0;
     sBattleUser->pendingStatusCondition = 0;
     sBattleUser->statusCondition &= ~STATUS_LEECH_SEED;
 }
 
-void Battle_Effect_SecondaryStatusChance(void) {
+void BattleEffect_SecondaryStatusChance(void) {
     BattleMonRuntime* runtime = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemonState* state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
 
@@ -348,8 +348,7 @@ void Battle_Effect_SecondaryStatusChance(void) {
     }
 }
 
-// better name: BattleEffect_ApplyStatBoost
-void Battle_ApplyRageStatBoost(void) {
+void BattleEffect_ApplyStatBoost(void) {
     s32 attack_modified;
     s32 speed_modified;
     s32 move_effect_index;
@@ -437,7 +436,7 @@ void Battle_ApplyRageStatBoost(void) {
     }
 }
 
-void Battle_Effect_RaiseOwnStat(void) {
+void BattleEffect_RaiseOwnStat(void) {
     s32 attack_modified;
     s32 speed_modified;
     s32 move_effect_index;
@@ -530,7 +529,7 @@ void Battle_Effect_RaiseOwnStat(void) {
     }
 }
 
-void Battle_Effect_LowerStat(void) {
+void BattleEffect_LowerStat(void) {
     s32 attack_modified;
     s32 speed_modified;
     s32 move_effect_index;
@@ -660,7 +659,7 @@ move_failed:
     }
 }
 
-void Battle_Effect_Bide(void) {
+void BattleEffect_Bide(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_BIDE;
     sBattleUser->moveCache.effect = 0;
     sBattleUser->immobilizedReason |= 1;
@@ -668,18 +667,17 @@ void Battle_Effect_Bide(void) {
     sBattleUser->isTrapped = (Battle_Random() & 1) + 2;
 }
 
-void Battle_Effect_Thrash(void) {
+void BattleEffect_Thrash(void) {
     sBattleUser->moveCache.effect = 0;
     sBattleUser->immobilizedReason |= 2;
     sBattleUser->isTrapped = (Battle_Random() & 1) + 2;
 }
 
-// Better name: BattleEffect_WildBattleOnlyMoves
 /*
     Handles Teleport, Roar, and Whirlwind which do nothing in stadium 
     since the moves only have effect in wild battles in gen 1
 */
-void Battle_Effect_ForceSwitchOrFlee(void) {
+void BattleEffect_WildBattleOnlyMoves(void) {
     if (sBattleUser->moveCache.moveId == TELEPORT) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TELEPORT;
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x53);
@@ -691,7 +689,7 @@ void Battle_Effect_ForceSwitchOrFlee(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x52);
 }
 
-void Battle_Effect_MultiHit(void) {
+void BattleEffect_MultiHit(void) {
     s32 rng;
 
     if (!(sBattleUser->immobilizedReason & IMMOBILIZED_MULTI_HIT)) {
@@ -720,7 +718,7 @@ void Battle_Effect_MultiHit(void) {
     }
 }
 
-void Battle_Effect_Flinch(void) {
+void BattleEffect_Flinch(void) {
     // Burnt Pokemon can't be flinched?
     // Maybe handles it so burn damage still applies?
     if (!(sBattleTarget->statusCondition & STATUS_BURN)) {
@@ -746,7 +744,7 @@ void Battle_Effect_Flinch(void) {
     }
 }
 
-void Battle_Effect_OHKO(void) {
+void BattleEffect_OHKO(void) {
     sBattleDamage = 0;
     sBattleCritFlag = 0xFF;
     if (sBattleUser->modifiedSpeed < sBattleTarget->modifiedSpeed) {
@@ -757,7 +755,7 @@ void Battle_Effect_OHKO(void) {
     sBattleCritFlag = 2;
 }
 
-void Battle_Effect_TwoTurnMove(void) {
+void BattleEffect_TwoTurnMove(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_CHARGE;
     sBattleUser->immobilizedReason |= IMMOBILIZED_CHARGING;
 
@@ -801,7 +799,7 @@ void Battle_Effect_TwoTurnMove(void) {
     }
 }
 
-void Battle_Effect_Trap(void) {
+void BattleEffect_Trap(void) {
     s32 rng;
 
     if (!(sBattleUser->immobilizedReason & STATUS_FREEZE) &&
@@ -817,7 +815,7 @@ void Battle_Effect_Trap(void) {
     }
 }
 
-void Battle_Effect_Mist(void) {
+void BattleEffect_Mist(void) {
     if (sBattleUser->statusCondition & STATUS_MIST) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
         // But, it failed!
@@ -830,7 +828,7 @@ void Battle_Effect_Mist(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x4A);
 }
 
-void Battle_Effect_FocusEnergy(void) {
+void BattleEffect_FocusEnergy(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (sBattleUser->statusCondition & STATUS_FOCUS_ENERGY) {
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x49);
@@ -841,7 +839,7 @@ void Battle_Effect_FocusEnergy(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x48);
 }
 
-void Battle_Effect_Recoil(void) {
+void BattleEffect_Recoil(void) {
     s32 recoil_amount;
 
     sBattleUser->currentHp = sBattleUser->displayHp;
@@ -868,7 +866,7 @@ void Battle_Effect_Recoil(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_RECOIL;
 }
 
-void Battle_Effect_ConfuseChance(void) {
+void BattleEffect_ConfuseChance(void) {
     if (!(sBattleTarget->statusCondition & STATUS_BURN) && (Battle_Random() < 26) && !(sBattleTarget->immobilizedReason & IMMOBILIZED_CONFUSED)) {
         sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_SECONDARY;
         sStatCanBeChangedFurther = 0;
@@ -879,7 +877,7 @@ void Battle_Effect_ConfuseChance(void) {
     }
 }
 
-void Battle_Effect_Confuse(void) {
+void BattleEffect_Confuse(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     sConfused = 0;
 
@@ -901,7 +899,7 @@ void Battle_Effect_Confuse(void) {
     }
 }
 
-void Battle_Effect_Paralyze(void) {
+void BattleEffect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
     if (sBattleTarget->pendingStatusCondition == 0) {
         if ((sBattleUser->moveCache.type != ELECTRIC) ||
@@ -928,7 +926,7 @@ void Battle_Effect_Paralyze(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x41);
 }
 
-void Battle_Effect_Substitute(void) {
+void BattleEffect_Substitute(void) {
     s32 substitute_health;
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
@@ -952,15 +950,15 @@ void Battle_Effect_Substitute(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_CREATED);
 }
 
-void Battle_Effect_Recharge(void) {
+void BattleEffect_Recharge(void) {
     sBattleUser->statusCondition |= STATUS_FREEZE;
 }
 
-void Battle_Effect_Rage(void) {
+void BattleEffect_Rage(void) {
     sBattleUser->statusCondition |= STATUS_PARALYSIS;
 }
 
-void Battle_Effect_Mimic(void) {
+void BattleEffect_Mimic(void) {
     ActivePokemonState* sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     s32 var_t0;
     u8 temp_v0;
@@ -987,7 +985,7 @@ void Battle_Effect_Mimic(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3F);
 }
 
-void Battle_Effect_LeechSeed(void) {
+void BattleEffect_LeechSeed(void) {
     HandleMoveEffectFlags();
 
     if ((sBattleMoveFailed == 0) && (sBattleTarget->types[0] != GRASS) && (sBattleTarget->types[1] != GRASS)) {
@@ -1004,12 +1002,12 @@ void Battle_Effect_LeechSeed(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3D);
 }
 
-void Battle_Effect_Splash(void) {
+void BattleEffect_Splash(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3C);
 }
 
-void Battle_Effect_Disable(void) {
+void BattleEffect_Disable(void) {
     s32 move_slot_to_disable;
     s32 disable_duration;
 
@@ -1034,11 +1032,11 @@ void Battle_Effect_Disable(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3A);
 }
 
-void Battle_Effect_PayDay(void) {
+void BattleEffect_PayDay(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x39);
 }
 
-void Battle_Effect_Conversion(void) {
+void BattleEffect_Conversion(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (!(sBattleTarget->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE)) {
         sBattleUser->types[0] = sBattleTarget->types[0];
@@ -1050,7 +1048,7 @@ void Battle_Effect_Conversion(void) {
     }
 }
 
-void Battle_Effect_Haze(void) {
+void BattleEffect_Haze(void) {
     s32 i;
     BattleMonRuntime* pokemon_runtime1 = &sActivePokemon[0]->state.runtime;
     BattleMonRuntime* pokemon_runtime2 = &sActivePokemon[1]->state.runtime;
@@ -1094,7 +1092,7 @@ void Battle_Effect_Haze(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x36);
 }
 
-void Battle_Effect_Heal(void) {
+void BattleEffect_Heal(void) {
     u8 pending_status_condition;
     ActivePokemonState* state;
     BattleMonRuntime* runtime;
@@ -1113,8 +1111,8 @@ void Battle_Effect_Heal(void) {
             if (pending_status_condition != 0) {
                 if (sBattleMechanicsSetting[0] == 1) {
                     sBattleUser->uniqueStatusFlags &= ~1;
-                    Battle_ApplyStatStageMultiplier(&sBattleUser->modifiedAttack, sBattleUser->unmodifiedAttack, sBattleUser->statChanges[0]);
-                    Battle_ApplyStatStageMultiplier(&sBattleUser->modifiedSpeed, sBattleUser->unmodifiedSpeed, sBattleUser->statChanges[2]);
+                    BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedAttack, sBattleUser->unmodifiedAttack, sBattleUser->statChanges[0]);
+                    BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedSpeed, sBattleUser->unmodifiedSpeed, sBattleUser->statChanges[2]);
                 }
                 Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
                 Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x35);
@@ -1141,7 +1139,7 @@ void Battle_Effect_Heal(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x32);
 }
 
-void Battle_Effect_Transform(void) {
+void BattleEffect_Transform(void) {
     s32 i;
     ActivePokemonState* pokemon1_state;
     ActivePokemonState* pokemon2_state;
@@ -1206,7 +1204,7 @@ void Battle_Effect_Transform(void) {
     Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_FAILED);
 }
 
-void Battle_Effect_ReflectLightScreen(void) {
+void BattleEffect_ReflectLightScreen(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (sBattleUser->moveCache.effect == EFFECT_LIGHT_SCREEN) {
         if (!(sBattleUser->uniqueStatusFlags & UNIQUE_STATUS_LIGHT_SCREEN)) {
@@ -1225,7 +1223,7 @@ void Battle_Effect_ReflectLightScreen(void) {
     }
 }
 
-void Battle_RunMoveEffect(void) {
+void BattleEffect_RunMoveEffect(void) {
     BattleMonRuntime* runtime = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
     s32 idx = runtime->moveCache.effect;
 
@@ -1234,6 +1232,6 @@ void Battle_RunMoveEffect(void) {
     }
 }
 
-void Battle_ExecuteMoveEffect(void) {
-    Battle_RunMoveEffect();
+void BattleEffect_ExecuteMoveEffect(void) {
+    BattleEffect_RunMoveEffect();
 }

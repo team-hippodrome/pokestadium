@@ -213,7 +213,7 @@ typedef struct PokemonBattleCues {
 #define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
 
 // BattleScene.moveEffectKind selects presentation, not moveCache.unk_01's
-// gameplay effect. Producers: Battle_Effect_* and Battle_CheckMonCanAct.
+// gameplay effect. Producers: BattleEffect_* and Battle_CheckMonCanAct.
 #define MOVE_PRESENTATION_NORMAL 0
 #define MOVE_PRESENTATION_SELF_TARGET 7
 #define MOVE_PRESENTATION_FAILED 8
@@ -3441,44 +3441,44 @@ void Battle_ResolveMonAction(void);
 void BeginBattleForEntity(ActivePokemon* active_pokemon);
 
 //@src/fragments/battle_engine/battle_engine_move_mechanics.c
-u16 Battle_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat_index) ;
-void Battle_Effect_Sleep(void);
-void Battle_Effect_Poison(void);
-void Battle_Effect_DrainHP(void);
-void Battle_Effect_Explosion(void);
-void Battle_Effect_SecondaryStatusChance(void);
-void Battle_ApplyRageStatBoost(void);
-void Battle_Effect_RaiseOwnStat(void);
-void Battle_Effect_LowerStat(void);
-void Battle_Effect_Bide(void);
-void Battle_Effect_Thrash(void);
-void Battle_Effect_ForceSwitchOrFlee(void);
-void Battle_Effect_MultiHit(void);
-void Battle_Effect_Flinch(void);
-void Battle_Effect_OHKO(void);
-void Battle_Effect_TwoTurnMove(void);
-void Battle_Effect_Trap(void);
-void Battle_Effect_Mist(void);
-void Battle_Effect_FocusEnergy(void);
-void Battle_Effect_Recoil(void);
-void Battle_Effect_ConfuseChance(void);
-void Battle_Effect_Confuse(void);
-void Battle_Effect_Paralyze(void);
-void Battle_Effect_Substitute(void);
-void Battle_Effect_Recharge(void);
-void Battle_Effect_Rage(void);
-void Battle_Effect_Mimic(void);
-void Battle_Effect_LeechSeed(void);
-void Battle_Effect_Splash(void);
-void Battle_Effect_Disable(void);
-void Battle_Effect_PayDay(void);
-void Battle_Effect_Conversion(void);
-void Battle_Effect_Haze(void);
-void Battle_Effect_Heal(void);
-void Battle_Effect_Transform(void);
-void Battle_Effect_ReflectLightScreen(void);
-void Battle_RunMoveEffect(void);
-void Battle_ExecuteMoveEffect(void);
+u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 stat_stage_delta, u8 stat_index) ;
+void BattleEffect_Sleep(void);
+void BattleEffect_Poison(void);
+void BattleEffect_DrainHP(void);
+void BattleEffect_Explosion(void);
+void BattleEffect_SecondaryStatusChance(void);
+void BattleEffect_ApplyStatBoost(void);
+void BattleEffect_RaiseOwnStat(void);
+void BattleEffect_LowerStat(void);
+void BattleEffect_Bide(void);
+void BattleEffect_Thrash(void);
+void BattleEffect_WildBattleOnlyMoves(void);
+void BattleEffect_MultiHit(void);
+void BattleEffect_Flinch(void);
+void BattleEffect_OHKO(void);
+void BattleEffect_TwoTurnMove(void);
+void BattleEffect_Trap(void);
+void BattleEffect_Mist(void);
+void BattleEffect_FocusEnergy(void);
+void BattleEffect_Recoil(void);
+void BattleEffect_ConfuseChance(void);
+void BattleEffect_Confuse(void);
+void BattleEffect_Paralyze(void);
+void BattleEffect_Substitute(void);
+void BattleEffect_Recharge(void);
+void BattleEffect_Rage(void);
+void BattleEffect_Mimic(void);
+void BattleEffect_LeechSeed(void);
+void BattleEffect_Splash(void);
+void BattleEffect_Disable(void);
+void BattleEffect_PayDay(void);
+void BattleEffect_Conversion(void);
+void BattleEffect_Haze(void);
+void BattleEffect_Heal(void);
+void BattleEffect_Transform(void);
+void BattleEffect_ReflectLightScreen(void);
+void BattleEffect_RunMoveEffect(void);
+void BattleEffect_ExecuteMoveEffect(void);
 
 //@src/fragments/battle_engine/battle_engine_com_decision_logic.c
 void BattleAI_LoadConfiguration(s32 arg0, u32 arg1);
