@@ -29,27 +29,46 @@
 /* 0x8000: unassigned. */
 
 /*
- * BattleMon.statusCondition
+ * BattleMon.statusCondition and BattleMonRuntime.pendingStatusCondition
  *
- * Bits 0–2 hold a sleep counter, not independent status flags.
-    ^probably AI hallucination but can't be sure because idk where the sleep turns are actually tracked
+ * BattleEffect_Sleep stores the duration in bits 0-2; Battle_CheckMonCanAct
+ * decrements that value. Battle_StoreMajorStatus copies the runtime byte
+ * back to the picked Pokemon's statusCondition.
+ * //@src/fragments/battle_engine/battle_engine_mechanics.c
+ * //@src/fragments/battle_engine/battle_engine_move_mechanics.c
  * Toxic uses STATUS_POISON plus separate runtime state.
  * Fainting is not encoded as a status bit here.
  * Keep the struct member u8.
  */
 #define STATUS_NONE 0x00
-#define STATUS_MIST 0x02
-#define STATUS_FOCUS_ENERGY 0x04
 #define STATUS_SLEEP_MASK 0x07
 #define STATUS_POISON 0x08
 #define STATUS_BURN 0x10
 #define STATUS_FREEZE 0x20
 #define STATUS_PARALYSIS 0x40
-#define STATUS_LEECH_SEED 0x80
-#define UNIQUE_STATUS_TRANSFORM 8
-#define UNIQUE_STATUS_REFLECT 2
-#define UNIQUE_STATUS_LIGHT_SCREEN 2
+/*
+ * BattleMonRuntime.volatileStatusFlags (offset 0x4D).
+ * These masks belong to a different byte from STATUS_* above.
+ * Setters are the move-effect handlers; Battle_CheckMonCanAct consumes
+ * recharge/Rage and Battle_ApplyDamage consumes Substitute.
+ */
+#define VOLATILE_STATUS_SKIP_ACCURACY 0x01
+#define VOLATILE_STATUS_MIST 0x02
+#define VOLATILE_STATUS_FOCUS_ENERGY 0x04
+/* 0x08: meaning unresolved; retained by Haze. */
+#define VOLATILE_STATUS_SUBSTITUTE 0x10
+#define VOLATILE_STATUS_RECHARGE 0x20
+#define VOLATILE_STATUS_RAGE 0x40
+#define VOLATILE_STATUS_LEECH_SEED 0x80
 
+/*
+ * BattleMonRuntime.uniqueStatusFlags (offset 0x4E).
+ * InitBattleParameters reads the screen bits when selecting defensive stats.
+ */
+#define UNIQUE_STATUS_TOXIC 0x01
+#define UNIQUE_STATUS_LIGHT_SCREEN 0x02
+#define UNIQUE_STATUS_REFLECT 0x04
+#define UNIQUE_STATUS_TRANSFORM 0x08
 
 /*
  * BattleMonRuntime.immobilizedReason (offset 0x4C)
@@ -60,17 +79,17 @@
  * (Battle_CheckMonCanAct and the move-effect turn handler).
  * Keep the struct member u8.
  */
-#define IMMOBILIZED_BIDING 0x01    /* Set by BattleEffect_Bide; stored damage in unk_54, turns left in unk_4F. */
+#define IMMOBILIZED_BIDING 0x01    /* Bide damage in effectCounter; duration in effectTurnsLeft. */
 #define IMMOBILIZED_THRASHING 0x02 /* Set by BattleEffect_Thrash; clears into IMMOBILIZED_CONFUSED. */
 #define IMMOBILIZED_MULTI_HIT 0x04 /* Set by BattleEffect_MultiHit; cleared when the hits finish. */
 #define IMMOBILIZED_FLINCHED \
     0x08 /* Set on the target by BattleEffect_Flinch; cleared at turn start and when it costs the action. */
 #define IMMOBILIZED_CHARGING 0x10 /* Set by BattleEffect_TwoTurnMove; cleared after the attack executes. */
 #define IMMOBILIZED_TRAPPING \
-    0x20 /* Set on the user by BattleEffect_Trap (Bind, Wrap, String Shot); locks the opponent's action. */
+    0x20 /* Set on the user by BattleEffect_Trap; locks the opponent's action. */
 #define IMMOBILIZED_SEMI_INVULNERABLE \
     0x40 /* Set with IMMOBILIZED_CHARGING for Dig and the 0x2B two-turn effect; cleared with it. */
-#define IMMOBILIZED_CONFUSED 0x80 /* Set by the confusion effects; turns left in unk_50. */
+#define IMMOBILIZED_CONFUSED 0x80 /* Set by the confusion effects; duration in confusionTurnsLeft. */
 
 /* Actions locked in: Thrash or two-turn charge. */
 #define IMMOBILIZED_ACTION_LOCKED (IMMOBILIZED_THRASHING | IMMOBILIZED_CHARGING)
