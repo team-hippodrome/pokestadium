@@ -37,6 +37,8 @@
  * Keep the struct member u8.
  */
 #define STATUS_NONE 0x00
+#define STATUS_MIST 0x02
+#define STATUS_FOCUS_ENERGY 0x04
 #define STATUS_SLEEP_MASK 0x07
 #define STATUS_POISON 0x08
 #define STATUS_BURN 0x10

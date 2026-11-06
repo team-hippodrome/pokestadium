@@ -23,7 +23,7 @@ typedef struct BattleMonRuntime {
     /* 0x0C */ u16 displayHp;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u16 unk_10;
-    /* 0x12 */ u16 unk_12;
+    /* 0x12 */ u16 currentHp;
     /* 0x14 */ u8 unk_14;
     /* 0x15 */ u8 pendingStatusCondition;
     /* 0x16 */ u8 roster[6];
@@ -33,7 +33,7 @@ typedef struct BattleMonRuntime {
     /* 0x23 */ char unk23[0x1];
     /* 0x24 */ u16 unk_24;
     /* 0x26 */ u8 unk_26;
-    /* 0x28 */ u16 hp;
+    /* 0x28 */ u16 maxHp;
     /* 0x2A */ u16 modifiedAttack;
     /* 0x2C */ u16 modifiedDefense;
     /* 0x2E */ u16 modifiedSpeed;
@@ -56,7 +56,7 @@ typedef struct BattleMonRuntime {
     /* 0x51 */ u8 unk_51;
     /* 0x52 */ u8 movesDisabled;
     /* 0x53 */ u8 unk_53;
-    /* 0x54 */ u16 unk_54;
+    /* 0x54 */ u16 multihitCount;
     /* 0x56 */ u8 scaleResize;
     /* 0x57 */ u8 unk_57;
     /* 0x58 */ u8 lastMove;

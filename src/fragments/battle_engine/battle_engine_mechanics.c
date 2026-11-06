@@ -219,7 +219,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
     }
 
     temp_v1->unk_28 = temp_a2_2->displayHp;
-    sp18 = (temp_a2_2->displayHp * 0x19) / (temp_a2_2->hp >> 2);
+    sp18 = (temp_a2_2->displayHp * 0x19) / (temp_a2_2->Basehp >> 2);
 
     Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->actionChosen].nickname);
 
@@ -264,9 +264,9 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->hp >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->displayHp) * 0x19) / (temp_a2->Basehp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->hp >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->displayHp) * 0x19) / (temp_a1->Basehp >> 2);
     }
 
     if (var_v0 == 0) {
@@ -785,7 +785,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     }
 
     sp24->unk_26 = sp34->level;
-    sp24->hp = sp34->maxHp;
+    sp24->Basehp = sp34->maxHp;
     sp24->modifiedAttack = sp34->unk_28;
     sp24->modifiedDefense = sp34->unk_2A;
     sp24->modifiedSpeed = sp34->unk_2C;
@@ -1006,13 +1006,13 @@ s32 Battle_Effect_Metronome(void) {
 void Battle_ApplyPoisonOrBurnDamage(void) {
     u16 var_a0;
 
-    if (sBattleUser->unk_12 != 0xFFFF) {
-        sBattleUser->unk_0E = sBattleUser->unk_12;
+    if (sBattleUser->currentHp != 0xFFFF) {
+        sBattleUser->unk_0E = sBattleUser->currentHp;
     } else {
         sBattleUser->unk_0E = sBattleUser->displayHp;
     }
 
-    var_a0 = (sBattleUser->hp >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->Basehp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1035,14 +1035,14 @@ void Battle_ApplyLeechSeedDamage(void) {
     u16 var_a0;
 
     if (!(sBattleUser->pendingStatusCondition & 0x18)) {
-        if (sBattleUser->unk_12 != 0xFFFF) {
-            sBattleUser->unk_10 = sBattleUser->unk_12;
+        if (sBattleUser->currentHp != 0xFFFF) {
+            sBattleUser->unk_10 = sBattleUser->currentHp;
         } else {
             sBattleUser->unk_10 = sBattleUser->displayHp;
         }
     }
 
-    var_a0 = (sBattleUser->hp >> 4) & 0xFFFF;
+    var_a0 = (sBattleUser->Basehp >> 4) & 0xFFFF;
     if (var_a0 == 0) {
         var_a0++;
     }
@@ -1062,8 +1062,8 @@ void Battle_ApplyLeechSeedDamage(void) {
     sBattleTarget->unk_10 = sBattleTarget->displayHp;
     sBattleTarget->unk_10 += var_a0;
 
-    if (sBattleTarget->hp < sBattleTarget->unk_10) {
-        sBattleTarget->unk_10 = sBattleTarget->hp;
+    if (sBattleTarget->Basehp < sBattleTarget->unk_10) {
+        sBattleTarget->unk_10 = sBattleTarget->Basehp;
     }
 }
 
@@ -1411,7 +1411,7 @@ s32 Battle_CheckMonCanAct(void) {
 
     if (sBattleUser->immobilizedReason & 1) {
         sBattleUser->moveCache.moveId = 0;
-        sBattleUser->unk_54 += sBattleDamage;
+        sBattleUser->multihitCount += sBattleDamage;
         sBattleUser->isTrapped -= 1;
         if (sBattleUser->isTrapped != 0) {
             sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_BIDE;
@@ -1422,7 +1422,7 @@ s32 Battle_CheckMonCanAct(void) {
         Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x11);
         sBattleUser->moveCache.power = 1;
 
-        sBattleDamage = sBattleUser->unk_54 * 2;
+        sBattleDamage = sBattleUser->multihitCount * 2;
         if (!sBattleDamage) {
             sBattleMoveFailed = 1;
         }
@@ -1431,7 +1431,7 @@ s32 Battle_CheckMonCanAct(void) {
             sBattleMoveFailed = 1;
         }
 
-        sBattleUser->unk_54 = 0;
+        sBattleUser->multihitCount = 0;
         sBattleUser->moveCache.moveId = BIDE;
         return 5;
     }
@@ -1592,13 +1592,13 @@ void ProcessBattleTurn(void) {
                                 goto block_28;
                             }
                             sBattleUser->immobilizedReason &= ~4;
-                            sprintf(sp2C, "%d", sBattleUser->unk_54);
+                            sprintf(sp2C, "%d", sBattleUser->multihitCount);
                             // separate stubbed print
                             PRINTF(" SpAttackTbl6\n");
-                            Text_SetNumberToken(2, sBattleUser->unk_54);
+                            Text_SetNumberToken(2, sBattleUser->multihitCount);
                             Battle_QueueMessage(sBattleMessageQueues->buffer[14], 4);
                             sBattleScene.scene->hitReactionKind = BATTLE_HIT_REACTION_MULTI_HIT;
-                            sBattleUser->unk_54 = 0;
+                            sBattleUser->multihitCount = 0;
                             sBattleDamage = D_843C4DA0;
                         }
                         if (sBattleUser->moveCache.effect == 0) {
@@ -1628,7 +1628,7 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
     temp_a11 = &sActivePokemon[sp1C]->state.runtime;
     temp_a01 = &sActivePokemon[!sp1C]->state.runtime;
 
-    temp_a01->unk_54 = 0;
+    temp_a01->multihitCount = 0;
     temp_a01->lastMove = 0;
     temp_a01->immobilizedReason &= ~4;
 
@@ -1719,7 +1719,7 @@ void Battle_CheckAllBroughtFainted_PP(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += arg0->state.runtime.unk_12;
+            var_s2 += arg0->state.runtime.currentHp;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;
@@ -1812,7 +1812,7 @@ s32 Battle_CheckFaintAfterMove(void) {
         Battle_CheckAllBroughtFainted_Level(sActivePokemon[sBattleScene.scene->actingSide]);
     }
 
-    if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->unk_12 == 0)) {
+    if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->currentHp == 0)) {
         Battle_CheckAllBroughtFainted_PP(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     } else if ((sBattleUser->displayHp != 0) && (sBattleTarget->displayHp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
@@ -1843,8 +1843,8 @@ void Battle_ResolveMonAction(void) {
     sBattleScene.scene->rageFollowupPhase = 0;
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NORMAL;
 
-    sp1C->unk_12 = 0xFFFF;
-    sp18->unk_12 = 0xFFFF;
+    sp1C->currentHp = 0xFFFF;
+    sp18->currentHp = 0xFFFF;
 
     D_843C4DA0 = 0;
 
@@ -1877,8 +1877,8 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
 
     sp24->moveSelectionLocked = 0;
     sp20->moveSelectionLocked = 0;
-    ptr1->unk_12 = 0xFFFF;
-    ptr2->unk_12 = 0xFFFF;
+    ptr1->currentHp = 0xFFFF;
+    ptr2->currentHp = 0xFFFF;
 
     sConfused = 1;
     sStatCanBeChangedFurther = 1;

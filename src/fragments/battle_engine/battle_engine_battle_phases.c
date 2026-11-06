@@ -320,7 +320,7 @@ s32 BattleScene_AnimateDisplayedHpToRuntime(ActivePokemon* active_pokemon) {
         return 1;
     }
 
-    damage = runtime->hp / 90.0f;
+    damage = runtime->maxHp / 90.0f;
     side = BattleScene_GetParticipantSideIndex(active_pokemon);
     sCurrentPokemonHp[side] = Math_StepToF(sCurrentPokemonHp[BattleScene_GetParticipantSideIndex(active_pokemon)],
                                            runtime->displayHp, damage, damage);
@@ -3346,8 +3346,8 @@ void BattleScene_PhaseRecoilDamage(CameraNode* camera) {
                 BattleAnim_QueueEffectList(9, sActingPokemon);
                 BattleScene_ResetCameraFrameCounter();
                 BattleScene_SetCameraOwnerWideShot(camera, sActivePokemon[sBattleScene.scene->actingSide]);
-                acting_runtime->displayHp = acting_runtime->unk_12;
-                other_runtime->displayHp = other_runtime->unk_12;
+                acting_runtime->displayHp = acting_runtime->currentHp;
+                other_runtime->displayHp = other_runtime->currentHp;
                 BattleBox_Open(6);
                 sBattleScene.scene->phaseStep += 1;
             }

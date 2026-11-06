@@ -256,11 +256,11 @@ void BattleScene_SyncActiveHpToPartyState(void) {
     pokemon2 = &sActivePokemon[1]->teamRoster->pokemonPicked[state2->rosterIndex];
 
     if (D_84390288 != 0) {
-        sCurrentPokemonHp[0] = runtime1->displayHp = runtime1->hp;
-        sCurrentPokemonHp[1] = runtime2->displayHp = runtime2->hp;
+        sCurrentPokemonHp[0] = runtime1->displayHp = runtime1->maxHp;
+        sCurrentPokemonHp[1] = runtime2->displayHp = runtime2->maxHp;
 
-        pokemon1->hp = runtime1->hp;
-        pokemon2->hp = runtime2->hp;
+        pokemon1->hp = runtime1->maxHp;
+        pokemon2->hp = runtime2->maxHp;
     }
 }
 
