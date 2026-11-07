@@ -5386,7 +5386,7 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
             temp_v1_5 = j + var_v0;
             var_a2 = 1;
             D_843C60A8->unk_14[temp_v1_5].unk_12.displayHp = sActivePokemon[1 - gBattleAI_ActivePokemon[0].unk_000]
-                                                                 ->sessionTeams->teamMember[i]
+                                                                 ->sessionTeams->tagTeamMember[i]
                                                                  ->pokemonPicked[j]
                                                                  .hp;
             if (D_843C60A8->unk_14[temp_v1_5].unk_12.displayHp == 0) {
@@ -5599,10 +5599,10 @@ s32 BattleAI_ChooseAction(UNUSED s32 arg0) {
     TeamRoster* sp30;
 
     if (gBattleAI_ActivePokemon[0].unk_001 == 0) {
-        temp_v0 = sActivePokemon[0]->sessionTeams->teamMember[0];
-        sp30 = sActivePokemon[1]->sessionTeams->teamMember[0];
+        temp_v0 = sActivePokemon[0]->sessionTeams->tagTeamMember[0];
+        sp30 = sActivePokemon[1]->sessionTeams->tagTeamMember[0];
         if (sActivePokemon[0]->sessionTeams->tagTeamSize == 2) {
-            temp_v00 = sActivePokemon[0]->sessionTeams->teamMember[1];
+            temp_v00 = sActivePokemon[0]->sessionTeams->tagTeamMember[1];
             BattleAI_InitTeamContext(temp_v0, temp_v00, D_843C60A8, 1);
         } else {
             BattleAI_InitTeamContext(temp_v0, NULL, D_843C60A8, 1);

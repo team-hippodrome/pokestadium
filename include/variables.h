@@ -610,7 +610,7 @@ extern u8 D_3022AA0[];
 extern u8 D_200B3E0[];
 extern u8 D_200C380[];
 extern u8 D_200D320[];
-extern u8 D_3008880[];
+extern u8 gComPlayerLabelIcon[];
 extern u8 D_302E440[];
 extern u8 D_302E840[];
 extern u8 D_3014760[];
@@ -750,11 +750,11 @@ extern u8 D_3015000[];
 extern u8 D_3015040[];
 extern u8 D_3015080[];
 extern u8 D_30150C0[];
-extern u8 D_3002220[];
-extern u8 D_3002820[];
-extern u8 D_3002E20[];
-extern u8 D_3003C80[];
-extern u8 D_30050C0[];
+extern u8 gLButtonOrderSelect[];
+extern u8 gRButtonOrderSelect[];
+extern u8 gBattleOrderSideBarFist[];
+extern u8 gBattleOrderSideBarSlotTop[];
+extern u8 gBattleOrderSideBarSlot[];
 extern u8 D_3005680[];
 extern u8 D_300C660[];
 extern u8 D_300D308[];
@@ -774,8 +774,8 @@ extern u8 D_3008100[];
 extern u8 D_30084C0[];
 extern u8 D_300B9B8[];
 extern u8 D_300AD10[];
-extern u8 D_3008FD0[];
-extern u8 D_3009720[];
+extern u8 sPlayer1LabelIcon[];
+extern u8 sPlayer2LabelIcon[];
 extern u8 D_3009E70[];
 extern u8 D_300A5C0[];
 extern u8 D_3003F80[];
@@ -920,20 +920,20 @@ typedef struct unk_D_8006FF00 {
 extern unk_D_8006FF00 D_8006FF00[152];
 
 typedef struct FontSet {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ u8* unk_04;
-    /* 0x08 */ u8* unk_08;
+    /* 0x00 */ s16 width;
+    /* 0x02 */ s16 height;
+    /* 0x04 */ u8* atlas;
+    /* 0x08 */ u8* texture;
 } FontSet; // size = 0xC
 
 typedef struct FontContext {
     /* 0x00 */ FontSet unk_00[6];
     /* 0x48 */ void* unk_48;
     /* 0x4C */ s32 unk_4C;
-    /* 0x50 */ u8 unk_50;
-    /* 0x51 */ s8 unk_51;
-    /* 0x52 */ u8 line_height;
-    /* 0x53 */ u8 line_break_flag;
+    /* 0x50 */ u8 setIndex;
+    /* 0x51 */ s8 width;
+    /* 0x52 */ u8 lineHeight;
+    /* 0x53 */ u8 lineBreakFlag;
 } FontContext; // size = 0x54
 
 extern Gfx gUiTranslucentFillDL[];

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-extern FontContext* font_context;
+extern FontContext* gFontContext;
 
 void Gfx_DrawTexturedRectClipped(s16 x1, s16 y1, s16 width, s16 height, s16 texture_start_x, s16 texture_start_y,
                                  s16 texture_step_x, s16 texture_step_y, s32 texture_spread_x_mode);
@@ -49,7 +49,7 @@ s32 Font_GetSetInfo(s32 arg0, FontSet* arg1);
 s16 Font_DrawChar(s16 arg0, s16 arg1, s16 arg2);
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void Font_DrawCharAt(s32 arg0, s32 arg1, s32 arg2);
+void Font_DrawCharAt(s32 x, s32 y, s32 char_index);
 void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
 void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a);
 void Font_SetLineHeight(s32 line_height);
@@ -61,6 +61,6 @@ void Font_EnableTwoCycleTexturing(void);
 void Font_DisableTwoCycleTexturing(void);
 void Gfx_FillRectWithDisplayState(s32 x1, s32 y1, s32 width, s32 length, s32 r, s32 g, s32 b, s32 alpha);
 s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...);
-u8 Font_GetCharWidth(s32 arg0, s32 arg1);
+u8 Font_GetCharWidth(s32 arg0, s32 index);
 
 #endif // _1CF30_H_

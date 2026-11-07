@@ -19,7 +19,7 @@ s32 BattleScene_ByteArrayContains(u8 lookup, u8* array, s32 array_length) {
 }
 
 BattleMon* BattleScene_GetParticipantSessionMon(ActivePokemon* active_pokemon) {
-    BattleMon* pokemon = &active_pokemon->sessionTeams->teamMember[active_pokemon->state.ownerTeamMemberIndex]
+    BattleMon* pokemon = &active_pokemon->sessionTeams->tagTeamMember[active_pokemon->state.ownerTeamMemberIndex]
                               ->pokemonPicked[active_pokemon->state.rosterIndex];
 
     return pokemon;
@@ -113,13 +113,13 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
 }
 
 s32 BattleScene_GetTeamMemberTeamSize(ActivePokemon* active_pokemon) {
-    return active_pokemon->sessionTeams->teamMember[active_pokemon->state.teamMemberIndex]->numberOfPokemonBrought;
+    return active_pokemon->sessionTeams->tagTeamMember[active_pokemon->state.teamMemberIndex]->numberOfPokemonBrought;
 }
 
 s32 BattleScene_GetPartnerTeamSize(ActivePokemon* active_pokemon) {
     s32 idx = active_pokemon->state.teamMemberIndex == 0;
 
-    return active_pokemon->sessionTeams->teamMember[idx]->numberOfPokemonBrought;
+    return active_pokemon->sessionTeams->tagTeamMember[idx]->numberOfPokemonBrought;
 }
 
 s32 BattleScene_GetParticipantSideIndex(ActivePokemon* active_pokemon) {
@@ -395,7 +395,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 }
 
 void BattleScene_BindParticipantTeamRoster(ActivePokemon* active_pokemon, s32 team_member_index) {
-    active_pokemon->teamRoster = active_pokemon->sessionTeams->teamMember[team_member_index];
+    active_pokemon->teamRoster = active_pokemon->sessionTeams->tagTeamMember[team_member_index];
 }
 
 void BattleScene_SetParticipantTeamMember(ActivePokemon* active_pokemon, s32 team_member_index) {
@@ -432,7 +432,7 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
 
     if (active_pokemon->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            pokemon = &active_pokemon->sessionTeams->tagTeamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_FREEZE) &&
                 (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
@@ -460,7 +460,7 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
 
     if (active_pokemon->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            pokemon = &active_pokemon->sessionTeams->tagTeamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_SLEEP_MASK) &&
                 (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
@@ -472,10 +472,10 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
 
 s32 BattleScene_GetCombinedTeamSize(ActivePokemon* active_pokemon) {
     if (active_pokemon->sessionTeams->tagTeamSize != 2) {
-        return active_pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought;
+        return active_pokemon->sessionTeams->tagTeamMember[0]->numberOfPokemonBrought;
     }
-    return active_pokemon->sessionTeams->teamMember[1]->numberOfPokemonBrought +
-           active_pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought;
+    return active_pokemon->sessionTeams->tagTeamMember[1]->numberOfPokemonBrought +
+           active_pokemon->sessionTeams->tagTeamMember[0]->numberOfPokemonBrought;
 }
 
 u8 BattleScene_GetRosterTeamSize(TeamRoster* roster) {
@@ -483,7 +483,7 @@ u8 BattleScene_GetRosterTeamSize(TeamRoster* roster) {
 }
 
 s32 BattleScene_GetParticipantDisplayPlayerNumber(ActivePokemon* active_pokemon) {
-    return active_pokemon->sessionTeams->teamMember[active_pokemon->thumbnail.tagTeam]->controllerPort + 1;
+    return active_pokemon->sessionTeams->tagTeamMember[active_pokemon->thumbnail.tagTeam]->controllerPort + 1;
 }
 
 void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s32 object_type,

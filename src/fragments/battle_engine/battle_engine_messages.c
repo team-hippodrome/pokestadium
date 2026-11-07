@@ -120,7 +120,7 @@ void Battle_QueueStatusText(char* text, s32 side) {
 
     Battle_ClearMessageCursor();
     sBattleMessageQueues->controllerPort =
-        sActivePokemon[side]->sessionTeams->teamMember[state->teamMemberIndex]->controllerPort;
+        sActivePokemon[side]->sessionTeams->tagTeamMember[state->teamMemberIndex]->controllerPort;
     Battle_SimpleStringFormat(sBattleMessageQueues->buffer[0], text + 1);
     *text = 0;
 }
@@ -134,9 +134,9 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
 
     if ((gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) && (sBattleScene.scene->transitionStep == 0)) {
         BattleHud_DrawCompactMonStatusBox(
-            pokemon1, 21, 15, pokemon1->sessionTeams->teamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
+            pokemon1, 21, 15, pokemon1->sessionTeams->tagTeamMember[pokemon1->thumbnail.tagTeam]->controllerPort);
         BattleHud_DrawCompactMonStatusBox(
-            pokemon2, 225, 15, pokemon2->sessionTeams->teamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
+            pokemon2, 225, 15, pokemon2->sessionTeams->tagTeamMember[pokemon2->thumbnail.tagTeam]->controllerPort);
     }
 }
 
@@ -729,14 +729,14 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
 
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
     sBattleMessageQueues->controllerPort =
-        pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+        pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
     pokemon->captionState.active = 1;
     Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
     Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
 }
 
 void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
-    TeamRoster* team_member_index = pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex];
+    TeamRoster* team_member_index = pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex];
 
     if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
         pokemon->captionState.unk_08[pokemon->captionState.unk_04] =

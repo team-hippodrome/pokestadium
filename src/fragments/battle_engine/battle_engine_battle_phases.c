@@ -3630,7 +3630,7 @@ void BattleScene_PhaseVoluntarySwitch(CameraNode* camera) {
         case SWITCH_STEP_REQUEST_MODEL:
             acting_pokemon->pokeBall.node.flags &= ~1;
             acting_pokemon->sessionTeams->unk_04 =
-                &acting_pokemon->sessionTeams->teamMember[acting_state->ownerTeamMemberIndex]
+                &acting_pokemon->sessionTeams->tagTeamMember[acting_state->ownerTeamMemberIndex]
                      ->pokemonPicked[acting_state->actionChosen];
             acting_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
             sBattleScene.scene->phaseStep += 1;
@@ -3740,7 +3740,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* camera) {
             acting_pokemon->pokeBall.node.flags &= ~1;
             acting_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
             acting_pokemon->sessionTeams->unk_04 =
-                &acting_pokemon->sessionTeams->teamMember[acting_pokemon_state->ownerTeamMemberIndex]
+                &acting_pokemon->sessionTeams->tagTeamMember[acting_pokemon_state->ownerTeamMemberIndex]
                      ->pokemonPicked[acting_pokemon_state->actionChosen];
             sBattleScene.scene->phaseStep += 1;
             break;

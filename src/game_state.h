@@ -121,7 +121,7 @@ typedef struct BattleSessionTeams {
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ TeamRoster* unk_04;
-    /* 0x08 */ TeamRoster* teamMember[2];
+    /* 0x08 */ TeamRoster* tagTeamMember[2];
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ ModelNodeView* loadedModel;
     /* 0x18 */ ModelNodeView* unk_18;

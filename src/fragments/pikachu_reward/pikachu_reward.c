@@ -124,7 +124,7 @@ s32 PikachuReward_FindPikachuOnCart(void) {
     s32 i;
     TeamRoster* var_v1;
 
-    var_v1 = gSessionContext.battleSides[0].teamMember[0];
+    var_v1 = gSessionContext.battleSides[0].tagTeamMember[0];
 
     for (i = 0; i < var_v1->numberOfPokemonBrought; i++) {
         if (var_v1->pokemonPicked[i].unk_00.unk_00 == 0x19) {

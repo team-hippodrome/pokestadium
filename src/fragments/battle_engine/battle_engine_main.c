@@ -433,7 +433,7 @@ void Battle_ResetFaintBatches(void) {
 
     for (side_index = 0; side_index < 2; side_index++, side++) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
-            roster = side->teamMember[trainer_index];
+            roster = side->tagTeamMember[trainer_index];
             for (pokemon_index = 0; pokemon_index < roster->numberOfPokemonBrought; pokemon_index++) {
                 roster->pokemonPicked[pokemon_index].unk_25 = 0;
             }
@@ -454,7 +454,7 @@ void Battle_UpdateFaintBatches(void) {
 
     for (side_index = 0; side_index < 2; side_index++, side++) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
-            roster = side->teamMember[trainer_index];
+            roster = side->tagTeamMember[trainer_index];
             for (pokemon_index = 0; pokemon_index < roster->numberOfPokemonBrought; pokemon_index++) {
                 if ((roster->pokemonPicked[pokemon_index].unk_25 == 0) &&
                     (roster->pokemonPicked[pokemon_index].hp == 0)) {
@@ -626,10 +626,10 @@ void Battle_SelectComRoster(void) {
     s32 i;
     s32 number_of_pokemon_picked;
 
-    player_roster = gSessionContext.battleSides[0].teamMember[0];
+    player_roster = gSessionContext.battleSides[0].tagTeamMember[0];
     // In Free Battle Team Battle, side 0 can have a second allied trainer in teamMember[1].
-    player_teammate_roster = gSessionContext.battleSides[0].teamMember[1];
-    com_roster = gSessionContext.battleSides[1].teamMember[0];
+    player_teammate_roster = gSessionContext.battleSides[0].tagTeamMember[1];
+    com_roster = gSessionContext.battleSides[1].tagTeamMember[0];
 
     if (com_roster->isHuman & 2) {
         // Free Battle can consider both allied trainers; other modes pass only one.
@@ -662,7 +662,7 @@ void Battle_SelectComRoster(void) {
 // triggers at the start of battle: bug boy in glc
 // Seed icon/presentation state from the side's first trainer and first picked Pokemon.
 void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {
-    TeamRoster* first_trainer = side->teamMember[0];
+    TeamRoster* first_trainer = side->tagTeamMember[0];
 
     side->unk_18 = model->unk_08->unk_00[0];
     side->uniqueStatusFlags |= 0xA0;

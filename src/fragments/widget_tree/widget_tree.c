@@ -1264,8 +1264,8 @@ s32 WidgetTree_DrawTextList(WidgetTextList* arg0, s32 arg1, s32 arg2) {
                 var_s5 += arg0->unk_36;
             } else {
                 Font_DrawCharAt(var_s2, var_s5, var_s0);
-                temp_v0_3 = Font_GetGlyphAdvance(&arg0->unk_3C->unk_00[arg0->unk_3C->unk_50], temp_v0_3 = var_s0);
-                if (arg0->unk_3C->unk_50 >= 2) {
+                temp_v0_3 = Font_GetGlyphAdvance(&arg0->unk_3C->unk_00[arg0->unk_3C->setIndex], temp_v0_3 = var_s0);
+                if (arg0->unk_3C->setIndex >= 2) {
                     var_v1 = temp_v0_3 - 2;
                 } else {
                     var_v1 = temp_v0_3 - 1;
@@ -2450,7 +2450,7 @@ void WidgetTree_SetMessagePanelText(unk_func_88509F48* arg0, unk_func_8850878C* 
         arg2 = Text_CountLines(arg1->unk_40);
     }
 
-    temp_v1 = arg0->unk_38->unk_00[arg0->unk_38->unk_50].unk_02;
+    temp_v1 = arg0->unk_38->unk_00[arg0->unk_38->setIndex].height;
 
     arg0->unk_2C->unk_00.unk_14.unk_00 = temp_v1 + arg3;
 
