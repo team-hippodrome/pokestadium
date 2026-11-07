@@ -475,25 +475,25 @@ typedef struct unk_D_86002F30 {
     /* 0x08 */ ModelNodeView* unk_08;
 } unk_D_86002F30; // size = 0x18 ??
 
-typedef struct UnkInputStruct8000D738 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u16 (*unk_04)[6][0x640];
-} UnkInputStruct8000D738; // size = 0x8
+typedef struct GbTowerSessionParams {
+    /* 0x00 */ s16 buttonBindings;
+    /* 0x02 */ u8 unlockTier;
+    /* 0x03 */ u8 partyCount;
+    /* 0x04 */ u16 (*partyIcons)[6][0x640];
+} GbTowerSessionParams; // size = 0x8
 
 typedef struct unk_D_800AA660 {
     /* 0x0000 */ OSThread thread;
     /* 0x01B0 */ char unk01B0[0x10];
     /* 0x01C0 */ OSMesgQueue queue1;
-    /* 0x01D8 */ struct unk_D_800AA660* unk_01D8;
+    /* 0x01D8 */ struct unk_D_800AA660* nextClient;
     /* 0x01DC */ s32 unk_01DC;
-    /* 0x01E0 */ char unk01E0[0x2000];
+    /* 0x01E0 */ char stack[0x2000];
     /* 0x21E0 */ OSMesg mesg;
     /* 0x21E4 */ OSMesgQueue queue2;
     /* 0x21FC */ u8* font1;
     /* 0x2200 */ u8* font2;
-    /* 0x2204 */ UnkInputStruct8000D738 unk_2204;
+    /* 0x2204 */ GbTowerSessionParams session;
     /* 0x220C */ char unk220C[4];
 } unk_D_800AA660; // size = 0x2210
 
@@ -551,89 +551,129 @@ typedef struct TrainerData {
 
 // GB Emulator State
 typedef struct unk_D_8122B2C0 {
-    /* 0x00000 */ u8 unk_00[0x208];
-    /* 0x00208 */ u8 unk_208[0x40];
-    /* 0x00248 */ u8 unk_248[0x40];
-    /* 0x00288 */ u8 unk_288[0x100];
-    /* 0x00388 */ u8 unk_388[0x400];
-    /* 0x00788 */ u8 unk_788[0x4000];
-    /* 0x04788 */ u8 unk_4788[0xC00];
-    /* 0x05388 */ s32 unk_5388;
-    /* 0x0538C */ char unk0538C[4];
-    /* 0x05390 */ u32 unk_5390;
-    /* 0x05394 */ u32 unk_5394;
-    /* 0x05398 */ u32 unk_5398;
-    /* 0x0539C */ u32 unk_539C;
+    /* 0x00000 */ u8 oamIoHram[0x208]; // GB 0xFE00-0xFFFF: OAM 0x00-0x9F, IO 0x100-0x17F, HRAM 0x180-0x1FE, IE 0x1FF
+    /* 0x00208 */ u8 cgbBgPaletteRam[0x40]; // written by the FF69 (BCPD) handler at BCPS & 0x3F
+    /* 0x00248 */ u8 cgbObjPaletteRam[0x40]; // written by the FF6B (OCPD) handler at OCPS & 0x3F
+    /* 0x00288 */ u8 unk_288[0x100]; // SGB palettes at 0x308 (u16[4][4]) and SGB attribute map at 0x328 (90 bytes)
+    /* 0x00388 */ u8 vramTileCached[0x400]; // per 16-byte VRAM tile: VRAM writes clear it, the tile converter sets 0xFF
+    /* 0x00788 */ u8 vram[0x4000]; // 0x8000-0x9FFF, two CGB banks
+    /* 0x04788 */ u8 opcodeTables[0xC00]; // CB-prefix handler table (256 pointers), then 256 x {cycles, length, rst, pad, handler}
+    /* 0x05388 */ s32 rspTaskDone; // 0x400 (SP_STATUS_SIG3) once the RSP has copied the frame, 0 on submit
+    /* 0x0538C */ s32 frameCounter;
+    /* 0x05390 */ u32 cartridgeFeatures; // sCartridgeTypeFeatures[header 0x147]
+    /* 0x05394 */ u32 romSize; // bytes, from header 0x148
+    /* 0x05398 */ u32 ramSize; // bytes, from header 0x149
+    /* 0x0539C */ u32 unk_539C; // 0x25800 (320 * 240 * 2) at reset; sent to the RSP task
     /* 0x053A0 */ char unk053A0[0x4];
     /* 0x053A4 */ u32 unk_53A4;
     /* 0x053A8 */ void* unk_53A8;
     /* 0x053AC */ void* unk_53AC;
     /* 0x053B0 */ void* unk_53B0;
-    /* 0x053B4 */ void* unk_53B4;
-    /* 0x053B8 */ char unk053B8[0x4];
-    /* 0x053BC */ void* unk_53BC;
-    /* 0x053C0 */ s32 unk_53C0;
-    /* 0x053C4 */ char unk053C4[0x24];
-    /* 0x053E8 */ u16 unk_53E8;
-    /* 0x053EA */ char unk053EA[0x4];
+    /* 0x053B4 */ void* tileCache; // 0x6000 bytes of converted tiles, DMA'd by the RSP renderer
+    /* 0x053B8 */ void* sgbPacketState; // continuation of the SGB joypad packet receiver
+    /* 0x053BC */ void* romImage; // 1 MB cartridge ROM copy; also the 0x0000-0x3FFF page base
+    /* 0x053C0 */ s32 unk_53C0; // APU timestamp base (cpu agent, Mild)
+    /* 0x053C4 */ char unk053C4[0x12];
+    /* 0x053D6 */ s16 cyclesPerLine;
+    /* 0x053D8 */ char unk053D8[0x4];
+    /* 0x053DC */ u16 lineLogOffset;
+    /* 0x053DE */ u16 linesRemaining;
+    /* 0x053E0 */ u16 savedStoreAddr;
+    /* 0x053E2 */ u16 savedSp;
+    /* 0x053E4 */ u16 regF; // lazy flag format
+    /* 0x053E6 */ u16 regHL;
+    /* 0x053E8 */ u16 regPC;
+    /* 0x053EA */ u16 regSP;
+    /* 0x053EC */ char unk053EC[0x2];
     /* 0x053EE */ u16 unk_53EE;
     /* 0x053F0 */ u16 unk_53F0;
-    /* 0x053F2 */ u16 unk_53F2;
-    /* 0x053F4 */ char unk053F4[0x2];
-    /* 0x053F6 */ u16 unk_53F6;
+    /* 0x053F2 */ u16 buttonsHeld; // N64 layout, with START -> 0x1000 and SELECT -> 0x2000 remapped
+    /* 0x053F4 */ u16 joypadMatrix;
+    /* 0x053F6 */ u16 buttonsPressed; // raw N64 buttons pressed this frame
     /* 0x053F8 */ char unk053F8[0x4];
-    /* 0x053FC */ s8 unk_53FC;
-    /* 0x053FD */ s8 unk_53FD;
+    /* 0x053FC */ s8 borderFadeLevel; // |sBorderFade|, sent to the RSP task
+    /* 0x053FD */ s8 gameScreenFadeLevel; // 0x40 while playing, fades to 0 when the pause menu opens; sent to the RSP task
     /* 0x053FE */ u8 unk_53FE;
-    /* 0x053FF */ char unk053FF[0x5];
-    /* 0x05404 */ u8 unk_5404;
-    /* 0x05405 */ char unk05405[0x80];
-    /* 0x05485 */ u8 unk_5485;
-    /* 0x05486 */ char unk05486[0x7];
-    /* 0x0548D */ u8 unk_548D;
-    /* 0x0548E */ u8 unk_548E;
+    /* 0x053FF */ u8 sgbPlayerIndex;
+    /* 0x05400 */ u8 sgbMultiplayerMode; // MLT_REQ
+    /* 0x05401 */ char unk05401[0x1];
+    /* 0x05402 */ u8 sgbMaskMode; // MASK_EN
+    /* 0x05403 */ u8 sgbTransferPending;
+    /* 0x05404 */ u8 unk_5404; // nonzero triggers GbSgb_RenderBorder
+    /* 0x05405 */ u8 sgbPacketBuffer[0x80];
+    /* 0x05485 */ u8 dmgMode; // 1 unless header 0x143 bit 7 (CGB) is set; selects the DMG RSP renderer
+    /* 0x05486 */ char unk05486[0x1];
+    /* 0x05487 */ u8 regA;
+    /* 0x05488 */ u8 regB;
+    /* 0x05489 */ u8 regC;
+    /* 0x0548A */ u8 regD;
+    /* 0x0548B */ u8 regE;
+    /* 0x0548C */ char unk0548C[0x1];
+    /* 0x0548D */ u8 invalidOpcodeHit; // set by GbCpu_HandleReservedOpcode; ends the session with code 3
+    /* 0x0548E */ u8 speedMultiplier; // 1, 2 or 4; the CPU runs speedMultiplier * 154 scanlines per frame
     /* 0x0548F */ char unk0548F[0x1];
-    /* 0x05490 */ u8 unk_5490;
-    /* 0x05491 */ char unk05491[0xB];
-    /* 0x0549C */ volatile u8 unk_549C[0x100];
-    /* 0x0559C */ volatile u8 unk_559C[0x10];
-    /* 0x055AC */ u8 unk_55AC[0x40];
-    /* 0x055EC */ u8 unk_55EC[0x40];
-    /* 0x0562C */ u8 unk_562C[0x200];
-    /* 0x0582C */ u8 unk_582C[0x200];
-    /* 0x05A2C */ u8 unk_5A2C[0x200];
-    /* 0x05C2C */ char unk05C2C[0x2C];
+    /* 0x05490 */ u8 apuTimeDivisor; // copy of speedMultiplier each frame; APU write timestamps are divided by it
+    /* 0x05491 */ u8 mbcRomBank;
+    /* 0x05492 */ u8 mbcRamBank;
+    /* 0x05493 */ u8 mbcBankingMode;
+    /* 0x05494 */ u8 romBankMask;
+    /* 0x05495 */ u8 ramBankMask;
+    /* 0x05496 */ char unk05496[0x3];
+    /* 0x05499 */ u8 timerShift; // from TAC
+    /* 0x0549A */ u16 paletteFadeState;
+    /* 0x0549C */ volatile u8 romBankStatus[0x100]; // per 16 KB ROM bank, 0xFF once loaded
+    /* 0x0559C */ volatile u8 ramBankStatus[0x10]; // per 8 KB RAM bank, 0xFF once loaded
+    /* 0x055AC */ u8 readPageTable[0x40]; // 16 host base pointers, one per 4 KB GB page
+    /* 0x055EC */ u8 writePageHandlers[0x40]; // 16 write handlers, one per 4 KB GB page
+    /* 0x0562C */ u8 ioWriteHandlers[0x200]; // 0x80 handlers for 0xFF00-0xFF7F
+    /* 0x0582C */ u8 sramPageSkipSync[0x200]; // per cart RAM page: 0 = written back to the pak, 0xFE = never written back (Pokemon carts: pages 0-4)
+    /* 0x05A2C */ u8 sramPageSyncState[0x200]; // per 256-byte cart RAM page: 0xFF unmodified since load, emulated writes clear to 0, 1 write queued, 2 written back
+    /* 0x05C2C */ u32 savedHostRegs[0xB]; // a0-a3, v0, v1, resume pc, ra, t7, t8, t9
     /* 0x05C58 */ void* unk_5C58;
-    /* 0x05C5C */ OSGbpakId unk_5C5C;
+    /* 0x05C5C */ OSGbpakId cartridgeId; // header read at startup; later reads (gbpakId) must match
     /* 0x05CAC */ OSGbpakId gbpakId;
     /* 0x05CFC */ OSPfs* pfs;
     /* 0x05D00 */ char unk05D00[0x64];
     /* 0x05D64 */ u8* transferBuffer;
     /* 0x05D68 */ u32 gbAddress;
     /* 0x05D6C */ s32 transferSize;
-    /* 0x05D70 */ u32 unk_5D70[4];
-    /* 0x05D80 */ u32 unk_5D80[4];
+    /* 0x05D70 */ u32 unk_5D70[4]; // [0] ROM checksum sum, [1] pak bank list, [2] stored bank list, [3] stored image offset
+    /* 0x05D80 */ u32 probePattern[4]; // 32-byte RAM probe block with unk_5D90
     /* 0x05D90 */ u32 unk_5D90[4];
-    /* 0x05DA0 */ u16 unk_5DA0;
-    /* 0x05DA2 */ u16 unk_5DA2;
-    /* 0x05DA4 */ u8 unk_5DA4[0x20];
-    /* 0x05DC4 */ u8 unk_5DC4;
-    /* 0x05DC5 */ u8 unk_5DC5;
-    /* 0x05DC6 */ u8 unk_5DC6;
-    /* 0x05DC7 */ u8 unk_5DC7;
-    /* 0x05DC8 */ volatile u8 unk_5DC8;
-    /* 0x05DC9 */ volatile u8 unk_5DC9;
-    /* 0x05DCA */ volatile u8 unk_5DCA;
+    /* 0x05DA0 */ u16 probeAddress;
+    /* 0x05DA2 */ u16 pakRomBank;
+    /* 0x05DA4 */ u8 romSignature[0x20]; // 32 bytes read from ROM 0x9C000, checked before fast boot
+    /* 0x05DC4 */ u8 probeValid;
+    /* 0x05DC5 */ u8 cartridgeVersion; // GbPak_DetectSupportedCartridgeVariant: 1 Red, 2 Green, 3 Blue, 4 Yellow
+    /* 0x05DC6 */ u8 unk_5DC6; // 1 for Red, 0 for Blue/Yellow; gates delta images in GbEmu_LoadStoredRomBanks
+    /* 0x05DC7 */ u8 pakRequest; // command for GbPak_ServiceThread
+    /* 0x05DC8 */ volatile u8 pakBusy;
+    /* 0x05DC9 */ volatile u8 pakState; // 2 ready, 8-11 error states
+    /* 0x05DCA */ volatile u8 pakConnected;
     /* 0x05DCB */ u8 status;
-    /* 0x05DCC */ u8 unk_5DCC;
-    /* 0x05DCD */ s8 unk_5DCD;
-    /* 0x05DCE */ u8 unk_5DCE;
-    /* 0x05DCF */ u8 unk_5DCF;
-    /* 0x05DD0 */ u8 unk_5DD0;
-    /* 0x05DD1 */ u8 unk05DD1[0x15287];
+    /* 0x05DCC */ u8 pakPort;
+    /* 0x05DCD */ s8 pakRetryBudget;
+    /* 0x05DCE */ u8 pakRamBank;
+    /* 0x05DCF */ u8 pakMbcMode;
+    /* 0x05DD0 */ u8 pakIdleCountdown; // set to 8 after a RAM page write; the pak is powered off at 0
+    /* 0x05DD1 */ char unk05DD1[0x3];
+    /* 0x05DD4 */ u16 hdmaLength;
+    /* 0x05DD6 */ u16 hdmaDst;
+    /* 0x05DD8 */ u16 hdmaSrc;
+    /* 0x05DDA */ char unk05DDA[0x16];
+    /* 0x05DF0 */ u8 wram[0x8000];
+    /* 0x0DDF0 */ u8 sgbBorderChr[0x2000]; // CHR_TRN
+    /* 0x0FDF0 */ u8 sgbBorderMap[0x800]; // PCT_TRN
+    /* 0x105F0 */ u8 sgbBorderPalettes[0x80];
+    /* 0x10670 */ char unk10670[0x780];
+    /* 0x10DF0 */ u8 sgbSystemPalettes[0x1000]; // PAL_TRN
+    /* 0x11DF0 */ u8 sgbAttrFiles[0x1000]; // ATTR_TRN
+    /* 0x12DF0 */ u8 cartRam[0x8000]; // accessed as (u8*)emu + 0x12DF0
+    /* 0x1ADF0 */ u8 sgbAttrMapUnpacked[360];
+    /* 0x1AF58 */ char unk1AF58[0x100];
 } unk_D_8122B2C0; // size = 0x1B058
 
-#define GB_HEADER(emu, offset) (((u8*)(emu)->unk_53BC)[offset])
+#define GB_HEADER(emu, offset) (((u8*)(emu)->romImage)[offset])
 
 extern s16 gCamDistances[];
 
