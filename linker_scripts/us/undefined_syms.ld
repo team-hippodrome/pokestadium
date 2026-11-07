@@ -603,8 +603,8 @@ gStatusIconParalyze = 0x3007D48;
 D_8006873C = 0x8006873C;
 
 // GB CPU opcode dispatch tables, kept as a rodatabin blob. splat's .incbin stub
-// labels only the first symbol (jtbl_81229500), so the second needs declaring here.
-D_81229580 = 0x81229580;
+// labels only the first symbol (sGbSgbCommandTable), so the second needs declaring here.
+sGbIoWriteHandlerTable = 0x81229580;
 
 // Interior aliases into pokemon_stats.c's D_80073230 packed table.
 gDexToInternalIndex = 0x80073267;
@@ -638,17 +638,17 @@ D_80078EB3 = 0x80078EB3;
 D_80078EBF = 0x80078EBF;
 
 // GB CPU handler tables, kept as a databin blob; the .incbin stub labels only
-// the first symbol (D_81228770).
-D_81228B70 = 0x81228B70;
-D_81229370 = 0x81229370;
-D_812294C0 = 0x812294C0;
-D_812294E0 = 0x812294E0;
+// the first symbol (sGbCpuCbOpcodeTable).
+sGbCpuOpcodeTable = 0x81228B70;
+sGbBootRomImage = 0x81229370;
+sGbJoypadButtonMap = 0x812294C0;
+sGbJoypadDpadMap = 0x812294E0;
 
-// Interior aliases into gb_tower_emulator_86CB0.c's sGbApuRegs.
+// Interior aliases into gb_tower_emulator_86CB0.c's sGbApuRegsFF20.
 D_8120EA80 = 0x8120EA80;
 D_8120EA86 = 0x8120EA86;
 
-// Interior aliases into gb_tower_emulator_7F9A0.c's D_8120D820.
+// Interior aliases into gb_tower_emulator_7F9A0.c's sBootLogoTiles.
 D_8120D8FD = 0x8120D8FD;
 D_8120D8FE = 0x8120D8FE;
 D_8120D906 = 0x8120D906;

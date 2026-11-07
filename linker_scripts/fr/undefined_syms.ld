@@ -602,8 +602,8 @@ gStatusIconParalyze = 0x03007D48;
 D_8006873C = 0x80068EDC;
 
 // GB CPU opcode dispatch tables, kept as a rodatabin blob. splat's .incbin stub
-// labels only the first symbol (jtbl_81229500), so the second needs declaring here.
-D_81229580 = 0x812295A0;
+// labels only the first symbol (sGbSgbCommandTable), so the second needs declaring here.
+sGbIoWriteHandlerTable = 0x812295A0;
 
 // Interior aliases into pokemon_stats.c's D_80073230 packed table.
 gDexToInternalIndex = 0x80073A07;
@@ -637,17 +637,17 @@ D_80078E80 = 0x80078450;
 // D_80078EBF = 0x80078EBF; // not found in fr
 
 // GB CPU handler tables, kept as a databin blob; the .incbin stub labels only
-// the first symbol (D_81228770).
-D_81228B70 = 0x81228B90;
-D_81229370 = 0x81229390;
-D_812294C0 = 0x812294E0;
-D_812294E0 = 0x81229500;
+// the first symbol (sGbCpuCbOpcodeTable).
+sGbCpuOpcodeTable = 0x81228B90;
+sGbBootRomImage = 0x81229390;
+sGbJoypadButtonMap = 0x812294E0;
+sGbJoypadDpadMap = 0x81229500;
 
-// Interior aliases into gb_tower_emulator_86CB0.c's sGbApuRegs.
+// Interior aliases into gb_tower_emulator_86CB0.c's sGbApuRegsFF20.
 D_8120EA80 = 0x8120EAA0;
 D_8120EA86 = 0x8120EAA6;
 
-// Interior aliases into gb_tower_emulator_7F9A0.c's D_8120D820.
+// Interior aliases into gb_tower_emulator_7F9A0.c's sBootLogoTiles.
 D_8120D8FD = 0x8120D921;
 D_8120D8FE = 0x8120D922;
 D_8120D906 = 0x8120D92A;
@@ -1359,38 +1359,38 @@ PROVIDE(D_81000000 = 0x81000000);
 PROVIDE(D_81100000 = 0x81100000);
 PROVIDE(gGbMemoryMap = 0x811FEB80);
 PROVIDE(D_81200000 = 0x81200000);
-PROVIDE(D_81209FBC = 0x81209FDC);
-PROVIDE(D_8120A1CC = 0x8120A1EC);
-PROVIDE(D_8120A204 = 0x8120A224);
-PROVIDE(D_8120A584 = 0x8120A5A4);
-PROVIDE(D_8120A718 = 0x8120A738);
-PROVIDE(D_8120A81C = 0x8120A83C);
-PROVIDE(D_8120A868 = 0x8120A888);
-PROVIDE(D_8120A87C = 0x8120A89C);
-PROVIDE(D_8120A890 = 0x8120A8B0);
-PROVIDE(D_8120A8AC = 0x8120A8CC);
-PROVIDE(D_8120A938 = 0x8120A958);
-PROVIDE(D_8120ACC0 = 0x8120ACE0);
-PROVIDE(D_8120AD54 = 0x8120AD74);
-PROVIDE(D_8120AD64 = 0x8120AD84);
-PROVIDE(D_8120AE48 = 0x8120AE68);
-PROVIDE(D_8120AE50 = 0x8120AE70);
-PROVIDE(D_8120AEE0 = 0x8120AF00);
-PROVIDE(D_8120AF28 = 0x8120AF48);
-PROVIDE(D_8120AF8C = 0x8120AFAC);
-PROVIDE(D_8120AFBC = 0x8120AFDC);
-PROVIDE(D_8120AFF8 = 0x8120B018);
-PROVIDE(D_8120B01C = 0x8120B03C);
+PROVIDE(GbPpu_StartFrame = 0x81209FDC);
+PROVIDE(GbPpu_StepMode2DoubleSpeed = 0x8120A1EC);
+PROVIDE(GbPpu_StepMode2 = 0x8120A224);
+PROVIDE(GbPpu_StepLine153 = 0x8120A5A4);
+PROVIDE(GbCpu_FetchOpcode = 0x8120A738);
+PROVIDE(GbMem_WriteHighPage = 0x8120A83C);
+PROVIDE(GbMem_WriteVramBank1 = 0x8120A888);
+PROVIDE(GbMem_WriteVramBank0 = 0x8120A89C);
+PROVIDE(GbMem_WriteCartRam = 0x8120A8B0);
+PROVIDE(GbMem_WriteCartRamMbc5 = 0x8120A8CC);
+PROVIDE(GbMem_WriteSerialControlDmg = 0x8120A958);
+PROVIDE(GbMem_WriteBootRomDisable = 0x8120ACE0);
+PROVIDE(GbSgb_ReceivePacketResync = 0x8120AD74);
+PROVIDE(GbSgb_ReceivePacketStart = 0x8120AD84);
+PROVIDE(GbMem_IgnoreWrite = 0x8120AE68);
+PROVIDE(GbMem_WriteMbc1RomBank = 0x8120AE70);
+PROVIDE(GbMem_WriteMbc1RamBank = 0x8120AF00);
+PROVIDE(GbMem_WriteMbc1BankMode = 0x8120AF48);
+PROVIDE(GbMem_WriteMbc3RomBank = 0x8120AFAC);
+PROVIDE(GbMem_WriteMbc3RamBank = 0x8120AFDC);
+PROVIDE(GbMem_WriteMbc5RomBank = 0x8120B018);
+PROVIDE(GbMem_WriteMbc5RamBank = 0x8120B03C);
 PROVIDE(D_8120D7F3 = 0x8120D813);
 PROVIDE(D_8120D8FD = 0x8120D921);
 PROVIDE(D_8120D8FE = 0x8120D922);
 PROVIDE(D_8120D906 = 0x8120D92A);
 PROVIDE(D_8120EA86 = 0x8120EAA6);
-PROVIDE(D_81228B70 = 0x81228B90);
-PROVIDE(D_81229370 = 0x81229390);
-PROVIDE(D_812294C0 = 0x812294E0);
-PROVIDE(D_812294E0 = 0x81229500);
-PROVIDE(D_81229580 = 0x812295A0);
+PROVIDE(sGbCpuOpcodeTable = 0x81228B90);
+PROVIDE(sGbBootRomImage = 0x81229390);
+PROVIDE(sGbJoypadButtonMap = 0x812294E0);
+PROVIDE(sGbJoypadDpadMap = 0x81229500);
+PROVIDE(sGbIoWriteHandlerTable = 0x812295A0);
 PROVIDE(D_81300000 = 0x81300000);
 PROVIDE(D_81400000 = 0x81400000);
 PROVIDE(D_8140DBA8 = 0x8140DBA8);

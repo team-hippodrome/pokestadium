@@ -461,7 +461,7 @@
 # gb_tower_emulator (fragment1): the Japanese fragment links a sound driver of its own
 # (gb_tower_emulator_96DA0, 0x96DA0..0x9C130) between osGbSetNextBuffer (86C30) and the GB APU
 # file (86CB0), so the porter windows start 86CB0 0x1F0 late. 86C30 owns hdwrBugFlag at 0xC1D50
-# and 86CB0 its .data at 0xC2470, .rodata at 0xDE2F0 and .bss at 0x81283BA0 (D_8122C790, located
+# and 86CB0 its .data at 0xC2470, .rodata at 0xDE2F0 and .bss at 0x81283BA0 (sGbAudioLastSampleLeft, located
 # from the GbApu_* accesses); 86CB0 code ends at 0x9E6A0 and the rest of the text block is
 # Japanese-only.
 - [0x96D20, asm, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
@@ -487,8 +487,8 @@
 -> - {vram: 0x812875A0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_bss_812875A0}
 
 # gb_tower: the Japanese code block 0xB1B0..0xC010 is all of gb_tower plus one Japanese-only
-# function at its end (func_8000B340_jp, which reads the file-local pak bss D_800A82A7/D_800A8100/
-# D_800A82A8). .data (static D_800697D0), .rodata (cartridge title strings) and .bss are built
+# function at its end (GbTower_PollAllPaks_jp, which reads the file-local pak bss gGbPakPollMask/gGbPakPfs/
+# gGbPakDisconnected). .data (static sPollPort), .rodata (cartridge title strings) and .bss are built
 # from src/gb_tower.c.
 - [0xB1B0, asm, text_B1B0]
 -> - [0xB1B0, c, gb_tower]

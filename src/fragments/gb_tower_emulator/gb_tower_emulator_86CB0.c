@@ -13,54 +13,60 @@ const char D_8122B054[0x24] = "AudioExit  : Reload Noisetable \n";
 const char D_8122B078[0x14] = "DAC:Lost 1 Frame.\n";
 const char D_8122B08C[0x14] = "Address Error %x\n";
 
+// Per-channel synthesis state for gGbApuSquare1/Square2/Wave/Noise. Output runs at 48 kHz
+// (sGbAudioOutputConfig.frequency); a waveform period is 32 steps of a 16.16 phase accumulator, so
+// timer fields below count output samples (200 = 1/240 s, 400 = 1/120 s, 800 = 1/60 s).
 typedef struct GbApuChannelState {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ u8 enabled; // channel on, as reported in NR52 bits 0-3
     /* 0x02 */ char unk02[0x02];
-    /* 0x04 */ s32 unk_04;
+    /* 0x04 */ s32 retriggerTimer; // wave only: 320 on trigger, fades the old note before restarting
     /* 0x08 */ union {
-        u16 unk_00;
-        s32 unk_02;
-    } unk_08;
-    /* 0x0C */ u32 unk_0C;
-    /* 0x10 */ u16 unk_10;
+        u16 index; // integer part: waveform step (0..31) or noise table position
+        s32 fixed; // 16.16 phase accumulator
+    } phase;
+    /* 0x0C */ u32 step;   // phase increment per output sample
+    /* 0x10 */ u16 period; // 11-bit period value from NRx3/NRx4 (noise: unused)
     /* 0x12 */ u16 unk_12;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ u8 unk_20;
-    /* 0x21 */ u8 unk_21;
+    /* 0x14 */ s32 lengthTimer;   // samples left before the length timer silences the channel
+    /* 0x18 */ s32 lengthEnabled; // NRx4 bit 6
+    /* 0x1C */ s32 length;        // 64 - NRx1 length (256 - NR31 for wave), in 200-sample ticks
+    /* 0x20 */ u8 amplitude;      // target level from the volume tables
+    /* 0x21 */ u8 initialVolume;  // NRx2 initial volume (wave: NR32 output level code)
     /* 0x22 */ char unk22[0x2];
-    /* 0x24 */ u32 unk_24;
-    /* 0x28 */ u32 unk_28;
+    /* 0x24 */ u32 envelopeCounter;
+    /* 0x28 */ u32 envelopePeriod; // NRx2 sweep pace * 800 samples (0 = envelope off)
     /* 0x2C */ char unk2C[0x1];
-    /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ u8 unk_2E;
+    /* 0x2D */ u8 envelopeVolume;    // current envelope volume 0..15
+    /* 0x2E */ u8 envelopeDirection; // NRx2 bit 3: 1 = increase
     /* 0x2F */ char unk2F[0x1];
-    /* 0x30 */ u32 unk_30;
-    /* 0x34 */ u32 unk_34;
-    /* 0x38 */ u8 unk_38;
-    /* 0x39 */ u8 unk_39;
-    /* 0x3A */ u8 unk_3A;
-    /* 0x3B */ u8 unk_3B;
-    /* 0x3C */ u8 unk_3C;
+    /* 0x30 */ u32 sweepCounter;  // square 1 only
+    /* 0x34 */ u32 sweepPeriod;   // NR10 pace * 400 samples
+    /* 0x38 */ u8 sweepShift;     // NR10 bits 0-2
+    /* 0x39 */ u8 sweepDirection; // NR10 bit 3: 1 = decrease
+    /* 0x3A */ u8 sweepEnabled;
+    /* 0x3B */ u8 duty; // waveform id for GbApu_GetWaveformSample: 0-3 duty, 6 noise, 7 wave RAM
+    /* 0x3C */ u8 outputAmplitude; // level actually applied; follows amplitude, decays to 0 when stopped
     /* 0x3D */ char unk3D[0x3];
-    /* 0x40 */ u32 unk_40;
-    /* 0x44 */ u16 unk_44;
+    /* 0x40 */ u32 activeStep;   // step in use (kept while a stopped note decays; noise: slews to step)
+    /* 0x44 */ u16 lastSample;   // wave only: previous output, averaged with the next one
     /* 0x46 */ u16 unk46;
-    /* 0x48 */ u32 unk_48;
-    /* 0x4C */ u8 unk_4C;
+    /* 0x48 */ u32 stepSlewRate; // noise only: how fast activeStep approaches step
+    /* 0x4C */ u8 muted;         // period out of audible range (<= 0 or >= 0x7FF)
     /* 0x4D */ char unk4D[0x3];
 } GbApuChannelState; // size = 0x50
 
-typedef struct unk_D_8122EEA8 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-} unk_D_8122EEA8; // size = 0x4
+// NR52 channel-status bits as seen by the CPU before the queued writes are rendered:
+// 2 = triggered since the last render (reads as on), 1 = switched off (reads as off), 0 = use the
+// channel's enabled flag. Set by GbApu_QueueRegisterWrite, cleared by GbApu_RenderBuffer.
+typedef struct GbApuStatusOverride {
+    /* 0x00 */ u8 square1;
+    /* 0x01 */ u8 square2;
+    /* 0x02 */ u8 wave;
+    /* 0x03 */ u8 noise;
+} GbApuStatusOverride; // size = 0x4
 
 // Game Boy sound registers NR10 (0xFF10) through NR52 (0xFF26), mirrored in
-// D_8120EA70 (indexed by register address - 0xFF10).
+// sGbApuRegs (indexed by register address - 0xFF10).
 typedef struct GbApuRegs {
     /* 0x00 NR10 */ u32 : 1;
     u32 sweepTime : 3;
@@ -127,10 +133,10 @@ typedef struct GbApuRegs {
     /* 0x17 */ u32 : 8;
 } GbApuRegs; // size = 0x18
 
-#define GB_APU_REGS (*(GbApuRegs*)D_8120EA70)
+#define GB_APU_REGS (*(GbApuRegs*)sGbApuRegs)
 
-// Capacity of the APU register-write queue (D_8122EEB0, created in GbApu_ResetChannels) and of
-// the D_8122C8D8 buffer that func_81208828 drains it into.
+// Capacity of the APU register-write queue (sGbApuWriteQueue, created in GbApu_ResetChannels) and of
+// the sGbApuWriteBuffer buffer that GbApu_RenderBuffer drains it into.
 #if defined(VERSION_JP)
 #define GB_APU_WRITE_QUEUE_LEN 1800
 #else
@@ -154,43 +160,43 @@ extern u16 D_8120EA86;
 extern u32 D_8120EA80;
 
 // .bss
-s16 D_8122C790;
-s16 D_8122C792;
-u8* D_8122C794;
+s16 sGbAudioLastSampleLeft;
+s16 sGbAudioLastSampleRight;
+u8* sGbApuNoiseTable; // 32 precomputed 16 KB LFSR noise waveforms (Yay0 from D_F4130, see GbApu_Reset)
 GbApuChannelState gGbApuSquare1;
 GbApuChannelState gGbApuSquare2;
 GbApuChannelState gGbApuWave;
 GbApuChannelState gGbApuNoise;
-GbApuWrite D_8122C8D8[GB_APU_WRITE_QUEUE_LEN];
-u8 D_8122EE58[0x40];
-s32 D_8122EE98;
+GbApuWrite sGbApuWriteBuffer[GB_APU_WRITE_QUEUE_LEN];
+u8 sGbApuWaveSamples[0x40]; // wave RAM (FF30-FF3F) unpacked to 32 nibbles, high nibble first
+s32 sGbApuNoiseTableOffset; // byte offset of the NR43-selected waveform in sGbApuNoiseTable
 s32 D_8122EE9C;
 s32 D_8122EEA0;
 s32 D_8122EEA4;
-unk_D_8122EEA8 D_8122EEA8;
-OSMesgQueue D_8122EEB0;
-OSMesg D_8122EEC8[GB_APU_WRITE_QUEUE_LEN + 1];
-typedef struct unk_D_81234690 {
+GbApuStatusOverride sGbApuStatusOverride;
+OSMesgQueue sGbApuWriteQueue;
+OSMesg sGbApuWriteQueueMessages[GB_APU_WRITE_QUEUE_LEN + 1];
+typedef struct GbAudioOutputConfig {
     /* 0x00 */ u8 pad0[2];
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
+    /* 0x02 */ u16 frequency;
+    /* 0x04 */ s16 actualFrequency;
+    /* 0x06 */ s16 samplesPerFrame;
+    /* 0x08 */ s16 maxSamplesPerFrame;
+    /* 0x0A */ s16 minSamplesPerFrame;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ u8 pad0E[0x2A];
-} unk_D_81234690; // size = 0x38
+} GbAudioOutputConfig; // size = 0x38
 
-extern unk_D_81234690 D_81234690;
-extern volatile s32 D_812346C8;
+extern GbAudioOutputConfig sGbAudioOutputConfig;
+extern volatile s32 sGbAudioFrameCount;
 extern s32 D_812346D0;
-extern s32 D_812346D4;
-extern s16* D_812346E0[3];
-extern s16 D_812346EC[3];
+extern s32 sGbAudioBufferIndex;
+extern s16* sGbAudioBuffers[3];
+extern s16 sGbAudioBufferLengths[3];
 extern u32 D_812346F4;
 extern volatile u32 D_812346FC;
 
-void func_81209374(s32 numSamples, s16* out);
+void GbAudio_RenderMenuSounds(s32 numSamples, s16* out);
 
 #if defined(VERSION_JP)
 // Japanese-only audio code linked between osGbSetNextBuffer and this file
@@ -221,67 +227,87 @@ s32 D_8120EA60 = 0;
 u8 D_8120EA64[0xC] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_8120EA70[0x10] = {
+// sGbApuRegs + sGbApuRegsFF20 together mirror the sound registers 0xFF10-0xFF5F (NR10-NR52 and wave
+// RAM FF30-FF3F), indexed by address - 0xFF10; see GbApuRegs / GB_APU_REGS.
+u8 sGbApuRegs[0x10] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 // D_8120EA80 and D_8120EA86 are interior aliases (undefined_syms.ld).
-u8 sGbApuRegs[0x40] = {
+u8 sGbApuRegsFF20[0x40] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 #if !defined(VERSION_JP)
-// Set by GbApu_SelectRegionClock: the divisor in GbApu_FreqToStep / GbApu_FreqToStep2x and the
-// time span func_81208828 spreads over one buffer. The Japanese build has no
-// GbApu_SelectRegionClock and uses the constants 1500.0f and 17784.0f instead.
-f32 D_8120EAC0 = 1500.0f;
-s32 D_8120EAC4 = 17784;
+// Set by GbApu_SetKey1Speed: the divisor in GbApu_FreqToStep / GbApu_FreqToStep2x and the
+// time span GbApu_RenderBuffer spreads over one buffer. The Japanese build has no
+// GbApu_SetKey1Speed and uses the constants 1500.0f and 17784.0f instead.
+f32 sGbApuStepDivisor = 1500.0f;
+s32 sGbApuBufferTimeSpan = 17784;
 #endif
-s32 D_8120EAC8 = 2048;
-s32 D_8120EACC = 16384;
-s32 D_8120EAD0 = 0;
-u16 D_8120EAD4[32] = {
+// Noise playback position wraps from sGbApuNoiseLoopEnd back to sGbApuNoiseLoopStart.
+s32 sGbApuNoiseLoopStart = 2048;
+s32 sGbApuNoiseLoopEnd = 16384;
+s32 sGbApuLastWriteTime = 0; // timestamp of the latest GbApu_QueueRegisterWrite
+// Per-waveform noise loop start, indexed [NR43 clock shift][NR43 LFSR width].
+u16 sGbApuNoiseLoopStarts[32] = {
     0x1120, 0x0201, 0x1100, 0x0F50, 0x0800, 0x0723, 0x0800, 0x0922, 0x0800, 0x0980, 0x1010,
     0x0BA6, 0x0800, 0x0BA6, 0x0800, 0x0BA5, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800,
     0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800, 0x0800,
 };
-u8 D_8120EB14[0x10] = {
+// Envelope volume (0-15) -> amplitude, squares.
+u8 sGbApuSquareVolumeLevels[0x10] = {
     0x00, 0x01, 0x03, 0x06, 0x0A, 0x0E, 0x12, 0x15, 0x18, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20,
 };
-u8 D_8120EB24[0x4] = {
+// NR32 output level: 0 = mute, 1 = 100%, 2 = 50%, 3 = 25%.
+u8 sGbApuWaveOutputLevels[0x4] = {
     0x00,
     0x20,
     0x10,
     0x08,
 };
-u8 D_8120EB28[0x10] = {
+// Envelope volume -> amplitude for noise, NR43 bit 3 = 0 (15-bit LFSR) and = 1 (7-bit LFSR).
+u8 sGbApuNoiseVolumeLevels15Bit[0x10] = {
     0x00, 0x06, 0x0A, 0x0E, 0x11, 0x16, 0x1A, 0x1D, 0x20, 0x22, 0x24, 0x26, 0x28, 0x2B, 0x2E, 0x32,
 };
-u8 D_8120EB38[0x10] = {
+u8 sGbApuNoiseVolumeLevels7Bit[0x10] = {
     0x00, 0x06, 0x0A, 0x0E, 0x11, 0x16, 0x1A, 0x1D, 0x20, 0x22, 0x24, 0x26, 0x29, 0x2C, 0x2F, 0x34,
 };
-u32 D_8120EB48[9] = {
+// NR43 clock divider (bits 0-2) -> 16.16 step 2 / r, with r = 0 treated as 0.5 (Pan Docs).
+// The ninth entry is never indexed.
+u32 sGbApuNoiseDividerSteps[9] = {
     0x00020000, 0x00010000, 0x00008000, 0x00005555, 0x00004000, 0x00003333, 0x00002AAA, 0x00002492, 0x12345678,
 };
 
 #if defined(VERSION_JP)
+/**
+ * Empty in the international builds; in JP flushes the Japanese sound driver (func_812103F0_jp). No callers found.
+ */
 void func_81207330(void) {
     func_812103F0_jp();
 }
 
+/**
+ * Sets D_8120EA60 (JP: also sends command 0xF1000000 to the Japanese sound driver). No callers found.
+ */
 void GbApu_SetActiveFlag(void) {
     func_8121036C_jp(0xF1000000, 0);
     D_8120EA60 = 1;
 }
 
+/**
+ * Clears D_8120EA60 (JP: also sends command 0xF2000000). No callers found.
+ */
 void GbApu_ClearActiveFlag(void) {
     func_8121036C_jp(0xF2000000, 0);
     D_8120EA60 = 0;
 }
 
-// Scales channel arg0's unk_01C by arg2 percent: at once when arg1 == 0, otherwise as a ramp
-// of unk_020 per step over unk_012 = arg1 steps. unk_024 keeps the value before the change.
+/**
+ * Scales channel arg0's unk_01C by arg2 percent: at once when arg1 == 0, otherwise as a ramp
+ * of unk_020 per step over unk_012 = arg1 steps. unk_024 keeps the value before the change.
+ */
 void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
     unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
     f32 target;
@@ -298,8 +324,10 @@ void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
     ch->unk_020 = (target - ch->unk_01C) / arg1;
 }
 
-// Returns channel arg0's unk_01C to the unk_024 value saved by func_81215C14_jp, at once or
-// as a ramp over arg1 steps.
+/**
+ * Returns channel arg0's unk_01C to the unk_024 value saved by func_81215C14_jp, at once or
+ * as a ramp over arg1 steps.
+ */
 void func_81215C9C_jp(s32 arg0, s32 arg1) {
     unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
 
@@ -313,59 +341,98 @@ void func_81215C9C_jp(s32 arg0, s32 arg1) {
     ch->unk_020 = (ch->unk_024 - ch->unk_01C) / arg1;
 }
 
+/**
+ * Empty.
+ */
 void func_81207354(void) {
 }
 
+/**
+ * Sends the Japanese sound driver command 0x08 with byte arguments arg0 and arg1, and arg2.
+ */
 void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2) {
     func_81210390_jp(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
 }
 
+/**
+ * Sends Japanese sound driver commands 0x82020100 and 0xF8000000 around a flush.
+ */
 void func_81215D50_jp(void) {
     func_8121036C_jp(0x82020100, 0);
     func_812103F0_jp();
     func_8121036C_jp(0xF8000000, 0);
 }
 
+/**
+ * Sends Japanese sound driver commands 0x06020002/1/0 with arg1, arg0 and arg2.
+ */
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2) {
     func_81210390_jp(0x06020002, arg1);
     func_81210390_jp(0x06020001, arg0);
     func_81210390_jp(0x06020000, arg2);
 }
 
+/**
+ * Sends Japanese sound driver command 0x06020004 with -1.
+ */
 void func_81215DDC_jp(void) {
     func_81210390_jp(0x06020004, -1);
 }
 #else
+/**
+ * Empty in the international builds; in JP flushes the Japanese sound driver (func_812103F0_jp). No callers found.
+ */
 void func_81207330(void) {
 }
 
+/**
+ * Sets D_8120EA60 (JP: also sends command 0xF1000000 to the Japanese sound driver). No callers found.
+ */
 void GbApu_SetActiveFlag(void) {
     D_8120EA60 = 1;
 }
 
+/**
+ * Clears D_8120EA60 (JP: also sends command 0xF2000000). No callers found.
+ */
 void GbApu_ClearActiveFlag(void) {
     D_8120EA60 = 0;
 }
 
+/**
+ * Empty.
+ */
 void func_81207354(void) {
 }
 
-void GbApu_SelectRegionClock(s32 arg0) {
-    if (arg0 == 0) {
-        D_8120EAC4 = 0x4578;
-        D_8120EAC0 = 1500.0f;
+/**
+ * arg0 = KEY1 (FF4D) bit 7, the CGB current-speed flag (GbEmu_AudioVideoTick). Double speed
+ * doubles the CPU cycles per frame, so the write timestamps span twice as much per buffer.
+ * This is the Game Boy's own speed switch, not the GB Tower "Double Speed" button; that one
+ * sets emu->speedMultiplier, which reaches the APU through apuTimeDivisor.
+ */
+void GbApu_SetKey1Speed(s32 doubleSpeed) {
+    if (doubleSpeed == 0) {
+        sGbApuBufferTimeSpan = 0x4578;
+        sGbApuStepDivisor = 1500.0f;
         return;
     }
-    D_8120EAC4 = 0x8AF0;
-    D_8120EAC0 = 1500.0f;
+    sGbApuBufferTimeSpan = 0x8AF0;
+    sGbApuStepDivisor = 1500.0f;
 }
 #endif
 
-void GbApu_SetNoisePeriodBounds(s32 arg0, s32 arg1) {
-    D_8120EAC8 = arg0;
-    D_8120EACC = arg1;
+/**
+ * No callers.
+ */
+void GbApu_SetNoiseLoopBounds(s32 start, s32 end) {
+    sGbApuNoiseLoopStart = start;
+    sGbApuNoiseLoopEnd = end;
 }
 
+/**
+ * Wave channel: 65536 / (2048 - period) Hz -> phase step (32 steps per cycle at 48 kHz).
+ */
 u32 GbApu_FreqToStep(u16 arg0) {
     u32 temp;
     if (arg0 == 0) {
@@ -374,55 +441,70 @@ u32 GbApu_FreqToStep(u16 arg0) {
 #if defined(VERSION_JP)
     temp = ((65536.0f / (0x800 - arg0)) / 1500.0f) * 65536;
 #else
-    temp = ((65536.0f / (0x800 - arg0)) / D_8120EAC0) * 65536;
+    temp = ((65536.0f / (0x800 - arg0)) / sGbApuStepDivisor) * 65536;
 #endif
     return temp;
 }
 
-u32 func_81207494(u16 arg0, u16 arg1, u16 arg2) {
+/**
+ * Applies NR43: selects the 16 KB noise waveform for (shift, width), its loop start, and returns
+ * the playback step for the clock divider.
+ */
+u32 GbApu_ConfigureNoiseTable(u16 shift, u16 width, u16 divider) {
     u32 temp;
     s32 temp2;
 
-    D_8122EE98 = (arg1 * 16 + arg0) << 14;
-    temp = D_8120EB48[arg2];
+    sGbApuNoiseTableOffset = (width * 16 + shift) << 14;
+    temp = sGbApuNoiseDividerSteps[divider];
     temp2 = (f32)temp;
     temp = (temp2 / 48000.0f) * 24000.0f;
-    D_8120EAC8 = D_8120EAD4[arg0 * 2 + arg1];
+    sGbApuNoiseLoopStart = sGbApuNoiseLoopStarts[shift * 2 + width];
     return temp;
 }
 
+/**
+ * Squares: 131072 / (2048 - period) Hz -> phase step.
+ */
 u32 GbApu_FreqToStep2x(u16 arg0) {
     u32 temp;
 #if defined(VERSION_JP)
     temp = ((131072.0f / (0x800 - arg0)) / 1500.0f) * 65536;
 #else
-    temp = ((131072.0f / (0x800 - arg0)) / D_8120EAC0) * 65536;
+    temp = ((131072.0f / (0x800 - arg0)) / sGbApuStepDivisor) * 65536;
 #endif
     return temp;
 }
 
+/**
+ * Empty.
+ */
 void func_81207690(void) {
 }
 
-s32 func_81207698(u32 arg0, s32 arg1) {
-    switch (arg0) {
+/**
+ * One sample (0..0x7F) of waveform `type` at step `pos`: 0-3 are the NRx1 duty cycles 12.5%, 25%,
+ * 50% and 75% over 32 steps, 6 reads the selected noise waveform, 7 wave RAM (4-bit << 3).
+ * Types 4 and 5 are unused and return nothing.
+ */
+s32 GbApu_GetWaveformSample(u32 type, s32 pos) {
+    switch (type) {
         case 0:
-            if ((arg1 >= 4) && (arg1 < 8)) {
+            if ((pos >= 4) && (pos < 8)) {
                 return 0x7F;
             }
             return 0;
         case 1:
-            if (arg1 < 8) {
+            if (pos < 8) {
                 return 0x7F;
             }
             return 0;
         case 2:
-            if (arg1 < 0x10) {
+            if (pos < 0x10) {
                 return 0x7F;
             }
             return 0;
         case 3:
-            if (arg1 < 8) {
+            if (pos < 8) {
                 return 0;
             }
             return 0x7F;
@@ -430,335 +512,357 @@ s32 func_81207698(u32 arg0, s32 arg1) {
         case 5:
             break;
         case 6:
-            return (u8)(D_8122C794[arg1 + D_8122EE98] & 0x7F);
+            return (u8)(sGbApuNoiseTable[pos + sGbApuNoiseTableOffset] & 0x7F);
         case 7:
-            return (u8)(D_8122EE58[arg1] << 3);
+            return (u8)(sGbApuWaveSamples[pos] << 3);
     }
 }
 
+/**
+ * Produces one sample of square channel 1 and advances its frequency sweep (NR10), volume
+ * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
+ */
 u16 GbApu_UpdateSquare1Channel(void) {
     u16 var_t0;
 
-    if (gGbApuSquare1.unk_00 == 0) {
-        if (gGbApuSquare1.unk_3C == 0) {
+    if (gGbApuSquare1.enabled == 0) {
+        if (gGbApuSquare1.outputAmplitude == 0) {
             return 0U;
         }
-        gGbApuSquare1.unk_3C--;
-        gGbApuSquare1.unk_20 = gGbApuSquare1.unk_3C;
-        gGbApuSquare1.unk_0C = (s32)gGbApuSquare1.unk_40;
+        gGbApuSquare1.outputAmplitude--;
+        gGbApuSquare1.amplitude = gGbApuSquare1.outputAmplitude;
+        gGbApuSquare1.step = (s32)gGbApuSquare1.activeStep;
     }
-    if ((s32)gGbApuSquare1.unk_10 <= 0) {
-        gGbApuSquare1.unk_4C = 1U;
-    } else if (((s32)gGbApuSquare1.unk_10 >= 0x7FF) && (gGbApuSquare1.unk_39 == 0)) {
-        gGbApuSquare1.unk_4C = 1U;
+    if ((s32)gGbApuSquare1.period <= 0) {
+        gGbApuSquare1.muted = 1U;
+    } else if (((s32)gGbApuSquare1.period >= 0x7FF) && (gGbApuSquare1.sweepDirection == 0)) {
+        gGbApuSquare1.muted = 1U;
     } else {
-        gGbApuSquare1.unk_4C = 0U;
+        gGbApuSquare1.muted = 0U;
     }
     {
-        s32 temp_v0 = func_81207698(gGbApuSquare1.unk_3B, gGbApuSquare1.unk_08.unk_00);
-        gGbApuSquare1.unk_08.unk_02 += gGbApuSquare1.unk_0C;
-        gGbApuSquare1.unk_08.unk_02 &= 0x1FFFFF;
-        if (gGbApuSquare1.unk_4C == 1) {
-            if (gGbApuSquare1.unk_3C != 0) {
-                gGbApuSquare1.unk_3C--;
+        s32 temp_v0 = GbApu_GetWaveformSample(gGbApuSquare1.duty, gGbApuSquare1.phase.index);
+        gGbApuSquare1.phase.fixed += gGbApuSquare1.step;
+        gGbApuSquare1.phase.fixed &= 0x1FFFFF;
+        if (gGbApuSquare1.muted == 1) {
+            if (gGbApuSquare1.outputAmplitude != 0) {
+                gGbApuSquare1.outputAmplitude--;
             }
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.unk_3C);
+            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.outputAmplitude);
         } else {
-            gGbApuSquare1.unk_40 = (s32)gGbApuSquare1.unk_0C;
-            gGbApuSquare1.unk_3C = (u8)gGbApuSquare1.unk_20;
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.unk_20);
+            gGbApuSquare1.activeStep = (s32)gGbApuSquare1.step;
+            gGbApuSquare1.outputAmplitude = (u8)gGbApuSquare1.amplitude;
+            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.amplitude);
         }
     }
-    if ((gGbApuSquare1.unk_3A != 0) && (((++gGbApuSquare1.unk_30 % (u32)gGbApuSquare1.unk_34) == 0))) {
-        s32 temp_a2 = ((s32)gGbApuSquare1.unk_10 >> gGbApuSquare1.unk_38) & 0xFFFF;
-        switch (gGbApuSquare1.unk_39) {
+    if ((gGbApuSquare1.sweepEnabled != 0) && (((++gGbApuSquare1.sweepCounter % (u32)gGbApuSquare1.sweepPeriod) == 0))) {
+        s32 temp_a2 = ((s32)gGbApuSquare1.period >> gGbApuSquare1.sweepShift) & 0xFFFF;
+        switch (gGbApuSquare1.sweepDirection) {
             case 0:
-                gGbApuSquare1.unk_10 += temp_a2;
+                gGbApuSquare1.period += temp_a2;
                 break;
             case 1:
-                gGbApuSquare1.unk_10 = (gGbApuSquare1.unk_10 - temp_a2) - 1;
+                gGbApuSquare1.period = (gGbApuSquare1.period - temp_a2) - 1;
                 ;
                 break;
         }
-        if (gGbApuSquare1.unk_10 <= 0) {
-            gGbApuSquare1.unk_00 = 0U;
+        if (gGbApuSquare1.period <= 0) {
+            gGbApuSquare1.enabled = 0U;
             return var_t0;
         } else {
-            if ((gGbApuSquare1.unk_10 >= 0x800) && (gGbApuSquare1.unk_39 == 0)) {
-                gGbApuSquare1.unk_10 = 0x7FFU;
-                gGbApuSquare1.unk_00 = 0U;
+            if ((gGbApuSquare1.period >= 0x800) && (gGbApuSquare1.sweepDirection == 0)) {
+                gGbApuSquare1.period = 0x7FFU;
+                gGbApuSquare1.enabled = 0U;
             }
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.period);
         }
     }
-    if (gGbApuSquare1.unk_28 != 0) {
-        gGbApuSquare1.unk_24++;
-        if ((gGbApuSquare1.unk_24 % (u32)gGbApuSquare1.unk_28) == 0) {
-            switch (gGbApuSquare1.unk_2E) {
+    if (gGbApuSquare1.envelopePeriod != 0) {
+        gGbApuSquare1.envelopeCounter++;
+        if ((gGbApuSquare1.envelopeCounter % (u32)gGbApuSquare1.envelopePeriod) == 0) {
+            switch (gGbApuSquare1.envelopeDirection) {
                 case 0:
-                    if (gGbApuSquare1.unk_2D != 0) {
-                        gGbApuSquare1.unk_2D--;
+                    if (gGbApuSquare1.envelopeVolume != 0) {
+                        gGbApuSquare1.envelopeVolume--;
                     }
-                    if (!gGbApuSquare1.unk_2D) {
-                        gGbApuSquare1.unk_00 = 0;
+                    if (!gGbApuSquare1.envelopeVolume) {
+                        gGbApuSquare1.enabled = 0;
                     }
                     break;
 
                 case 1:
-                    if (gGbApuSquare1.unk_2D < 0xF) {
-                        gGbApuSquare1.unk_2D++;
+                    if (gGbApuSquare1.envelopeVolume < 0xF) {
+                        gGbApuSquare1.envelopeVolume++;
                     }
                     break;
 
                 default:
                     break;
             }
-            gGbApuSquare1.unk_20 = D_8120EB14[gGbApuSquare1.unk_2D];
+            gGbApuSquare1.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare1.envelopeVolume];
         }
     } else {
-        gGbApuSquare1.unk_20 = D_8120EB14[gGbApuSquare1.unk_2D];
+        gGbApuSquare1.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare1.envelopeVolume];
     }
-    if (gGbApuSquare1.unk_18 == 1U) {
-        if (gGbApuSquare1.unk_14 != 0) {
-            gGbApuSquare1.unk_14--;
+    if (gGbApuSquare1.lengthEnabled == 1U) {
+        if (gGbApuSquare1.lengthTimer != 0) {
+            gGbApuSquare1.lengthTimer--;
         }
-        if (gGbApuSquare1.unk_14 == 0) {
-            gGbApuSquare1.unk_00 = 0U;
+        if (gGbApuSquare1.lengthTimer == 0) {
+            gGbApuSquare1.enabled = 0U;
         }
     }
     return var_t0;
 }
 
+/**
+ * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
+ */
 s32 GbApu_UpdateSquare2Channel(void) {
     s32 temp_v0;
     s32 var_a3;
     u8 var_v0;
 
-    if (gGbApuSquare2.unk_00 == 0) {
-        if (gGbApuSquare2.unk_3C == 0) {
+    if (gGbApuSquare2.enabled == 0) {
+        if (gGbApuSquare2.outputAmplitude == 0) {
             return 0;
         }
-        gGbApuSquare2.unk_3C--;
-        gGbApuSquare2.unk_20 = gGbApuSquare2.unk_3C;
-        gGbApuSquare2.unk_0C = (s32)gGbApuSquare2.unk_40;
+        gGbApuSquare2.outputAmplitude--;
+        gGbApuSquare2.amplitude = gGbApuSquare2.outputAmplitude;
+        gGbApuSquare2.step = (s32)gGbApuSquare2.activeStep;
     }
-    if ((s32)gGbApuSquare2.unk_10 >= 0x7FF) {
-        gGbApuSquare2.unk_4C = 1U;
+    if ((s32)gGbApuSquare2.period >= 0x7FF) {
+        gGbApuSquare2.muted = 1U;
     } else {
-        gGbApuSquare2.unk_4C = 0U;
+        gGbApuSquare2.muted = 0U;
     }
-    temp_v0 = func_81207698(gGbApuSquare2.unk_3B, gGbApuSquare2.unk_08.unk_00);
-    gGbApuSquare2.unk_08.unk_02 += gGbApuSquare2.unk_0C;
-    gGbApuSquare2.unk_08.unk_02 &= 0x1FFFFF;
-    if (gGbApuSquare2.unk_4C == 1) {
-        if (gGbApuSquare2.unk_3C != 0) {
-            gGbApuSquare2.unk_3C--;
+    temp_v0 = GbApu_GetWaveformSample(gGbApuSquare2.duty, gGbApuSquare2.phase.index);
+    gGbApuSquare2.phase.fixed += gGbApuSquare2.step;
+    gGbApuSquare2.phase.fixed &= 0x1FFFFF;
+    if (gGbApuSquare2.muted == 1) {
+        if (gGbApuSquare2.outputAmplitude != 0) {
+            gGbApuSquare2.outputAmplitude--;
         }
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.unk_3C) & 0xFFFF;
+        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.outputAmplitude) & 0xFFFF;
     } else {
-        if (gGbApuSquare2.unk_20 != gGbApuSquare2.unk_3C) {
-            gGbApuSquare2.unk_3C = (u8)gGbApuSquare2.unk_20;
+        if (gGbApuSquare2.amplitude != gGbApuSquare2.outputAmplitude) {
+            gGbApuSquare2.outputAmplitude = (u8)gGbApuSquare2.amplitude;
         }
-        gGbApuSquare2.unk_40 = (s32)gGbApuSquare2.unk_0C;
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.unk_20) & 0xFFFF;
+        gGbApuSquare2.activeStep = (s32)gGbApuSquare2.step;
+        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.amplitude) & 0xFFFF;
     }
-    if (gGbApuSquare2.unk_28 != 0) {
-        gGbApuSquare2.unk_24++;
-        if ((gGbApuSquare2.unk_24 % (u32)gGbApuSquare2.unk_28) == 0) {
-            switch (gGbApuSquare2.unk_2E) {
+    if (gGbApuSquare2.envelopePeriod != 0) {
+        gGbApuSquare2.envelopeCounter++;
+        if ((gGbApuSquare2.envelopeCounter % (u32)gGbApuSquare2.envelopePeriod) == 0) {
+            switch (gGbApuSquare2.envelopeDirection) {
                 case 0:
-                    if (gGbApuSquare2.unk_2D != 0) {
-                        gGbApuSquare2.unk_2D--;
+                    if (gGbApuSquare2.envelopeVolume != 0) {
+                        gGbApuSquare2.envelopeVolume--;
                     }
-                    if (!gGbApuSquare2.unk_2D) {
-                        gGbApuSquare2.unk_00 = 0;
+                    if (!gGbApuSquare2.envelopeVolume) {
+                        gGbApuSquare2.enabled = 0;
                     }
                     break;
 
                 case 1:
-                    if (gGbApuSquare2.unk_2D < 0xF) {
-                        gGbApuSquare2.unk_2D++;
+                    if (gGbApuSquare2.envelopeVolume < 0xF) {
+                        gGbApuSquare2.envelopeVolume++;
                     }
                     break;
 
                 default:
                     break;
             }
-            gGbApuSquare2.unk_20 = D_8120EB14[gGbApuSquare2.unk_2D];
+            gGbApuSquare2.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare2.envelopeVolume];
         }
     } else {
-        gGbApuSquare2.unk_20 = D_8120EB14[gGbApuSquare2.unk_2D];
+        gGbApuSquare2.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare2.envelopeVolume];
     }
-    if (gGbApuSquare2.unk_18 == 1U) {
-        if (gGbApuSquare2.unk_14 != 0) {
-            gGbApuSquare2.unk_14--;
+    if (gGbApuSquare2.lengthEnabled == 1U) {
+        if (gGbApuSquare2.lengthTimer != 0) {
+            gGbApuSquare2.lengthTimer--;
         }
-        if (gGbApuSquare2.unk_14 == 0) {
-            gGbApuSquare2.unk_00 = 0U;
+        if (gGbApuSquare2.lengthTimer == 0) {
+            gGbApuSquare2.enabled = 0U;
         }
     }
     return var_a3;
 }
 
+/**
+ * Produces one sample of the wave channel from wave RAM at the NR32 output level, averaged with
+ * the previous sample. On a retrigger the old note fades out before the phase restarts.
+ */
 u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_v0;
     u16 temp_a0;
     u16 temp_a1;
     u16 var_a0;
 
-    if (gGbApuWave.unk_00 == 0) {
-        if (gGbApuWave.unk_3C == 0) {
+    if (gGbApuWave.enabled == 0) {
+        if (gGbApuWave.outputAmplitude == 0) {
             return 0U;
         }
-        gGbApuWave.unk_3C--;
-        gGbApuWave.unk_20 = gGbApuWave.unk_3C;
-        gGbApuWave.unk_0C = (s32)gGbApuWave.unk_40;
+        gGbApuWave.outputAmplitude--;
+        gGbApuWave.amplitude = gGbApuWave.outputAmplitude;
+        gGbApuWave.step = (s32)gGbApuWave.activeStep;
     } else {
-        if (gGbApuWave.unk_04 != 0) {
-            gGbApuWave.unk_04--;
-            if (gGbApuWave.unk_04 >= 0x21) {
-                if (gGbApuWave.unk_3C == 0) {
-                    gGbApuWave.unk_04 = 0x20;
-                    gGbApuWave.unk_08.unk_02 = 0;
-                    gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
-                    gGbApuWave.unk_20 = D_8120EB24[gGbApuWave.unk_21];
+        if (gGbApuWave.retriggerTimer != 0) {
+            gGbApuWave.retriggerTimer--;
+            if (gGbApuWave.retriggerTimer >= 0x21) {
+                if (gGbApuWave.outputAmplitude == 0) {
+                    gGbApuWave.retriggerTimer = 0x20;
+                    gGbApuWave.phase.fixed = 0;
+                    gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.period);
+                    gGbApuWave.amplitude = sGbApuWaveOutputLevels[gGbApuWave.initialVolume];
                 } else {
-                    if (!(gGbApuWave.unk_04 & 7)) {
-                        gGbApuWave.unk_3C--;
+                    if (!(gGbApuWave.retriggerTimer & 7)) {
+                        gGbApuWave.outputAmplitude--;
                     }
-                    gGbApuWave.unk_20 = gGbApuWave.unk_3C;
-                    gGbApuWave.unk_0C = (s32)gGbApuWave.unk_40;
+                    gGbApuWave.amplitude = gGbApuWave.outputAmplitude;
+                    gGbApuWave.step = (s32)gGbApuWave.activeStep;
                 }
             }
         }
     }
-    temp_a0 = func_81207698(7, gGbApuWave.unk_08.unk_00);
-    gGbApuWave.unk_08.unk_02 += gGbApuWave.unk_0C;
-    gGbApuWave.unk_08.unk_02 &= 0x1FFFFF;
-    if (gGbApuWave.unk_4C - 1 == 0) {
+    temp_a0 = GbApu_GetWaveformSample(7, gGbApuWave.phase.index);
+    gGbApuWave.phase.fixed += gGbApuWave.step;
+    gGbApuWave.phase.fixed &= 0x1FFFFF;
+    if (gGbApuWave.muted - 1 == 0) {
 
-        if (gGbApuWave.unk_3C != 0) {
-            gGbApuWave.unk_3C--;
+        if (gGbApuWave.outputAmplitude != 0) {
+            gGbApuWave.outputAmplitude--;
         }
-        temp_a1 = gGbApuWave.unk_3C;
+        temp_a1 = gGbApuWave.outputAmplitude;
     } else {
-        gGbApuWave.unk_3C = gGbApuWave.unk_20;
-        gGbApuWave.unk_40 = gGbApuWave.unk_0C;
-        temp_a1 = gGbApuWave.unk_20;
+        gGbApuWave.outputAmplitude = gGbApuWave.amplitude;
+        gGbApuWave.activeStep = gGbApuWave.step;
+        temp_a1 = gGbApuWave.amplitude;
     }
 
     temp_a0 *= temp_a1;
-    temp_a0 = (gGbApuWave.unk_44 + temp_a0) >> 1;
-    gGbApuWave.unk_44 = temp_a0;
-    if (gGbApuWave.unk_18 == 1) {
-        if (gGbApuWave.unk_14 != 0) {
-            gGbApuWave.unk_14--;
+    temp_a0 = (gGbApuWave.lastSample + temp_a0) >> 1;
+    gGbApuWave.lastSample = temp_a0;
+    if (gGbApuWave.lengthEnabled == 1) {
+        if (gGbApuWave.lengthTimer != 0) {
+            gGbApuWave.lengthTimer--;
         }
-        if (gGbApuWave.unk_14 == 0) {
-            gGbApuWave.unk_00 = 0U;
+        if (gGbApuWave.lengthTimer == 0) {
+            gGbApuWave.enabled = 0U;
         }
     }
     return temp_a0;
 }
 
+/**
+ * Empty; no return value.
+ */
 u16 func_81207C5C_Empty(void) {
 }
 
-u16 func_81207DF8(void) {
-    static s32 D_8120EB6C = 0;
+/**
+ * Noise channel counterpart of GbApu_UpdateSquare1Channel. The step slews toward a new NR43
+ * value over ~128 samples and the applied amplitude moves one unit every 95 samples.
+ */
+u16 GbApu_UpdateNoiseChannel(void) {
+    static s32 sGbApuNoiseSampleCount = 0;
     u16 temp_v0;
     u32 var_a2;
 
-    if (gGbApuNoise.unk_0C < gGbApuNoise.unk_40) {
-        gGbApuNoise.unk_40 -= gGbApuNoise.unk_48;
-        var_a2 = gGbApuNoise.unk_40;
-    } else if (gGbApuNoise.unk_40 < gGbApuNoise.unk_0C) {
-        gGbApuNoise.unk_40 += gGbApuNoise.unk_48;
-        var_a2 = gGbApuNoise.unk_40;
+    if (gGbApuNoise.step < gGbApuNoise.activeStep) {
+        gGbApuNoise.activeStep -= gGbApuNoise.stepSlewRate;
+        var_a2 = gGbApuNoise.activeStep;
+    } else if (gGbApuNoise.activeStep < gGbApuNoise.step) {
+        gGbApuNoise.activeStep += gGbApuNoise.stepSlewRate;
+        var_a2 = gGbApuNoise.activeStep;
     } else {
-        var_a2 = gGbApuNoise.unk_40;
+        var_a2 = gGbApuNoise.activeStep;
     }
 
-    if (gGbApuNoise.unk_00 == 0) {
-        if (gGbApuNoise.unk_3C == 0) {
+    if (gGbApuNoise.enabled == 0) {
+        if (gGbApuNoise.outputAmplitude == 0) {
             return 0;
         }
-        gGbApuNoise.unk_3C--;
-        gGbApuNoise.unk_20 = gGbApuNoise.unk_3C;
-        gGbApuNoise.unk_0C = gGbApuNoise.unk_40;
+        gGbApuNoise.outputAmplitude--;
+        gGbApuNoise.amplitude = gGbApuNoise.outputAmplitude;
+        gGbApuNoise.step = gGbApuNoise.activeStep;
     }
-    temp_v0 = func_81207698(6, gGbApuNoise.unk_08.unk_00);
-    gGbApuNoise.unk_08.unk_02 += var_a2;
-    if (gGbApuNoise.unk_08.unk_00 >= (u32)D_8120EACC) {
-        gGbApuNoise.unk_08.unk_00 = D_8120EAC8;
+    temp_v0 = GbApu_GetWaveformSample(6, gGbApuNoise.phase.index);
+    gGbApuNoise.phase.fixed += var_a2;
+    if (gGbApuNoise.phase.index >= (u32)sGbApuNoiseLoopEnd) {
+        gGbApuNoise.phase.index = sGbApuNoiseLoopStart;
     }
-    temp_v0 *= gGbApuNoise.unk_3C;
-    if ((gGbApuNoise.unk_3C != gGbApuNoise.unk_20) && ((D_8120EB6C % 95) == 0)) {
-        if (gGbApuNoise.unk_3C > gGbApuNoise.unk_20) {
-            gGbApuNoise.unk_3C--;
+    temp_v0 *= gGbApuNoise.outputAmplitude;
+    if ((gGbApuNoise.outputAmplitude != gGbApuNoise.amplitude) && ((sGbApuNoiseSampleCount % 95) == 0)) {
+        if (gGbApuNoise.outputAmplitude > gGbApuNoise.amplitude) {
+            gGbApuNoise.outputAmplitude--;
         } else {
-            gGbApuNoise.unk_3C++;
+            gGbApuNoise.outputAmplitude++;
         }
     }
-    D_8120EB6C++;
-    if (gGbApuNoise.unk_28 != 0) {
-        gGbApuNoise.unk_24++;
-        if ((gGbApuNoise.unk_24 % (u32)gGbApuNoise.unk_28) == 0) {
-            switch (gGbApuNoise.unk_2E) { /* irregular */
+    sGbApuNoiseSampleCount++;
+    if (gGbApuNoise.envelopePeriod != 0) {
+        gGbApuNoise.envelopeCounter++;
+        if ((gGbApuNoise.envelopeCounter % (u32)gGbApuNoise.envelopePeriod) == 0) {
+            switch (gGbApuNoise.envelopeDirection) { /* irregular */
                 case 0:
-                    if (gGbApuNoise.unk_2D) {
-                        gGbApuNoise.unk_2D--;
+                    if (gGbApuNoise.envelopeVolume) {
+                        gGbApuNoise.envelopeVolume--;
                     }
-                    if (gGbApuNoise.unk_2D == 0) {
-                        gGbApuNoise.unk_00 = 0;
+                    if (gGbApuNoise.envelopeVolume == 0) {
+                        gGbApuNoise.enabled = 0;
                     }
                     break;
                 case 1:
-                    if (gGbApuNoise.unk_2D < 0xF) {
-                        gGbApuNoise.unk_2D++;
+                    if (gGbApuNoise.envelopeVolume < 0xF) {
+                        gGbApuNoise.envelopeVolume++;
                     }
                     break;
             }
             switch ((D_8120EA80 << 0x14) >> 0x1F) { /* switch 1; irregular */
                 case 0:                             /* switch 1 */
-                    gGbApuNoise.unk_20 = D_8120EB28[gGbApuNoise.unk_2D];
+                    gGbApuNoise.amplitude = sGbApuNoiseVolumeLevels15Bit[gGbApuNoise.envelopeVolume];
                     break;
                 case 1: /* switch 1 */
-                    gGbApuNoise.unk_20 = D_8120EB38[gGbApuNoise.unk_2D];
+                    gGbApuNoise.amplitude = sGbApuNoiseVolumeLevels7Bit[gGbApuNoise.envelopeVolume];
                     break;
             }
         }
     }
-    if (gGbApuNoise.unk_18 == 1) {
-        if (gGbApuNoise.unk_14 != 0) {
-            gGbApuNoise.unk_14--;
+    if (gGbApuNoise.lengthEnabled == 1) {
+        if (gGbApuNoise.lengthTimer != 0) {
+            gGbApuNoise.lengthTimer--;
         }
-        if (gGbApuNoise.unk_14 == 0) {
-            gGbApuNoise.unk_00 = 0U;
+        if (gGbApuNoise.lengthTimer == 0) {
+            gGbApuNoise.enabled = 0U;
         }
     }
 
     return (temp_v0 << 1);
 }
 
-// 0x8120EB70: the 8 bytes between func_81207DF8's static and D_8120EB78.
+// 0x8120EB70: the 8 bytes between GbApu_UpdateNoiseChannel's static and sGbAudioMenuSoundMode.
 u8 D_8120EB70[0x8] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-s32 D_8120EB78 = 0;
-// A streamed sample: stream id (index into GB_AUDIO_STREAM_DATA/SIZE) and read position.
+s32 sGbAudioMenuSoundMode = 0;
+// A playing menu sound: id (index into GB_AUDIO_STREAM_DATA/SIZE) and read position.
 typedef struct GbAudioStream {
     /* 0x0 */ s32 id;
     /* 0x4 */ s32 pos;
 } GbAudioStream; // size = 0x8
 
-// D_8120EB7C: pending stream to start; D_8120EB84: current stream; D_8120EB8C: previous
-// stream, kept playing (at D_8122869C) under the new one.
-GbAudioStream D_8120EB7C = { 0, 0 };
-GbAudioStream D_8120EB84 = { 0, 0 };
-GbAudioStream D_8120EB8C = { 0, 0 };
-u8 D_8120EB94[0x6B40] = {
+// sGbAudioPendingMenuSound: pending stream to start; sGbAudioCurrentMenuSound: current stream; sGbAudioPreviousMenuSound: previous
+// stream, kept playing (at sGbAudioPreviousMenuSoundGain) under the new one.
+GbAudioStream sGbAudioPendingMenuSound = { 0, 0 };
+GbAudioStream sGbAudioCurrentMenuSound = { 0, 0 };
+GbAudioStream sGbAudioPreviousMenuSound = { 0, 0 };
+// GB Tower menu sounds: signed 8-bit mono PCM played by GbAudio_RenderMenuSounds. Named after the
+// GbAudio_PlayMenuSound call sites in gb_tower_emulator_7F9A0.c: id 2 A on a main menu entry,
+// 3 rejected button binding, 4 never requested, 5 Left/Right value change, 6 A confirm,
+// 7 Up/Down cursor move, 8 B back. Ids 0 and 1 point at the 8-byte sGbMenuSoundSilence.
+u8 sGbMenuSoundOpen[0x6B40] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x01, 0x06, 0x09, 0x09, 0x03, 0xFA, 0xF5, 0xF5, 0x01,
     0x08, 0x21, 0x02, 0xDA, 0xDC, 0xF0, 0x29, 0x37, 0x2B, 0xEF, 0xC2, 0xC6, 0xE4, 0x24, 0x35, 0x26, 0xE6, 0xB3, 0xA3,
     0xC8, 0x26, 0x50, 0x52, 0x11, 0xC5, 0x9A, 0xC6, 0x3F, 0x50, 0x53, 0x46, 0xE1, 0xA3, 0xA7, 0xAD, 0xF6, 0x51, 0x45,
@@ -2206,7 +2310,7 @@ u8 D_8120EB94[0x6B40] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00,
 };
-u8 D_812156D4[0x5AF0] = {
+u8 sGbMenuSoundInvalid[0x5AF0] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00,
@@ -3986,7 +4090,7 @@ u8 D_8121B1C4[0x28D0] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_8121DA94[0x1AE0] = {
+u8 sGbMenuSoundChange[0x1AE0] = {
     0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF,
     0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -4351,7 +4455,7 @@ u8 D_8121DA94[0x1AE0] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00,
 };
-u8 D_8121F574[0x4190] = {
+u8 sGbMenuSoundConfirm[0x4190] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x01, 0x07, 0x0A, 0x0B, 0x03, 0xF9, 0xF3, 0xF3, 0x01,
     0x09, 0x28, 0x03, 0xD2, 0xD5, 0xED, 0x31, 0x41, 0x33, 0xEC, 0xB6, 0xBB, 0xDF, 0x2B, 0x3F, 0x2D, 0xE1, 0xA4, 0x92,
     0xBD, 0x2D, 0x60, 0x62, 0x14, 0xBA, 0x86, 0xBB, 0x4B, 0x60, 0x63, 0x54, 0xDC, 0x92, 0x96, 0x9D, 0xF4, 0x61, 0x52,
@@ -5237,7 +5341,7 @@ u8 D_8121F574[0x4190] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_81223704[0x3260] = {
+u8 sGbMenuSoundCursor[0x3260] = {
     0x00, 0x07, 0x1E, 0x11, 0xAD, 0x9D, 0xCC, 0xF3, 0xF9, 0xCE, 0xA8, 0xB7, 0xEA, 0xDD, 0xD7, 0xDE, 0xD9, 0xE0, 0xFA,
     0x24, 0x3A, 0x57, 0x35, 0x18, 0x62, 0x7E, 0x5C, 0x31, 0x02, 0x26, 0x53, 0x40, 0x3E, 0x36, 0x2E, 0x3C, 0x53, 0x4C,
     0x30, 0x21, 0xCE, 0xAC, 0x91, 0x98, 0xC1, 0xCE, 0xBC, 0xBF, 0xD5, 0x88, 0x8A, 0x9B, 0x86, 0x83, 0xA7, 0x9A, 0xA9,
@@ -5918,7 +6022,7 @@ u8 D_81223704[0x3260] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_81226964[0x1CE8] = {
+u8 sGbMenuSoundCancel[0x1CE8] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00,
     0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00,
     0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -6310,10 +6414,11 @@ u8 D_81226964[0x1CE8] = {
     0x01, 0x00, 0xFF, 0xFE, 0xFE, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_8122864C[0x8] = {
+u8 sGbMenuSoundSilence[0x8] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
-u8 D_81228654[0x24] = {
+// s8* per menu sound id (0-8); raw per-version pointers.
+u8 sGbMenuSoundData[0x24] = {
 #if defined(VERSION_US_REV2)
     0x81, 0x22, 0x86, 0xEC, 0x81, 0x22, 0x86, 0xEC, 0x81, 0x20, 0xEC, 0x34, 0x81, 0x21, 0x57, 0x74, 0x81, 0x21,
     0xB2, 0x64, 0x81, 0x21, 0xDB, 0x34, 0x81, 0x21, 0xF6, 0x14, 0x81, 0x22, 0x37, 0xA4, 0x81, 0x22, 0x6A, 0x04,
@@ -6328,22 +6433,26 @@ u8 D_81228654[0x24] = {
     0xB1, 0xC4, 0x81, 0x21, 0xDA, 0x94, 0x81, 0x21, 0xF5, 0x74, 0x81, 0x22, 0x37, 0x04, 0x81, 0x22, 0x69, 0x64,
 #endif
 };
-u8 D_81228678[0x24] = {
+// s32 length in bytes per menu sound id.
+u8 sGbMenuSoundSizes[0x24] = {
     0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x6B, 0x40, 0x00, 0x00, 0x5A, 0xF0, 0x00, 0x00,
     0x28, 0xD0, 0x00, 0x00, 0x1A, 0xE0, 0x00, 0x00, 0x41, 0x90, 0x00, 0x00, 0x32, 0x60, 0x00, 0x00, 0x1C, 0xE0,
 };
 
-#define GB_AUDIO_STREAM_DATA ((s8**)D_81228654)
-#define GB_AUDIO_STREAM_SIZE ((s32*)D_81228678)
+#define GB_AUDIO_STREAM_DATA ((s8**)sGbMenuSoundData)
+#define GB_AUDIO_STREAM_SIZE ((s32*)sGbMenuSoundSizes)
 
-void func_8120806C(u16 reg, u8 value) {
+/**
+ * Applies one queued write to sound register 0xFF00 + reg (NR10-NR52, wave RAM 0x30-0x3F).
+ */
+void GbApu_WriteRegister(u16 reg, u8 value) {
     s32 pad;
     s32 i;
     s32 pad2;
 
     if ((reg == 0x26) && !(value & 0x80)) {
         for (i = 0x23; i != 0xF; i--) {
-            func_8120806C(i, 0);
+            GbApu_WriteRegister(i, 0);
         }
     }
 
@@ -6351,114 +6460,114 @@ void func_8120806C(u16 reg, u8 value) {
         return;
     }
 
-    D_8120EA70[reg - 0x10] = value;
+    sGbApuRegs[reg - 0x10] = value;
 
     switch (reg) {
         case 0x10:
-            gGbApuSquare1.unk_34 = GB_APU_REGS.sweepTime * 400;
-            gGbApuSquare1.unk_39 = GB_APU_REGS.sweepDir;
-            gGbApuSquare1.unk_38 = GB_APU_REGS.sweepShift;
-            if (gGbApuSquare1.unk_3A == 0) {
-                gGbApuSquare1.unk_30 = 0;
+            gGbApuSquare1.sweepPeriod = GB_APU_REGS.sweepTime * 400;
+            gGbApuSquare1.sweepDirection = GB_APU_REGS.sweepDir;
+            gGbApuSquare1.sweepShift = GB_APU_REGS.sweepShift;
+            if (gGbApuSquare1.sweepEnabled == 0) {
+                gGbApuSquare1.sweepCounter = 0;
             }
-            if (gGbApuSquare1.unk_34 == 0) {
-                gGbApuSquare1.unk_3A = 0;
+            if (gGbApuSquare1.sweepPeriod == 0) {
+                gGbApuSquare1.sweepEnabled = 0;
             } else {
-                gGbApuSquare1.unk_3A = 1;
+                gGbApuSquare1.sweepEnabled = 1;
             }
             break;
         case 0x11:
-            gGbApuSquare1.unk_3B = GB_APU_REGS.duty1;
-            gGbApuSquare1.unk_1C = 0x40 - GB_APU_REGS.length1;
+            gGbApuSquare1.duty = GB_APU_REGS.duty1;
+            gGbApuSquare1.length = 0x40 - GB_APU_REGS.length1;
             break;
         case 0x12:
-            gGbApuSquare1.unk_21 = GB_APU_REGS.volume1;
+            gGbApuSquare1.initialVolume = GB_APU_REGS.volume1;
             if ((GB_APU_REGS.volume1 == 0) && (GB_APU_REGS.envDir1 == 0)) {
-                gGbApuSquare1.unk_00 = 0;
+                gGbApuSquare1.enabled = 0;
             }
             break;
         case 0x13:
-            gGbApuSquare1.unk_10 = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.period = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.period);
             break;
         case 0x14:
-            gGbApuSquare1.unk_18 = GB_APU_REGS.counter1;
-            gGbApuSquare1.unk_10 = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.lengthEnabled = GB_APU_REGS.counter1;
+            gGbApuSquare1.period = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.period);
             if ((s32)GB_APU_REGS.trigger1 == 1) {
-                gGbApuSquare1.unk_14 = gGbApuSquare1.unk_1C * 200;
-                gGbApuSquare1.unk_20 = D_8120EB14[gGbApuSquare1.unk_21];
-                gGbApuSquare1.unk_24 = 0;
-                gGbApuSquare1.unk_30 = 0;
-                gGbApuSquare1.unk_2E = GB_APU_REGS.envDir1;
-                gGbApuSquare1.unk_28 = GB_APU_REGS.envSweep1 * 800;
-                gGbApuSquare1.unk_2D = gGbApuSquare1.unk_21;
+                gGbApuSquare1.lengthTimer = gGbApuSquare1.length * 200;
+                gGbApuSquare1.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare1.initialVolume];
+                gGbApuSquare1.envelopeCounter = 0;
+                gGbApuSquare1.sweepCounter = 0;
+                gGbApuSquare1.envelopeDirection = GB_APU_REGS.envDir1;
+                gGbApuSquare1.envelopePeriod = GB_APU_REGS.envSweep1 * 800;
+                gGbApuSquare1.envelopeVolume = gGbApuSquare1.initialVolume;
                 if (GB_APU_REGS.power) {
-                    gGbApuSquare1.unk_00 = 1;
+                    gGbApuSquare1.enabled = 1;
                 }
             }
-            if (gGbApuSquare1.unk_34 == 0) {
-                gGbApuSquare1.unk_3A = 0;
+            if (gGbApuSquare1.sweepPeriod == 0) {
+                gGbApuSquare1.sweepEnabled = 0;
             } else {
-                gGbApuSquare1.unk_3A = 1;
+                gGbApuSquare1.sweepEnabled = 1;
             }
             break;
         case 0x16:
-            gGbApuSquare2.unk_3B = GB_APU_REGS.duty2;
-            gGbApuSquare2.unk_1C = 0x40 - GB_APU_REGS.length2;
+            gGbApuSquare2.duty = GB_APU_REGS.duty2;
+            gGbApuSquare2.length = 0x40 - GB_APU_REGS.length2;
             break;
         case 0x17:
-            gGbApuSquare2.unk_21 = GB_APU_REGS.volume2;
+            gGbApuSquare2.initialVolume = GB_APU_REGS.volume2;
             if ((GB_APU_REGS.volume2 == 0) && (GB_APU_REGS.envDir2 == 0)) {
-                gGbApuSquare2.unk_00 = 0;
+                gGbApuSquare2.enabled = 0;
             }
             break;
         case 0x18:
-            gGbApuSquare2.unk_10 = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
-            gGbApuSquare2.unk_0C = GbApu_FreqToStep2x(gGbApuSquare2.unk_10);
+            gGbApuSquare2.period = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
+            gGbApuSquare2.step = GbApu_FreqToStep2x(gGbApuSquare2.period);
             break;
         case 0x19:
-            gGbApuSquare2.unk_18 = GB_APU_REGS.counter2;
-            gGbApuSquare2.unk_10 = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
-            gGbApuSquare2.unk_0C = GbApu_FreqToStep2x(gGbApuSquare2.unk_10);
+            gGbApuSquare2.lengthEnabled = GB_APU_REGS.counter2;
+            gGbApuSquare2.period = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
+            gGbApuSquare2.step = GbApu_FreqToStep2x(gGbApuSquare2.period);
             if ((s32)GB_APU_REGS.trigger2 == 1) {
-                gGbApuSquare2.unk_14 = gGbApuSquare2.unk_1C * 200;
-                gGbApuSquare2.unk_08.unk_02 = 0;
-                gGbApuSquare2.unk_20 = D_8120EB14[gGbApuSquare2.unk_21];
-                gGbApuSquare2.unk_24 = 0;
-                gGbApuSquare2.unk_2E = GB_APU_REGS.envDir2;
-                gGbApuSquare2.unk_28 = GB_APU_REGS.envSweep2 * 800;
-                gGbApuSquare2.unk_2D = gGbApuSquare2.unk_21;
+                gGbApuSquare2.lengthTimer = gGbApuSquare2.length * 200;
+                gGbApuSquare2.phase.fixed = 0;
+                gGbApuSquare2.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare2.initialVolume];
+                gGbApuSquare2.envelopeCounter = 0;
+                gGbApuSquare2.envelopeDirection = GB_APU_REGS.envDir2;
+                gGbApuSquare2.envelopePeriod = GB_APU_REGS.envSweep2 * 800;
+                gGbApuSquare2.envelopeVolume = gGbApuSquare2.initialVolume;
                 if (GB_APU_REGS.power) {
-                    gGbApuSquare2.unk_00 = 1;
+                    gGbApuSquare2.enabled = 1;
                 }
             }
             break;
         case 0x1A:
             if (GB_APU_REGS.waveOn == 0) {
-                gGbApuWave.unk_00 = GB_APU_REGS.waveOn;
+                gGbApuWave.enabled = GB_APU_REGS.waveOn;
             }
             break;
         case 0x1B:
-            gGbApuWave.unk_1C = 0x100 - GB_APU_REGS.length3;
+            gGbApuWave.length = 0x100 - GB_APU_REGS.length3;
             break;
         case 0x1C:
-            gGbApuWave.unk_21 = GB_APU_REGS.level3;
-            gGbApuWave.unk_20 = D_8120EB24[gGbApuWave.unk_21];
+            gGbApuWave.initialVolume = GB_APU_REGS.level3;
+            gGbApuWave.amplitude = sGbApuWaveOutputLevels[gGbApuWave.initialVolume];
             break;
         case 0x1D:
-            gGbApuWave.unk_10 = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
-            gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
+            gGbApuWave.period = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
+            gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.period);
             break;
         case 0x1E:
-            gGbApuWave.unk_10 = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
-            gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
-            gGbApuWave.unk_18 = GB_APU_REGS.counter3;
+            gGbApuWave.period = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
+            gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.period);
+            gGbApuWave.lengthEnabled = GB_APU_REGS.counter3;
             if ((s32)GB_APU_REGS.trigger3 == 1) {
-                gGbApuWave.unk_14 = gGbApuWave.unk_1C * 200;
-                gGbApuWave.unk_04 = 0x140;
+                gGbApuWave.lengthTimer = gGbApuWave.length * 200;
+                gGbApuWave.retriggerTimer = 0x140;
                 if (GB_APU_REGS.power && ((s32)GB_APU_REGS.waveOn == 1)) {
-                    gGbApuWave.unk_00 = 1;
+                    gGbApuWave.enabled = 1;
                 }
             }
             break;
@@ -6478,73 +6587,78 @@ void func_8120806C(u16 reg, u8 value) {
         case 0x3D:
         case 0x3E:
         case 0x3F:
-            D_8122EE58[(reg - 0x30) * 2 + 0] = (D_8120EA70[reg - 0x10] >> 4) & 0xF;
-            D_8122EE58[(reg - 0x30) * 2 + 1] = D_8120EA70[reg - 0x10] & 0xF;
+            sGbApuWaveSamples[(reg - 0x30) * 2 + 0] = (sGbApuRegs[reg - 0x10] >> 4) & 0xF;
+            sGbApuWaveSamples[(reg - 0x30) * 2 + 1] = sGbApuRegs[reg - 0x10] & 0xF;
             break;
         case 0x20:
-            gGbApuNoise.unk_1C = 0x40 - GB_APU_REGS.length4;
+            gGbApuNoise.length = 0x40 - GB_APU_REGS.length4;
             break;
         case 0x21:
-            gGbApuNoise.unk_21 = GB_APU_REGS.volume4;
+            gGbApuNoise.initialVolume = GB_APU_REGS.volume4;
             if ((GB_APU_REGS.volume4 == 0) && (GB_APU_REGS.envDir4 == 0)) {
-                gGbApuNoise.unk_00 = 0;
+                gGbApuNoise.enabled = 0;
             }
             break;
         case 0x22:
-            gGbApuNoise.unk_10 = GB_APU_REGS.shift4;
-            gGbApuNoise.unk_0C = func_81207494(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
-            if (gGbApuNoise.unk_00 == 0) {
-                gGbApuNoise.unk_40 = gGbApuNoise.unk_0C;
+            gGbApuNoise.period = GB_APU_REGS.shift4;
+            gGbApuNoise.step = GbApu_ConfigureNoiseTable(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
+            if (gGbApuNoise.enabled == 0) {
+                gGbApuNoise.activeStep = gGbApuNoise.step;
             }
-            if (gGbApuNoise.unk_40 < gGbApuNoise.unk_0C) {
-                gGbApuNoise.unk_48 = gGbApuNoise.unk_0C - gGbApuNoise.unk_40;
+            if (gGbApuNoise.activeStep < gGbApuNoise.step) {
+                gGbApuNoise.stepSlewRate = gGbApuNoise.step - gGbApuNoise.activeStep;
             } else {
-                gGbApuNoise.unk_48 = gGbApuNoise.unk_40 - gGbApuNoise.unk_0C;
+                gGbApuNoise.stepSlewRate = gGbApuNoise.activeStep - gGbApuNoise.step;
             }
-            gGbApuNoise.unk_48 >>= 7;
-            if (gGbApuNoise.unk_48 == 0) {
-                gGbApuNoise.unk_48 = 1;
+            gGbApuNoise.stepSlewRate >>= 7;
+            if (gGbApuNoise.stepSlewRate == 0) {
+                gGbApuNoise.stepSlewRate = 1;
             }
             break;
         case 0x23:
-            gGbApuNoise.unk_18 = GB_APU_REGS.counter4;
+            gGbApuNoise.lengthEnabled = GB_APU_REGS.counter4;
             if ((s32)GB_APU_REGS.trigger4 == 1) {
-                gGbApuNoise.unk_14 = gGbApuNoise.unk_1C * 200;
-                if (gGbApuNoise.unk_00 == 0) {
-                    gGbApuNoise.unk_08.unk_02 = 0;
+                gGbApuNoise.lengthTimer = gGbApuNoise.length * 200;
+                if (gGbApuNoise.enabled == 0) {
+                    gGbApuNoise.phase.fixed = 0;
                 }
-                gGbApuNoise.unk_2D = gGbApuNoise.unk_21;
+                gGbApuNoise.envelopeVolume = gGbApuNoise.initialVolume;
                 switch ((s32)GB_APU_REGS.width4) {
                     case 0:
-                        gGbApuNoise.unk_20 = D_8120EB28[gGbApuNoise.unk_2D];
+                        gGbApuNoise.amplitude = sGbApuNoiseVolumeLevels15Bit[gGbApuNoise.envelopeVolume];
                         break;
                     case 1:
-                        gGbApuNoise.unk_20 = D_8120EB38[gGbApuNoise.unk_2D];
+                        gGbApuNoise.amplitude = sGbApuNoiseVolumeLevels7Bit[gGbApuNoise.envelopeVolume];
                         break;
                 }
-                if ((gGbApuNoise.unk_00 == 0) || (gGbApuNoise.unk_3C < gGbApuNoise.unk_20)) {
-                    gGbApuNoise.unk_3C = gGbApuNoise.unk_20;
+                if ((gGbApuNoise.enabled == 0) || (gGbApuNoise.outputAmplitude < gGbApuNoise.amplitude)) {
+                    gGbApuNoise.outputAmplitude = gGbApuNoise.amplitude;
                 }
-                gGbApuNoise.unk_24 = 0;
-                gGbApuNoise.unk_2E = GB_APU_REGS.envDir4;
-                gGbApuNoise.unk_28 = GB_APU_REGS.envSweep4 * 800;
+                gGbApuNoise.envelopeCounter = 0;
+                gGbApuNoise.envelopeDirection = GB_APU_REGS.envDir4;
+                gGbApuNoise.envelopePeriod = GB_APU_REGS.envSweep4 * 800;
                 if (GB_APU_REGS.power) {
-                    gGbApuNoise.unk_00 = 1;
+                    gGbApuNoise.enabled = 1;
                 }
             }
             break;
         case 0x26:
             if (!(value & 0x80)) {
-                gGbApuSquare1.unk_00 = 0;
-                gGbApuSquare2.unk_00 = 0;
-                gGbApuWave.unk_00 = 0;
-                gGbApuNoise.unk_00 = 0;
+                gGbApuSquare1.enabled = 0;
+                gGbApuSquare2.enabled = 0;
+                gGbApuWave.enabled = 0;
+                gGbApuNoise.enabled = 0;
             }
             break;
     }
 }
 
-void func_81208828(s32 numSamples, s16* out) {
+/**
+ * Renders numSamples interleaved stereo samples of GB sound. Drains the register-write queue,
+ * applies each write when the buffer position reaches its timestamp, then mixes the four
+ * channels per NR51 panning and NR50 master volume.
+ */
+void GbApu_RenderBuffer(s32 numSamples, s16* out) {
     s32 i;
     u32 sq1R;
     u32 sq1L;
@@ -6576,7 +6690,7 @@ void func_81208828(s32 numSamples, s16* out) {
     idx = 0;
     lastTime = 0;
     while (TRUE) {
-        if (osRecvMesg(&D_8122EEB0, (OSMesg*)&msg, OS_MESG_NOBLOCK) == -1) {
+        if (osRecvMesg(&sGbApuWriteQueue, (OSMesg*)&msg, OS_MESG_NOBLOCK) == -1) {
             break;
         }
         if (first) {
@@ -6584,15 +6698,15 @@ void func_81208828(s32 numSamples, s16* out) {
             first = FALSE;
         }
         if (msg.time < lastTime) {
-            if (startTime < D_8120EAD0) {
-                osJamMesg(&D_8122EEB0, *(OSMesg*)&msg, OS_MESG_NOBLOCK);
+            if (startTime < sGbApuLastWriteTime) {
+                osJamMesg(&sGbApuWriteQueue, *(OSMesg*)&msg, OS_MESG_NOBLOCK);
                 break;
             }
             startTime = 0;
-            D_8122C8D8[count++] = msg;
+            sGbApuWriteBuffer[count++] = msg;
             lastTime = msg.time;
         } else {
-            D_8122C8D8[count++] = msg;
+            sGbApuWriteBuffer[count++] = msg;
             lastTime = msg.time;
         }
     }
@@ -6601,7 +6715,7 @@ void func_81208828(s32 numSamples, s16* out) {
 #if defined(VERSION_JP)
     step = 17784.0f / (f32)numSamples;
 #else
-    step = (f32)D_8120EAC4 / (f32)numSamples;
+    step = (f32)sGbApuBufferTimeSpan / (f32)numSamples;
 #endif
     if (numSamples < count) {
         flush = TRUE;
@@ -6616,15 +6730,15 @@ void func_81208828(s32 numSamples, s16* out) {
                 if (count == 0) {
                     break;
                 }
-                if (((s32)pos & 0xFFFF) < D_8122C8D8[idx].time) {
+                if (((s32)pos & 0xFFFF) < sGbApuWriteBuffer[idx].time) {
                     break;
                 }
-                func_8120806C(D_8122C8D8[idx].reg, D_8122C8D8[idx].value);
+                GbApu_WriteRegister(sGbApuWriteBuffer[idx].reg, sGbApuWriteBuffer[idx].value);
                 count--;
                 idx++;
             }
-        } else if ((count != 0) && (((s32)pos & 0xFFFF) >= D_8122C8D8[idx].time)) {
-            func_8120806C(D_8122C8D8[idx].reg, D_8122C8D8[idx].value);
+        } else if ((count != 0) && (((s32)pos & 0xFFFF) >= sGbApuWriteBuffer[idx].time)) {
+            GbApu_WriteRegister(sGbApuWriteBuffer[idx].reg, sGbApuWriteBuffer[idx].value);
             count--;
             idx++;
         }
@@ -6632,7 +6746,7 @@ void func_81208828(s32 numSamples, s16* out) {
         sq1 = GbApu_UpdateSquare1Channel();
         sq2 = GbApu_UpdateSquare2Channel();
         wave = GbApu_UpdateWaveChannel();
-        noise = func_81207DF8();
+        noise = GbApu_UpdateNoiseChannel();
 
         noiseL = GB_APU_REGS.noiseLeft ? noise : 0;
         noiseR = GB_APU_REGS.noiseRight ? noise : 0;
@@ -6656,72 +6770,81 @@ void func_81208828(s32 numSamples, s16* out) {
     }
 
     while (count != 0) {
-        func_8120806C(D_8122C8D8[idx].reg, D_8122C8D8[idx].value);
+        GbApu_WriteRegister(sGbApuWriteBuffer[idx].reg, sGbApuWriteBuffer[idx].value);
         count--;
         idx++;
     }
 
-    D_8122EEA8.unk_00 = 0;
-    D_8122EEA8.unk_01 = 0;
-    D_8122EEA8.unk_02 = 0;
-    D_8122EEA8.unk_03 = 0;
+    sGbApuStatusOverride.square1 = 0;
+    sGbApuStatusOverride.square2 = 0;
+    sGbApuStatusOverride.wave = 0;
+    sGbApuStatusOverride.noise = 0;
 }
 
-void func_81208C08(u16 arg0, u8 arg1, u16 arg2) {
-    s32 temp_v1;
+/**
+ * Called by the CPU core's I/O write path for sound registers: queues (address - 0xFF00, value,
+ * timestamp) for GbApu_RenderBuffer and records triggers (NRx4 bit 7) and NR52 power-offs in
+ * sGbApuStatusOverride so NR52 reads are correct before the write is rendered.
+ */
+void GbApu_QueueRegisterWrite(u16 address, u8 value, u16 time) {
+    s32 reg;
 
-    temp_v1 = arg0 + 0xFFFF0100;
-    osSendMesg(&D_8122EEB0, (temp_v1 << 0x18) | (arg1 << 0x10) | arg2, 0);
-    D_8120EAD0 = (s32)arg2;
-    switch (temp_v1) {
+    reg = address + 0xFFFF0100;
+    osSendMesg(&sGbApuWriteQueue, (reg << 0x18) | (value << 0x10) | time, 0);
+    sGbApuLastWriteTime = (s32)time;
+    switch (reg) {
         case 20:
-            if (arg1 & 0x80) {
-                D_8122EEA8.unk_00 = 2;
+            if (value & 0x80) {
+                sGbApuStatusOverride.square1 = 2;
                 return;
             }
         default:
             return;
         case 25:
-            if (arg1 & 0x80) {
-                D_8122EEA8.unk_01 = 2;
+            if (value & 0x80) {
+                sGbApuStatusOverride.square2 = 2;
                 return;
             }
             break;
         case 30:
-            if (arg1 & 0x80) {
-                D_8122EEA8.unk_02 = 2;
+            if (value & 0x80) {
+                sGbApuStatusOverride.wave = 2;
                 return;
             }
             break;
         case 35:
-            if (arg1 & 0x80) {
-                D_8122EEA8.unk_03 = 2;
+            if (value & 0x80) {
+                sGbApuStatusOverride.noise = 2;
                 return;
             }
             break;
         case 38:
-            if (!(arg1 & 1)) {
-                D_8122EEA8.unk_00 = 1;
+            if (!(value & 1)) {
+                sGbApuStatusOverride.square1 = 1;
             }
-            if (!(arg1 & 2)) {
-                D_8122EEA8.unk_01 = 1;
+            if (!(value & 2)) {
+                sGbApuStatusOverride.square2 = 1;
             }
-            if (!(arg1 & 4)) {
-                D_8122EEA8.unk_02 = 1;
+            if (!(value & 4)) {
+                sGbApuStatusOverride.wave = 1;
             }
-            if (!(arg1 & 8)) {
-                D_8122EEA8.unk_03 = 1;
+            if (!(value & 8)) {
+                sGbApuStatusOverride.noise = 1;
             }
-            if (!(arg1 & 0x80)) {
-                D_8122EEA8.unk_00 = 1;
-                D_8122EEA8.unk_01 = 1;
-                D_8122EEA8.unk_02 = 1;
-                D_8122EEA8.unk_03 = 1;
+            if (!(value & 0x80)) {
+                sGbApuStatusOverride.square1 = 1;
+                sGbApuStatusOverride.square2 = 1;
+                sGbApuStatusOverride.wave = 1;
+                sGbApuStatusOverride.noise = 1;
             }
             break;
     }
 }
 
+/**
+ * Creates the register-write queue, zeroes every sound register (0xFF10-0xFF50) through
+ * GbApu_WriteRegister and silences all four channels.
+ */
 void GbApu_ResetChannels(void) {
     s32 pad[6];
     s32 i;
@@ -6729,29 +6852,36 @@ void GbApu_ResetChannels(void) {
     OSMesg sp20;
 
     osCreateMesgQueue(&sp24, &sp20, 1);
-    osCreateMesgQueue(&D_8122EEB0, D_8122EEC8, GB_APU_WRITE_QUEUE_LEN);
+    osCreateMesgQueue(&sGbApuWriteQueue, sGbApuWriteQueueMessages, GB_APU_WRITE_QUEUE_LEN);
     for (i = 0x50; i > 0xF; i--) {
-        func_8120806C(i, 0);
+        GbApu_WriteRegister(i, 0);
     }
-    gGbApuSquare1.unk_3C = 0;
-    gGbApuSquare2.unk_3C = 0;
-    gGbApuWave.unk_3C = 0;
-    gGbApuNoise.unk_3C = 0;
-    gGbApuSquare1.unk_08.unk_02 = 0;
-    gGbApuSquare2.unk_08.unk_02 = 0;
-    gGbApuWave.unk_08.unk_02 = 0;
-    gGbApuNoise.unk_08.unk_02 = 0;
+    gGbApuSquare1.outputAmplitude = 0;
+    gGbApuSquare2.outputAmplitude = 0;
+    gGbApuWave.outputAmplitude = 0;
+    gGbApuNoise.outputAmplitude = 0;
+    gGbApuSquare1.phase.fixed = 0;
+    gGbApuSquare2.phase.fixed = 0;
+    gGbApuWave.phase.fixed = 0;
+    gGbApuNoise.phase.fixed = 0;
 }
 
-void GbApu_Reset(s32 arg0) {
-    D_8122C794 = arg0;
+/**
+ * noiseTable: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
+ */
+void GbApu_Reset(s32 noiseTable) {
+    sGbApuNoiseTable = noiseTable;
     GbApu_ResetChannels();
 }
 
-void func_81208E4C(void) {
-    void* sp34 = D_812346E0[0];
-    f32 x = (f32)D_8122C790;
-    f32 y = (f32)D_8122C792;
+/**
+ * Resets the APU and submits 640 samples ramping linearly from the last output sample to zero,
+ * avoiding a click when audio stops. No C callers.
+ */
+void GbAudio_RampToSilence(void) {
+    void* sp34 = sGbAudioBuffers[0];
+    f32 x = (f32)sGbAudioLastSampleLeft;
+    f32 y = (f32)sGbAudioLastSampleRight;
     f32 dx = x / 640.0f;
     f32 dy = y / 640.0f;
     s32 i;
@@ -6766,14 +6896,21 @@ void func_81208E4C(void) {
         idx += 2;
     }
     do {
-    } while (osAiGetStatus() & 0x80000000);
+    } while (osAiGetStatus() & AI_STATUS_FIFO_FULL);
     osWritebackDCache(sp34, 0xA00);
     osGbSetNextBuffer(sp34, 0xA00);
 }
 
+/**
+ * Empty; called once from func_812033F4.
+ */
 void func_81208F94(void) {
 }
 
+/**
+ * Reads a GB I/O register byte. FF26 (NR52) is rebuilt from the APU channel
+ * state; every other address is read straight from gGbMemoryMap.
+ */
 u8 GbMem_ReadIoRegister(u16 arg0) {
     u8 var_a0;
     u8 var_a1;
@@ -6781,25 +6918,25 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
     u8 var_v1;
     u8 temp;
     if ((arg0 & 0xFFFF) == 0xFF26) {
-        if (D_8122EEA8.unk_00 != 0) {
-            var_v1 = (D_8122EEA8.unk_00 - 1) & 0xFF;
+        if (sGbApuStatusOverride.square1 != 0) {
+            var_v1 = (sGbApuStatusOverride.square1 - 1) & 0xFF;
         } else {
-            var_v1 = gGbApuSquare1.unk_00;
+            var_v1 = gGbApuSquare1.enabled;
         }
-        if (D_8122EEA8.unk_01 != 0) {
-            var_a0 = (D_8122EEA8.unk_01 - 1) & 0xFF;
+        if (sGbApuStatusOverride.square2 != 0) {
+            var_a0 = (sGbApuStatusOverride.square2 - 1) & 0xFF;
         } else {
-            var_a0 = gGbApuSquare2.unk_00;
+            var_a0 = gGbApuSquare2.enabled;
         }
-        if (D_8122EEA8.unk_02 != 0) {
-            var_a1 = (D_8122EEA8.unk_02 - 1) & 0xFF;
+        if (sGbApuStatusOverride.wave != 0) {
+            var_a1 = (sGbApuStatusOverride.wave - 1) & 0xFF;
         } else {
-            var_a1 = gGbApuWave.unk_00;
+            var_a1 = gGbApuWave.enabled;
         }
-        if (D_8122EEA8.unk_03 != 0) {
-            var_a2 = (D_8122EEA8.unk_03 - 1) & 0xFF;
+        if (sGbApuStatusOverride.noise != 0) {
+            var_a2 = (sGbApuStatusOverride.noise - 1) & 0xFF;
         } else {
-            var_a2 = gGbApuNoise.unk_00;
+            var_a2 = gGbApuNoise.enabled;
         }
         temp = ((((u32)D_8120EA86 >> 0xF) << 7) | (var_a2 * 8) | (var_a1 * 4) | (var_a0 * 2) | var_v1);
         return temp;
@@ -6807,7 +6944,12 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
     return gGbMemoryMap[arg0 & 0xFFFF];
 }
 
-s32 func_81209078(void) {
+/**
+ * Per-frame AI service. Submits the buffer rendered last frame with osGbSetNextBuffer, then renders
+ * the next one: samplesPerFrame minus what the AI still holds, plus 128, rounded to 16 and clamped
+ * to [min, max]. Source is the GB APU, or the menu sounds while sGbAudioMenuSoundMode is set.
+ */
+s32 GbAudio_UpdateFrame(void) {
     u32 aiLen;
     s32 n;
     s32 idx;
@@ -6818,27 +6960,27 @@ s32 func_81209078(void) {
     s16* len;
     s16** bufPtr;
 
-    D_812346C8++;
+    sGbAudioFrameCount++;
 #if defined(VERSION_JP)
-    osSendMesg(D_812896A0_jp, (OSMesg)D_812346C8, OS_MESG_NOBLOCK);
+    osSendMesg(D_812896A0_jp, (OSMesg)sGbAudioFrameCount, OS_MESG_NOBLOCK);
 #endif
     D_812346D0 ^= 1;
-    D_812346D4++;
-    D_812346D4 %= 3;
-    idx = (D_812346D4 + 2) % 3;
+    sGbAudioBufferIndex++;
+    sGbAudioBufferIndex %= 3;
+    idx = (sGbAudioBufferIndex + 2) % 3;
     aiLen = osAiGetLength() >> 2;
 
     if (D_812346FC < 16) {
-        len = &D_812346EC[idx];
+        len = &sGbAudioBufferLengths[idx];
         if (*len != 0) {
-            bufPtr = &D_812346E0[idx];
+            bufPtr = &sGbAudioBuffers[idx];
             if (osGbSetNextBuffer(*bufPtr, *len * 4) == -1) {
                 status = 0;
             } else {
                 queued = *bufPtr;
                 n = *len;
-                D_8122C790 = queued[n * 2 - 2];
-                D_8122C792 = queued[n * 2 - 1];
+                sGbAudioLastSampleLeft = queued[n * 2 - 2];
+                sGbAudioLastSampleRight = queued[n * 2 - 1];
                 status = 2;
             }
             // Discarded reads; they only steer IDO's register allocation.
@@ -6854,34 +6996,40 @@ s32 func_81209078(void) {
         D_812346FC++;
     }
 
-    idx = D_812346D4;
-    bufPtr = &D_812346E0[idx];
-    len = &D_812346EC[idx];
+    idx = sGbAudioBufferIndex;
+    bufPtr = &sGbAudioBuffers[idx];
+    len = &sGbAudioBufferLengths[idx];
     buf = *bufPtr;
-    *len = ((D_81234690.unk_06 - aiLen + 0x80) & 0xFFF0) + 0x10;
-    if (*len < D_81234690.unk_0A) {
-        *len = D_81234690.unk_0A;
+    *len = ((sGbAudioOutputConfig.samplesPerFrame - aiLen + 0x80) & 0xFFF0) + 0x10;
+    if (*len < sGbAudioOutputConfig.minSamplesPerFrame) {
+        *len = sGbAudioOutputConfig.minSamplesPerFrame;
     }
-    if (D_81234690.unk_08 < *len) {
-        *len = D_81234690.unk_08;
+    if (sGbAudioOutputConfig.maxSamplesPerFrame < *len) {
+        *len = sGbAudioOutputConfig.maxSamplesPerFrame;
     }
-    if (D_8120EB78 == 0) {
-        func_81208828(*len, buf);
+    if (sGbAudioMenuSoundMode == 0) {
+        GbApu_RenderBuffer(*len, buf);
     } else {
-        func_81209374(*len, buf);
+        GbAudio_RenderMenuSounds(*len, buf);
     }
     osWritebackDCache(buf, *len * 4);
-    D_812346F4 = osGetCount() * (D_812346F4 + D_812346C8);
-    D_812346F4 = D_812346E0[idx][D_812346C8 & 0xFF] + D_812346F4;
+    D_812346F4 = osGetCount() * (D_812346F4 + sGbAudioFrameCount);
+    D_812346F4 = sGbAudioBuffers[idx][sGbAudioFrameCount & 0xFF] + D_812346F4;
     return 0;
 }
 
-void GbAudio_SetAlternateRendererEnabled(s32 arg0) {
-    D_8120EB78 = arg0;
+/**
+ * 1 while the GB Tower pause/options menu is open: output menu sounds instead of the GB APU mix.
+ */
+void GbAudio_SetMenuSoundMode(s32 enabled) {
+    sGbAudioMenuSoundMode = enabled;
 }
 
-void GbAudio_SetAlternateStreamId(s32 arg0) {
-    D_8120EB7C.id = arg0;
+/**
+ * Starts menu sound `id` (index into sGbMenuSoundData) on the next GbAudio_RenderMenuSounds.
+ */
+void GbAudio_PlayMenuSound(s32 id) {
+    sGbAudioPendingMenuSound.id = id;
 }
 
 typedef struct GbStereoSample {
@@ -6889,8 +7037,12 @@ typedef struct GbStereoSample {
     /* 0x2 */ s16 right;
 } GbStereoSample; // size = 0x4
 
-void func_81209374(s32 numSamples, s16* out) {
-    static u32 D_8122869C = 0;
+/**
+ * Mixes the current and previous menu sound (signed 8-bit PCM, one byte per output sample) into
+ * numSamples stereo samples: left = cur + prev, right = cur - prev.
+ */
+void GbAudio_RenderMenuSounds(s32 numSamples, s16* out) {
+    static u32 sGbAudioPreviousMenuSoundGain = 0;
 
     s32 i;
     s8* mainData;
@@ -6902,18 +7054,18 @@ void func_81209374(s32 numSamples, s16* out) {
 
     mainData = NULL;
     altData = NULL;
-    if (D_8120EB7C.id != 0) {
-        D_8120EB8C = D_8120EB84;
-        D_8120EB84 = D_8120EB7C;
-        D_8120EB84.pos = 0;
-        D_8120EB7C.id = 0;
-        D_8122869C = 0x400;
+    if (sGbAudioPendingMenuSound.id != 0) {
+        sGbAudioPreviousMenuSound = sGbAudioCurrentMenuSound;
+        sGbAudioCurrentMenuSound = sGbAudioPendingMenuSound;
+        sGbAudioCurrentMenuSound.pos = 0;
+        sGbAudioPendingMenuSound.id = 0;
+        sGbAudioPreviousMenuSoundGain = 0x400;
     }
-    if (D_8120EB84.id != 0) {
-        mainData = GB_AUDIO_STREAM_DATA[D_8120EB84.id];
-        mainEnd = GB_AUDIO_STREAM_SIZE[D_8120EB84.id];
+    if (sGbAudioCurrentMenuSound.id != 0) {
+        mainData = GB_AUDIO_STREAM_DATA[sGbAudioCurrentMenuSound.id];
+        mainEnd = GB_AUDIO_STREAM_SIZE[sGbAudioCurrentMenuSound.id];
     }
-    i = D_8120EB8C.id;
+    i = sGbAudioPreviousMenuSound.id;
     if (i != 0) {
         altData = GB_AUDIO_STREAM_DATA[i];
         altEnd = GB_AUDIO_STREAM_SIZE[i];
@@ -6921,24 +7073,24 @@ void func_81209374(s32 numSamples, s16* out) {
 
     for (i = 0; i < numSamples; i++) {
         if (mainData != NULL) {
-            if (mainEnd == D_8120EB84.pos) {
-                D_8120EB84.id = 0;
+            if (mainEnd == sGbAudioCurrentMenuSound.pos) {
+                sGbAudioCurrentMenuSound.id = 0;
                 mainData = NULL;
                 a = 0;
             } else {
-                a = mainData[D_8120EB84.pos++];
+                a = mainData[sGbAudioCurrentMenuSound.pos++];
             }
         } else {
             a = 0;
         }
         if (altData != NULL) {
-            if (altEnd == D_8120EB8C.pos) {
-                D_8120EB8C.id = 0;
+            if (altEnd == sGbAudioPreviousMenuSound.pos) {
+                sGbAudioPreviousMenuSound.id = 0;
                 altData = NULL;
                 b = 0;
             } else {
-                b = altData[D_8120EB8C.pos++];
-                b = (s32)(b * D_8122869C) / 1024;
+                b = altData[sGbAudioPreviousMenuSound.pos++];
+                b = (s32)(b * sGbAudioPreviousMenuSoundGain) / 1024;
             }
         } else {
             b = 0;
@@ -6948,11 +7100,16 @@ void func_81209374(s32 numSamples, s16* out) {
     }
 }
 
+/**
+ * Empty.
+ */
 void func_81209688(UNUSED s32 arg0) {
 }
 
 #if defined(VERSION_JP)
-// Second empty handler; in the Japanese build this file's .text ends here (0x81218110).
+/**
+ * Second empty handler; in the Japanese build this file's .text ends here (0x81218110).
+ */
 void func_81218104_jp(UNUSED s32 arg0) {
 }
 #endif
