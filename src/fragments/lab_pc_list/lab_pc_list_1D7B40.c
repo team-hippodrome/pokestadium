@@ -3113,7 +3113,7 @@ void BattleInfoWidget_UpdateItemMenuTitle(unk_func_8830867C_04C* arg0) {
 
     if (arg0->unk_88 != NULL) {
         sp1C = 0x4D;
-        Text_SetStringToken(0x19, Text_GetString(NULL, 0, sPcListPokemonNames, arg0->unk_88->unk_00.unk_00 - 1));
+        Text_SetStringToken(0x19, Text_GetString(NULL, 0, sPcListPokemonNames, arg0->unk_88->species.unk_00 - 1));
     } else {
         sp1C = 0x4E;
     }

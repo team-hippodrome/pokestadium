@@ -75,7 +75,7 @@ void Gallery_RentalViewerMarkMatchingPikachu(unk_D_838067F0* arg0, BattleMon* ar
 
     unk_func_83802660_sp28 sp28;
 
-    if ((arg0->unk_0018 < 4) && (GbSave_GetPortGame(arg0->unk_0018) == 7) && (arg1->unk_00.unk_00 == 0x19)) {
+    if ((arg0->unk_0018 < 4) && (GbSave_GetPortGame(arg0->unk_0018) == 7) && (arg1->species.unk_00 == 0x19)) {
         GbSave_CopyPlayerIdentity(arg0->unk_0018, &sp28);
         _bcopy(arg1->unk_46, sp28.unk_14, sizeof(arg1->unk_46));
         sp28.unk_12 = arg1->unk_0E;
@@ -99,7 +99,7 @@ s32 Gallery_RentalViewerFillPage(unk_D_838067F0* arg0, unk_D_838067F0_0168* arg1
     arg1->unk_2692 = arg0->unk_001C;
 
     for (i = 0; i < 3; i++) {
-        arg1->unk_0000[i].unk_004.unk_00.unk_00 = 0;
+        arg1->unk_0000[i].unk_004.species.unk_00 = 0;
         *(s32*)&arg1->unk_0000[i].unk_000 = 0;
     }
 
@@ -143,7 +143,7 @@ s32 Gallery_RentalViewerFillPage(unk_D_838067F0* arg0, unk_D_838067F0_0168* arg1
         arg1->unk_0000[i].unk_000 = arg0->unk_0018;
         arg1->unk_0000[i].unk_001 = arg0->unk_001C;
         arg1->unk_0000[i].unk_002 = arg2 * 3 + i;
-        arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.unk_00.unk_00;
+        arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.species.unk_00;
 
         arg1->unk_0000[i].unk_004.unk_53 = arg2 * 3 + i;
         arg1->unk_0000[i].unk_004.unk_52 = (arg0->unk_0018 * 0x10) | arg0->unk_001C;
@@ -241,10 +241,10 @@ void Gallery_RentalViewerConfirmMonSelect(unk_D_838067F0* arg0) {
     unk_D_838067F0_0168* ptr = Gallery_RentalViewerGetPage(arg0->unk_0160, arg0->unk_0028);
     BattleMon* temp_a1 = &ptr->unk_0000[arg0->unk_0024].unk_004;
 
-    if (temp_a1->unk_00.unk_00 != 0) {
+    if (temp_a1->species.unk_00 != 0) {
         arg0->unk_0000 = 7;
         Gallery_CopyPhotoMonFromBattleMon(&D_83407AC8, temp_a1);
-        if ((temp_a1->unk_00.unk_00 == 0x19) && (temp_a1->unk_52 & 0x80)) {
+        if ((temp_a1->species.unk_00 == 0x19) && (temp_a1->unk_52 & 0x80)) {
             D_83407AC8.unk_02 = 0x99;
         }
         Audio_PlaySoundEffectById(0x20);
@@ -669,7 +669,7 @@ void Gallery_RentalViewerDrawMonRow(s32 arg0, s32 arg1, unk_D_838067F0_0168* arg
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        if (arg2->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
+        if (arg2->unk_0000[i].unk_004.species.unk_00 != 0) {
             TeamSelection_DrawColoredFrame(arg0 + i * 0x84, arg1, 0x84, 0x2C, 0x64, 0x64, 0xC8, 0xFF);
         } else {
             TeamSelection_DrawColoredFrame(arg0 + i * 0x84, arg1, 0x84, 0x2C, 0x3C, 0x3C, 0xA0, 0xFF);
@@ -679,7 +679,7 @@ void Gallery_RentalViewerDrawMonRow(s32 arg0, s32 arg1, unk_D_838067F0_0168* arg
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     for (i = 0; i < 3; i++) {
-        if (arg2->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
+        if (arg2->unk_0000[i].unk_004.species.unk_00 != 0) {
             Gfx_DrawTextureRgba16(arg0 + (i * 0x84) + 2, arg1 + 2, 0x28, 0x28, &arg2->unk_0000[i].unk_058, 0x28, 0);
         }
     }
@@ -687,7 +687,7 @@ void Gallery_RentalViewerDrawMonRow(s32 arg0, s32 arg1, unk_D_838067F0_0168* arg
     Font_BeginTranslucentTextRendering();
 
     for (i = 0; i < 3; i++) {
-        if (arg2->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
+        if (arg2->unk_0000[i].unk_004.species.unk_00 != 0) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetActive(4, 0);
             Font_Printf(arg0 + (i * 0x84) + 0x2C, arg1 + 5, arg2->unk_0000[i].unk_004.nickname);

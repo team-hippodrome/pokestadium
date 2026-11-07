@@ -654,7 +654,7 @@ void Battle_SelectComRoster(void) {
         com_roster->numberOfPokemonBrought = number_of_pokemon_picked;
 
         for (i = 0; i < com_roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-            com_roster->pokemonPicked[i] = com_roster->rosterInfo->unk_028[order_of_picked_pokemon[i]];
+            com_roster->pokemonPicked[i] = com_roster->rosterInfo->battleMon[order_of_picked_pokemon[i]];
         }
     }
 }
@@ -667,7 +667,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk
     side->unk_18 = model->unk_08->unk_00[0];
     side->uniqueStatusFlags |= 0xA0;
     side->unk_1C = 0;
-    side->displayModel = first_trainer->pokemonPicked[0].unk_00.unk_00;
+    side->displayModel = first_trainer->pokemonPicked[0].species.unk_00;
     side->unk_04 = first_trainer->pokemonPicked;
     Trainer_RequestPokeIcon(side);
 }

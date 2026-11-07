@@ -693,18 +693,18 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
 
     for (i = 0; i < 6; i++, var_s1++) {
         var_s1->unk_25 = 1;
-        if ((var_s1->unk_00.unk_00 > 0) && (var_s1->unk_00.unk_00 < 0x98)) {
+        if ((var_s1->species.unk_00 > 0) && (var_s1->species.unk_00 < 0x98)) {
             if (EventBattle_HasLegalMoves(var_s1) != 0) {
                 ptr1 = &D_8230597C[(arg1 - 1) & 0xFFFFFFFF];
 
-                if (D_8006FF00[var_s1->unk_00.unk_00 - 1].unk_0C & ptr1->unk_06) {
+                if (D_8006FF00[var_s1->species.unk_00 - 1].unk_0C & ptr1->unk_06) {
                     if ((var_s1->level >= ptr1->unk_00) && (ptr1->unk_02 >= var_s1->level)) {
                         var_s1->unk_25 = 0;
                     }
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (var_s1->unk_00.unk_00 == arg0->unk_0020[j].unk_00.unk_00) {
+                    if (var_s1->species.unk_00 == arg0->unk_0020[j].species.unk_00) {
                         var_s1->unk_25 = 1;
                         arg0->unk_0020[j].unk_25 = 1;
                     }
@@ -1370,7 +1370,7 @@ void EventBattle_MarkPartnerPikachu(BattleMon* arg0, s16 arg1) {
     GbSavePlayerIdentity sp30;
     GbSavePlayerIdentity sp20;
 
-    if ((GbSave_GetPortGame(arg1) == 7) && (arg0->unk_00.unk_00 == 0x19)) {
+    if ((GbSave_GetPortGame(arg1) == 7) && (arg0->species.unk_00 == 0x19)) {
         GbSave_CopyPlayerIdentity(arg1, &sp20);
         _bcopy(arg0->unk_46, sp30.unk_02, 11);
         sp30.unk_00 = arg0->unk_0E;

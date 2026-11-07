@@ -36,8 +36,8 @@ void LabPC_MarkBoxSeen(unk_func_88205880_00D0* arg0) {
     temp_s3 = GbSave_GetActivePort();
 
     for (i = 0; i < arg0->unk_690; i++, tmp++) {
-        if ((tmp->unk_00.unk_00 > 0) && (tmp->unk_00.unk_00 < 0x98)) {
-            GbSave_SetSeenOwnedBits(temp_s3, tmp->unk_00.unk_00, 3);
+        if ((tmp->species.unk_00 > 0) && (tmp->species.unk_00 < 0x98)) {
+            GbSave_SetSeenOwnedBits(temp_s3, tmp->species.unk_00, 3);
         }
     }
 }

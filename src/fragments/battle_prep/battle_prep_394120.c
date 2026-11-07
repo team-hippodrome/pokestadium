@@ -61,7 +61,7 @@ void BattlePrep_SaveVictoryPalaceRecords(void) {
 
     temp_v0 = gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo;
     temp_s0 = temp_v0->numberOfPokemonCanBePicked;
-    var_s1 = temp_v0->unk_028;
+    var_s1 = temp_v0->battleMon;
 
     if ((gSessionContext.mode == 3) || (gSessionContext.mode == 6)) {
         if (gSessionContext.modeSelection != 3) {
@@ -481,8 +481,8 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         temp_v1 = var_a1->rosterInfo;
 
         for (i = 0; i < temp_v1->numberOfPokemonCanBePicked; i++) {
-            s32 tmp = (temp_v1->unk_028[i].unk_52 & 0x70) >> 4;
-            s32 tmp2 = temp_v1->unk_028[i].unk_52 & 0xF;
+            s32 tmp = (temp_v1->battleMon[i].unk_52 & 0x70) >> 4;
+            s32 tmp2 = temp_v1->battleMon[i].unk_52 & 0xF;
 
             if ((tmp >= 4) || (tmp2 >= 13)) {
                 return;
@@ -492,7 +492,7 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         for (i = 0; i < var_a1->numberOfPokemonBrought; i++) {
             BattleMon* ptr = &var_a1->pokemonPicked[i];
 
-            if (ptr->unk_00.unk_00 == 0x19) {
+            if (ptr->species.unk_00 == 0x19) {
                 for (j = 0; j < 4; j++) {
                     if (ptr->moves[j] == 0) {
                         break;

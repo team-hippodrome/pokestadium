@@ -1061,12 +1061,12 @@ void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0) {
     PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0xC0, 1));
 
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00,
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.unk_00,
                       0);
     }
 
     for (count = 3, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00,
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.unk_00,
                       0);
     }
 }
@@ -1080,26 +1080,26 @@ void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0) {
     PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
 
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00,
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.unk_00,
                       0);
     }
 
     for (count = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00,
+        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.unk_00,
                       0);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
         for (count = 3, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
             func_8001A324(arg0->unk_1C, count,
-                          gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
+                          gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].species.unk_00, 0);
         }
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
         for (count = 9, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
             func_8001A324(arg0->unk_1C, count,
-                          gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].unk_00.unk_00, 0);
+                          gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].species.unk_00, 0);
         }
     }
 }
@@ -1154,12 +1154,12 @@ void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0) {
 
     for (i = 0, count = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+            arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.unk_00, NULL);
     }
 
     for (i = 0, count = 3; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+            arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.unk_00, NULL);
     }
 }
 
@@ -1169,18 +1169,18 @@ void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
 
     for (i = 0, count = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+            &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.unk_00, NULL);
     }
 
     for (i = 0, count = 6; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].unk_00.unk_00, NULL);
+            &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.unk_00, NULL);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
         for (i = 0, count = 3; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
             PokeIcon_LoadModelTextureForMon(
-                &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].unk_00.unk_00,
+                &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].species.unk_00,
                 NULL);
         }
     }
@@ -1188,7 +1188,7 @@ void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
         for (i = 0, count = 9; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
             PokeIcon_LoadModelTextureForMon(
-                &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].unk_00.unk_00,
+                &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].species.unk_00,
                 NULL);
         }
     }

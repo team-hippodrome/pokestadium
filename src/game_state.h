@@ -27,7 +27,7 @@ typedef struct BattleMonSpecies {
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
-    /* 0x00 */ BattleMonSpecies unk_00;
+    /* 0x00 */ BattleMonSpecies species;
     /* 0x02 */ u16 hp;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 statusCondition;
@@ -84,7 +84,7 @@ typedef struct ExtendedRosterInfo {
     /* 0x004 */ char unk004[0x10];
     /* 0x014 */ char unk_014[4];
     /* 0x018 */ char unk018[0x10];
-    /* 0x028 */ BattleMon unk_028[1];
+    /* 0x028 */ BattleMon battleMon[1];
 #if defined(VERSION_JP)
     /* 0x078 */ char unk078[0x190];
     /* 0x208 */ char unk_208[0x4];

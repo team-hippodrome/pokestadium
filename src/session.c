@@ -128,7 +128,7 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
 
     if (tmp < 6) {
         arg0->pokemonPicked[tmp] = *arg1;
-        ptr->unk_028[tmp] = *arg1;
+        ptr->battleMon[tmp] = *arg1;
 
         arg0->numberOfPokemonBrought = tmp + 1;
         ptr->numberOfPokemonCanBePicked = tmp + 1;
@@ -136,7 +136,7 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
 }
 
 BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
-    arg0->unk_00.unk_00 = arg1;
+    arg0->species.unk_00 = arg1;
     arg0->unk_04 = 0;
     arg0->statusCondition = 0;
 
@@ -327,7 +327,7 @@ s16 Team_GetHighestPartyLevel(void) {
     s16 var_v1 = 0;
     BattleMon* var_v0;
 
-    var_v0 = &gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_028[0];
+    var_v0 = &gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[0];
 
     for (i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          i++, var_v0++) {
@@ -349,11 +349,11 @@ void Team_ScaleOpponentToLevel(s16 arg0) {
     }
 
     var_s0 = gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked;
-    var_s1 = gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_028;
+    var_s1 = gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon;
 
     for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; i++, var_s1++, var_s0++) {
         var_s0->level = arg0;
-        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->unk_00.unk_00, arg0);
+        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->species.unk_00, arg0);
         Pokemon_RecalcStats(var_s0);
         var_s0->hp = var_s0->maxHp;
 
@@ -538,7 +538,7 @@ void Session_SaveContinueData(void) {
 
     _bcopy(gSessionContext.opponentHistory[0], &sp20.unk_05, 8);
     Text_TranscodeNameWrapper(&sp20.unk_10, &gSessionContext.battleSides[0].tagTeamMember[0]->trainerName);
-    Session_SaveContinueRecord(&sp20, sp1C->unk_028, sp1C->numberOfPokemonCanBePicked);
+    Session_SaveContinueRecord(&sp20, sp1C->battleMon, sp1C->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 

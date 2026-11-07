@@ -1081,40 +1081,40 @@ void BattleMenu_HandleOrderSelectPanel_MonDetailInput(Controller* controller, Ba
     }
 }
 
-s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, BattleOrderInputState* arg1) {
-    Controller* var_a0;
-    s32 sp18 = 0;
+s32 BattleMenu_UpdateOrderSelectPanel(s32 do_not_update, BattleOrderInputState* input_state) {
+    Controller* controller;
+    s32 done = 0;
 
-    if (arg1->roster->isHuman & 0x2) {
-        var_a0 = &sComController;
+    if (input_state->roster->isHuman & 0x2) {
+        controller = &sComController;
     } else {
-        var_a0 = &gControllers[arg1->port];
+        controller = &gControllers[input_state->port];
     }
 
-    if (arg0 == 0) {
-        switch (arg1->doneSelecting) {
+    if (do_not_update == 0) {
+        switch (input_state->doneSelecting) {
             case 0:
-                BattleMenu_HandleOrderSelectPanel_PartyInput(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_PartyInput(controller, input_state);
                 break;
 
             case 1:
-                BattleMenu_HandleOrderSelectPanel_ConfirmInput(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_ConfirmInput(controller, input_state);
                 break;
 
             case 2:
-                BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(controller, input_state);
                 break;
 
             case 3:
-                sp18 = 1;
+                done = 1;
                 break;
 
             case 4:
-                BattleMenu_HandleOrderSelectPanel_MonDetailInput(var_a0, arg1);
+                BattleMenu_HandleOrderSelectPanel_MonDetailInput(controller, input_state);
                 break;
         }
     }
-    return sp18;
+    return done;
 }
 
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
@@ -1162,34 +1162,34 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     return sp30;
 }
 
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, TeamOrderState* arg1) {
+void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* battle_session_teams, TeamOrderState* order_state) {
     TeamRoster* temp_v0;
     s32 tmp;
 
-    if (arg0->tagTeamSize == 2) {
-        tmp = ((arg1->pokemonPicked[0] >> 4) & 0xF) - 1;
-        if (tmp == arg0->tagTeamMember[1]->controllerPort) {
-            temp_v0 = arg0->tagTeamMember[0];
-            arg0->tagTeamMember[0] = arg0->tagTeamMember[1];
-            arg0->tagTeamMember[1] = temp_v0;
+    if (battle_session_teams->tagTeamSize == 2) {
+        tmp = ((order_state->pokemonPicked[0] >> 4) & 0xF) - 1;
+        if (tmp == battle_session_teams->tagTeamMember[1]->controllerPort) {
+            temp_v0 = battle_session_teams->tagTeamMember[0];
+            battle_session_teams->tagTeamMember[0] = battle_session_teams->tagTeamMember[1];
+            battle_session_teams->tagTeamMember[1] = temp_v0;
         }
     }
 }
 
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1) {
+void BattleMenu_FillDefaultOrder(s8* pokemon_slots, s32 number_of_slots_filled) {
     s32 i;
     s32 j;
 
     for (i = 0; i < 6; i++) {
-        for (j = 0; j < arg1; j++) {
-            if (i == arg0[j]) {
+        for (j = 0; j < number_of_slots_filled; j++) {
+            if (i == pokemon_slots[j]) {
                 break;
             }
         }
 
-        if (j == arg1) {
-            arg0[arg1] = i;
-            arg1 += 1;
+        if (j == number_of_slots_filled) {
+            pokemon_slots[number_of_slots_filled] = i;
+            number_of_slots_filled += 1;
         }
     }
 }
@@ -1207,7 +1207,7 @@ void BattleMenu_CommitOrderSelection(void) {
         temp_s1 = var_s2->roster;
         if (temp_s1->isHuman & 0x2) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
-            _bcopy(temp_s1->rosterInfo->unk_028, temp_s1->pokemonPicked, 504);
+            _bcopy(temp_s1->rosterInfo->battleMon, temp_s1->pokemonPicked, 504);
         } else {
             BattleMenu_FillDefaultOrder(var_s2->pickedSlots, var_s2->numberOfPokemonPicked);
             temp_s1->numberOfPokemonBrought = var_s2->numberOfPokemonPicked;
@@ -1223,34 +1223,34 @@ void BattleMenu_CommitOrderSelection(void) {
     BattleMenu_RearrangeLeadPokemon(&sSessionContext->battleSides[1], &sTeamOrderStates[1]);
 }
 
-void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
+void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 is_human, s32 port) {
     s32 i;
-    BattleOrderInputState* temp_v1;
-    BattleMon* temp_s0;
+    BattleOrderInputState* input_state;
+    BattleMon* pokemon;
 
-    temp_v1 = &sBattleOrderInputStates[D_8480379C];
-    temp_v1->unk_0000 = D_8480379C;
-    temp_v1->port = arg2->controllerPort;
-    temp_v1->tagTeamPartnerPort = arg4;
-    temp_v1->isHuman = arg3;
-    temp_v1->doneSelecting = 0;
-    temp_v1->numberOfPokemonPicked = 0;
-    temp_v1->confirmCursorMoving = 2;
-    temp_v1->summaryDisplayProgress = 0;
-    temp_v1->rButtonHeld = 0;
-    temp_v1->confirmCursorSelection = 0;
-    temp_v1->x = arg0;
-    temp_v1->y = arg1;
-    temp_v1->rosterSize = arg2->rosterInfo->numberOfPokemonCanBePicked;
-    temp_v1->pokemon = arg2->rosterInfo->unk_028;
-    temp_v1->roster = arg2;
+    input_state = &sBattleOrderInputStates[D_8480379C];
+    input_state->unk_0000 = D_8480379C;
+    input_state->port = roster->controllerPort;
+    input_state->tagTeamPartnerPort = port;
+    input_state->isHuman = is_human;
+    input_state->doneSelecting = 0;
+    input_state->numberOfPokemonPicked = 0;
+    input_state->confirmCursorMoving = 2;
+    input_state->summaryDisplayProgress = 0;
+    input_state->rButtonHeld = 0;
+    input_state->confirmCursorSelection = 0;
+    input_state->x = x;
+    input_state->y = y;
+    input_state->rosterSize = roster->rosterInfo->numberOfPokemonCanBePicked;
+    input_state->pokemon = roster->rosterInfo->battleMon;
+    input_state->roster = roster;
 
-    for (i = 0; i < arg2->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        temp_s0 = &arg2->rosterInfo->unk_028[i];
-        Pokemon_PrepareBattleMon(temp_s0);
-        temp_s0->type1 = gSpeciesData[temp_s0->unk_00.unk_00 - 1].type1;
-        temp_s0->type2 = gSpeciesData[temp_s0->unk_00.unk_00 - 1].type2;
-        PokeIcon_LoadModelTextureForMon(temp_v1->firstPokemonIcon[i], 0, temp_s0);
+    for (i = 0; i < roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+        pokemon = &roster->rosterInfo->battleMon[i];
+        Pokemon_PrepareBattleMon(pokemon);
+        pokemon->type1 = gSpeciesData[pokemon->species.unk_00 - 1].type1;
+        pokemon->type2 = gSpeciesData[pokemon->species.unk_00 - 1].type2;
+        PokeIcon_LoadModelTextureForMon(input_state->firstPokemonIcon[i], 0, pokemon);
     }
 
     D_8480379C++;

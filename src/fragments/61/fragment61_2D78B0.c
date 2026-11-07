@@ -738,9 +738,9 @@ void TeamSelection_ApplySlotSelection(s16 arg0, s16 arg1) {
 
     if (temp_v1->numberOfPokemonBrought != 0) {
         if (arg1 == 4) {
-            TeamSelection_RegisteredTeam_ApplySelection(&D_84229EB0, temp_v1->rosterInfo->unk_028[0].unk_53);
+            TeamSelection_RegisteredTeam_ApplySelection(&D_84229EB0, temp_v1->rosterInfo->battleMon[0].unk_53);
         } else {
-            Rental_CopyRosterToTeam(&D_84211B50, &temp_v1->rosterInfo->unk_028,
+            Rental_CopyRosterToTeam(&D_84211B50, &temp_v1->rosterInfo->battleMon,
                                     temp_v1->rosterInfo->numberOfPokemonCanBePicked);
         }
     }

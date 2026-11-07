@@ -734,7 +734,7 @@ void Gallery_CopyPhotoMonFromBattleMon(unk_D_83402EE0_070* arg0, BattleMon* arg1
 
     bzero(arg0, sizeof(unk_D_83402EE0_070));
     arg0->unk_00 = arg1->unk_0E;
-    arg0->unk_02 = arg1->unk_00.unk_00;
+    arg0->unk_02 = arg1->species.unk_00;
 
     for (i = 0; i < 11; i++) {
         arg0->unk_03[i] = ((s8*)arg1->nickname)[i];
@@ -751,7 +751,7 @@ void Gallery_CopyBattleMonFromPhotoMon(BattleMon* arg0, unk_D_83407AC8* arg1) {
     bzero(arg0, sizeof(BattleMon));
 
     arg0->unk_0E = arg1->unk_00;
-    arg0->unk_00.unk_00 = arg1->unk_02;
+    arg0->species.unk_00 = arg1->unk_02;
 
     for (i = 0; i < 11; i++) {
         arg0->nickname[i] = arg1->unk_03[i];
@@ -874,16 +874,16 @@ void Gallery_InitializePhotoModel(unk_func_80031270* arg0) {
     Gallery_CopyBattleMonFromPhotoMon(&sp30, &temp_s1->unk_70);
     Vec3f_SetComponentsDuplicate(&arg0->unk_20->position, 0, temp_s1->unk_00.unk_00.raw, 0); //?
     arg0->unk_20->effectSlot = 0xFE;
-    sp94 = sp30.unk_00.unk_00;
-    if (sp30.unk_00.unk_00 == 0x99) {
-        sp30.unk_00.unk_00 = 0x19;
+    sp94 = sp30.species.unk_00;
+    if (sp30.species.unk_00 == 0x99) {
+        sp30.species.unk_00 = 0x19;
     }
     Model_ComputeSizeVariant(&sp90, &sp30);
-    sp30.unk_00.unk_00 = sp94;
-    PokeIcon_RequestFrameLoad(arg0->unk_10, sp30.unk_00.unk_00, sp90);
+    sp30.species.unk_00 = sp94;
+    PokeIcon_RequestFrameLoad(arg0->unk_10, sp30.species.unk_00, sp90);
     PokeIcon_WaitFrameLoad(arg0->unk_10);
     ModelRenderer_ClearDisplayObject(arg0->unk_20);
-    Model_InitDisplayObject(arg0->unk_20, 0, sp30.unk_00.unk_00, arg0->unk_10->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_20, 0, sp30.species.unk_00, arg0->unk_10->loadedModel->modelRoot->unk_00[0]);
     sp28 = Util_ConvertAddrToVirtAddr(&Particle31_UnpackSlotData);
     sp28(arg0->unk_20, Util_ConvertAddrToVirtAddr(&temp_s1->unk_00.unk_09[1]));
     ModelAnim_SetAnimation(arg0->unk_20, temp_s1->unk_00.unk_05);

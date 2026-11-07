@@ -1212,7 +1212,7 @@ void VictoryPalace_SaveSpeciesRecord(BattleMon* arg0, s16 arg1, u8 arg2) {
 #else
     Text_TranscodeName(sp24.unk_0F, arg0->unk_3B);
 #endif
-    Save_WriteTypedRecord(0x13, 0, arg0->unk_00.unk_00 - 1, &sp24);
+    Save_WriteTypedRecord(0x13, 0, arg0->species.unk_00 - 1, &sp24);
 }
 
 #if !defined(VERSION_JP)
@@ -2621,7 +2621,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
 #if defined(VERSION_JP)
                 arg4->unk_00 = temp_v0->unk_045[arg3];
 #else
-                arg4->unk_00 = temp_v0->unk_04A[arg3];
+                arg4->species = temp_v0->unk_04A[arg3];
 #endif
                 break;
 
@@ -2629,7 +2629,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
 #if defined(VERSION_JP)
                 arg4->unk_00 = temp_v0->unk_25D[arg3];
 #else
-                arg4->unk_00 = temp_v0->unk_267[arg3];
+                arg4->species = temp_v0->unk_267[arg3];
 #endif
                 break;
         }
@@ -2663,7 +2663,7 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 #if defined(VERSION_JP)
                 ptr->unk_045[arg3] = arg4->unk_000[0].unk_00;
 #else
-                ptr->unk_04A[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_04A[arg3] = arg4->unk_000[0].species;
 #endif
                 break;
 
@@ -2671,7 +2671,7 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 #if defined(VERSION_JP)
                 ptr->unk_25D[arg3] = arg4->unk_000[0].unk_00;
 #else
-                ptr->unk_267[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_267[arg3] = arg4->unk_000[0].species;
 #endif
                 break;
         }
