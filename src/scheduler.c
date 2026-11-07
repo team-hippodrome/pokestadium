@@ -170,7 +170,7 @@ void Sched_NotifyClients(u32 arg0) {
         } else if (var_s0->unk_01DC != 0) {
             osSendMesg(&var_s0->queue1, arg0, 0);
         }
-        var_s0 = var_s0->unk_01D8;
+        var_s0 = var_s0->nextClient;
     }
 }
 
@@ -206,7 +206,7 @@ void Sched_HandlePreNMI(void) {
         if (var_s0->unk_01DC == 0) {
             osStopThread(&var_s0->thread);
         }
-        var_s0 = var_s0->unk_01D8;
+        var_s0 = var_s0->nextClient;
     }
     D_800A62E0.unk_A38 = 1;
     Audio_FadeOutForShutdown();
@@ -343,15 +343,15 @@ void Sched_AddClient(unk_D_800AA660* arg0) {
         D_800A62E0.unk_A10 = arg0;
     } else {
         var_v1 = D_800A62E0.unk_A10;
-        var_a1 = var_v1->unk_01D8;
+        var_a1 = var_v1->nextClient;
 
         while (var_a1 != NULL) {
             var_v1 = var_a1;
-            var_a1 = var_a1->unk_01D8;
+            var_a1 = var_a1->nextClient;
         }
-        var_v1->unk_01D8 = arg0;
+        var_v1->nextClient = arg0;
     }
-    arg0->unk_01D8 = NULL;
+    arg0->nextClient = NULL;
 }
 
 void Sched_RemoveClient(unk_D_800AA660* arg0) {
@@ -360,11 +360,11 @@ void Sched_RemoveClient(unk_D_800AA660* arg0) {
 
     while (var_v1 != NULL) {
         if (var_v1 == arg0) {
-            *var_v0 = var_v1->unk_01D8;
+            *var_v0 = var_v1->nextClient;
             break;
         }
-        var_v0 = &var_v1->unk_01D8;
-        var_v1 = var_v1->unk_01D8;
+        var_v0 = &var_v1->nextClient;
+        var_v1 = var_v1->nextClient;
     }
 }
 

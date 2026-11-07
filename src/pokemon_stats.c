@@ -1854,7 +1854,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
         }
 
         sp28 = GbSave_ReadMainData(arg0);
-        if (GbTower_CheckPakRemoved(arg0, sp2F) == 0) {
+        if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -1921,7 +1921,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
                 sp2C = GbSave_ReadBoxBank(arg0, 1);
             }
 
-            if (GbTower_CheckPakRemoved(arg0, sp37) == 0) {
+            if (GbTower_IsPakInserted(arg0, sp37) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -1975,7 +1975,7 @@ s32 GbSave_LoadPort(s32 arg0) {
             temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
             temp_s1 &= GbSave_OpenBoxData(arg0);
 
-            if (GbTower_CheckPakRemoved(arg0, sp2F) == 0) {
+            if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -1995,7 +1995,7 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
 
     switch (D_8007364C[arg0]) {
         case 0:
-            GbTower_CheckPakRemoved(arg0, 0);
+            GbTower_IsPakInserted(arg0, 0);
             D_8007364C[arg0] += 1;
             // fallthrough
 
@@ -2112,7 +2112,7 @@ s32 GbSave_ScanAllPorts(void) {
                 }
                 GbSave_RefreshPortState(i);
             }
-            GbTower_CheckPakRemoved(i, 0);
+            GbTower_IsPakInserted(i, 0);
         }
     }
 
@@ -2153,7 +2153,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
         if (sp28 != 0) {
             sp28 = GbSave_WriteBoxBank(arg0, 1);
         }
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -2168,7 +2168,7 @@ s32 GbSave_CommitMainData(s32 arg0) {
         }
 
         sp28 = GbSave_WriteMainData(arg0);
-        sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
 
         if (sp28 != 0) {
             GbSave_RefreshPlayerIdentity(arg0);
@@ -2199,7 +2199,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         }
     }
 
-    sp28 &= GbTower_CheckPakRemoved(arg0, sp2F);
+    sp28 &= GbTower_IsPakInserted(arg0, sp2F);
     return sp28;
 }
 
@@ -2216,7 +2216,7 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
 }
 
 void GbSave_RequirePakPresent(s32 arg0) {
-    if (GbTower_CheckPakRemoved(arg0, 0) == 0) {
+    if (GbTower_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }
