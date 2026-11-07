@@ -425,7 +425,7 @@ void BattleAI_AppendTrainerTeamSpecies(TeamRoster* arg0) {
         if (temp_v0 >= 18) {
             break;
         }
-        temp_a0 = arg0->pokemonPicked[j].unk_00.unk_00;
+        temp_a0 = arg0->pokemonPicked[j].species.id;
         D_843C5550[temp_v0] = temp_a0;
         Battle_DmaLoadLevelUpLearnset(temp_a0, &D_843C5310[temp_v0]);
     }
@@ -3570,13 +3570,13 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
 
         for (j = 0; j < arg2->unk_01[i]; j++) {
             sp73 = temp_s7[j].level;
-            sp6C = &gSpeciesData[temp_s7[j].unk_00.unk_00 - 1];
+            sp6C = &gSpeciesData[temp_s7[j].species.id - 1];
 
             arg2->unk_14[j + var_v1].unk_00 = j;
             arg2->unk_14[j + var_v1].unk_04 = 0;
-            arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].unk_00.unk_00;
-            arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].unk_06;
-            arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].unk_07;
+            arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].species.id;
+            arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].type1;
+            arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].type2;
             arg2->unk_14[j + var_v1].unk_12.unk_26 = temp_s7[j].level;
 
             _bcopy(temp_s7[j].moves, &arg2->unk_14[j + var_v1].unk_12.moves[0], 4);
@@ -3610,25 +3610,25 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedAttack = BattleAI_ComputeDifficultyThreshold(sp6C->baseAttack, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedAttack = temp_s7[j].unk_28;
+                arg2->unk_14[j + var_v1].unk_12.modifiedAttack = temp_s7[j].attack;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedDefense = BattleAI_ComputeDifficultyThreshold(sp6C->baseDefense, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedDefense = temp_s7[j].unk_2A;
+                arg2->unk_14[j + var_v1].unk_12.modifiedDefense = temp_s7[j].defense;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = BattleAI_ComputeDifficultyThreshold(sp6C->baseSpeed, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = temp_s7[j].unk_2C;
+                arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = temp_s7[j].speed;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = BattleAI_ComputeDifficultyThreshold(sp6C->baseSpecial, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = temp_s7[j].unk_2E;
+                arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = temp_s7[j].special;
             }
 
             arg2->unk_14[j + var_v1].unk_12.displayHp = arg2->unk_14[j + var_v1].unk_12.maxHp;
@@ -5386,7 +5386,7 @@ void BattleAI_SyncTeamStateFromRuntime(void) {
             temp_v1_5 = j + var_v0;
             var_a2 = 1;
             D_843C60A8->unk_14[temp_v1_5].unk_12.displayHp = sActivePokemon[1 - gBattleAI_ActivePokemon[0].unk_000]
-                                                                 ->sessionTeams->teamMember[i]
+                                                                 ->sessionTeams->tagTeamMember[i]
                                                                  ->pokemonPicked[j]
                                                                  .hp;
             if (D_843C60A8->unk_14[temp_v1_5].unk_12.displayHp == 0) {
@@ -5599,10 +5599,10 @@ s32 BattleAI_ChooseAction(UNUSED s32 arg0) {
     TeamRoster* sp30;
 
     if (gBattleAI_ActivePokemon[0].unk_001 == 0) {
-        temp_v0 = sActivePokemon[0]->sessionTeams->teamMember[0];
-        sp30 = sActivePokemon[1]->sessionTeams->teamMember[0];
+        temp_v0 = sActivePokemon[0]->sessionTeams->tagTeamMember[0];
+        sp30 = sActivePokemon[1]->sessionTeams->tagTeamMember[0];
         if (sActivePokemon[0]->sessionTeams->tagTeamSize == 2) {
-            temp_v00 = sActivePokemon[0]->sessionTeams->teamMember[1];
+            temp_v00 = sActivePokemon[0]->sessionTeams->tagTeamMember[1];
             BattleAI_InitTeamContext(temp_v0, temp_v00, D_843C60A8, 1);
         } else {
             BattleAI_InitTeamContext(temp_v0, NULL, D_843C60A8, 1);

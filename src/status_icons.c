@@ -16,6 +16,7 @@
  * categories, sStatusNames and one array per type and move name.
  */
 #include "status_icons.h"
+#include "types.h"
 
 #if defined(VERSION_JP)
 // Species names and categories ("たね" for Bulbasaur, the Seed Pokemon) in record order;
@@ -5248,11 +5249,11 @@ u32 Status_ToDisplayIconIndex(s32 arg0) {
     return ret;
 }
 
-u32 PokemonType_ToDisplayIndex(s32 arg0) {
-    if (arg0 >= 0x1B) {
-        arg0 = 0;
-    } else if (arg0 >= 0x14) {
-        arg0 -= 0xB;
+u32 PokemonType_ToDisplayIndex(s32 type) {
+    if (type >= DARK) {
+        type = 0;
+    } else if (type >= FIRE) {
+        type -= 0xB;
     }
-    return arg0;
+    return type;
 }

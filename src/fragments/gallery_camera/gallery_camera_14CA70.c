@@ -450,10 +450,10 @@ ModelLoadResult* Gallery_LoadSurfingPikachuIcon(BattleMon* arg0) {
     arg1_func_80010CA8 sp1C;
     ModelLoadContext* sp18;
 
-    arg0->unk_00.unk_00 = 25;
+    arg0->species.id = 25;
     sp18 = PokeIcon_AllocFramebuffers(1);
     Model_ComputeSizeVariant(&sp1C, arg0);
-    PokeIcon_RequestFrameLoad(sp18, arg0->unk_00.unk_00 = 153, sp1C);
+    PokeIcon_RequestFrameLoad(sp18, arg0->species.id = 153, sp1C);
     PokeIcon_WaitFrameLoad(sp18);
 
     return sp18->loadedModel;

@@ -332,8 +332,8 @@ void BattleScene_AutoSelectReplacementMon(ActivePokemon* pokemon) {
     s32 i;
     ActivePokemonState* state = &pokemon->state;
 
-    for (i = 0; i < pokemon->sessionTeams->teamMember[0]->numberOfPokemonBrought; i++) {
-        if ((pokemon->sessionTeams->teamMember[0]->pokemonPicked[i].hp != 0) && (i != state->rosterIndex)) {
+    for (i = 0; i < pokemon->sessionTeams->tagTeamMember[0]->numberOfPokemonBrought; i++) {
+        if ((pokemon->sessionTeams->tagTeamMember[0]->pokemonPicked[i].hp != 0) && (i != state->rosterIndex)) {
             BattleAnim_PlayMenuConfirmSoundEffect();
             state->showingCommandOptions = 0;
             state->actionDelayTimer = 0;
@@ -350,7 +350,7 @@ void BattleScene_SelectActiveController(ActivePokemon* pokemon) {
     ActivePokemonState* state = &pokemon->state;
 
     state->ownerTeamMemberIndex = state->teamMemberIndex;
-    state->controller = &gControllers[pokemon->sessionTeams->teamMember[state->ownerTeamMemberIndex]->controllerPort];
+    state->controller = &gControllers[pokemon->sessionTeams->tagTeamMember[state->ownerTeamMemberIndex]->controllerPort];
 }
 
 void BattleScene_HandleActionSelectionCancel(s32 side) {
@@ -649,11 +649,11 @@ void BattleScene_ForfeitPrompt(ActivePokemon* pokemon) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(pokemon) == 0]->state;
 
     if (pokemon->sessionTeams->tagTeamSize == 1) {
-        sTeammate1Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
-        sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
+        sTeammate1Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
+        sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
     } else {
-        sTeammate1Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
-        sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[1]->controllerPort];
+        sTeammate1Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
+        sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[1]->controllerPort];
     }
 
     if (opponent_state->selectedCommandOption == 4) {
@@ -711,7 +711,7 @@ void BattleScene_CommitPlayerSwitchAction(ActivePokemon* arg0) {
 }
 
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
-    if (arg0->sessionTeams->teamMember[arg0->state.ownerTeamMemberIndex]->pokemonPicked[arg0->state.actionChosen].hp !=
+    if (arg0->sessionTeams->tagTeamMember[arg0->state.ownerTeamMemberIndex]->pokemonPicked[arg0->state.actionChosen].hp !=
         0) {
         return 1;
     }
@@ -729,11 +729,11 @@ void BattleScene_QueuePartySelectionConfirmMessage(ActivePokemon* arg0) {
 
 void BattleScene_AssignActiveCoopController(ActivePokemon* arg0, s32 arg1) {
     if (arg1 == 1) {
-        sTeammate1Controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        sTeammate2Controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+        sTeammate1Controller = &gControllers[arg0->sessionTeams->tagTeamMember[0]->controllerPort];
+        sTeammate2Controller = &gControllers[arg0->sessionTeams->tagTeamMember[0]->controllerPort];
     } else {
-        sTeammate1Controller = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        sTeammate2Controller = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+        sTeammate1Controller = &gControllers[arg0->sessionTeams->tagTeamMember[0]->controllerPort];
+        sTeammate2Controller = &gControllers[arg0->sessionTeams->tagTeamMember[1]->controllerPort];
     }
 
     if (arg1 == 1) {
@@ -760,7 +760,7 @@ void BattleScene_HandlePartySlotCursorInput(ActivePokemon* pokemon, Controller* 
     state = &pokemon->state;
 
     BattleScene_AssignActiveCoopController(pokemon, pokemon->sessionTeams->tagTeamSize);
-    current_team_member = pokemon->sessionTeams->teamMember[state->ownerTeamMemberIndex];
+    current_team_member = pokemon->sessionTeams->tagTeamMember[state->ownerTeamMemberIndex];
     controller = state->controller;
 
     if (current_team_member->numberOfPokemonBrought < 4) {
@@ -821,14 +821,14 @@ void BattleScene_HandlePlayerPartySelection(ActivePokemon* pokemon) {
     ActivePokemonState* state = &pokemon->state;
 
     if (pokemon->sessionTeams->tagTeamSize == 1) {
-        sTeammate1Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
-        sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
+        sTeammate1Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
+        sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
     } else {
 
         sTeammate1Controller =
-            &gControllers[pokemon->sessionTeams->teamMember[state->ownerTeamMemberIndex]->controllerPort];
+            &gControllers[pokemon->sessionTeams->tagTeamMember[state->ownerTeamMemberIndex]->controllerPort];
         idx = state->ownerTeamMemberIndex == 0;
-        sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[idx]->controllerPort];
+        sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[idx]->controllerPort];
     }
 
     if (pokemon->captionState.active != 0) {
@@ -1052,11 +1052,11 @@ void BattleScene_PollActionMenuRequestButtons(ActivePokemon* pokemon) {
 
     if (state->selectedCommandOption == 0) {
         if (pokemon->sessionTeams->tagTeamSize == 1) {
-            sTeammate1Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
-            sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
+            sTeammate1Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
+            sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
         } else {
-            sTeammate1Controller = &gControllers[pokemon->sessionTeams->teamMember[0]->controllerPort];
-            sTeammate2Controller = &gControllers[pokemon->sessionTeams->teamMember[1]->controllerPort];
+            sTeammate1Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
+            sTeammate2Controller = &gControllers[pokemon->sessionTeams->tagTeamMember[1]->controllerPort];
         }
 
         if (state->controller->buttonPressed & A_BUTTON) {

@@ -119,7 +119,7 @@ void func_88206110(BattleMon* arg0) {
 
     bzero(arg0, sizeof(BattleMon));
 
-    arg0->unk_00.unk_00 = (u16)Save_GetSelectedPokemonId();
+    arg0->species.id = (u16)Save_GetSelectedPokemonId();
     var_a2 = GbSave_GetPortGame(GbSave_GetActivePort());
     i = 0;
     if (var_a2 == 7) {
@@ -138,7 +138,7 @@ void func_88206110(BattleMon* arg0) {
     temp_a2 = var_a2;
 
     for (var_v0 = temp_a1; i < 9; i++, var_v0++) {
-        if (var_v0->unk_00 == arg0->unk_00.unk_00) {
+        if (var_v0->unk_00 == arg0->species.id) {
             break;
         }
     }
@@ -163,14 +163,14 @@ void func_88206110(BattleMon* arg0) {
 
     arg0->unk_1E = (s16)(u16)guRandom();
 
-    arg0->unk_06 = gSpeciesData[arg0->unk_00.unk_00 - 1].type1;
-    arg0->unk_07 = gSpeciesData[arg0->unk_00.unk_00 - 1].type2;
+    arg0->type1 = gSpeciesData[arg0->species.id - 1].type1;
+    arg0->type2 = gSpeciesData[arg0->species.id - 1].type2;
 
     Pokemon_PrepareBattleMon(arg0);
 
     arg0->unk_04 = arg0->level;
 
-    HAL_Strcpy(arg0->nickname, Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_00.unk_00 - 1));
+    HAL_Strcpy(arg0->nickname, Text_GetString(NULL, 0, sPokemonNameTable, arg0->species.id - 1));
     HAL_Strcpy(arg0->unk_3B, Text_GetString(NULL, 0, sPcPokemonText, 0x17));
 
     Pokemon_SetDisplayNameFromOt(arg0);
@@ -552,7 +552,7 @@ void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s3
 
     temp_v1 = Font_MeasureTextExtent(0, 0, "L100");
 
-    if ((arg0->unk_000[0].unk_00.unk_00 <= 0) || (arg0->unk_000[0].unk_00.unk_00 >= 0x98)) {
+    if ((arg0->unk_000[0].species.id <= 0) || (arg0->unk_000[0].species.id >= 0x98)) {
         Font_Printf(((arg1 + arg3) - temp_v1) - 0x14, arg2 + 8, "L?");
     } else {
         Font_Printf(((arg1 + arg3) - temp_v1) - 0x14, arg2 + 8, "L%d", arg0->unk_000[0].level);
@@ -1332,7 +1332,7 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
 
     Font_BeginTranslucentTextRendering();
 
-    if ((arg0->unk_002C->unk_000[0].unk_00.unk_00 <= 0) || (arg0->unk_002C->unk_000[0].unk_00.unk_00 >= 0x98)) {
+    if ((arg0->unk_002C->unk_000[0].species.id <= 0) || (arg0->unk_002C->unk_000[0].species.id >= 0x98)) {
         Gfx_SetEnvColor(D_88217E3C.r, D_88217E3C.g, D_88217E3C.b, D_88217E3C.a);
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 8, arg2 + 8, "?????");
@@ -1352,13 +1352,13 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
         Gfx_SetEnvColor(D_88217E3C.r, D_88217E3C.g, D_88217E3C.b, D_88217E3C.a);
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 8, arg2 + 8,
-                    Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
+                    Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_002C->unk_000[0].species.id - 1));
 
         Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].maxHp);
-        Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_28);
-        Font_Printf(arg1 + 0xD1, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2A);
-        Font_Printf(arg1 + 0x15C, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2C);
-        Font_Printf(arg1 + 0x1E7, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2E);
+        Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].attack);
+        Font_Printf(arg1 + 0xD1, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].defense);
+        Font_Printf(arg1 + 0x15C, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].speed);
+        Font_Printf(arg1 + 0x1E7, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].special);
     }
 
     for (i = 0; i < spB0; i++) {
@@ -2018,8 +2018,8 @@ void LabPC_MarkSeenOwned(unk_func_88200FA0_030_038* arg0, s32 arg1) {
     unk_func_88205880_00D0** tmp = arg0->unk_00;
 
     for (i = 0; i < arg0->unk_08; i++) {
-        if ((tmp[i]->unk_000[0].unk_00.unk_00 > 0) && (tmp[i]->unk_000[0].unk_00.unk_00 < 0x98)) {
-            GbSave_SetSeenOwnedBits(arg1, tmp[i]->unk_000[0].unk_00.unk_00, 3);
+        if ((tmp[i]->unk_000[0].species.id > 0) && (tmp[i]->unk_000[0].species.id < 0x98)) {
+            GbSave_SetSeenOwnedBits(arg1, tmp[i]->unk_000[0].species.id, 3);
         }
     }
 }

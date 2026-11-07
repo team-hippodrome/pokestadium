@@ -709,34 +709,34 @@ SpeciesData gSpeciesData[152] = {
       0xFF },
 };
 
-unk_D_80071D88 sStatusDisplayInfo[8] = {
+ColoredString sStatusDisplayInfo[8] = {
     { NULL, { 0x00, 0x00, 0x00, 0x00 } },
-    { (char*)sStatusNames[0], { 0xFF, 0xFF, 0xFF, 0xFF } },
-    { (char*)sStatusNames[1], { 0x4D, 0x4D, 0x4D, 0xFF } },
-    { (char*)sStatusNames[2], { 0x9F, 0x91, 0xE8, 0xFF } },
-    { (char*)sStatusNames[3], { 0x96, 0x50, 0xFF, 0xFF } },
-    { (char*)sStatusNames[4], { 0xF0, 0x5A, 0x46, 0xFF } },
-    { (char*)sStatusNames[5], { 0x85, 0xD5, 0xF1, 0xFF } },
-    { (char*)sStatusNames[6], { 0xFF, 0xFF, 0x00, 0xFF } },
+    { (char*)sStatusNames[0], { 0xFF, 0xFF, 0xFF, 0xFF } }, // #FFFFFF
+    { (char*)sStatusNames[1], { 0x4D, 0x4D, 0x4D, 0xFF } }, // #4D4D4D
+    { (char*)sStatusNames[2], { 0x9F, 0x91, 0xE8, 0xFF } }, // #9F91E8
+    { (char*)sStatusNames[3], { 0x96, 0x50, 0xFF, 0xFF } }, // #9650FF
+    { (char*)sStatusNames[4], { 0xF0, 0x5A, 0x46, 0xFF } }, // #F05A46
+    { (char*)sStatusNames[5], { 0x85, 0xD5, 0xF1, 0xFF } }, // #85D5F1
+    { (char*)sStatusNames[6], { 0xFF, 0xFF, 0x00, 0xFF } }, // #FFFF00
 };
 
-unk_D_80071D88 D_80071D88[17] = {
-    { (char*)sTypeNames[0], { 0xF0, 0xF0, 0xF0, 0xFF } },
-    { (char*)sTypeNames[1], { 0xF0, 0x96, 0x32, 0xFF } },
-    { (char*)sTypeNames[2], { 0x50, 0x96, 0xF0, 0xFF } },
-    { (char*)sTypeNames[3], { 0xC8, 0x96, 0xF0, 0xFF } },
-    { (char*)sTypeNames[4], { 0xF0, 0xC8, 0x78, 0xFF } },
-    { (char*)sTypeNames[5], { 0x64, 0xB4, 0xB4, 0xFF } },
-    { (char*)sTypeNames[6], { 0x50, 0x96, 0xF0, 0xFF } },
-    { (char*)sTypeNames[7], { 0xC8, 0xF0, 0x50, 0xFF } },
-    { (char*)sTypeNames[8], { 0xDC, 0xC8, 0xF0, 0xFF } },
-    { (char*)sTypeNames[9], { 0xF0, 0x64, 0x64, 0xFF } },
-    { (char*)sTypeNames[10], { 0x46, 0xB4, 0xF0, 0xFF } },
-    { (char*)sTypeNames[11], { 0x64, 0xC8, 0x64, 0xFF } },
-    { (char*)sTypeNames[12], { 0xF0, 0xF0, 0x32, 0xFF } },
-    { (char*)sTypeNames[13], { 0xF0, 0x8C, 0xB4, 0xFF } },
-    { (char*)sTypeNames[14], { 0xB4, 0xF0, 0xF0, 0xFF } },
-    { (char*)sTypeNames[15], { 0x64, 0xDC, 0xC8, 0xFF } },
+ColoredString D_80071D88[17] = {
+    { (char*)sTypeNames[0], { 0xF0, 0xF0, 0xF0, 0xFF } }, // #F0F0F0
+    { (char*)sTypeNames[1], { 0xF0, 0x96, 0x32, 0xFF } }, // #F09632
+    { (char*)sTypeNames[2], { 0x50, 0x96, 0xF0, 0xFF } }, // #5096F0
+    { (char*)sTypeNames[3], { 0xC8, 0x96, 0xF0, 0xFF } }, // #C896F0
+    { (char*)sTypeNames[4], { 0xF0, 0xC8, 0x78, 0xFF } }, // #F0C878
+    { (char*)sTypeNames[5], { 0x64, 0xB4, 0xB4, 0xFF } }, // #64B4B4
+    { (char*)sTypeNames[6], { 0x50, 0x96, 0xF0, 0xFF } }, // #5096F0
+    { (char*)sTypeNames[7], { 0xC8, 0xF0, 0x50, 0xFF } }, // #C8F050
+    { (char*)sTypeNames[8], { 0xDC, 0xC8, 0xF0, 0xFF } }, // #DCC8F0
+    { (char*)sTypeNames[9], { 0xF0, 0x64, 0x64, 0xFF } }, // #F06464
+    { (char*)sTypeNames[10], { 0x46, 0xB4, 0xF0, 0xFF } }, // #46B4F0
+    { (char*)sTypeNames[11], { 0x64, 0xC8, 0x64, 0xFF } }, // #64C864
+    { (char*)sTypeNames[12], { 0xF0, 0xF0, 0x32, 0xFF } }, // #F0F032
+    { (char*)sTypeNames[13], { 0xF0, 0x8C, 0xB4, 0xFF } }, // #F08CB4
+    { (char*)sTypeNames[14], { 0xB4, 0xF0, 0xF0, 0xFF } }, // #B4F0F0
+    { (char*)sTypeNames[15], { 0x64, 0xDC, 0xC8, 0xFF } }, // #64DCC8
     { NULL, { 0x00, 0x00, 0x00, 0x00 } },
 };
 
@@ -1253,14 +1253,14 @@ char* Text_GetTmHmName(s32 arg0, char* arg1) {
 }
 
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
-    arg0->unk_00.unk_00 = Species_FromInternalIndex(arg1->unk_00);
-    arg0->unk_00.unk_01 = arg1->unk_00;
+    arg0->species.id = Species_FromInternalIndex(arg1->unk_00);
+    arg0->species.unk_01 = arg1->unk_00;
     arg0->hp = GbData_ReadU16BE(arg1->unk_01);
 
     arg0->unk_04 = arg1->unk_03;
     arg0->statusCondition = arg1->unk_04;
-    arg0->unk_06 = arg1->unk_05;
-    arg0->unk_07 = arg1->unk_06;
+    arg0->type1 = arg1->unk_05;
+    arg0->type2 = arg1->unk_06;
     arg0->unk_08 = arg1->unk_07;
 
     arg0->unk_0E = GbData_ReadU16BE(arg1->unk_0C);
@@ -1280,25 +1280,25 @@ void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
     Pokemon_FromGbRecord(arg0, &arg1->unk_00);
     arg0->level = arg1->unk_21;
     arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
-    arg0->unk_28 = GbData_ReadU16BE(arg1->unk_24);
-    arg0->unk_2A = GbData_ReadU16BE(arg1->unk_26);
-    arg0->unk_2C = GbData_ReadU16BE(arg1->unk_28);
-    arg0->unk_2E = GbData_ReadU16BE(arg1->unk_2A);
+    arg0->attack = GbData_ReadU16BE(arg1->unk_24);
+    arg0->defense = GbData_ReadU16BE(arg1->unk_26);
+    arg0->speed = GbData_ReadU16BE(arg1->unk_28);
+    arg0->special = GbData_ReadU16BE(arg1->unk_2A);
 }
 
 void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
-    if (Species_ToInternalIndex(arg0->unk_00.unk_00) & 0xFF) {
-        arg1->unk_00 = Species_ToInternalIndex(arg0->unk_00.unk_00);
+    if (Species_ToInternalIndex(arg0->species.id) & 0xFF) {
+        arg1->unk_00 = Species_ToInternalIndex(arg0->species.id);
     } else {
-        arg1->unk_00 = arg0->unk_00.unk_01;
+        arg1->unk_00 = arg0->species.unk_01;
     }
 
     GbData_WriteU16BE(arg1->unk_01, (u16)arg0->hp);
 
     arg1->unk_03 = arg0->unk_04;
     arg1->unk_04 = arg0->statusCondition;
-    arg1->unk_05 = arg0->unk_06;
-    arg1->unk_06 = arg0->unk_07;
+    arg1->unk_05 = arg0->type1;
+    arg1->unk_06 = arg0->type2;
     arg1->unk_07 = arg0->unk_08;
 
     GbData_WriteU16BE(arg1->unk_0C, arg0->unk_0E);
@@ -1318,10 +1318,10 @@ void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg
     Pokemon_ToGbRecord(arg0->unk_000, arg1);
     arg1->unk_21 = arg0->unk_000[0].level;
     GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
-    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].unk_28);
-    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].unk_2A);
-    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].unk_2C);
-    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].unk_2E);
+    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].attack);
+    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].defense);
+    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].speed);
+    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
 }
 
 u16 StatExpSqrt(u16 square) {
@@ -1414,12 +1414,12 @@ u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u
 }
 
 void Pokemon_RecalcStats(BattleMon* arg0) {
-    arg0->level = Pokemon_LevelFromExp(arg0->unk_00.unk_00, arg0->unk_10);
-    arg0->maxHp = CalculateStatValue(1, arg0->unk_00.unk_00, arg0->unk_14, arg0->level, arg0->unk_1E);
-    arg0->unk_28 = CalculateStatValue(2, arg0->unk_00.unk_00, arg0->unk_16, arg0->level, arg0->unk_1E);
-    arg0->unk_2A = CalculateStatValue(3, arg0->unk_00.unk_00, arg0->unk_18, arg0->level, arg0->unk_1E);
-    arg0->unk_2C = CalculateStatValue(4, arg0->unk_00.unk_00, arg0->unk_1A, arg0->level, arg0->unk_1E);
-    arg0->unk_2E = CalculateStatValue(5, arg0->unk_00.unk_00, arg0->unk_1C, arg0->level, arg0->unk_1E);
+    arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->unk_10);
+    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->unk_14, arg0->level, arg0->unk_1E);
+    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->unk_16, arg0->level, arg0->unk_1E);
+    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->unk_18, arg0->level, arg0->unk_1E);
+    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->unk_1A, arg0->level, arg0->unk_1E);
+    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->unk_1C, arg0->level, arg0->unk_1E);
 }
 
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {

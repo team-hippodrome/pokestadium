@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-extern FontContext* font_context;
+extern FontContext* gFontContext;
 
 void Gfx_DrawTexturedRectClipped(s16 x1, s16 y1, s16 width, s16 height, s16 texture_start_x, s16 texture_start_y,
                                  s16 texture_step_x, s16 texture_step_y, s32 texture_spread_x_mode);
@@ -28,7 +28,7 @@ void Gfx_DrawTextureI16(s16 x1, s16 y1, s16 draw_width, s16 height, u8* texture,
 void Gfx_DrawTextureRgba16Ia8(s16 x1, s16 y1, s16 draw_width, s16 height, u8* texture, u8* texture_multi,
                               s16 load_width, s32 texture_x_spread_mode);
 void Gfx_DrawTiledRgba16Image(u8* image);
-void Gfx_DrawRgba16ImageRegion(u32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+void Gfx_DrawRgba16ImageRegion(u32 image_address, s16 x1, s16 y1, s16 width, s16 height);
 void Gfx_DrawTiledImageMesh(s16 arg0, s16 arg1, s16 arg2, f32 arg3, Vtx* arg4, u32 arg5);
 Vtx* func_8001E490(void);
 void Gfx_SetVertexAttributes(Vtx* vertex, s16 x, s16 y, s16 z, s16 texture_x, s16 texture_y, u8 r, u8 g, u8 b,
@@ -49,9 +49,9 @@ s32 Font_GetSetInfo(s32 arg0, FontSet* arg1);
 s16 Font_DrawChar(s16 arg0, s16 arg1, s16 arg2);
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void Font_DrawCharAt(s32 arg0, s32 arg1, s32 arg2);
-void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
-void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a);
+void Font_DrawCharAt(s32 x, s32 y, s32 char_index);
+void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 alpha);
+void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 alpha);
 void Font_SetLineHeight(s32 line_height);
 void Font_DisableLineBreak(void);
 void Font_EnableLineBreak(void);
@@ -61,6 +61,6 @@ void Font_EnableTwoCycleTexturing(void);
 void Font_DisableTwoCycleTexturing(void);
 void Gfx_FillRectWithDisplayState(s32 x1, s32 y1, s32 width, s32 length, s32 r, s32 g, s32 b, s32 alpha);
 s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...);
-u8 Font_GetCharWidth(s32 arg0, s32 arg1);
+u8 Font_GetCharWidth(s32 arg0, s32 index);
 
 #endif // _1CF30_H_

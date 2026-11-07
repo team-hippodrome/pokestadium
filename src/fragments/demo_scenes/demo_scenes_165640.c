@@ -279,7 +279,7 @@ void Intro_LoadPokemonTextures(void) {
 }
 
 void Intro_LoadShowcaseModel(void) {
-    D_86B0FA78->unk_174 = D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].unk_00.unk_00;
+    D_86B0FA78->unk_174 = D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].species.id;
     ModelRenderer_AttachDisplayObject(&D_86B0FA78->unk_004);
     PokeIcon_OpenModelArchives();
 
@@ -577,10 +577,10 @@ void Intro_TriggerTextPanelExit(void) {
 
 void Intro_SelectPartyRoster(void) {
     if (gSessionContext.battleSides[0].unk_1C == 1) {
-        D_86B10690 = gSessionContext.battleSides[0].teamMember[0];
+        D_86B10690 = gSessionContext.battleSides[0].tagTeamMember[0];
         D_86B10694 = &gSessionContext.battleSides[0];
     } else {
-        D_86B10690 = gSessionContext.battleSides[1].teamMember[0];
+        D_86B10690 = gSessionContext.battleSides[1].tagTeamMember[0];
         D_86B10694 = &gSessionContext.battleSides[1];
     }
 }
