@@ -442,19 +442,19 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
             break;
 
         case 2:
-            arg1->unk_28 = temp_a0;
+            arg1->attack = temp_a0;
             break;
 
         case 3:
-            arg1->unk_2A = temp_a0;
+            arg1->defense = temp_a0;
             break;
 
         case 4:
-            arg1->unk_2C = temp_a0;
+            arg1->speed = temp_a0;
             break;
 
         case 5:
-            arg1->unk_2E = temp_a0;
+            arg1->special = temp_a0;
             break;
     }
 }
@@ -761,8 +761,8 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->id = sp34->unk_00.unk_00;
     sp24->displayHp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
-    sp24->types[0] = sp34->unk_06;
-    sp24->types[1] = sp34->unk_07;
+    sp24->types[0] = sp34->type1;
+    sp24->types[1] = sp34->type2;
     sp24->unk_1E = sp34->unk_08;
 
     sp24->moves[0] = sp34->moves[0];
@@ -804,19 +804,19 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp24->unk_26 = sp34->level;
     sp24->maxHp = sp34->maxHp;
-    sp24->modifiedAttack = sp34->unk_28;
-    sp24->modifiedDefense = sp34->unk_2A;
-    sp24->modifiedSpeed = sp34->unk_2C;
-    sp24->modifiedSpecial = sp34->unk_2E;
+    sp24->modifiedAttack = sp34->attack;
+    sp24->modifiedDefense = sp34->defense;
+    sp24->modifiedSpeed = sp34->speed;
+    sp24->modifiedSpecial = sp34->special;
 
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
     sp24->unk_36 = gBaseStats[sp24->id].baseHP;
-    sp24->unmodifiedAttack = sp34->unk_28;
-    sp24->unmodifiedDefense = sp34->unk_2A;
-    sp24->unmodifiedSpeed = sp34->unk_2C;
-    sp24->unmodifiedSpecial = sp34->unk_2E;
+    sp24->unmodifiedAttack = sp34->attack;
+    sp24->unmodifiedDefense = sp34->defense;
+    sp24->unmodifiedSpeed = sp34->speed;
+    sp24->unmodifiedSpecial = sp34->special;
 
     // clang-format off
     for (i = 0; i < 8; i++) { sp24->statChanges[i] = 7; }

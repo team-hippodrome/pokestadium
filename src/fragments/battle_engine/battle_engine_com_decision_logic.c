@@ -3575,8 +3575,8 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
             arg2->unk_14[j + var_v1].unk_00 = j;
             arg2->unk_14[j + var_v1].unk_04 = 0;
             arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].unk_00.unk_00;
-            arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].unk_06;
-            arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].unk_07;
+            arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].type1;
+            arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].type2;
             arg2->unk_14[j + var_v1].unk_12.unk_26 = temp_s7[j].level;
 
             _bcopy(temp_s7[j].moves, &arg2->unk_14[j + var_v1].unk_12.moves[0], 4);
@@ -3610,25 +3610,25 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedAttack = BattleAI_ComputeDifficultyThreshold(sp6C->baseAttack, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedAttack = temp_s7[j].unk_28;
+                arg2->unk_14[j + var_v1].unk_12.modifiedAttack = temp_s7[j].attack;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedDefense = BattleAI_ComputeDifficultyThreshold(sp6C->baseDefense, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedDefense = temp_s7[j].unk_2A;
+                arg2->unk_14[j + var_v1].unk_12.modifiedDefense = temp_s7[j].defense;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = BattleAI_ComputeDifficultyThreshold(sp6C->baseSpeed, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = temp_s7[j].unk_2C;
+                arg2->unk_14[j + var_v1].unk_12.modifiedSpeed = temp_s7[j].speed;
             }
 
             if (arg3) {
                 arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = BattleAI_ComputeDifficultyThreshold(sp6C->baseSpecial, sp73);
             } else {
-                arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = temp_s7[j].unk_2E;
+                arg2->unk_14[j + var_v1].unk_12.modifiedSpecial = temp_s7[j].special;
             }
 
             arg2->unk_14[j + var_v1].unk_12.displayHp = arg2->unk_14[j + var_v1].unk_12.maxHp;

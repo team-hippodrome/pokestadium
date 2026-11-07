@@ -21,8 +21,8 @@ typedef struct unk_D_848037A0 {
     /* 0x0004 */ char unk0004[1];
     /* 0x0005 */ s8 doneSelecting;
     /* 0x0006 */ s8 confirmCursorMoving;
-    /* 0x0007 */ s8 confirmCursorMovingSubstep;
-    /* 0x0008 */ s8 unk_0008;
+    /* 0x0007 */ s8 summaryDisplayProgress;
+    /* 0x0008 */ s8 loadProgress;
     /* 0x0009 */ s8 rButtonHeld;
     /* 0x000A */ s8 confirmCursorSelection;
     /* 0x000B */ s8 numberOfPokemonPicked;
@@ -38,9 +38,9 @@ typedef struct unk_D_848037A0 {
 } BattleOrderInputState; // size = 0x4B20
 
 typedef struct unk_D_848035FC {
-    /* 0x00 */ Color_RGB8 unk_00;
-    /* 0x04 */ u8* unk_04;
-} unk_D_848035FC; // size = 0x8
+    /* 0x00 */ Color_RGB8 color;
+    /* 0x04 */ u8* string;
+} PokemonTypeString; // size = 0x8
 
 typedef struct unk_D_84803548 {
     /* 0x00 */ u16 delay;

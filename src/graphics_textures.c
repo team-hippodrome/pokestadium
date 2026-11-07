@@ -570,12 +570,12 @@ void Font_DrawCharAt(s32 x, s32 y, s32 char_index) {
     Font_DrawChar(x - 1, y, char_index & 0xFF);
 }
 
-void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a) {
-    gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
+void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 alpha) {
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, alpha);
 }
 
-void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a) {
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
+void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 alpha) {
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, alpha);
 }
 
 void Font_SetLineHeight(s32 line_height) {

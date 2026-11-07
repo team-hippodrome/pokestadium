@@ -31,8 +31,8 @@ typedef struct BattleMon {
     /* 0x02 */ u16 hp;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 statusCondition;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
+    /* 0x06 */ u8 type1;
+    /* 0x07 */ u8 type2;
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
@@ -48,10 +48,10 @@ typedef struct BattleMon {
     /* 0x24 */ u8 level;
     /* 0x25 */ u8 unk_25;
     /* 0x26 */ u16 maxHp;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 unk_2E;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
 #if defined(VERSION_JP)
     // Japanese layout: GbSave_LoadBattleMonRecord clears 0x3C and 0x4C, copies 3 bytes of the
     // GB record to 0x3D and 0x4D each, and untranscodes names into 0x30 and 0x40.

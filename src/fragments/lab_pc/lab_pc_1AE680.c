@@ -163,8 +163,8 @@ void func_88206110(BattleMon* arg0) {
 
     arg0->unk_1E = (s16)(u16)guRandom();
 
-    arg0->unk_06 = gSpeciesData[arg0->unk_00.unk_00 - 1].type1;
-    arg0->unk_07 = gSpeciesData[arg0->unk_00.unk_00 - 1].type2;
+    arg0->type1 = gSpeciesData[arg0->unk_00.unk_00 - 1].type1;
+    arg0->type2 = gSpeciesData[arg0->unk_00.unk_00 - 1].type2;
 
     Pokemon_PrepareBattleMon(arg0);
 
@@ -1355,10 +1355,10 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
                     Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
 
         Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].maxHp);
-        Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_28);
-        Font_Printf(arg1 + 0xD1, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2A);
-        Font_Printf(arg1 + 0x15C, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2C);
-        Font_Printf(arg1 + 0x1E7, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_2E);
+        Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].attack);
+        Font_Printf(arg1 + 0xD1, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].defense);
+        Font_Printf(arg1 + 0x15C, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].speed);
+        Font_Printf(arg1 + 0x1E7, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].special);
     }
 
     for (i = 0; i < spB0; i++) {

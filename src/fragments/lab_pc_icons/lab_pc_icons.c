@@ -598,13 +598,13 @@ s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg
                     arg2 + 4, "%s/", sp4C);
         sprintf(sp4C, "%d", arg0->unk_2C->maxHp);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 4, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_28);
+        sprintf(sp4C, "%d", arg0->unk_2C->attack);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x2A, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2A);
+        sprintf(sp4C, "%d", arg0->unk_2C->defense);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x40, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2C);
+        sprintf(sp4C, "%d", arg0->unk_2C->speed);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x56, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2E);
+        sprintf(sp4C, "%d", arg0->unk_2C->special);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x6C, sp4C);
     }
     Font_EndTexturedTextRendering();

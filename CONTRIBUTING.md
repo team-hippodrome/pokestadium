@@ -92,6 +92,9 @@ Keep functions without a body named in the style of `func_{address}`, since we c
 ### Spelling
 Use American English spelling (color, mom, etc.).
 
+### Japanese Text
+Japanese literal strings should have a English Translation in a comment alongside them regardless of if the text is in kana, kanji, or romaji.
+
 ### Terminology
 #### Technical
 Do not use yaw, pitch, or roll to describe rotations about an axis. Those terms are body-relative, while most rotations in Pokemon Stadium are world-relative. Use `rotationX`, `rotationY`, and `rotationZ`.
