@@ -101,7 +101,7 @@ gSoftResetGreen = 0x800A743C;
 gSoftResetBlue = 0x800A7440;
 gControllers = 0x800A7450; // defined:true size:0x90
 D_800A83A8 = 0x800A84D8; // defined:true size:0xD0
-D_800AA668 = 0x800AA798; // defined:true size:0x1
+sSavedPollMask = 0x800AA798; // defined:true size:0x1
 font_context = 0x800AC9A0; // defined:true size:0x4
 D_800AC890 = 0x800AC9C0; // defined:true size:0x80
 D_800AC910 = 0x800ACA40; // defined:true size:0x160
@@ -1515,8 +1515,8 @@ gGbPakServiceQueueMessages = 0x8122C550; // size:0x10
 gGbPakServiceQueue = 0x8122C560; // size:0x18
 gGbPakSiEventQueue = 0x8122C578; // size:0x4
 gGbPakServiceThreadActive = 0x8122C580; // size:0x1
-gGbEmuPresentationMode = 0x8122C582;
-gGbEmuButtonBindingSelections = 0x8122C59A;
+sGbTowerUnlockTier = 0x8122C582;
+sButtonBindings = 0x8122C59A;
 gGbEmuFont1Data = 0x8122C7E0;
 gGbEmuFont2Data = 0x8122C7E4;
 gGbApuSquare1 = 0x8122C838;
@@ -1531,12 +1531,26 @@ sBattleDamage = 0x843C4E54;
 sBattleUser = 0x843C52C8;
 sBattleTarget = 0x843C52CC;
 
+// GB CPU core tables in the gb_tower_emulator data/dispatch blobs, all copied or
+// installed by GbEmu_InitContext. sGbCpuCbOpcodeTable = 256 CB-prefix handlers,
+// sGbCpuOpcodeTable = 256 x {cycles, length, rst vector, pad, handler},
+// sGbBootRomImage = DMG boot ROM + header logo mapped at 0x0000 until FF50,
+// sGbJoypad*Map = N64 buttons to GB P1 nibbles, sGbSgbCommandTable = 32 SGB
+// command handlers, sGbIoWriteHandlerTable = FF00-FF7F write handlers.
+sGbCpuCbOpcodeTable = 0x81228810;
+sGbCpuOpcodeTable = 0x81228C10;
+sGbBootRomImage = 0x81229410;
+sGbJoypadButtonMap = 0x81229560;
+sGbJoypadDpadMap = 0x81229580;
+sGbSgbCommandTable = 0x812295A0;
+sGbIoWriteHandlerTable = 0x81229620;
+
 // GB recompiler code templates: defined in gb_tower_emulator_7F9A0.c, so keep
-// splat from migrating them back into func_8120572C.s.
-D_812297C0 = 0x81229860; // force_not_migration:True size:0x9E4
-D_8122A1A4 = 0x8122A244; // force_not_migration:True size:0xBC
-D_8122A260 = 0x8122A300; // force_not_migration:True size:0xA40
-D_8122ACA0 = 0x8122AD40; // force_not_migration:True size:0xB0
+// splat from migrating them back into GbEmu_UpdateFrame.s.
+sCgbRenderMicrocode = 0x81229860; // force_not_migration:True size:0x9E4
+sCgbRenderMicrocodeData = 0x8122A244; // force_not_migration:True size:0xBC
+sDmgRenderMicrocode = 0x8122A300; // force_not_migration:True size:0xA40
+sDmgRenderMicrocodeData = 0x8122AD40; // force_not_migration:True size:0xB0
 
 gRound2BadgeTexture = 0x20144E0; // type:u8
 

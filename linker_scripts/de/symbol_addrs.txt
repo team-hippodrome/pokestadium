@@ -101,7 +101,7 @@ gSoftResetGreen = 0x800A798C;
 gSoftResetBlue = 0x800A7990;
 gControllers = 0x800A79A0; // defined:true
 D_800A83A8 = 0x800A8A28; // defined:true
-D_800AA668 = 0x800AACE8; // defined:true
+sSavedPollMask = 0x800AACE8; // defined:true
 font_context = 0x800ACEF0; // defined:true
 D_800AC890 = 0x800ACF10; // defined:true
 D_800AC910 = 0x800ACF90; // defined:true
@@ -1515,8 +1515,8 @@ gGbPakServiceQueueMessages = 0x8122C530; //
 gGbPakServiceQueue = 0x8122C540; //
 gGbPakSiEventQueue = 0x8122C558; //
 gGbPakServiceThreadActive = 0x8122C560; //
-gGbEmuPresentationMode = 0x8122C562;
-gGbEmuButtonBindingSelections = 0x8122C57A;
+sGbTowerUnlockTier = 0x8122C562;
+sButtonBindings = 0x8122C57A;
 gGbEmuFont1Data = 0x8122C7C0;
 gGbEmuFont2Data = 0x8122C7C4;
 gGbApuSquare1 = 0x8122C818;
@@ -1531,12 +1531,26 @@ sBattleDamage = 0x843C4DC4;
 sBattleUser = 0x843C5238;
 sBattleTarget = 0x843C523C;
 
+// GB CPU core tables in the gb_tower_emulator data/dispatch blobs, all copied or
+// installed by GbEmu_InitContext. sGbCpuCbOpcodeTable = 256 CB-prefix handlers,
+// sGbCpuOpcodeTable = 256 x {cycles, length, rst vector, pad, handler},
+// sGbBootRomImage = DMG boot ROM + header logo mapped at 0x0000 until FF50,
+// sGbJoypad*Map = N64 buttons to GB P1 nibbles, sGbSgbCommandTable = 32 SGB
+// command handlers, sGbIoWriteHandlerTable = FF00-FF7F write handlers.
+sGbCpuCbOpcodeTable = 0x812287F0;
+sGbCpuOpcodeTable = 0x81228BF0;
+sGbBootRomImage = 0x812293F0;
+sGbJoypadButtonMap = 0x81229540;
+sGbJoypadDpadMap = 0x81229560;
+sGbSgbCommandTable = 0x81229580;
+sGbIoWriteHandlerTable = 0x81229600;
+
 // GB recompiler code templates: defined in gb_tower_emulator_7F9A0.c, so keep
-// splat from migrating them back into func_8120572C.s.
-// D_812297C0 = 0x812297C0; // force_not_migration:True size:0x9E4 // not found in de
-D_8122A1A4 = 0x8122A224; // force_not_migration:True
-// D_8122A260 = 0x8122A260; // force_not_migration:True size:0xA40 // not found in de
-// D_8122ACA0 = 0x8122ACA0; // force_not_migration:True size:0xB0 // not found in de
+// splat from migrating them back into GbEmu_UpdateFrame.s.
+// sCgbRenderMicrocode = 0x812297C0; // force_not_migration:True size:0x9E4 // not found in de
+sCgbRenderMicrocodeData = 0x8122A224; // force_not_migration:True
+// sDmgRenderMicrocode = 0x8122A260; // force_not_migration:True size:0xA40 // not found in de
+// sDmgRenderMicrocodeData = 0x8122ACA0; // force_not_migration:True size:0xB0 // not found in de
 
 gRound2BadgeTexture = 0x2006C00; // type:u8
 
