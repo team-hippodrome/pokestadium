@@ -208,7 +208,7 @@ void ShowDamageMessage(s32 arg0, s32 arg1) {
 
     temp_v1 = &sActivePokemon[arg0]->state;
     temp_a2_2 = &sActivePokemon[arg1]->state.runtime;
-    temp_a3 = sActivePokemon[arg0]->sessionTeams->teamMember[temp_v1->ownerTeamMemberIndex];
+    temp_a3 = sActivePokemon[arg0]->sessionTeams->tagTeamMember[temp_v1->ownerTeamMemberIndex];
 
     if (temp_a2_2->displayHp == 0) {
         Text_SetStringToken(0x19, temp_a3->pokemonPicked[temp_v1->actionChosen].nickname);
@@ -442,19 +442,19 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
             break;
 
         case 2:
-            arg1->unk_28 = temp_a0;
+            arg1->attack = temp_a0;
             break;
 
         case 3:
-            arg1->unk_2A = temp_a0;
+            arg1->defense = temp_a0;
             break;
 
         case 4:
-            arg1->unk_2C = temp_a0;
+            arg1->speed = temp_a0;
             break;
 
         case 5:
-            arg1->unk_2E = temp_a0;
+            arg1->special = temp_a0;
             break;
     }
 }
@@ -755,14 +755,14 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp28 = &arg0->state;
     sp24 = &arg0->state.runtime;
-    sp34 = &arg0->sessionTeams->teamMember[sp28->ownerTeamMemberIndex]->pokemonPicked[sp28->actionChosen];
+    sp34 = &arg0->sessionTeams->tagTeamMember[sp28->ownerTeamMemberIndex]->pokemonPicked[sp28->actionChosen];
 
     sp24->unk_14 = sp28->rosterIndex;
-    sp24->id = sp34->unk_00.unk_00;
+    sp24->id = sp34->species.id;
     sp24->displayHp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
-    sp24->types[0] = sp34->unk_06;
-    sp24->types[1] = sp34->unk_07;
+    sp24->types[0] = sp34->type1;
+    sp24->types[1] = sp34->type2;
     sp24->unk_1E = sp34->unk_08;
 
     sp24->moves[0] = sp34->moves[0];
@@ -804,19 +804,19 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp24->unk_26 = sp34->level;
     sp24->maxHp = sp34->maxHp;
-    sp24->modifiedAttack = sp34->unk_28;
-    sp24->modifiedDefense = sp34->unk_2A;
-    sp24->modifiedSpeed = sp34->unk_2C;
-    sp24->modifiedSpecial = sp34->unk_2E;
+    sp24->modifiedAttack = sp34->attack;
+    sp24->modifiedDefense = sp34->defense;
+    sp24->modifiedSpeed = sp34->speed;
+    sp24->modifiedSpecial = sp34->special;
 
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
     sp24->unk_36 = gBaseStats[sp24->id].baseHP;
-    sp24->unmodifiedAttack = sp34->unk_28;
-    sp24->unmodifiedDefense = sp34->unk_2A;
-    sp24->unmodifiedSpeed = sp34->unk_2C;
-    sp24->unmodifiedSpecial = sp34->unk_2E;
+    sp24->unmodifiedAttack = sp34->attack;
+    sp24->unmodifiedDefense = sp34->defense;
+    sp24->unmodifiedSpeed = sp34->speed;
+    sp24->unmodifiedSpecial = sp34->special;
 
     // clang-format off
     for (i = 0; i < 8; i++) { sp24->statChanges[i] = 7; }
@@ -1709,7 +1709,7 @@ void Battle_CheckDefeatAtStatusHp(ActivePokemon* arg0) {
 
     if (arg0->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->sessionTeams->tagTeamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -1740,7 +1740,7 @@ void Battle_CheckDefeatAtSeedHp(ActivePokemon* arg0) {
 
     if (arg0->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->sessionTeams->tagTeamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -1771,7 +1771,7 @@ void Battle_CheckDefeatAtCurrentHp(ActivePokemon* arg0) {
 
     if (arg0->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->sessionTeams->tagTeamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -1802,7 +1802,7 @@ void Battle_CheckDefeatAtDisplayHp(ActivePokemon* arg0) {
 
     if (arg0->sessionTeams->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->sessionTeams->tagTeamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -1832,7 +1832,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
 
             if (arg0->sessionTeams->tagTeamSize == 2) {
                 for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-                    temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+                    temp_v0 = &arg0->sessionTeams->tagTeamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
                     var_s2 += temp_v0->hp;
                 }
             }

@@ -267,7 +267,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
 
             if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
                 Gfx_DrawTextureRgba16(D_82F13C54[i] + arg0->unk_04, D_82F13C5C[i] + arg0->unk_06, 0x14, 0x14,
-                                      D_82F13C68[gMoveDisplayInfo[sp11C->moves[i] - 1].unk_01], 0x14, 0x200000);
+                                      D_82F13C68[gMoveDisplayInfo[sp11C->moves[i] - 1].type], 0x14, 0x200000);
             }
         }
 
@@ -305,26 +305,26 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                     sp11C->level);
         Font_SetActive(8, 0);
         Font_Printf(arg0->unk_04 + 0x12E, arg0->unk_06 + 8, "%s%03d", Text_GetString(NULL, 0, sTradePokemonDetailText, 0x16),
-                    sp11C->unk_00.unk_00);
+                    sp11C->species.id);
         Font_SetActive(8, 0);
-        Font_Printf(arg0->unk_04 + 0x19C, arg0->unk_06 + 8, Trade_GetSpeciesName(sp11C->unk_00.unk_00));
+        Font_Printf(arg0->unk_04 + 0x19C, arg0->unk_06 + 8, Trade_GetSpeciesName(sp11C->species.id));
 
-        temp_s0 = PokemonType_ToDisplayIndex(sp11C->unk_06);
-        temp_s1_2 = PokemonType_ToDisplayIndex(sp11C->unk_07);
+        temp_s0 = PokemonType_ToDisplayIndex(sp11C->type1);
+        temp_s1_2 = PokemonType_ToDisplayIndex(sp11C->type2);
 
         Font_SetActive(8, 0);
         Font_Printf(arg0->unk_04 + 0xE4, arg0->unk_06 + 0x28, Text_GetString(NULL, 0, gTradeStrings, 0xC));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(arg0->unk_04 + 0x120, arg0->unk_06 + 0x28, "1/");
         Gfx_SetEnvColor(D_80071D88[temp_s0].color.r, D_80071D88[temp_s0].color.g, D_80071D88[temp_s0].color.b, 0xFF);
-        Font_Printf(arg0->unk_04 + 0x13E, arg0->unk_06 + 0x28, "%s", Trade_GetTypeName(sp11C->unk_06));
+        Font_Printf(arg0->unk_04 + 0x13E, arg0->unk_06 + 0x28, "%s", Trade_GetTypeName(sp11C->type1));
 
-        if (sp11C->unk_06 != sp11C->unk_07) {
+        if (sp11C->type1 != sp11C->type2) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_Printf(arg0->unk_04 + 0x19E, arg0->unk_06 + 0x28, "2/");
             Gfx_SetEnvColor(D_80071D88[temp_s1_2].color.r, D_80071D88[temp_s1_2].color.g, D_80071D88[temp_s1_2].color.b,
                             0xFF);
-            Font_Printf(arg0->unk_04 + 0x1BC, arg0->unk_06 + 0x28, "%s", Trade_GetTypeName(sp11C->unk_07));
+            Font_Printf(arg0->unk_04 + 0x1BC, arg0->unk_06 + 0x28, "%s", Trade_GetTypeName(sp11C->type2));
         }
 
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -347,13 +347,13 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         Font_Printf(arg0->unk_04 + 0x144, arg0->unk_06 + 0xAC, Text_GetString(NULL, 0, gTradeStrings, 0x10));
         Font_SetActive(8, 0);
 
-        sprintf(sp94, "%d", sp11C->unk_28);
+        sprintf(sp94, "%d", sp11C->attack);
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0x6A, sp94);
-        sprintf(sp94, "%d", sp11C->unk_2A);
+        sprintf(sp94, "%d", sp11C->defense);
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0x80, sp94);
-        sprintf(sp94, "%d", sp11C->unk_2C);
+        sprintf(sp94, "%d", sp11C->speed);
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0x96, sp94);
-        sprintf(sp94, "%d", sp11C->unk_2E);
+        sprintf(sp94, "%d", sp11C->special);
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0xAC, sp94);
         Font_SetActive(8, 0);
 
@@ -371,7 +371,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                 }
 
                 if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
-                    sp70 = &D_80071D88[gMoveDisplayInfo[sp11C->moves[i] - 1].unk_01].color;
+                    sp70 = &D_80071D88[gMoveDisplayInfo[sp11C->moves[i] - 1].type].color;
                     sp74 = Trade_GetMoveName(sp11C->moves[i]);
                 } else {
                     // "？？？？？？？"

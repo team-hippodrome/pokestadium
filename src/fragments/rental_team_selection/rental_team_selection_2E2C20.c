@@ -292,10 +292,10 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             gDPSetCombineLERP(gDisplayListHead++, ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, ENVIRONMENT, 0,
                               ENVIRONMENT, PRIMITIVE, TEXEL0, PRIMITIVE, TEXEL0, 0, ENVIRONMENT, 0);
 
-            TeamSelection_Preview_DrawTypeIcon(temp_s4 + 0x6A, temp_s5 + 0x26, temp_s6->unk_06);
+            TeamSelection_Preview_DrawTypeIcon(temp_s4 + 0x6A, temp_s5 + 0x26, temp_s6->type1);
 
-            if (temp_s6->unk_06 != temp_s6->unk_07) {
-                TeamSelection_Preview_DrawTypeIcon(temp_s4 + 0xBA, temp_s5 + 0x26, temp_s6->unk_07);
+            if (temp_s6->type1 != temp_s6->type2) {
+                TeamSelection_Preview_DrawTypeIcon(temp_s4 + 0xBA, temp_s5 + 0x26, temp_s6->type2);
             }
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -309,9 +309,9 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->level);
             Font_SetActive(4, 0);
             Font_Printf(temp_s4 + 0xE8, temp_s5 + 0xC, "%s%03d", TeamSelection_GetInstructionText(0x16),
-                        temp_s6->unk_00.unk_00);
+                        temp_s6->species.id);
             Font_SetActive(4, 0);
-            Font_Printf(temp_s4 + 0x13C, temp_s5 + 0xC, TeamSelection_GetTextFromSetA(temp_s6->unk_00.unk_00));
+            Font_Printf(temp_s4 + 0x13C, temp_s5 + 0xC, TeamSelection_GetTextFromSetA(temp_s6->species.id));
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0x76, temp_s5 + 0x5A, "%s", TeamSelection_GetInstructionText(8));
             Font_SetActive(8, 0);
@@ -322,21 +322,21 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_Printf(temp_s4 + 0x116, temp_s5 + 0x4B, TeamSelection_GetLabelText(7));
             Font_Printf(temp_s4 + 0x116, temp_s5 + 0x5E, TeamSelection_GetLabelText(8));
             Font_SetActive(4, 0);
-            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x25, "%3d", temp_s6->unk_28);
-            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x38, "%3d", temp_s6->unk_2A);
-            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x4B, "%3d", temp_s6->unk_2C);
-            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x5E, "%3d", temp_s6->unk_2E);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x25, "%3d", temp_s6->attack);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x38, "%3d", temp_s6->defense);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x4B, "%3d", temp_s6->speed);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x5E, "%3d", temp_s6->special);
             Font_SetActive(4, 0);
             temp_v0_8 = TeamSelection_GetLabelText(9);
             Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0x90, temp_s5 + 0x26, temp_v0_8);
-            temp_v0_8 = TeamSelection_GetModeText(PokemonType_ToDisplayIndex(temp_s6->unk_06));
+            temp_v0_8 = TeamSelection_GetModeText(PokemonType_ToDisplayIndex(temp_s6->type1));
             Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0x90, temp_s5 + 0x3A, temp_v0_8);
 
-            if (temp_s6->unk_06 != temp_s6->unk_07) {
+            if (temp_s6->type1 != temp_s6->type2) {
                 temp_v0_8 = TeamSelection_GetLabelText(0xA);
                 Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x26,
                             temp_v0_8);
-                temp_v0_8 = TeamSelection_GetModeText(PokemonType_ToDisplayIndex(temp_s6->unk_07));
+                temp_v0_8 = TeamSelection_GetModeText(PokemonType_ToDisplayIndex(temp_s6->type2));
                 Font_Printf((temp_s4 - (Font_MeasureTextExtent(4, 0, temp_v0_8) / 2)) + 0xE0, temp_s5 + 0x3A,
                             temp_v0_8);
             }
@@ -353,7 +353,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                     if (temp_a0 == 0) {
                         break;
                     }
-                    color = &D_842115F0[gMoveDisplayInfo[temp_a0 - 1].unk_01].unk_00[2];
+                    color = &D_842115F0[gMoveDisplayInfo[temp_a0 - 1].type].unk_00[2];
                     sp80 =
                         TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_a0));
                     Gfx_SetEnvColor(color->r, color->g, color->b, 0xFF);
@@ -373,7 +373,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                     sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i],
                                                                 TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
                     Gfx_DrawTextureRgba16((temp_s4 + sp80) - 0x18, D_842116F8[i] + temp_s5, 0x14, 0x14,
-                                          D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].unk_01].unk_0C, 0x14, 0);
+                                          D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].type].unk_0C, 0x14, 0);
                 }
             }
 

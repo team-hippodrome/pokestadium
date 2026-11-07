@@ -22,17 +22,17 @@ typedef struct unk_D_800AE520 {
 } unk_D_800AE520; // size >= 0x14
 
 typedef struct BattleMonSpecies {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ u8 id;
     /* 0x01 */ u8 unk_01;
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
-    /* 0x00 */ BattleMonSpecies unk_00;
+    /* 0x00 */ BattleMonSpecies species;
     /* 0x02 */ u16 hp;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 statusCondition;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
+    /* 0x06 */ u8 type1;
+    /* 0x07 */ u8 type2;
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
@@ -48,10 +48,10 @@ typedef struct BattleMon {
     /* 0x24 */ u8 level;
     /* 0x25 */ u8 unk_25;
     /* 0x26 */ u16 maxHp;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 unk_2E;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
 #if defined(VERSION_JP)
     // Japanese layout: GbSave_LoadBattleMonRecord clears 0x3C and 0x4C, copies 3 bytes of the
     // GB record to 0x3D and 0x4D each, and untranscodes names into 0x30 and 0x40.
@@ -84,7 +84,7 @@ typedef struct ExtendedRosterInfo {
     /* 0x004 */ char unk004[0x10];
     /* 0x014 */ char unk_014[4];
     /* 0x018 */ char unk018[0x10];
-    /* 0x028 */ BattleMon unk_028[1];
+    /* 0x028 */ BattleMon battleMon[1];
 #if defined(VERSION_JP)
     /* 0x078 */ char unk078[0x190];
     /* 0x208 */ char unk_208[0x4];
@@ -121,7 +121,7 @@ typedef struct BattleSessionTeams {
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ TeamRoster* unk_04;
-    /* 0x08 */ TeamRoster* teamMember[2];
+    /* 0x08 */ TeamRoster* tagTeamMember[2];
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ ModelNodeView* loadedModel;
     /* 0x18 */ ModelNodeView* unk_18;

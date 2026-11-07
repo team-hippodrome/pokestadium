@@ -58,8 +58,8 @@ extern SpeciesData gSpeciesData[152];
 typedef struct unk_D_80071D88 {
     /* 0x00 */ char* type_name;
     /* 0x04 */ Color_RGBA8 color;
-} unk_D_80071D88; // size = 0x8
-extern unk_D_80071D88 D_80071D88[];
+} ColoredString; // size = 0x8
+extern ColoredString D_80071D88[];
 
 typedef struct GbPokemonRecord {
     /* 0x00 */ u8 unk_00;

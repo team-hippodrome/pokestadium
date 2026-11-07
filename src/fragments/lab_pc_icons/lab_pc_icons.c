@@ -458,7 +458,7 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(D_88605AF0.r, D_88605AF0.g, D_88605AF0.b, D_88605AF0.a);
     Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->nickname);
-    if ((arg0->unk_2C->unk_00.unk_00 <= 0) || (arg0->unk_2C->unk_00.unk_00 >= 0x98)) {
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
         Font_SetActive(0x10, 0);
         Font_Printf(arg1 + 0x9B, arg2 + 6, "%s?", sp34);
         Font_SetActive(8, 0);
@@ -468,8 +468,8 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
         Font_SetActive(0x10, 0);
         Font_Printf(arg1 + 0x9B, arg2 + 6, "%s%d", sp34, arg0->unk_2C->level);
         Font_SetActive(8, 0);
-        Font_Printf(arg1 + 0x11E, arg2 + 0xA, "%s%03d", sp30, arg0->unk_2C->unk_00.unk_00);
-        Font_Printf(arg1 + 0x1A0, arg2 + 0xA, Text_GetString(NULL, 0, D_8861C514, arg0->unk_2C->unk_00.unk_00 - 1));
+        Font_Printf(arg1 + 0x11E, arg2 + 0xA, "%s%03d", sp30, arg0->unk_2C->species.id);
+        Font_Printf(arg1 + 0x1A0, arg2 + 0xA, Text_GetString(NULL, 0, D_8861C514, arg0->unk_2C->species.id - 1));
     }
     Font_EndTexturedTextRendering();
     return 0;
@@ -512,7 +512,7 @@ s32 LabPC_DrawTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32
     Font_Printf(arg1 + var_s4, arg2 + 4, temp_v0);
     var_s4 += Font_MeasureTextExtent(0, 0, temp_v0);
 
-    if ((arg0->unk_2C->unk_00.unk_00 <= 0) || (arg0->unk_2C->unk_00.unk_00 >= 0x98)) {
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
         char* tmp = "1/";
 
         Gfx_SetEnvColor(D_88605AF4.r, D_88605AF4.g, D_88605AF4.b, D_88605AF4.a);
@@ -571,7 +571,7 @@ s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg
         return 0;
     }
 
-    if ((arg0->unk_2C->unk_00.unk_00 > 0) && (arg0->unk_2C->unk_00.unk_00 < 0x98)) {
+    if ((arg0->unk_2C->species.id > 0) && (arg0->unk_2C->species.id < 0x98)) {
         BattleHud_DrawHpBarTexture(sp54, arg2 + 0x18, 0x90, arg0->unk_2C->hp, arg0->unk_2C->maxHp);
     }
 
@@ -584,7 +584,7 @@ s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg
     Font_Printf(sp54 + 4, arg2 + 0x56, Text_GetString(NULL, 0, D_8861C510, 0xB));
     Font_Printf(sp54 + 4, arg2 + 0x6C, Text_GetString(NULL, 0, D_8861C510, 0xC));
 
-    if ((arg0->unk_2C->unk_00.unk_00 <= 0) || (arg0->unk_2C->unk_00.unk_00 >= 0x98)) {
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
         sp50 = Font_MeasureTextExtent(0, 0, D_88605AFC);
         Font_Printf((sp54 - sp50) + 0x8C, arg2 + 4, D_88605AFC);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, "?/000")) + 0x8C, arg2 + 4, "?/");
@@ -598,13 +598,13 @@ s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg
                     arg2 + 4, "%s/", sp4C);
         sprintf(sp4C, "%d", arg0->unk_2C->maxHp);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 4, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_28);
+        sprintf(sp4C, "%d", arg0->unk_2C->attack);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x2A, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2A);
+        sprintf(sp4C, "%d", arg0->unk_2C->defense);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x40, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2C);
+        sprintf(sp4C, "%d", arg0->unk_2C->speed);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x56, sp4C);
-        sprintf(sp4C, "%d", arg0->unk_2C->unk_2E);
+        sprintf(sp4C, "%d", arg0->unk_2C->special);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x6C, sp4C);
     }
     Font_EndTexturedTextRendering();
@@ -844,14 +844,14 @@ s32 LabPC_DrawTrainerInfoWidget(unk_func_88205880_0098_008_054* arg0, s32 arg1, 
     Font_Printf(arg1 + 0xE8, arg2 + 0x2C, sp70);
     Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0xE8, arg2 + 0x2C, "%d", arg0->unk_2C->unk_10);
 
-    if ((arg0->unk_2C->unk_00.unk_00 > 0) && (arg0->unk_2C->unk_00.unk_00 < 0x98)) {
+    if ((arg0->unk_2C->species.id > 0) && (arg0->unk_2C->species.id < 0x98)) {
         s32 sp6C = (arg0->unk_2C->level == 0x64) ? 0x64 : arg0->unk_2C->level + 1;
         UNUSED s32 pad;
         char sp48[32];
         s32 sp44;
 
         Text_SetNumberToken(
-            6, (char*)(LabPC_ComputeExpForLevel(arg0->unk_2C->unk_00.unk_00, sp6C) - arg0->unk_2C->unk_10));
+            6, (char*)(LabPC_ComputeExpForLevel(arg0->unk_2C->species.id, sp6C) - arg0->unk_2C->unk_10));
         Text_GetString(sp48, sizeof(sp48), D_8861C510, 0x10);
         sp44 = Font_MeasureTextExtent(0, 0, sp48);
         Font_Printf(arg1 + 0xE8, arg2 + 0x44, sp48);

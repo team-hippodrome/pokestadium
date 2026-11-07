@@ -31,7 +31,7 @@ s32 func_8420DBA0(unk_D_84229EB0_00024* arg0) {
         temp_s3 = Deck_OpenAndSetName(0x10, 0, temp_v0, &arg0->unk_4D12, &arg0->unk_4D12, arg0->unk_4D10);
 
         for (i = 0; i < arg0->unk_4D20; i++) {
-            Deck_WriteEntries(&arg0->unk_0000[i].unk_004.unk_00.unk_00, 1, temp_s3);
+            Deck_WriteEntries(&arg0->unk_0000[i].unk_004.species.id, 1, temp_s3);
         }
 
         Deck_CloseAndFlush(temp_s3);
@@ -149,7 +149,7 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
     Font_SetActive(4, 0);
 
     for (var_s1 = 0; var_s1 < 6; var_s1++) {
-        if (arg3->unk_0000[var_s1].unk_004.unk_00.unk_00 != 0) {
+        if (arg3->unk_0000[var_s1].unk_004.species.id != 0) {
             s16 tmp1 = D_84211870[var_s1] + arg1 + 0x2C;
             s16 tmp2 = D_8421187C[var_s1] + arg2 + 5;
 
@@ -160,7 +160,7 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
     Font_SetActive(4, 0);
 
     for (var_s1 = 0; var_s1 < 6; var_s1++) {
-        if (arg3->unk_0000[var_s1].unk_004.unk_00.unk_00 != 0) {
+        if (arg3->unk_0000[var_s1].unk_004.species.id != 0) {
             temp_s2 = D_84211870[var_s1] + arg1 + 0x2C;
             temp_s3 = D_8421187C[var_s1] + arg2 + 0x17;
             Font_Printf(temp_s2, temp_s3, "%s%d", TeamSelection_GetInstructionText(0x15),
@@ -407,7 +407,7 @@ s32 TeamSelection_RegisteredTeam_Load(unk_D_84229EB0_00024* arg0, s16 arg1) {
     arg0->unk_4D12[0] = 0;
 
     for (i = 0; i < 6; i++) {
-        arg0->unk_0000[i].unk_004.unk_00.unk_00 = 0;
+        arg0->unk_0000[i].unk_004.species.id = 0;
         arg0->unk_0000[i].raw = 0;
     }
 
@@ -426,7 +426,7 @@ s32 TeamSelection_RegisteredTeam_Load(unk_D_84229EB0_00024* arg0, s16 arg1) {
         arg0->unk_0000[i].unk_000 = 4;
         arg0->unk_0000[i].unk_001 = arg1;
         arg0->unk_0000[i].unk_002 = i;
-        arg0->unk_0000[i].unk_003 = arg0->unk_0000[i].unk_004.unk_00.unk_00;
+        arg0->unk_0000[i].unk_003 = arg0->unk_0000[i].unk_004.species.id;
     }
 
     arg0->unk_4D1E = arg1;
@@ -576,7 +576,7 @@ void TeamSelection_RegisteredTeam_HandleListInput(unk_D_84229EB0* arg0) {
         TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, arg0->unk_0000D - arg0->unk_0000C);
 
     if (BTN_IS_PRESSED(cont, BTN_A)) {
-        if (temp_v0->unk_0000[0].unk_004.unk_00.unk_00 != 0) {
+        if (temp_v0->unk_0000[0].unk_004.species.id != 0) {
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 
             switch (arg0->unk_00000) {
@@ -619,7 +619,7 @@ void TeamSelection_RegisteredTeam_MovePokemonLeft(unk_D_84229EB0* arg0) {
             TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, arg0->unk_0000D - arg0->unk_0000C);
         s32 idx = ((arg0->unk_0000A * 3) + arg0->unk_00008) - 1;
 
-        if (ptr->unk_0000[idx].unk_004.unk_00.unk_00 != 0) {
+        if (ptr->unk_0000[idx].unk_004.species.id != 0) {
             arg0->unk_00008 = arg0->unk_00008 - 1;
             arg0->unk_00018 = -1;
             arg0->unk_0001A = -4;
@@ -637,7 +637,7 @@ void TeamSelection_RegisteredTeam_MovePokemonRight(unk_D_84229EB0* arg0) {
             TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, arg0->unk_0000D - arg0->unk_0000C);
         s32 idx = ((arg0->unk_0000A * 3) + arg0->unk_00008) + 1;
 
-        if (ptr->unk_0000[idx].unk_004.unk_00.unk_00 != 0) {
+        if (ptr->unk_0000[idx].unk_004.species.id != 0) {
             arg0->unk_00008++;
             arg0->unk_00018 = 1;
             arg0->unk_0001A = 4;
@@ -655,7 +655,7 @@ void TeamSelection_RegisteredTeam_MovePokemonUp(unk_D_84229EB0* arg0) {
             TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, arg0->unk_0000D - arg0->unk_0000C);
         s32 idx = ((arg0->unk_0000A * 3) + arg0->unk_00008) - 3;
 
-        if (ptr->unk_0000[idx].unk_004.unk_00.unk_00 != 0) {
+        if (ptr->unk_0000[idx].unk_004.species.id != 0) {
             arg0->unk_0000A--;
             arg0->unk_00018 = -1;
             arg0->unk_0001A = -4;
@@ -673,7 +673,7 @@ void TeamSelection_RegisteredTeam_MovePokemonDown(unk_D_84229EB0* arg0) {
             TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, arg0->unk_0000D - arg0->unk_0000C);
         s32 idx = ((arg0->unk_0000A * 3) + arg0->unk_00008) + 3;
 
-        if (ptr->unk_0000[idx].unk_004.unk_00.unk_00 != 0) {
+        if (ptr->unk_0000[idx].unk_004.species.id != 0) {
             arg0->unk_0000A = arg0->unk_0000A + 1;
             arg0->unk_00018 = 1;
             arg0->unk_0001A = 4;
@@ -863,7 +863,7 @@ void TeamSelection_RegisteredTeam_EditTeam(unk_D_84229EB0* arg0) {
         }
 
         if (temp_hi == 4) {
-            temp_v0->unk_0000[temp_lo].unk_004.unk_00.unk_00 = 0;
+            temp_v0->unk_0000[temp_lo].unk_004.species.id = 0;
             PokeIcon_LoadModelTextureForMon(temp_v0->unk_0000[temp_lo].unk_058, 0x84, NULL);
             Audio_PlaySoundEffectById(0x01100010);
         }
@@ -901,7 +901,7 @@ void RegisteredTeam_SaveFromTray(unk_D_84229EB0* arg0) {
     if (arg0->unk_00006 == 0) {
         temp_a3->unk_4D20 = 0;
         for (i = 0; i < 6; i++) {
-            if (temp_v0->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
+            if (temp_v0->unk_0000[i].unk_004.species.id != 0) {
                 temp_a3->unk_4D20++;
             }
         }
@@ -915,7 +915,7 @@ void RegisteredTeam_SaveFromTray(unk_D_84229EB0* arg0) {
         }
 
         if (temp_hi == 4) {
-            temp_a3->unk_0000[temp_lo].unk_004.unk_00.unk_00 = temp_v0->unk_0000[temp_lo].unk_004.unk_00.unk_00;
+            temp_a3->unk_0000[temp_lo].unk_004.species.id = temp_v0->unk_0000[temp_lo].unk_004.species.id;
             _bcopy(temp_v0->unk_0000[temp_lo].unk_058, temp_a3->unk_0000[temp_lo].unk_058,
                    sizeof(temp_v0->unk_0000[temp_lo].unk_058));
             Audio_PlaySoundEffectById(0x01100010);
@@ -1147,8 +1147,8 @@ s32 RegistrationManager_Initialize(unk_D_84229EB0* arg0, u16 arg1, char* arg2, u
     HAL_Strcpy(ptr->unk_4D12, arg2);
 
     for (i = 0; i < 6; i++) {
-        if (ptr->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
-            ptr->unk_0000[i].unk_004.unk_00.unk_00 = 0;
+        if (ptr->unk_0000[i].unk_004.species.id != 0) {
+            ptr->unk_0000[i].unk_004.species.id = 0;
             ptr->unk_0000[i].raw = 1;
             PokeIcon_LoadModelTextureForMon(ptr->unk_0000[i].unk_058, 0x84, NULL);
         } else {
