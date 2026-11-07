@@ -97,7 +97,7 @@ s32 GbTower_ProbePak(s32 port, u8* wasReady, u8* pattern) {
  * Returns 1 if the pak has not latched a reset (OS_GBPAK_RSTB_DETECTION clear), i.e. the
  * cartridge was not removed; powers the pak off when keepPowered == 0.
  */
-s32 GbTower_CheckPakRemoved(s32 port, u8 keepPowered) {
+s32 GbTower_IsPakInserted(s32 port, u8 keepPowered) {
     u8 status;
     s32 notReset;
 
