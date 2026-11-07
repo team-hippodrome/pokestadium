@@ -34,33 +34,37 @@ static s32 D_84816450;
 static s16 D_84816458[4];
 
 static u16 sBorderPortColors[] = { 0x1D, 0x341, 0x6947, 0x6A41 };
-static ComSelectionButtonPresses D_84803548[] = {
+static ComSelectionButtonPresses sComButtonPressesForSinglePokemon[] = {
     { 30, 0 },
     { 30, BTN_B },
     { 1, BTN_A },
     { 0, 0 },
 };
-static ComSelectionButtonPresses D_84803558[] = {
+static ComSelectionButtonPresses sComButtonPressesRosterSize2[] = {
     { 30, 0 }, { 10, BTN_B }, { 30, BTN_CLEFT }, { 1, BTN_A }, { 0, 0 },
 };
-static ComSelectionButtonPresses D_8480356C[] = {
-    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT },
-    { 30, BTN_CUP }, { 1, BTN_A }, { 0, 0 },
+static ComSelectionButtonPresses sComButtonPressesRosterSize3[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 30, BTN_CUP }, { 1, BTN_A }, { 0, 0 },
 };
-static ComSelectionButtonPresses D_84803584[] = {
-    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
-    { 30, BTN_A }, { 1, BTN_A }, { 0, 0 },
+static ComSelectionButtonPresses sComButtonPressesRosterSize4[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP }, { 30, BTN_A }, { 1, BTN_A }, { 0, 0 },
 };
-static ComSelectionButtonPresses D_848035A0[] = {
-    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
-    { 10, BTN_A }, { 30, BTN_CDOWN }, { 1, BTN_A }, { 0, 0 },
+static ComSelectionButtonPresses sComButtonPressesRosterSize5[] = {
+    { 30, 0 },     { 10, BTN_B },     { 10, BTN_CLEFT }, { 10, BTN_CUP },
+    { 10, BTN_A }, { 30, BTN_CDOWN }, { 1, BTN_A },      { 0, 0 },
 };
-static ComSelectionButtonPresses D_848035C0[] = {
-    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
+static ComSelectionButtonPresses sComButtonPressesRosterSize6[] = {
+    { 30, 0 },     { 10, BTN_B },     { 10, BTN_CLEFT },  { 10, BTN_CUP },
     { 10, BTN_A }, { 10, BTN_CDOWN }, { 30, BTN_CRIGHT }, { 1, BTN_A },
 };
 static ComSelectionButtonPresses* sComButtonPressesByRosterSize[] = {
-    NULL, D_84803548, D_84803558, D_8480356C, D_84803584, D_848035A0, D_848035C0,
+    NULL,
+    sComButtonPressesForSinglePokemon,
+    sComButtonPressesRosterSize2,
+    sComButtonPressesRosterSize3,
+    sComButtonPressesRosterSize4,
+    sComButtonPressesRosterSize5,
+    sComButtonPressesRosterSize6,
 };
 static unk_D_848035FC D_848035FC[] = {
     { { 0xF0, 0xF0, 0xF0 }, D_2017740 }, { { 0xF0, 0x96, 0x32 }, D_2019040 }, { { 0x50, 0x96, 0xF0 }, D_20199A0 },
@@ -71,7 +75,7 @@ static unk_D_848035FC D_848035FC[] = {
     { { 0x64, 0xDC, 0xC8 }, D_201A300 },
 };
 static Color_RGB8 sHelpTextGradientStart = { 0x00, 0x0A, 0x41 }; // #000A41
-static Color_RGB8 sHelpTextGradientEnd = { 0x00, 0x00, 0xD2 }; // #0000D2
+static Color_RGB8 sHelpTextGradientEnd = { 0x00, 0x00, 0xD2 };   // #0000D2
 static u8* sHumanPlayerLabelIcon[] = { sPlayer1LabelIcon, sPlayer2LabelIcon, D_3009E70 };
 static u8* D_84803690[] = { D_300A5C0, D_300AD10 };
 static u8* D_84803698[] = { D_300B9B8 };
@@ -162,7 +166,8 @@ void BattleMenu_DrawScrollingRulesText(void) {
     }
 
     for (i = 0; i < 16; i++) {
-        Font_DrawCharAt(((46 - Font_GetCharWidth(0x10, scrolling_text[char_index])) / 2) + 552, y, scrolling_text[char_index]);
+        Font_DrawCharAt(((46 - Font_GetCharWidth(0x10, scrolling_text[char_index])) / 2) + 552, y,
+                        scrolling_text[char_index]);
         char_index += 1;
         if (strlen(scrolling_text) < char_index) {
             char_index = 0;
@@ -171,7 +176,8 @@ void BattleMenu_DrawScrollingRulesText(void) {
     }
     Font_EndTexturedTextRendering();
 
-    gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, depth_buffer->width * 4.0f, depth_buffer->height * 4.0f);
+    gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, depth_buffer->width * 4.0f,
+                      depth_buffer->height * 4.0f);
 
     sScrollingTextProgress += 2;
     if (sScrollingTextProgress >= ((strlen(scrolling_text) * 24) + 24)) {
@@ -179,7 +185,8 @@ void BattleMenu_DrawScrollingRulesText(void) {
     }
 }
 
-void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessionTeams* battle_session_teams, s32 rule_category) {
+void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessionTeams* battle_session_teams,
+                                   s32 rule_category) {
     s32 i;
 
     team_order_state->numberPicked = 0;
@@ -202,7 +209,8 @@ void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessi
         team_order_state->firstTagTeamPartnerPort = battle_session_teams->tagTeamMember[0]->controllerPort;
         team_order_state->secondTagTeamPartnerPort = -1;
         team_order_state->unk_01 = (battle_session_teams->tagTeamMember[0]->isHuman & 2) != 0;
-    } else if (battle_session_teams->tagTeamMember[0]->controllerPort < battle_session_teams->tagTeamMember[1]->controllerPort) {
+    } else if (battle_session_teams->tagTeamMember[0]->controllerPort <
+               battle_session_teams->tagTeamMember[1]->controllerPort) {
         team_order_state->firstTagTeamPartnerPort = battle_session_teams->tagTeamMember[0]->controllerPort;
         team_order_state->secondTagTeamPartnerPort = battle_session_teams->tagTeamMember[1]->controllerPort;
     } else {
@@ -299,8 +307,8 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
 
     poke_ball_y = y + 118;
     for (i = 0; i < 6; i++) {
-        state->pokemonPicked[i] =
-            BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y - i * 23, state->pokemonPicked[i], state->pokemonPendingPick[i]);
+        state->pokemonPicked[i] = BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y - i * 23, state->pokemonPicked[i],
+                                                                    state->pokemonPendingPick[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -335,8 +343,8 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 
     poke_ball_y = y + 12;
     for (i = 0; i < 6; i++) {
-        state->pokemonPicked[i] =
-            BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y + i * 23, state->pokemonPicked[i], state->pokemonPendingPick[i]);
+        state->pokemonPicked[i] = BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y + i * 23, state->pokemonPicked[i],
+                                                                    state->pokemonPendingPick[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -346,7 +354,8 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 void BattleMenu_AppendOrderSlotIcon(s32 side, s32 pokemon_slot_index) {
     TeamOrderState* state = &sTeamOrderStates[side];
 
-    state->pokemonPicked[state->numberPicked] = ((pokemon_slot_index + 1) << 4) | (state->pokemonPicked[state->numberPicked] & 0xF);
+    state->pokemonPicked[state->numberPicked] =
+        ((pokemon_slot_index + 1) << 4) | (state->pokemonPicked[state->numberPicked] & 0xF);
     state->pokemonPendingPick[state->numberPicked] = 1;
     state->numberPicked++;
 }
@@ -666,7 +675,8 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* arg0) {
         temp_v1 = &D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01];
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(temp_v1->unk_00.r, temp_v1->unk_00.g, temp_v1->unk_00.b, 0xFF);
-        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, sMoveNameTable, sp78->moves[i] - 1));
+        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7,
+                    Text_GetString(NULL, 0, sMoveNameTable, sp78->moves[i] - 1));
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->pp[i] & 0x3F);
@@ -765,7 +775,8 @@ void BattleMenu_UpdateComPanelAutoInput(void) {
     }
 
     if (i < 4) {
-        if ((sSessionContext->ruleCategory != RULE_CATEGORY_ANYTHING_GOES) && (sSessionContext->ruleCategory != RULE_CATEGORY_VS_MEWTWO)) {
+        if ((sSessionContext->ruleCategory != RULE_CATEGORY_ANYTHING_GOES) &&
+            (sSessionContext->ruleCategory != RULE_CATEGORY_VS_MEWTWO)) {
             number_of_pokemon_to_pick = 3;
         } else {
             number_of_pokemon_to_pick = sBattleOrderInputStates[i].rosterSize;
@@ -774,9 +785,9 @@ void BattleMenu_UpdateComPanelAutoInput(void) {
         if (D_84816450 == 0) {
             com_button_presses = sComButtonPressesByRosterSize[number_of_pokemon_to_pick];
 
-            D_84816450 = com_button_presses[D_8481644C].unk_00;
+            D_84816450 = com_button_presses[D_8481644C].delay;
             if (D_84816450 != 0) {
-                D_84816428.buttonPressed = com_button_presses[D_8481644C].unk_02;
+                D_84816428.buttonPressed = com_button_presses[D_8481644C].button;
                 D_8481644C++;
             }
         }
@@ -1242,8 +1253,10 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
     D_84816450 = 0;
     D_84816428.buttonPressed = 0;
 
-    BattleMenu_InitTeamOrderState(&sTeamOrderStates[0], &sSessionContext->battleSides[0], sSessionContext->ruleCategory);
-    BattleMenu_InitTeamOrderState(&sTeamOrderStates[1], &sSessionContext->battleSides[1], sSessionContext->ruleCategory);
+    BattleMenu_InitTeamOrderState(&sTeamOrderStates[0], &sSessionContext->battleSides[0],
+                                  sSessionContext->ruleCategory);
+    BattleMenu_InitTeamOrderState(&sTeamOrderStates[1], &sSessionContext->battleSides[1],
+                                  sSessionContext->ruleCategory);
 
     if (temp_s0->tagTeamSize == 1) {
         BattleMenu_AddOrderSelectPanel(0x50, 0x21, temp_s0->tagTeamMember[0], 0, -1);

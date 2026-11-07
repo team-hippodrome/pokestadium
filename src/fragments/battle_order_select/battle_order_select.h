@@ -43,8 +43,8 @@ typedef struct unk_D_848035FC {
 } unk_D_848035FC; // size = 0x8
 
 typedef struct unk_D_84803548 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
+    /* 0x00 */ u16 delay;
+    /* 0x02 */ u16 button;
 } ComSelectionButtonPresses; // size = 0x4
 
 void BattleMenu_DrawBottomActionButtons(void);
