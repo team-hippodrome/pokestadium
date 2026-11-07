@@ -226,7 +226,7 @@ extern s32 D_82F14424;
 extern unk_D_82F14450 D_82F14450[4];
 
 extern char** gTradeStrings;
-extern char** D_82F13B74;
+extern char** sTradePokemonDetailText;
 
 char* Trade_GetSpeciesName(s32 arg0);
 char* Trade_GetMoveName(s32 arg0);

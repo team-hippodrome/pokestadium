@@ -28,11 +28,11 @@ s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040*, Controller*);
 s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C*, s32, s32);
 s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C*, s32, s32);
 
-static char** D_888267A0;
-static char** D_888267A4;
-static char** D_888267A8;
-static char** D_888267AC;
-static char** D_888267B0;
+static char** sPokedexMenuText;
+static char** sPokemonNameTable;
+static char** sPokedexEntryText;
+static char** sSpeciesCategoryTable;
+static char** sPokedexAreaText;
 static DisplayObject D_888267B8;
 static unk_func_8001B1FC* D_88826920;
 static StageContext* D_88826924;
@@ -219,7 +219,7 @@ void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3,
 
     if (sp70 != 0) {
         Font_SetActive(0x10, 0);
-        Font_Printf(arg0 + 0x76, arg1 + 4, Text_GetString(NULL, 0, D_888267A4, sp74));
+        Font_Printf(arg0 + 0x76, arg1 + 4, Text_GetString(NULL, 0, sPokemonNameTable, sp74));
     }
 
     Font_EndTexturedTextRendering();
@@ -368,12 +368,12 @@ void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 
     Font_SetActive(0x10, 0);
     Font_Printf(arg1 + 0x10, arg2 + 6, arg0->unk_30);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg1 + 0x10, arg2 + 0x24, "%s%05d", Text_GetString(NULL, 0, D_888267A0, 7), arg0->unk_2C);
+    Font_Printf(arg1 + 0x10, arg2 + 0x24, "%s%05d", Text_GetString(NULL, 0, sPokedexMenuText, 7), arg0->unk_2C);
     Font_SetActive(8, 0);
     Gfx_SetPrimColor(0x80, 0xFF, 0x80, 0xFF);
-    Font_Printf(arg1 + 0x24, arg2 + 0x4C, Text_GetString(NULL, 0, D_888267A0, 8));
-    Font_Printf(arg1 + 0x24, arg2 + 0x64, Text_GetString(NULL, 0, D_888267A0, 9));
-    Font_Printf(arg1 + 0x24, arg2 + 0x7C, Text_GetString(NULL, 0, D_888267A0, 0xA));
+    Font_Printf(arg1 + 0x24, arg2 + 0x4C, Text_GetString(NULL, 0, sPokedexMenuText, 8));
+    Font_Printf(arg1 + 0x24, arg2 + 0x64, Text_GetString(NULL, 0, sPokedexMenuText, 9));
+    Font_Printf(arg1 + 0x24, arg2 + 0x7C, Text_GetString(NULL, 0, sPokedexMenuText, 0xA));
     Font_DisableTwoCycleTexturing();
     Gfx_SetEnvColor(D_888081F8.r, D_888081F8.g, D_888081F8.b, D_888081F8.a);
     Font_SetActive(8, 0);
@@ -427,11 +427,11 @@ s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 ar
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF);
-    sp74 = Text_GetString(NULL, 0, D_888267A0, 0);
+    sp74 = Text_GetString(NULL, 0, sPokedexMenuText, 0);
     Font_Printf((arg1 - (Font_MeasureTextExtent(0, 0, sp74) / 2)) + 0x7C, arg2 + 0xA, sp74);
     Font_SetActive(0x10, 0);
-    sp74 = Text_GetString(NULL, 0, D_888267A0, 1);
-    sp70 = Text_GetString(NULL, 0, D_888267A0, 2);
+    sp74 = Text_GetString(NULL, 0, sPokedexMenuText, 1);
+    sp70 = Text_GetString(NULL, 0, sPokedexMenuText, 2);
     sp6C = Font_MeasureTextExtent(0, 0, sp74);
     temp_v0_3 = Font_MeasureTextExtent(0, 0, sp70);
 
@@ -502,10 +502,10 @@ void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg
     Pokedex_InitSortOrderLabel(arg0->unk_30, 0, 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp58->unk_00.unk_00, &arg0->unk_30->unk_00.unk_00);
     PointerList_Allocate(&arg0->unk_38, 4, arg3);
-    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, D_888267A0, 3), 0);
-    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, D_888267A0, 4), 1);
-    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, D_888267A0, 5), 2);
-    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, D_888267A0, 6), 3);
+    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 3), 0);
+    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 4), 1);
+    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 5), 2);
+    PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 6), 3);
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_88200FA0_030_030));
     ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_34, 0x154, 4, Pokedex_DrawEntryMenuItem,
@@ -537,7 +537,7 @@ void Pokedex_FormatHeightString(s32 arg0, s32 arg1, s32 arg2) {
     char sp2C[12];
     UNUSED s32 pad[2];
 
-    sprintf(sp2C, "%d%s%02d", arg2 / 100, Text_GetString(NULL, 0, D_888267A0, 0x11), arg2 % 100);
+    sprintf(sp2C, "%d%s%02d", arg2 / 100, Text_GetString(NULL, 0, sPokedexMenuText, 0x11), arg2 % 100);
     Font_Printf(arg0 - Font_MeasureTextExtent(0, 0, sp2C), arg1, sp2C);
 }
 
@@ -567,19 +567,19 @@ s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg1 + 0x10, arg2 + 6, "%s%03d", Text_GetString(NULL, 0, D_888267A0, 0x10), sp54->unk_00);
+    Font_Printf(arg1 + 0x10, arg2 + 6, "%s%03d", Text_GetString(NULL, 0, sPokedexMenuText, 0x10), sp54->unk_00);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg1 + 0x10, arg2 + 0x24, Text_GetString(NULL, 0, D_888267A4, sp54->unk_00 - 1));
+    Font_Printf(arg1 + 0x10, arg2 + 0x24, Text_GetString(NULL, 0, sPokemonNameTable, sp54->unk_00 - 1));
     Font_SetActive(8, 0);
     Gfx_SetPrimColor(0x80, 0xFF, 0x80, 0xFF);
-    Font_Printf(arg1 + 0x24, arg2 + 0x4C, Text_GetString(NULL, 0, D_888267AC, sp54->unk_00 - 1));
-    Font_Printf(arg1 + 0x24, arg2 + 0x64, Text_GetString(NULL, 0, D_888267A0, 0xC));
-    Font_Printf(arg1 + 0x24, arg2 + 0x7C, Text_GetString(NULL, 0, D_888267A0, 0xD));
+    Font_Printf(arg1 + 0x24, arg2 + 0x4C, Text_GetString(NULL, 0, sSpeciesCategoryTable, sp54->unk_00 - 1));
+    Font_Printf(arg1 + 0x24, arg2 + 0x64, Text_GetString(NULL, 0, sPokedexMenuText, 0xC));
+    Font_Printf(arg1 + 0x24, arg2 + 0x7C, Text_GetString(NULL, 0, sPokedexMenuText, 0xD));
     Font_DisableTwoCycleTexturing();
     Font_SetActive(8, 0);
     Gfx_SetEnvColor(D_88808214.r, D_88808214.g, D_88808214.b, D_88808214.a);
-    sp4C = Text_GetString(NULL, 0, D_888267A0, 0xE);
-    sp48 = Text_GetString(NULL, 0, D_888267A0, 0xF);
+    sp4C = Text_GetString(NULL, 0, sPokedexMenuText, 0xE);
+    sp48 = Text_GetString(NULL, 0, sPokedexMenuText, 0xF);
     sp44 = Font_MeasureTextExtent(0, 0, sp4C);
 
     temp_v0_2 = Font_MeasureTextExtent(0, 0, sp48);
@@ -594,7 +594,7 @@ s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
         Pokedex_FormatHeightString(arg1 + sp44, arg2 + 0x64, D_8007596C[sp54->unk_00].unk_00);
         Pokedex_FormatWeightString(arg1 + sp44, arg2 + 0x7C, D_8007596C[sp54->unk_00].unk_02);
     } else {
-        sprintf(sp34, "?%s??", Text_GetString(NULL, 0, D_888267A0, 0x11));
+        sprintf(sp34, "?%s??", Text_GetString(NULL, 0, sPokedexMenuText, 0x11));
         Font_Printf((arg1 + sp44) - Font_MeasureTextExtent(0, 0, sp34), arg2 + 0x64, sp34);
         sp48 = "???";
         Font_Printf((arg1 + sp44) - Font_MeasureTextExtent(0, 0, sp48), arg2 + 0x7C, sp48);
@@ -650,7 +650,7 @@ void Pokedex_SetFlavorText(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2) {
     char* sp18;
 
     if (GbSave_GetSpeciesProgressLevel(arg1, D_8006FF00[arg2].unk_00) >= 2) {
-        sp18 = Text_GetString(NULL, 0, D_888267A8, arg2);
+        sp18 = Text_GetString(NULL, 0, sPokedexEntryText, arg2);
     } else {
         sp18 = "\n???";
     }
@@ -6190,8 +6190,8 @@ void Pokedex_EnterAreaMapScreen(void) {
     StageContext_SaveAndSwitch(D_88826928);
     StageLoader_RunFrames(2);
     sp2C = Pokedex_GetSelectedSpeciesIndex(D_88826940->unk_38->unk_2C) + 1;
-    func_88807D04(sp2C, D_88826930, 0x70800, D_88826934, 0x4B000, Text_GetString(NULL, 0, D_888267A4, sp2C - 1),
-                  D_888267B0);
+    func_88807D04(sp2C, D_88826930, 0x70800, D_88826934, 0x4B000, Text_GetString(NULL, 0, sPokemonNameTable, sp2C - 1),
+                  sPokedexAreaText);
     StageFade_Start(8);
     BgStage_RunUntilCondition(0xA, Pokedex_DrawAreaMapFrame);
 }
@@ -6328,11 +6328,11 @@ s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     sp2C = mem_pool_try_init(0x8000, 0);
     Text_InitStringTables();
-    D_888267A0 = Text_GetStringTable(8);
-    D_888267A4 = Text_GetStringTable(0x24);
-    D_888267A8 = Text_GetStringTable(0xA);
-    D_888267AC = Text_GetStringTable(0x28);
-    D_888267B0 = Text_GetStringTable(9);
+    sPokedexMenuText = Text_GetStringTable(8);
+    sPokemonNameTable = Text_GetStringTable(0x24);
+    sPokedexEntryText = Text_GetStringTable(0xA);
+    sSpeciesCategoryTable = Text_GetStringTable(0x28);
+    sPokedexAreaText = Text_GetStringTable(9);
     D_888269A0 = GbSave_GetActivePort();
 
     if (D_888269A0 != -1) {

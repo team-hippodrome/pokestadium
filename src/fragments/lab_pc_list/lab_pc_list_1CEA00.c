@@ -16,13 +16,13 @@
 #include "src/stage_loader.h"
 #include "src/fragments/pokemon_lab_support/pokemon_lab_support.h"
 
-char** D_8831A4C0;
-char** D_8831A4C4;
-char** D_8831A4C8;
-char** D_8831A4CC;
-char** D_8831A4D0;
-char** D_8831A4D4;
-char** D_8831A4D8;
+char** sIdLabelText;
+char** sPcListText;
+char** sItemDescriptionText;
+char** sPcListMoveNames;
+char** sPcListPokemonNames;
+char** sPcListTypeNames;
+char** sItemNameTable;
 s32 pad_D_8831A4DC[8];
 
 static Color_RGBA8 D_883171D0[] = {
@@ -109,7 +109,7 @@ s32 LabPCList_HeaderPokemon_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171E0.r, D_883171E0.g, D_883171E0.b, D_883171E0.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 3);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 3);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
 
@@ -149,7 +149,7 @@ s32 LabPCList_HeaderNickname_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171E4.r, D_883171E4.g, D_883171E4.b, D_883171E4.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 4);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 4);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -188,7 +188,7 @@ s32 LabPCList_HeaderID_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171E8.r, D_883171E8.g, D_883171E8.b, D_883171E8.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 5);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 5);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -227,7 +227,7 @@ s32 LabPCList_HeaderOT_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171EC.r, D_883171EC.g, D_883171EC.b, D_883171EC.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 6);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 6);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -266,7 +266,7 @@ s32 LabPCList_HeaderArea_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171F0.r, D_883171F0.g, D_883171F0.b, D_883171F0.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 7);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 7);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -313,10 +313,10 @@ s32 LabPCList_HeaderTypes_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171F4.r, D_883171F4.g, D_883171F4.b, D_883171F4.a);
     Font_SetActive(4, 0);
 
-    sp54 = Text_GetString(NULL, 0, D_8831A4C4, 8);
+    sp54 = Text_GetString(NULL, 0, sPcListText, 8);
     Font_Printf(((0x48 - Font_MeasureTextExtent(0, 0, sp54)) / 2) + arg1, arg2 + 2, sp54);
 
-    sp54 = Text_GetString(NULL, 0, D_8831A4C4, 9);
+    sp54 = Text_GetString(NULL, 0, sPcListText, 9);
     Font_Printf(((0x48 - Font_MeasureTextExtent(0, 0, sp54)) / 2) + arg1 + 0x48, arg2 + 2, sp54);
 
     Font_EndTexturedTextRendering();
@@ -383,16 +383,16 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171F8.r, D_883171F8.g, D_883171F8.b, D_883171F8.a);
     Font_SetActive(4, 0);
 
-    temp_v0_16 = Text_GetString(NULL, 0, D_8831A4C4, 0xA);
+    temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xA);
     Font_Printf(((0x69 - Font_MeasureTextExtent(0, 0, temp_v0_16)) / 2) + arg1, arg2 + 2, temp_v0_16);
 
-    temp_v0_16 = Text_GetString(NULL, 0, D_8831A4C4, 0xB);
+    temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xB);
     Font_Printf(((0x69 - Font_MeasureTextExtent(0, 0, temp_v0_16)) / 2) + arg1 + 0x69, arg2 + 2, temp_v0_16);
 
-    temp_v0_16 = Text_GetString(NULL, 0, D_8831A4C4, 0xC);
+    temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xC);
     Font_Printf(((0x69 - Font_MeasureTextExtent(0, 0, temp_v0_16)) / 2) + arg1 + 0xD2, arg2 + 2, temp_v0_16);
 
-    temp_v0_16 = Text_GetString(NULL, 0, D_8831A4C4, 0xD);
+    temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xD);
     Font_Printf(((0x69 - Font_MeasureTextExtent(0, 0, temp_v0_16)) / 2) + arg1 + 0x13B, arg2 + 2, temp_v0_16);
 
     Font_EndTexturedTextRendering();
@@ -432,7 +432,7 @@ s32 LabPCList_HeaderLevel_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_883171FC.r, D_883171FC.g, D_883171FC.b, D_883171FC.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 0xE);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 0xE);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
 
     Font_EndTexturedTextRendering();
@@ -472,7 +472,7 @@ s32 LabPCList_HeaderHp_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Gfx_SetEnvColor(D_88317200.r, D_88317200.g, D_88317200.b, D_88317200.a);
     Font_SetActive(4, 0);
 
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 0xF);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 0xF);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
 
     Font_EndTexturedTextRendering();
@@ -510,7 +510,7 @@ s32 LabPCList_HeaderAttack_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317204.r, D_88317204.g, D_88317204.b, D_88317204.a);
     Font_SetActive(4, 0);
-    Font_Printf(arg1 + 4, arg2 + 2, Text_GetString(NULL, 0, D_8831A4C4, 0x10));
+    Font_Printf(arg1 + 4, arg2 + 2, Text_GetString(NULL, 0, sPcListText, 0x10));
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -547,7 +547,7 @@ s32 LabPCList_HeaderDefense_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317208.r, D_88317208.g, D_88317208.b, D_88317208.a);
     Font_SetActive(4, 0);
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 0x11);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 0x11);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -585,7 +585,7 @@ s32 LabPCList_HeaderSpeed_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_8831720C.r, D_8831720C.g, D_8831720C.b, D_8831720C.a);
     Font_SetActive(4, 0);
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 0x12);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 0x12);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -623,7 +623,7 @@ s32 LabPCList_HeaderSpecial_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317210.r, D_88317210.g, D_88317210.b, D_88317210.a);
     Font_SetActive(4, 0);
-    sp1C = Text_GetString(NULL, 0, D_8831A4C4, 0x13);
+    sp1C = Text_GetString(NULL, 0, sPcListText, 0x13);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -761,11 +761,11 @@ s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2) {
     s32 spE4;
 
     Text_SetNumberToken(1, arg0->unk_2C->unk_CD0 + 1);
-    Text_GetString(spF0, 0x20, D_8831A4C4, 2);
+    Text_GetString(spF0, 0x20, sPcListText, 2);
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317218.r, D_88317218.g, D_88317218.b, D_88317218.a);
     Font_SetActive(8, 0);
-    spEC = Text_GetString(NULL, 0, D_8831A4C4, 1);
+    spEC = Text_GetString(NULL, 0, sPcListText, 1);
     spE8 = Font_MeasureTextExtent(0, 0, spEC);
     Font_Printf(arg1 + 0x22, arg2 + 5, spEC);
     spE4 = 0x206 - Font_MeasureTextExtent(0, 0, spF0);
@@ -1175,7 +1175,7 @@ void LabPCList_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4) {
         sp28 = Species_GetMoveSlot(arg3, arg4);
         if (sp28 != -1) {
             sp2C = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(sp28)->unk_04;
-            sp20 = Text_GetString(NULL, 0, D_8831A4D4, PokemonType_ToDisplayIndex(sp28));
+            sp20 = Text_GetString(NULL, 0, sPcListTypeNames, PokemonType_ToDisplayIndex(sp28));
         } else {
             return;
         }
@@ -1203,7 +1203,7 @@ void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4
             sp2C = " ????? ";
         } else {
             sp28 = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(sp24->unk_00[1])->unk_04;
-            sp2C = Text_GetString(NULL, 0, D_8831A4CC, sp18[9] - 1);
+            sp2C = Text_GetString(NULL, 0, sPcListMoveNames, sp18[9] - 1);
         }
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
@@ -1362,7 +1362,7 @@ void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s
     if ((mon->unk_08 <= 0) || (mon->unk_08 >= 0x98)) {
         Font_Printf((arg0 + spA8) + 0x26, arg1 + 2, "?????");
     } else {
-        Font_Printf((arg0 + spA8) + 0x26, arg1 + 2, Text_GetString(NULL, 0, D_8831A4D0, mon->unk_08 - 1));
+        Font_Printf((arg0 + spA8) + 0x26, arg1 + 2, Text_GetString(NULL, 0, sPcListPokemonNames, mon->unk_08 - 1));
     }
     Font_EndTexturedTextRendering();
     var_s6 = temp_s5->unk_CD4[temp_s5->unk_CD0];
@@ -1631,7 +1631,7 @@ void LabPCList_PerformMoveMon(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C
         Text_SetStringToken(0x25, sp50);
         BattleInfoWidget_FormatLocationName(sp30, sp88, sp84);
         Text_SetStringToken(0x28, sp30);
-        Text_GetString(arg0->unk_CCC->unk_40, 0x140, D_8831A4C4, 0x5C);
+        Text_GetString(arg0->unk_CCC->unk_40, 0x140, sPcListText, 0x5C);
         ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_090, arg0->unk_CCC, 0, 0);
         ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_090, arg2);
     } else {
@@ -1903,9 +1903,9 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
             ((func88507C0C)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelectionWithOffset))(arg0->unk_034, spD0,
                                                                                                 spCC);
             Text_SetStringToken(0x1A, spD8->unk_38);
-            Text_SetStringToken(0x1D, Text_GetString(NULL, 0, D_8831A4CC, spBC - 1));
-            Text_SetStringToken(0x1E, Text_GetString(NULL, 0, D_8831A4CC, sp34->unk_11 - 1));
-            Text_GetString(arg0->unk_CCC->unk_40, 0x140, D_8831A4C4, 0x5D);
+            Text_SetStringToken(0x1D, Text_GetString(NULL, 0, sPcListMoveNames, spBC - 1));
+            Text_SetStringToken(0x1E, Text_GetString(NULL, 0, sPcListMoveNames, sp34->unk_11 - 1));
+            Text_GetString(arg0->unk_CCC->unk_40, 0x140, sPcListText, 0x5D);
             ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_090, arg0->unk_CCC, 0, 0);
             ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_090,
                                                                                          gPlayer1Controller);
@@ -1953,7 +1953,7 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
             Text_SetStringToken(0x1A, spD8->unk_38);
             Text_SetNumberToken(2, sp48);
             Text_SetNumberToken(3, sp44);
-            Text_GetString(arg0->unk_CCC->unk_40, 0x140, D_8831A4C4, 0x5E);
+            Text_GetString(arg0->unk_CCC->unk_40, 0x140, sPcListText, 0x5E);
             ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_090, arg0->unk_CCC, 0, 0);
             ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelWithSound))(arg0->unk_090,
                                                                                          gPlayer1Controller);
@@ -1969,12 +1969,12 @@ s32 LabPCList_OpenListMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
     char* sp28[6];
     u32 sp24;
 
-    sp28[0] = Text_GetString(NULL, 0, D_8831A4C4, 0x17);
-    sp28[1] = Text_GetString(NULL, 0, D_8831A4C4, 0x18);
-    sp28[2] = Text_GetString(NULL, 0, D_8831A4C4, 0x19);
-    sp28[3] = Text_GetString(NULL, 0, D_8831A4C4, 0x1A);
-    sp28[4] = Text_GetString(NULL, 0, D_8831A4C4, 0x1B);
-    sp28[5] = Text_GetString(NULL, 0, D_8831A4C4, 0x1C);
+    sp28[0] = Text_GetString(NULL, 0, sPcListText, 0x17);
+    sp28[1] = Text_GetString(NULL, 0, sPcListText, 0x18);
+    sp28[2] = Text_GetString(NULL, 0, sPcListText, 0x19);
+    sp28[3] = Text_GetString(NULL, 0, sPcListText, 0x1A);
+    sp28[4] = Text_GetString(NULL, 0, sPcListText, 0x1B);
+    sp28[5] = Text_GetString(NULL, 0, sPcListText, 0x1C);
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp28, 6);
 
@@ -2060,15 +2060,15 @@ s32 LabPCList_OpenRowMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
         sp38 = 0x23;
     }
 
-    Text_SetStringToken(0x19, Text_GetString(NULL, 0, D_8831A4D0, sp3C->unk_08.unk_00 - 1));
-    Text_GetString(D_8831A500, 0x20, D_8831A4C4, sp38);
+    Text_SetStringToken(0x19, Text_GetString(NULL, 0, sPcListPokemonNames, sp3C->unk_08.unk_00 - 1));
+    Text_GetString(D_8831A500, 0x20, sPcListText, sp38);
 
     sp44[0] = D_8831A500;
     sp38 = (arg0->unk_C54.unk_04 & 0x10) ? (0x26) : (0x25);
-    sp44[1] = Text_GetString(NULL, 0, D_8831A4C4, sp38);
-    sp44[2] = Text_GetString(NULL, 0, D_8831A4C4, 0x27);
-    sp44[3] = Text_GetString(NULL, 0, D_8831A4C4, 0x28);
-    sp44[4] = Text_GetString(NULL, 0, D_8831A4C4, 0x29);
+    sp44[1] = Text_GetString(NULL, 0, sPcListText, sp38);
+    sp44[2] = Text_GetString(NULL, 0, sPcListText, 0x27);
+    sp44[3] = Text_GetString(NULL, 0, sPcListText, 0x28);
+    sp44[4] = Text_GetString(NULL, 0, sPcListText, 0x29);
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp44, 5);
 
@@ -2238,7 +2238,7 @@ s32 LabPCList_HandleColumnHeaderClick(unk_func_8830867C_02C* arg0, WidgetNode* a
     char* sp40[3];
 
     for (i = 0; i < D_883172F4[arg2 - 2].unk_04; i++) {
-        sp40[i] = Text_GetString(NULL, 0, D_8831A4C4, D_883172F4[arg2 - 2].unk_00[i]);
+        sp40[i] = Text_GetString(NULL, 0, sPcListText, D_883172F4[arg2 - 2].unk_00[i]);
     }
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp40, D_883172F4[arg2 - 2].unk_04);
@@ -3016,12 +3016,12 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
 
     sp78 = mem_pool_alloc(arg3, sizeof(unk_func_88509A2C));
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp78, 0x38, 0x22, GbSave_GetActivePort(),
-                                                                          Text_GetString(NULL, 0, D_8831A4C0, 0));
+                                                                          Text_GetString(NULL, 0, sIdLabelText, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp7C->unk_00.unk_00, &sp78->unk_00.unk_00);
 
     sp74 = mem_pool_alloc(arg3, sizeof(unk_func_88509E34));
     ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp74, 0, 0,
-                                                                        Text_GetString(NULL, 0, D_8831A4C4, 0));
+                                                                        Text_GetString(NULL, 0, sPcListText, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp7C->unk_00.unk_00, &sp74->unk_00.unk_00);
 
     sp88 = mem_pool_alloc(arg3, sizeof(WidgetNode));
@@ -3065,9 +3065,9 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     arg0->unk_54.unk_14 = sp88;
     arg0->unk_6C = 0;
     arg0->unk_70 = arg6;
-    arg0->unk_74 = D_8831A4D0;
-    arg0->unk_78 = D_8831A4CC;
-    arg0->unk_7C = D_8831A4D4;
+    arg0->unk_74 = sPcListPokemonNames;
+    arg0->unk_78 = sPcListMoveNames;
+    arg0->unk_7C = sPcListTypeNames;
     arg0->unk_80 = arg7;
     arg0->unk_84 = arg8;
     arg0->unk_88 = arg9;
@@ -3158,13 +3158,13 @@ s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     Text_InitStringTables();
 
-    D_8831A4C0 = Text_GetStringTable(0x2A);
-    D_8831A4CC = Text_GetStringTable(0x25);
-    D_8831A4D0 = Text_GetStringTable(0x24);
-    D_8831A4D4 = Text_GetStringTable(0x26);
-    D_8831A4C4 = Text_GetStringTable(5);
-    D_8831A4D8 = Text_GetStringTable(0x27);
-    D_8831A4C8 = Text_GetStringTable(0xC);
+    sIdLabelText = Text_GetStringTable(0x2A);
+    sPcListMoveNames = Text_GetStringTable(0x25);
+    sPcListPokemonNames = Text_GetStringTable(0x24);
+    sPcListTypeNames = Text_GetStringTable(0x26);
+    sPcListText = Text_GetStringTable(5);
+    sItemNameTable = Text_GetStringTable(0x27);
+    sItemDescriptionText = Text_GetStringTable(0xC);
 
     sp40 = Text_GetStringTable(7);
     sp3C = Text_GetStringTable(6);

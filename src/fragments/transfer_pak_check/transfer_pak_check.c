@@ -30,9 +30,9 @@ static Pak_PortStatus D_82D0AB38[4];
 static ModeSettings D_82D0AB90;
 static u16 D_82D0AB98;
 #if defined(VERSION_JP)
-// JP .bss order (ROM addresses 0x82D0A4AC-0x82D0A50C). D_82D0AB9C is unused in JP (no string
+// JP .bss order (ROM addresses 0x82D0A4AC-0x82D0A50C). sGameFunctionalityText is unused in JP (no string
 // table is loaded) but its slot remains; D_82D0ABA0-D_82D0ABA8 and D_82D0AC0C are absent.
-static char** D_82D0AB9C;
+static char** sGameFunctionalityText;
 static PakUi_StatusPopup D_82D0ABD0;
 static DepthBuffer* D_82D0ABE0[8];
 static GraphNode* D_82D0AC00;
@@ -45,7 +45,7 @@ static DepthBuffer* D_82D0ABB8[4];
 static DepthBuffer* D_82D0ABC8;
 static DepthBuffer* D_82D0ABCC;
 #else
-static char** D_82D0AB9C;
+static char** sGameFunctionalityText;
 static s32 D_82D0ABA0;
 static s32 D_82D0ABA4;
 static s32 D_82D0ABA8;
@@ -1316,9 +1316,9 @@ void PakUi_DrawPartyProgressBar(s32 arg0) {
         if (arg0 == 10) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            sp30 = Text_GetString(NULL, 0, D_82D0AB9C, 0x1D);
+            sp30 = Text_GetString(NULL, 0, sGameFunctionalityText, 0x1D);
             Font_Printf(0x8C - (Font_MeasureTextExtent(0x10, 0, sp30) / 2), 0x2C, sp30);
-            sp30 = Text_GetString(NULL, 0, D_82D0AB9C, 0x1E);
+            sp30 = Text_GetString(NULL, 0, sGameFunctionalityText, 0x1E);
             Font_Printf(0x8C - (Font_MeasureTextExtent(0x10, 0, sp30) / 2), 0x48, sp30);
             Font_EndTexturedTextRendering();
         }
@@ -1531,9 +1531,9 @@ void PakUi_BuildPartyCard(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s8* arg4) {
         }
     } else {
         Font_SetActive(4, 0);
-        sp40 = Text_GetString(NULL, 0, D_82D0AB9C, 0x1D);
+        sp40 = Text_GetString(NULL, 0, sGameFunctionalityText, 0x1D);
         Font_Printf(0x40 - (Font_MeasureTextExtent(4, 0, sp40) / 2), 0x24, sp40);
-        sp40 = Text_GetString(NULL, 0, D_82D0AB9C, 0x1F);
+        sp40 = Text_GetString(NULL, 0, sGameFunctionalityText, 0x1F);
         Font_Printf(0x40 - (Font_MeasureTextExtent(4, 0, sp40) / 2), 0x38, sp40);
     }
 
@@ -1543,15 +1543,15 @@ void PakUi_BuildPartyCard(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s8* arg4) {
 
         switch (arg2) {
             case 20:
-                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, D_82D0AB9C, 0x20));
+                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, sGameFunctionalityText, 0x20));
                 break;
 
             case 19:
-                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, D_82D0AB9C, 0x21));
+                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, sGameFunctionalityText, 0x21));
                 break;
 
             case 21:
-                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, D_82D0AB9C, 0x22));
+                Font_Printf(0xE, 0x70, Text_GetString(NULL, 0, sGameFunctionalityText, 0x22));
                 break;
         }
     }
@@ -1629,7 +1629,7 @@ void PakUi_BuildIconPanel(void) {
     Font_Printf(0x6E, 0x40, "をきってからおこなってください。");
 #else
     Font_SetLineHeight(0x1C);
-    Font_Printf(0x6E, 8, Text_GetString(NULL, 0, D_82D0AB9C, 0x23));
+    Font_Printf(0x6E, 8, Text_GetString(NULL, 0, sGameFunctionalityText, 0x23));
 #endif
     Font_EndTexturedTextRendering();
 }
@@ -1652,7 +1652,7 @@ void PakUi_BuildBottomBanner(void) {
     Font_SetActive(0x10, 0);
     Font_Printf(0x14, 7, "ＯＫ？");
 #else
-    sp28 = Text_GetString(NULL, 0, D_82D0AB9C, 0x24);
+    sp28 = Text_GetString(NULL, 0, sGameFunctionalityText, 0x24);
     sp2C = Font_MeasureTextExtent(0x10, 0, sp28);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
@@ -1889,12 +1889,12 @@ void PakUi_DrawRulesPanel(s16 arg0, s16 arg1) {
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
             Font_SetLineHeight(0x1A);
-            Font_Printf(0x9B, sp24 + 0xC, Text_GetString(NULL, 0, D_82D0AB9C, 0x25));
-            Font_Printf(0x9B, sp24 + 0x44, Text_GetString(NULL, 0, D_82D0AB9C, 0x26));
+            Font_Printf(0x9B, sp24 + 0xC, Text_GetString(NULL, 0, sGameFunctionalityText, 0x25));
+            Font_Printf(0x9B, sp24 + 0x44, Text_GetString(NULL, 0, sGameFunctionalityText, 0x26));
             Gfx_SetEnvColor(0xFF, 0xFF, ((arg1 * 0x1C) == 0) ? 0 : 0xFF, 0xFF);
-            Font_Printf(0x163, sp24 + 0x48, Text_GetString(NULL, 0, D_82D0AB9C, 0x27));
+            Font_Printf(0x163, sp24 + 0x48, Text_GetString(NULL, 0, sGameFunctionalityText, 0x27));
             Gfx_SetEnvColor(0xFF, 0xFF, ((arg1 * 0x1C) == 0x1C) ? 0 : 0xFF, 0xFF);
-            Font_Printf(0x163, sp24 + 0x64, Text_GetString(NULL, 0, D_82D0AB9C, 0x28));
+            Font_Printf(0x163, sp24 + 0x64, Text_GetString(NULL, 0, sGameFunctionalityText, 0x28));
             Font_EndTexturedTextRendering();
         }
     }
@@ -1989,52 +1989,52 @@ void PakUi_DrawDataSummaryPanel(s16 arg0, s16 arg1, SessionContinueData* arg2, s
             }
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf(0x99, temp_s0 + 0xD, Text_GetString(NULL, 0, D_82D0AB9C, 0x29));
-            Font_Printf(0x99, temp_s0 + 0xA5, Text_GetString(NULL, 0, D_82D0AB9C, 0x2A));
-            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 0, arg1, Text_GetString(NULL, 0, D_82D0AB9C, 0x2B));
-            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 1, arg1, Text_GetString(NULL, 0, D_82D0AB9C, 0x2C));
-            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 2, arg1, Text_GetString(NULL, 0, D_82D0AB9C, 0x2D));
+            Font_Printf(0x99, temp_s0 + 0xD, Text_GetString(NULL, 0, sGameFunctionalityText, 0x29));
+            Font_Printf(0x99, temp_s0 + 0xA5, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2A));
+            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 0, arg1, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2B));
+            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 1, arg1, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2C));
+            PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 2, arg1, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2D));
             Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF);
 
             if (arg2->unk_00 == 7) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_01 + 0x13));
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_01 + 0x13));
 
                 if (arg2->unk_01 < 8) {
                     if (arg2->unk_02 < 4) {
                         Text_SetNumberToken(1, arg2->unk_02);
-                        Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), D_82D0AB9C, 0x2E));
+                        Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), sGameFunctionalityText, 0x2E));
                     } else {
-                        Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, D_82D0AB9C, 0x2F));
+                        Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2F));
                     }
                 } else {
                     Text_SetNumberToken(1, arg2->unk_02);
-                    Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), D_82D0AB9C, 0x30));
+                    Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), sGameFunctionalityText, 0x30));
                 }
             } else if ((arg2->unk_00 == 3) || (arg2->unk_00 == 6)) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_01 + 7));
-                Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_02 + 0xA));
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_01 + 7));
+                Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_02 + 0xA));
             } else {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_02 + 0xA));
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_02 + 0xA));
             }
 
             if (arg2->unk_00 != 7) {
                 Font_SetActive(8, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
                 Text_SetNumberToken(1, arg2->unk_04);
-                Font_Printf(0x12D, temp_s0 + 0x85, Text_GetString(&sp50, 0x100, D_82D0AB9C, 0x31));
+                Font_Printf(0x12D, temp_s0 + 0x85, Text_GetString(&sp50, 0x100, sGameFunctionalityText, 0x31));
             }
 
             Font_SetActive(8, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
             Font_SetLineHeight(0x1A);
-            Font_Printf(0xA1, temp_s0 + 0x124, Text_GetString(NULL, 0, D_82D0AB9C, 0x32));
+            Font_Printf(0xA1, temp_s0 + 0x124, Text_GetString(NULL, 0, sGameFunctionalityText, 0x32));
             Font_EndTexturedTextRendering();
 
             if (arg2->unk_03 == 1) {
-                s32 temp_v0_3 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_82D0AB9C, arg2->unk_00 - 1));
+                s32 temp_v0_3 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
 
                 gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -2371,11 +2371,11 @@ void PakUi_DrawStatusPopup(PakUi_StatusPopup* arg0) {
             }
 #else
             if (arg0->unk_08 != 0) {
-                Font_Printf(sp4A + 0x76, temp_s0 + 0x18, Text_GetString(NULL, 0, D_82D0AB9C, arg0->unk_08 + 0x32));
+                Font_Printf(sp4A + 0x76, temp_s0 + 0x18, Text_GetString(NULL, 0, sGameFunctionalityText, arg0->unk_08 + 0x32));
             }
 
             if (arg0->unk_0A != 0) {
-                Font_Printf(sp4A + 0x76, temp_s0 + 0x5A, Text_GetString(NULL, 0, D_82D0AB9C, arg0->unk_0A + 0x32));
+                Font_Printf(sp4A + 0x76, temp_s0 + 0x5A, Text_GetString(NULL, 0, sGameFunctionalityText, arg0->unk_0A + 0x32));
             }
 #endif
 
@@ -2702,14 +2702,14 @@ void PakUi_DrawHeaderProgressBar(s32 arg0, s32 arg1) {
 
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            tmp = (Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_82D0AB9C, 0x3B)));
-            Font_Printf(0x140 - tmp / 2, 0x36, Text_GetString(NULL, 0, D_82D0AB9C, 0x3B));
+            tmp = (Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3B)));
+            Font_Printf(0x140 - tmp / 2, 0x36, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3B));
 
             if (D_82D0AB90.clearedModes == PAKUI_ALL_MODES_CLEARED) {
                 Font_SetActive(8, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp48);
-                Font_Printf(0x1D6, 0x2D, Text_GetString(NULL, 0, D_82D0AB9C, 0x3C));
-                Font_Printf(0x1D6, 0x43, Text_GetString(NULL, 0, D_82D0AB9C, 0x3D));
+                Font_Printf(0x1D6, 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3C));
+                Font_Printf(0x1D6, 0x43, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3D));
             }
 
             Font_EndTexturedTextRendering();
@@ -2742,9 +2742,9 @@ void PakUi_DrawBodyProgressBar(s32 arg0, s32 arg1) {
             Font_SetActive(0x10, 0);
             Font_SetLineHeight(0x1C);
             if (D_82D0ABA4 == 0) {
-                Font_Printf(0x50, 0x15E, Text_GetString(NULL, 0, D_82D0AB9C, D_82D09F14[D_82D06FA0]));
+                Font_Printf(0x50, 0x15E, Text_GetString(NULL, 0, sGameFunctionalityText, D_82D09F14[D_82D06FA0]));
             } else {
-                Font_Printf(0x50, 0x15E, Text_GetString(NULL, 0, D_82D0AB9C, 0x46));
+                Font_Printf(0x50, 0x15E, Text_GetString(NULL, 0, sGameFunctionalityText, 0x46));
             }
             Font_EndTexturedTextRendering();
         }
@@ -2883,9 +2883,9 @@ DepthBuffer* PakUi_BuildGameIconBuffer(s32 arg0) {
     // EUC-JP code 0xA5B8, sign-extended as an s16.
     Font_DrawCharAt(0x6A, 0x74, (s16)0xA5B8);
 #else
-    temp_s0 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, D_82D0AB9C, 0x3E));
+    temp_s0 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3E));
     Font_SetActive(8, 0);
-    Font_Printf(0x54 - (temp_s0 / 2), 0x74, Text_GetString(NULL, 0, D_82D0AB9C, 0x3E));
+    Font_Printf(0x54 - (temp_s0 / 2), 0x74, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3E));
 #endif
     Font_EndTexturedTextRendering();
 
@@ -2917,7 +2917,7 @@ DepthBuffer* PakUi_BuildControllerIconBuffer(void) {
     Font_Printf(0x50, 0x3A, "したい！");
 #else
     Font_SetLineHeight(0x16);
-    Font_Printf(0x50, 0x17, Text_GetString(NULL, 0, D_82D0AB9C, 0x3F));
+    Font_Printf(0x50, 0x17, Text_GetString(NULL, 0, sGameFunctionalityText, 0x3F));
 #endif
     Font_EndTexturedTextRendering();
 
@@ -2948,7 +2948,7 @@ DepthBuffer* PakUi_BuildControllerIconBufferAlt(void) {
     Font_Printf(0x5A, 0x2D, "バトル");
 #else
     Font_SetLineHeight(0x16);
-    Font_Printf(0x50, 0x17, Text_GetString(NULL, 0, D_82D0AB9C, 0x40));
+    Font_Printf(0x50, 0x17, Text_GetString(NULL, 0, sGameFunctionalityText, 0x40));
 #endif
     Font_EndTexturedTextRendering();
 
@@ -2976,7 +2976,7 @@ DepthBuffer* PakUi_BuildMonIconBuffer(void) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Font_SetLineHeight(0x16);
-    Font_Printf(0x40, 0x14, Text_GetString(NULL, 0, D_82D0AB9C, 0x44));
+    Font_Printf(0x40, 0x14, Text_GetString(NULL, 0, sGameFunctionalityText, 0x44));
     Font_EndTexturedTextRendering();
 
     return sp34;
@@ -3062,11 +3062,11 @@ void TransferPak_MenuIconsInit(void) {
     D_82D0ABE0[0] = PakUi_BuildGameIconBuffer(0);
     D_82D0ABE0[7] = PakUi_BuildGameIconBuffer(1);
     D_82D0ABE0[1] = PakUi_BuildControllerIconBufferAlt();
-    D_82D0ABE0[2] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, D_82D0AB9C, 0x41), 0x1E, 0x64, 0x1E);
+    D_82D0ABE0[2] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, sGameFunctionalityText, 0x41), 0x1E, 0x64, 0x1E);
     D_82D0ABE0[3] = PakUi_BuildMonIconBuffer();
     D_82D0ABE0[4] = PakUi_BuildControllerIconBuffer();
-    D_82D0ABE0[5] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, D_82D0AB9C, 0x42), 0x1E, 0x64, 0x1E);
-    D_82D0ABE0[6] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, D_82D0AB9C, 0x43), 0x1E, 0x64, 0x1E);
+    D_82D0ABE0[5] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, sGameFunctionalityText, 0x42), 0x1E, 0x64, 0x1E);
+    D_82D0ABE0[6] = PakUi_BuildTextLabelBuffer(Text_GetString(NULL, 0, sGameFunctionalityText, 0x43), 0x1E, 0x64, 0x1E);
 
     Model_InitDisplayObject(&D_82D09FF8[0], 0, 0, D_82D0AC00);
     Model_InitDisplayObject(&D_82D09FF8[1], 0, 0, D_82D0AC04);
@@ -3503,7 +3503,7 @@ s32 TransferPak_CheckMain(s32 arg0, s32 arg1) {
 
     TransferPak_InitMenuGraphics();
     Text_InitStringTables();
-    D_82D0AB9C = Text_GetStringTable(0xE);
+    sGameFunctionalityText = Text_GetStringTable(0xE);
     Audio_PlayMusicIfChanged(0x28);
     StageContext_Activate(sp54);
 

@@ -3173,36 +3173,36 @@ void EkansGame_DrawTutorialText(void) {
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86C12000, Text_GetString(NULL, 0, D_87806330, 0x3E)) / 2), 0x20,
-                Text_GetString(NULL, 0, D_87806330, 0x3E));
+    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86C12000, Text_GetString(NULL, 0, gMinigameText, 0x3E)) / 2), 0x20,
+                Text_GetString(NULL, 0, gMinigameText, 0x3E));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-    Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x3F));
-    Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, D_87806330, 0x40));
-    Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, D_87806330, 0x41));
+    Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, gMinigameText, 0x3F));
+    Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, gMinigameText, 0x40));
+    Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, gMinigameText, 0x41));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F),
-                           Text_GetString(NULL, 0, D_87806330, 0x61), 0xC);
-    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x61));
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x3F),
-                           Text_GetString(NULL, 0, D_87806330, 0x62), 0xC);
-    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x62));
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x41),
-                           Text_GetString(NULL, 0, D_87806330, 0x62), 0xC);
-    Font_Printf(sp38 + 0x28, sp34 + 0x70, Text_GetString(NULL, 0, D_87806330, 0x62));
-    Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
-    Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x5C));
-    Font_Printf(0xE5, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x5C));
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, gMinigameText, 0x3F),
+                           Text_GetString(NULL, 0, gMinigameText, 0x61), 0xC);
+    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x61));
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, gMinigameText, 0x3F),
+                           Text_GetString(NULL, 0, gMinigameText, 0x62), 0xC);
+    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x62));
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, gMinigameText, 0x41),
+                           Text_GetString(NULL, 0, gMinigameText, 0x62), 0xC);
+    Font_Printf(sp38 + 0x28, sp34 + 0x70, Text_GetString(NULL, 0, gMinigameText, 0x62));
+    Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+    Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+    Font_Printf(0xE5, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Font_Printf(0x8C, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x42));
+    Font_Printf(0x8C, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x42));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Font_Printf(0xFC, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x43));
+    Font_Printf(0xFC, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x43));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-    Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+    Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
@@ -3246,11 +3246,11 @@ void miniEkansDrawCountdown(void) {
     Gfx_SetEnvColor(0xFF, 0xC8, 0x32, 0xFF); // set color
     Font_SetActive(8, 0);                    // set style
 #if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
-    sprintf(countdownText, "%s99", Text_GetString(NULL, 0, D_87806330, 0x5D));
+    sprintf(countdownText, "%s99", Text_GetString(NULL, 0, gMinigameText, 0x5D));
     textPosition = (320 - Font_MeasureTextExtent(0, 0, countdownText)) / 2;
-    Font_Printf(textPosition, 0x14, "%s%2d", Text_GetString(NULL, 0, D_87806330, 0x5D), miniEkansCountdown);
+    Font_Printf(textPosition, 0x14, "%s%2d", Text_GetString(NULL, 0, gMinigameText, 0x5D), miniEkansCountdown);
 #else
-    Font_Printf(0x80, 0x14, Text_GetString(NULL, 0, D_87806330, 0x5D)); // TIME text
+    Font_Printf(0x80, 0x14, Text_GetString(NULL, 0, gMinigameText, 0x5D)); // TIME text
     Font_Printf(0xAA, 0x14, "%d", miniEkansCountdown);
 #endif
 }

@@ -621,7 +621,7 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
     Font_EnableTwoCycleTexturing();
 
     if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
-        char* temp_s2 = Text_GetString(NULL, 0, D_87806330, 0x29);
+        char* temp_s2 = Text_GetString(NULL, 0, gMinigameText, 0x29);
         s32 sp58;
         s32 sp54;
         s32 temp_s0;
@@ -630,26 +630,26 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
         Font_SetLineHeight(0xC);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, D_87806330, 0x28)) / 2), 0x20,
-                    Text_GetString(NULL, 0, D_87806330, 0x28));
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, gMinigameText, 0x28)) / 2), 0x20,
+                    Text_GetString(NULL, 0, gMinigameText, 0x28));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(0x28, 0x34, temp_s2);
 
         temp_s0 = ((Text_CountLines(temp_s2) * 0xC) + 0xC);
-        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x2A));
-        Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-        Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x2A));
+        Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+        Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Widget_MeasureLabelBox(&sp58, &sp54, temp_s2, Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
-        Font_Printf(sp58 + 0x28, sp54 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x5F));
+        Widget_MeasureLabelBox(&sp58, &sp54, temp_s2, Text_GetString(NULL, 0, gMinigameText, 0x5F), 0xC);
+        Font_Printf(sp58 + 0x28, sp54 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x5F));
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x2B));
+        Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x2B));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-        Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+        Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     }
 
     Font_DisableTwoCycleTexturing();

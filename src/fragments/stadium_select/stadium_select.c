@@ -37,7 +37,7 @@ typedef struct MenuRectAnim {
     /* 0x0A */ s16 unk_0A;
 } MenuRectAnim; // size = 0xC
 
-static char** D_84103440;
+static char** sStadiumCupText;
 static BinArchive* D_84103444;
 static void* D_84103448;
 static void* D_8410344C;
@@ -744,18 +744,18 @@ void StadiumSelect_DrawCupInfoPanel(s16 arg0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
-        Font_Printf(0x48, 0x160, Text_GetString(NULL, 0, D_84103440, D_84103CC8));
-        Font_Printf(0x18C, 0x160, Text_GetString(NULL, 0, D_84103440, 0xC));
-        Font_Printf(Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_84103440, 0xC)) + 0x190, 0x160, "%d~%d",
+        Font_Printf(0x48, 0x160, Text_GetString(NULL, 0, sStadiumCupText, D_84103CC8));
+        Font_Printf(0x18C, 0x160, Text_GetString(NULL, 0, sStadiumCupText, 0xC));
+        Font_Printf(Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sStadiumCupText, 0xC)) + 0x190, 0x160, "%d~%d",
                     sMenuOptionRanges[D_84103CC8][0], sMenuOptionRanges[D_84103CC8][1]);
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetLineHeight(0x18);
-        Font_Printf(0x48, 0x182, Text_GetString(NULL, 0, D_84103440, D_84103CC8 + 6));
+        Font_Printf(0x48, 0x182, Text_GetString(NULL, 0, sStadiumCupText, D_84103CC8 + 6));
         Font_EndTexturedTextRendering();
 
         if (gSessionContext.inRound2 == 1) {
-            temp_v0 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, D_84103440, D_84103CC8));
+            temp_v0 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sStadiumCupText, D_84103CC8));
 
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -1027,7 +1027,7 @@ s32 StadiumSelect_Main(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     ASSET_LOAD(D_3000000, stadium_select_ui, 0);
     Text_InitStringTables();
-    D_84103440 = Text_GetStringTable(0x13);
+    sStadiumCupText = Text_GetStringTable(0x13);
     D_84103450 = func_8001E490();
 
     D_84103444 = ASSET_LOAD2(backgrounds, 1, 1);

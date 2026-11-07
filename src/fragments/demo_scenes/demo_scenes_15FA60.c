@@ -127,7 +127,7 @@ s32 D_86B0E5DC;
 #if !defined(VERSION_JP)
 // String table 0x14, read by Diorama_DrawEndCaption. The Japanese build has neither, and its .bss
 // places D_86B0E5E4 directly after D_86B0E5DC.
-char** D_86B0E5E0;
+char** sControllerErrorText;
 #endif
 static BinArchive* D_86B0E5E4;
 static u8* D_86B0E5E8;
@@ -630,7 +630,7 @@ s32 Stage_ShowBootDiorama(void) {
 
 #if !defined(VERSION_JP)
     Text_InitStringTables();
-    D_86B0E5E0 = Text_GetStringTable(0x14);
+    sControllerErrorText = Text_GetStringTable(0x14);
 #endif
     Diorama_InitScene();
     StageLoader_UpdateSegments();

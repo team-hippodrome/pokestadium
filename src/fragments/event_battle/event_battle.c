@@ -16,8 +16,8 @@
 #include "src/stage_loader.h"
 #include "src/pokemon_stats.h"
 
-static char** D_82305A20;
-static char** D_82305A24;
+static char** sEventBattleText;
+static char** sPokemonDetailText;
 static unk_D_82305A28 D_82305A28;
 static SlidingPanel D_82305A30;
 static SlidingPanel D_82305A38;
@@ -336,9 +336,9 @@ void EventBattle_DrawTitleBar(void) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
-    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, D_82305A20, 8));
+    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, sEventBattleText, 8));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
-    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, D_82305A20, 8));
+    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, sEventBattleText, 8));
     Font_EndTexturedTextRendering();
 }
 
@@ -358,7 +358,7 @@ void EventBattle_DrawInfoBox(SlidingPanel* arg0) {
             Font_SetActive(8, 0);
             Font_SetLineHeight(0x18);
             Font_Printf(tmp2 + 0x20, sp3A + 8,
-                        Text_GetString(NULL, 0, D_82305A20, D_82305A50[D_82305A28.unk_02].unk_18));
+                        Text_GetString(NULL, 0, sEventBattleText, D_82305A50[D_82305A28.unk_02].unk_18));
             Font_EndTexturedTextRendering();
         }
     }
@@ -433,7 +433,7 @@ void EventBattle_DrawRuleCard(unk_D_82305A50* arg0) {
             Font_Printf(temp_s1 + 0x34, sp3C, arg0->unk_10);
             Font_SetActive(4, 0);
             Gfx_SetEnvColor(0x92, 0xC1, 0xFF, 0xFF);
-            sprintf(sp44, "%s%d~%d", Text_GetString(NULL, 0, D_82305A24, 0x15), arg0->unk_14, arg0->unk_16);
+            sprintf(sp44, "%s%d~%d", Text_GetString(NULL, 0, sPokemonDetailText, 0x15), arg0->unk_14, arg0->unk_16);
             Font_Printf((temp_s1 - (s16)Font_MeasureTextExtent(4, 0, sp44)) + 0xEA, temp_s2 + 0x20, sp44);
         } else {
             Font_SetActive(8, 0);
@@ -544,7 +544,7 @@ void EventBattle_DrawRuleNotice(unk_D_82305AF8* arg0, s16 arg1, s16 arg2) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0, sp3E);
         Font_SetLineHeight(0x20);
         Text_SetNumberToken(3, D_8230597C[arg0->unk_0004 - 1].unk_04);
-        Font_Printf(arg1 + 0x88, arg2 + 0x14, Text_GetString(sp40, 0x100, D_82305A20, 9));
+        Font_Printf(arg1 + 0x88, arg2 + 0x14, Text_GetString(sp40, 0x100, sEventBattleText, 9));
         Font_EndTexturedTextRendering();
         arg0->unk_0010 += 0x300;
     }
@@ -604,7 +604,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp3 = D_823059B0[i] + sp58 + 0x2C;
             tmp4 = D_823059BC[i] + sp56 + 0x17;
-            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, D_82305A24, 0x15), arg0->unk_0020[i].level);
+            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 0x15), arg0->unk_0020[i].level);
         }
 
         Font_EndTexturedTextRendering();
@@ -778,7 +778,7 @@ void EventBattle_DrawNoticeBanner(SlidingPanel* arg0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0x50, 0x64, 0xFF);
-            Font_Printf(0x90, sp58 + 0xE, Text_GetString(NULL, 0, D_82305A20, 0xA));
+            Font_Printf(0x90, sp58 + 0xE, Text_GetString(NULL, 0, sEventBattleText, 0xA));
             Font_EndTexturedTextRendering();
         } else {
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -885,11 +885,11 @@ void EventBattle_DrawSettingLine(unk_D_82305A40* arg0, s16 arg1, s16 arg2, s16 a
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     }
 
-    Font_Printf(arg0->unk_08 + 0x34, arg0->unk_0A + arg1 * 0x21 + 0x2F, Text_GetString(NULL, 0, D_82305A20, arg2));
+    Font_Printf(arg0->unk_08 + 0x34, arg0->unk_0A + arg1 * 0x21 + 0x2F, Text_GetString(NULL, 0, sEventBattleText, arg2));
 
     if (arg3 >= 0) {
         Text_SetNumberToken(2, arg4);
-        Text_GetString(sp30, sizeof(sp30), D_82305A20, arg3);
+        Text_GetString(sp30, sizeof(sp30), sEventBattleText, arg3);
         Font_Printf((arg0->unk_08 - (Font_MeasureTextExtent(0, 0, sp30) / 2)) + 0x158,
                     arg0->unk_0A + arg1 * 0x21 + 0x2F, sp30, arg4);
     }
@@ -972,7 +972,7 @@ void EventBattle_DrawSettingsPanel(unk_D_82305A40* arg0) {
 
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            sp54 = Text_GetString(NULL, 0, D_82305A20, 0xB);
+            sp54 = Text_GetString(NULL, 0, sEventBattleText, 0xB);
             Font_Printf((temp_s2 - (Font_MeasureTextExtent(0x10, 0, sp54) / 2)) + 0xDF, temp_s1 + 0xA, sp54);
 
             if (arg0->unk_01 == 1) {
@@ -1601,16 +1601,16 @@ void EventBattle_InitSelect(unk_D_82305A28* arg0, s16 arg1) {
     EventBattle_InitTrainerCard(&D_82305AF8[0], 0x40, 0x5C, 0);
     EventBattle_InitTrainerCard(&D_82305AF8[1], 0x40, 0xF8, 1);
 
-    EventBattle_InitRuleCard(&D_82305A50[0], 0x44, 0x84, D_3028E00, Text_GetString(NULL, 0, D_82305A20, 0x15), 3, 0);
-    EventBattle_InitRuleCard(&D_82305A50[1], 0x144, 0x84, D_3029A80, Text_GetString(NULL, 0, D_82305A20, 0x18), 4, 1);
-    EventBattle_InitRuleCard(&D_82305A50[2], 0x44, 0xC8, D_302A700, Text_GetString(NULL, 0, D_82305A20, 0x1A), 6, 5);
-    EventBattle_InitRuleCard(&D_82305A50[3], 0x144, 0xC8, D_302B380, Text_GetString(NULL, 0, D_82305A20, 0x19), 5, 3);
-    EventBattle_InitRuleCard(&D_82305A50[4], 0x44, 0x10C, NULL, Text_GetString(NULL, 0, D_82305A20, 0x1B), 0, 6);
-    EventBattle_InitRuleCard(&D_82305A50[5], 0x144, 0x10C, NULL, Text_GetString(NULL, 0, D_82305A20, 0x1C), 0, 7);
+    EventBattle_InitRuleCard(&D_82305A50[0], 0x44, 0x84, D_3028E00, Text_GetString(NULL, 0, sEventBattleText, 0x15), 3, 0);
+    EventBattle_InitRuleCard(&D_82305A50[1], 0x144, 0x84, D_3029A80, Text_GetString(NULL, 0, sEventBattleText, 0x18), 4, 1);
+    EventBattle_InitRuleCard(&D_82305A50[2], 0x44, 0xC8, D_302A700, Text_GetString(NULL, 0, sEventBattleText, 0x1A), 6, 5);
+    EventBattle_InitRuleCard(&D_82305A50[3], 0x144, 0xC8, D_302B380, Text_GetString(NULL, 0, sEventBattleText, 0x19), 5, 3);
+    EventBattle_InitRuleCard(&D_82305A50[4], 0x44, 0x10C, NULL, Text_GetString(NULL, 0, sEventBattleText, 0x1B), 0, 6);
+    EventBattle_InitRuleCard(&D_82305A50[5], 0x144, 0x10C, NULL, Text_GetString(NULL, 0, sEventBattleText, 0x1C), 0, 7);
 
-    EventBattle_InitOptionLabel(&D_8230F528[0], 0x50, 0x181, Text_GetString(NULL, 0, D_82305A20, 0x1D));
-    EventBattle_InitOptionLabel(&D_8230F528[1], 0xF4, 0x181, Text_GetString(NULL, 0, D_82305A20, 0x1E));
-    EventBattle_InitOptionLabel(&D_8230F528[2], 0x198, 0x181, Text_GetString(NULL, 0, D_82305A20, 0x1F));
+    EventBattle_InitOptionLabel(&D_8230F528[0], 0x50, 0x181, Text_GetString(NULL, 0, sEventBattleText, 0x1D));
+    EventBattle_InitOptionLabel(&D_8230F528[1], 0xF4, 0x181, Text_GetString(NULL, 0, sEventBattleText, 0x1E));
+    EventBattle_InitOptionLabel(&D_8230F528[2], 0x198, 0x181, Text_GetString(NULL, 0, sEventBattleText, 0x1F));
 
     if (arg1 == -1) {
         for (i = 2; i >= 0; i--) {
@@ -1655,8 +1655,8 @@ s32 EventBattle_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     Gfx_InitDisplayListBuffers(0x10000, 0);
     StageContext_Activate(StageContext_Allocate(1, 0, 2, 0, 2, 1));
     Text_InitStringTables();
-    D_82305A20 = Text_GetStringTable(0x10);
-    D_82305A24 = Text_GetStringTable(6);
+    sEventBattleText = Text_GetStringTable(0x10);
+    sPokemonDetailText = Text_GetStringTable(6);
 
     while (temp_v0 == STATE_EVENT_BATTLE) {
         temp_v0 = EventBattle_ShowSelect();

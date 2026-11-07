@@ -57,7 +57,7 @@ static u32 sFirstClearBonusGeoLayout[] = {
 };
 
 #if !defined(VERSION_JP)
-static char** D_86B10840;
+static char** sBattleMessagesTable;
 #endif
 static unk_D_86002F30* D_86B10844;
 static GraphNode* D_86B10848;
@@ -233,9 +233,9 @@ void FirstClearBonus_UpdateDialogSequence(void) {
             }
 #else
             if (gSessionContext.mode == 0x16) {
-                sprintf(D_86B109C8, Text_GetString(NULL, 0, D_86B10840, 0x91));
+                sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x91));
             } else {
-                sprintf(D_86B109C8, Text_GetString(NULL, 0, D_86B10840, 0x93));
+                sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x93));
             }
 #endif
 
@@ -281,9 +281,9 @@ void FirstClearBonus_UpdateDialogSequence(void) {
                 }
 #else
                 if (gSessionContext.mode == 0x16) {
-                    sprintf(D_86B109C8, Text_GetString(NULL, 0, D_86B10840, 0x92));
+                    sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x92));
                 } else {
-                    sprintf(D_86B109C8, Text_GetString(NULL, 0, D_86B10840, 0x94));
+                    sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x94));
                 }
 #endif
 
@@ -489,7 +489,7 @@ s32 Stage_ShowFirstClearBonusScene(void) {
 
 #if !defined(VERSION_JP)
     Text_InitStringTables();
-    D_86B10840 = Text_GetStringTable(0x1E);
+    sBattleMessagesTable = Text_GetStringTable(0x1E);
 #endif
 
     if (gSessionContext.mode == 0x16) {

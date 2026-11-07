@@ -826,8 +826,8 @@ static CameraNode* D_86B0EBC4;
 static s16 D_86B0EBC8;
 static s16 D_86B0EBCA;
 static f32 D_86B0EBCC;
-static char** D_86B0EBD0;
-static char** D_86B0EBD4;
+static char** sBattleMessagesTable;
+static char** sPokemonNameTable;
 static unk_D_86B0EBD8* D_86B0EBD8;
 static unk_D_86B0EBDC* D_86B0EBDC;
 static unk_D_86B0EBE0* D_86B0EBE0;
@@ -1029,11 +1029,11 @@ void Completion_DrawSpeciesRewardText(s16 arg0, s16 arg1) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, 0xA5);
+    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, 0xA5);
     Font_Printf((arg0 - (Font_MeasureTextExtent(2, 0, D_86B0F7C8) / 2)) + 0x5A, arg1 + 5, D_86B0F7C8);
-    Font_Printf(arg0 + 0x28, arg1 + 0x19, Text_GetString(NULL, 0, D_86B0EBD0, 0xA2));
-    Font_Printf(arg0 + 0x69, arg1 + 0x19, Text_GetString(NULL, 0, D_86B0EBD0, 0xA3));
+    Font_Printf(arg0 + 0x28, arg1 + 0x19, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA2));
+    Font_Printf(arg0 + 0x69, arg1 + 0x19, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA3));
     Font_EndTexturedTextRendering();
 
     gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
@@ -1080,10 +1080,10 @@ void Completion_UpdateGiftDialogFirstTime(void) {
     switch (D_86B0EBE0->unk_00) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, 0x96));
+                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
-                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Intro);
+                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+                Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Intro);
             }
 
             D_86B0EBE0->unk_04 = 0;
@@ -1122,8 +1122,8 @@ void Completion_UpdateGiftDialogFirstTime(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Confirm);
+                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+                    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Confirm);
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1141,7 +1141,7 @@ void Completion_UpdateGiftDialogFirstTime(void) {
                 for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                 // clang-format on
 
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_Success));
+                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_Success));
                 Cry_Play(D_86B0EBDC->unk_2EC, 2);
                 ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
                 D_86B0EBE0->unk_00++;
@@ -1170,10 +1170,10 @@ void Completion_UpdateGiftDialogWithExisting(void) {
     switch (D_86B0EBE0->unk_00) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, 0x96));
+                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
-                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_IntroWithExisting);
+                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+                Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_IntroWithExisting);
             }
             D_86B0EBE0->unk_04 = 0;
             D_86B0EBE0->unk_08 = 0xB4;
@@ -1211,7 +1211,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_ConfirmWithExisting));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_ConfirmWithExisting));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1229,7 +1229,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_SuccessWithExisting));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_SuccessWithExisting));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1247,9 +1247,9 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    Text_SetStringToken(0x20, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2E8 - 1));
-                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Failure);
+                    Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2E8 - 1));
+                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+                    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Failure);
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1284,7 +1284,7 @@ void Completion_UpdateGiftDialogWithExisting(void) {
                     for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, D_86B0EBD0, sCompletionMsgId_Complete));
+                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_Complete));
                     D_86B0EBE0->unk_00++;
                 }
             }
@@ -1479,9 +1479,9 @@ void Completion_HandleAcceptDeclineInput(void) {
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
             D_86B0EBE0->unk_00 = 6;
             Completion_ResetDialogText();
-            Text_SetStringToken(0x20, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2E8 - 1));
-            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Timeout);
+            Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2E8 - 1));
+            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+            Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Timeout);
             ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
             Cry_Play(D_86B0EBDC->unk_2EC, 2);
         }
@@ -1490,8 +1490,8 @@ void Completion_HandleAcceptDeclineInput(void) {
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
             D_86B0EBE0->unk_00 = 7;
             Completion_ResetDialogText();
-            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, D_86B0EBD4, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, D_86B0EBD0, sCompletionMsgId_Extra);
+            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
+            Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Extra);
             ModelAnim_SetSpeed(&D_86B0EBDC->unk_008, -1);
         }
     }
@@ -1748,8 +1748,8 @@ s32 Stage_ShowCompletionScene(void) {
 
     Text_InitStringTables();
 
-    D_86B0EBD0 = Text_GetStringTable(0x1E);
-    D_86B0EBD4 = Text_GetStringTable(0x24);
+    sBattleMessagesTable = Text_GetStringTable(0x1E);
+    sPokemonNameTable = Text_GetStringTable(0x24);
 
     Completion_InitScene();
     StageContext_Activate(sp24);

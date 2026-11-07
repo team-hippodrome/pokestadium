@@ -482,40 +482,40 @@ void DynamoGame_DrawTutorialScreen(s32 arg0) {
         s32 temp_s0;
         s32 sp48;
         s32 sp44;
-        char* sp40 = Text_GetString(NULL, 0, D_87806330, 0x2D);
+        char* sp40 = Text_GetString(NULL, 0, gMinigameText, 0x2D);
 
         Font_SetActive(2, 0);
         Font_SetLineHeight(0xC);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, D_87806330, 0x2C)) / 2), 0x20,
-                    Text_GetString(NULL, 0, D_87806330, 0x2C));
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, Text_GetString(NULL, 0, gMinigameText, 0x2C)) / 2), 0x20,
+                    Text_GetString(NULL, 0, gMinigameText, 0x2C));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(0x28, 0x34, sp40);
 
         temp_s0 = (Text_CountLines(sp40) * 0xC) + 0xC;
-        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x2E));
+        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x2E));
 
-        temp_s0 += (Text_CountLines(Text_GetString(NULL, 0, D_87806330, 0x2E)) * 0xC) + 0xC;
-        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x2F));
+        temp_s0 += (Text_CountLines(Text_GetString(NULL, 0, gMinigameText, 0x2E)) * 0xC) + 0xC;
+        Font_Printf(0x28, temp_s0 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x2F));
 
-        Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-        Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+        Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+        Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Widget_MeasureLabelBox(&sp48, &sp44, sp40, Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
-        Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x5F));
+        Widget_MeasureLabelBox(&sp48, &sp44, sp40, Text_GetString(NULL, 0, gMinigameText, 0x5F), 0xC);
+        Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x5F));
         Gfx_SetEnvColor(0xC8, 0xFA, 0xD2, 0xFF);
         Gfx_SetPrimColor(0x32, 0xE6, 0x82, 0xFF);
-        Widget_MeasureLabelBox(&sp48, &sp44, sp40, Text_GetString(NULL, 0, D_87806330, 0x60), 0xC);
-        Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x60));
+        Widget_MeasureLabelBox(&sp48, &sp44, sp40, Text_GetString(NULL, 0, gMinigameText, 0x60), 0xC);
+        Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x60));
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x30));
+        Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x30));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-        Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+        Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     }
 
     Font_DisableTwoCycleTexturing();

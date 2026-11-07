@@ -32,7 +32,7 @@ static GraphNode* D_8130464C;
 static s16 D_81304650;
 static s32 D_81304654;
 #if !defined(VERSION_JP)
-static char** D_81304658;
+static char** sHallOfFameText;
 static char D_81304660[0x400];
 #endif
 static s16 D_81304A60;
@@ -272,19 +272,19 @@ void TransferPak_DrawPortBox(s32 arg0, s32 arg1, s32 arg2) {
                 break;
 #else
             case 1:
-                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, D_81304658, 0xE));
+                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, sHallOfFameText, 0xE));
                 break;
 
             case 2:
-                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, D_81304658, 0xF));
+                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, sHallOfFameText, 0xF));
                 break;
 
             case 3:
-                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, D_81304658, 0x10));
+                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, sHallOfFameText, 0x10));
                 break;
 
             case 4:
-                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, D_81304658, 0x11));
+                Font_Printf(arg1 + 5, arg2 + 0xAC, Text_GetString(NULL, 0, sHallOfFameText, 0x11));
                 break;
 #endif
         }
@@ -518,8 +518,8 @@ void TransferPak_DrawPortSelectOverlay(void) {
         Font_Printf(0x3B, 0x1A1, D_81303B94_jp);
 #else
         Font_SetActive(0x10, 0);
-        Font_Printf(0x132 - (Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, D_81304658, 0x12)) / 2), 0x1A1,
-                    Text_GetString(NULL, 0, D_81304658, 0x12));
+        Font_Printf(0x132 - (Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sHallOfFameText, 0x12)) / 2), 0x1A1,
+                    Text_GetString(NULL, 0, sHallOfFameText, 0x12));
 #endif
         Font_EndTexturedTextRendering();
         TransferPak_DrawPortBox(0, 0x38, 0x2E);
@@ -539,7 +539,7 @@ void TransferPak_DrawPortSelectOverlay(void) {
 #else
         Font_SetActive(0x10, 0);
         Font_SetLineHeight(0x1C);
-        Font_Printf(0x5A, 0x15A, Text_GetString(NULL, 0, D_81304658, 0x13));
+        Font_Printf(0x5A, 0x15A, Text_GetString(NULL, 0, sHallOfFameText, 0x13));
 #endif
         Font_EndTexturedTextRendering();
     }
@@ -890,7 +890,7 @@ s32 TransferPak_SelectMain(s32 arg0, UNUSED s32 arg1) {
     TransferPak_AutoSelectPort();
 #if !defined(VERSION_JP)
     Text_InitStringTables();
-    D_81304658 = Text_GetStringTable(0x1F);
+    sHallOfFameText = Text_GetStringTable(0x1F);
 #endif
     TransferPak_InitScene();
     D_81304654 = TransferPak_GetPresentationMode();
