@@ -447,7 +447,7 @@ MoveData* Move_GetData(s32 arg0) {
 }
 
 s32 Species_GetMoveSlot(BattleMon* arg0, s32 arg1) {
-    s32 temp_v0 = arg0->species.unk_00 - 1;
+    s32 temp_v0 = arg0->species.id - 1;
     s32 var_v1;
 
     if (arg1 == 1) {

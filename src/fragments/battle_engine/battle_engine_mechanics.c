@@ -758,7 +758,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp34 = &arg0->sessionTeams->tagTeamMember[sp28->ownerTeamMemberIndex]->pokemonPicked[sp28->actionChosen];
 
     sp24->unk_14 = sp28->rosterIndex;
-    sp24->id = sp34->species.unk_00;
+    sp24->id = sp34->species.id;
     sp24->displayHp = sp34->hp;
     sp24->pendingStatusCondition = sp34->statusCondition;
     sp24->types[0] = sp34->type1;

@@ -667,7 +667,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk
     side->unk_18 = model->unk_08->unk_00[0];
     side->uniqueStatusFlags |= 0xA0;
     side->unk_1C = 0;
-    side->displayModel = first_trainer->pokemonPicked[0].species.unk_00;
+    side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->unk_04 = first_trainer->pokemonPicked;
     Trainer_RequestPokeIcon(side);
 }

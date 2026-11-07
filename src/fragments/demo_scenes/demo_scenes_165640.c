@@ -279,7 +279,7 @@ void Intro_LoadPokemonTextures(void) {
 }
 
 void Intro_LoadShowcaseModel(void) {
-    D_86B0FA78->unk_174 = D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].species.unk_00;
+    D_86B0FA78->unk_174 = D_86B10690->pokemonPicked[D_86B0FA78->unk_17C].species.id;
     ModelRenderer_AttachDisplayObject(&D_86B0FA78->unk_004);
     PokeIcon_OpenModelArchives();
 

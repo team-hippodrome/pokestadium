@@ -22,7 +22,7 @@ typedef struct unk_D_800AE520 {
 } unk_D_800AE520; // size >= 0x14
 
 typedef struct BattleMonSpecies {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ u8 id;
     /* 0x01 */ u8 unk_01;
 } BattleMonSpecies; // size = 0x2
 

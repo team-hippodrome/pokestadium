@@ -503,7 +503,7 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     unk_D_86002F30* sp24 = NULL;
     MemoryBlock* sp20;
 
-    sp2C = BinArchive_GetFile(D_800ABE10.unk_A04.unk_00, arg0->species.unk_00 - 1);
+    sp2C = BinArchive_GetFile(D_800ABE10.unk_A04.unk_00, arg0->species.id - 1);
     if (sp2C != NULL) {
         sp20 = MainPool_AllocState(main_pool_get_available(), 0);
         Model_ComputeSizeVariant(&sp28, arg0);

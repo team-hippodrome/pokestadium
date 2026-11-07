@@ -73,8 +73,8 @@ s32 PikachuReward_CheckNoSpecialMove(BattleMon* arg0) {
 s32 PikachuReward_CheckEligibleForSurf(BattleMon* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s32 sp1C = 0;
 
-    if ((arg0->species.unk_00 > 0) && (arg0->species.unk_00 < 0x98)) {
-        if ((PikachuReward_CheckNoSpecialMove(arg0) != 0) && (D_8006FF00[arg0->species.unk_00 - 1].unk_0C & arg3)) {
+    if ((arg0->species.id > 0) && (arg0->species.id < 0x98)) {
+        if ((PikachuReward_CheckNoSpecialMove(arg0) != 0) && (D_8006FF00[arg0->species.id - 1].unk_0C & arg3)) {
             if ((arg0->level >= arg1) && (arg2 >= arg0->level)) {
                 sp1C = 1;
             }
@@ -100,10 +100,10 @@ s32 PikachuReward_SearchDeckForPikachu(s16 arg0, s16 arg1, s16 arg2) {
     }
 
     if (var_v0 != NULL) {
-        while (Deck_ReadEntries(&ptr->species.unk_00, 1, var_v0) == 1) {
+        while (Deck_ReadEntries(&ptr->species.id, 1, var_v0) == 1) {
             if (PikachuReward_CheckEligibleForSurf(ptr, 1, 0x64, 0x20) != 0) {
                 if (!arg2--) {
-                    if (ptr->species.unk_00 == 0x19) {
+                    if (ptr->species.id == 0x19) {
                         sp34 = 1;
                     }
                     break;
@@ -127,7 +127,7 @@ s32 PikachuReward_FindPikachuOnCart(void) {
     var_v1 = gSessionContext.battleSides[0].tagTeamMember[0];
 
     for (i = 0; i < var_v1->numberOfPokemonBrought; i++) {
-        if (var_v1->pokemonPicked[i].species.unk_00 == 0x19) {
+        if (var_v1->pokemonPicked[i].species.id == 0x19) {
             D_832027C8.unk_00 = (var_v1->pokemonPicked[i].unk_52 & 0x70) >> 4;
             D_832027C8.unk_01 = var_v1->pokemonPicked[i].unk_52 & 0xF;
             if ((D_832027C8.unk_00 < 4) && (D_832027C8.unk_01 < 0xD)) {

@@ -136,7 +136,7 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
 }
 
 BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
-    arg0->species.unk_00 = arg1;
+    arg0->species.id = arg1;
     arg0->unk_04 = 0;
     arg0->statusCondition = 0;
 
@@ -353,7 +353,7 @@ void Team_ScaleOpponentToLevel(s16 arg0) {
 
     for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; i++, var_s1++, var_s0++) {
         var_s0->level = arg0;
-        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->species.unk_00, arg0);
+        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->species.id, arg0);
         Pokemon_RecalcStats(var_s0);
         var_s0->hp = var_s0->maxHp;
 

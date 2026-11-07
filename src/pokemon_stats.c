@@ -1212,7 +1212,7 @@ void VictoryPalace_SaveSpeciesRecord(BattleMon* arg0, s16 arg1, u8 arg2) {
 #else
     Text_TranscodeName(sp24.unk_0F, arg0->unk_3B);
 #endif
-    Save_WriteTypedRecord(0x13, 0, arg0->species.unk_00 - 1, &sp24);
+    Save_WriteTypedRecord(0x13, 0, arg0->species.id - 1, &sp24);
 }
 
 #if !defined(VERSION_JP)
@@ -2520,7 +2520,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 #if defined(VERSION_JP)
                 sp1C->unk_25D[arg3].unk_00 = 0xFF;
 #else
-                sp1C->unk_267[arg3].unk_00 = 0xFF;
+                sp1C->unk_267[arg3].id = 0xFF;
 #endif
                 break;
 
@@ -2533,7 +2533,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 #if defined(VERSION_JP)
                 sp1C->unk_045[arg3].unk_00 = 0xFF;
 #else
-                sp1C->unk_04A[arg3].unk_00 = 0xFF;
+                sp1C->unk_04A[arg3].id = 0xFF;
 #endif
                 break;
         }
@@ -2578,7 +2578,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
 #if defined(VERSION_JP)
                 sp1C->unk_25D[sp18].unk_00 = 0xFF;
 #else
-                sp1C->unk_267[sp18].unk_00 = 0xFF;
+                sp1C->unk_267[sp18].id = 0xFF;
 #endif
                 break;
 
@@ -2591,7 +2591,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
 #if defined(VERSION_JP)
                 sp1C->unk_045[sp18].unk_00 = 0xFF;
 #else
-                sp1C->unk_04A[sp18].unk_00 = 0xFF;
+                sp1C->unk_04A[sp18].id = 0xFF;
 #endif
                 break;
         }

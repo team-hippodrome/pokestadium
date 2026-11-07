@@ -986,13 +986,13 @@ void BattlePrepRoster_LoadDexIdsSingle(unk_D_84B25A28* arg0) {
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          count++, i++) {
         func_8001A324(arg0->unk_20, count,
-                      gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.unk_00, 0);
+                      gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
     for (count = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          count++, i++) {
         func_8001A324(arg0->unk_20, count,
-                      gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.unk_00, 0);
+                      gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 }
 
@@ -1006,28 +1006,28 @@ void BattlePrepRoster_LoadDexIdsDouble(unk_D_84B25A28* arg0) {
     for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          count++, i++) {
         func_8001A324(arg0->unk_20, count,
-                      gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.unk_00, 0);
+                      gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
         for (i = 0, count = 6; i < gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked;
              count++, i++) {
             func_8001A324(arg0->unk_20, count,
-                          gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->battleMon[i].species.unk_00, 0);
+                          gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->battleMon[i].species.id, 0);
         }
     }
 
     for (i = 0, count = 12; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          count++, i++) {
         func_8001A324(arg0->unk_20, count,
-                      gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.unk_00, 0);
+                      gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
         for (count = 18, i = 0;
              i < gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked; count++, i++) {
             func_8001A324(arg0->unk_20, count,
-                          gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->battleMon[i].species.unk_00, 0);
+                          gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->battleMon[i].species.id, 0);
         }
     }
 }
