@@ -17,15 +17,15 @@
 #include "src/stage_loader.h"
 
 static TeamOrderState sTeamOrderStates[2];
-static BinArchive* D_84803780;
-static void* sPartyGridTextureOffset;
+static BinArchive* sBackgroundArchive;
+static void* sBackgroundImage;
 static char** sMoveNameTable;
 static char** sTypeNameTable;
 static char** sTeamSelectText;
 static char** sPokemonDetailText;
-static s16 D_84803798;
+static s16 sFullRedrawFrames;
 static s16 sScrollingTextProgress;
-static s32 D_8480379C;
+static s32 sOrderSelectPanelCount;
 static BattleOrderInputState sBattleOrderInputStates[4];
 static SessionContext* sSessionContext;
 static Controller sComController;
@@ -33,7 +33,7 @@ static s32 sComNextButtonPress;
 static s32 sComSelectionTimer;
 static s16 sCursorOscillationPhases[4];
 
-static u16 sBorderPortColors[] = { 0x1D, 0x341, 0x6947, 0x6A41 };
+static u16 sBorderPortColors[] = { 0x1D, 0x341, 0x6947, 0x6A41 }; // #000073, #006B00, #6B2918, #6B4A00
 static ComSelectionButtonPresses sComButtonPressesForSinglePokemon[] = {
     { 30, 0 },
     { 30, BTN_B },
@@ -66,7 +66,7 @@ static ComSelectionButtonPresses* sComButtonPressesByRosterSize[] = {
     sComButtonPressesRosterSize5,
     sComButtonPressesRosterSize6,
 };
-static PokemonTypeString sPokemonTypeStrings[] = {
+static PokemonTypeStyle sPokemonTypeStyles[] = {
     { { 0xF0, 0xF0, 0xF0 }, D_2017740 }, // #F0F0F0 
     { { 0xF0, 0x96, 0x32 }, D_2019040 }, // #F09632 
     { { 0x50, 0x96, 0xF0 }, D_20199A0 }, // #5096F0
@@ -86,7 +86,11 @@ static PokemonTypeString sPokemonTypeStrings[] = {
 };
 static Color_RGB8 sHelpTextGradientStart = { 0x00, 0x0A, 0x41 }; // #000A41
 static Color_RGB8 sHelpTextGradientEnd = { 0x00, 0x00, 0xD2 };   // #0000D2
-static u8* sHumanPlayerLabelIcon[] = { sPlayer1LabelIcon, sPlayer2LabelIcon, D_3009E70 };
+// FAKE: these split pointer tables are indexed across their declared bounds.
+// Controller and partner-port lookups reach subsequent declarations, and the
+// packed owner/frame lookup uses column 3 of D_8480369C, ending at D_848036D8.
+// Declaration order is retained for matching.
+static u8* sHumanPlayerLabelIcon[] = { gPlayer1LabelIcon, gPlayer2LabelIcon, D_3009E70 };
 static u8* D_84803690[] = { D_300A5C0, D_300AD10 };
 static u8* D_84803698[] = { D_300B9B8 };
 static u8* D_8480369C[][3] = {
@@ -124,7 +128,7 @@ static u8* D_848036D8 = D_30084C0;
     * (R) Button to check
 */
 void BattleMenu_DrawBottomActionButtons(void) {
-    Gfx_DrawTiledRgba16Image(sPartyGridTextureOffset);
+    Gfx_DrawTiledRgba16Image(sBackgroundImage);
 
     gSPDisplayList(gDisplayListHead++, D_8006F4E0);
 
@@ -144,8 +148,8 @@ void BattleMenu_DrawBottomActionButtons(void) {
     Font_EndTexturedTextRendering();
 }
 
-// better name: BattleMenu_DrawScrollingHelpText
-void BattleMenu_DrawScrollingRulesText(void) {
+/* Draws and advances the vertical help-text strip for the current rules. */
+void BattleMenu_DrawScrollingHelpText(void) {
     s32 i;
     s32 char_index;
     s32 y;
@@ -195,22 +199,23 @@ void BattleMenu_DrawScrollingRulesText(void) {
     }
 }
 
+/* Initializes a side's selection icons and controller-port labels. */
 void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessionTeams* battle_session_teams,
                                    s32 rule_category) {
     s32 i;
 
     team_order_state->numberPicked = 0;
-    team_order_state->unk_01 = 0;
+    team_order_state->isCom = 0;
 
     for (i = 0; i < 6; i++) {
-        team_order_state->pokemonPicked[i] = 0;
-        team_order_state->pokemonPendingPick[i] = 1;
+        team_order_state->slotIconStates[i] = 0;
+        team_order_state->slotIconDirections[i] = 1;
     }
 
     if (rule_category != RULE_CATEGORY_ANYTHING_GOES) {
         if (rule_category != RULE_CATEGORY_VS_MEWTWO) {
             // clang-format off
-            for (i = 3; i < 6; i++) { team_order_state->pokemonPicked[i] = -1; }
+            for (i = 3; i < 6; i++) { team_order_state->slotIconStates[i] = -1; }
             // clang-format on
         }
     }
@@ -218,7 +223,7 @@ void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessi
     if (battle_session_teams->tagTeamSize == 1) {
         team_order_state->firstTagTeamPartnerPort = battle_session_teams->tagTeamMember[0]->controllerPort;
         team_order_state->secondTagTeamPartnerPort = -1;
-        team_order_state->unk_01 = (battle_session_teams->tagTeamMember[0]->isHuman & 0x2) != 0;
+        team_order_state->isCom = (battle_session_teams->tagTeamMember[0]->isHuman & 0x2) != 0;
     } else if (battle_session_teams->tagTeamMember[0]->controllerPort <
                battle_session_teams->tagTeamMember[1]->controllerPort) {
         team_order_state->firstTagTeamPartnerPort = battle_session_teams->tagTeamMember[0]->controllerPort;
@@ -229,12 +234,12 @@ void BattleMenu_InitTeamOrderState(TeamOrderState* team_order_state, BattleSessi
     }
 }
 
-// better name: BattleMenu_DrawPlayerPortIcon
-void BattleMenu_DrawSidebarLeadIcon(s32 x, s32 y, TeamOrderState* state) {
+/* Draws the side's COM, single-controller, or paired-controller label. */
+void BattleMenu_DrawPlayerPortIcon(s32 x, s32 y, TeamOrderState* state) {
     u8* texture;
 
     if (state->secondTagTeamPartnerPort == -1) {
-        if (state->unk_01 != 0) {
+        if (state->isCom != 0) {
             Gfx_DrawTextureRgba16(x, y, 36, 26, gComPlayerLabelIcon, 36, 0x200000);
         } else {
             Gfx_DrawTextureRgba16(x, y, 36, 26, sHumanPlayerLabelIcon[state->firstTagTeamPartnerPort], 36, 0x200000);
@@ -257,37 +262,38 @@ void BattleMenu_DrawSidebarLeadIcon(s32 x, s32 y, TeamOrderState* state) {
     }
 }
 
-// better name: BattleMenu_DrawBottomPokeBallIcon
-s32 BattleMenu_DrawSidebarRowTypeIcon(s32 x, s32 y, s8 port, s8 ordinal_of_pokemon) {
-    s32 sp34;
-    s32 sp30;
+/* Advances a packed selection-icon frame and draws its current texture. */
+s32 BattleMenu_DrawOrderSlotIcon(s32 x, s32 y, s8 icon_state, s8 animation_direction) {
+    s32 owner_index;
+    s32 frame;
 
-    if (port != 0) {
-        if (port == -1) {
+    if (icon_state != 0) {
+        if (icon_state == -1) {
             Gfx_DrawTextureRgba16(x, y, 32, 20, D_3005680, 32, 0x200000);
         } else {
-            sp34 = (port >> 4) & 0xF;
-            sp30 = port & 0xF;
+            owner_index = (icon_state >> 4) & 0xF;
+            frame = icon_state & 0xF;
 
-            if (ordinal_of_pokemon > 0) {
-                if (sp30 < 3) {
-                    sp30++;
+            if (animation_direction > 0) {
+                if (frame < 3) {
+                    frame++;
                 }
-            } else if (sp30 > 0) {
-                sp30--;
+            } else if (frame > 0) {
+                frame--;
             }
 
-            if (sp30 > 0) {
-                Gfx_DrawTextureRgba16(x + 6, y, 24, 20, D_8480369C[sp34][sp30], 24, 0x200000);
-                port = (sp34 * 0x10) | sp30;
+            if (frame > 0) {
+                Gfx_DrawTextureRgba16(x + 6, y, 24, 20, D_8480369C[owner_index][frame], 24, 0x200000);
+                icon_state = (owner_index * 0x10) | frame;
             } else {
-                port = 0;
+                icon_state = 0;
             }
         }
     }
-    return port;
+    return icon_state;
 }
 
+/* Draws side 0's order sidebar and advances its selection icons. */
 void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     TeamOrderState* state = &sTeamOrderStates[0];
     s32 i;
@@ -310,20 +316,21 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     Gfx_DrawTextureRgba16(37, y + 104, 40, 46, gBattleOrderSideBarFist, 40, 0x200000);
 
     if (state->secondTagTeamPartnerPort == -1) {
-        BattleMenu_DrawSidebarLeadIcon(45, 33, &sTeamOrderStates[0]);
+        BattleMenu_DrawPlayerPortIcon(45, 33, &sTeamOrderStates[0]);
     } else {
-        BattleMenu_DrawSidebarLeadIcon(45, 29, &sTeamOrderStates[0]);
+        BattleMenu_DrawPlayerPortIcon(45, 29, &sTeamOrderStates[0]);
     }
 
     poke_ball_y = y + 118;
     for (i = 0; i < 6; i++) {
-        state->pokemonPicked[i] = BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y - i * 23, state->pokemonPicked[i],
-                                                                    state->pokemonPendingPick[i]);
+        state->slotIconStates[i] = BattleMenu_DrawOrderSlotIcon(45, poke_ball_y - i * 23, state->slotIconStates[i],
+                                                                    state->slotIconDirections[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/* Draws side 1's order sidebar and advances its selection icons. */
 void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     TeamOrderState* state = &sTeamOrderStates[1];
     s32 i;
@@ -346,45 +353,47 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     Gfx_DrawTextureRgba16(45, y + 136, 32, 14, D_3004D40, 32, 0x200000);
 
     if (state->secondTagTeamPartnerPort == -1) {
-        BattleMenu_DrawSidebarLeadIcon(45, 393, &sTeamOrderStates[1]);
+        BattleMenu_DrawPlayerPortIcon(45, 393, &sTeamOrderStates[1]);
     } else {
-        BattleMenu_DrawSidebarLeadIcon(45, 380, &sTeamOrderStates[1]);
+        BattleMenu_DrawPlayerPortIcon(45, 380, &sTeamOrderStates[1]);
     }
 
     poke_ball_y = y + 12;
     for (i = 0; i < 6; i++) {
-        state->pokemonPicked[i] = BattleMenu_DrawSidebarRowTypeIcon(45, poke_ball_y + i * 23, state->pokemonPicked[i],
-                                                                    state->pokemonPendingPick[i]);
+        state->slotIconStates[i] = BattleMenu_DrawOrderSlotIcon(45, poke_ball_y + i * 23, state->slotIconStates[i],
+                                                                    state->slotIconDirections[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-// Better name: BattleMenu_RegisterPokemonSelection
-void BattleMenu_AppendOrderSlotIcon(s32 side, s32 pokemon_slot_index) {
+/* Appends a growing selection icon owned by the given controller port. */
+void BattleMenu_AppendOrderSlotIcon(s32 side, s32 controller_port) {
     TeamOrderState* state = &sTeamOrderStates[side];
 
-    state->pokemonPicked[state->numberPicked] =
-        ((pokemon_slot_index + 1) << 4) | (state->pokemonPicked[state->numberPicked] & 0xF);
-    state->pokemonPendingPick[state->numberPicked] = 1;
+    state->slotIconStates[state->numberPicked] =
+        ((controller_port + 1) << 4) | (state->slotIconStates[state->numberPicked] & 0xF);
+    state->slotIconDirections[state->numberPicked] = 1;
     state->numberPicked++;
 }
 
+/* Starts shrinking all selection icons and clears the side's pick count. */
 void BattleMenu_ResetOrderSlotIcons(s32 side) {
     TeamOrderState* state = &sTeamOrderStates[side];
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        state->pokemonPendingPick[i] = -1;
+        state->slotIconDirections[i] = -1;
     }
     state->numberPicked = 0;
 }
 
-// better name: BattleMenu_DrawPanelBorder
-void BattleMenu_DrawBorderedPanel(s16 x, s16 y, s16 width, s16 height, s16 port) {
+/* Draws a panel using the border color assigned to its controller port. */
+void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 port) {
     Ui_DrawBorderedPanelStyleB(x, y, width, height, sBorderPortColors[port]);
 }
 
+/* Draws the six slot buttons, Pokemon icons, names, and levels. */
 void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_state) {
     s32 i;
     s16 x;
@@ -396,7 +405,7 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_stat
     x = input_state->x;
     y = input_state->y;
 
-    BattleMenu_DrawBorderedPanel(x, y, 471, 94, input_state->port);
+    BattleMenu_DrawPanelBorder(x, y, 471, 94, input_state->controllerPort);
 
     gSPDisplayList(gDisplayListHead++, D_8006F4E0);
 
@@ -438,16 +447,17 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_stat
 
     Font_EndTexturedTextRendering();
 
-    if (input_state->summaryDisplayProgress > 0) {
-        if (input_state->isHuman == 0) {
-            Gfx_DrawRgba16ImageRegion(sPartyGridTextureOffset, 200, 129, 351, 83);
+    if (input_state->overlayClearFrames > 0) {
+        if (input_state->sideIndex == 0) {
+            Gfx_DrawRgba16ImageRegion(sBackgroundImage, 200, 129, 351, 83);
         } else {
-            Gfx_DrawRgba16ImageRegion(sPartyGridTextureOffset, 80, 240, 351, 83);
+            Gfx_DrawRgba16ImageRegion(sBackgroundImage, 80, 240, 351, 83);
         }
-        input_state->summaryDisplayProgress -= 1;
+        input_state->overlayClearFrames -= 1;
     }
 }
 
+/* Draws a horizontally oscillating marker and advances its per-panel phase. */
 void BattleMenu_DrawCursorArrow(s16 x, s16 y, s16 oscillation_index) {
     if (sCursorOscillationPhases[oscillation_index] < 6) {
         x += sCursorOscillationPhases[oscillation_index];
@@ -458,13 +468,14 @@ void BattleMenu_DrawCursorArrow(s16 x, s16 y, s16 oscillation_index) {
     sCursorOscillationPhases[oscillation_index] = (sCursorOscillationPhases[oscillation_index] + 1) % 12;
 }
 
+/* Draws the order-confirmation choices and the current choice marker. */
 void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_state) {
     s32 sp38;
     s16 x;
     s16 y;
 
-    if (input_state->tagTeamPartnerPort == -1) {
-        if (input_state->isHuman == 0) {
+    if (input_state->partnerPanelIndex == -1) {
+        if (input_state->sideIndex == 0) {
             x = 200;
             y = 129;
         } else {
@@ -473,12 +484,12 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_
         }
 
         BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
-        BattleMenu_DrawBorderedPanel(x, y, 351, 83, input_state->port);
+        BattleMenu_DrawPanelBorder(x, y, 351, 83, input_state->controllerPort);
 
-        if (input_state->confirmCursorSelection == 0) {
-            BattleMenu_DrawCursorArrow(x + 38, y + 48, input_state->unk_0000);
+        if (input_state->confirmChoice == 0) {
+            BattleMenu_DrawCursorArrow(x + 38, y + 48, input_state->panelIndex);
         } else {
-            BattleMenu_DrawCursorArrow(x + 134, y + 48, input_state->unk_0000);
+            BattleMenu_DrawCursorArrow(x + 134, y + 48, input_state->panelIndex);
         }
 
         Font_BeginTranslucentTextRendering();
@@ -487,21 +498,21 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_
         Font_Printf(x + 79, y + 48, Text_GetString(NULL, 0, sTeamSelectText, 5));
         Font_Printf(x + 175, y + 48, Text_GetString(NULL, 0, sTeamSelectText, 6));
         Font_EndTexturedTextRendering();
-        input_state->summaryDisplayProgress = 2;
+        input_state->overlayClearFrames = 2;
     } else {
         x = input_state->x;
         y = input_state->y;
 
         BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
         Gfx_FillRectWithDisplayState(x + 5, y + 5, 461, 84, 0, 0, 0, 0x80);
-        if (input_state->confirmCursorSelection == 0) {
-            BattleMenu_DrawCursorArrow(x + 92, y + 60, input_state->unk_0000);
+        if (input_state->confirmChoice == 0) {
+            BattleMenu_DrawCursorArrow(x + 92, y + 60, input_state->panelIndex);
         } else {
-            BattleMenu_DrawCursorArrow(x + 188, y + 60, input_state->unk_0000);
+            BattleMenu_DrawCursorArrow(x + 188, y + 60, input_state->panelIndex);
         }
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         Font_Printf(x + 80, y + 20, Text_GetString(NULL, 0, sTeamSelectText, 4));
         Font_Printf(x + 128, y + 60, Text_GetString(NULL, 0, sTeamSelectText, 5));
         Font_Printf(x + 224, y + 60, Text_GetString(NULL, 0, sTeamSelectText, 6));
@@ -509,77 +520,79 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_
     }
 }
 
-void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(BattleOrderInputState* arg0) {
-    char sp38[256];
-    s32 sp34;
-    s32 sp30;
-    s32 sp2C;
+/* Draws the current rules' total-level-limit warning. */
+void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(BattleOrderInputState* input_state) {
+    char message_buffer[256];
+    s32 x;
+    s32 y;
+    s32 level_cap;
 
     switch (sSessionContext->ruleCategory) {
         case 3:
-            sp2C = 155;
+            level_cap = 155;
             break;
 
         case 4:
-            sp2C = 80;
+            level_cap = 80;
             break;
 
         case 5:
-            sp2C = 50;
+            level_cap = 50;
             break;
     }
 
-    if (arg0->tagTeamPartnerPort == -1) {
+    if (input_state->partnerPanelIndex == -1) {
         // clang-format off
-        if (arg0->isHuman == 0) {
-            sp34 = 200; sp30 = 129;
+        if (input_state->sideIndex == 0) {
+            x = 200; y = 129;
         } else {
-            sp34 = 80; sp30 = 240;
+            x = 80; y = 240;
         }
         // clang-format on
 
-        BattleMenu_DrawBorderedPanel(sp34, sp30, 351, 83, arg0->port);
+        BattleMenu_DrawPanelBorder(x, y, 351, 83, input_state->controllerPort);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
         Font_SetLineHeight(37);
-        Text_SetNumberToken(3, sp2C);
-        Font_Printf(sp34 + 16, sp30 + 11, Text_GetString(sp38, sizeof(sp38), sTeamSelectText, 7));
+        Text_SetNumberToken(3, level_cap);
+        Font_Printf(x + 16, y + 11, Text_GetString(message_buffer, sizeof(message_buffer), sTeamSelectText, 7));
         Font_EndTexturedTextRendering();
-        arg0->summaryDisplayProgress = 2;
+        input_state->overlayClearFrames = 2;
     } else {
-        sp34 = arg0->x;
-        sp30 = arg0->y;
+        x = input_state->x;
+        y = input_state->y;
 
-        BattleMenu_DrawOrderSelectPanel_PartyGrid(arg0);
-        Gfx_FillRectWithDisplayState(sp34 + 5, sp30 + 5, 461, 84, 0, 0, 0, 0x80);
+        BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
+        Gfx_FillRectWithDisplayState(x + 5, y + 5, 461, 84, 0, 0, 0, 0x80);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
         Font_SetLineHeight(40);
-        Text_SetNumberToken(3, sp2C);
-        Font_Printf(sp34 + 80, sp30 + 20, Text_GetString(NULL, 0, sTeamSelectText, 7));
+        Text_SetNumberToken(3, level_cap);
+        Font_Printf(x + 80, y + 20, Text_GetString(NULL, 0, sTeamSelectText, 7));
         Font_EndTexturedTextRendering();
     }
 }
 
+/* Draws the ready message, pulsing its text alpha for tag-team panels. */
 void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
     s32 x;
     s32 y;
     s32 alpha;
     char* text;
 
-    if (input_state->tagTeamPartnerPort == -1) {
+    if (input_state->partnerPanelIndex == -1) {
         // clang-format off
-        if (input_state->isHuman == 0) {
+        if (input_state->sideIndex == 0) {
             x = 200; y = 129;
         } else {
             x = 80; y = 240;
         }
         // clang-format on
-        input_state->summaryDisplayProgress = 0;
+        input_state->overlayClearFrames = 0;
         BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
-        BattleMenu_DrawBorderedPanel(x, y, 351, 83, input_state->port);
+        BattleMenu_DrawPanelBorder(x, y, 351, 83, input_state->controllerPort);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();
@@ -592,19 +605,19 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
         x = input_state->x;
         y = input_state->y;
 
-        if (input_state->loadProgress < 16) {
-            alpha = input_state->loadProgress * 16;
-        } else if (input_state->loadProgress < 35) {
+        if (input_state->readyPulseFrame < 16) {
+            alpha = input_state->readyPulseFrame * 16;
+        } else if (input_state->readyPulseFrame < 35) {
             alpha = 0xFF;
-        } else if (input_state->loadProgress < 50) {
-            alpha = (-input_state->loadProgress * 16) + 800;
+        } else if (input_state->readyPulseFrame < 50) {
+            alpha = (-input_state->readyPulseFrame * 16) + 800;
         } else {
             alpha = 0;
         }
 
-        input_state->loadProgress++;
-        if (input_state->loadProgress >= 61) {
-            input_state->loadProgress = 0;
+        input_state->readyPulseFrame++;
+        if (input_state->readyPulseFrame >= 61) {
+            input_state->readyPulseFrame = 0;
         }
 
         BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
@@ -621,12 +634,13 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
     }
 }
 
+/* Draws a Pokemon's stats, types, moves, and remaining PP. */
 void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_state) {
     s32 i;
     s16 x;
     s8 slot_to_summarize;
-    PokemonTypeString* temp_v1;
-    s32 idx;
+    PokemonTypeStyle* move_type_style;
+    s32 type_index;
     s32 y;
     BattleMon* pokemon_to_summarize;
 
@@ -635,7 +649,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
     y = input_state->y;
     pokemon_to_summarize = &input_state->pokemon[slot_to_summarize];
 
-    BattleMenu_DrawBorderedPanel(x, y, 471, 94, input_state->port);
+    BattleMenu_DrawPanelBorder(x, y, 471, 94, input_state->controllerPort);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -657,14 +671,14 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
         Font_Printf(x + 50, y + 67, Text_GetString(NULL, 0, sTeamSelectText, 14));
     }
 
-    idx = PokemonType_ToDisplayIndex(pokemon_to_summarize->type1);
-    Gfx_SetEnvColor(sPokemonTypeStrings[idx].color.r, sPokemonTypeStrings[idx].color.g, sPokemonTypeStrings[idx].color.b, 0xFF);
+    type_index = PokemonType_ToDisplayIndex(pokemon_to_summarize->type1);
+    Gfx_SetEnvColor(sPokemonTypeStyles[type_index].color.r, sPokemonTypeStyles[type_index].color.g, sPokemonTypeStyles[type_index].color.b, 0xFF);
     Font_Printf(x + 122, y + 47,
                 Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(pokemon_to_summarize->type1)));
 
     if (pokemon_to_summarize->type1 != pokemon_to_summarize->type2) {
-        idx = PokemonType_ToDisplayIndex(pokemon_to_summarize->type2);
-        Gfx_SetEnvColor(sPokemonTypeStrings[idx].color.r, sPokemonTypeStrings[idx].color.g, sPokemonTypeStrings[idx].color.b, 0xFF);
+        type_index = PokemonType_ToDisplayIndex(pokemon_to_summarize->type2);
+        Gfx_SetEnvColor(sPokemonTypeStyles[type_index].color.r, sPokemonTypeStyles[type_index].color.g, sPokemonTypeStyles[type_index].color.b, 0xFF);
         Font_Printf(x + 122, y + 67,
                     Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(pokemon_to_summarize->type2)));
     }
@@ -683,9 +697,9 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
         if (pokemon_to_summarize->moves[i] == 0) {
             break;
         }
-        temp_v1 = &sPokemonTypeStrings[gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].type];
+        move_type_style = &sPokemonTypeStyles[gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].type];
         Font_SetActive(4, 0);
-        Gfx_SetEnvColor(temp_v1->color.r, temp_v1->color.g, temp_v1->color.b, 0xFF);
+        Gfx_SetEnvColor(move_type_style->color.r, move_type_style->color.g, move_type_style->color.b, 0xFF);
         Font_Printf(x + 332, (i * 20) + y + 7,
                     Text_GetString(NULL, 0, sMoveNameTable, pokemon_to_summarize->moves[i] - 1));
         Font_SetActive(4, 0);
@@ -702,27 +716,27 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
             break;
         }
         Gfx_DrawTextureRgba16(x + 310, (i * 20) + y + 7, 20, 20,
-                              sPokemonTypeStrings[gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].type].string, 20, 0);
+                              sPokemonTypeStyles[gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].type].iconTexture, 20, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    if (input_state->summaryDisplayProgress > 0) {
-        if (input_state->isHuman == 0) {
-            Gfx_DrawRgba16ImageRegion(sPartyGridTextureOffset, 200, 129, 351, 83);
+    if (input_state->overlayClearFrames > 0) {
+        if (input_state->sideIndex == 0) {
+            Gfx_DrawRgba16ImageRegion(sBackgroundImage, 200, 129, 351, 83);
         } else {
-            Gfx_DrawRgba16ImageRegion(sPartyGridTextureOffset, 80, 240, 351, 83);
+            Gfx_DrawRgba16ImageRegion(sBackgroundImage, 80, 240, 351, 83);
         }
-        input_state->summaryDisplayProgress--;
+        input_state->overlayClearFrames--;
     }
 }
 
-// Better name: BattleMenu_DrawTrainerLabel
-void BattleMenu_DrawConfirmButtonLabel(BattleOrderInputState* input_state) {
+/* Draws the trainer name in a controller-colored panel. */
+void BattleMenu_DrawTrainerLabel(BattleOrderInputState* input_state) {
     s16 x;
     s16 y;
 
-    if (input_state->isHuman == 0) {
+    if (input_state->sideIndex == 0) {
         // clang-format off
         x = 80; y = 129;
         // clang-format on
@@ -731,7 +745,7 @@ void BattleMenu_DrawConfirmButtonLabel(BattleOrderInputState* input_state) {
         y = 291;
     }
 
-    BattleMenu_DrawBorderedPanel(x, y, 118, 32, input_state->port);
+    BattleMenu_DrawPanelBorder(x, y, 118, 32, input_state->controllerPort);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Font_Printf((x - (Font_MeasureTextExtent(8, 0, input_state->roster->trainerName) / 2)) + 59, y + 5,
@@ -739,13 +753,14 @@ void BattleMenu_DrawConfirmButtonLabel(BattleOrderInputState* input_state) {
     Font_EndTexturedTextRendering();
 }
 
+/* Draws the current panel mode when needed and updates its redraw countdown. */
 void BattleMenu_DrawOrderSelectPanel(BattleOrderInputState* input_state) {
-    if ((D_84803798 != 0) || (input_state->confirmCursorMoving != 0)) {
-        if ((D_84803798 != 0) && (input_state->tagTeamPartnerPort == -1)) {
-            BattleMenu_DrawConfirmButtonLabel(input_state);
+    if ((sFullRedrawFrames != 0) || (input_state->redrawFrames != 0)) {
+        if ((sFullRedrawFrames != 0) && (input_state->partnerPanelIndex == -1)) {
+            BattleMenu_DrawTrainerLabel(input_state);
         }
 
-        switch (input_state->doneSelecting) {
+        switch (input_state->panelMode) {
             case 0:
                 BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
                 break;
@@ -767,14 +782,15 @@ void BattleMenu_DrawOrderSelectPanel(BattleOrderInputState* input_state) {
                 break;
         }
 
-        if (input_state->confirmCursorMoving != 0) {
-            input_state->confirmCursorMoving--;
+        if (input_state->redrawFrames != 0) {
+            input_state->redrawFrames--;
         }
-    } else if (input_state->doneSelecting == 3) {
+    } else if (input_state->panelMode == 3) {
         BattleMenu_DrawOrderSelectPanel_Ready(input_state);
     }
 }
 
+/* Advances the scripted button presses used by the COM selection panel. */
 void BattleMenu_UpdateComPanelAutoInput(void) {
     s32 i;
     s8 number_of_pokemon_to_pick;
@@ -810,6 +826,7 @@ void BattleMenu_UpdateComPanelAutoInput(void) {
     }
 }
 
+/* Tests whether a roster slot already occurs in the panel's picked order. */
 s32 BattleMenu_IsSlotAlreadySelected(BattleOrderInputState* input_state, s8 slot) {
     s32 i;
     s8 pad;
@@ -824,6 +841,7 @@ s32 BattleMenu_IsSlotAlreadySelected(BattleOrderInputState* input_state, s8 slot
     return 0;
 }
 
+/* Tests picked level totals against the rules' intermediate and final limits. */
 s32 BattleMenu_PicksExceedLevelCap(BattleOrderInputState* input_state) {
     s32 i;
     s32 level_sum = 0;
@@ -863,6 +881,7 @@ s32 BattleMenu_PicksExceedLevelCap(BattleOrderInputState* input_state) {
     return 0;
 }
 
+/* Tests whether the panel has picked its required number of Pokemon. */
 s32 BattleMenu_IsOrderSelectionComplete(BattleOrderInputState* input_state) {
     s8 number_of_picks_allowed;
 
@@ -872,7 +891,7 @@ s32 BattleMenu_IsOrderSelectionComplete(BattleOrderInputState* input_state) {
         number_of_picks_allowed = input_state->rosterSize;
     } else {
         number_of_picks_allowed = input_state->rosterSize;
-        if ((input_state->tagTeamPartnerPort != -1) && (number_of_picks_allowed >= 4)) {
+        if ((input_state->partnerPanelIndex != -1) && (number_of_picks_allowed >= 4)) {
             number_of_picks_allowed = 3;
         }
     }
@@ -880,8 +899,8 @@ s32 BattleMenu_IsOrderSelectionComplete(BattleOrderInputState* input_state) {
     return input_state->numberOfPokemonPicked >= number_of_picks_allowed;
 }
 
-// better name: BattleMenu_SelectSlotOrShowSummary
-void BattleMenu_SelectOrderSlot(BattleOrderInputState* input_state, s8 selected_slot, s32 show_summary) {
+/* Opens a slot's details or adds it to the picked order and checks the result. */
+void BattleMenu_SelectSlotOrShowSummary(BattleOrderInputState* input_state, s8 selected_slot, s32 show_summary) {
     if (selected_slot >= input_state->rosterSize) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
         return;
@@ -889,8 +908,8 @@ void BattleMenu_SelectOrderSlot(BattleOrderInputState* input_state, s8 selected_
 
     if (show_summary != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        input_state->doneSelecting = 4;
-        input_state->confirmCursorMoving = 2;
+        input_state->panelMode = 4;
+        input_state->redrawFrames = 2;
         input_state->summaryDisplaySlot = selected_slot;
         return;
     }
@@ -902,171 +921,175 @@ void BattleMenu_SelectOrderSlot(BattleOrderInputState* input_state, s8 selected_
 
     input_state->pickedSlots[input_state->numberOfPokemonPicked] = selected_slot;
     input_state->numberOfPokemonPicked++;
-    BattleMenu_AppendOrderSlotIcon(input_state->isHuman, input_state->port);
+    BattleMenu_AppendOrderSlotIcon(input_state->sideIndex, input_state->controllerPort);
 
     if (input_state->rButtonHeld != 0) {
-        input_state->confirmCursorMoving = 2;
+        input_state->redrawFrames = 2;
     }
 
     if (BattleMenu_PicksExceedLevelCap(input_state) != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-        input_state->doneSelecting = 2;
-        input_state->confirmCursorMoving = 2;
+        input_state->panelMode = 2;
+        input_state->redrawFrames = 2;
         return;
     }
 
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
     if (BattleMenu_IsOrderSelectionComplete(input_state) != 0) {
-        input_state->doneSelecting = 1;
-        input_state->confirmCursorSelection = 0;
-        input_state->confirmCursorMoving = 2;
+        input_state->panelMode = 1;
+        input_state->confirmChoice = 0;
+        input_state->redrawFrames = 2;
     }
 }
 
-// better name: BattleMenu_UndoSelections
-void BattleMenu_UndoLastOrderSelection(BattleOrderInputState* order_state) {
-    BattleOrderInputState* temp_v0;
+/* Clears a nonempty panel's picks, resetting the partner panel when present. */
+void BattleMenu_UndoSelections(BattleOrderInputState* order_state) {
+    BattleOrderInputState* partner_state;
 
     if (order_state->numberOfPokemonPicked > 0) {
         order_state->numberOfPokemonPicked = 0;
 
-        BattleMenu_ResetOrderSlotIcons(order_state->isHuman);
+        BattleMenu_ResetOrderSlotIcons(order_state->sideIndex);
 
         if (order_state->rButtonHeld != 0) {
-            order_state->confirmCursorMoving = 2;
+            order_state->redrawFrames = 2;
         }
 
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
 
-        if (order_state->tagTeamPartnerPort != -1) {
-            temp_v0 = &sBattleOrderInputStates[order_state->tagTeamPartnerPort];
-            temp_v0->doneSelecting = 0;
-            temp_v0->numberOfPokemonPicked = 0;
-            temp_v0->rButtonHeld = 0;
-            temp_v0->confirmCursorMoving = 2;
+        if (order_state->partnerPanelIndex != -1) {
+            partner_state = &sBattleOrderInputStates[order_state->partnerPanelIndex];
+            partner_state->panelMode = 0;
+            partner_state->numberOfPokemonPicked = 0;
+            partner_state->rButtonHeld = 0;
+            partner_state->redrawFrames = 2;
         }
     }
 }
 
+/* Maps slot buttons to picking or checking Pokemon and handles L-cancel. */
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* controller, BattleOrderInputState* input_state) {
     s32 r_held_down = BTN_IS_DOWN(controller, BTN_R);
 
     if (BTN_IS_PRESSED(controller, BTN_R)) {
         // clang-format off
-        input_state->rButtonHeld = 1; input_state->confirmCursorMoving = 2;
+        input_state->rButtonHeld = 1; input_state->redrawFrames = 2;
         // clang-format on
     }
 
-    if (controller->buttonHeld & 0x10) {
+    if (controller->buttonReleased & 0x10) {
         input_state->rButtonHeld = 0;
-        input_state->confirmCursorMoving = 2;
+        input_state->redrawFrames = 2;
     }
 
     if (BTN_IS_PRESSED(controller, BTN_L)) {
-        BattleMenu_UndoLastOrderSelection(input_state);
+        BattleMenu_UndoSelections(input_state);
     } else if (BTN_IS_PRESSED(controller, BTN_B)) {
-        BattleMenu_SelectOrderSlot(input_state, 0, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 0, r_held_down);
     } else if (BTN_IS_PRESSED(controller, BTN_CLEFT)) {
-        BattleMenu_SelectOrderSlot(input_state, 1, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 1, r_held_down);
     } else if (BTN_IS_PRESSED(controller, BTN_CUP)) {
-        BattleMenu_SelectOrderSlot(input_state, 2, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 2, r_held_down);
     } else if (BTN_IS_PRESSED(controller, BTN_A)) {
-        BattleMenu_SelectOrderSlot(input_state, 3, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 3, r_held_down);
     } else if (BTN_IS_PRESSED(controller, BTN_CDOWN)) {
-        BattleMenu_SelectOrderSlot(input_state, 4, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 4, r_held_down);
     } else if (BTN_IS_PRESSED(controller, BTN_CRIGHT)) {
-        BattleMenu_SelectOrderSlot(input_state, 5, r_held_down);
+        BattleMenu_SelectSlotOrShowSummary(input_state, 5, r_held_down);
     }
 }
 
+/* Handles confirmation choices, accepting the order or restarting selection. */
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* controller, BattleOrderInputState* input_state) {
-    BattleOrderInputState* temp_v0_2;
+    BattleOrderInputState* partner_state;
 
     if (BTN_IS_PRESSED(controller, BTN_R)) {
         input_state->rButtonHeld = 1;
-        input_state->confirmCursorMoving = 2;
+        input_state->redrawFrames = 2;
     }
-    if (controller->buttonHeld & 0x10) {
+    if (controller->buttonReleased & 0x10) {
         input_state->rButtonHeld = 0;
-        input_state->confirmCursorMoving = 2;
+        input_state->redrawFrames = 2;
     }
 
     if (BTN_IS_PRESSED(controller, BTN_DLEFT | BTN_DRIGHT)) {
-        input_state->confirmCursorMoving = 2;
-        input_state->confirmCursorSelection ^= 1;
+        input_state->redrawFrames = 2;
+        input_state->confirmChoice ^= 1;
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     } else if (BTN_IS_PRESSED(controller, BTN_A)) {
-        if (input_state->confirmCursorSelection == 0) {
-            input_state->confirmCursorMoving = 2;
-            input_state->doneSelecting = 3;
-            input_state->loadProgress = 0;
+        if (input_state->confirmChoice == 0) {
+            input_state->redrawFrames = 2;
+            input_state->panelMode = 3;
+            input_state->readyPulseFrame = 0;
             Audio_PlaySoundEffectById(9);
         } else {
-            input_state->confirmCursorMoving = 2;
-            input_state->doneSelecting = 0;
+            input_state->redrawFrames = 2;
+            input_state->panelMode = 0;
             input_state->numberOfPokemonPicked = 0;
             input_state->rButtonHeld = 0;
-            BattleMenu_ResetOrderSlotIcons(input_state->isHuman);
+            BattleMenu_ResetOrderSlotIcons(input_state->sideIndex);
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
-            if (input_state->tagTeamPartnerPort != -1) {
-                temp_v0_2 = &sBattleOrderInputStates[input_state->tagTeamPartnerPort];
-                temp_v0_2->doneSelecting = 0;
-                temp_v0_2->numberOfPokemonPicked = 0;
-                temp_v0_2->rButtonHeld = 0;
-                temp_v0_2->confirmCursorMoving = 2;
+            if (input_state->partnerPanelIndex != -1) {
+                partner_state = &sBattleOrderInputStates[input_state->partnerPanelIndex];
+                partner_state->panelMode = 0;
+                partner_state->numberOfPokemonPicked = 0;
+                partner_state->rButtonHeld = 0;
+                partner_state->redrawFrames = 2;
             }
         }
     }
-    input_state->confirmCursorMoving = 2;
+    input_state->redrawFrames = 2;
 }
 
+/* Dismisses the level-limit warning and clears this panel's picks. */
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* controller, BattleOrderInputState* input_state) {
     if (BTN_IS_PRESSED(controller, BTN_A | BTN_B)) {
-        input_state->doneSelecting = 0;
+        input_state->panelMode = 0;
         input_state->numberOfPokemonPicked = 0;
         input_state->rButtonHeld = 0;
-        input_state->confirmCursorMoving = 2;
-        BattleMenu_ResetOrderSlotIcons(input_state->isHuman);
+        input_state->redrawFrames = 2;
+        BattleMenu_ResetOrderSlotIcons(input_state->sideIndex);
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     }
 }
 
+/* Closes details when the corresponding slot button is released. */
 void BattleMenu_HandleOrderSelectPanel_MonDetailInput(Controller* controller, BattleOrderInputState* input_state) {
     s32 is_valid_button = 0;
 
     switch (input_state->summaryDisplaySlot) {
         case 0:
-            if (controller->buttonHeld & BTN_B) {
+            if (controller->buttonReleased & BTN_B) {
                 is_valid_button = 1;
             }
             break;
 
         case 1:
-            if (controller->buttonHeld & BTN_CLEFT) {
+            if (controller->buttonReleased & BTN_CLEFT) {
                 is_valid_button = 1;
             }
             break;
 
         case 2:
-            if (controller->buttonHeld & BTN_CUP) {
+            if (controller->buttonReleased & BTN_CUP) {
                 is_valid_button = 1;
             }
             break;
 
         case 3:
-            if (controller->buttonHeld & BTN_A) {
+            if (controller->buttonReleased & BTN_A) {
                 is_valid_button = 1;
             }
             break;
 
         case 4:
-            if (controller->buttonHeld & BTN_CDOWN) {
+            if (controller->buttonReleased & BTN_CDOWN) {
                 is_valid_button = 1;
             }
             break;
 
         case 5:
-            if (controller->buttonHeld & BTN_CRIGHT) {
+            if (controller->buttonReleased & BTN_CRIGHT) {
                 is_valid_button = 1;
             }
             break;
@@ -1076,23 +1099,24 @@ void BattleMenu_HandleOrderSelectPanel_MonDetailInput(Controller* controller, Ba
         if (!(controller->buttonDown & BTN_R)) {
             input_state->rButtonHeld = 0;
         }
-        input_state->doneSelecting = 0;
-        input_state->confirmCursorMoving = 2;
+        input_state->panelMode = 0;
+        input_state->redrawFrames = 2;
     }
 }
 
-s32 BattleMenu_UpdateOrderSelectPanel(s32 do_not_update, BattleOrderInputState* input_state) {
+/* Dispatches panel input while enabled and reports whether the panel is ready. */
+s32 BattleMenu_UpdateOrderSelectPanel(s32 fade_mode, BattleOrderInputState* input_state) {
     Controller* controller;
     s32 done = 0;
 
     if (input_state->roster->isHuman & 0x2) {
         controller = &sComController;
     } else {
-        controller = &gControllers[input_state->port];
+        controller = &gControllers[input_state->controllerPort];
     }
 
-    if (do_not_update == 0) {
-        switch (input_state->doneSelecting) {
+    if (fade_mode == 0) {
+        switch (input_state->panelMode) {
             case 0:
                 BattleMenu_HandleOrderSelectPanel_PartyInput(controller, input_state);
                 break;
@@ -1117,14 +1141,18 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 do_not_update, BattleOrderInputState* 
     return done;
 }
 
-s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
+/* Updates and draws selection for one frame, requesting exit when all panels are ready.
+ * BgStage_WaitForCondition supplies the fade mode; nonzero modes block selection input.
+ */
+//@src/stage_loader.c
+s32 BattleMenu_UpdateOrderSelect(s32 fade_mode) {
     UNUSED s32 pad;
     s32 i;
-    s32 var_s2;
-    s32 sp30;
+    s32 ready_panel_count;
+    s32 all_ready;
 
-    var_s2 = 0;
-    sp30 = 0;
+    ready_panel_count = 0;
+    all_ready = 0;
 
     Cont_StartReadInputs();
     Cont_ReadInputs();
@@ -1133,50 +1161,52 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     GeoRender_AdvanceFrameCounter();
     BgStage_DrawFrame();
 
-    if (D_84803798 != 0) {
+    if (sFullRedrawFrames != 0) {
         BattleMenu_DrawBottomActionButtons();
     }
 
-    for (i = 0; i < D_8480379C; i++) {
-        var_s2 += BattleMenu_UpdateOrderSelectPanel(arg0, &sBattleOrderInputStates[i]);
+    for (i = 0; i < sOrderSelectPanelCount; i++) {
+        ready_panel_count += BattleMenu_UpdateOrderSelectPanel(fade_mode, &sBattleOrderInputStates[i]);
         BattleMenu_DrawOrderSelectPanel(&sBattleOrderInputStates[i]);
     }
 
     BattleMenu_DrawTeamOrderSidebarTeam0();
     BattleMenu_DrawTeamOrderSidebarTeam1();
-    BattleMenu_DrawScrollingRulesText();
+    BattleMenu_DrawScrollingHelpText();
 
-    if (arg0 == 0) {
-        if (var_s2 == D_8480379C) {
-            sp30 = 1;
-            StageContext_SetClearColor(0xFFFF);
+    if (fade_mode == 0) {
+        if (ready_panel_count == sOrderSelectPanelCount) {
+            all_ready = 1;
+            StageContext_SetClearColor(0xFFFF); // #FFFFFF
             Audio_StopMusic(0x10);
         }
 
-        if (D_84803798 > 0) {
-            D_84803798 -= 1;
+        if (sFullRedrawFrames > 0) {
+            sFullRedrawFrames -= 1;
         }
     } else {
-        D_84803798 = 2;
+        sFullRedrawFrames = 2;
     }
-    return sp30;
+    return all_ready;
 }
 
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* battle_session_teams, TeamOrderState* order_state) {
-    TeamRoster* temp_v0;
-    s32 tmp;
+/* Moves the trainer owning the first selection into the lead tag-team position. */
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* battle_session_teams, TeamOrderState* order_state) {
+    TeamRoster* lead_roster;
+    s32 first_controller_port;
 
     if (battle_session_teams->tagTeamSize == 2) {
-        tmp = ((order_state->pokemonPicked[0] >> 4) & 0xF) - 1;
-        if (tmp == battle_session_teams->tagTeamMember[1]->controllerPort) {
-            temp_v0 = battle_session_teams->tagTeamMember[0];
+        first_controller_port = ((order_state->slotIconStates[0] >> 4) & 0xF) - 1;
+        if (first_controller_port == battle_session_teams->tagTeamMember[1]->controllerPort) {
+            lead_roster = battle_session_teams->tagTeamMember[0];
             battle_session_teams->tagTeamMember[0] = battle_session_teams->tagTeamMember[1];
-            battle_session_teams->tagTeamMember[1] = temp_v0;
+            battle_session_teams->tagTeamMember[1] = lead_roster;
         }
     }
 }
 
-void BattleMenu_FillDefaultOrder(s8* pokemon_slots, s32 number_of_slots_filled) {
+/* Appends the unpicked roster slots in ascending order to fill six entries. */
+void BattleMenu_AppendUnpickedSlots(s8* pokemon_slots, s32 number_of_slots_filled) {
     s32 i;
     s32 j;
 
@@ -1194,51 +1224,55 @@ void BattleMenu_FillDefaultOrder(s8* pokemon_slots, s32 number_of_slots_filled) 
     }
 }
 
+/* Copies final orders into battle rosters and sets each tag team's lead trainer.
+ * COM rosters keep their original order rather than using the scripted panel picks.
+ */
 void BattleMenu_CommitOrderSelection(void) {
     s32 i;
-    s32 var_s4;
-    TeamRoster* temp_s1;
-    BattleOrderInputState* var_s2;
+    s32 panels_remaining;
+    TeamRoster* roster;
+    BattleOrderInputState* input_state;
 
-    var_s2 = sBattleOrderInputStates;
-    var_s4 = D_8480379C;
+    input_state = sBattleOrderInputStates;
+    panels_remaining = sOrderSelectPanelCount;
 
-    while (var_s4-- > 0) {
-        temp_s1 = var_s2->roster;
-        if (temp_s1->isHuman & 0x2) {
-            temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
-            _bcopy(temp_s1->rosterInfo->battleMon, temp_s1->pokemonPicked, 504);
+    while (panels_remaining-- > 0) {
+        roster = input_state->roster;
+        if (roster->isHuman & 0x2) {
+            roster->numberOfPokemonBrought = roster->rosterInfo->numberOfPokemonCanBePicked;
+            _bcopy(roster->rosterInfo->battleMon, roster->pokemonPicked, 504);
         } else {
-            BattleMenu_FillDefaultOrder(var_s2->pickedSlots, var_s2->numberOfPokemonPicked);
-            temp_s1->numberOfPokemonBrought = var_s2->numberOfPokemonPicked;
+            BattleMenu_AppendUnpickedSlots(input_state->pickedSlots, input_state->numberOfPokemonPicked);
+            roster->numberOfPokemonBrought = input_state->numberOfPokemonPicked;
 
-            for (i = 0; i < temp_s1->rosterInfo->numberOfPokemonCanBePicked; i++) {
-                temp_s1->pokemonPicked[i] = var_s2->pokemon[var_s2->pickedSlots[i]];
+            for (i = 0; i < roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
+                roster->pokemonPicked[i] = input_state->pokemon[input_state->pickedSlots[i]];
             }
         }
-        var_s2++;
+        input_state++;
     }
 
-    BattleMenu_RearrangeLeadPokemon(&sSessionContext->battleSides[0], &sTeamOrderStates[0]);
-    BattleMenu_RearrangeLeadPokemon(&sSessionContext->battleSides[1], &sTeamOrderStates[1]);
+    BattleMenu_SetLeadTagTeamMember(&sSessionContext->battleSides[0], &sTeamOrderStates[0]);
+    BattleMenu_SetLeadTagTeamMember(&sSessionContext->battleSides[1], &sTeamOrderStates[1]);
 }
 
-void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 is_human, s32 port) {
+/* Initializes one trainer's panel and loads its roster icons. */
+void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 side_index, s32 partner_panel_index) {
     s32 i;
     BattleOrderInputState* input_state;
     BattleMon* pokemon;
 
-    input_state = &sBattleOrderInputStates[D_8480379C];
-    input_state->unk_0000 = D_8480379C;
-    input_state->port = roster->controllerPort;
-    input_state->tagTeamPartnerPort = port;
-    input_state->isHuman = is_human;
-    input_state->doneSelecting = 0;
+    input_state = &sBattleOrderInputStates[sOrderSelectPanelCount];
+    input_state->panelIndex = sOrderSelectPanelCount;
+    input_state->controllerPort = roster->controllerPort;
+    input_state->partnerPanelIndex = partner_panel_index;
+    input_state->sideIndex = side_index;
+    input_state->panelMode = 0;
     input_state->numberOfPokemonPicked = 0;
-    input_state->confirmCursorMoving = 2;
-    input_state->summaryDisplayProgress = 0;
+    input_state->redrawFrames = 2;
+    input_state->overlayClearFrames = 0;
     input_state->rButtonHeld = 0;
-    input_state->confirmCursorSelection = 0;
+    input_state->confirmChoice = 0;
     input_state->x = x;
     input_state->y = y;
     input_state->rosterSize = roster->rosterInfo->numberOfPokemonCanBePicked;
@@ -1253,15 +1287,16 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 is_hum
         PokeIcon_LoadModelTextureForMon(input_state->firstPokemonIcon[i], 0, pokemon);
     }
 
-    D_8480379C++;
+    sOrderSelectPanelCount++;
 }
 
+/* Resets selection state and creates controller-ordered panels for both sides. */
 void BattleMenu_InitOrderSelectPanels(SessionContext* session_context) {
     BattleSessionTeams* session_teams = &session_context->battleSides[0];
 
     sSessionContext = session_context;
-    D_8480379C = 0;
-    D_84803798 = 2;
+    sOrderSelectPanelCount = 0;
+    sFullRedrawFrames = 2;
     sScrollingTextProgress = 0;
     sComNextButtonPress = 0;
     sComSelectionTimer = 0;
@@ -1275,22 +1310,22 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* session_context) {
     if (session_teams->tagTeamSize == 1) {
         BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[0], 0, -1);
     } else if (session_teams->tagTeamMember[0]->controllerPort < session_teams->tagTeamMember[1]->controllerPort) {
-        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[0], 0, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[1], 0, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[0], 0, sOrderSelectPanelCount + 1);
+        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[1], 0, sOrderSelectPanelCount - 1);
     } else {
-        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[1], 0, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[0], 0, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[1], 0, sOrderSelectPanelCount + 1);
+        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[0], 0, sOrderSelectPanelCount - 1);
     }
 
     session_teams++;
     if (session_teams->tagTeamSize == 1) {
         BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[0], 1, -1);
     } else if (session_teams->tagTeamMember[0]->controllerPort < session_teams->tagTeamMember[1]->controllerPort) {
-        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[0], 1, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[1], 1, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[0], 1, sOrderSelectPanelCount + 1);
+        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[1], 1, sOrderSelectPanelCount - 1);
     } else {
-        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[1], 1, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[0], 1, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[1], 1, sOrderSelectPanelCount + 1);
+        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[0], 1, sOrderSelectPanelCount - 1);
     }
 }
 
@@ -1300,6 +1335,7 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* session_context) {
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_RunOrderSelectScreen.s")
 // clang-format on
 #else
+/* Loads selection resources, runs the screen through its fades, and commits the orders. */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     StageContext* stage_context;
 
@@ -1310,8 +1346,8 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     Text_InitStringTables();
     Font_Init(60, 0);
     PokeIcon_OpenModelArchive();
-    D_84803780 = ASSET_LOAD2(backgrounds, 1, 1);
-    sPartyGridTextureOffset = BinArchive_GetFile(D_84803780, 5);
+    sBackgroundArchive = ASSET_LOAD2(backgrounds, 1, 1);
+    sBackgroundImage = BinArchive_GetFile(sBackgroundArchive, 5);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, order_select_ui, 0);

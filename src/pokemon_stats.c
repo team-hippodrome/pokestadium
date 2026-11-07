@@ -2518,7 +2518,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                 sp1C->unk_266 = arg3;
 #endif
 #if defined(VERSION_JP)
-                sp1C->unk_25D[arg3].unk_00 = 0xFF;
+                sp1C->unk_25D[arg3].id = 0xFF;
 #else
                 sp1C->unk_267[arg3].id = 0xFF;
 #endif
@@ -2531,7 +2531,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                 sp1C->unk_049 = arg3;
 #endif
 #if defined(VERSION_JP)
-                sp1C->unk_045[arg3].unk_00 = 0xFF;
+                sp1C->unk_045[arg3].id = 0xFF;
 #else
                 sp1C->unk_04A[arg3].id = 0xFF;
 #endif
@@ -2576,7 +2576,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
                 sp1C->unk_266 = sp18;
 #endif
 #if defined(VERSION_JP)
-                sp1C->unk_25D[sp18].unk_00 = 0xFF;
+                sp1C->unk_25D[sp18].id = 0xFF;
 #else
                 sp1C->unk_267[sp18].id = 0xFF;
 #endif
@@ -2589,7 +2589,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
                 sp1C->unk_049 = sp18;
 #endif
 #if defined(VERSION_JP)
-                sp1C->unk_045[sp18].unk_00 = 0xFF;
+                sp1C->unk_045[sp18].id = 0xFF;
 #else
                 sp1C->unk_04A[sp18].id = 0xFF;
 #endif
@@ -2619,7 +2619,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
 
             case 35:
 #if defined(VERSION_JP)
-                arg4->unk_00 = temp_v0->unk_045[arg3];
+                arg4->species = temp_v0->unk_045[arg3];
 #else
                 arg4->species = temp_v0->unk_04A[arg3];
 #endif
@@ -2627,7 +2627,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
 
             case 34:
 #if defined(VERSION_JP)
-                arg4->unk_00 = temp_v0->unk_25D[arg3];
+                arg4->species = temp_v0->unk_25D[arg3];
 #else
                 arg4->species = temp_v0->unk_267[arg3];
 #endif
@@ -2661,7 +2661,7 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 
             case 35:
 #if defined(VERSION_JP)
-                ptr->unk_045[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_045[arg3] = arg4->unk_000[0].species;
 #else
                 ptr->unk_04A[arg3] = arg4->unk_000[0].species;
 #endif
@@ -2669,7 +2669,7 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 
             case 34:
 #if defined(VERSION_JP)
-                ptr->unk_25D[arg3] = arg4->unk_000[0].unk_00;
+                ptr->unk_25D[arg3] = arg4->unk_000[0].species;
 #else
                 ptr->unk_267[arg3] = arg4->unk_000[0].species;
 #endif

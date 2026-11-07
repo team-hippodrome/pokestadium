@@ -492,7 +492,7 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         for (i = 0; i < var_a1->numberOfPokemonBrought; i++) {
             BattleMon* ptr = &var_a1->pokemonPicked[i];
 
-            if (ptr->species.unk_00 == 0x19) {
+            if (ptr->species.id == 0x19) {
                 for (j = 0; j < 4; j++) {
                     if (ptr->moves[j] == 0) {
                         break;

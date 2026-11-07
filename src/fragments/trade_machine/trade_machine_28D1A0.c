@@ -305,9 +305,9 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                     sp11C->level);
         Font_SetActive(8, 0);
         Font_Printf(arg0->unk_04 + 0x12E, arg0->unk_06 + 8, "%s%03d", Text_GetString(NULL, 0, sTradePokemonDetailText, 0x16),
-                    sp11C->species.unk_00);
+                    sp11C->species.id);
         Font_SetActive(8, 0);
-        Font_Printf(arg0->unk_04 + 0x19C, arg0->unk_06 + 8, Trade_GetSpeciesName(sp11C->species.unk_00));
+        Font_Printf(arg0->unk_04 + 0x19C, arg0->unk_06 + 8, Trade_GetSpeciesName(sp11C->species.id));
 
         temp_s0 = PokemonType_ToDisplayIndex(sp11C->type1);
         temp_s1_2 = PokemonType_ToDisplayIndex(sp11C->type2);

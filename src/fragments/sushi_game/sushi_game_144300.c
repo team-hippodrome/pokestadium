@@ -127,22 +127,22 @@ void SushiGame_PollInput(void) {
     temp_v0 = *D_86806D68;
     D_86807518.buttonDown |= temp_v0->buttonDown;
     D_86807518.buttonPressed |= temp_v0->buttonPressed;
-    D_86807518.buttonHeld |= temp_v0->buttonHeld;
+    D_86807518.buttonReleased |= temp_v0->buttonReleased;
 
     temp_v0 = *D_86806D6C;
     D_86807518.buttonDown |= temp_v0->buttonDown;
     D_86807518.buttonPressed |= temp_v0->buttonPressed;
-    D_86807518.buttonHeld |= temp_v0->buttonHeld;
+    D_86807518.buttonReleased |= temp_v0->buttonReleased;
 
     temp_v0 = *D_86806D70;
     D_86807518.buttonDown |= temp_v0->buttonDown;
     D_86807518.buttonPressed |= temp_v0->buttonPressed;
-    D_86807518.buttonHeld |= temp_v0->buttonHeld;
+    D_86807518.buttonReleased |= temp_v0->buttonReleased;
 
     temp_v0 = *D_86806D74;
     D_86807518.buttonDown |= temp_v0->buttonDown;
     D_86807518.buttonPressed |= temp_v0->buttonPressed;
-    D_86807518.buttonHeld |= temp_v0->buttonHeld;
+    D_86807518.buttonReleased |= temp_v0->buttonReleased;
 
     if (1) {}
 }

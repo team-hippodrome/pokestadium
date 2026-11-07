@@ -155,10 +155,11 @@ void Gfx_DrawTiledRgba16Image(u8* image) {
 }
 
 
-void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y2) {
+/* Restores a rectangle from a tiled background image using its starting position and dimensions. */
+void Gfx_DrawRgba16ImageRegion(u32 image_address, s16 x1, s16 y1, s16 width, s16 height) {
     s32 div = 32;
-    s16 width;
-    s16 height;
+    s16 end_x;
+    s16 end_y;
     s16 sp36;
     s16 sp30;
     s16 j;
@@ -170,8 +171,8 @@ void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y
     s16 texture_start_x;
     s16 texture_start_y;
 
-    width = x1 + x2;
-    height = y1 + y2;
+    end_x = x1 + width;
+    end_y = y1 + height;
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
@@ -181,16 +182,16 @@ void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGB, G_CC_DECALRGB);
     gDPPipeSync(gDisplayListHead++);
 
-    for (i = (y1 >> 5) << 5; i < height; i += 32) {
-        for (j = (x1 >> 5) << 5; j < width; j += 32) {
+    for (i = (y1 >> 5) << 5; i < end_y; i += 32) {
+        for (j = (x1 >> 5) << 5; j < end_x; j += 32) {
             if (j < x1) {
                 final_x1 = x1;
             } else {
                 final_x1 = j;
             }
 
-            if (width < j + 32) {
-                final_x2 = width;
+            if (end_x < j + 32) {
+                final_x2 = end_x;
             } else {
                 final_x2 = j + 32;
             }
@@ -201,8 +202,8 @@ void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y
                 final_y1 = i;
             }
 
-            if (height < i + 32) {
-                final_y2 = height;
+            if (end_y < i + 32) {
+                final_y2 = end_y;
             } else {
                 final_y2 = i + 32;
             }
@@ -210,7 +211,7 @@ void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y
             texture_start_x = final_x1 - j;
             texture_start_y = final_y1 - i;
 
-            gDPLoadTextureBlock(gDisplayListHead++, ((((i / div) * 20) + (j / div)) << 9) + texture_offset, G_IM_FMT_RGBA,
+            gDPLoadTextureBlock(gDisplayListHead++, ((((i / div) * 20) + (j / div)) << 9) + image_address, G_IM_FMT_RGBA,
                                 G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                                 G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(gDisplayListHead++, final_x1 * 4, final_y1 * 4, final_x2 * 4, final_y2 * 4, G_TX_RENDERTILE,
@@ -335,7 +336,7 @@ u8 Font_MapGlyphCode(u16 index) {
 u8 Font_GetGlyphAdvance(FontSet* font_set, u16 index) {
     s32 idx = Font_MapGlyphCode(index);
 
-    return font_set->atlas[idx];
+    return font_set->glyphWidths[idx];
 }
 
 void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1) {
@@ -344,7 +345,7 @@ void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1) {
 
 void Font_FreeSetAsset(UNUSED s32 arg0, s32 arg1) {
     if (gFontContext != NULL) {
-        gFontContext->unk_00[arg1].atlas = 0;
+        gFontContext->unk_00[arg1].glyphWidths = 0;
         gFontContext->unk_00[arg1].texture = 0;
     }
 }
@@ -374,12 +375,12 @@ void Font_LoadSet(s32 arg0, s32 arg1, s32 arg2) {
     ret_func_8000484C* temp_v0_2;
 
     sp1C = Font_GetSetIndexFromMask(arg0);
-    if (gFontContext->unk_00[sp1C].atlas == 0) {
+    if (gFontContext->unk_00[sp1C].glyphWidths == 0) {
         temp_v0_2 = BinArchive_GetFile(gFontContext->unk_48, sp1C);
         gFontContext->setIndex = sp1C;
         gFontContext->unk_00[sp1C].width = arg1;
         gFontContext->unk_00[sp1C].height = arg2;
-        gFontContext->unk_00[sp1C].atlas = temp_v0_2;
+        gFontContext->unk_00[sp1C].glyphWidths = temp_v0_2;
         gFontContext->unk_00[sp1C].texture = &temp_v0_2->unk_90;
         main_pool_set_func(temp_v0_2, sp1C, &Font_FreeSetAsset);
     }
@@ -429,38 +430,38 @@ void Font_LoadSizes(s32 arg0) {
 void Font_UnloadSizes(s32 arg0) {
     if (gFontContext != NULL) {
         if (arg0 & 1) {
-            if (gFontContext->unk_00[0].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[0].atlas);
+            if (gFontContext->unk_00[0].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[0].glyphWidths);
             }
         }
 
         if (arg0 & 2) {
-            if (gFontContext->unk_00[1].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[1].atlas);
+            if (gFontContext->unk_00[1].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[1].glyphWidths);
             }
         }
 
         if (arg0 & 4) {
-            if (gFontContext->unk_00[2].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[2].atlas);
+            if (gFontContext->unk_00[2].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[2].glyphWidths);
             }
         }
 
         if (arg0 & 8) {
-            if (gFontContext->unk_00[3].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[3].atlas);
+            if (gFontContext->unk_00[3].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[3].glyphWidths);
             }
         }
 
         if (arg0 & 0x10) {
-            if (gFontContext->unk_00[4].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[4].atlas);
+            if (gFontContext->unk_00[4].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[4].glyphWidths);
             }
         }
 
         if (arg0 & 0x20) {
-            if (gFontContext->unk_00[5].atlas != NULL) {
-                main_pool_try_free(gFontContext->unk_00[5].atlas);
+            if (gFontContext->unk_00[5].glyphWidths != NULL) {
+                main_pool_try_free(gFontContext->unk_00[5].glyphWidths);
             }
         }
     }
@@ -469,8 +470,8 @@ void Font_UnloadSizes(s32 arg0) {
 void Font_SetActive(s32 mask, s32 arg1) {
     if (gFontContext != NULL) {
         gFontContext->setIndex = Font_GetSetIndexFromMask(mask);
-        gFontContext->width = arg1;
-        gFontContext->lineBreakFlag &= ~2;
+        gFontContext->letterSpacing = arg1;
+        gFontContext->flags &= ~2;
     }
 }
 
@@ -494,8 +495,8 @@ s16 Font_DrawChar(s16 x, s16 y, s16 char_index) {
     sp88 = Font_MapGlyphCode(char_index) * character->width * character->height;
     width = Font_GetGlyphAdvance(character, char_index);
 
-    if ((gFontContext->lineBreakFlag & 1) && !(gFontContext->lineBreakFlag & 2)) {
-        gFontContext->lineBreakFlag |= 2;
+    if ((gFontContext->flags & 1) && !(gFontContext->flags & 2)) {
+        gFontContext->flags |= 2;
 
         gDPLoadMultiBlock(gDisplayListHead++, (u32)character->texture + (character->width * 0x90 * character->height), 0x0100,
                           1, G_IM_FMT_I, G_IM_SIZ_8b, character->width, character->height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -512,7 +513,7 @@ s16 Font_DrawChar(s16 x, s16 y, s16 char_index) {
 
     Gfx_DrawTexturedRectClipped(x, y, width, character->height, 0, 0, 0x400, 0x400, 0);
 
-    x += width + gFontContext->width;
+    x += width + gFontContext->letterSpacing;
     if (gFontContext->setIndex >= 2) {
         x -= 2;
     } else {
@@ -548,7 +549,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
         while (chr != 0) {
             var_v0 = 1;
 
-            if (!(gFontContext->lineBreakFlag & 4) && (chr == 0xA)) {
+            if (!(gFontContext->flags & 4) && (chr == 0xA)) {
                 var_s1 = temp_s5;
                 var_v0 = 0;
                 y += gFontContext->lineHeight;
@@ -583,15 +584,15 @@ void Font_SetLineHeight(s32 line_height) {
 }
 
 void Font_DisableLineBreak(void) {
-    gFontContext->lineBreakFlag |= 4;
+    gFontContext->flags |= 4;
 }
 
 void Font_EnableLineBreak(void) {
-    gFontContext->lineBreakFlag &= ~4;
+    gFontContext->flags &= ~4;
 }
 
 void Font_BeginTranslucentTextRendering(void) {
-    gFontContext->lineBreakFlag = 0;
+    gFontContext->flags = 0;
     gFontContext->lineHeight = 0x28;
     gFontContext->unk_4C = 0;
 
@@ -603,14 +604,14 @@ void Font_EndTexturedTextRendering(void) {
 }
 
 void Font_EnableTwoCycleTexturing(void) {
-    gFontContext->lineBreakFlag |= 1;
-    gFontContext->lineBreakFlag &= ~2;
+    gFontContext->flags |= 1;
+    gFontContext->flags &= ~2;
 
     gSPDisplayList(gDisplayListHead++, D_8006F768);
 }
 
 void Font_DisableTwoCycleTexturing(void) {
-    gFontContext->lineBreakFlag &= ~3;
+    gFontContext->flags &= ~3;
     gSPDisplayList(gDisplayListHead++, D_8006F798);
 }
 
@@ -643,7 +644,7 @@ s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...) {
     }
 
     temp_s4 = &gFontContext->unk_00[var_a0];
-    if (temp_s4->atlas != NULL) {
+    if (temp_s4->glyphWidths != NULL) {
         temp_s0 = 0;
         temp_v0 = _Printf(String_CopyBytesAndAdvance, sp5C, fmt, args);
         if (temp_v0 > 0) {

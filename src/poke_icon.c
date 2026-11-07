@@ -156,7 +156,7 @@ void func_8001A46C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
         w = arg0->unk_08[arg1].unk_0C->width;
         h = arg0->unk_08[arg1].unk_0C->height;
         bzero(arg0->unk_08[arg1].unk_0C->img_p, w * h * 2);
-        if (((s32)arg2->species.species > 0) && ((s32)arg2->id.id < 0x98)) {
+        if (((s32)arg2->species.id > 0) && ((s32)arg2->species.id < 0x98)) {
             arg0->unk_08[arg1].unk_00 = 3;
             arg0->unk_08[arg1].unk_14.raw = arg2;
             ;

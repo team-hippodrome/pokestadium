@@ -774,8 +774,8 @@ extern u8 D_3008100[];
 extern u8 D_30084C0[];
 extern u8 D_300B9B8[];
 extern u8 D_300AD10[];
-extern u8 sPlayer1LabelIcon[];
-extern u8 sPlayer2LabelIcon[];
+extern u8 gPlayer1LabelIcon[];
+extern u8 gPlayer2LabelIcon[];
 extern u8 D_3009E70[];
 extern u8 D_300A5C0[];
 extern u8 D_3003F80[];
@@ -922,7 +922,7 @@ extern unk_D_8006FF00 D_8006FF00[152];
 typedef struct FontSet {
     /* 0x00 */ s16 width;
     /* 0x02 */ s16 height;
-    /* 0x04 */ u8* atlas;
+    /* 0x04 */ u8* glyphWidths; // One advance width per mapped glyph; texture pixels follow the width table.
     /* 0x08 */ u8* texture;
 } FontSet; // size = 0xC
 
@@ -931,9 +931,9 @@ typedef struct FontContext {
     /* 0x48 */ void* unk_48;
     /* 0x4C */ s32 unk_4C;
     /* 0x50 */ u8 setIndex;
-    /* 0x51 */ s8 width;
+    /* 0x51 */ s8 letterSpacing; // Added to the glyph advance.
     /* 0x52 */ u8 lineHeight;
-    /* 0x53 */ u8 lineBreakFlag;
+    /* 0x53 */ u8 flags; // 0x1 two-cycle texturing, 0x2 auxiliary texture loaded, 0x4 suppress newline handling.
 } FontContext; // size = 0x54
 
 extern Gfx gUiTranslucentFillDL[];

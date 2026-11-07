@@ -425,7 +425,7 @@ void BattleAI_AppendTrainerTeamSpecies(TeamRoster* arg0) {
         if (temp_v0 >= 18) {
             break;
         }
-        temp_a0 = arg0->pokemonPicked[j].species.unk_00;
+        temp_a0 = arg0->pokemonPicked[j].species.id;
         D_843C5550[temp_v0] = temp_a0;
         Battle_DmaLoadLevelUpLearnset(temp_a0, &D_843C5310[temp_v0]);
     }
@@ -3570,11 +3570,11 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
 
         for (j = 0; j < arg2->unk_01[i]; j++) {
             sp73 = temp_s7[j].level;
-            sp6C = &gSpeciesData[temp_s7[j].species.unk_00 - 1];
+            sp6C = &gSpeciesData[temp_s7[j].species.id - 1];
 
             arg2->unk_14[j + var_v1].unk_00 = j;
             arg2->unk_14[j + var_v1].unk_04 = 0;
-            arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].species.unk_00;
+            arg2->unk_14[j + var_v1].unk_12.id = temp_s7[j].species.id;
             arg2->unk_14[j + var_v1].unk_12.types[0] = temp_s7[j].type1;
             arg2->unk_14[j + var_v1].unk_12.types[1] = temp_s7[j].type2;
             arg2->unk_14[j + var_v1].unk_12.unk_26 = temp_s7[j].level;
