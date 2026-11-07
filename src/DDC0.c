@@ -122,6 +122,6 @@ void Audio_ThreadMain(void* unused) {
 }
 
 void Audio_StartThread(void) {
-    osCreateThread(&D_800A8480.thread, 4, Audio_ThreadMain, NULL, &D_800AA660, 0x50);
+    osCreateThread(&D_800A8480.thread, 4, Audio_ThreadMain, NULL, &gGbTowerEmuThread, 0x50);
     osStartThread(&D_800A8480.thread);
 }

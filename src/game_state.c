@@ -861,7 +861,7 @@ void State_VictoryPalace(void) {
 
 void State_GbTower(void) {
     s32 sp34;
-    UnkInputStruct8000D738 sp2C;
+    GbTowerSessionParams sp2C;
     GameOptions sp24;
 
     main_pool_push_state('EMU0');
@@ -872,7 +872,7 @@ void State_GbTower(void) {
         Display_WaitForFrames(2);
         Audio_Disable();
 
-        sp2C.unk_04 = main_pool_alloc(sizeof(*sp2C.unk_04), 0);
+        sp2C.partyIcons = main_pool_alloc(sizeof(*sp2C.partyIcons), 0);
 
         FRAGMENT_LOAD_AND_CALL(FRAGMENT_GB_TOWER_TEAM_PREP, D_80075674, &sp2C);
         GbTower_Start(&sp2C);
@@ -891,7 +891,7 @@ void State_GbTower(void) {
         Save_EnsureBankLoaded(2);
         Save_GetOptions(&sp24);
 
-        sp24.unk_04 = sp2C.unk_00;
+        sp24.unk_04 = sp2C.buttonBindings;
 
         Save_SetOptions(&sp24);
         Save_CommitTypedRecord(0x14, 0);

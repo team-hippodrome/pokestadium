@@ -40,15 +40,15 @@ s32 GbTower_TeamPrepFrameCallback(u8 arg0) {
     return 0;
 }
 
-void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
+void GbTower_BuildPartyResult(GbTowerSessionParams* arg0) {
     s32 i;
     GameOptions sp34;
-    u16(*var_s1)[0x640] = arg0->unk_04[0];
+    u16(*var_s1)[0x640] = arg0->partyIcons[0];
 
     Save_GetOptions(&sp34);
-    arg0->unk_02 = sp34.gbTowerUnlockTier;
-    arg0->unk_00 = sp34.unk_04;
-    arg0->unk_03 = D_82A00360;
+    arg0->unlockTier = sp34.gbTowerUnlockTier;
+    arg0->buttonBindings = sp34.unk_04;
+    arg0->partyCount = D_82A00360;
 
     for (i = 0; i < D_82A00360; i++, var_s1++) {
         _bcopy(PokeIcon_GetImage(D_82A00374, i), var_s1, sizeof(var_s1[0]));
@@ -59,7 +59,7 @@ void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
     }
 }
 
-s32 GbTower_TeamPrep(s32 arg0, UnkInputStruct8000D738* arg1) {
+s32 GbTower_TeamPrep(s32 arg0, GbTowerSessionParams* arg1) {
     StageContext* sp24;
 
     main_pool_push_state('PREP');
