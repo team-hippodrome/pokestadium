@@ -154,23 +154,24 @@ void Gfx_DrawTiledRgba16Image(u8* image) {
     }
 }
 
-void Gfx_DrawRgba16ImageRegion(u32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+
+void Gfx_DrawRgba16ImageRegion(u32 texture_offset, s16 x1, s16 y1, s16 x2, s16 y2) {
     s32 div = 32;
-    s16 sp9A;
-    s16 sp98;
+    s16 width;
+    s16 height;
     s16 sp36;
     s16 sp30;
     s16 j;
     s16 i;
-    s16 temp_t4;
-    s16 temp_t5;
-    s16 var_s2;
-    s16 var_t1;
-    s16 s1;
-    s16 s2;
+    s16 final_y1;
+    s16 final_x1;
+    s16 final_x2;
+    s16 final_y2;
+    s16 texture_start_x;
+    s16 texture_start_y;
 
-    sp9A = arg1 + arg3;
-    sp98 = arg2 + arg4;
+    width = x1 + x2;
+    height = y1 + y2;
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
@@ -180,40 +181,40 @@ void Gfx_DrawRgba16ImageRegion(u32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4)
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGB, G_CC_DECALRGB);
     gDPPipeSync(gDisplayListHead++);
 
-    for (i = (arg2 >> 5) << 5; i < sp98; i += 0x20) {
-        for (j = (arg1 >> 5) << 5; j < sp9A; j += 0x20) {
-            if (j < arg1) {
-                temp_t5 = arg1;
+    for (i = (y1 >> 5) << 5; i < height; i += 32) {
+        for (j = (x1 >> 5) << 5; j < width; j += 32) {
+            if (j < x1) {
+                final_x1 = x1;
             } else {
-                temp_t5 = j;
+                final_x1 = j;
             }
 
-            if (sp9A < j + 0x20) {
-                var_s2 = sp9A;
+            if (width < j + 32) {
+                final_x2 = width;
             } else {
-                var_s2 = j + 0x20;
+                final_x2 = j + 32;
             }
 
-            if (i < arg2) {
-                temp_t4 = arg2;
+            if (i < y1) {
+                final_y1 = y1;
             } else {
-                temp_t4 = i;
+                final_y1 = i;
             }
 
-            if (sp98 < i + 0x20) {
-                var_t1 = sp98;
+            if (height < i + 32) {
+                final_y2 = height;
             } else {
-                var_t1 = i + 0x20;
+                final_y2 = i + 32;
             }
 
-            s1 = temp_t5 - j;
-            s2 = temp_t4 - i;
+            texture_start_x = final_x1 - j;
+            texture_start_y = final_y1 - i;
 
-            gDPLoadTextureBlock(gDisplayListHead++, ((((i / div) * 0x14) + (j / div)) << 9) + arg0, G_IM_FMT_RGBA,
+            gDPLoadTextureBlock(gDisplayListHead++, ((((i / div) * 20) + (j / div)) << 9) + texture_offset, G_IM_FMT_RGBA,
                                 G_IM_SIZ_16b, 16, 16, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                                 G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-            gSPTextureRectangle(gDisplayListHead++, temp_t5 * 4, temp_t4 * 4, var_s2 * 4, var_t1 * 4, G_TX_RENDERTILE,
-                                s1 << 4, s2 << 4, 0x0200, 0x0200);
+            gSPTextureRectangle(gDisplayListHead++, final_x1 * 4, final_y1 * 4, final_x2 * 4, final_y2 * 4, G_TX_RENDERTILE,
+                                texture_start_x << 4, texture_start_y << 4, 0x0200, 0x0200);
         }
     }
 }

@@ -33,8 +33,8 @@ typedef struct unk_D_848037A0 {
     /* 0x0017 */ s8 rosterSize;
     /* 0x0018 */ BattleMon* pokemon;
     /* 0x001C */ TeamRoster* roster;
-    /* 0x0020 */ u16 unk_0020[1][1600];
-    /* 0x0CA0 */ char unk0CA0[16000];
+    /* 0x0020 */ u16 firstPokemonIcon[1][1600];
+    /* 0x0CA0 */ char otherPokemonIcon[16000];
 } BattleOrderInputState; // size = 0x4B20
 
 typedef struct unk_D_848035FC {
