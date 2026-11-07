@@ -599,7 +599,7 @@ void FreeBattle_DrawConfirmPanel(void) {
         if (D_84002D28.unk_04 == 8) {
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(D_84002D28.unk_00 + 0xC, D_84002D28.unk_02 + 0xA, 0x24, 0x1A, D_3008880, 0x24, 0);
+            Gfx_DrawTextureRgba16(D_84002D28.unk_00 + 0xC, D_84002D28.unk_02 + 0xA, 0x24, 0x1A, gComPlayerLabelIcon, 0x24, 0);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -781,13 +781,13 @@ void FreeBattle_ApplyRuleSelection(void) {
     }
 
     if (gSessionContext.battleSides[0].tagTeamSize == 2) {
-        gSessionContext.battleSides[0].teamMember[0]->rosterInfo->unk_003 = 0x35;
-        gSessionContext.battleSides[0].teamMember[1]->rosterInfo->unk_003 = 0x35;
+        gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003 = 0x35;
+        gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->unk_003 = 0x35;
     }
 
     if (gSessionContext.battleSides[1].tagTeamSize == 2) {
-        gSessionContext.battleSides[1].teamMember[0]->rosterInfo->unk_003 = 0x35;
-        gSessionContext.battleSides[1].teamMember[1]->rosterInfo->unk_003 = 0x35;
+        gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003 = 0x35;
+        gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->unk_003 = 0x35;
     }
 }
 #endif

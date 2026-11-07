@@ -142,10 +142,10 @@ arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon
     u8 var_a0;
     s8* var_v1;
 
-    sp30 = &D_8006FF00[arg1->unk_00.unk_00 - 1];
+    sp30 = &D_8006FF00[arg1->species.id - 1];
     sp34.raw = 0;
 
-    Text_CopySpeciesName(sp38, arg1->unk_00.unk_00);
+    Text_CopySpeciesName(sp38, arg1->species.id);
 
     if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
@@ -174,7 +174,7 @@ arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon
 void Model_ComputeSizeVariantFromRecord(arg1_func_80010CA8* arg0, unk_func_8001C014* arg1, u16 arg2) {
     BattleMon stack;
 
-    stack.unk_00.unk_00 = arg2;
+    stack.species.id = arg2;
     stack.unk_0E = arg1->unk_02;
 
     _bcopy(arg1->unk_04, stack.nickname, 0x10);

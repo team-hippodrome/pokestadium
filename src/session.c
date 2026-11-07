@@ -18,8 +18,8 @@ void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {
     arg0->displayModel = 0;
     arg0->unk_04 = 0;
     arg0->loadedModel = 0;
-    arg0->teamMember[0] = 0;
-    arg0->teamMember[1] = 0;
+    arg0->tagTeamMember[0] = 0;
+    arg0->tagTeamMember[1] = 0;
     arg0->assetIsBusy = 0;
     arg0->unk_20 = 0;
     arg0->unk_1E = 0;
@@ -117,7 +117,7 @@ void Team_AddTrainer(s32 arg0, TeamRoster* arg1) {
     u8 idx = temp_v0->tagTeamSize;
 
     if (idx < 2) {
-        temp_v0->teamMember[idx] = arg1;
+        temp_v0->tagTeamMember[idx] = arg1;
         temp_v0->tagTeamSize++;
     }
 }
@@ -128,7 +128,7 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
 
     if (tmp < 6) {
         arg0->pokemonPicked[tmp] = *arg1;
-        ptr->unk_028[tmp] = *arg1;
+        ptr->battleMon[tmp] = *arg1;
 
         arg0->numberOfPokemonBrought = tmp + 1;
         ptr->numberOfPokemonCanBePicked = tmp + 1;
@@ -136,12 +136,12 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
 }
 
 BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
-    arg0->unk_00.unk_00 = arg1;
+    arg0->species.id = arg1;
     arg0->unk_04 = 0;
     arg0->statusCondition = 0;
 
-    arg0->unk_06 = gSpeciesData[arg1 - 1].type1;
-    arg0->unk_07 = gSpeciesData[arg1 - 1].type2;
+    arg0->type1 = gSpeciesData[arg1 - 1].type1;
+    arg0->type2 = gSpeciesData[arg1 - 1].type2;
 
     arg0->unk_14 = 0x6400;
     arg0->unk_16 = 0x6400;
@@ -327,9 +327,9 @@ s16 Team_GetHighestPartyLevel(void) {
     s16 var_v1 = 0;
     BattleMon* var_v0;
 
-    var_v0 = &gSessionContext.battleSides[0].teamMember[0]->rosterInfo->unk_028[0];
+    var_v0 = &gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[0];
 
-    for (i = 0; i < gSessionContext.battleSides[0].teamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+    for (i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
          i++, var_v0++) {
         if (var_v1 < var_v0->level) {
             var_v1 = var_v0->level;
@@ -348,12 +348,12 @@ void Team_ScaleOpponentToLevel(s16 arg0) {
         return;
     }
 
-    var_s0 = gSessionContext.battleSides[1].teamMember[0]->pokemonPicked;
-    var_s1 = gSessionContext.battleSides[1].teamMember[0]->rosterInfo->unk_028;
+    var_s0 = gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked;
+    var_s1 = gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon;
 
-    for (i = 0; i < gSessionContext.battleSides[1].teamMember[0]->numberOfPokemonBrought; i++, var_s1++, var_s0++) {
+    for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; i++, var_s1++, var_s0++) {
         var_s0->level = arg0;
-        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->unk_00.unk_00, arg0);
+        var_s0->unk_10 = Pokemon_ExpForLevel(var_s0->species.id, arg0);
         Pokemon_RecalcStats(var_s0);
         var_s0->hp = var_s0->maxHp;
 
@@ -387,7 +387,7 @@ void Team_LoadPresetTrainer(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     PresetTrainerSlot* ptr;
     PresetTrainerSlot* temp_v1;
 
-    temp_s3 = gSessionContext.battleSides[arg0].teamMember[0];
+    temp_s3 = gSessionContext.battleSides[arg0].tagTeamMember[0];
     if (gSessionContext.inRound2 != 0) {
         arg1 += 0x1F;
     }
@@ -525,7 +525,7 @@ void Team_BuildQuickBattleTeams(s16 arg0) {
 
 void Session_SaveContinueData(void) {
     SessionContinueData sp20;
-    ExtendedRosterInfo* sp1C = gSessionContext.battleSides[0].teamMember[0]->rosterInfo;
+    ExtendedRosterInfo* sp1C = gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo;
 
     sp20.unk_00 = gSessionContext.mode;
     sp20.unk_01 = gSessionContext.modeSelection;
@@ -534,11 +534,11 @@ void Session_SaveContinueData(void) {
     sp20.unk_03 = gSessionContext.inRound2;
 
     sp20.unk_0D = gSessionContext.gbStarterChoice;
-    sp20.unk_0E = gSessionContext.battleSides[0].teamMember[0]->unk_018;
+    sp20.unk_0E = gSessionContext.battleSides[0].tagTeamMember[0]->unk_018;
 
     _bcopy(gSessionContext.opponentHistory[0], &sp20.unk_05, 8);
-    Text_TranscodeNameWrapper(&sp20.unk_10, &gSessionContext.battleSides[0].teamMember[0]->trainerName);
-    Session_SaveContinueRecord(&sp20, sp1C->unk_028, sp1C->numberOfPokemonCanBePicked);
+    Text_TranscodeNameWrapper(&sp20.unk_10, &gSessionContext.battleSides[0].tagTeamMember[0]->trainerName);
+    Session_SaveContinueRecord(&sp20, sp1C->battleMon, sp1C->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
@@ -566,7 +566,7 @@ s32 Session_LoadContinueData(void) {
         Team_AddTrainer(1, Trainer_Create(-1, tmp, "COM", Text_GetPlayerLabel(3)));
 
         for (i = 0; i < temp_v0; i++) {
-            Trainer_AddPokemon(gSessionContext.battleSides[0].teamMember[0], &sp58[i]);
+            Trainer_AddPokemon(gSessionContext.battleSides[0].tagTeamMember[0], &sp58[i]);
         }
 
         gSessionContext.sessionFlags |= 3;

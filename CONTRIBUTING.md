@@ -92,6 +92,9 @@ Keep functions without a body named in the style of `func_{address}`, since we c
 ### Spelling
 Use American English spelling (color, mom, etc.).
 
+### Japanese Text
+Japanese literal strings should have a English Translation in a comment alongside them regardless of if the text is in kana, kanji, or romaji.
+
 ### Terminology
 #### Technical
 Do not use yaw, pitch, or roll to describe rotations about an axis. Those terms are body-relative, while most rotations in Pokemon Stadium are world-relative. Use `rotationX`, `rotationY`, and `rotationZ`.
@@ -167,12 +170,23 @@ Next to any color, add a comment in the format `// #{hex}` above or right next t
 Reference other files with `//@{path}`
 
 ## Numbers
-Use hexadecimal only for:
-- One-off powers of 2
-- One-off values that are one less than a power of 2 (`0xFF` and similar values)
-- Colors
-- Addresses
-- Masks
-- Angles
 
-Otherwise, keep numbers in decimal.
+Hex is for bit structure. Decimal is for quantities.
+
+### Must be hex
+- Addresses, offsets, segment values
+- Bitmasks and bit flags
+- Packed color/channel values (RGBA words, RGB5A1, etc.)
+- Binary angles (s16/u16 angle units where 0x10000 = one full turn)
+
+### Must be decimal
+- Loop bounds, array lengths, element counts
+- Timers, frame counts, durations
+- Game-logic quantities (HP, damage, speed, coordinates in world units)
+- Indices
+
+### Either is acceptable
+- One-off powers of 2 and values one less than a power of 2 (`16` / `0x10`, `255` / `0xFF`, `4096` / `0x1000`). Pick whichever matches the role of the number: a count reads better in decimal, a width or alignment reads better in hex.
+
+### Do not churn
+Never change the base of an existing literal unless you are already editing that line for a functional reason. Matching the surrounding code beats matching this guide. A diff that only flips 15 to 0xF will be rejected.

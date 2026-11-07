@@ -203,7 +203,7 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        if ((arg3->unk_0000[i].unk_004.unk_00.unk_00 != 0) &&
+        if ((arg3->unk_0000[i].unk_004.species.id != 0) &&
             (Rental_CanAddMonToTeam(arg0->unk_13608, &arg3->unk_0000[i & 0xFFFFFFFF]) != 0)) {
             TeamSelection_DrawColoredFrame(arg1 + i * 0x84, arg2, 0x84, 0x2C, 0x64, 0x64, 0xC8, 0xFF);
         } else {
@@ -214,7 +214,7 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     for (i = 0; i < 3; i++) {
-        if (arg3->unk_0000[i].unk_004.unk_00.unk_00 != 0) {
+        if (arg3->unk_0000[i].unk_004.species.id != 0) {
             Gfx_DrawTextureRgba16(arg1 + (i * 0x84) + 2, arg2 + 2, 0x28, 0x28, arg3->unk_0000[i].unk_058, 0x28, 0);
         }
     }
@@ -235,7 +235,7 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
     Font_BeginTranslucentTextRendering();
 
     for (i = 0; i < 3; i++) {
-        if ((arg3->unk_0000[i].unk_004.unk_00.unk_00 != 0) &&
+        if ((arg3->unk_0000[i].unk_004.species.id != 0) &&
             (Rental_TeamContainsMon(arg0->unk_13608, &arg3->unk_0000[i & 0xFFFFFFFF]) == 0)) {
             if (Rental_CanAddMonToTeam(arg0->unk_13608, &arg3->unk_0000[i & 0xFFFFFFFF]) != 0) {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -391,7 +391,7 @@ void Rental_MarkMatchingPlayerPikachu(RentalCarouselState* arg0, BattleMon* arg1
     GbSavePlayerIdentity sp38;
     GbSavePlayerIdentity sp28;
 
-    if ((arg0->unk_00004 < 4) && (GbSave_GetPortGame(arg0->unk_00004) == 7) && (arg1->unk_00.unk_00 == 0x19)) {
+    if ((arg0->unk_00004 < 4) && (GbSave_GetPortGame(arg0->unk_00004) == 7) && (arg1->species.id == 0x19)) {
         GbSave_CopyPlayerIdentity(arg0->unk_00004, &sp28);
         _bcopy(arg1->unk_46, sp38.unk_02, 11);
         sp38.unk_00 = arg1->unk_0E;
@@ -413,7 +413,7 @@ s32 Rental_FillPageFromRoster(RentalCarouselState* arg0, unk_D_838067F0_0168* ar
     var_s3 = 0;
 
     for (i = 0; i < 3; i++) {
-        arg1->unk_0000[i].unk_004.unk_00.unk_00 = 0;
+        arg1->unk_0000[i].unk_004.species.id = 0;
         arg1->unk_0000[i].raw = 0;
     }
 
@@ -432,7 +432,7 @@ s32 Rental_FillPageFromRoster(RentalCarouselState* arg0, unk_D_838067F0_0168* ar
                 for (j = 0; j < 3; j++) {
                     if (i < temp_s5->unk_00) {
                         if (Deck_SetCursor(var_v0, temp_s5->unk_02[i++]) != 0) {
-                            var_s3 += Deck_ReadEntries(&arg1->unk_0000[j].unk_004.unk_00.unk_00, 1, var_v0);
+                            var_s3 += Deck_ReadEntries(&arg1->unk_0000[j].unk_004.species.id, 1, var_v0);
                         }
                     }
                 }
@@ -455,7 +455,7 @@ s32 Rental_FillPageFromRoster(RentalCarouselState* arg0, unk_D_838067F0_0168* ar
         arg1->unk_0000[i].unk_000 = arg0->unk_00004;
         arg1->unk_0000[i].unk_001 = arg0->unk_00005;
         arg1->unk_0000[i].unk_002 = (arg2 * 3) + i;
-        arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.unk_00.unk_00;
+        arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.species.id;
 
         arg1->unk_0000[i].unk_004.unk_53 = (arg2 * 3) + i;
         arg1->unk_0000[i].unk_004.unk_52 = (arg0->unk_00004 * 0x10) | arg0->unk_00005;
@@ -777,8 +777,8 @@ s32 Rental_MonHasLegalMoveset(BattleMon* arg0) {
 s32 Rental_MonMeetsCategoryFilter(BattleMon* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s32 sp1C = 0;
 
-    if ((arg0->unk_00.unk_00 > 0) && (arg0->unk_00.unk_00 < 0x98)) {
-        if ((Rental_MonHasLegalMoveset(arg0) != 0) && (D_8006FEE8[arg0->unk_00.unk_00][8] & arg3)) {
+    if ((arg0->species.id > 0) && (arg0->species.id < 0x98)) {
+        if ((Rental_MonHasLegalMoveset(arg0) != 0) && (D_8006FEE8[arg0->species.id][8] & arg3)) {
             if ((arg0->level >= arg1) && (arg2 >= arg0->level)) {
                 sp1C = 1;
             }

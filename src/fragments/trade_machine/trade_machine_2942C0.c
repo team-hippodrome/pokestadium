@@ -296,7 +296,7 @@ void TradeEvo_BeginSequence(s16 arg0) {
     ptr->unk_30.unk_04 = ptr->unk_30.unk_06 = -1;
 
     Audio_PlaySoundEffectById(SFX_PANEL_OPEN);
-    GbSave_SetSeenOwnedBits(ptr->unk_04, ptr->unk_24->unk_00.unk_00, 3);
+    GbSave_SetSeenOwnedBits(ptr->unk_04, ptr->unk_24->species.id, 3);
 }
 
 void TradeEvo_UpdatePreviewModel(unk_D_82F21238* arg0) {
@@ -358,7 +358,7 @@ void TradeEvo_UpdateWaitForConfirm(unk_D_82F21238* arg0) {
     }
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        if (Trade_SpeciesEvolvesOnTransfer(arg0->unk_24->unk_00.unk_00) != 0) {
+        if (Trade_SpeciesEvolvesOnTransfer(arg0->unk_24->species.id) != 0) {
             arg0->unk_02 = 3;
             arg0->unk_08 = 1;
             arg0->unk_0C = 0x3C;
@@ -427,17 +427,17 @@ s32 Trade_NicknameIsSpeciesDefault(s16 arg0, s8* arg1) {
 void Trade_ApplyEvolution(s16 arg0, BattleMon* arg1) {
     s16 sp2E = 0;
 
-    if (Trade_SpeciesEvolvesOnTransfer(arg1->unk_00.unk_00) != 0) {
-        sp2E = arg1->unk_00.unk_00;
-        arg1->unk_00.unk_00++;
+    if (Trade_SpeciesEvolvesOnTransfer(arg1->species.id) != 0) {
+        sp2E = arg1->species.id;
+        arg1->species.id++;
     }
 
     if (sp2E != 0) {
         if (Trade_NicknameIsSpeciesDefault(sp2E, arg1->nickname) != 0) {
-            Text_CopyString(arg1->nickname, Trade_GetSpeciesName(arg1->unk_00.unk_00));
+            Text_CopyString(arg1->nickname, Trade_GetSpeciesName(arg1->species.id));
         }
         Pokemon_RecalcStats(arg1);
-        GbSave_SetSeenOwnedBits(arg0, arg1->unk_00.unk_00, 3);
+        GbSave_SetSeenOwnedBits(arg0, arg1->species.id, 3);
     }
 }
 
@@ -722,9 +722,9 @@ void TradeEvo_DrawEvolutionCaption(unk_D_82F20A40_00E* arg0, BattleMon* arg1) {
     sp3C = NULL;
     sp40 = NULL;
 
-    if (Trade_SpeciesEvolvesOnTransfer(arg1->unk_00.unk_00 - 1) != 0) {
-        sp40 = Trade_GetSpeciesName(arg1->unk_00.unk_00 - 1);
-        sp3C = Trade_GetSpeciesName(arg1->unk_00.unk_00);
+    if (Trade_SpeciesEvolvesOnTransfer(arg1->species.id - 1) != 0) {
+        sp40 = Trade_GetSpeciesName(arg1->species.id - 1);
+        sp3C = Trade_GetSpeciesName(arg1->species.id);
     }
 
     if (sp40 != NULL) {

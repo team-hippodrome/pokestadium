@@ -300,11 +300,11 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     if (arg2->tagTeamSize == 1) {
-        if (arg2->teamMember[0]->isHuman & 2) {
+        if (arg2->tagTeamMember[0]->isHuman & 2) {
             Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_3025200, 0x24, 0);
             if (0) {}
         } else {
-            Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort],
+            Gfx_DrawTextureRgba16(arg0 + 0x1A, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->tagTeamMember[0]->controllerPort],
                                   0x24, 0);
         }
 
@@ -312,13 +312,13 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
         return;
     }
 
-    if (arg2->teamMember[0]->controllerPort < arg2->teamMember[1]->controllerPort) {
-        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24, 0);
-        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[1]->controllerPort], 0x24,
+    if (arg2->tagTeamMember[0]->controllerPort < arg2->tagTeamMember[1]->controllerPort) {
+        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->tagTeamMember[0]->controllerPort], 0x24, 0);
+        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->tagTeamMember[1]->controllerPort], 0x24,
                               0);
     } else {
-        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[1]->controllerPort], 0x24, 0);
-        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->teamMember[0]->controllerPort], 0x24,
+        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->tagTeamMember[1]->controllerPort], 0x24, 0);
+        Gfx_DrawTextureRgba16(arg0 + 0x30, arg1 + 3, 0x24, 0x1A, D_84B17608[arg2->tagTeamMember[0]->controllerPort], 0x24,
                               0);
     }
 

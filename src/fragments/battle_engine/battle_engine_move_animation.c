@@ -517,7 +517,7 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
     side_index = BattleScene_GetParticipantSideIndex(pokemon);
     species = pokemon->displayObject.objectType - 1;
 
-    battle_mon = &pokemon->sessionTeams->teamMember[pokemon->state.ownerTeamMemberIndex]
+    battle_mon = &pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]
                       ->pokemonPicked[pokemon->state.actionChosen];
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[species] & 0xFFFFFF);
@@ -1324,7 +1324,7 @@ void BattleScene_TickAssetLoadQueueRowEffectList3(ActivePokemon* active_pokemon)
         active_pokemon->animationTimer = 0;
         BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[animation_state].mode);
         Audio_PlayCommand(3, 0, 0);
-        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->teamMember[pokemon_state->teamMemberIndex]
+        active_pokemon->sessionTeams->unk_04 = &active_pokemon->sessionTeams->tagTeamMember[pokemon_state->teamMemberIndex]
                                                     ->pokemonPicked[pokemon_state->actionChosen];
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
@@ -2430,7 +2430,7 @@ void BattleScene_AllocateParticipants(BattleSessionTeams* battle_teams) {
  * Binds the first team member, side and controller to the participant.
  */
 void BattleScene_InitializeParticipantController(ActivePokemon* active_pokemon) {
-    Controller* controller = &gControllers[active_pokemon->sessionTeams->teamMember[0]->controllerPort];
+    Controller* controller = &gControllers[active_pokemon->sessionTeams->tagTeamMember[0]->controllerPort];
 
     BattleScene_BindParticipantTeamRoster(active_pokemon, 0);
     BattleScene_SetParticipantTeamMember(active_pokemon, 0);
