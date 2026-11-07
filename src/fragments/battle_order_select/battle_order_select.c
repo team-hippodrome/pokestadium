@@ -1256,10 +1256,10 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 is_hum
     D_8480379C++;
 }
 
-void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
-    BattleSessionTeams* temp_s0 = &arg0->battleSides[0];
+void BattleMenu_InitOrderSelectPanels(SessionContext* session_context) {
+    BattleSessionTeams* session_teams = &session_context->battleSides[0];
 
-    sSessionContext = arg0;
+    sSessionContext = session_context;
     D_8480379C = 0;
     D_84803798 = 2;
     sScrollingTextProgress = 0;
@@ -1272,25 +1272,25 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
     BattleMenu_InitTeamOrderState(&sTeamOrderStates[1], &sSessionContext->battleSides[1],
                                   sSessionContext->ruleCategory);
 
-    if (temp_s0->tagTeamSize == 1) {
-        BattleMenu_AddOrderSelectPanel(80, 33, temp_s0->tagTeamMember[0], 0, -1);
-    } else if (temp_s0->tagTeamMember[0]->controllerPort < temp_s0->tagTeamMember[1]->controllerPort) {
-        BattleMenu_AddOrderSelectPanel(80, 33, temp_s0->tagTeamMember[0], 0, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 129, temp_s0->tagTeamMember[1], 0, D_8480379C - 1);
+    if (session_teams->tagTeamSize == 1) {
+        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[0], 0, -1);
+    } else if (session_teams->tagTeamMember[0]->controllerPort < session_teams->tagTeamMember[1]->controllerPort) {
+        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[0], 0, D_8480379C + 1);
+        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[1], 0, D_8480379C - 1);
     } else {
-        BattleMenu_AddOrderSelectPanel(80, 33, temp_s0->tagTeamMember[1], 0, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 129, temp_s0->tagTeamMember[0], 0, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 33, session_teams->tagTeamMember[1], 0, D_8480379C + 1);
+        BattleMenu_AddOrderSelectPanel(80, 129, session_teams->tagTeamMember[0], 0, D_8480379C - 1);
     }
 
-    temp_s0++;
-    if (temp_s0->tagTeamSize == 1) {
-        BattleMenu_AddOrderSelectPanel(80, 326, temp_s0->tagTeamMember[0], 1, -1);
-    } else if (temp_s0->tagTeamMember[0]->controllerPort < temp_s0->tagTeamMember[1]->controllerPort) {
-        BattleMenu_AddOrderSelectPanel(80, 230, temp_s0->tagTeamMember[0], 1, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 326, temp_s0->tagTeamMember[1], 1, D_8480379C - 1);
+    session_teams++;
+    if (session_teams->tagTeamSize == 1) {
+        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[0], 1, -1);
+    } else if (session_teams->tagTeamMember[0]->controllerPort < session_teams->tagTeamMember[1]->controllerPort) {
+        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[0], 1, D_8480379C + 1);
+        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[1], 1, D_8480379C - 1);
     } else {
-        BattleMenu_AddOrderSelectPanel(80, 230, temp_s0->tagTeamMember[1], 1, D_8480379C + 1);
-        BattleMenu_AddOrderSelectPanel(80, 326, temp_s0->tagTeamMember[0], 1, D_8480379C - 1);
+        BattleMenu_AddOrderSelectPanel(80, 230, session_teams->tagTeamMember[1], 1, D_8480379C + 1);
+        BattleMenu_AddOrderSelectPanel(80, 326, session_teams->tagTeamMember[0], 1, D_8480379C - 1);
     }
 }
 
@@ -1301,12 +1301,12 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
 // clang-format on
 #else
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
-    StageContext* sp24;
+    StageContext* stage_context;
 
     main_pool_push_state('MSEL');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
-    sp24 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
+    stage_context = StageContext_Allocate(1, 1, 2, 0, 2, 1);
     Text_InitStringTables();
     Font_Init(60, 0);
     PokeIcon_OpenModelArchive();
@@ -1324,7 +1324,7 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
 
     BattleMenu_InitOrderSelectPanels(&gSessionContext);
     Audio_PlayMusicIfChanged(7);
-    StageContext_Activate(sp24);
+    StageContext_Activate(stage_context);
     BgStage_WaitForCondition(BattleMenu_UpdateOrderSelect, 8, 8);
     StageContext_Deactivate();
     BattleMenu_CommitOrderSelection();
