@@ -29,12 +29,12 @@ s32 GbPak_MbcWrite(s32 port, void* buffer, u16 address, u16 size);
  */
 s32 GbPak_VerifyPattern(s32 port, void* pattern) {
     u8 status;
-    u8 readBack[0x20];
+    u8 read_back[0x20];
     s32 result = 0;
     UNUSED u8 padding[8];
 
-    if ((GbPak_MbcWrite(port, pattern, 0, 0x20) == 0) && (GbPak_MbcRead(port, (uintptr_t)&readBack, 0, 0x20) == 0) &&
-        (bcmp(&readBack, pattern, 0x20) == 0) && (osGbpakGetStatus(&gGbPakPfs[port], &status) == 0)) {
+    if ((GbPak_MbcWrite(port, pattern, 0, 0x20) == 0) && (GbPak_MbcRead(port, (uintptr_t)&read_back, 0, 0x20) == 0) &&
+        (bcmp(&read_back, pattern, 0x20) == 0) && (osGbpakGetStatus(&gGbPakPfs[port], &status) == 0)) {
         result = ((status & 4) != 0) == 0;
     }
     return result;
@@ -46,17 +46,17 @@ s32 GbPak_VerifyPattern(s32 port, void* pattern) {
  */
 s32 GbPak_DetectRam(s32 port, u8* pattern) {
     s32 result = 0;
-    u8 localPattern[0x20];
+    u8 local_pattern[0x20];
 
     if (pattern == NULL) {
-        pattern = localPattern;
+        pattern = local_pattern;
     }
     HAL_Memset((char*)pattern, 0x55, 0x20);
     if (GbPak_VerifyPattern(port, pattern) != 0) {
         HAL_Memset((char*)pattern, 0xAA, 0x20);
         if (GbPak_VerifyPattern(port, pattern) != 0) {
             s32 i;
-            for (i = 0; i < ARRAY_COUNT(localPattern); i++) {
+            for (i = 0; i < ARRAY_COUNT(local_pattern); i++) {
                 pattern[i] = osGetCount();
             }
             result = GbPak_VerifyPattern(port, pattern);
@@ -69,48 +69,48 @@ s32 GbPak_DetectRam(s32 port, u8* pattern) {
  * Prepares the pak on a port once (gGbPakPortReady): reads the ID, enables
  * cartridge RAM and runs GbPak_DetectRam. Shuts down with error 1 if the read fails.
  */
-s32 GbTower_ProbePak(s32 port, u8* wasReady, u8* pattern) {
+s32 GbTower_ProbePak(s32 port, u8* was_ready, u8* pattern) {
     u8 status;
-    OSGbpakId gbpakId;
-    s32 hasRam = 0;
+    OSGbpakId gbpak_id;
+    s32 has_ram = 0;
 
-    if (wasReady != NULL) {
-        *wasReady = gGbPakPortReady[port];
+    if (was_ready != NULL) {
+        *was_ready = gGbPakPortReady[port];
     }
 
     if (gGbPakPortReady[port] == 1) {
         return 1;
     }
 
-    if (osGbpakReadId(&gGbPakPfs[port], &gbpakId, &status) != 0) {
+    if (osGbpakReadId(&gGbPakPfs[port], &gbpak_id, &status) != 0) {
         Game_ShutdownAndLoadFragment(port, 1);
     }
     if ((status & OS_GBPAK_RSTB_STATUS) && (osGbpakCheckConnector(&gGbPakPfs[port], &status) == 0)) {
         osGbmbcRamEnable(&gGbPakPfs[port]);
-        hasRam = GbPak_DetectRam(port, pattern);
+        has_ram = GbPak_DetectRam(port, pattern);
     }
     gGbPakPortReady[port] = 1;
-    return hasRam;
+    return has_ram;
 }
 
 /**
  * Returns 1 if the pak has not latched a reset (OS_GBPAK_RSTB_DETECTION clear), i.e. the
- * cartridge was not removed; powers the pak off when keepPowered == 0.
+ * cartridge was not removed; powers the pak off when keep_powered == 0.
  */
-s32 GbTower_IsPakInserted(s32 port, u8 keepPowered) {
+s32 GbTower_IsPakInserted(s32 port, u8 keep_powered) {
     u8 status;
-    s32 notReset;
+    s32 not_reset;
 
     if (osGbpakGetStatus(&gGbPakPfs[port], &status) != 0) {
         Game_ShutdownAndLoadFragment(port, 1);
     }
 
-    notReset = !((status & OS_GBPAK_RSTB_DETECTION) != 0);
-    if (keepPowered == 0) {
+    not_reset = !((status & OS_GBPAK_RSTB_DETECTION) != 0);
+    if (keep_powered == 0) {
         osGbpakPower(&gGbPakPfs[port], 0);
         gGbPakPortReady[port] = 0;
     }
-    return notReset;
+    return not_reset;
 }
 
 /**
@@ -170,9 +170,9 @@ s32 GbPak_IsPokemonCartridge(OSGbpakId* header) {
  */
 s32 GbTower_ScanPaks(void) {
     s32 i;
-    s32 readIdError;
+    s32 read_id_error;
     u8 status;
-    OSGbpakId gbpakId;
+    OSGbpakId gbpak_id;
 
     gGbPakUsableMask = 0;
     gGbPakInitMask = 0;
@@ -189,15 +189,15 @@ s32 GbTower_ScanPaks(void) {
 #endif
             if (osGbpakInit(&gSIEventMesgQueue, &gGbPakPfs[i], i) == 0) {
                 gGbPakInitMask |= (1 << i);
-                readIdError = osGbpakReadId(&gGbPakPfs[i], &gbpakId, &status);
-                if (readIdError == 0) {
+                read_id_error = osGbpakReadId(&gGbPakPfs[i], &gbpak_id, &status);
+                if (read_id_error == 0) {
                     if (!(status & 8)) {
                         Game_ShutdownAndLoadFragment(i, 2);
                     }
-                    if (GbPak_IsPokemonCartridge(&gbpakId) != 0) {
+                    if (GbPak_IsPokemonCartridge(&gbpak_id) != 0) {
 #if !defined(VERSION_JP)
-                        if (readIdError == 4) {
-                            // what. the redundant readIdError functionless check is apparently needed to match.
+                        if (read_id_error == 4) {
+                            // what. the redundant read_id_error functionless check is apparently needed to match.
                         }
 #endif
                         if (osGbpakCheckConnector(&gGbPakPfs[i], &status) == 0) {
@@ -213,7 +213,7 @@ s32 GbTower_ScanPaks(void) {
                     }
                 } else {
                     gGbPakPortReady[i] = 0;
-                    if (readIdError == 4) {
+                    if (read_id_error == 4) {
                         Game_ShutdownAndLoadFragment(i, 2);
                     }
                 }
@@ -258,11 +258,11 @@ s32 GbPak_IsCartOn(s32 port) {
 s32 GbTower_ReinitPak(s32 port) {
     UNUSED u8 filler[4];
     u8 status;
-    OSGbpakId gbpakId;
+    OSGbpakId gbpak_id;
 
     gGbPakPortReady[port] = 0;
     if ((osGbpakInit(&gSIEventMesgQueue, &gGbPakPfs[port], port) == 0) &&
-        (osGbpakReadId(&gGbPakPfs[port], &gbpakId, &status) == 0) && (status & OS_GBPAK_RSTB_STATUS) &&
+        (osGbpakReadId(&gGbPakPfs[port], &gbpak_id, &status) == 0) && (status & OS_GBPAK_RSTB_STATUS) &&
         (osGbpakCheckConnector(&gGbPakPfs[port], &status) == 0)) {
 
         osGbmbcRamEnable(&gGbPakPfs[port]);
@@ -278,11 +278,11 @@ s32 GbTower_ReinitPak(s32 port) {
  */
 s32 GbTower_VerifyPakStillInserted(s32 port, void* pattern) {
     u8 status;
-    u8 readBack[0x20];
+    u8 read_back[0x20];
     s32 result;
 
     result = 0;
-    if ((GbPak_MbcRead(port, (uintptr_t)&readBack, 0, 0x20) == 0) && (bcmp(&readBack, pattern, 0x20) == 0) &&
+    if ((GbPak_MbcRead(port, (uintptr_t)&read_back, 0, 0x20) == 0) && (bcmp(&read_back, pattern, 0x20) == 0) &&
         (osGbpakGetStatus(&gGbPakPfs[port], &status) == 0) && !(status & OS_GBPAK_RSTB_DETECTION)) {
         result = 1;
     }
@@ -374,48 +374,48 @@ int GbPak_SelectRomBank(s32 port, s32 bank) {
  * Reads a linear range of cartridge ROM, aligned to 32 bytes, switching banks
  * for addresses at or above 0x4000.
  */
-s32 GbPak_ReadRom(s32 port, u8* buffer, s32 romAddress, s32 size) {
+s32 GbPak_ReadRom(s32 port, u8* buffer, s32 rom_address, s32 size) {
     s32 ret = 1;
-    u32 address = (romAddress & ~0x1F);
-    u32 endAddress = ((romAddress + size) + 0x1F) & ~0x1F;
+    u32 address = (rom_address & ~0x1F);
+    u32 end_address = ((rom_address + size) + 0x1F) & ~0x1F;
 
-    s32 bankChunkSize;
-    s32 chunkSize;
-    u32 bankEnd;
-    u32 chunkEnd;
+    s32 bank_chunk_size;
+    s32 chunk_size;
+    u32 bank_end;
+    u32 chunk_end;
 
     if (address < 0x4000U) {
-        if (endAddress < 0x4001U) {
-            chunkEnd = endAddress;
+        if (end_address < 0x4001U) {
+            chunk_end = end_address;
         } else {
-            chunkEnd = 0x4000;
+            chunk_end = 0x4000;
         }
-        chunkSize = chunkEnd - address;
-        ret = GbPak_RawRead(port, buffer, address, chunkSize);
+        chunk_size = chunk_end - address;
+        ret = GbPak_RawRead(port, buffer, address, chunk_size);
         if (ret != 0) {
             return ret;
         }
-        address += chunkSize;
-        buffer = &buffer[chunkSize];
+        address += chunk_size;
+        buffer = &buffer[chunk_size];
     }
-    while (address < endAddress) {
-        bankEnd = (address & ~0x3FFF) + 0x4000;
-        if (bankEnd >= endAddress) {
-            chunkEnd = endAddress;
+    while (address < end_address) {
+        bank_end = (address & ~0x3FFF) + 0x4000;
+        if (bank_end >= end_address) {
+            chunk_end = end_address;
         } else {
-            chunkEnd = bankEnd;
+            chunk_end = bank_end;
         }
-        bankChunkSize = chunkEnd - address;
+        bank_chunk_size = chunk_end - address;
         ret = GbPak_SelectRomBank(port, address >> 0xE);
         if (ret != 0) {
             return ret;
         }
-        ret = GbPak_RawRead(port, buffer, ((address & 0x3FFF) + 0x4000) & 0xFFFF, bankChunkSize);
+        ret = GbPak_RawRead(port, buffer, ((address & 0x3FFF) + 0x4000) & 0xFFFF, bank_chunk_size);
         if (ret != 0) {
             return ret;
         }
-        address += bankChunkSize;
-        buffer = &buffer[bankChunkSize];
+        address += bank_chunk_size;
+        buffer = &buffer[bank_chunk_size];
     }
     return ret;
 }
@@ -424,10 +424,10 @@ s32 GbPak_ReadRom(s32 port, u8* buffer, s32 romAddress, s32 size) {
  * Sets the ports polled by GbTower_PollPakConnection; returns the old mask.
  */
 u8 GbTower_SetPollMask(u8 mask) {
-    u8 oldMask = gGbPakPollMask;
+    u8 old_mask = gGbPakPollMask;
 
     gGbPakPollMask = mask;
-    return oldMask;
+    return old_mask;
 }
 
 #if defined(VERSION_JP)

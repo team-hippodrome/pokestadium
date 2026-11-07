@@ -68,13 +68,13 @@ s32 D_8123470C;
  * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
  */
 u32 GbApu_AllocZeroed(GbAudioHeap* heap, s32 size) {
-    s32 alignedSize;
+    s32 aligned_size;
     u32 allocation;
     u32 cursor;
-    alignedSize = ALIGN16(size);
+    aligned_size = ALIGN16(size);
     allocation = heap->cur;
-    if ((heap->base + heap->len) >= (allocation + alignedSize)) {
-        heap->cur += alignedSize;
+    if ((heap->base + heap->len) >= (allocation + aligned_size)) {
+        heap->cur += aligned_size;
         cursor = allocation;
         while (cursor < heap->cur) {
             *((u8*)cursor++) = 0;
@@ -91,12 +91,12 @@ u32 GbApu_AllocZeroed(GbAudioHeap* heap, s32 size) {
  */
 s32 GbApu_Alloc(GbAudioHeap* heap, s32 size) {
     s32 allocation;
-    u32 alignedSize;
+    u32 aligned_size;
 
-    alignedSize = ALIGN16(size);
+    aligned_size = ALIGN16(size);
     allocation = heap->cur;
-    if ((heap->base + heap->len) >= (heap->cur + alignedSize)) {
-        heap->cur = alignedSize + allocation;
+    if ((heap->base + heap->len) >= (heap->cur + aligned_size)) {
+        heap->cur = aligned_size + allocation;
     } else {
         return 0;
     }
@@ -119,24 +119,24 @@ void GbApu_InitAllocator(GbAudioHeap* heap, s32 base, s32 len) {
  * and allocates the three output buffers.
  */
 void GbAudio_InitOutput(void) {
-    u64* bssCursor;
-    s16* lengthCursor;
-    s32 sampleIndex;
+    u64* bss_cursor;
+    s16* length_cursor;
+    s32 sample_index;
     u32 remaining;
-    s16* bufferCursor;
+    s16* buffer_cursor;
     s32 i;
 
     D_812346FC = 0;
     for (i = 0; i < D_812286EC / 8; i++) {
         sGbAudioHeapMemory[i] = 0;
     }
-    bssCursor = D_81234650;
+    bss_cursor = D_81234650;
     remaining = (u32)((s32)&D_81234700 - (s32)D_81234650) >> 3;
     if ((s32)remaining >= 0) {
         do {
             remaining--;
-            *bssCursor = 0;
-            ++bssCursor;
+            *bss_cursor = 0;
+            ++bss_cursor;
         } while ((s32)remaining >= 0);
     }
     D_812346D8 = 16.713f;
@@ -146,22 +146,22 @@ void GbAudio_InitOutput(void) {
     sGbAudioOutputConfig.frequency = 0xBB80;
     sGbAudioOutputConfig.actualFrequency = osAiSetFrequency(sGbAudioOutputConfig.frequency);
     sGbAudioOutputConfig.samplesPerFrame = (s16)(((sGbAudioOutputConfig.frequency / sGbAudioFrameRate) + 0xF) & ~0xF);
-    lengthCursor = (s16*)&sGbAudioBufferLengths;
+    length_cursor = (s16*)&sGbAudioBufferLengths;
     sGbAudioOutputConfig.minSamplesPerFrame = (s16)(sGbAudioOutputConfig.samplesPerFrame - 0x10);
     sGbAudioOutputConfig.maxSamplesPerFrame = (s16)(sGbAudioOutputConfig.samplesPerFrame + 0x10);
     do {
-        *lengthCursor = 0xA0;
-        lengthCursor++;
-    } while (lengthCursor < (s16*)&D_812346F2);
+        *length_cursor = 0xA0;
+        length_cursor++;
+    } while (length_cursor < (s16*)&D_812346F2);
     sGbAudioFrameCount = 0;
     sGbAudioBufferIndex = 0;
     GbApu_InitAllocator(&sGbAudioHeap, (s32)sGbAudioHeapMemory, D_812286F0);
     for (i = 0; i < 3; i++) {
         sGbAudioBuffers[i] = (s16*)GbApu_Alloc(&sGbAudioHeap, 0xFC0);
-        bufferCursor = sGbAudioBuffers[i];
-        for (sampleIndex = 0; sampleIndex != 0xFC0 / 2; sampleIndex++) {
-            *bufferCursor = 0;
-            bufferCursor++;
+        buffer_cursor = sGbAudioBuffers[i];
+        for (sample_index = 0; sample_index != 0xFC0 / 2; sample_index++) {
+            *buffer_cursor = 0;
+            buffer_cursor++;
         }
     }
 }

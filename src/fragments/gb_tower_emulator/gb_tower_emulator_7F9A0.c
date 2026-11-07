@@ -813,8 +813,8 @@ s32 GbPak_CheckTransferStatus(unk_D_8122B2C0* emu) {
  * Selects the MBC1 ROM bank for a 0x4000-0x7FFF read of a linear ROM address,
  * switching to ROM banking mode and writing the upper bank bits when needed.
  */
-s32 GbPak_SelectRomAddress(unk_D_8122B2C0* emu, s32 romBank) {
-    s32 upperBank;
+s32 GbPak_SelectRomAddress(unk_D_8122B2C0* emu, s32 rom_bank) {
+    s32 upper_bank;
     s32 ret;
 
     ret = 0;
@@ -827,17 +827,17 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* emu, s32 romBank) {
         }
     }
     if (ret == 0) {
-        if (romBank != emu->pakRomBank) {
-            upperBank = romBank / 32;
-            if (upperBank != ((s32)emu->pakRomBank / 32)) {
+        if (rom_bank != emu->pakRomBank) {
+            upper_bank = rom_bank / 32;
+            if (upper_bank != ((s32)emu->pakRomBank / 32)) {
                 emu->pakRomBank = 0xFFFEU;
-                ret = GbPak_WriteFilledRegisterBlock(emu, 0x4000, upperBank);
+                ret = GbPak_WriteFilledRegisterBlock(emu, 0x4000, upper_bank);
             }
             if (ret == 0) {
                 emu->pakRomBank = 0xFFFDU;
-                ret = GbPak_WriteFilledRegisterBlock(emu, 0x2100, romBank);
+                ret = GbPak_WriteFilledRegisterBlock(emu, 0x2100, rom_bank);
                 if (ret == 0) {
-                    emu->pakRomBank = (u16)romBank;
+                    emu->pakRomBank = (u16)rom_bank;
                 }
             }
         }
@@ -848,7 +848,7 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* emu, s32 romBank) {
 /**
  * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
  */
-s32 GbPak_SelectRamBank(unk_D_8122B2C0* emu, s32 ramBank) {
+s32 GbPak_SelectRamBank(unk_D_8122B2C0* emu, s32 ram_bank) {
     s32 ret;
 
     ret = 0;
@@ -860,10 +860,10 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* emu, s32 ramBank) {
             emu->pakMbcMode = 1U;
         }
     }
-    if ((ret == 0) && (ramBank != emu->pakRamBank)) {
-        ret = GbPak_WriteFilledRegisterBlock(emu, 0x4000, ramBank);
+    if ((ret == 0) && (ram_bank != emu->pakRamBank)) {
+        ret = GbPak_WriteFilledRegisterBlock(emu, 0x4000, ram_bank);
         if (ret == 0) {
-            emu->pakRamBank = ramBank;
+            emu->pakRamBank = ram_bank;
         }
     }
     return ret;
@@ -989,60 +989,60 @@ s32 GbPak_ProbeCartridge(unk_D_8122B2C0* emu) {
  */
 s32 GbPak_ReadRomAndChecksum(unk_D_8122B2C0* emu) {
     s32 checksum = 0;
-    s32 chunkSize;
-    s32 bankChunkSize;
+    s32 chunk_size;
+    s32 bank_chunk_size;
     s32 remaining;
     s32 ret;
-    u32 romAddress;
+    u32 rom_address;
     u8* dst;
     u32 offset;
     s32 i;
     u32 temp;
     ret = GbPak_ProbeCartridge(emu);
     dst = emu->transferBuffer;
-    romAddress = emu->gbAddress;
+    rom_address = emu->gbAddress;
     remaining = emu->transferSize;
 
-    if (ret == 0 && romAddress < 0x4000U) {
-        temp = romAddress;
+    if (ret == 0 && rom_address < 0x4000U) {
+        temp = rom_address;
         temp += remaining;
         if (temp >= 0x4001U) {
-            chunkSize = 0x4000 - romAddress;
+            chunk_size = 0x4000 - rom_address;
         } else {
-            chunkSize = remaining;
+            chunk_size = remaining;
         }
 
-        ret = osGbpakReadWrite(&emu->pfs, 0, romAddress, dst, chunkSize);
+        ret = osGbpakReadWrite(&emu->pfs, 0, rom_address, dst, chunk_size);
 
         if (ret == 0) {
-            ret = chunkSize;
+            ret = chunk_size;
 
             while (ret != 0) {
                 checksum += *dst;
                 dst++;
                 ret--;
             }
-            remaining -= chunkSize;
-            romAddress = 0x4000;
+            remaining -= chunk_size;
+            rom_address = 0x4000;
         }
     }
 
     while (ret == 0 && remaining != 0) {
-        ret = GbPak_SelectRomAddress(emu, romAddress >> 14);
+        ret = GbPak_SelectRomAddress(emu, rom_address >> 14);
         if (ret == 0) {
-            offset = romAddress & 0x3FFF;
+            offset = rom_address & 0x3FFF;
             temp = offset;
             temp += remaining;
             if (temp >= 0x4001U) {
-                bankChunkSize = 0x4000 - offset;
+                bank_chunk_size = 0x4000 - offset;
             } else {
-                bankChunkSize = remaining;
+                bank_chunk_size = remaining;
             }
 
-            ret = osGbpakReadWrite(&emu->pfs, 0, (offset | 0x4000), dst, bankChunkSize);
+            ret = osGbpakReadWrite(&emu->pfs, 0, (offset | 0x4000), dst, bank_chunk_size);
 
             if (ret == 0) {
-                ret = bankChunkSize;
+                ret = bank_chunk_size;
 
                 while (ret != 0) {
                     checksum += *dst;
@@ -1050,8 +1050,8 @@ s32 GbPak_ReadRomAndChecksum(unk_D_8122B2C0* emu) {
                     ret--;
                 }
 
-                remaining -= bankChunkSize;
-                romAddress = (romAddress + 0x4000) & ~0x3FFF;
+                remaining -= bank_chunk_size;
+                rom_address = (rom_address + 0x4000) & ~0x3FFF;
             }
         }
     }
@@ -1067,38 +1067,38 @@ s32 GbPak_ReadRomAndChecksum(unk_D_8122B2C0* emu) {
 }
 
 /**
- * Reads (isWrite == 0) or writes (isWrite != 0) transferSize bytes of banked cartridge
+ * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
  * RAM at gbAddress, selecting each 8 KB bank as it goes.
  */
-s32 GbPak_TransferBankedRam(unk_D_8122B2C0* emu, s32 isWrite) {
-    s32 bankOffset;
-    s32 chunkSize;
+s32 GbPak_TransferBankedRam(unk_D_8122B2C0* emu, s32 is_write) {
+    s32 bank_offset;
+    s32 chunk_size;
     s32 remaining;
     u8* buffer;
     s32 var_v0;
     s32 var_v1;
-    u32 ramAddress;
+    u32 ram_address;
 
     var_v0 = GbPak_ProbeCartridge(emu);
     var_v1 = var_v0;
     buffer = emu->transferBuffer;
-    ramAddress = emu->gbAddress;
+    ram_address = emu->gbAddress;
     remaining = emu->transferSize;
     while ((var_v0 == 0) && (remaining != 0)) {
-        var_v0 = GbPak_SelectRamBank(emu, ramAddress >> 0xD);
+        var_v0 = GbPak_SelectRamBank(emu, ram_address >> 0xD);
         var_v1 = var_v0;
         if (var_v0 == 0) {
-            bankOffset = ramAddress & 0x1FFF;
-            if ((u32)(bankOffset + remaining) >= 0x2001U) {
-                chunkSize = 0x2000 - bankOffset;
+            bank_offset = ram_address & 0x1FFF;
+            if ((u32)(bank_offset + remaining) >= 0x2001U) {
+                chunk_size = 0x2000 - bank_offset;
             } else {
-                chunkSize = remaining;
+                chunk_size = remaining;
             }
-            var_v0 = osGbpakReadWrite(&emu->pfs, isWrite, (bankOffset | 0xA000) & 0xFFFF, buffer, chunkSize);
+            var_v0 = osGbpakReadWrite(&emu->pfs, is_write, (bank_offset | 0xA000) & 0xFFFF, buffer, chunk_size);
             var_v1 = var_v0;
-            buffer += chunkSize;
-            remaining -= chunkSize;
-            ramAddress = (ramAddress + 0x2000) & ~0x1FFF;
+            buffer += chunk_size;
+            remaining -= chunk_size;
+            ram_address = (ram_address + 0x2000) & ~0x1FFF;
         }
     }
     if (var_v0 == 0) {
@@ -1396,7 +1396,7 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     s32 x;
     s32 dir;
     long trans;
-    s32 tileSize;
+    s32 tile_size;
     s32 count;
     s32 row;
     s32 col;
@@ -1419,16 +1419,16 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
             default:
                 map = sFont1GlyphTable;
                 data = gGbEmuFont1Data;
-                tileSize = 0xA;
+                tile_size = 0xA;
                 break;
             case 0xC:
-                tileSize = 0xC;
+                tile_size = 0xC;
                 map = sFont2GlyphTable;
                 data = gGbEmuFont2Data;
                 break;
             case 0xA:
                 map = sFont1GlyphTable, data = gGbEmuFont1Data;
-                tileSize = 0xA;
+                tile_size = 0xA;
                 break;
         }
 
@@ -1477,9 +1477,9 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
             count--;
             tile = map[ptr[6] + 0x80];
             width = map[tile];
-            src = data + tile * tileSize * 0x10;
+            src = data + tile * tile_size * 0x10;
 
-            for (row = 0; row != tileSize; row++) {
+            for (row = 0; row != tile_size; row++) {
                 for (col = 0; col != width; col++) {
                     if (trans || (pal[*src & 0xF] != 0)) {
                         *dst = pal[*src & 0xF];
@@ -1491,7 +1491,7 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
                 src = src - width + 0x10;
             }
             ptr++;
-            dst -= tileSize * 0x140 - width - dir;
+            dst -= tile_size * 0x140 - width - dir;
         }
         flags = ptr[6];
         ptr += 6;
@@ -1613,9 +1613,9 @@ void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
 /**
  * Additively blends a solid color into the destination using a 4-bit alpha map.
  */
-void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alphaMap, s32 color, s32 width, s32 height, u32 alphaStride) {
-    u16* dstRow;
-    u8* alphaRow;
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
+    u16* dst_row;
+    u8* alpha_row;
     s32 x;
     s32 y;
     s32 channel;
@@ -1623,7 +1623,7 @@ void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alphaMap, s32 color, s32 width, 
     s32 alpha;
     for (y = 0; y < height; y++) {
         for (x = 0; x < width; x++) {
-            alpha = alphaMap[y * alphaStride + x] & 0xF;
+            alpha = alpha_map[y * alpha_stride + x] & 0xF;
             channel = (dst[y * 320 + x] & 0xF800) + (((color & 0xF800) * alpha) / 15 & 0xF800);
             if (channel > 0xF800)
                 channel = 0xF800;
@@ -1688,18 +1688,18 @@ void GbEmu_DrawAccessIcon(u16* dst, s32 direction, s32 frame) {
 
 /**
  * Builds one of the two access overlay images: border in the cartridge version
- * color, the text "Loading..." (textOffset == 0) or "Saving..." (textOffset != 0) decoded from
+ * color, the text "Loading..." (text_offset == 0) or "Saving..." (text_offset != 0) decoded from
  * sLoadingSavingText, a pak icon, and the access icon.
  */
-void GbEmu_DrawAccessOverlay(s32 overlayIndex, s32 textOffset) {
+void GbEmu_DrawAccessOverlay(s32 overlay_index, s32 text_offset) {
     u8* fb;
     s32 x;
     s32 i;
     s32 count;
     s32 off;
 
-    fb = (u8*)sOverlayImages[overlayIndex];
-    bzero(sOverlayImages[overlayIndex], 0x2800);
+    fb = (u8*)sOverlayImages[overlay_index];
+    bzero(sOverlayImages[overlay_index], 0x2800);
     fb += 0xAA;
 
     i = sGbEmu->cartridgeVersion;
@@ -1708,9 +1708,9 @@ void GbEmu_DrawAccessOverlay(s32 overlayIndex, s32 textOffset) {
     }
     GbEmu_DrawStretchedBorderRow(fb, sVersionColors[i], 0x70);
 
-    if (textOffset != 0) {
+    if (text_offset != 0) {
         count = 8;
-        textOffset = 0xA;
+        text_offset = 0xA;
     } else {
         count = 9;
     }
@@ -1718,9 +1718,9 @@ void GbEmu_DrawAccessOverlay(s32 overlayIndex, s32 textOffset) {
 
     for (i = 0; i <= count; i++) {
         GbEmu_BlendColorWithAlphaMap((u16*)((x * 2) + fb + 0x788),
-                      &gGbEmuFont1Data[sFont1GlyphTable[sLoadingSavingText[textOffset + count - i] - i + 0x43] * 0xA0], 0xFFFE, 0xC, 0xA,
+                      &gGbEmuFont1Data[sFont1GlyphTable[sLoadingSavingText[text_offset + count - i] - i + 0x43] * 0xA0], 0xFFFE, 0xC, 0xA,
                       0x10);
-        x += sFont1GlyphTable[sFont1GlyphTable[sLoadingSavingText[textOffset + count - i] - i + 0x43]];
+        x += sFont1GlyphTable[sFont1GlyphTable[sLoadingSavingText[text_offset + count - i] - i + 0x43]];
     }
 
     GbEmu_BlitWithPixelOp((u16*)(fb + 0x7FE), (u16*)((u8*)sUiGraphics + 0xAD18), 0, 0x10, 0xA);
@@ -1732,7 +1732,7 @@ void GbEmu_DrawAccessOverlay(s32 overlayIndex, s32 textOffset) {
     off = i * 0x90;
     GbEmu_BlitWithPixelOp((u16*)(fb + 0x5C2), (u16*)((off * 2) + (u8*)sUiGraphics + 0xAE58), 0, 0xC, 0xC);
 
-    GbEmu_DrawAccessIcon(fb - 0x10, textOffset, 0);
+    GbEmu_DrawAccessIcon(fb - 0x10, text_offset, 0);
     sAccessIconFrame = 0;
 }
 
@@ -1743,7 +1743,7 @@ void GbEmu_DrawAccessOverlay(s32 overlayIndex, s32 textOffset) {
 void GbEmu_DrawStatusBar(void) {
     u8* var_s2;
     s32 image;
-    s32 textX;
+    s32 text_x;
     s32 var_s1;
     s32 pos;
     u16 color;
@@ -1777,17 +1777,17 @@ void GbEmu_DrawStatusBar(void) {
     }
     GbEmu_BlitWithPixelOp((u16*)(pos), (u16*)(sUiGraphics + 0xC1D8), 0, 0xC, 0xC);
 
-    textX = 0;
+    text_x = 0;
     pos -= 0x266;
     for (var_s2 = (u8*)&D_8120D7F3, var_s1 = 0x37; var_s1 < 0x42; var_s1++, var_s2--) {
-        GbEmu_BlendColorWithAlphaMap((textX * 2) + pos, (sFont2GlyphTable[var_s2[0x116] - var_s1 + 0x80] * 0xC0) + gGbEmuFont2Data,
+        GbEmu_BlendColorWithAlphaMap((text_x * 2) + pos, (sFont2GlyphTable[var_s2[0x116] - var_s1 + 0x80] * 0xC0) + gGbEmuFont2Data,
                       0xFFFE, 0xC, 0xC, 0x10);
-        textX += sFont2GlyphTable[sFont2GlyphTable[var_s2[0x116] - var_s1 + 0x80]];
+        text_x += sFont2GlyphTable[sFont2GlyphTable[var_s2[0x116] - var_s1 + 0x80]];
         if (var_s1 == 0x3C) {
-            textX -= 1;
+            text_x -= 1;
         }
         if (var_s1 == 0x3D) {
-            textX += 1;
+            text_x += 1;
         }
     }
 }
@@ -1797,24 +1797,24 @@ void GbEmu_DrawStatusBar(void) {
  * loading screen; the segment count depends on sActivePort, frame is the animation frame (0-7).
  */
 void GbEmu_DrawTransferAnimation(s32 dst, s32 frame) {
-    s32 stripOffset;
-    s32 tileOffset;
+    s32 strip_offset;
+    s32 tile_offset;
     s32 i;
 
-    stripOffset = (frame * 0x28) << 1;
+    strip_offset = (frame * 0x28) << 1;
     for (i = 0; i < 6; i++) {
-        GbEmu_BlitWithPixelOp(dst, stripOffset + sUiGraphics + 0x8910, 0, 8, 5);
+        GbEmu_BlitWithPixelOp(dst, strip_offset + sUiGraphics + 0x8910, 0, 8, 5);
         dst += 0x10;
     }
-    tileOffset = frame << 6;
-    tileOffset <<= 1;
-    GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x8F90, 0, 8, 8);
+    tile_offset = frame << 6;
+    tile_offset <<= 1;
+    GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x8F90, 0, 8, 8);
     dst += 0x1406;
     for (i = 0; i < 5; i++) {
-        GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x8090, 0, 8, 8);
+        GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x8090, 0, 8, 8);
         dst += 0x1400;
     }
-    GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x8510, 0, 8, 8);
+    GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x8510, 0, 8, 8);
     dst += 0x10;
     switch (sActivePort) {
         case 1:
@@ -1831,25 +1831,25 @@ void GbEmu_DrawTransferAnimation(s32 dst, s32 frame) {
             break;
     }
     while (i > 0) {
-        GbEmu_BlitWithPixelOp(dst + 0x780, stripOffset + sUiGraphics + 0x8910, 0, 8, 5);
+        GbEmu_BlitWithPixelOp(dst + 0x780, strip_offset + sUiGraphics + 0x8910, 0, 8, 5);
         dst += 0x10;
         i--;
     }
-    GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x8B90, 0, 8, 8);
+    GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x8B90, 0, 8, 8);
     dst -= 0x13FA;
-    GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x9390, 0, 8, 8);
+    GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x9390, 0, 8, 8);
     dst -= 0x1400;
-    GbEmu_BlitWithPixelOp(dst, tileOffset + sUiGraphics + 0x9390, 0, 8, 8);
+    GbEmu_BlitWithPixelOp(dst, tile_offset + sUiGraphics + 0x9390, 0, 8, 8);
     dst -= 0x1400;
     GbEmu_BlitWithPixelOp(dst, sUiGraphics + 0x8490, 0, 8, 8);
 }
 
 /**
  * Draws the loading screen: background, the six 40x40 party icons in framed
- * panels, the cartridge version art (versionIndex = cartridgeVersion - 1) and the active
+ * panels, the cartridge version art (version_index = cartridgeVersion - 1) and the active
  * controller port (port).
  */
-void GbEmu_DrawLoadingScreen(u16* dst, u16 (*partyIcons)[6][0x640], s32 port, s32 versionIndex) {
+void GbEmu_DrawLoadingScreen(u16* dst, u16 (*party_icons)[6][0x640], s32 port, s32 version_index) {
     s32 x;
     s32 y;
     s32 step;
@@ -1895,9 +1895,9 @@ void GbEmu_DrawLoadingScreen(u16* dst, u16 (*partyIcons)[6][0x640], s32 port, s3
 
     for (x = 0; x < 6; x++) {
         GbEmu_DrawFramedPanel(dst + 0xB916 + x * 46);
-        if (partyIcons != NULL) {
-            osInvalDCache((*partyIcons) + (0, x), sizeof((*partyIcons)[x]));
-            GbEmu_BlitWithPixelOp(dst + 0xBCD9 + x * 46, (*partyIcons) + (0, x), 0, 40, 40);
+        if (party_icons != NULL) {
+            osInvalDCache((*party_icons) + (0, x), sizeof((*party_icons)[x]));
+            GbEmu_BlitWithPixelOp(dst + 0xBCD9 + x * 46, (*party_icons) + (0, x), 0, 40, 40);
         }
     }
 
@@ -1937,7 +1937,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u16 (*partyIcons)[6][0x640], s32 port, s3
     GbEmu_BlitWithPixelOp(dst + 0x4E38, (u16*)(sUiGraphics + 0x3600), 0, 0x56, 0x21);
     GbEmu_BlitWithPixelOp((u16*)(D_8122C754 + 0x61E0), (u16*)(sUiGraphics + 0x4CB0), 0, 0x3C, 0x4B);
 
-    switch (versionIndex) {
+    switch (version_index) {
         case 0:
             GbEmu_BlitWithPixelOp((u16*)(D_8122C754 + 0x6706), (u16*)(sUiGraphics + 0x6FD8), 0, 0x17, 0x19);
             break;
@@ -1961,7 +1961,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u16 (*partyIcons)[6][0x640], s32 port, s3
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
  */
-void GbEmu_BlendScrollingLayer(u16* src, u16* overlay, s16* dst, s32 height, s32 scrollX) {
+void GbEmu_BlendScrollingLayer(u16* src, u16* overlay, s16* dst, s32 height, s32 scroll_x) {
     s32 i;
     s32 j;
     s32 channel;
@@ -1969,17 +1969,17 @@ void GbEmu_BlendScrollingLayer(u16* src, u16* overlay, s16* dst, s32 height, s32
 
     for (j = 0; j < height; j++) {
         for (i = 0; i < 320; i++) {
-            channel = (src[(j * 320) + ((scrollX + i) % 320)] & 0xF800) + (overlay[(j * 320) + i] & 0xF800);
+            channel = (src[(j * 320) + ((scroll_x + i) % 320)] & 0xF800) + (overlay[(j * 320) + i] & 0xF800);
             if (channel > 0xF800) {
                 channel = 0xF800;
             }
             blended = channel;
-            channel = (src[(j * 320) + ((scrollX + i) % 320)] & 0x7C0) + (overlay[(j * 320) + i] & 0x7C0);
+            channel = (src[(j * 320) + ((scroll_x + i) % 320)] & 0x7C0) + (overlay[(j * 320) + i] & 0x7C0);
             if (channel > 0x7C0) {
                 channel = 0x7C0;
             }
             blended |= channel;
-            channel = (src[(j * 320) + ((scrollX + i) % 320)] & 0x3E) + (overlay[(j * 320) + i] & 0x3E);
+            channel = (src[(j * 320) + ((scroll_x + i) % 320)] & 0x3E) + (overlay[(j * 320) + i] & 0x3E);
             if (channel > 0x3E) {
                 channel = 0x3E;
             }
@@ -1992,7 +1992,7 @@ void GbEmu_BlendScrollingLayer(u16* src, u16* overlay, s16* dst, s32 height, s32
  * Advances the loading screen animation when enough time has passed; returns 1
  * when a new frame was drawn so the caller swaps framebuffers.
  */
-s32 GbEmu_AnimateLoadingScreen(s32 screenBase, s32 framebuffer) {
+s32 GbEmu_AnimateLoadingScreen(s32 screen_base, s32 framebuffer) {
     s32 redraw;
 
     redraw = 0;
@@ -2013,7 +2013,7 @@ s32 GbEmu_AnimateLoadingScreen(s32 screenBase, s32 framebuffer) {
         }
     }
     if (redraw != 0) {
-        GbEmu_DrawTransferAnimation(screenBase + 0x87BA, sTransferAnimFrame);
+        GbEmu_DrawTransferAnimation(screen_base + 0x87BA, sTransferAnimFrame);
         GbEmu_BlendScrollingLayer(D_8122C750, D_8122C74C, framebuffer + 0x20A80, 0xF, D_8122C764);
     }
     return redraw;
@@ -2126,7 +2126,7 @@ void GbAudio_SetMenuSoundMode(s32);
 #if defined(VERSION_US_REV2)
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_InitSession.s")
 #else
-void GbEmu_InitSession(s32 arg0, s32 port, OSId threadId, s32 threadPriority, OSMesgQueue* siEventQueue, u16 (*partyIcons)[6][0x640]) {
+void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, OSMesgQueue* si_event_queue, u16 (*party_icons)[6][0x640]) {
     unk_D_8122B2C0* emu;
     s32 pad[2];
     s32 i;
@@ -2161,10 +2161,10 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId threadId, s32 threadPriority, OS
     osViBlack(TRUE);
 
     gGbPakServiceThreadActive = 0;
-    gGbPakSiEventQueue = siEventQueue;
+    gGbPakSiEventQueue = si_event_queue;
     osCreateMesgQueue(&gGbPakServiceQueue, gGbPakServiceQueueMessages, ARRAY_COUNT(gGbPakServiceQueueMessages));
-    osCreateThread(&gGbPakServiceThread, threadId, GbPak_ServiceThread, NULL,
-                   gGbPakServiceThreadStack + sizeof(gGbPakServiceThreadStack), threadPriority);
+    osCreateThread(&gGbPakServiceThread, thread_id, GbPak_ServiceThread, NULL,
+                   gGbPakServiceThreadStack + sizeof(gGbPakServiceThreadStack), thread_priority);
     osStartThread(&gGbPakServiceThread);
 
     sFramebufferIndex = 0;
@@ -2213,7 +2213,7 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId threadId, s32 threadPriority, OS
     for (i = 0; i < 2; i++) {
         sRenderTasks[i].taskType = 2;
         sRenderTasks[i].taskFlags = 0;
-        GbEmu_DrawLoadingScreen((u16*)(&sFramebuffer0)[i]->img_p, partyIcons, port, 0);
+        GbEmu_DrawLoadingScreen((u16*)(&sFramebuffer0)[i]->img_p, party_icons, port, 0);
         D_8122C758[i] = D_8122C754;
     }
 
@@ -2290,8 +2290,8 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId threadId, s32 threadPriority, OS
             return;
         }
         sGbEmuPhase = 5;
-        GbEmu_DrawLoadingScreen((u16*)sFramebuffer0->img_p, partyIcons, port, (emu->cartridgeVersion != 0) ? emu->cartridgeVersion - 1 : 0);
-        GbEmu_DrawLoadingScreen((u16*)sFramebuffer1->img_p, partyIcons, port, (emu->cartridgeVersion != 0) ? emu->cartridgeVersion - 1 : 0);
+        GbEmu_DrawLoadingScreen((u16*)sFramebuffer0->img_p, party_icons, port, (emu->cartridgeVersion != 0) ? emu->cartridgeVersion - 1 : 0);
+        GbEmu_DrawLoadingScreen((u16*)sFramebuffer1->img_p, party_icons, port, (emu->cartridgeVersion != 0) ? emu->cartridgeVersion - 1 : 0);
     }
 
     D_8122C760 = osGetCount();
@@ -2311,38 +2311,38 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId threadId, s32 threadPriority, OS
 #else
 void GbEmu_LoadStoredRomBanks(unk_D_8122B2C0* emu) {
     u16* entry;
-    u32 romOffset;
-    s32 deltaCount;
-    s32 bankIndex;
-    s32 deltaIndex;
+    u32 rom_offset;
+    s32 delta_count;
+    s32 bank_index;
+    s32 delta_index;
     u8* bank;
     u8* delta;
     s32 i;
 
     if (emu->unk_5D70[2] != NULL) {
         entry = (u16*)emu->unk_5D70[2];
-        romOffset = emu->unk_5D70[3] + 0x7C0000;
+        rom_offset = emu->unk_5D70[3] + 0x7C0000;
         do {
-            bankIndex = *entry & 0xFF;
-            deltaCount = *entry / 0x100;
-            Dma_WriteChunks((u32)((u8*)emu->romImage + 0xEC000), romOffset, entry[1] + romOffset, 0);
-            romOffset += entry[1];
+            bank_index = *entry & 0xFF;
+            delta_count = *entry / 0x100;
+            Dma_WriteChunks((u32)((u8*)emu->romImage + 0xEC000), rom_offset, entry[1] + rom_offset, 0);
+            rom_offset += entry[1];
             entry += 2;
-            Yay0_Decompress((u8*)emu->romImage + 0xEC000, (u8*)emu->romImage + (bankIndex << 14));
-            for (deltaIndex = 0; deltaIndex < deltaCount; deltaIndex++) {
-                if ((deltaIndex + 1) >= emu->unk_5DC6) {
-                    Dma_WriteChunks((u32)((u8*)emu->romImage + 0xF0000), romOffset, entry[0] + romOffset, 0);
+            Yay0_Decompress((u8*)emu->romImage + 0xEC000, (u8*)emu->romImage + (bank_index << 14));
+            for (delta_index = 0; delta_index < delta_count; delta_index++) {
+                if ((delta_index + 1) >= emu->unk_5DC6) {
+                    Dma_WriteChunks((u32)((u8*)emu->romImage + 0xF0000), rom_offset, entry[0] + rom_offset, 0);
                     Yay0_Decompress((u8*)emu->romImage + 0xF0000, (u8*)emu->romImage + 0xEC000);
                     delta = (u8*)emu->romImage + 0xEC000;
-                    bank = (u8*)emu->romImage + (bankIndex << 14);
+                    bank = (u8*)emu->romImage + (bank_index << 14);
                     for (i = 0; i != 0x1000; i++) {
                         bank[i] = delta[i] ^ bank[i];
                     }
                 }
-                romOffset += entry[0];
+                rom_offset += entry[0];
                 entry += 1;
             }
-            emu->romBankStatus[bankIndex] = 0xFF;
+            emu->romBankStatus[bank_index] = 0xFF;
         } while (*entry);
     }
 }
@@ -3065,8 +3065,8 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
 #if defined(VERSION_US_REV2)
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_UpdateFrame.s")
 #else
-s32 GbEmu_UpdateFrame(s32 emuIndex) {
-    unk_D_8122B2C0* emu = (&sGbEmu)[emuIndex];
+s32 GbEmu_UpdateFrame(s32 emu_index) {
+    unk_D_8122B2C0* emu = (&sGbEmu)[emu_index];
     s32 i;
     s32 pressed;
 
