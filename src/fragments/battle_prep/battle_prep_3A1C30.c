@@ -156,7 +156,11 @@ void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2, s
     Font_Printf(arg1, arg2 + (arg3 * 0xE), arg5);
 }
 
-void BattlePrep_DrawResultPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kinds 1 and 2: "Keep battling?" Continue / Save and Quit. Kind 1 (cups) also
+ * shows "Continue = N".
+ */
+void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     BattlePrep_DrawCursorArrow(arg0, arg1->unk_00 + 0xC, arg1->unk_02 + 0x18);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
@@ -174,7 +178,10 @@ void BattlePrep_DrawResultPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindo
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_DrawContinuePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 3: cup loss menu (Continue / Save / Re-enter / From the start / Quit).
+ */
+void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     s32 sp2C;
     s32 sp28;
 
@@ -197,7 +204,10 @@ void BattlePrep_DrawContinuePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWin
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_DrawGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 4: castle loss menu (Re-enter / Re-start at this GYM / Quit).
+ */
+void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     s32 sp2C = !!(gSessionContext.sessionFlags & 2);
 
     sp2C = !sp2C;
@@ -210,8 +220,11 @@ void BattlePrep_DrawGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindo
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_DrawRetireStreakPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
-    s32 sp2C = gSessionContext.battleSides[0].unk_1E < 0x63 && gSessionContext.battleSides[1].unk_1E < 0x63;
+/**
+ * Rule window kind 5: Free Battle menu (Try once more / Change team combination / Quit).
+ */
+void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+    s32 sp2C = gSessionContext.battleSides[0].winCount < 0x63 && gSessionContext.battleSides[1].winCount < 0x63;
 
     BattlePrep_DrawCursorArrow(arg0, arg1->unk_00 + 5, arg1->unk_02 + 6);
     Font_BeginTranslucentTextRendering();
@@ -222,7 +235,10 @@ void BattlePrep_DrawRetireStreakPrompt(BattlePrepRuleWindow* arg0, BattlePrepRul
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_DrawQuitPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 6: Mewtwo loss menu (Battle again / Quit).
+ */
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     BattlePrep_DrawCursorArrow(arg0, arg1->unk_00 + 5, arg1->unk_02 + 6);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
@@ -231,7 +247,10 @@ void BattlePrep_DrawQuitPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowL
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_DrawCupRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 7: cup name, ball class and BATTLE N label.
+ */
+void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     char* temp_v0;
 
     Font_BeginTranslucentTextRendering();
@@ -258,9 +277,12 @@ void BattlePrep_DrawCupRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRuleWin
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawCastleRuleSummary.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawCastleProgressHeader.s")
 #else
-void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 8: gym name with BATTLE, TRAINER N / GYM LEADER / ELITE FOUR N.
+ */
+void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     s32 sp12C;
     char sp2C[0x100];
 
@@ -294,7 +316,10 @@ void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRule
 }
 #endif
 
-void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
+/**
+ * Draws the COM (D_3025200) or 1P-4P controller tag for a battle side.
+ */
+void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
     static u8* D_84B17608[] = { D_3025950, D_30260A0, D_30267F0, D_3026F40 };
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -330,10 +355,13 @@ void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
     Font_EndTexturedTextRendering();
 }
 
-void BattlePrep_SetStreakColor(BattleSessionTeams* arg0) {
+/**
+ * Sets the text color for a side's win count; the side that won this battle pulses yellow.
+ */
+void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0) {
     static s16 D_84B17618 = 0;
 
-    if (arg0->unk_1C == 1) {
+    if (arg0->wonBattle == 1) {
         Gfx_SetEnvColor(0xFF, (SINS((s32)(SINS(D_84B17618) * 16384.0f)) * 100.0f) + 155.0f, 0x37, 0xFF);
         D_84B17618 += 0x400;
     } else {
@@ -341,11 +369,14 @@ void BattlePrep_SetStreakColor(BattleSessionTeams* arg0) {
     }
 }
 
-void BattlePrep_DrawTeamPreview(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 9: Free Battle "Record" with each side's win(s) count.
+ */
+void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     BattlePrep_DrawBorderedRect(arg1->unk_00 + 8, arg1->unk_02 + 0x14, 0xA8, 0x20, 0, 0, 0, 0xFF);
     BattlePrep_DrawBorderedRect(arg1->unk_00 + 8, arg1->unk_02 + 0x44, 0xA8, 0x20, 0, 0, 0, 0xFF);
-    BattlePrep_DrawRankBadge(arg1->unk_00 + 8, arg1->unk_02 + 0x14, gSessionContext.battleSides);
-    BattlePrep_DrawRankBadge(arg1->unk_00 + 8, arg1->unk_02 + 0x44, &gSessionContext.battleSides[1]);
+    BattlePrep_DrawPlayerTag(arg1->unk_00 + 8, arg1->unk_02 + 0x14, gSessionContext.battleSides);
+    BattlePrep_DrawPlayerTag(arg1->unk_00 + 8, arg1->unk_02 + 0x44, &gSessionContext.battleSides[1]);
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(4, 0);
@@ -353,10 +384,10 @@ void BattlePrep_DrawTeamPreview(BattlePrepRuleWindow* arg0, BattlePrepRuleWindow
     Font_Printf(arg1->unk_00 + 0x40, arg1->unk_02 + 2, BattlePrep_GetString(0x38));
     Font_DisableTwoCycleTexturing();
     Font_SetActive(0x10, 0);
-    BattlePrep_SetStreakColor(&gSessionContext.battleSides[0]);
-    Font_Printf(arg1->unk_00 + 0x5C, arg1->unk_02 + 0x18, "%2d", gSessionContext.battleSides[0].unk_1E);
-    BattlePrep_SetStreakColor(&gSessionContext.battleSides[1]);
-    Font_Printf(arg1->unk_00 + 0x5C, arg1->unk_02 + 0x48, "%2d", gSessionContext.battleSides[1].unk_1E);
+    BattlePrep_SetWinCountColor(&gSessionContext.battleSides[0]);
+    Font_Printf(arg1->unk_00 + 0x5C, arg1->unk_02 + 0x18, "%2d", gSessionContext.battleSides[0].winCount);
+    BattlePrep_SetWinCountColor(&gSessionContext.battleSides[1]);
+    Font_Printf(arg1->unk_00 + 0x5C, arg1->unk_02 + 0x48, "%2d", gSessionContext.battleSides[1].winCount);
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_Printf(arg1->unk_00 + 0x82, arg1->unk_02 + 0x1F, BattlePrep_GetString(0x39));
@@ -365,9 +396,12 @@ void BattlePrep_DrawTeamPreview(BattlePrepRuleWindow* arg0, BattlePrepRuleWindow
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawStreakGiveUpPrompt.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawOverwriteSavePrompt.s")
 #else
-void BattlePrep_DrawStreakGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
+/**
+ * Rule window kind 10: overwrite-saved-battle-data prompt.
+ */
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     SessionContinueData sp50;
     UNUSED s32 pad;
     s32 sp48;
@@ -465,43 +499,43 @@ void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0) {
 
             switch (arg0->unk_01) {
                 case 1:
-                    BattlePrep_DrawResultPrompt(arg0, temp_s0);
+                    BattlePrep_DrawKeepBattlingPrompt(arg0, temp_s0);
                     break;
 
                 case 2:
-                    BattlePrep_DrawResultPrompt(arg0, temp_s0);
+                    BattlePrep_DrawKeepBattlingPrompt(arg0, temp_s0);
                     break;
 
                 case 3:
-                    BattlePrep_DrawContinuePrompt(arg0, temp_s0);
+                    BattlePrep_DrawCupLossMenu(arg0, temp_s0);
                     break;
 
                 case 4:
-                    BattlePrep_DrawGiveUpPrompt(arg0, temp_s0);
+                    BattlePrep_DrawCastleLossMenu(arg0, temp_s0);
                     break;
 
                 case 5:
-                    BattlePrep_DrawRetireStreakPrompt(arg0, temp_s0);
+                    BattlePrep_DrawFreeBattleMenu(arg0, temp_s0);
                     break;
 
                 case 6:
-                    BattlePrep_DrawQuitPrompt(arg0, temp_s0);
+                    BattlePrep_DrawMewtwoLossMenu(arg0, temp_s0);
                     break;
 
                 case 7:
-                    BattlePrep_DrawCupRuleSummary(arg0, temp_s0);
+                    BattlePrep_DrawCupProgressHeader(arg0, temp_s0);
                     break;
 
                 case 8:
-                    BattlePrep_DrawCastleRuleSummary(arg0, temp_s0);
+                    BattlePrep_DrawCastleProgressHeader(arg0, temp_s0);
                     break;
 
                 case 9:
-                    BattlePrep_DrawTeamPreview(arg0, temp_s0);
+                    BattlePrep_DrawWinRecord(arg0, temp_s0);
                     break;
 
                 case 10:
-                    BattlePrep_DrawStreakGiveUpPrompt(arg0, temp_s0);
+                    BattlePrep_DrawOverwriteSavePrompt(arg0, temp_s0);
                     break;
             }
         }
@@ -619,7 +653,7 @@ void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1) {
             ptr->unk_0E &= ~1;
         }
     } else if ((arg1 - 1 == 4) &&
-               ((gSessionContext.battleSides[0].unk_1E >= 0x63) || (gSessionContext.battleSides[1].unk_1E >= 0x63))) {
+               ((gSessionContext.battleSides[0].winCount >= 0x63) || (gSessionContext.battleSides[1].winCount >= 0x63))) {
         ptr->unk_0E &= ~1;
     }
 

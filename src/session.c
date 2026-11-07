@@ -22,7 +22,7 @@ void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {
     arg0->tagTeamMember[1] = 0;
     arg0->assetIsBusy = 0;
     arg0->unk_20 = 0;
-    arg0->unk_1E = 0;
+    arg0->winCount = 0;
 }
 
 void Session_SetMode(s32 arg0, s32 arg1, s32 arg2) {

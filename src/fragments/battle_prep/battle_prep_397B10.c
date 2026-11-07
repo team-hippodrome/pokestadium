@@ -15,10 +15,10 @@ s32 BattlePrep_BindCarouselSegment2(s32, unk_func_80011B94*);
 s32 BattlePrep_CarouselDepthCallback(s32, unk_D_86002F34_alt5*);
 s32 BattlePrep_BindCarouselSegment3(s32, unk_func_80011B94*);
 
-s32 BattlePrep_BadgeCarouselGeoCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselGlowCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselTextureCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselGlowCallback2(s32, unk_func_80011B94*);
+s32 BattlePrep_OpponentLadderPortraitCallback(s32, unk_func_80011B94*);
+s32 BattlePrep_OpponentLadderHighlightCallback(s32, unk_func_80011B94*);
+s32 BattlePrep_OpponentLadderTextureCallback(s32, unk_func_80011B94*);
+s32 BattlePrep_OpponentLadderHighlightCallback2(s32, unk_func_80011B94*);
 
 static u8 D_84B0FC40[] = {
     0x00, 0x00, 0x00, 0x01, 0x02, 0x03,
@@ -557,12 +557,12 @@ static u32 D_84B11640[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGeoCallback,
+    BattlePrep_OpponentLadderPortraitCallback,
     0x00000000,
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGlowCallback,
+    BattlePrep_OpponentLadderHighlightCallback,
     0x00000000,
     0x06000000,
     0x1B000000,
@@ -573,12 +573,12 @@ static u32 D_84B11640[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGeoCallback,
+    BattlePrep_OpponentLadderPortraitCallback,
     0x00000001,
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGlowCallback,
+    BattlePrep_OpponentLadderHighlightCallback,
     0x00000001,
     0x06000000,
     0x06000000,
@@ -652,8 +652,8 @@ static Gfx D_84B11A88[] = {
 };
 static u32 D_84B11BD0[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B116E0,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BadgeCarouselTextureCallback,
-    D_84B119A0, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BadgeCarouselGlowCallback2,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_OpponentLadderTextureCallback,
+    D_84B119A0, 0x22050000, 0x00000000, 0x08000000, BattlePrep_OpponentLadderHighlightCallback2,
     D_84B11A88, 0x06000000, 0x01000000,
 };
 
@@ -1306,7 +1306,10 @@ void BattlePrep_InitBannerScene(unk_D_84B259A8* arg0) {
     BattlePrep_ApplyBannerColors(arg0);
 }
 
-s32 BattlePrep_BadgeCarouselGeoCallback(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds the portrait texture for an opponent ladder slot to segment 0x0F.
+ */
+s32 BattlePrep_OpponentLadderPortraitCallback(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B259E8* temp_a0;
     s32 tmp;
     s32 tmp2;
@@ -1325,7 +1328,10 @@ s32 BattlePrep_BadgeCarouselGeoCallback(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselGlowCallback(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Pulses a yellow/red highlight on the ladder slot for the current round.
+ */
+s32 BattlePrep_OpponentLadderHighlightCallback(s32 arg0, unk_func_80011B94* arg1) {
     static s16 D_84B11C18 = 0;
 
     unk_D_84B259E8* temp_v0;
@@ -1358,7 +1364,10 @@ s32 BattlePrep_BadgeCarouselGlowCallback(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselTextureCallback(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds a rendered ladder image (unk_30) for the slot to segment 0x0F.
+ */
+s32 BattlePrep_OpponentLadderTextureCallback(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B259E8* temp_a0;
     s32 tmp;
 
@@ -1376,7 +1385,10 @@ s32 BattlePrep_BadgeCarouselTextureCallback(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselGlowCallback2(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Second pulse highlight for the current-round ladder slot.
+ */
+s32 BattlePrep_OpponentLadderHighlightCallback2(s32 arg0, unk_func_80011B94* arg1) {
     static s16 D_84B11C1C = 0;
 
     unk_D_84B259E8* temp_v0;
@@ -1408,7 +1420,10 @@ s32 BattlePrep_BadgeCarouselGlowCallback2(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-void BattlePrep_RenderBadgeGlowTexture(s32 arg0) {
+/**
+ * Renders D_3017F00, a 64x64 I4 "X" tinted #FF3214, into a defeated opponent's portrait buffer.
+ */
+void BattlePrep_StampDefeatedMark(s32 arg0) {
     DepthBuffer sp40;
     u32 sp3C = Util_ConvertAddrToVirtAddr(&D_3017F00);
 
@@ -1423,7 +1438,10 @@ void BattlePrep_RenderBadgeGlowTexture(s32 arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void BattlePrep_ResetBadgeSlideSlots(unk_D_84B259E8* arg0) {
+/**
+ * Resets the four visible opponent ladder slots.
+ */
+void BattlePrep_ResetLadderSlots(unk_D_84B259E8* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1435,7 +1453,10 @@ void BattlePrep_ResetBadgeSlideSlots(unk_D_84B259E8* arg0) {
     }
 }
 
-void BattlePrep_BadgeSlideInLeft(unk_D_84B259E8* arg0) {
+/**
+ * Slides the four opponent ladder slots in from the right toward the left.
+ */
+void BattlePrep_LadderSlideInLeft(unk_D_84B259E8* arg0) {
     s32 i;
 
     arg0->unk_01++;
@@ -1450,7 +1471,10 @@ void BattlePrep_BadgeSlideInLeft(unk_D_84B259E8* arg0) {
     }
 }
 
-void BattlePrep_BadgeSlideInRight(unk_D_84B259E8* arg0) {
+/**
+ * Slides the opponent ladder slots out toward the left, then hides them.
+ */
+void BattlePrep_LadderSlideInRight(unk_D_84B259E8* arg0) {
     s32 i;
     s32 var_v0;
 
@@ -1469,7 +1493,11 @@ void BattlePrep_BadgeSlideInRight(unk_D_84B259E8* arg0) {
     }
 }
 
-void BattlePrep_BadgeRevealSpin(unk_D_84B259E8* arg0) {
+/**
+ * Spins the ladder slots, then stamps the defeated mark on the current opponent
+ * (sound 0x01100014).
+ */
+void BattlePrep_LadderRevealSpin(unk_D_84B259E8* arg0) {
     s32 i;
     s32 var_a2;
 
@@ -1481,7 +1509,7 @@ void BattlePrep_BadgeRevealSpin(unk_D_84B259E8* arg0) {
         }
     } else if (arg0->unk_01 == 0x10) {
         Audio_PlayCategory11SoundCommand(0x0110000C, 0, 0);
-        BattlePrep_ResetBadgeSlideSlots(arg0);
+        BattlePrep_ResetLadderSlots(arg0);
     } else if (arg0->unk_01 == 0x20) {
         if (gSessionContext.mode == 7) {
             var_a2 = 4;
@@ -1490,7 +1518,7 @@ void BattlePrep_BadgeRevealSpin(unk_D_84B259E8* arg0) {
         }
 
         Audio_PlayCategory11SoundCommand(0x01100014, gSessionContext.roundOrDemoId, var_a2);
-        BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[gSessionContext.roundOrDemoId - 1]);
+        BattlePrep_StampDefeatedMark(arg0->unk_10[gSessionContext.roundOrDemoId - 1]);
 
         if (gSessionContext.mode == 7) {
             GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_30[gSessionContext.roundOrDemoId - 1]);
@@ -1510,7 +1538,10 @@ void BattlePrep_BadgeRevealSpin(unk_D_84B259E8* arg0) {
     }
 }
 
-void BattlePrep_BadgeHideSpin(unk_D_84B259E8* arg0) {
+/**
+ * Spins the ladder slots closed.
+ */
+void BattlePrep_LadderHideSpin(unk_D_84B259E8* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1521,33 +1552,39 @@ void BattlePrep_BadgeHideSpin(unk_D_84B259E8* arg0) {
     arg0->unk_01++;
     if (arg0->unk_01 == 0x10) {
         Audio_PlayCategory11SoundCommand(0x0110000C, 0, 0);
-        BattlePrep_ResetBadgeSlideSlots(arg0);
+        BattlePrep_ResetLadderSlots(arg0);
         arg0->unk_01 = 0;
         arg0->unk_00 = 0;
     }
 }
 
-void BattlePrep_UpdateBadgeCarousel(unk_D_84B259E8* arg0) {
+/**
+ * Runs the opponent ladder state machine.
+ */
+void BattlePrep_UpdateOpponentLadder(unk_D_84B259E8* arg0) {
     switch (arg0->unk_00) {
         case 1:
-            BattlePrep_BadgeSlideInLeft(arg0);
+            BattlePrep_LadderSlideInLeft(arg0);
             break;
 
         case 2:
-            BattlePrep_BadgeSlideInRight(arg0);
+            BattlePrep_LadderSlideInRight(arg0);
             break;
 
         case 3:
-            BattlePrep_BadgeRevealSpin(arg0);
+            BattlePrep_LadderRevealSpin(arg0);
             break;
 
         case 4:
-            BattlePrep_BadgeHideSpin(arg0);
+            BattlePrep_LadderHideSpin(arg0);
             break;
     }
 }
 
-void BattlePrep_InitBadgeCarousel(unk_D_84B259E8* arg0, DisplayObject* arg1, s16 arg2) {
+/**
+ * Initializes the opponent ladder display objects.
+ */
+void BattlePrep_InitOpponentLadder(unk_D_84B259E8* arg0, DisplayObject* arg1, s16 arg2) {
     s32 i;
     s16 var_s2;
 
@@ -1580,7 +1617,10 @@ void BattlePrep_InitBadgeCarousel(unk_D_84B259E8* arg0, DisplayObject* arg1, s16
     }
 }
 
-void BattlePrep_RenderBadgeBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2) {
+/**
+ * Renders the background and label of an opponent ladder image.
+ */
+void BattlePrep_RenderLadderBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2) {
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_30[arg1]);
 
     gSPDisplayList(gDisplayListHead++, D_8006F4E0);
@@ -1631,7 +1671,10 @@ s32 BattlePrep_Align64PoolBlock(s32* arg0) {
     return var_v1;
 }
 
-void BattlePrep_LoadBadgeTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+/**
+ * Loads opponent portraits (8 for cups, 4 trainers for the castle) for the ladder.
+ */
+void BattlePrep_LoadLadderTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
     s16 i;
     s16 sp44;
     unk_func_84B067B4* temp_s5;
@@ -1684,10 +1727,10 @@ void BattlePrep_LoadBadgeTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArc
             tmp = (ptr->unk_038 >> 8) & 0xFF;
             arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
             if (i < (gSessionContext.roundOrDemoId - 1)) {
-                BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[i]);
+                BattlePrep_StampDefeatedMark(arg0->unk_10[i]);
             }
             arg0->unk_30[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
-            BattlePrep_RenderBadgeBackground(arg0, i, ptr->unk_010);
+            BattlePrep_RenderLadderBackground(arg0, i, ptr->unk_010);
         }
     } else {
         for (i = 0; i < 8; i++) {
@@ -1696,7 +1739,7 @@ void BattlePrep_LoadBadgeTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArc
 
                 arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
                 if (i < (gSessionContext.roundOrDemoId - 1)) {
-                    BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[i]);
+                    BattlePrep_StampDefeatedMark(arg0->unk_10[i]);
                 }
             } else {
                 arg0->unk_10[i] = BinArchive_GetFile(arg2, 0);
@@ -1705,7 +1748,10 @@ void BattlePrep_LoadBadgeTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArc
     }
 }
 
-void BattlePrep_InitBadgeCarouselScene(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+/**
+ * Loads ladder textures and initializes the opponent ladder.
+ */
+void BattlePrep_InitOpponentLadderScene(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
     s32 i;
     MemoryBlock* temp_v0;
 
@@ -1726,5 +1772,5 @@ void BattlePrep_InitBadgeCarouselScene(unk_D_84B259E8* arg0, BinArchive* arg1, B
     }
 
     MainPool_FinalizeAllocation(temp_v0);
-    BattlePrep_LoadBadgeTextures(arg0, arg1, arg2);
+    BattlePrep_LoadLadderTextures(arg0, arg1, arg2);
 }

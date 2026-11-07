@@ -39,7 +39,7 @@ static Gfx D_84B164A0[] = {
 };
 static u32 D_84B16588[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B163E0,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIcon,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawPlate,
     D_84B164A0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B165C0[] = {
@@ -64,7 +64,7 @@ static Gfx D_84B16640[] = {
 static u32 D_84B166E8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B165C0,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00050000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIconAlt,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawMedal,
     D_84B16640, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16738[] = {
@@ -138,7 +138,10 @@ static u32 D_84B16A38[] = {
     0x22050000, D_84B169C0, 0x25000000, 0x06000000, 0x01000000,
 };
 
-s32 BattlePrepBadgeAward_DrawBadgeIcon(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds the badge plate texture (badge_ui D_2018000 table: BOULDER ... EARTH) for a badge slot.
+ */
+s32 BattlePrepBadgeAward_DrawPlate(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A90* temp_v0;
     s32 tmp;
 
@@ -156,7 +159,10 @@ s32 BattlePrepBadgeAward_DrawBadgeIcon(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrepBadgeAward_DrawBadgeIconAlt(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds the badge medal texture (badge_ui D_2021620 table) for a badge slot.
+ */
+s32 BattlePrepBadgeAward_DrawMedal(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A90* temp_v0;
     s32 tmp;
 
