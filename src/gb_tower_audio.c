@@ -20,7 +20,7 @@ extern u8 D_81200000[];
  * GbEmu_AudioVideoTick each tick.
  */
 void GbTower_AudioThread(UNUSED void* arg0) {
-    void (*func)(void*) = Util_ConvertAddrToVirtAddr(&GbEmu_AudioVideoTick);
+    void (*tickFunc)(void*) = Util_ConvertAddrToVirtAddr(&GbEmu_AudioVideoTick);
 
     __osSetFpcCsr(0x01000C01);
     Sched_InitClientQueue(gGbTowerAudioThread, 0, 1);
@@ -31,7 +31,7 @@ void GbTower_AudioThread(UNUSED void* arg0) {
         if (D_800A62E0.unk_A38 >= 0x15) {
             continue;
         }
-        func(gGbTowerAudioThread);
+        tickFunc(gGbTowerAudioThread);
     }
 }
 
@@ -40,13 +40,13 @@ void GbTower_AudioThread(UNUSED void* arg0) {
  * calls GbEmu_RunFrame on each scheduler tick.
  */
 void GbTower_EmuThread(UNUSED void* arg0) {
-    void (*func1)(void* func) = Util_ConvertAddrToVirtAddr(&GbEmu_Init);
-    void (*func2)(void* func) = Util_ConvertAddrToVirtAddr(&GbEmu_RunFrame);
+    void (*initFunc)(void* func) = Util_ConvertAddrToVirtAddr(&GbEmu_Init);
+    void (*runFrameFunc)(void* func) = Util_ConvertAddrToVirtAddr(&GbEmu_RunFrame);
 
     __osSetFpcCsr(0x01000C01);
     Sched_InitClientQueue(gGbTowerEmuThread, 0, 1);
     Sched_AddClient(gGbTowerEmuThread);
-    func1(gGbTowerEmuThread);
+    initFunc(gGbTowerEmuThread);
     osStartThread(&gGbTowerAudioThread->thread);
 
     while (1) {
@@ -54,7 +54,7 @@ void GbTower_EmuThread(UNUSED void* arg0) {
         if (D_800A62E0.unk_A38 >= 0x15) {
             continue;
         }
-        func2(gGbTowerEmuThread);
+        runFrameFunc(gGbTowerEmuThread);
     }
 }
 
@@ -62,19 +62,19 @@ void GbTower_EmuThread(UNUSED void* arg0) {
  * Starts a GB Tower session: allocates both thread blocks, loads the emulator
  * fragment and fonts, copies the session parameters and starts the emulator thread.
  */
-void GbTower_Start(GbTowerSessionParams* arg0) {
-    s32 temp_v0;
+void GbTower_Start(GbTowerSessionParams* params) {
+    s32 fontArchive;
 
     main_pool_push_state('GBEM');
     gGbTowerEmuThread = main_pool_alloc(0x2210, 0);
     gGbTowerAudioThread = main_pool_alloc(0x21E0, 0);
 
     FRAGMENT_LOAD(FRAGMENT_GB_TOWER_EMULATOR);
-    temp_v0 = ASSET_LOAD2(fonts, 1, 1);
+    fontArchive = ASSET_LOAD2(fonts, 1, 1);
 
-    gGbTowerEmuThread->font1 = BinArchive_GetFile(temp_v0, 0);
-    gGbTowerEmuThread->font2 = BinArchive_GetFile(temp_v0, 1);
-    gGbTowerEmuThread->session = *arg0;
+    gGbTowerEmuThread->font1 = BinArchive_GetFile(fontArchive, 0);
+    gGbTowerEmuThread->font2 = BinArchive_GetFile(fontArchive, 1);
+    gGbTowerEmuThread->session = *params;
     osCreateMesgQueue(&gGbTowerEmuThread->queue2, &gGbTowerEmuThread->mesg, 1);
     osCreateThread(&gGbTowerAudioThread->thread, 10, GbTower_AudioThread, NULL, (u32)gGbTowerAudioThread + 0x21E0, 0x11);
     osCreateThread(&gGbTowerEmuThread->thread, 8, GbTower_EmuThread, NULL, (u32)gGbTowerEmuThread + 0x21E0, 0xF);
@@ -96,8 +96,8 @@ OSMesg* GbTower_RecvExitMesg(void) {
  * Ends the session: copies the session parameters back (button bindings), restores
  * the pak poll mask and destroys both threads.
  */
-void GbTower_Stop(GbTowerSessionParams* arg0) {
-    *arg0 = gGbTowerEmuThread->session;
+void GbTower_Stop(GbTowerSessionParams* params) {
+    *params = gGbTowerEmuThread->session;
     GbTower_SetPollMask(sSavedPollMask);
     osViBlack(1U);
     Display_ApplyPendingVideoMode();

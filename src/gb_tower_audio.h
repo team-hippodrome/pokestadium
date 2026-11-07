@@ -10,8 +10,8 @@ typedef struct unk_D_800AA664 {
 
 extern unk_D_800AA660* gGbTowerEmuThread;
 
-void GbTower_Start(GbTowerSessionParams* arg0);
+void GbTower_Start(GbTowerSessionParams* params);
 OSMesg* GbTower_RecvExitMesg(void);
-void GbTower_Stop(GbTowerSessionParams* arg0);
+void GbTower_Stop(GbTowerSessionParams* params);
 
 #endif // _E1C0_H_

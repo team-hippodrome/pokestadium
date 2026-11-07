@@ -305,40 +305,41 @@ void GbApu_ClearActiveFlag(void) {
 }
 
 /**
- * Scales channel arg0's unk_01C by arg2 percent: at once when arg1 == 0, otherwise as a ramp
- * of unk_020 per step over unk_012 = arg1 steps. unk_024 keeps the value before the change.
+ * Scales channel channelIndex's unk_01C to `percent` percent: at once when rampSteps == 0, otherwise
+ * as a ramp of unk_020 per step over unk_012 = rampSteps steps. unk_024 keeps the value before
+ * the change.
  */
-void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
+void func_81215C14_jp(s32 channelIndex, s32 rampSteps, u8 percent) {
+    unk_D_81287B08_jp* ch = &D_81287B08_jp[channelIndex];
     f32 target;
 
     ch->unk_012 = 0;
-    target = ((s32)arg2 / 100.0f) * ch->unk_01C;
+    target = ((s32)percent / 100.0f) * ch->unk_01C;
     ch->unk_024 = ch->unk_01C;
-    if (arg1 == 0) {
+    if (rampSteps == 0) {
         ch->unk_01C = target;
         return;
     }
     ch->unk_001 = 0;
-    ch->unk_012 = arg1;
-    ch->unk_020 = (target - ch->unk_01C) / arg1;
+    ch->unk_012 = rampSteps;
+    ch->unk_020 = (target - ch->unk_01C) / rampSteps;
 }
 
 /**
- * Returns channel arg0's unk_01C to the unk_024 value saved by func_81215C14_jp, at once or
- * as a ramp over arg1 steps.
+ * Returns channel channelIndex's unk_01C to the unk_024 value saved by func_81215C14_jp, at once or
+ * as a ramp over rampSteps steps.
  */
-void func_81215C9C_jp(s32 arg0, s32 arg1) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
+void func_81215C9C_jp(s32 channelIndex, s32 rampSteps) {
+    unk_D_81287B08_jp* ch = &D_81287B08_jp[channelIndex];
 
     ch->unk_012 = 0;
-    if (arg1 == 0) {
+    if (rampSteps == 0) {
         ch->unk_01C = ch->unk_024;
         return;
     }
     ch->unk_001 = 0;
-    ch->unk_012 = arg1;
-    ch->unk_020 = (ch->unk_024 - ch->unk_01C) / arg1;
+    ch->unk_012 = rampSteps;
+    ch->unk_020 = (ch->unk_024 - ch->unk_01C) / rampSteps;
 }
 
 /**
@@ -406,7 +407,7 @@ void func_81207354(void) {
 }
 
 /**
- * arg0 = KEY1 (FF4D) bit 7, the CGB current-speed flag (GbEmu_AudioVideoTick). Double speed
+ * doubleSpeed = KEY1 (FF4D) bit 7, the CGB current-speed flag (GbEmu_AudioVideoTick). Double speed
  * doubles the CPU cycles per frame, so the write timestamps span twice as much per buffer.
  * This is the Game Boy's own speed switch, not the GB Tower "Double Speed" button; that one
  * sets emu->speedMultiplier, which reaches the APU through apuTimeDivisor.
@@ -433,15 +434,15 @@ void GbApu_SetNoiseLoopBounds(s32 start, s32 end) {
 /**
  * Wave channel: 65536 / (2048 - period) Hz -> phase step (32 steps per cycle at 48 kHz).
  */
-u32 GbApu_FreqToStep(u16 arg0) {
+u32 GbApu_FreqToStep(u16 period) {
     u32 temp;
-    if (arg0 == 0) {
+    if (period == 0) {
         return 0;
     }
 #if defined(VERSION_JP)
-    temp = ((65536.0f / (0x800 - arg0)) / 1500.0f) * 65536;
+    temp = ((65536.0f / (0x800 - period)) / 1500.0f) * 65536;
 #else
-    temp = ((65536.0f / (0x800 - arg0)) / sGbApuStepDivisor) * 65536;
+    temp = ((65536.0f / (0x800 - period)) / sGbApuStepDivisor) * 65536;
 #endif
     return temp;
 }
@@ -465,12 +466,12 @@ u32 GbApu_ConfigureNoiseTable(u16 shift, u16 width, u16 divider) {
 /**
  * Squares: 131072 / (2048 - period) Hz -> phase step.
  */
-u32 GbApu_FreqToStep2x(u16 arg0) {
+u32 GbApu_FreqToStep2x(u16 period) {
     u32 temp;
 #if defined(VERSION_JP)
-    temp = ((131072.0f / (0x800 - arg0)) / 1500.0f) * 65536;
+    temp = ((131072.0f / (0x800 - period)) / 1500.0f) * 65536;
 #else
-    temp = ((131072.0f / (0x800 - arg0)) / sGbApuStepDivisor) * 65536;
+    temp = ((131072.0f / (0x800 - period)) / sGbApuStepDivisor) * 65536;
 #endif
     return temp;
 }
@@ -523,7 +524,7 @@ s32 GbApu_GetWaveformSample(u32 type, s32 pos) {
  * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
  */
 u16 GbApu_UpdateSquare1Channel(void) {
-    u16 var_t0;
+    u16 output;
 
     if (gGbApuSquare1.enabled == 0) {
         if (gGbApuSquare1.outputAmplitude == 0) {
@@ -541,34 +542,34 @@ u16 GbApu_UpdateSquare1Channel(void) {
         gGbApuSquare1.muted = 0U;
     }
     {
-        s32 temp_v0 = GbApu_GetWaveformSample(gGbApuSquare1.duty, gGbApuSquare1.phase.index);
+        s32 waveSample = GbApu_GetWaveformSample(gGbApuSquare1.duty, gGbApuSquare1.phase.index);
         gGbApuSquare1.phase.fixed += gGbApuSquare1.step;
         gGbApuSquare1.phase.fixed &= 0x1FFFFF;
         if (gGbApuSquare1.muted == 1) {
             if (gGbApuSquare1.outputAmplitude != 0) {
                 gGbApuSquare1.outputAmplitude--;
             }
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.outputAmplitude);
+            output = ((waveSample & 0xFFFF) * gGbApuSquare1.outputAmplitude);
         } else {
             gGbApuSquare1.activeStep = (s32)gGbApuSquare1.step;
             gGbApuSquare1.outputAmplitude = (u8)gGbApuSquare1.amplitude;
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.amplitude);
+            output = ((waveSample & 0xFFFF) * gGbApuSquare1.amplitude);
         }
     }
     if ((gGbApuSquare1.sweepEnabled != 0) && (((++gGbApuSquare1.sweepCounter % (u32)gGbApuSquare1.sweepPeriod) == 0))) {
-        s32 temp_a2 = ((s32)gGbApuSquare1.period >> gGbApuSquare1.sweepShift) & 0xFFFF;
+        s32 sweepDelta = ((s32)gGbApuSquare1.period >> gGbApuSquare1.sweepShift) & 0xFFFF;
         switch (gGbApuSquare1.sweepDirection) {
             case 0:
-                gGbApuSquare1.period += temp_a2;
+                gGbApuSquare1.period += sweepDelta;
                 break;
             case 1:
-                gGbApuSquare1.period = (gGbApuSquare1.period - temp_a2) - 1;
+                gGbApuSquare1.period = (gGbApuSquare1.period - sweepDelta) - 1;
                 ;
                 break;
         }
         if (gGbApuSquare1.period <= 0) {
             gGbApuSquare1.enabled = 0U;
-            return var_t0;
+            return output;
         } else {
             if ((gGbApuSquare1.period >= 0x800) && (gGbApuSquare1.sweepDirection == 0)) {
                 gGbApuSquare1.period = 0x7FFU;
@@ -612,15 +613,15 @@ u16 GbApu_UpdateSquare1Channel(void) {
             gGbApuSquare1.enabled = 0U;
         }
     }
-    return var_t0;
+    return output;
 }
 
 /**
  * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
  */
 s32 GbApu_UpdateSquare2Channel(void) {
-    s32 temp_v0;
-    s32 var_a3;
+    s32 waveSample;
+    s32 output;
     u8 var_v0;
 
     if (gGbApuSquare2.enabled == 0) {
@@ -636,20 +637,20 @@ s32 GbApu_UpdateSquare2Channel(void) {
     } else {
         gGbApuSquare2.muted = 0U;
     }
-    temp_v0 = GbApu_GetWaveformSample(gGbApuSquare2.duty, gGbApuSquare2.phase.index);
+    waveSample = GbApu_GetWaveformSample(gGbApuSquare2.duty, gGbApuSquare2.phase.index);
     gGbApuSquare2.phase.fixed += gGbApuSquare2.step;
     gGbApuSquare2.phase.fixed &= 0x1FFFFF;
     if (gGbApuSquare2.muted == 1) {
         if (gGbApuSquare2.outputAmplitude != 0) {
             gGbApuSquare2.outputAmplitude--;
         }
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.outputAmplitude) & 0xFFFF;
+        output = ((waveSample & 0xFFFF) * gGbApuSquare2.outputAmplitude) & 0xFFFF;
     } else {
         if (gGbApuSquare2.amplitude != gGbApuSquare2.outputAmplitude) {
             gGbApuSquare2.outputAmplitude = (u8)gGbApuSquare2.amplitude;
         }
         gGbApuSquare2.activeStep = (s32)gGbApuSquare2.step;
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.amplitude) & 0xFFFF;
+        output = ((waveSample & 0xFFFF) * gGbApuSquare2.amplitude) & 0xFFFF;
     }
     if (gGbApuSquare2.envelopePeriod != 0) {
         gGbApuSquare2.envelopeCounter++;
@@ -686,7 +687,7 @@ s32 GbApu_UpdateSquare2Channel(void) {
             gGbApuSquare2.enabled = 0U;
         }
     }
-    return var_a3;
+    return output;
 }
 
 /**
@@ -695,8 +696,8 @@ s32 GbApu_UpdateSquare2Channel(void) {
  */
 u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_v0;
-    u16 temp_a0;
-    u16 temp_a1;
+    u16 sample;
+    u16 level;
     u16 var_a0;
 
     if (gGbApuWave.enabled == 0) {
@@ -725,7 +726,7 @@ u16 GbApu_UpdateWaveChannel(void) {
             }
         }
     }
-    temp_a0 = GbApu_GetWaveformSample(7, gGbApuWave.phase.index);
+    sample = GbApu_GetWaveformSample(7, gGbApuWave.phase.index);
     gGbApuWave.phase.fixed += gGbApuWave.step;
     gGbApuWave.phase.fixed &= 0x1FFFFF;
     if (gGbApuWave.muted - 1 == 0) {
@@ -733,16 +734,16 @@ u16 GbApu_UpdateWaveChannel(void) {
         if (gGbApuWave.outputAmplitude != 0) {
             gGbApuWave.outputAmplitude--;
         }
-        temp_a1 = gGbApuWave.outputAmplitude;
+        level = gGbApuWave.outputAmplitude;
     } else {
         gGbApuWave.outputAmplitude = gGbApuWave.amplitude;
         gGbApuWave.activeStep = gGbApuWave.step;
-        temp_a1 = gGbApuWave.amplitude;
+        level = gGbApuWave.amplitude;
     }
 
-    temp_a0 *= temp_a1;
-    temp_a0 = (gGbApuWave.lastSample + temp_a0) >> 1;
-    gGbApuWave.lastSample = temp_a0;
+    sample *= level;
+    sample = (gGbApuWave.lastSample + sample) >> 1;
+    gGbApuWave.lastSample = sample;
     if (gGbApuWave.lengthEnabled == 1) {
         if (gGbApuWave.lengthTimer != 0) {
             gGbApuWave.lengthTimer--;
@@ -751,7 +752,7 @@ u16 GbApu_UpdateWaveChannel(void) {
             gGbApuWave.enabled = 0U;
         }
     }
-    return temp_a0;
+    return sample;
 }
 
 /**
@@ -766,17 +767,17 @@ u16 func_81207C5C_Empty(void) {
  */
 u16 GbApu_UpdateNoiseChannel(void) {
     static s32 sGbApuNoiseSampleCount = 0;
-    u16 temp_v0;
-    u32 var_a2;
+    u16 sample;
+    u32 currentStep;
 
     if (gGbApuNoise.step < gGbApuNoise.activeStep) {
         gGbApuNoise.activeStep -= gGbApuNoise.stepSlewRate;
-        var_a2 = gGbApuNoise.activeStep;
+        currentStep = gGbApuNoise.activeStep;
     } else if (gGbApuNoise.activeStep < gGbApuNoise.step) {
         gGbApuNoise.activeStep += gGbApuNoise.stepSlewRate;
-        var_a2 = gGbApuNoise.activeStep;
+        currentStep = gGbApuNoise.activeStep;
     } else {
-        var_a2 = gGbApuNoise.activeStep;
+        currentStep = gGbApuNoise.activeStep;
     }
 
     if (gGbApuNoise.enabled == 0) {
@@ -787,12 +788,12 @@ u16 GbApu_UpdateNoiseChannel(void) {
         gGbApuNoise.amplitude = gGbApuNoise.outputAmplitude;
         gGbApuNoise.step = gGbApuNoise.activeStep;
     }
-    temp_v0 = GbApu_GetWaveformSample(6, gGbApuNoise.phase.index);
-    gGbApuNoise.phase.fixed += var_a2;
+    sample = GbApu_GetWaveformSample(6, gGbApuNoise.phase.index);
+    gGbApuNoise.phase.fixed += currentStep;
     if (gGbApuNoise.phase.index >= (u32)sGbApuNoiseLoopEnd) {
         gGbApuNoise.phase.index = sGbApuNoiseLoopStart;
     }
-    temp_v0 *= gGbApuNoise.outputAmplitude;
+    sample *= gGbApuNoise.outputAmplitude;
     if ((gGbApuNoise.outputAmplitude != gGbApuNoise.amplitude) && ((sGbApuNoiseSampleCount % 95) == 0)) {
         if (gGbApuNoise.outputAmplitude > gGbApuNoise.amplitude) {
             gGbApuNoise.outputAmplitude--;
@@ -838,7 +839,7 @@ u16 GbApu_UpdateNoiseChannel(void) {
         }
     }
 
-    return (temp_v0 << 1);
+    return (sample << 1);
 }
 
 // 0x8120EB70: the 8 bytes between GbApu_UpdateNoiseChannel's static and sGbAudioMenuSoundMode.
@@ -860,7 +861,7 @@ GbAudioStream sGbAudioCurrentMenuSound = { 0, 0 };
 GbAudioStream sGbAudioPreviousMenuSound = { 0, 0 };
 // GB Tower menu sounds: signed 8-bit mono PCM played by GbAudio_RenderMenuSounds. Named after the
 // GbAudio_PlayMenuSound call sites in gb_tower_emulator_7F9A0.c: id 2 A on a main menu entry,
-// 3 rejected button binding, 4 never requested, 5 Left/Right value change, 6 A confirm,
+// 3 rejected button binding, 4 never requested, 5 D-pad Left/Right value change, 6 A confirm,
 // 7 Up/Down cursor move, 8 B back. Ids 0 and 1 point at the 8-byte sGbMenuSoundSilence.
 u8 sGbMenuSoundOpen[0x6B40] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x01, 0x06, 0x09, 0x09, 0x03, 0xFA, 0xF5, 0xF5, 0x01,
@@ -6879,7 +6880,7 @@ void GbApu_Reset(s32 noiseTable) {
  * avoiding a click when audio stops. No C callers.
  */
 void GbAudio_RampToSilence(void) {
-    void* sp34 = sGbAudioBuffers[0];
+    void* buffer = sGbAudioBuffers[0];
     f32 x = (f32)sGbAudioLastSampleLeft;
     f32 y = (f32)sGbAudioLastSampleRight;
     f32 dx = x / 640.0f;
@@ -6889,16 +6890,16 @@ void GbAudio_RampToSilence(void) {
 
     GbApu_ResetChannels();
     for (i = 0, idx = 0; i != 0x280; i++) {
-        ((s16*)sp34)[idx + 0] = x;
-        ((s16*)sp34)[idx + 1] = y;
+        ((s16*)buffer)[idx + 0] = x;
+        ((s16*)buffer)[idx + 1] = y;
         x -= dx;
         y -= dy;
         idx += 2;
     }
     do {
     } while (osAiGetStatus() & AI_STATUS_FIFO_FULL);
-    osWritebackDCache(sp34, 0xA00);
-    osGbSetNextBuffer(sp34, 0xA00);
+    osWritebackDCache(buffer, 0xA00);
+    osGbSetNextBuffer(buffer, 0xA00);
 }
 
 /**
@@ -6911,37 +6912,37 @@ void func_81208F94(void) {
  * Reads a GB I/O register byte. FF26 (NR52) is rebuilt from the APU channel
  * state; every other address is read straight from gGbMemoryMap.
  */
-u8 GbMem_ReadIoRegister(u16 arg0) {
-    u8 var_a0;
-    u8 var_a1;
-    u8 var_a2;
-    u8 var_v1;
+u8 GbMem_ReadIoRegister(u16 address) {
+    u8 square2On;
+    u8 waveOn;
+    u8 noiseOn;
+    u8 square1On;
     u8 temp;
-    if ((arg0 & 0xFFFF) == 0xFF26) {
+    if ((address & 0xFFFF) == 0xFF26) {
         if (sGbApuStatusOverride.square1 != 0) {
-            var_v1 = (sGbApuStatusOverride.square1 - 1) & 0xFF;
+            square1On = (sGbApuStatusOverride.square1 - 1) & 0xFF;
         } else {
-            var_v1 = gGbApuSquare1.enabled;
+            square1On = gGbApuSquare1.enabled;
         }
         if (sGbApuStatusOverride.square2 != 0) {
-            var_a0 = (sGbApuStatusOverride.square2 - 1) & 0xFF;
+            square2On = (sGbApuStatusOverride.square2 - 1) & 0xFF;
         } else {
-            var_a0 = gGbApuSquare2.enabled;
+            square2On = gGbApuSquare2.enabled;
         }
         if (sGbApuStatusOverride.wave != 0) {
-            var_a1 = (sGbApuStatusOverride.wave - 1) & 0xFF;
+            waveOn = (sGbApuStatusOverride.wave - 1) & 0xFF;
         } else {
-            var_a1 = gGbApuWave.enabled;
+            waveOn = gGbApuWave.enabled;
         }
         if (sGbApuStatusOverride.noise != 0) {
-            var_a2 = (sGbApuStatusOverride.noise - 1) & 0xFF;
+            noiseOn = (sGbApuStatusOverride.noise - 1) & 0xFF;
         } else {
-            var_a2 = gGbApuNoise.enabled;
+            noiseOn = gGbApuNoise.enabled;
         }
-        temp = ((((u32)D_8120EA86 >> 0xF) << 7) | (var_a2 * 8) | (var_a1 * 4) | (var_a0 * 2) | var_v1);
+        temp = ((((u32)D_8120EA86 >> 0xF) << 7) | (noiseOn * 8) | (waveOn * 4) | (square2On * 2) | square1On);
         return temp;
     }
-    return gGbMemoryMap[arg0 & 0xFFFF];
+    return gGbMemoryMap[address & 0xFFFF];
 }
 
 /**

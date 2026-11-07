@@ -68,40 +68,40 @@ s32 D_8123470C;
  * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
  */
 u32 GbApu_AllocZeroed(GbAudioHeap* heap, s32 size) {
-    s32 temp_v0;
-    u32 temp_a2;
-    u32 var_a1;
-    temp_v0 = ALIGN16(size);
-    temp_a2 = heap->cur;
-    if ((heap->base + heap->len) >= (temp_a2 + temp_v0)) {
-        heap->cur += temp_v0;
-        var_a1 = temp_a2;
-        while (var_a1 < heap->cur) {
-            *((u8*)var_a1++) = 0;
+    s32 alignedSize;
+    u32 allocation;
+    u32 cursor;
+    alignedSize = ALIGN16(size);
+    allocation = heap->cur;
+    if ((heap->base + heap->len) >= (allocation + alignedSize)) {
+        heap->cur += alignedSize;
+        cursor = allocation;
+        while (cursor < heap->cur) {
+            *((u8*)cursor++) = 0;
         }
     } else {
         return 0;
     }
     heap->count++;
-    return temp_a2;
+    return allocation;
 }
 
 /**
  * GbApu_AllocZeroed without the clear.
  */
 s32 GbApu_Alloc(GbAudioHeap* heap, s32 size) {
-    s32 temp_a2;
-    u32 temp_v0;
+    s32 allocation;
+    u32 alignedSize;
 
-    temp_v0 = ALIGN16(size);
-    temp_a2 = heap->cur;
-    if ((heap->base + heap->len) >= (heap->cur + temp_v0)) {
-        heap->cur = temp_v0 + temp_a2;
+    alignedSize = ALIGN16(size);
+    allocation = heap->cur;
+    if ((heap->base + heap->len) >= (heap->cur + alignedSize)) {
+        heap->cur = alignedSize + allocation;
     } else {
         return 0;
     }
     heap->count++;
-    return temp_a2;
+    return allocation;
 }
 
 /**
@@ -119,25 +119,25 @@ void GbApu_InitAllocator(GbAudioHeap* heap, s32 base, s32 len) {
  * and allocates the three output buffers.
  */
 void GbAudio_InitOutput(void) {
-    u64* var_v0_2;
-    s16* var_v1_2;
-    s32 var_a0;
-    u32 var_v1;
-    s16* var_v1_3;
+    u64* bssCursor;
+    s16* lengthCursor;
+    s32 sampleIndex;
+    u32 remaining;
+    s16* bufferCursor;
     s32 i;
 
     D_812346FC = 0;
     for (i = 0; i < D_812286EC / 8; i++) {
         sGbAudioHeapMemory[i] = 0;
     }
-    var_v0_2 = D_81234650;
-    var_v1 = (u32)((s32)&D_81234700 - (s32)D_81234650) >> 3;
-    if ((s32)var_v1 >= 0) {
+    bssCursor = D_81234650;
+    remaining = (u32)((s32)&D_81234700 - (s32)D_81234650) >> 3;
+    if ((s32)remaining >= 0) {
         do {
-            var_v1--;
-            *var_v0_2 = 0;
-            ++var_v0_2;
-        } while ((s32)var_v1 >= 0);
+            remaining--;
+            *bssCursor = 0;
+            ++bssCursor;
+        } while ((s32)remaining >= 0);
     }
     D_812346D8 = 16.713f;
     sGbAudioFrameRate = 0x3C;
@@ -146,22 +146,22 @@ void GbAudio_InitOutput(void) {
     sGbAudioOutputConfig.frequency = 0xBB80;
     sGbAudioOutputConfig.actualFrequency = osAiSetFrequency(sGbAudioOutputConfig.frequency);
     sGbAudioOutputConfig.samplesPerFrame = (s16)(((sGbAudioOutputConfig.frequency / sGbAudioFrameRate) + 0xF) & ~0xF);
-    var_v1_2 = (s16*)&sGbAudioBufferLengths;
+    lengthCursor = (s16*)&sGbAudioBufferLengths;
     sGbAudioOutputConfig.minSamplesPerFrame = (s16)(sGbAudioOutputConfig.samplesPerFrame - 0x10);
     sGbAudioOutputConfig.maxSamplesPerFrame = (s16)(sGbAudioOutputConfig.samplesPerFrame + 0x10);
     do {
-        *var_v1_2 = 0xA0;
-        var_v1_2++;
-    } while (var_v1_2 < (s16*)&D_812346F2);
+        *lengthCursor = 0xA0;
+        lengthCursor++;
+    } while (lengthCursor < (s16*)&D_812346F2);
     sGbAudioFrameCount = 0;
     sGbAudioBufferIndex = 0;
     GbApu_InitAllocator(&sGbAudioHeap, (s32)sGbAudioHeapMemory, D_812286F0);
     for (i = 0; i < 3; i++) {
         sGbAudioBuffers[i] = (s16*)GbApu_Alloc(&sGbAudioHeap, 0xFC0);
-        var_v1_3 = sGbAudioBuffers[i];
-        for (var_a0 = 0; var_a0 != 0xFC0 / 2; var_a0++) {
-            *var_v1_3 = 0;
-            var_v1_3++;
+        bufferCursor = sGbAudioBuffers[i];
+        for (sampleIndex = 0; sampleIndex != 0xFC0 / 2; sampleIndex++) {
+            *bufferCursor = 0;
+            bufferCursor++;
         }
     }
 }
