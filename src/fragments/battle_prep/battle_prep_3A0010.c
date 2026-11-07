@@ -162,6 +162,10 @@ s32 BattlePrepResultBanner_DrawTieLabel(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Draw callback for a spark particle: binds its current texture frame (unk_0C) to segment 0x0F
+ * and sets env color from the particle's RGB.
+ */
 s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25AC0_000* temp_a0;
 
@@ -178,6 +182,10 @@ s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) 
     return 0;
 }
 
+/**
+ * Starts a spark particle on an ellipse (radius 52x26) around (arg2, arg3) at angle arg4, at
+ * scale 2.0.
+ */
 void BattlePrepResultBanner_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4) {
     arg0->unk_04 = 0;
     arg0->unk_06 = arg4;
@@ -191,6 +199,10 @@ void BattlePrepResultBanner_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F
     arg0->unk_00->position.z = -289.0f;
 }
 
+/**
+ * Animates a spark for 16 frames: steps through the 8-frame D_2023240 texture table, fades blue,
+ * and moves outward 2 units per frame along its angle; then resets the object.
+ */
 void BattlePrepResultBanner_UpdateSparkSlot(unk_D_84B25AC0_000* arg0) {
     s16 temp_v0;
     DisplayObject* temp_v1;
@@ -208,6 +220,9 @@ void BattlePrepResultBanner_UpdateSparkSlot(unk_D_84B25AC0_000* arg0) {
     }
 }
 
+/**
+ * Draw callback for a rainbow particle: sets env color RGBA from the particle's color.
+ */
 s32 BattlePrepResultBanner_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25AC0_0A0* temp_v1;
 
@@ -235,6 +250,9 @@ void BattlePrepResultBanner_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_
     arg0->unk_00->position.z = -289.0f;
 }
 
+/**
+ * Spawns a mode-1 trail copy of particle arg1 (same color, model, position, scale) into arg0.
+ */
 void BattlePrepResultBanner_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 1;
@@ -245,6 +263,9 @@ void BattlePrepResultBanner_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25
     arg0->unk_00->scale = arg1->unk_00->scale;
 }
 
+/**
+ * Spawns a mode-2 white flash copy of particle arg1 at half scale, heading at arg1's angle + arg2.
+ */
 void BattlePrepResultBanner_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1, s16 arg2) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 2;
@@ -257,6 +278,10 @@ void BattlePrepResultBanner_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25
     Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, 0.5f, 0.5f, 0.5f);
 }
 
+/**
+ * Spawns a mode-3 scatter particle at a random offset (±25 x, ±20 y) from arg2, pale yellow with
+ * random blue, at scale 0.6.
+ */
 void BattlePrepResultBanner_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, Vec3f* arg2) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 3;
@@ -270,6 +295,10 @@ void BattlePrepResultBanner_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D
     arg0->unk_00->position.z = arg2->z;
 }
 
+/**
+ * Mode 0: for 16 frames moves outward, grows, and lerps color through the D_84B16EEC gradient,
+ * leaving a trail copy every 4 frames; then spawns three flash copies and frees itself.
+ */
 void BattlePrepResultBanner_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0) {
     f32 temp_fv0;
     Color_RGBA8* color1;
@@ -302,6 +331,9 @@ void BattlePrepResultBanner_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0) 
     }
 }
 
+/**
+ * Mode 1: holds a trail copy for 8 frames, shrinks it by 0.8x per frame until frame 16, then frees it.
+ */
 void BattlePrepResultBanner_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
     arg0->unk_06++;
     if ((arg0->unk_06 >= 8) && (arg0->unk_06 < 0x10)) {
@@ -313,6 +345,10 @@ void BattlePrepResultBanner_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
+/**
+ * Mode 2: moves a flash copy outward with decreasing speed and shrinks it by 0.9x per frame for
+ * 16 frames, then frees it.
+ */
 void BattlePrepResultBanner_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
     f32 temp_fv0;
     f32 temp_fv1;
@@ -330,6 +366,10 @@ void BattlePrepResultBanner_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
+/**
+ * Mode 3: for 20 frames shrinks a scatter particle, lowers alpha by 5 and drops it 2 units per
+ * frame, then frees it.
+ */
 void BattlePrepResultBanner_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
     if (arg0->unk_06 < 0x14) {
         Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x - 0.025f,
@@ -343,6 +383,9 @@ void BattlePrepResultBanner_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
+/**
+ * Dispatches a rainbow particle update by its mode (unk_04: 0 gradient, 1 trail, 2 flash, 3 scatter).
+ */
 void BattlePrepResultBanner_UpdateRainbowParticle(unk_D_84B25AC0_0A0* arg0) {
     switch (arg0->unk_04) {
         case 0:
@@ -363,6 +406,10 @@ void BattlePrepResultBanner_UpdateRainbowParticle(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
+/**
+ * Banner state 1: updates the rainbow particles (unk_5A2 != 0) or spark particles for 36 frames,
+ * then returns to idle state 0.
+ */
 void BattlePrepResultBanner_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
     s32 i;
     s32 j;
@@ -390,6 +437,10 @@ void BattlePrepResultBanner_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Banner state 2: shows the banner and swings it along a quarter arc toward the camera (side by
+ * unk_5A3); at frame 16 spawns 10 rainbow or spark particles around it and enters state 1.
+ */
 void BattlePrepResultBanner_UpdateFlightArc(unk_D_84B25AC0* arg0) {
     s16 i;
     s16 var_s2;
@@ -448,6 +499,10 @@ void BattlePrepResultBanner_UpdateFlightArc(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Banner state 3: after 4 frames throws the banner up-left with gravity and spin while emitting
+ * scatter particles; frees the banner at frame 34 and returns to state 0.
+ */
 void BattlePrepResultBanner_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
     s32 i;
     s32 j;
@@ -483,6 +538,10 @@ void BattlePrepResultBanner_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Banner state 4: after 4 frames moves the banner under gravity (sliding left and spinning when
+ * unk_5A2 != 0); frees it at frame 32 and returns to state 0.
+ */
 void BattlePrepResultBanner_UpdateSparkAftermath(unk_D_84B25AC0* arg0) {
     arg0->unk_5A1++;
     if (arg0->unk_5A1 >= 4) {
@@ -502,6 +561,10 @@ void BattlePrepResultBanner_UpdateSparkAftermath(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Banner state 5 (unk_5A2 == -1 variant): slides the banner right 40 units per frame for the
+ * first 7 frames when unk_5A3 is set, then idles until frame 44 and returns to state 0.
+ */
 void BattlePrepResultBanner_UpdateExitSlide(unk_D_84B25AC0* arg0) {
     if ((arg0->unk_5A1 < 0x14) && (arg0->unk_5A3 != 0) && (arg0->unk_5A1 < 7)) {
         arg0->unk_5A8->position.x += 40.0f;
@@ -514,6 +577,10 @@ void BattlePrepResultBanner_UpdateExitSlide(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Banner state 7 (unk_5A2 == -1 exit): slides the banner right 40 units per frame when unk_5A3 is
+ * set, returning to state 0 after 11 frames.
+ */
 void BattlePrepResultBanner_UpdateFirstClearExit(unk_D_84B25AC0* arg0) {
     s32 tmp;
 
@@ -533,6 +600,9 @@ void BattlePrepResultBanner_UpdateFirstClearExit(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Per-frame dispatcher for the result banner state machine (states 1-5 and 7).
+ */
 void BattlePrepResultBanner_Update(unk_D_84B25AC0* arg0) {
     switch (arg0->unk_5A0) {
         case 1:
@@ -561,6 +631,10 @@ void BattlePrepResultBanner_Update(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Builds the banner object from arg1 and assigns particle objects from arg2. Variant -1 starts
+ * the state 5 slide in from the left; otherwise positions the banner by side and starts state 2.
+ */
 void BattlePrepResultBanner_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, DisplayObject* arg2) {
     s32 i;
     s32 j;
@@ -609,6 +683,10 @@ void BattlePrepResultBanner_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, Di
     }
 }
 
+/**
+ * Picks the banner exit: state 7 for variant -1, state 3 (rainbow throw) for unk_5A3 with
+ * unk_5A2 set, otherwise state 4 with an initial vertical speed in unk_5A4.
+ */
 void BattlePrepResultBanner_StartExit(unk_D_84B25AC0* arg0) {
     arg0->unk_5A1 = 0;
     if (arg0->unk_5A2 == -1) {
@@ -631,6 +709,10 @@ void BattlePrepResultBanner_StartExit(unk_D_84B25AC0* arg0) {
     }
 }
 
+/**
+ * Resets the banner, stores side (arg1) and variant (arg2), and builds the banner geo layout
+ * (D_84B16CFC for variant -1, else D_84B16CC8) plus the spark and rainbow particle layouts.
+ */
 void BattlePrepResultBanner_Init(unk_D_84B25AC0* arg0, s8 arg1, s8 arg2) {
     GraphNode* var_v0;
     MemoryBlock* temp_v0;

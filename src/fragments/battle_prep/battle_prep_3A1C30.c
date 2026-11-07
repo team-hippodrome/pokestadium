@@ -123,6 +123,10 @@ static BattlePrepRuleWindowLayout gBattlePrepRuleWindowLayouts[] = {
     },
 };
 
+/**
+ * Draws the rule window's selection arrow (D_10031D0) beside the selected row, bobbing
+ * horizontally on a 12-frame cycle.
+ */
 void BattlePrep_DrawCursorArrow(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2) {
     static s16 D_84B17604 = 0;
 
@@ -145,6 +149,10 @@ void BattlePrep_DrawCursorArrow(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2) 
     D_84B17604 = (D_84B17604 + 1) % 12;
 }
 
+/**
+ * Prints rule window option arg5 at row arg3: gray when disabled (arg4 == 0), yellow when
+ * selected, otherwise white.
+ */
 void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4, s8* arg5) {
     if (arg4 == 0) {
         Gfx_SetEnvColor(0x64, 0x64, 0x64, 0xFF);
@@ -468,6 +476,10 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* arg0, BattlePrepRu
 }
 #endif
 
+/**
+ * Draws the active rule window: grows the panel vertically while opening (unk_02 < 4), then draws
+ * the full panel and the contents for window kind unk_01 (1-10).
+ */
 void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0) {
     BattlePrepRuleWindowLayout* temp_s0;
     s16 temp_a1;
@@ -542,6 +554,10 @@ void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0) {
     }
 }
 
+/**
+ * Handles input for an open rule window: A plays the option's sound from the layout's unk_10
+ * 3-bit table and starts closing; D-pad up/down moves the cursor, skipping disabled rows (unk_0E).
+ */
 void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* arg0) {
     BattlePrepRuleWindowLayout* sp24;
     s16 sp22;
@@ -597,6 +613,9 @@ void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* arg0) {
     }
 }
 
+/**
+ * State 1: increments the open step each frame until 4, then enters the input state 3.
+ */
 void BattlePrep_RuleWindowExpanding(BattlePrepRuleWindow* arg0) {
     arg0->unk_02++;
     if (arg0->unk_02 >= 5) {
@@ -605,6 +624,9 @@ void BattlePrep_RuleWindowExpanding(BattlePrepRuleWindow* arg0) {
     }
 }
 
+/**
+ * State 2: decrements the open step each frame until 0, then enters the closed state 4.
+ */
 void BattlePrep_RuleWindowCollapsing(BattlePrepRuleWindow* arg0) {
     arg0->unk_02--;
     if (arg0->unk_02 < 0) {
@@ -613,6 +635,9 @@ void BattlePrep_RuleWindowCollapsing(BattlePrepRuleWindow* arg0) {
     }
 }
 
+/**
+ * Per-frame dispatcher for the rule window state machine (1 expanding, 2 collapsing, 3 input).
+ */
 void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* arg0) {
     switch (arg0->unk_00) {
         case 1:
@@ -629,6 +654,10 @@ void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* arg0) {
     }
 }
 
+/**
+ * Opens rule window kind arg1 with SFX_PANEL_OPEN. Disables rows by session state (no continues
+ * left, sessionFlags 0x2, or a win count of 99 in kind 5), then moves the cursor to the first enabled row.
+ */
 void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1) {
     BattlePrepRuleWindowLayout* ptr = &gBattlePrepRuleWindowLayouts[arg1 - 1];
 
@@ -662,12 +691,19 @@ void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Immediately hides the rule window by clearing its state, kind and open step.
+ */
 void BattlePrep_CloseRuleWindow(BattlePrepRuleWindow* arg0) {
     arg0->unk_00 = 0;
     arg0->unk_01 = 0;
     arg0->unk_02 = 0;
 }
 
+/**
+ * Returns the chosen row once the window has finished closing (state 4) and resets it to idle;
+ * returns -1 otherwise.
+ */
 s32 BattlePrep_PollRuleWindow(BattlePrepRuleWindow* arg0) {
     if (arg0->unk_00 == 4) {
         arg0->unk_00 = 0;

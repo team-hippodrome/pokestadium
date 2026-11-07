@@ -378,6 +378,10 @@ static u32 D_84B16330[] = {
     0x06000000, 0x01000000, 0x00000000, 0x00000000,
 };
 
+/**
+ * Geo callback (draw phase 5): binds segment 0x0F to trainer status icon image unk_24 for the first
+ * node or unk_28 otherwise, then draws the node's display list and reapplies material state.
+ */
 s32 BattlePrepTeamIcons_DrawActiveTeamBadge(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A58* temp_v1;
     u8* var_a3;
@@ -399,6 +403,10 @@ s32 BattlePrepTeamIcons_DrawActiveTeamBadge(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5) for single-format team icons: binds the PokeIcon image for the slot and
+ * frame D_3006000 / D_3009000, draws, then shows the next sibling (FAINTED/X mark) when unk_2C[slot] is set.
+ */
 s32 BattlePrepTeamIcons_DrawIconSingle(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A58* temp_t1;
     s32 temp_t2;
@@ -429,6 +437,10 @@ s32 BattlePrepTeamIcons_DrawIconSingle(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5) for tag-team icons: binds the preloaded texture unk_20[slot] and frame
+ * D_3006000 / D_3009000, then draws the node.
+ */
 s32 BattlePrepTeamIcons_DrawIconDouble(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A58* temp_a3;
     s32 temp_t0;
@@ -453,6 +465,10 @@ s32 BattlePrepTeamIcons_DrawIconDouble(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5) for the post-flip single-format icons: maps the slot via D_84B14C10 (or
+ * modulo 12), binds the PokeIcon image and frame D_300C000 / D_300D800, and toggles the next sibling on unk_2C.
+ */
 s32 BattlePrepTeamIcons_DrawBadgeIconSingle(s32 arg0, unk_func_80011B94* arg1) {
     u8* var_a3;
     unk_D_84B25A58* temp_t1;
@@ -490,6 +506,10 @@ s32 BattlePrepTeamIcons_DrawBadgeIconSingle(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_DrawBadgeIconSingle using preloaded textures unk_20; no
+ * sibling toggle.
+ */
 s32 BattlePrepTeamIcons_DrawBadgeIconDouble(s32 arg0, unk_func_80011B94* arg1) {
     s32 temp_a3;
     unk_D_84B25A58* temp_t1;
@@ -521,6 +541,10 @@ s32 BattlePrepTeamIcons_DrawBadgeIconDouble(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Renders an HP bar texture for each brought Pokémon of both sides into its icon image. arg1 is a
+ * percentage floor: the bar shows max(hp, maxHp * arg1 / 100).
+ */
 void BattlePrepTeamIcons_DrawHpBarsSingle(unk_D_84B25A58* arg0, s32 arg1) {
     s32 i;
     s32 j;
@@ -544,6 +568,9 @@ void BattlePrepTeamIcons_DrawHpBarsSingle(unk_D_84B25A58* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_DrawHpBarsSingle covering both members of each side.
+ */
 void BattlePrepTeamIcons_DrawHpBarsDouble(unk_D_84B25A58* arg0, s32 arg1) {
     s32 i;
     s32 j;
@@ -571,6 +598,10 @@ void BattlePrepTeamIcons_DrawHpBarsDouble(unk_D_84B25A58* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Sets unk_2C for every brought Pokémon whose unk_25 equals arg1 and plays sound 0x0110000B per mark;
+ * drives the FAINTED/X reveal in faint order.
+ */
 void BattlePrepTeamIcons_MarkFaintedSingle(unk_D_84B25A58* arg0, s32 arg1) {
     UNUSED s32 pad;
     TeamRoster* temp_s5;
@@ -591,6 +622,9 @@ void BattlePrepTeamIcons_MarkFaintedSingle(unk_D_84B25A58* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_MarkFaintedSingle.
+ */
 void BattlePrepTeamIcons_MarkFaintedDouble(unk_D_84B25A58* arg0, s32 arg1) {
     s32 i;
     s32 j;
@@ -615,6 +649,10 @@ void BattlePrepTeamIcons_MarkFaintedDouble(unk_D_84B25A58* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Binds icon nodes 1-6 to geo unk_08 and lays them out 3 per row (y = +48 / -48), pre-rotated +/-0x5800
+ * about Y for the flip-in.
+ */
 void BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(unk_D_84B25A58* arg0) {
     s32 i;
 
@@ -634,6 +672,9 @@ void BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Binds back-face nodes 9-14 to geo unk_10, rotated 0x8000 about Y, at the same positions as the visible icons.
+ */
 void BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(unk_D_84B25A58* arg0) {
     s32 i;
 
@@ -652,6 +693,9 @@ void BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Tag-team variant: binds nodes 16-21 and 22-27 to geo unk_08/unk_0C, pre-rotated +/-0x5800 about Y.
+ */
 void BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(unk_D_84B25A58* arg0) {
     s32 i;
 
@@ -682,6 +726,9 @@ void BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Tag-team variant: binds back-face nodes 28-33 and 34-39 to geo unk_10/unk_14, rotated 0x8000 about Y.
+ */
 void BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(unk_D_84B25A58* arg0) {
     s32 i;
 
@@ -713,6 +760,10 @@ void BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Flips the icon rows into view by 0x800 per frame for 11 frames (sound 0x01100009 at frame 0) and
+ * draws full HP bars.
+ */
 void BattlePrepTeamIcons_RevealStepSingle(unk_D_84B25A58* arg0, s16 arg1) {
     s16 i;
 
@@ -733,6 +784,9 @@ void BattlePrepTeamIcons_RevealStepSingle(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_RevealStepSingle (nodes 0, 7, and 16-27).
+ */
 void BattlePrepTeamIcons_RevealStepDouble(unk_D_84B25A58* arg0, s16 arg1) {
     s16 i;
 
@@ -756,6 +810,10 @@ void BattlePrepTeamIcons_RevealStepDouble(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * NTSC: lowers the HP bar floor from 100% by 4 per frame for 26 frames (sound 0x0110000A), then marks
+ * fainted Pokémon one faint index every 6 frames.
+ */
 void BattlePrepTeamIcons_HpDrainStepSingleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
@@ -770,6 +828,9 @@ void BattlePrepTeamIcons_HpDrainStepSingleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_HpDrainStepSingleNTSC, marking every 3 frames.
+ */
 void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
@@ -784,6 +845,9 @@ void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * PAL timing of BattlePrepTeamIcons_HpDrainStepSingleNTSC (5 per frame for 21 frames, marks every 5).
+ */
 void BattlePrepTeamIcons_HpDrainStepSinglePAL(unk_D_84B25A58* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
@@ -798,6 +862,9 @@ void BattlePrepTeamIcons_HpDrainStepSinglePAL(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * PAL timing of BattlePrepTeamIcons_HpDrainStepDoubleNTSC (5 per frame for 21 frames, marks every 3).
+ */
 void BattlePrepTeamIcons_HpDrainStepDoublePAL(unk_D_84B25A58* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
@@ -812,6 +879,10 @@ void BattlePrepTeamIcons_HpDrainStepDoublePAL(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Spins icons of fainted Pokémon (unk_25 != 0) together with their back faces for 16 frames, then at
+ * frame 16 rebinds each icon to geo unk_08 (not fainted) or unk_10 (fainted) and resets the flip nodes.
+ */
 void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1) {
     s32 i;
     BattleMon* temp_s5 = gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked;
@@ -864,6 +935,10 @@ void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepTeamIcons_FinalRevealSingle: at frame 16 rebuilds nodes 1-6 and 9-14
+ * from the flip state and resets nodes 16-39.
+ */
 void BattlePrepTeamIcons_FinalRevealDouble(unk_D_84B25A58* arg0, s16 arg1) {
     s32 i;
     BattleMon* temp_s0 = &gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[0];
@@ -964,6 +1039,10 @@ void BattlePrepTeamIcons_FinalRevealDouble(unk_D_84B25A58* arg0, s16 arg1) {
     }
 }
 
+/**
+ * State 3 tick: sequences reveal, HP drain, and final reveal steps for the current format and TV
+ * type; returns to state 0 at frame 96 (80 on PAL).
+ */
 void BattlePrepTeamIcons_UpdateStep(unk_D_84B25A58* arg0) {
     if (osTvType == OS_TV_PAL) {
         if (arg0->unk_02 == 1) {
@@ -1030,6 +1109,9 @@ void BattlePrepTeamIcons_UpdateStep(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * State 1 tick: processes one PokeIcon slot per frame; after at least 30 frames and all slots idle, sets state 2.
+ */
 void BattlePrepTeamIcons_UpdateLoadingStep(unk_D_84B25A58* arg0) {
     PokeIcon_ProcessNextSlot(arg0->unk_1C, 0);
 
@@ -1040,6 +1122,9 @@ void BattlePrepTeamIcons_UpdateLoadingStep(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Per-frame dispatcher for team icons: state 1 loading, state 3 result animation.
+ */
 void BattlePrepTeamIcons_Update(unk_D_84B25A58* arg0) {
     switch (arg0->unk_00) {
         case 1:
@@ -1052,6 +1137,9 @@ void BattlePrepTeamIcons_Update(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Allocates the icon depth buffer (0x80x0xC0) and queues brought species: side 0 into slots 0-2, side 1 into 3-5.
+ */
 void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0) {
     s32 i;
     s32 count;
@@ -1071,6 +1159,9 @@ void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Tag-team variant (0x80x0x60 buffer): side 0 members 0/1 into slots 0/3, side 1 members 0/1 into 6/9.
+ */
 void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0) {
     s32 i;
     s32 count;
@@ -1104,6 +1195,10 @@ void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Loads icon archives and the particle library, queues brought species icons, renders both trainers'
+ * status icons into unk_24/unk_28, and sets state 1 (loading).
+ */
 void BattlePrepTeamIcons_Load(unk_D_84B25A58* arg0, BinArchive* arg1) {
     u8* sp24 = BinArchive_GetFile(arg1, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
     u8* sp20 = BinArchive_GetFile(arg1, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
@@ -1123,6 +1218,10 @@ void BattlePrepTeamIcons_Load(unk_D_84B25A58* arg0, BinArchive* arg1) {
     arg0->unk_00 = 1;
 }
 
+/**
+ * Once loading reaches state 2, sets up trainer badge nodes 0 and 7 and the format-specific icon nodes,
+ * then enters state 3. Returns 1 while in state 3.
+ */
 s32 BattlePrepTeamIcons_InitDisplayObjects(unk_D_84B25A58* arg0, DisplayObject* arg1) {
     if (arg0->unk_00 == 2) {
         arg0->unk_00 = 3;
@@ -1148,6 +1247,9 @@ s32 BattlePrepTeamIcons_InitDisplayObjects(unk_D_84B25A58* arg0, DisplayObject* 
     return arg0->unk_00 == 3;
 }
 
+/**
+ * Loads model textures for each brought species into unk_20 (side 0 slots 0-2, side 1 slots 3-5).
+ */
 void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0) {
     s32 i;
     s32 count;
@@ -1163,6 +1265,9 @@ void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Tag-team variant: side 0 members 0/1 into slots 0/3, side 1 members 0/1 into 6/9.
+ */
 void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
     s32 i;
     s32 count;
@@ -1194,6 +1299,11 @@ void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
     }
 }
 
+/**
+ * Initializes team icon state: chooses the 6-per-side layout (unk_02 = 1) for rule category 8 with 4+
+ * brought or rule category 0 with tag teams or 4+ brought, clears faint marks, allocates render lists and
+ * texture buffers, builds geo layouts, and loads icon textures.
+ */
 void BattlePrepTeamIcons_Init(unk_D_84B25A58* arg0) {
     MemoryBlock* sp2C;
     s32 i;

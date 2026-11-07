@@ -54,6 +54,10 @@ static u32 D_84B0FB20[] = {
     0x06000000,  0x06000000,  0x06000000, 0x01000000,
 };
 
+/**
+ * Records each Pokémon on the player's roster with VictoryPalace_SaveSpeciesRecord (Hall of Fame),
+ * then commits save record 0x13. For modes 3/6 only when modeSelection is 3, for mode 7 only when 9.
+ */
 void BattlePrep_SaveVictoryPalaceRecords(void) {
     s16 temp_s0;
     ExtendedRosterInfo* temp_v0;
@@ -78,6 +82,10 @@ void BattlePrep_SaveVictoryPalaceRecords(void) {
     Save_CommitTypedRecord(0x13, 0);
 }
 
+/**
+ * On the first clear of mode 3 or 6 at modeSelection 3 (clearedModes bit 0x8 / 0x40 not yet set),
+ * raises GameOptions.gbTowerUnlockTier (max 2) and sets transitionFlags 0x8 (tier 1) or 0x10 (tier 2).
+ */
 void BattlePrep_MarkFirstClearBonus(void) {
     GameOptions sp20;
     s32 sp1C = 0;
@@ -103,6 +111,10 @@ void BattlePrep_MarkFirstClearBonus(void) {
     }
 }
 
+/**
+ * Sets clearedModes bit (1 << mode) when the final selection of mode 3/6/7 is cleared; when all of
+ * bits 0xF8 are set, unlocks Mewtwo and sets SESSION_FLAG_REVEAL_MEWTWO. Saves mode settings.
+ */
 void BattlePrep_MarkCupCleared(void) {
     if (((gSessionContext.mode != 3) || (gSessionContext.modeSelection >= 3)) &&
         ((gSessionContext.mode != 6) || (gSessionContext.modeSelection >= 3)) &&
@@ -116,6 +128,10 @@ void BattlePrep_MarkCupCleared(void) {
     }
 }
 
+/**
+ * Raises castleClears / nintendoCupClears / primeCupClears to modeSelection + 1 when the current
+ * selection exceeds the saved count, setting transitionFlags 0x400. Saves mode settings.
+ */
 void BattlePrep_MarkNewRoundRecord(void) {
     if (gSessionContext.mode == 7) {
         if ((gSessionContext.modeSelection >= D_84B26670.castleClears) && (gSessionContext.modeSelection < 8)) {
@@ -135,14 +151,23 @@ void BattlePrep_MarkNewRoundRecord(void) {
     Save_SetModeSettings(&D_84B26670, gSessionContext.inRound2);
 }
 
+/**
+ * Returns string arg0 from the battle_prep text table (table 0x1B).
+ */
 char* BattlePrep_GetString(s32 arg0) {
     return Text_GetString(NULL, 0, sBattlePrepText, arg0);
 }
 
+/**
+ * Formats string arg2 from the battle_prep text table into buffer arg0 of size arg1.
+ */
 char* BattlePrep_FormatString(char* arg0, s32 arg1, u32 arg2) {
     return Text_GetString(arg0, arg1, sBattlePrepText, arg2);
 }
 
+/**
+ * Geo layout callback: on draw (arg0 == 5) draws the starfield from the node's callbackArg.
+ */
 s32 BattlePrep_StarfieldGeoCallback(s32 arg0, unk_D_86002F34_alt8* arg1) {
     if (arg0 == 5) {
         BattlePrep_DrawStarfield(arg1->node.callbackArg);
@@ -150,6 +175,9 @@ s32 BattlePrep_StarfieldGeoCallback(s32 arg0, unk_D_86002F34_alt8* arg1) {
     }
 }
 
+/**
+ * Clears a display object and resets its position to 0, scale to 1 and rotation to 0.
+ */
 void BattlePrep_ResetDisplayObject(DisplayObject* arg0) {
     ModelRenderer_ClearDisplayObject(arg0);
     Vec3f_SetComponentsDuplicate(&arg0->position, 0.0f, 0.0f, 0.0f);
@@ -157,6 +185,9 @@ void BattlePrep_ResetDisplayObject(DisplayObject* arg0) {
     Vec3s_SetComponents(&arg0->rotation, 0, 0, 0);
 }
 
+/**
+ * Resets all 128 display objects in sBattlePrepState.
+ */
 void BattlePrep_ResetAllDisplayObjects(void) {
     s32 i;
 
@@ -165,6 +196,9 @@ void BattlePrep_ResetAllDisplayObjects(void) {
     }
 }
 
+/**
+ * Prints arg2 in font 2 horizontally centered on x = 32 at row arg1 (arg0 unused).
+ */
 void BattlePrep_DrawCenteredText(s16 arg0, s16 arg1, char* arg2) {
     s32 sp1C = Font_MeasureTextExtent(2, 0, arg2);
 
@@ -175,6 +209,10 @@ void BattlePrep_DrawCenteredText(s16 arg0, s16 arg1, char* arg2) {
     Font_EndTexturedTextRendering();
 }
 
+/**
+ * Draws a rounded rectangle at (arg0, arg1) of size arg2 x arg3 tinted RGBA (arg4..arg7): four
+ * corner textures up to 8 px each, with fills for the edges and center.
+ */
 void BattlePrep_DrawBorderedRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
     s16 temp_a2;
     s16 temp_s0_32;
@@ -235,6 +273,11 @@ void BattlePrep_DrawBorderedRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Renders side arg1's 64x96 nameplate image into buffer arg0 from frame arg3 and portrait arg2:
+ * controller-port labels (or the COM label) in 2-player modes 0/9, otherwise a port label plus
+ * the trainer name, or only the opponent name for side 1.
+ */
 void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8* arg3) {
     BattleSessionTeams* temp_v1 = &gSessionContext.battleSides[arg1];
 
@@ -281,6 +324,10 @@ void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8*
     }
 }
 
+/**
+ * Frame arg0 (< 16) of the burst: moves display objects 0-15 apart vertically and horizontally
+ * while spinning them.
+ */
 void BattlePrep_AnimateBallBurstEffect(s16 arg0) {
     static s16 D_84B0FC0C[] = {
         0x0300, 0x0150, 0xFEB0, 0xFD00, 0xFD00, 0xFEB0, 0x0150, 0x0300,
@@ -314,6 +361,9 @@ void BattlePrep_AnimateBallBurstEffect(s16 arg0) {
     }
 }
 
+/**
+ * Frame arg0 (< 16): fades lodFraction of display objects 0-15 and 28-31 from 0xF0 toward 0.
+ */
 void BattlePrep_FadeInBallBurstObjects(s16 arg0) {
     s32 i;
 
@@ -328,6 +378,9 @@ void BattlePrep_FadeInBallBurstObjects(s16 arg0) {
     }
 }
 
+/**
+ * Draws one frame: background stage, geo root (starfield and display objects) and both rule windows.
+ */
 void BattlePrep_RenderFrame(void) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -397,6 +450,9 @@ s32 BattlePrep_ShowVersusIntro(void) {
     return 4;
 }
 
+/**
+ * Advances one frame of the phase 1 round intro (starfield, banner carousel, opponent ladder, roster).
+ */
 void BattlePrep_UpdateRoundIntroFrame(void) {
     Controller_PollInputs();
     BattlePrep_UpdateStarfield(D_84B19910);
@@ -406,6 +462,9 @@ void BattlePrep_UpdateRoundIntroFrame(void) {
     BattlePrep_RenderFrame();
 }
 
+/**
+ * Initializes the banner, opponent ladder and roster for the phase 1 round intro.
+ */
 void BattlePrep_InitRoundIntroScene(void) {
     BattlePrep_InitBannerScene(&D_84B259A8);
     BattlePrep_InitOpponentLadderScene(&D_84B259E8, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
@@ -480,6 +539,10 @@ s32 BattlePrep_ShowRoundIntro(void) {
     return 4;
 }
 
+/**
+ * In round 2 mode 6 at modeSelection 3 (session flag 0x2 clear), if every roster Pokémon passes the
+ * unk_52 limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
+ */
 void BattlePrep_CheckPikachuNeedsSurf(void) {
     s32 i;
     s32 j;
@@ -669,6 +732,10 @@ void BattlePrep_RunOpponentLadderResult(void) {
     }
 }
 
+/**
+ * Waits for both result banners to finish, resets display objects 16+, plays sound 0x01100017,
+ * runs 16 burst frames, then resets objects 0-15 and runs 16 idle starfield frames.
+ */
 void BattlePrep_RunBallBurstTransition(void) {
     s32 i;
     s32 j;
@@ -701,6 +768,9 @@ void BattlePrep_RunBallBurstTransition(void) {
     }
 }
 
+/**
+ * Stops music and runs 16 frames fading out display objects via BattlePrep_FadeInBallBurstObjects.
+ */
 void BattlePrep_FadeInBallBurstTransition(void) {
     s32 i;
 
@@ -714,6 +784,9 @@ void BattlePrep_FadeInBallBurstTransition(void) {
     }
 }
 
+/**
+ * Stops music, starts a 16-frame fade from transparent, and runs 34 starfield frames to finish it.
+ */
 void BattlePrep_FadeToTransparentEnding(void) {
     s32 i;
 
@@ -780,6 +853,8 @@ s32 BattlePrep_PromptKeepBattling(void) {
 /**
  * Cup loss menu Save option: confirms overwriting existing continue data, then spends a
  * continue and writes the continue data. Returns 0 if the player declines the overwrite.
+ * Only BattlePrep_ShowCupResult calls this. Its Continue option spends a continue
+ * directly, without saving. Continues are only spent after a cup loss.
  */
 s32 BattlePrep_SpendContinueAndSave(void) {
     s32 sp24 = 1;
@@ -809,7 +884,10 @@ s32 BattlePrep_SpendContinueAndSave(void) {
 
 /**
  * Free Battle (mode 0) result: adds wins to winCount, shows the win record and the
- * Try once more / Change team combination / Quit menu.
+ * Try once more / Change team combination / Quit menu. Try once more (0x21) returns to
+ * entry Pokemon selection; Change team combination (0x81) returns to the Free Battle rules
+ * screen, where the controller ports assigned to each team can be changed; Quit (0x1)
+ * returns to the area select.
  */
 s32 BattlePrep_ShowFreeBattleResult(void) {
     s32 var_v0;
@@ -1257,6 +1335,10 @@ s32 BattlePrep_ShowCastleClearOutro(void) {
     return 4;
 }
 
+/**
+ * Computes playerWon / isDraw from battleSides[].wonBattle, attaches the 128 display objects, builds
+ * the geo layout D_84B0FB20 (near 10, far 6000), initializes the starfield and closes both rule windows.
+ */
 void BattlePrep_InitScene(void) {
     MemoryBlock* temp_v0;
     CameraNode* ptr;
