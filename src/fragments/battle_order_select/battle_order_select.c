@@ -26,7 +26,7 @@ static char** sPokemonDetailText;
 static s16 D_84803798;
 static s16 sScrollingTextProgress;
 static s32 D_8480379C;
-static BattleOrderInputState D_848037A0[4];
+static BattleOrderInputState sBattleOrderInputStates[4];
 static SessionContext* sSessionContext;
 static Controller D_84816428;
 static s32 D_8481644C;
@@ -34,32 +34,32 @@ static s32 D_84816450;
 static s16 D_84816458[4];
 
 static u16 sBorderPortColors[] = { 0x1D, 0x341, 0x6947, 0x6A41 };
-static unk_D_84803548 D_84803548[] = {
-    { 0x001E, 0x0000 },
-    { 0x001E, 0x4000 },
-    { 0x0001, 0x8000 },
-    { 0x0000, 0x0000 },
+static ComSelectionButtonPresses D_84803548[] = {
+    { 30, 0 },
+    { 30, BTN_B },
+    { 1, BTN_A },
+    { 0, 0 },
 };
-static unk_D_84803548 D_84803558[] = {
-    { 0x001E, 0x0000 }, { 0x000A, 0x4000 }, { 0x001E, 0x0002 }, { 0x0001, 0x8000 }, { 0x0000, 0x0000 },
+static ComSelectionButtonPresses D_84803558[] = {
+    { 30, 0 }, { 10, BTN_B }, { 30, BTN_CLEFT }, { 1, BTN_A }, { 0, 0 },
 };
-static unk_D_84803548 D_8480356C[] = {
-    { 0x001E, 0x0000 }, { 0x000A, 0x4000 }, { 0x000A, 0x0002 },
-    { 0x001E, 0x0008 }, { 0x0001, 0x8000 }, { 0x0000, 0x0000 },
+static ComSelectionButtonPresses D_8480356C[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT },
+    { 30, BTN_CUP }, { 1, BTN_A }, { 0, 0 },
 };
-static unk_D_84803548 D_84803584[] = {
-    { 0x001E, 0x0000 }, { 0x000A, 0x4000 }, { 0x000A, 0x0002 }, { 0x000A, 0x0008 },
-    { 0x001E, 0x8000 }, { 0x0001, 0x8000 }, { 0x0000, 0x0000 },
+static ComSelectionButtonPresses D_84803584[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
+    { 30, BTN_A }, { 1, BTN_A }, { 0, 0 },
 };
-static unk_D_84803548 D_848035A0[] = {
-    { 0x001E, 0x0000 }, { 0x000A, 0x4000 }, { 0x000A, 0x0002 }, { 0x000A, 0x0008 },
-    { 0x000A, 0x8000 }, { 0x001E, 0x0004 }, { 0x0001, 0x8000 }, { 0x0000, 0x0000 },
+static ComSelectionButtonPresses D_848035A0[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
+    { 10, BTN_A }, { 30, BTN_CDOWN }, { 1, BTN_A }, { 0, 0 },
 };
-static unk_D_84803548 D_848035C0[] = {
-    { 0x001E, 0x0000 }, { 0x000A, 0x4000 }, { 0x000A, 0x0002 }, { 0x000A, 0x0008 },
-    { 0x000A, 0x8000 }, { 0x000A, 0x0004 }, { 0x001E, 0x0001 }, { 0x0001, 0x8000 },
+static ComSelectionButtonPresses D_848035C0[] = {
+    { 30, 0 }, { 10, BTN_B }, { 10, BTN_CLEFT }, { 10, BTN_CUP },
+    { 10, BTN_A }, { 10, BTN_CDOWN }, { 30, BTN_CRIGHT }, { 1, BTN_A },
 };
-static unk_D_84803548* D_848035E0[] = {
+static ComSelectionButtonPresses* sComButtonPressesByRosterSize[] = {
     NULL, D_84803548, D_84803558, D_8480356C, D_84803584, D_848035A0, D_848035C0,
 };
 static unk_D_848035FC D_848035FC[] = {
@@ -755,28 +755,28 @@ void BattleMenu_DrawOrderSelectPanel(BattleOrderInputState* arg0) {
 
 void BattleMenu_UpdateComPanelAutoInput(void) {
     s32 i;
-    s8 var_v0;
-    unk_D_84803548* ptr;
+    s8 number_of_pokemon_to_pick;
+    ComSelectionButtonPresses* com_button_presses;
 
     for (i = 0; i < 4; i++) {
-        if ((D_848037A0[i].roster != NULL) && (D_848037A0[i].roster->isHuman & 2)) {
+        if ((sBattleOrderInputStates[i].roster != NULL) && (sBattleOrderInputStates[i].roster->isHuman & 2)) {
             break;
         }
     }
 
     if (i < 4) {
-        if ((sSessionContext->ruleCategory != 0) && (sSessionContext->ruleCategory != 8)) {
-            var_v0 = 3;
+        if ((sSessionContext->ruleCategory != RULE_CATEGORY_ANYTHING_GOES) && (sSessionContext->ruleCategory != RULE_CATEGORY_VS_MEWTWO)) {
+            number_of_pokemon_to_pick = 3;
         } else {
-            var_v0 = D_848037A0[i].rosterSize;
+            number_of_pokemon_to_pick = sBattleOrderInputStates[i].rosterSize;
         }
         D_84816428.buttonPressed = 0;
         if (D_84816450 == 0) {
-            ptr = D_848035E0[var_v0];
+            com_button_presses = sComButtonPressesByRosterSize[number_of_pokemon_to_pick];
 
-            D_84816450 = ptr[D_8481644C].unk_00;
+            D_84816450 = com_button_presses[D_8481644C].unk_00;
             if (D_84816450 != 0) {
-                D_84816428.buttonPressed = ptr[D_8481644C].unk_02;
+                D_84816428.buttonPressed = com_button_presses[D_8481644C].unk_02;
                 D_8481644C++;
             }
         }
@@ -787,13 +787,13 @@ void BattleMenu_UpdateComPanelAutoInput(void) {
     }
 }
 
-s32 BattleMenu_IsSlotAlreadySelected(BattleOrderInputState* arg0, s8 arg1) {
+s32 BattleMenu_IsSlotAlreadySelected(BattleOrderInputState* input_state, s8 slot) {
     s32 i;
-    s8 temp_v1;
-    BattleOrderInputState* var_a2;
+    s8 pad;
+    BattleOrderInputState* pad2;
 
-    for (i = 0; i < arg0->numberOfPokemonPicked; i++) {
-        if (arg1 == arg0->pickedSlots[i]) {
+    for (i = 0; i < input_state->numberOfPokemonPicked; i++) {
+        if (slot == input_state->pickedSlots[i]) {
             return 1;
         }
     }
@@ -801,37 +801,37 @@ s32 BattleMenu_IsSlotAlreadySelected(BattleOrderInputState* arg0, s8 arg1) {
     return 0;
 }
 
-s32 BattleMenu_PicksExceedLevelCap(BattleOrderInputState* arg0) {
+s32 BattleMenu_PicksExceedLevelCap(BattleOrderInputState* input_state) {
     s32 i;
-    s32 var_v0 = 0;
+    s32 level_sum = 0;
 
-    if (!(arg0->roster->isHuman & 2)) {
-        for (i = 0; i < arg0->numberOfPokemonPicked; i++) {
-            var_v0 += arg0->pokemon[arg0->pickedSlots[i]].level;
+    if (!(input_state->roster->isHuman & 2)) {
+        for (i = 0; i < input_state->numberOfPokemonPicked; i++) {
+            level_sum += input_state->pokemon[input_state->pickedSlots[i]].level;
         }
 
-        if (sSessionContext->ruleCategory == 3) {
-            if ((arg0->numberOfPokemonPicked == 2) && (var_v0 >= 0x6A)) {
+        if (sSessionContext->ruleCategory == RULE_CATEGORY_NINTENDO_CUP_99) {
+            if ((input_state->numberOfPokemonPicked == 2) && (level_sum >= 106)) {
                 return 1;
             }
 
-            if ((arg0->numberOfPokemonPicked == 3) && (var_v0 >= 0x9C)) {
+            if ((input_state->numberOfPokemonPicked == 3) && (level_sum >= 156)) {
                 return 1;
             }
-        } else if (sSessionContext->ruleCategory == 4) {
-            if ((arg0->numberOfPokemonPicked == 2) && (var_v0 >= 0x38)) {
-                return 1;
-            }
-
-            if ((arg0->numberOfPokemonPicked == 3) && (var_v0 >= 0x51)) {
-                return 1;
-            }
-        } else if (sSessionContext->ruleCategory == 5) {
-            if ((arg0->numberOfPokemonPicked == 2) && (var_v0 >= 0x24)) {
+        } else if (sSessionContext->ruleCategory == RULE_CATEGORY_PETIT_CUP) {
+            if ((input_state->numberOfPokemonPicked == 2) && (level_sum >= 56)) {
                 return 1;
             }
 
-            if ((arg0->numberOfPokemonPicked == 3) && (var_v0 >= 0x33)) {
+            if ((input_state->numberOfPokemonPicked == 3) && (level_sum >= 81)) {
+                return 1;
+            }
+        } else if (sSessionContext->ruleCategory == RULE_CATEGORY_PIKA_CUP) {
+            if ((input_state->numberOfPokemonPicked == 2) && (level_sum >= 36)) {
+                return 1;
+            }
+
+            if ((input_state->numberOfPokemonPicked == 3) && (level_sum >= 51)) {
                 return 1;
             }
         }
@@ -914,7 +914,7 @@ void BattleMenu_UndoLastOrderSelection(BattleOrderInputState* arg0) {
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
 
         if (arg0->tagTeamPartnerPort != -1) {
-            temp_v0 = &D_848037A0[arg0->tagTeamPartnerPort];
+            temp_v0 = &sBattleOrderInputStates[arg0->tagTeamPartnerPort];
             temp_v0->doneSelecting = 0;
             temp_v0->numberOfPokemonPicked = 0;
             temp_v0->rButtonHeld = 0;
@@ -984,7 +984,7 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, BattleOrde
             BattleMenu_ResetOrderSlotIcons(arg1->isHuman);
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
             if (arg1->tagTeamPartnerPort != -1) {
-                temp_v0_2 = &D_848037A0[arg1->tagTeamPartnerPort];
+                temp_v0_2 = &sBattleOrderInputStates[arg1->tagTeamPartnerPort];
                 temp_v0_2->doneSelecting = 0;
                 temp_v0_2->numberOfPokemonPicked = 0;
                 temp_v0_2->rButtonHeld = 0;
@@ -1113,8 +1113,8 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     }
 
     for (i = 0; i < D_8480379C; i++) {
-        var_s2 += BattleMenu_UpdateOrderSelectPanel(arg0, &D_848037A0[i]);
-        BattleMenu_DrawOrderSelectPanel(&D_848037A0[i]);
+        var_s2 += BattleMenu_UpdateOrderSelectPanel(arg0, &sBattleOrderInputStates[i]);
+        BattleMenu_DrawOrderSelectPanel(&sBattleOrderInputStates[i]);
     }
 
     BattleMenu_DrawTeamOrderSidebarTeam0();
@@ -1175,7 +1175,7 @@ void BattleMenu_CommitOrderSelection(void) {
     TeamRoster* temp_s1;
     BattleOrderInputState* var_s2;
 
-    var_s2 = D_848037A0;
+    var_s2 = sBattleOrderInputStates;
     var_s4 = D_8480379C;
 
     while (var_s4-- > 0) {
@@ -1203,7 +1203,7 @@ void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 ar
     BattleOrderInputState* temp_v1;
     BattleMon* temp_s0;
 
-    temp_v1 = &D_848037A0[D_8480379C];
+    temp_v1 = &sBattleOrderInputStates[D_8480379C];
     temp_v1->unk_0000 = D_8480379C;
     temp_v1->port = arg2->controllerPort;
     temp_v1->tagTeamPartnerPort = arg4;

@@ -45,7 +45,7 @@ typedef struct unk_D_848035FC {
 typedef struct unk_D_84803548 {
     /* 0x00 */ u16 unk_00;
     /* 0x02 */ u16 unk_02;
-} unk_D_84803548; // size = 0x4
+} ComSelectionButtonPresses; // size = 0x4
 
 void BattleMenu_DrawBottomActionButtons(void);
 void BattleMenu_DrawScrollingRulesText(void);
