@@ -230,6 +230,46 @@ def c_calls(text, names):
                 argument_start = position + 1
 
 
+def source_text_tables(repo):
+    """Map textdata table numbers to C variables assigned from Text_GetStringTable.
+
+    Only plain `<identifier> = Text_GetStringTable(<literal>)` assignments are
+    recognized. Placeholder names (D_<address>, func_<address>, spNN, var_*)
+    are ignored, so a table is named only after it has a semantic annotation.
+    """
+    names = {}
+    assignment = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*$")
+    placeholder = re.compile(r"D_[0-9A-Fa-f]{7,8}\w*|func_[0-9A-Fa-f]{8}\w*|sp[0-9A-Fa-f]+|(?:var|temp|unk)_\w*")
+    for path in sorted((repo / "src").rglob("*.c")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for _, arguments, start in c_calls(text, ["Text_GetStringTable"]):
+            target = assignment.search(text[max(0, start - 120) : start])
+            if target is None or len(arguments) != 1:
+                continue
+            name = target.group(1)
+            if placeholder.fullmatch(name):
+                continue
+            try:
+                number = numeric(arguments[0])
+            except (ValueError, SyntaxError):
+                continue
+            names.setdefault(number, Counter())[name] += 1
+    return names
+
+
+def text_table_names(source_names):
+    """Choose one stable, unique semantic key per table number."""
+    chosen, used = {}, set()
+    for number in sorted(source_names):
+        counts = source_names[number]
+        name = min(counts, key=lambda item: (-counts[item], item))
+        if name in used:
+            name = f"{name}_{number}"
+        used.add(name)
+        chosen[number] = name
+    return chosen
+
+
 def address(expression):
     """Resolve a literal segmented address or legacy D_<hex> symbol only."""
     value = expression.strip()
@@ -440,22 +480,38 @@ class MediaExporter:
         )
 
     def export_text(self):
-        """Export every recognized textdata table to indexed JSON and UTF-8 TXT."""
+        """Export every recognized textdata table to JSON and UTF-8 TXT.
+
+        Tables are keyed by the semantic C variable that loads them (see
+        source_text_tables); tables without one fall back to `table_<number>`.
+        Each record keeps its numeric `table` id for Text_GetStringTable lookups.
+        """
+        source_names = source_text_tables(self.repo)
+        semantic = text_table_names(source_names)
         tables = {}
-        for name, data in self.leaves.items():
+        for name, data in sorted(
+            self.leaves.items(),
+            key=lambda item: (len(item[0]), item[0]),
+        ):
             if not re.fullmatch(r"textdata/\d+\.bin", name):
                 continue
             try:
                 strings = text_table(data, self.options.text_encoding)
-                table_number = Path(name).stem
-                tables[table_number] = strings
+                table_number = int(Path(name).stem)
+                key = semantic.get(table_number, f"table_{table_number}")
+                record = {
+                    "table": table_number,
+                    "source_names": sorted(source_names.get(table_number, ())),
+                }
+                tables[key] = dict(record, strings=strings)
                 self.add_json(
-                    f"text/tables/{table_number}.json",
-                    {
-                        "source": name,
-                        "encoding": self.options.text_encoding,
-                        "strings": strings,
-                    },
+                    f"text/tables/{key}.json",
+                    dict(
+                        record,
+                        source=name,
+                        encoding=self.options.text_encoding,
+                        strings=strings,
+                    ),
                     name,
                     "text",
                 )
@@ -472,8 +528,8 @@ class MediaExporter:
                     for entry in strings
                 )
                 self.add(
-                    f"text/tables/{table_number}.txt",
-                    (readable + "\n").encode("utf-8"),
+                    f"text/tables/{key}.txt",
+                    (f"# table {table_number}: {key}\n\n" + readable + "\n").encode("utf-8"),
                     name,
                     "text",
                 )
@@ -484,7 +540,11 @@ class MediaExporter:
             {
                 "encoding": self.options.text_encoding,
                 "tables": tables,
-                "note": "Tokens and control bytes are not substituted. raw_hex preserves each string.",
+                "note": (
+                    "Keys are the C variables assigned from Text_GetStringTable(table); "
+                    "table_<n> means no semantic name exists yet. Tokens and control "
+                    "bytes are not substituted. raw_hex preserves each string."
+                ),
             },
             "textdata.bin",
             "text",
