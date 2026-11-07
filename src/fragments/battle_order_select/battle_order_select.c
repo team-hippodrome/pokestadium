@@ -418,12 +418,12 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_stat
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(x + 35, y + 6, 40, 40, input_state->firstPokemonIcon[0], 40, 0);
-    Gfx_DrawTextureRgba16(x + 189, y + 6, 40, 40, input_state->otherPokemonIcon, 40, 0);
-    Gfx_DrawTextureRgba16(x + 343, y + 6, 40, 40, &input_state->otherPokemonIcon[3200], 40, 0);
-    Gfx_DrawTextureRgba16(x + 35, y + 48, 40, 40, &input_state->otherPokemonIcon[6400], 40, 0);
-    Gfx_DrawTextureRgba16(x + 189, y + 48, 40, 40, &input_state->otherPokemonIcon[9600], 40, 0);
-    Gfx_DrawTextureRgba16(x + 343, y + 48, 40, 40, &input_state->otherPokemonIcon[12800], 40, 0);
+    Gfx_DrawTextureRgba16(x + 35, y + 6, 40, 40, input_state->pokemonIcon[0], 40, 0);
+    Gfx_DrawTextureRgba16(x + 189, y + 6, 40, 40, input_state->pokemonIcon[1], 40, 0);
+    Gfx_DrawTextureRgba16(x + 343, y + 6, 40, 40, input_state->pokemonIcon[2], 40, 0);
+    Gfx_DrawTextureRgba16(x + 35, y + 48, 40, 40, input_state->pokemonIcon[3], 40, 0);
+    Gfx_DrawTextureRgba16(x + 189, y + 48, 40, 40, input_state->pokemonIcon[4], 40, 0);
+    Gfx_DrawTextureRgba16(x + 343, y + 48, 40, 40, input_state->pokemonIcon[5], 40, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -653,7 +653,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(x + 8, y + 7, 40, 40, &input_state->firstPokemonIcon[slot_to_summarize], 40, 0);
+    Gfx_DrawTextureRgba16(x + 8, y + 7, 40, 40, input_state->pokemonIcon[slot_to_summarize], 40, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -1284,7 +1284,7 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 side_i
         Pokemon_PrepareBattleMon(pokemon);
         pokemon->type1 = gSpeciesData[pokemon->species.id - 1].type1;
         pokemon->type2 = gSpeciesData[pokemon->species.id - 1].type2;
-        PokeIcon_LoadModelTextureForMon(input_state->firstPokemonIcon[i], 0, pokemon);
+        PokeIcon_LoadModelTextureForMon(input_state->pokemonIcon[i], 0, pokemon);
     }
 
     sOrderSelectPanelCount++;

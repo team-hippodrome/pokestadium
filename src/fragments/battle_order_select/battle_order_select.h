@@ -34,9 +34,7 @@ typedef struct BattleOrderInputState {
     /* 0x0017 */ s8 rosterSize;
     /* 0x0018 */ BattleMon* pokemon;
     /* 0x001C */ TeamRoster* roster;
-    // FAKE: loading and drawing index this split storage as six consecutive 40x40 RGBA16 icons.
-    /* 0x0020 */ u16 firstPokemonIcon[1][1600];
-    /* 0x0CA0 */ char otherPokemonIcon[16000];
+    /* 0x0020 */ u16 pokemonIcon[6][1600]; // Six 40x40 RGBA16 icons.
 } BattleOrderInputState; // size = 0x4B20
 
 typedef struct PokemonTypeStyle {
