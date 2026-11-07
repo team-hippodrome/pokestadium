@@ -9,7 +9,7 @@
 
 static s32 D_81100930;
 static s32 D_81100934;
-static char** D_81100938;
+static char** sFatalErrorText;
 
 void FatalError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -50,7 +50,7 @@ void FatalError_DrawMessagePanel(s32 arg0) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x52, 0x21, Text_GetString(NULL, 0, D_81100938, arg0 - 1));
+    Font_Printf(0x52, 0x21, Text_GetString(NULL, 0, sFatalErrorText, arg0 - 1));
     Font_EndTexturedTextRendering();
 }
 
@@ -115,7 +115,7 @@ void FatalError_Main(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, transfer_pak_error_ui, 0);
     Text_InitStringTables();
-    D_81100938 = Text_GetStringTable(0xD);
+    sFatalErrorText = Text_GetStringTable(0xD);
     StageContext_Activate(temp_s0);
 
     while (true) {

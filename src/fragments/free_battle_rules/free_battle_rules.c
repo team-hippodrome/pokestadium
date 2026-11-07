@@ -36,8 +36,8 @@ typedef struct unk_D_84002BE8 {
     /* 0x0C */ u8* unk_0C;
 } unk_D_84002BE8; // size = 0x10
 
-static char** D_84002D00;
-static char** D_84002D04;
+static char** sRuleSelectText;
+static char** sPokemonDetailText;
 #if defined(VERSION_US_REV2)
 static s32 pad_D_84002D08_us_rev2;
 #endif
@@ -190,9 +190,9 @@ void FreeBattle_DrawTitleBar(void) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
-    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, D_84002D00, 0));
+    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, sRuleSelectText, 0));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
-    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, D_84002D00, 0));
+    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, sRuleSelectText, 0));
     Font_EndTexturedTextRendering();
 }
 
@@ -378,7 +378,7 @@ void FreeBattle_DrawRuleGrid(void) {
         Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF);
     }
 
-    Font_Printf(0x64, 0x5A, Text_GetString(NULL, 0, D_84002D00, 1));
+    Font_Printf(0x64, 0x5A, Text_GetString(NULL, 0, sRuleSelectText, 1));
     Font_EndTexturedTextRendering();
 
     if (D_84002D16 == 1) {
@@ -522,22 +522,22 @@ void FreeBattle_DrawLevelSelectPanel(void) {
     FreeBattle_DrawSlicedFrame(0x64, 0x10C, 0x1B0, 0x84, 0, 0, 0, 0xFF);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 0, Text_GetString(NULL, 0, D_84002D00, 2));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 1, Text_GetString(NULL, 0, D_84002D00, 3));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 2, Text_GetString(NULL, 0, D_84002D00, 6));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 3, Text_GetString(NULL, 0, D_84002D00, 7));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 4, Text_GetString(NULL, 0, D_84002D00, 8));
+    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 0, Text_GetString(NULL, 0, sRuleSelectText, 2));
+    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 1, Text_GetString(NULL, 0, sRuleSelectText, 3));
+    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 2, Text_GetString(NULL, 0, sRuleSelectText, 6));
+    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 3, Text_GetString(NULL, 0, sRuleSelectText, 7));
+    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 4, Text_GetString(NULL, 0, sRuleSelectText, 8));
     Font_SetActive(4, 0);
 
-    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, D_84002D04, 0x15));
+    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
     FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 0, sp2C);
-    sprintf(sp2C, "%s50~55", Text_GetString(NULL, 0, D_84002D04, 0x15));
+    sprintf(sp2C, "%s50~55", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
     FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 1, sp2C);
-    sprintf(sp2C, "%s25~30", Text_GetString(NULL, 0, D_84002D04, 0x15));
+    sprintf(sp2C, "%s25~30", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
     FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 2, sp2C);
-    sprintf(sp2C, "%s15~20", Text_GetString(NULL, 0, D_84002D04, 0x15));
+    sprintf(sp2C, "%s15~20", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
     FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 3, sp2C);
-    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, D_84002D04, 0x15));
+    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
     FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 4, sp2C);
 
     Font_SetActive(0x10, 0);
@@ -548,7 +548,7 @@ void FreeBattle_DrawLevelSelectPanel(void) {
         Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF);
     }
 
-    Font_Printf(0x64, 0xF4, Text_GetString(NULL, 0, D_84002D00, 9));
+    Font_Printf(0x64, 0xF4, Text_GetString(NULL, 0, sRuleSelectText, 9));
     Font_EndTexturedTextRendering();
 
     if (D_84002D16 == 3) {
@@ -607,10 +607,10 @@ void FreeBattle_DrawConfirmPanel(void) {
                                          D_84002D28.unk_02 + (D_84002D28.unk_08 * 0x1C) + 0x2B);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf(D_84002D28.unk_00 + 0x30, D_84002D28.unk_02 + 0xB, Text_GetString(NULL, 0, D_84002D00, 0xA));
-            FreeBattle_DrawConfirmLine(0, Text_GetString(NULL, 0, D_84002D00, 0xB));
-            FreeBattle_DrawConfirmLine(1, Text_GetString(NULL, 0, D_84002D00, 0xC));
-            FreeBattle_DrawConfirmLine(2, Text_GetString(NULL, 0, D_84002D00, 0xD));
+            Font_Printf(D_84002D28.unk_00 + 0x30, D_84002D28.unk_02 + 0xB, Text_GetString(NULL, 0, sRuleSelectText, 0xA));
+            FreeBattle_DrawConfirmLine(0, Text_GetString(NULL, 0, sRuleSelectText, 0xB));
+            FreeBattle_DrawConfirmLine(1, Text_GetString(NULL, 0, sRuleSelectText, 0xC));
+            FreeBattle_DrawConfirmLine(2, Text_GetString(NULL, 0, sRuleSelectText, 0xD));
             Font_EndTexturedTextRendering();
         }
     }
@@ -852,8 +852,8 @@ s32 FreeBattle_RuleSelectMain(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     ASSET_LOAD(D_3000000, order_select_ui, 0);
     Text_InitStringTables();
-    D_84002D00 = Text_GetStringTable(0xF);
-    D_84002D04 = Text_GetStringTable(6);
+    sRuleSelectText = Text_GetStringTable(0xF);
+    sPokemonDetailText = Text_GetStringTable(6);
     D_84002D08 = ASSET_LOAD2(backgrounds, 1, 1);
     D_84002D0C = BinArchive_GetFile(D_84002D08, 6);
     D_84002D14 = Cont_GetControllerBits();

@@ -591,13 +591,13 @@ typedef struct unk_func_88316128 {
     /* 0x43 */ u8 unk_43;
 } unk_func_88316128; // size >= 0x44
 
-extern char** D_8831A4C0;
-extern char** D_8831A4C4;
-extern char** D_8831A4C8;
-extern char** D_8831A4CC;
-extern char** D_8831A4D0;
-extern char** D_8831A4D4;
-extern char** D_8831A4D8;
+extern char** sIdLabelText;
+extern char** sPcListText;
+extern char** sItemDescriptionText;
+extern char** sPcListMoveNames;
+extern char** sPcListPokemonNames;
+extern char** sPcListTypeNames;
+extern char** sItemNameTable;
 extern Color_RGBA8 D_8831727C;
 extern Color_RGBA8 D_88317280;
 extern Color_RGBA8 D_88317284;

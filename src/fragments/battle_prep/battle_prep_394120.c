@@ -31,7 +31,7 @@ unk_D_84B25AC0 D_84B25AC0;
 unk_D_84B25AC0 D_84B26080;
 unk_D_84B26640 D_84B26640;
 ModeSettings D_84B26670;
-char** D_84B26678;
+char** sBattlePrepText;
 
 static u8* D_84B0FB10[] = {
     D_3015100,
@@ -136,11 +136,11 @@ void BattlePrep_MarkNewRoundRecord(void) {
 }
 
 char* BattlePrep_GetString(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84B26678, arg0);
+    return Text_GetString(NULL, 0, sBattlePrepText, arg0);
 }
 
 char* BattlePrep_FormatString(char* arg0, s32 arg1, u32 arg2) {
-    return Text_GetString(arg0, arg1, D_84B26678, arg2);
+    return Text_GetString(arg0, arg1, sBattlePrepText, arg2);
 }
 
 s32 BattlePrep_StarfieldGeoCallback(s32 arg0, unk_D_86002F34_alt8* arg1) {
@@ -1238,7 +1238,7 @@ s32 BattlePrep_RunRulesScreen(s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_3000000, common_menu0_ui, 0);
 
     Text_InitStringTables();
-    D_84B26678 = Text_GetStringTable(0x1B);
+    sBattlePrepText = Text_GetStringTable(0x1B);
     PokeIcon_OpenModelArchive();
 
     D_84B1A598.unk_B408 = BinArchive_Open(TRAINER_DATA_ROM_START, NULL, 1, 1);

@@ -76,8 +76,8 @@ static f32 D_8267E4F8[150];
 static s32 D_8267E750;
 static s32 D_8267E754;
 static s32 D_8267E758;
-static char** D_8267E75C;
-char** D_8267E760;
+static char** sHallOfFameText;
+char** gVictoryPokemonNames;
 
 static u32 D_82603E80[] = {
     0xA4CAA4DE, 0xA4A80000, 0xA5ECA5D9, 0xA5EB0000, 0xA4AAA4E4, 0x00000000, 0xA4C7A4F3, 0xA4C9A4A6, 0xA4A4A4EA,
@@ -1987,7 +1987,7 @@ void VictoryPalace_DrawOverlay(void) {
                                 G_TX_NOLOD, G_TX_NOLOD);
 
             temp_v0_2 = Font_MeasureTextExtent(
-                4, 0, Text_GetString(NULL, 0, D_8267E75C, (((sp158.unk_00 & 0x7F) - 1) % 7) + 7));
+                4, 0, Text_GetString(NULL, 0, sHallOfFameText, (((sp158.unk_00 & 0x7F) - 1) % 7) + 7));
 
             gSPTextureRectangle(gDisplayListHead++, (temp_v0_2 + 0x49) << 2, 0x0264, (temp_v0_2 + 0x59) << 2, 0x02A4,
                                 G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
@@ -2039,15 +2039,15 @@ void VictoryPalace_DrawOverlay(void) {
         VictoryPalace_LoadSpeciesRecord(&sp58, (D_82607B54 % D_8267E4F0) + 1);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetActive(2, 0);
-        Font_Printf(0x58, 0x2E, "%s", Text_GetString(NULL, 0, D_8267E75C, 0));
-        Font_Printf(0x58, 0x42, "%s", Text_GetString(NULL, 0, D_8267E75C, 1));
-        Font_Printf(0x58, 0x56, "%s", Text_GetString(NULL, 0, D_8267E75C, 2));
+        Font_Printf(0x58, 0x2E, "%s", Text_GetString(NULL, 0, sHallOfFameText, 0));
+        Font_Printf(0x58, 0x42, "%s", Text_GetString(NULL, 0, sHallOfFameText, 1));
+        Font_Printf(0x58, 0x56, "%s", Text_GetString(NULL, 0, sHallOfFameText, 2));
         Font_Printf(0x58, 0x6A, "ID");
-        Font_Printf(0x4C, 0x86, "%s", Text_GetString(NULL, 0, D_8267E75C, 4));
+        Font_Printf(0x4C, 0x86, "%s", Text_GetString(NULL, 0, sHallOfFameText, 4));
 
         if (VictoryPalace_IsCurrentSpeciesOwnedByPlayer() > 0) {
             Gfx_SetEnvColor(0x64, 0x64, 0xC8, 0xFF);
-            Font_Printf(0xD4, 0x6C, "%s", Text_GetString(NULL, 0, D_8267E75C, 3));
+            Font_Printf(0xD4, 0x6C, "%s", Text_GetString(NULL, 0, sHallOfFameText, 3));
         }
 
         Font_EnableTwoCycleTexturing();
@@ -2065,7 +2065,7 @@ void VictoryPalace_DrawOverlay(void) {
         Font_Printf(0x8C, 0x42, "%d", sp58.unk_01);
         Font_Printf(0x8C, 0x56, "%s", sp58.unk_14);
         Font_Printf(0x8C, 0x6A, "%05d", sp58.unk_02);
-        Font_Printf(0x46, 0x98, "%s", Text_GetString(NULL, 0, D_8267E75C, (((sp58.unk_00 & 0x7F) - 1) % 7) + 7));
+        Font_Printf(0x46, 0x98, "%s", Text_GetString(NULL, 0, sHallOfFameText, (((sp58.unk_00 & 0x7F) - 1) % 7) + 7));
         Font_DisableTwoCycleTexturing();
     }
 
@@ -2078,8 +2078,8 @@ void VictoryPalace_DrawOverlay(void) {
 
         Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
         Text_SetNumberToken(3, D_8267E4EA);
-        Font_Printf(0xBE, 0xC2, "%s", Text_GetString(sp38, 0x20, D_8267E75C, 5));
-        Font_Printf(0x2A, 0xC3, "%s", Text_GetString(NULL, 0, D_8267E75C, 6));
+        Font_Printf(0xBE, 0xC2, "%s", Text_GetString(sp38, 0x20, sHallOfFameText, 5));
+        Font_Printf(0x2A, 0xC3, "%s", Text_GetString(NULL, 0, sHallOfFameText, 6));
     } else if ((D_8267E4E8 == 1) && (D_82608542 == 0) && (D_82608552 == 2) && (D_82608550 == 5)) {
         u16 temp_v1_70 = D_8267E758 % 32;
         char* sp2C;
@@ -2090,7 +2090,7 @@ void VictoryPalace_DrawOverlay(void) {
         } else {
             Gfx_SetEnvColor(0xFF, 0xFF, 0x64, ((-temp_v1_70 * 0xFF) + 0x1EE1) / 15);
         }
-        sp2C = Text_GetString(NULL, 0, D_8267E75C, 0x14);
+        sp2C = Text_GetString(NULL, 0, sHallOfFameText, 0x14);
         Font_Printf(0xA0 - (Font_MeasureTextExtent(0, 0, sp2C) / 2), 0xA2, "%s", sp2C);
     } else if (D_8267E4E8 == 1) {
         D_8267E758 = 0;
@@ -2735,8 +2735,8 @@ s32 HallOfFame_Main(s32 arg0, s32 arg1) {
     Save_EnsureBankLoaded(2);
     HallOfFame_InitGallery();
     Text_InitStringTables();
-    D_8267E75C = Text_GetStringTable(0x1F);
-    D_8267E760 = Text_GetStringTable(0x24);
+    sHallOfFameText = Text_GetStringTable(0x1F);
+    gVictoryPokemonNames = Text_GetStringTable(0x24);
     StageContext_Activate(sp24);
     HallOfFame_RunGallery();
     StageContext_Deactivate();

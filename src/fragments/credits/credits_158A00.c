@@ -1591,7 +1591,7 @@ s32 Credits_InterpolateRoleColor(Color_RGBA8_u32* arg0, u16 arg1, u16 arg2, u8 a
 }
 
 /**
- * The storage at 0x86A06218 is this function's block-scope `static char** D_86A06218`:
+ * The storage at 0x86A06218 is this function's block-scope `static char** sCreditsText`:
  * only the block-scope spelling produces the target codegen (a file-scope definition,
  * static or not, costs an extra callee-saved register that caches the symbol's address
  * across the loop).
@@ -1612,7 +1612,7 @@ static void lcomm_walk_pad_4(void);
 static void lcomm_walk_pad_5(void);
 
 void func_86A013C8(u8 arg0, u8 arg1, unk_D_86A03014* arg2) {
-    static char** D_86A06218;
+    static char** sCreditsText;
 
     u16 i;
     u16 sp2C;
@@ -1620,10 +1620,10 @@ void func_86A013C8(u8 arg0, u8 arg1, unk_D_86A03014* arg2) {
 
     sp2C = Credits_GetRoleCount();
     Text_InitStringTables();
-    D_86A06218 = Text_GetStringTable(0x2D);
+    sCreditsText = Text_GetStringTable(0x2D);
 
     for (i = 0, ptr = D_86A02750; i < sp2C; i++, ptr++) {
-        ptr->unk_04[0] = Text_GetString(NULL, 0, D_86A06218, i);
+        ptr->unk_04[0] = Text_GetString(NULL, 0, sCreditsText, i);
     }
 
     D_86A06210 = arg0;

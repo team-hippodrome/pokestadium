@@ -17,10 +17,10 @@ extern u32 D_87806670[];
 extern u32 D_878065B0[];
 extern u32 D_87806730[];
 
-char** D_87806330 = NULL;
+char** gMinigameText = NULL;
 
 static s32 D_8780FA20;
-static char** D_8780FA24;
+static char** sControllerErrorText;
 u16 D_8780FA28;
 s16 D_8780FA2A;
 s16 D_8780FA2C;
@@ -38,8 +38,8 @@ s16 D_8780FA68[4];
 
 void Widget_Init(void) {
     Text_InitStringTables();
-    D_87806330 = Text_GetStringTable(0x1D);
-    D_8780FA24 = Text_GetStringTable(0x14);
+    gMinigameText = Text_GetStringTable(0x1D);
+    sControllerErrorText = Text_GetStringTable(0x14);
 }
 
 void Widget_DrawControllerDisconnectBanner(void) {
@@ -49,18 +49,18 @@ void Widget_DrawControllerDisconnectBanner(void) {
     s16 temp_s0;
 
     if (!(Cont_GetControllerBits() & 1)) {
-        sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, D_8780FA24, 0));
+        sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sControllerErrorText, 0));
         temp_s0 = 0x50 - D_87806334;
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
-        Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, D_8780FA24, 0));
+        Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, sControllerErrorText, 0));
 
         temp_s0 += sp24 + 0x1E;
         if (temp_s0 < 0x140) {
-            Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, D_8780FA24, 0));
+            Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, sControllerErrorText, 0));
         }
 
         Font_EndTexturedTextRendering();

@@ -2249,26 +2249,26 @@ void SandshrewGame_DrawTutorialText(void) {
     Font_SetLineHeight(0xC);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86F0D264, Text_GetString(NULL, 0, D_87806330, 0x4A)) / 2), 0x20,
-                Text_GetString(NULL, 0, D_87806330, 0x4A));
+    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86F0D264, Text_GetString(NULL, 0, gMinigameText, 0x4A)) / 2), 0x20,
+                Text_GetString(NULL, 0, gMinigameText, 0x4A));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-    Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x4B));
-    Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, D_87806330, 0x4C));
-    Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, D_87806330, 0x4D));
+    Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, gMinigameText, 0x4B));
+    Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, gMinigameText, 0x4C));
+    Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, gMinigameText, 0x4D));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, D_87806330, 0x4B),
-                           Text_GetString(NULL, 0, D_87806330, 0x63), 0xC);
-    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x63));
-    Font_Printf(0xB8, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-    Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+    Widget_MeasureLabelBox(&sp38, &sp34, Text_GetString(NULL, 0, gMinigameText, 0x4B),
+                           Text_GetString(NULL, 0, gMinigameText, 0x63), 0xC);
+    Font_Printf(sp38 + 0x28, sp34 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x63));
+    Font_Printf(0xB8, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+    Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
     Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
     Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-    Font_Printf(0xCF, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x4E));
+    Font_Printf(0xCF, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x4E));
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-    Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+    Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     Font_DisableTwoCycleTexturing();
     Font_SetActive(4, -2);
     Font_EndTexturedTextRendering();

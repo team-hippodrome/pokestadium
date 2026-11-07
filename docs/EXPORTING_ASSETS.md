@@ -24,7 +24,11 @@ It preserves the decompressed binary tree and adds a `media/` tree containing:
 - **WAV:** Numus instrument/SFX samples and MORT announcer/voice clips, decoded
   using the existing `tools/audio` implementations.
 - **UTF-8 TXT/JSON:** Indexed strings from every decoded `textdata` table.
-  Original bytes, token placeholders and control codes are retained.
+  Original bytes, token placeholders and control codes are retained. Tables are
+  keyed and named after the C variable assigned from `Text_GetStringTable(n)`
+  (for example `text/tables/sCreditsText.json`); each record keeps its numeric
+  `table` id and every matching `source_names` entry. Tables with no semantic
+  variable yet fall back to `table_<n>`.
 
 The first `--fetch-model-tools` run downloads two SHA-256-verified Python modules
 from revision `33dea39d52a36641bca9499ad8ad59774ac183ae` of

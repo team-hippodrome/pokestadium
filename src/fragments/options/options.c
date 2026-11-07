@@ -12,7 +12,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-static char** D_82C01660;
+static char** sOptionsText;
 static s16 D_82C01664;
 static u16 D_82C01666;
 
@@ -92,7 +92,7 @@ void Options_DrawMainPanel(s16 arg0, s32 arg1) {
 
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            sp40 = Text_GetString(NULL, 0, D_82C01660, 4);
+            sp40 = Text_GetString(NULL, 0, sOptionsText, 4);
             Font_Printf(0x140 - (Font_MeasureTextExtent(0x10, 0, sp40) / 2), sp2C + 0xA, sp40);
 
             if (D_82C01664 == 0) {
@@ -102,8 +102,8 @@ void Options_DrawMainPanel(s16 arg0, s32 arg1) {
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-            Font_Printf(0xBB, sp2C + 0x31, Text_GetString(NULL, 0, D_82C01660, 5));
-            sp40 = Text_GetString(NULL, 0, D_82C01660, (D_82C01666 & 1) != 0);
+            Font_Printf(0xBB, sp2C + 0x31, Text_GetString(NULL, 0, sOptionsText, 5));
+            sp40 = Text_GetString(NULL, 0, sOptionsText, (D_82C01666 & 1) != 0);
             Font_Printf(0x1A4 - (Font_MeasureTextExtent(0x10, 0, sp40) / 2), sp2C + 0x31, sp40);
 
             if (D_82C01664 == 1) {
@@ -113,8 +113,8 @@ void Options_DrawMainPanel(s16 arg0, s32 arg1) {
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-            Font_Printf(0xBB, sp2C + 0x51, Text_GetString(NULL, 0, D_82C01660, 6));
-            sp40 = Text_GetString(NULL, 0, D_82C01660, ((D_82C01666 & 2) != 0) + 2);
+            Font_Printf(0xBB, sp2C + 0x51, Text_GetString(NULL, 0, sOptionsText, 6));
+            sp40 = Text_GetString(NULL, 0, sOptionsText, ((D_82C01666 & 2) != 0) + 2);
             Font_Printf(0x1A4 - (Font_MeasureTextExtent(0x10, 0, sp40) / 2), sp2C + 0x51, sp40);
 
             if (D_82C01664 == 2) {
@@ -124,7 +124,7 @@ void Options_DrawMainPanel(s16 arg0, s32 arg1) {
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-            Font_Printf(0xBB, sp2C + 0x71, Text_GetString(NULL, 0, D_82C01660, 7));
+            Font_Printf(0xBB, sp2C + 0x71, Text_GetString(NULL, 0, sOptionsText, 7));
 
             if (D_82C01664 == 3) {
                 var_a2 = 0;
@@ -133,7 +133,7 @@ void Options_DrawMainPanel(s16 arg0, s32 arg1) {
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-            Font_Printf(0xBB, sp2C + 0x91, Text_GetString(NULL, 0, D_82C01660, 8));
+            Font_Printf(0xBB, sp2C + 0x91, Text_GetString(NULL, 0, sOptionsText, 8));
             Font_EndTexturedTextRendering();
         }
     }
@@ -155,16 +155,16 @@ void Options_DrawConfirmPrompt(s32 arg0, s32 arg1, s32 arg2) {
 
             if (arg0 == 0) {
                 Font_SetLineHeight(0x1C);
-                Font_Printf(0x63, sp24 + 0xC, Text_GetString(NULL, 0, D_82C01660, 9));
+                Font_Printf(0x63, sp24 + 0xC, Text_GetString(NULL, 0, sOptionsText, 9));
             } else {
                 Font_SetLineHeight(0x1C);
-                Font_Printf(0x63, sp24 + 0xC, Text_GetString(NULL, 0, D_82C01660, 0xA));
+                Font_Printf(0x63, sp24 + 0xC, Text_GetString(NULL, 0, sOptionsText, 0xA));
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, (arg1 == 0) ? 0 : 0xFF, 0xFF);
-            Font_Printf(0x141, sp24 + 0x48, Text_GetString(NULL, 0, D_82C01660, 0xB));
+            Font_Printf(0x141, sp24 + 0x48, Text_GetString(NULL, 0, sOptionsText, 0xB));
             Gfx_SetEnvColor(0xFF, 0xFF, (arg1 == 1) ? 0 : 0xFF, 0xFF);
-            Font_Printf(0x141, sp24 + 0x64, Text_GetString(NULL, 0, D_82C01660, 0xC));
+            Font_Printf(0x141, sp24 + 0x64, Text_GetString(NULL, 0, sOptionsText, 0xC));
             Font_EndTexturedTextRendering();
         }
     }
@@ -181,7 +181,7 @@ void Options_DrawEraseCompleteMessage(s32 arg0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
-            Font_Printf(0x9B, sp24 + 0x18, Text_GetString(NULL, 0, D_82C01660, 0xD));
+            Font_Printf(0x9B, sp24 + 0x18, Text_GetString(NULL, 0, sOptionsText, 0xD));
             Font_EndTexturedTextRendering();
         }
     }
@@ -422,7 +422,7 @@ s32 Options_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
     Text_InitStringTables();
-    D_82C01660 = Text_GetStringTable(0x15);
+    sOptionsText = Text_GetStringTable(0x15);
     Save_EnsureAllBanksLoaded();
     Save_GetOptionsField02(&D_82C01666);
     D_82C01664 = 0;

@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-extern char** D_8267E760;
+extern char** gVictoryPokemonNames;
 
 void VictoryPalace_CheckAllCaught(void);
 s32 VictoryPalace_StringsEqual(s8* arg0, s8* arg1);

@@ -276,7 +276,7 @@ void func_81003A54(Gfx* gfx) {
 #if defined(VERSION_JP)
             sp34 = D_8006FF00[temp_t0].name;
 #else
-            sp34 = Text_GetString(0, 0, D_8267E760, temp_t0);
+            sp34 = Text_GetString(0, 0, gVictoryPokemonNames, temp_t0);
 #endif
             sprintf(D_81004BB8, "%s     ", sp34);
             temp_v1 = D_81004BB0 - 3;

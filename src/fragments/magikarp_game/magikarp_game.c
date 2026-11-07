@@ -370,43 +370,43 @@ void MagikarpGame_DrawOverlay(s32 arg0) {
             Font_SetLineHeight(0xC);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, Text_GetString(NULL, 0, D_87806330, 0x15)) / 2),
-                        0x20, Text_GetString(NULL, 0, D_87806330, 0x15));
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, Text_GetString(NULL, 0, gMinigameText, 0x15)) / 2),
+                        0x20, Text_GetString(NULL, 0, gMinigameText, 0x15));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x16));
-            Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, D_87806330, 0x17));
-            Font_Printf(0x28, 0x7C, Text_GetString(NULL, 0, D_87806330, 0x18));
+            Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, gMinigameText, 0x16));
+            Font_Printf(0x28, 0x58, Text_GetString(NULL, 0, gMinigameText, 0x17));
+            Font_Printf(0x28, 0x7C, Text_GetString(NULL, 0, gMinigameText, 0x18));
             Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
 
-            temp_s0_2 = Text_GetString(NULL, 0, D_87806330, 0x5F);
+            temp_s0_2 = Text_GetString(NULL, 0, gMinigameText, 0x5F);
 
-            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, D_87806330, 0x16), temp_s0_2, 0xC);
+            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, gMinigameText, 0x16), temp_s0_2, 0xC);
             if (sp50 >= 0) {
                 Font_Printf(sp50 + 0x28, sp4C + 0x34, temp_s0_2);
             }
 
-            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, D_87806330, 0x17), temp_s0_2, 0xC);
+            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, gMinigameText, 0x17), temp_s0_2, 0xC);
             if (sp50 >= 0) {
                 Font_Printf(sp50 + 0x28, sp4C + 0x58, temp_s0_2);
             }
 
-            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, D_87806330, 0x18), temp_s0_2, 0xC);
+            Widget_MeasureLabelBox(&sp50, &sp4C, Text_GetString(NULL, 0, gMinigameText, 0x18), temp_s0_2, 0xC);
             if (sp50 >= 0) {
                 Font_Printf(sp50 + 0x28, sp4C + 0x7C, temp_s0_2);
             }
 
             Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-            Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x19));
+            Font_Printf(0xA2, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x19));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-            Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+            Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-            Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+            Font_Printf(0x8B, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+            Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_DisableTwoCycleTexturing();
             break;
 
@@ -415,8 +415,8 @@ void MagikarpGame_DrawOverlay(s32 arg0) {
             Font_SetActive(0x20, -2);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x1E, 0x1E, 0xFF, 0xFF);
-            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, Text_GetString(NULL, 0, D_87806330, 0x5A)) / 2),
-                        0x64, Text_GetString(NULL, 0, D_87806330, 0x5A));
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, Text_GetString(NULL, 0, gMinigameText, 0x5A)) / 2),
+                        0x64, Text_GetString(NULL, 0, gMinigameText, 0x5A));
             Font_DisableTwoCycleTexturing();
             break;
     }

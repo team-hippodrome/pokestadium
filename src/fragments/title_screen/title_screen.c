@@ -16,7 +16,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-static char** gTitleStrings;
+static char** sControllerErrorText;
 static s32 pad_D_82100EA4;
 static ModeSettings gTitleModeSettings;
 static BinArchive* gTitleBackgroundArchive;
@@ -116,18 +116,18 @@ void Title_DrawNoControllerWarning(void) {
     s16 temp_s0;
 
     if (!(Cont_GetControllerBits() & 1)) {
-        sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, gTitleStrings, 0));
+        sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sControllerErrorText, 0));
         temp_s0 = 0x50 - titleNoControllerWarningFrame;
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
-        Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, gTitleStrings, 0));
+        Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, sControllerErrorText, 0));
 
         temp_s0 += sp24 + 30;
         if (temp_s0 < 0x140) {
-            Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, gTitleStrings, 0));
+            Font_Printf(temp_s0, 0xB3, Text_GetString(NULL, 0, sControllerErrorText, 0));
         }
 
         Font_EndTexturedTextRendering();
@@ -381,7 +381,7 @@ s32 Title_Main(UNUSED s32 arg0, s16* arg1) {
     Font_Init(6, 0);
     Title_LoadAssets();
     Text_InitStringTables();
-    gTitleStrings = Text_GetStringTable(0x14);
+    sControllerErrorText = Text_GetStringTable(0x14);
     Audio_LoadWaveTablesAndMusic(gTitleAudioBuffer);
     Title_FadeIn();
     sp24 = Title_Loop();

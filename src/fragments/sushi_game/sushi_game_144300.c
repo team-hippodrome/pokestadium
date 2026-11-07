@@ -313,30 +313,30 @@ void func_86800B38(void) {
         Font_SetActive(2, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86807504, Text_GetString(NULL, 0, D_87806330, 0xC)) / 2), 0x20,
-                    Text_GetString(NULL, 0, D_87806330, 0xC));
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86807504, Text_GetString(NULL, 0, gMinigameText, 0xC)) / 2), 0x20,
+                    Text_GetString(NULL, 0, gMinigameText, 0xC));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetLineHeight(0xC);
-        Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x32));
-        Font_Printf(0x28, 0x4C, Text_GetString(NULL, 0, D_87806330, 0x33));
-        Font_Printf(0x78, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-        Font_Printf(0xDA, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x5C));
-        Font_Printf(0x86, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+        Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, gMinigameText, 0x32));
+        Font_Printf(0x28, 0x4C, Text_GetString(NULL, 0, gMinigameText, 0x33));
+        Font_Printf(0x78, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+        Font_Printf(0xDA, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+        Font_Printf(0x86, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
         Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-        Font_Printf(0x8C, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x34));
+        Font_Printf(0x8C, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x34));
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Font_Printf(0xEE, 0xB2, Text_GetString(NULL, 0, D_87806330, 0x35));
+        Font_Printf(0xEE, 0xB2, Text_GetString(NULL, 0, gMinigameText, 0x35));
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-        Font_Printf(0x9A, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
-        Widget_MeasureLabelBox(&spA4, &spA0, Text_GetString(NULL, 0, D_87806330, 0x32),
-                               Text_GetString(NULL, 0, D_87806330, 0x5F), 0xC);
+        Font_Printf(0x9A, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
+        Widget_MeasureLabelBox(&spA4, &spA0, Text_GetString(NULL, 0, gMinigameText, 0x32),
+                               Text_GetString(NULL, 0, gMinigameText, 0x5F), 0xC);
         Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
         Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
-        Font_Printf(spA4 + 0x28, spA0 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x5F));
+        Font_Printf(spA4 + 0x28, spA0 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x5F));
         Font_SetActive(1, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -346,11 +346,11 @@ void func_86800B38(void) {
             pad1 = i % 4;
             if (pad1) {}
 
-            sp9C = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, D_87806330, 0x36));
-            sp98 = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, D_87806330, i + 0x36));
+            sp9C = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, gMinigameText, 0x36));
+            sp98 = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, gMinigameText, i + 0x36));
 
             Font_Printf((((var_v0 * pad1) + sp9C) - sp98) + 0x46, ((i / 4) << 5) + 0x72,
-                        Text_GetString(NULL, 0, D_87806330, i + 0x36));
+                        Text_GetString(NULL, 0, gMinigameText, i + 0x36));
         }
     }
 
@@ -433,7 +433,7 @@ void func_86800B38(void) {
 
                 Text_SetNumberToken(6, ptr->unk_01C);
                 Font_Printf(D_86806D78[i] + var_s7, D_86806D80[i] + var_s4,
-                            Text_GetString(&sp78, 0x20, D_87806330, 0x5E));
+                            Text_GetString(&sp78, 0x20, gMinigameText, 0x5E));
             }
             break;
     }
