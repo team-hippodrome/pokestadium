@@ -42,7 +42,7 @@ unk_D_83003CE0 D_83003CE0;
 unk_D_83003CE0 D_83003DE0;
 
 char** sBattleModeLabels = NULL;
-static char** D_830039C4 = NULL;
+static char** sRentalRulesPokemonNames = NULL;
 static u8 D_830039C8[] = {
     6, 0x07, 0x08, 9, 10, 11, 12, 13, 0x0F,
 };
@@ -104,7 +104,7 @@ static s16 D_83003B54[] = {
 };
 
 char* RentalRules_GetPokemonName(s32 file_number) {
-    return Text_GetString(NULL, 0, D_830039C4, file_number - 1);
+    return Text_GetString(NULL, 0, sRentalRulesPokemonNames, file_number - 1);
 }
 
 void RentalRules_LoadBackgroundArchive(void) {
@@ -814,7 +814,7 @@ s32 RentalRules_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     PokeIcon_OpenModelArchive();
     Text_InitStringTables();
     sBattleModeLabels = Text_GetStringTable(0x20);
-    D_830039C4 = Text_GetStringTable(36);
+    sRentalRulesPokemonNames = Text_GetStringTable(36);
     StageLoader_UpdateSegments();
     RentalRules_Loop();
     StageLoader_WaitForRetrace();

@@ -603,54 +603,54 @@ void ClefairyGame_DrawOverlay(s32 arg0) {
             Font_SetLineHeight(0xC);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
-            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x1A)) / 2),
-                        0x20, Text_GetString(NULL, 0, D_87806330, 0x1A));
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x1A)) / 2),
+                        0x20, Text_GetString(NULL, 0, gMinigameText, 0x1A));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, D_87806330, 0x1B));
-            Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, D_87806330, 0x1C));
+            Font_Printf(0x28, 0x34, Text_GetString(NULL, 0, gMinigameText, 0x1B));
+            Font_Printf(0x28, 0x70, Text_GetString(NULL, 0, gMinigameText, 0x1C));
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-            Widget_MeasureLabelBox(&sp48, &sp44, Text_GetString(NULL, 0, D_87806330, 0x1B),
-                                   Text_GetString(NULL, 0, D_87806330, 0x61), 0xC);
+            Widget_MeasureLabelBox(&sp48, &sp44, Text_GetString(NULL, 0, gMinigameText, 0x1B),
+                                   Text_GetString(NULL, 0, gMinigameText, 0x61), 0xC);
 
             if (sp48 >= 0) {
-                Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, D_87806330, 0x61));
+                Font_Printf(sp48 + 0x28, sp44 + 0x34, Text_GetString(NULL, 0, gMinigameText, 0x61));
             }
 
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-            Font_Printf(0x8C, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x1D));
+            Font_Printf(0x8C, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x1D));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
-            Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x14));
+            Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, D_87806330, 0x5C));
-            Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, D_87806330, 0x5C));
+            Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+            Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_DisableTwoCycleTexturing();
             break;
 
         case 3:
             Font_SetActive(4, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x1E)) / 2),
-                        0x40, Text_GetString(NULL, 0, D_87806330, 0x1E));
+            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x1E)) / 2),
+                        0x40, Text_GetString(NULL, 0, gMinigameText, 0x1E));
             break;
 
         case 5:
             Font_SetActive(4, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x1F)) / 2),
-                        0x40, Text_GetString(NULL, 0, D_87806330, 0x1F));
+            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x1F)) / 2),
+                        0x40, Text_GetString(NULL, 0, gMinigameText, 0x1F));
             break;
 
         case 8:
             if (D_8610549C < 0x3C) {
                 Font_SetActive(4, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x20)) / 2),
-                            0x40, Text_GetString(NULL, 0, D_87806330, 0x20));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x20)) / 2),
+                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x20));
             }
             break;
 
@@ -659,8 +659,8 @@ void ClefairyGame_DrawOverlay(s32 arg0) {
             if (D_8610549C < 0x3C) {
                 Font_SetActive(4, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x21)) / 2),
-                            0x40, Text_GetString(NULL, 0, D_87806330, 0x21));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x21)) / 2),
+                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x21));
             }
             break;
 
@@ -668,8 +668,8 @@ void ClefairyGame_DrawOverlay(s32 arg0) {
             if ((D_8610549C >= 0x10) && (D_8610549C < 0x3C)) {
                 Font_SetActive(4, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, D_87806330, 0x22)) / 2),
-                            0x40, Text_GetString(NULL, 0, D_87806330, 0x22));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x22)) / 2),
+                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x22));
             }
             break;
     }

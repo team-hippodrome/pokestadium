@@ -18,10 +18,10 @@
 static unk_D_84803760 D_84803760[2];
 static BinArchive* D_84803780;
 static void* D_84803784;
-static char** D_84803788;
-static char** D_8480378C;
-static char** D_84803790;
-static char** D_84803794;
+static char** sMoveNameTable;
+static char** sTypeNameTable;
+static char** sTeamSelectText;
+static char** sPokemonDetailText;
 static s16 D_84803798;
 static s16 D_8480379A;
 static s32 D_8480379C;
@@ -117,8 +117,8 @@ void BattleMenu_DrawBottomActionButtons(void) {
     Font_SetActive(8, 0);
     Font_Printf(0x5A, 0x1AA, "*");
     Font_Printf(0x149, 0x1AA, "*");
-    Font_Printf(0x91, 0x1A8, Text_GetString(NULL, 0, D_84803790, 2));
-    Font_Printf(0x180, 0x1A8, Text_GetString(NULL, 0, D_84803790, 3));
+    Font_Printf(0x91, 0x1A8, Text_GetString(NULL, 0, sTeamSelectText, 2));
+    Font_Printf(0x180, 0x1A8, Text_GetString(NULL, 0, sTeamSelectText, 3));
     Font_EndTexturedTextRendering();
 }
 
@@ -146,9 +146,9 @@ void BattleMenu_DrawScrollingRulesText(void) {
     Gfx_SetEnvColor(0xA5, 0xDE, 0x8C, 0xFF);
 
     if ((D_84816420->ruleCategory == 0) || (D_84816420->ruleCategory == 8)) {
-        var_v0 = Text_GetString(NULL, 0, D_84803790, 1);
+        var_v0 = Text_GetString(NULL, 0, sTeamSelectText, 1);
     } else {
-        var_v0 = Text_GetString(NULL, 0, D_84803790, 0);
+        var_v0 = Text_GetString(NULL, 0, sTeamSelectText, 0);
     }
 
     for (i = 0; i < 16; i++) {
@@ -399,7 +399,7 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0) {
         if ((arg0->unk_0009 != 0) && (temp_v0_4 != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         }
-        Font_Printf(temp_s1_2, temp_s2_3 + 0x14, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
+        Font_Printf(temp_s1_2, temp_s2_3 + 0x14, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 0x15),
                     arg0->unk_0018[i].level);
     }
 
@@ -450,9 +450,9 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(unk_D_848037A0* arg0) {
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Font_Printf(var_s1 + 0x1F, var_s2 + 0xB, Text_GetString(NULL, 0, D_84803790, 4));
-        Font_Printf(var_s1 + 0x4F, var_s2 + 0x30, Text_GetString(NULL, 0, D_84803790, 5));
-        Font_Printf(var_s1 + 0xAF, var_s2 + 0x30, Text_GetString(NULL, 0, D_84803790, 6));
+        Font_Printf(var_s1 + 0x1F, var_s2 + 0xB, Text_GetString(NULL, 0, sTeamSelectText, 4));
+        Font_Printf(var_s1 + 0x4F, var_s2 + 0x30, Text_GetString(NULL, 0, sTeamSelectText, 5));
+        Font_Printf(var_s1 + 0xAF, var_s2 + 0x30, Text_GetString(NULL, 0, sTeamSelectText, 6));
         Font_EndTexturedTextRendering();
         arg0->unk_0007 = 2;
     } else {
@@ -469,9 +469,9 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(unk_D_848037A0* arg0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(var_s1 + 0x50, var_s2 + 0x14, Text_GetString(NULL, 0, D_84803790, 4));
-        Font_Printf(var_s1 + 0x80, var_s2 + 0x3C, Text_GetString(NULL, 0, D_84803790, 5));
-        Font_Printf(var_s1 + 0xE0, var_s2 + 0x3C, Text_GetString(NULL, 0, D_84803790, 6));
+        Font_Printf(var_s1 + 0x50, var_s2 + 0x14, Text_GetString(NULL, 0, sTeamSelectText, 4));
+        Font_Printf(var_s1 + 0x80, var_s2 + 0x3C, Text_GetString(NULL, 0, sTeamSelectText, 5));
+        Font_Printf(var_s1 + 0xE0, var_s2 + 0x3C, Text_GetString(NULL, 0, sTeamSelectText, 6));
         Font_EndTexturedTextRendering();
     }
 }
@@ -511,7 +511,7 @@ void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(unk_D_848037A0* arg0) {
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
         Font_SetLineHeight(0x25);
         Text_SetNumberToken(3, sp2C);
-        Font_Printf(sp34 + 0x10, sp30 + 0xB, Text_GetString(sp38, sizeof(sp38), D_84803790, 7));
+        Font_Printf(sp34 + 0x10, sp30 + 0xB, Text_GetString(sp38, sizeof(sp38), sTeamSelectText, 7));
         Font_EndTexturedTextRendering();
         arg0->unk_0007 = 2;
     } else {
@@ -525,7 +525,7 @@ void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(unk_D_848037A0* arg0) {
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
         Font_SetLineHeight(0x28);
         Text_SetNumberToken(3, sp2C);
-        Font_Printf(sp34 + 0x50, sp30 + 0x14, Text_GetString(NULL, 0, D_84803790, 7));
+        Font_Printf(sp34 + 0x50, sp30 + 0x14, Text_GetString(NULL, 0, sTeamSelectText, 7));
         Font_EndTexturedTextRendering();
     }
 }
@@ -551,7 +551,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();
         Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF);
-        temp_v0 = Text_GetString(NULL, 0, D_84803790, 8);
+        temp_v0 = Text_GetString(NULL, 0, sTeamSelectText, 8);
         Font_Printf((sp3C - (Font_MeasureTextExtent(0x20, 0, temp_v0) / 2)) + 0xAF, sp38 + 0x19, temp_v0);
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
@@ -581,7 +581,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
         Font_EnableTwoCycleTexturing();
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp34);
         Gfx_SetPrimColor(0x1C, 0x74, 0xFF, sp34);
-        temp_v0 = Text_GetString(NULL, 0, D_84803790, 8);
+        temp_v0 = Text_GetString(NULL, 0, sTeamSelectText, 8);
         Font_Printf((sp3C - (Font_MeasureTextExtent(0x20, 0, temp_v0) / 2)) + 0xEB, sp38 + 0x25, temp_v0);
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
@@ -613,32 +613,32 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
     Font_Printf(temp_fp + 0x32, sp7C + 7, arg0->unk_0018[temp_s1].nickname);
-    Font_Printf(temp_fp + 0x32, sp7C + 0x1B, "%s", Text_GetString(NULL, 0, D_84803794, 8));
-    Font_Printf(temp_fp + 0xBE, sp7C + 7, Text_GetString(NULL, 0, D_84803790, 9));
-    Font_Printf(temp_fp + 0xBE, sp7C + 0x1B, Text_GetString(NULL, 0, D_84803790, 0xA));
-    Font_Printf(temp_fp + 0xBE, sp7C + 0x2F, Text_GetString(NULL, 0, D_84803790, 0xB));
-    Font_Printf(temp_fp + 0xBE, sp7C + 0x43, Text_GetString(NULL, 0, D_84803790, 0xC));
-    Font_Printf(temp_fp + 0x32, sp7C + 0x2F, Text_GetString(NULL, 0, D_84803790, 0xD));
+    Font_Printf(temp_fp + 0x32, sp7C + 0x1B, "%s", Text_GetString(NULL, 0, sPokemonDetailText, 8));
+    Font_Printf(temp_fp + 0xBE, sp7C + 7, Text_GetString(NULL, 0, sTeamSelectText, 9));
+    Font_Printf(temp_fp + 0xBE, sp7C + 0x1B, Text_GetString(NULL, 0, sTeamSelectText, 0xA));
+    Font_Printf(temp_fp + 0xBE, sp7C + 0x2F, Text_GetString(NULL, 0, sTeamSelectText, 0xB));
+    Font_Printf(temp_fp + 0xBE, sp7C + 0x43, Text_GetString(NULL, 0, sTeamSelectText, 0xC));
+    Font_Printf(temp_fp + 0x32, sp7C + 0x2F, Text_GetString(NULL, 0, sTeamSelectText, 0xD));
 
     if (sp78->unk_06 != sp78->unk_07) {
-        Font_Printf(temp_fp + 0x32, sp7C + 0x43, Text_GetString(NULL, 0, D_84803790, 0xE));
+        Font_Printf(temp_fp + 0x32, sp7C + 0x43, Text_GetString(NULL, 0, sTeamSelectText, 0xE));
     }
 
     idx = PokemonType_ToDisplayIndex(sp78->unk_06);
     Gfx_SetEnvColor(D_848035FC[idx].unk_00.r, D_848035FC[idx].unk_00.g, D_848035FC[idx].unk_00.b, 0xFF);
     Font_Printf(temp_fp + 0x7A, sp7C + 0x2F,
-                Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_06)));
+                Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(sp78->unk_06)));
 
     if (sp78->unk_06 != sp78->unk_07) {
         idx = PokemonType_ToDisplayIndex(sp78->unk_07);
         Gfx_SetEnvColor(D_848035FC[idx].unk_00.r, D_848035FC[idx].unk_00.g, D_848035FC[idx].unk_00.b, 0xFF);
         Font_Printf(temp_fp + 0x7A, sp7C + 0x43,
-                    Text_GetString(NULL, 0, D_8480378C, PokemonType_ToDisplayIndex(sp78->unk_07)));
+                    Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(sp78->unk_07)));
     }
 
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-    Font_Printf(temp_fp + 0x8C, sp7C + 7, "%s%d", Text_GetString(NULL, 0, D_84803794, 0x15),
+    Font_Printf(temp_fp + 0x8C, sp7C + 7, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 0x15),
                 arg0->unk_0018[temp_s1].level);
     Font_Printf(temp_fp + 0x52, sp7C + 0x1B, "%3d", sp78->maxHp);
     Font_Printf(temp_fp + 0xFA, sp7C + 7, "%3d", sp78->unk_28);
@@ -653,7 +653,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0) {
         temp_v1 = &D_848035FC[gMoveDisplayInfo[sp78->moves[i] - 1].unk_01];
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(temp_v1->unk_00.r, temp_v1->unk_00.g, temp_v1->unk_00.b, 0xFF);
-        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, D_84803788, sp78->moves[i] - 1));
+        Font_Printf(temp_fp + 0x14C, (i * 0x14) + sp7C + 7, Text_GetString(NULL, 0, sMoveNameTable, sp78->moves[i] - 1));
         Font_SetActive(4, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(temp_fp + 0x1B3, (i * 0x14) + sp7C + 7, "%2d", sp78->pp[i] & 0x3F);
@@ -1277,10 +1277,10 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_3000000, order_select_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
-    D_84803788 = Text_GetStringTable(0x25);
-    D_8480378C = Text_GetStringTable(0x26);
-    D_84803790 = Text_GetStringTable(0x12);
-    D_84803794 = Text_GetStringTable(6);
+    sMoveNameTable = Text_GetStringTable(0x25);
+    sTypeNameTable = Text_GetStringTable(0x26);
+    sTeamSelectText = Text_GetStringTable(0x12);
+    sPokemonDetailText = Text_GetStringTable(6);
 
     BattleMenu_InitOrderSelectPanels(&gSessionContext);
     Audio_PlayMusicIfChanged(7);

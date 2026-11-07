@@ -23,11 +23,11 @@
 BinArchive* D_84211B30;
 void* D_84211B34;
 RentalRoster* D_84211B38;
-char** D_84211B3C;
-char** D_84211B40;
-char** D_84211B44;
-char** D_84211B48;
-char** D_84211B4C;
+char** sRentalSelectPokemonNames;
+char** sRentalSelectMoveNames;
+char** sRentalSelectTypeNames;
+char** sTeamEntryText;
+char** sRentalSelectDetailText;
 RentalTeamTray D_84211B50;
 RentalCarouselState D_842168A0;
 unk_D_84229EB0 D_84229EB0;
@@ -54,27 +54,27 @@ s32 TeamSelection_CheckCartRemoved(s32 arg0) {
 }
 
 char* TeamSelection_GetTextFromSetA(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84211B3C, arg0 - 1);
+    return Text_GetString(NULL, 0, sRentalSelectPokemonNames, arg0 - 1);
 }
 
 char* TeamSelection_GetTextFromSetB(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84211B40, arg0 - 1);
+    return Text_GetString(NULL, 0, sRentalSelectMoveNames, arg0 - 1);
 }
 
 char* TeamSelection_GetModeText(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84211B44, PokemonType_ToDisplayIndex(arg0));
+    return Text_GetString(NULL, 0, sRentalSelectTypeNames, PokemonType_ToDisplayIndex(arg0));
 }
 
 char* TeamSelection_GetLabelText(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84211B48, arg0);
+    return Text_GetString(NULL, 0, sTeamEntryText, arg0);
 }
 
 char* TeamSelection_GetInstructionText(s32 arg0) {
-    return Text_GetString(NULL, 0, D_84211B4C, arg0);
+    return Text_GetString(NULL, 0, sRentalSelectDetailText, arg0);
 }
 
 char* TeamSelection_FormatText(char* arg0, s32 arg1, s32 arg2) {
-    return Text_GetString(arg0, arg1, D_84211B48, arg2);
+    return Text_GetString(arg0, arg1, sTeamEntryText, arg2);
 }
 
 void TeamSelection_DrawCornerFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
@@ -354,7 +354,7 @@ void TeamSelection_DrawCategoryScreen(s16 arg0, s16 arg1, s16 arg2) {
             Font_SetActive(8, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetLineHeight(0x18);
-            Font_Printf(0x58, 0x154, Text_GetString(NULL, 0, D_84211B48, 0x4D));
+            Font_Printf(0x58, 0x154, Text_GetString(NULL, 0, sTeamEntryText, 0x4D));
             Font_EndTexturedTextRendering();
         }
     }
@@ -472,13 +472,13 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
 
-    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, D_84211B48, arg0 + 0x37));
+    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, sTeamEntryText, arg0 + 0x37));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
-    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, D_84211B48, arg0 + 0x37));
+    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, sTeamEntryText, arg0 + 0x37));
 
     if ((arg0 == 0) && (var_t0 != 0)) {
         Font_SetActive(4, 0);
-        Font_Printf(0x1F9, 0x2F, Text_GetString(NULL, 0, D_84211B48, 0x4E));
+        Font_Printf(0x1F9, 0x2F, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
     }
     Font_EndTexturedTextRendering();
 }
@@ -1113,11 +1113,11 @@ s32 Rental_Main(s32 arg0, UNUSED s32 arg1) {
     PokeIcon_OpenModelArchives();
     Text_InitStringTables();
 
-    D_84211B3C = Text_GetStringTable(0x24);
-    D_84211B40 = Text_GetStringTable(0x25);
-    D_84211B44 = Text_GetStringTable(0x26);
-    D_84211B48 = Text_GetStringTable(0x1A);
-    D_84211B4C = Text_GetStringTable(6);
+    sRentalSelectPokemonNames = Text_GetStringTable(0x24);
+    sRentalSelectMoveNames = Text_GetStringTable(0x25);
+    sRentalSelectTypeNames = Text_GetStringTable(0x26);
+    sTeamEntryText = Text_GetStringTable(0x1A);
+    sRentalSelectDetailText = Text_GetStringTable(6);
 
     Save_EnsureBankLoaded(gSessionContext.ruleCategory / 4);
     Save_SetActiveRecordBank(gSessionContext.ruleCategory);

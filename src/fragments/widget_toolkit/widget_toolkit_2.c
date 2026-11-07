@@ -1313,14 +1313,14 @@ void Widget_PauseMenuInit(void) {
     D_8780FE01 = 0;
     D_8780FE00 = 0xC;
 
-    D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, D_87806330, 0x51);
+    D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, gMinigameText, 0x51);
 
-    D_8780FE08[1] = Text_GetString(NULL, 0, D_87806330, 0x52);
+    D_8780FE08[1] = Text_GetString(NULL, 0, gMinigameText, 0x52);
 
-    D_8780FE08[2] = D_8780FE18[2] = D_8780FE28[1] = Text_GetString(NULL, 0, D_87806330, 0x53);
+    D_8780FE08[2] = D_8780FE18[2] = D_8780FE28[1] = Text_GetString(NULL, 0, gMinigameText, 0x53);
 
-    D_8780FE18[0] = Text_GetString(NULL, 0, D_87806330, 0x54);
-    D_8780FE18[1] = Text_GetString(NULL, 0, D_87806330, 0x55);
+    D_8780FE18[0] = Text_GetString(NULL, 0, gMinigameText, 0x54);
+    D_8780FE18[1] = Text_GetString(NULL, 0, gMinigameText, 0x55);
 
     Font_SetActive(4, 0);
 
@@ -1868,10 +1868,10 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
         char sp8C[0x60];
         char* var_s0_3;
 
-        var_s0_3 = Text_GetString(sp8C, 0x60, D_87806330, 0x13);
+        var_s0_3 = Text_GetString(sp8C, 0x60, gMinigameText, 0x13);
 
         if ((D_8780FA30[0] + D_8780FA30[1] + D_8780FA30[2] + D_8780FA30[3]) != 0) {
-            sprintf(sp8C, "%s - %s", var_s0_3, Text_GetString(NULL, 0, D_87806330, D_8780F9B0[D_8780FA38]));
+            sprintf(sp8C, "%s - %s", var_s0_3, Text_GetString(NULL, 0, gMinigameText, D_8780F9B0[D_8780FA38]));
             var_s0_3 = sp8C;
         }
 
@@ -2231,8 +2231,8 @@ s32 Widget_PauseMenuUpdate(void) {
         }
 
         if (D_8780FC6C != 0) {
-            sp60 = Text_GetString(0, 0, D_87806330, 0x57);
-            sp5C = Text_GetString(0, 0, D_87806330, 0x58);
+            sp60 = Text_GetString(0, 0, gMinigameText, 0x57);
+            sp5C = Text_GetString(0, 0, gMinigameText, 0x58);
             sp44 = Text_CountLines(sp60);
             tmp = Text_CountLines(sp5C);
             tmp = sp44 + tmp;
@@ -2296,8 +2296,8 @@ s32 Widget_PauseMenuUpdate(void) {
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
-            Font_Printf(0xA0 - (Text_MeasureStringWidth(NULL, Text_GetString(0, 0, D_87806330, 0x56)) / 2), 0x6C,
-                        Text_GetString(0, 0, D_87806330, 0x56));
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(NULL, Text_GetString(0, 0, gMinigameText, 0x56)) / 2), 0x6C,
+                        Text_GetString(0, 0, gMinigameText, 0x56));
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         }

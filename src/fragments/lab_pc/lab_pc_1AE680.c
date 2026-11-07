@@ -80,10 +80,10 @@ s32 LabPC_DrawBoxLocationLabel(unk_func_88208C5C*, s32, s32);
 void LabPC_InfoCard_SetMon(unk_func_8820BE14_02C_070* arg0, unk_func_88205880_00D0* arg1);
 s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070*, s32, s32);
 
-static char** D_88224FB0;
-static char** D_88224FB4;
-static char** D_88224FB8;
-static char** D_88224FBC;
+static char** sIdLabelText;
+static char** sPcPokemonText;
+static char** sPokemonNameTable;
+static char** sMoveNameTable;
 
 void func_88206110(BattleMon* arg0) {
     static unk_D_88217D10 D_88217D10[2][9] = {
@@ -170,8 +170,8 @@ void func_88206110(BattleMon* arg0) {
 
     arg0->unk_04 = arg0->level;
 
-    HAL_Strcpy(arg0->nickname, Text_GetString(NULL, 0, D_88224FB8, arg0->unk_00.unk_00 - 1));
-    HAL_Strcpy(arg0->unk_3B, Text_GetString(NULL, 0, D_88224FB4, 0x17));
+    HAL_Strcpy(arg0->nickname, Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_00.unk_00 - 1));
+    HAL_Strcpy(arg0->unk_3B, Text_GetString(NULL, 0, sPcPokemonText, 0x17));
 
     Pokemon_SetDisplayNameFromOt(arg0);
 
@@ -214,7 +214,7 @@ void LabPC_DrawBoxNumberCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s
     char sp58[4];
     s32 color;
 
-    sp5C = Text_GetString(0, 0, D_88224FB4, 0x41);
+    sp5C = Text_GetString(0, 0, sPcPokemonText, 0x41);
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_FILL);
     gDPSetRenderMode(gDisplayListHead++, 0, 0);
@@ -278,7 +278,7 @@ void LabPC_DrawBoxTypeCell(s32 arg0, s32 arg1, unk_func_8820634C_arg2* arg2, s32
     }
     Gfx_SetEnvColor(sp48.r, sp48.g, sp48.b, sp48.a);
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 8, arg1 + 4, Text_GetString(0, 0, D_88224FB4, D_88217DF8[arg3]));
+    Font_Printf(arg0 + 8, arg1 + 4, Text_GetString(0, 0, sPcPokemonText, D_88217DF8[arg3]));
     Font_EndTexturedTextRendering();
     if (arg2->unk_08 == 1) {
         temp_v0_7 = arg2->unk_00;
@@ -331,7 +331,7 @@ s32 LabPC_MeasureBoxNumberWidth(void) {
     s32 tmp;
     s32 sp18;
 
-    sp18 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, D_88224FB4, 0x41));
+    sp18 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, sPcPokemonText, 0x41));
     tmp = Font_MeasureTextExtent(8, 0, " 00");
 
     return sp18 + tmp + 0x3D;
@@ -372,7 +372,7 @@ s32 LabPC_MeasureBoxTypeLabelWidth(void) {
     s32 var_s1 = 0;
 
     for (i = 0; i < 3; i++) {
-        var_v1 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, D_88224FB4, D_88217E0C[i]));
+        var_v1 = Font_MeasureTextExtent(8, 0, Text_GetString(NULL, 0, sPcPokemonText, D_88217E0C[i]));
 
         if (i == 0) {
             var_v1 += 0x3D;
@@ -689,7 +689,7 @@ void LabPC_InitSwapMenu(unk_func_8820B12C_02C* arg0, unk_func_8820B12C_02C_020* 
         arg0->unk_5C[i] = mem_pool_alloc(arg6, sizeof(unk_func_8850878C));
 
         ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
-            arg0->unk_5C[i], 0, 0, Text_GetString(NULL, 0, D_88224FB4, i + 0xB), 0x10);
+            arg0->unk_5C[i], 0, 0, Text_GetString(NULL, 0, sPcPokemonText, i + 0xB), 0x10);
 
         arg0->unk_5C[i]->unk_30 = D_88217E2C;
         arg0->unk_5C[i]->unk_44 = arg0->unk_5C[i]->unk_44;
@@ -1169,7 +1169,7 @@ s32 LabPC_DrawBoxLocationLabel(unk_func_88208C5C* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88217E34 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_88217E38 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
-    char* spBC = Text_GetString(NULL, 0, D_88224FB4, D_88217E30[arg0->unk_34]);
+    char* spBC = Text_GetString(NULL, 0, sPcPokemonText, D_88217E30[arg0->unk_34]);
     s8 sp9C[0x20];
     s32 temp_v0;
     s32 var_s0;
@@ -1254,7 +1254,7 @@ void LabPC_DrawMoveName(s32 arg0, s32 arg1, ret_func_8002ED08* arg2, s32 arg3) {
         sp20 = "???????";
     } else {
         sp24 = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(arg2->unk_00[1])->unk_04;
-        sp20 = Text_GetString(NULL, 0, D_88224FBC, arg2->unk_00[0] - 1);
+        sp20 = Text_GetString(NULL, 0, sMoveNameTable, arg2->unk_00[0] - 1);
     }
 
     Gfx_SetEnvColor(sp24.r, sp24.g, sp24.b, sp24.a);
@@ -1340,19 +1340,19 @@ s32 LabPC_DrawPokemonInfoCard(unk_func_8820BE14_02C_070* arg0, s32 arg1, s32 arg
         Gfx_SetEnvColor(D_88217E3C.r, D_88217E3C.g, D_88217E3C.b, D_88217E3C.a);
         Font_SetActive(8, 0);
 
-        Font_Printf(arg1 + 8, arg2 + 0x24, Text_GetString(NULL, 0, D_88224FB4, 0x12));
+        Font_Printf(arg1 + 8, arg2 + 0x24, Text_GetString(NULL, 0, sPcPokemonText, 0x12));
         Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF);
         Font_SetActive(4, 0);
 
-        Font_Printf(arg1 + 6, arg2 + 0x56, Text_GetString(NULL, 0, D_88224FB4, 0x13));
-        Font_Printf(arg1 + 0x91, arg2 + 0x56, Text_GetString(NULL, 0, D_88224FB4, 0x14));
-        Font_Printf(arg1 + 0x11C, arg2 + 0x56, Text_GetString(NULL, 0, D_88224FB4, 0x15));
-        Font_Printf(arg1 + 0x1A7, arg2 + 0x56, Text_GetString(NULL, 0, D_88224FB4, 0x16));
+        Font_Printf(arg1 + 6, arg2 + 0x56, Text_GetString(NULL, 0, sPcPokemonText, 0x13));
+        Font_Printf(arg1 + 0x91, arg2 + 0x56, Text_GetString(NULL, 0, sPcPokemonText, 0x14));
+        Font_Printf(arg1 + 0x11C, arg2 + 0x56, Text_GetString(NULL, 0, sPcPokemonText, 0x15));
+        Font_Printf(arg1 + 0x1A7, arg2 + 0x56, Text_GetString(NULL, 0, sPcPokemonText, 0x16));
 
         Gfx_SetEnvColor(D_88217E3C.r, D_88217E3C.g, D_88217E3C.b, D_88217E3C.a);
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 8, arg2 + 8,
-                    Text_GetString(NULL, 0, D_88224FB8, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
+                    Text_GetString(NULL, 0, sPokemonNameTable, arg0->unk_002C->unk_000[0].unk_00.unk_00 - 1));
 
         Font_Printf(arg1 + 0x44, arg2 + 0x24, "%3d", arg0->unk_002C->unk_000[0].maxHp);
         Font_Printf(arg1 + 0x46, arg2 + 0x54, "%3d", arg0->unk_002C->unk_000[0].unk_28);
@@ -1668,7 +1668,7 @@ void func_88209B54(unk_func_8820BE14_02C* arg0, s32 arg1, s32 arg2, unk_func_882
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_64, arg0->unk_68);
 
     for (i = 0; i != 8; i++) {
-        temp_s1_2 = Text_GetString(NULL, 0, D_88224FB4, i + 1);
+        temp_s1_2 = Text_GetString(NULL, 0, sPcPokemonText, i + 1);
         spB4[i] = mem_pool_alloc(argA, sizeof(unk_func_8850878C));
         ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
             spB4[i], (0x228 - Font_MeasureTextExtent(0x10, 0, temp_s1_2)) / 2, 0x2A, temp_s1_2, 0x10);
@@ -1681,7 +1681,7 @@ void func_88209B54(unk_func_8820BE14_02C* arg0, s32 arg1, s32 arg2, unk_func_882
     }
 
     if (arg3 != NULL) {
-        temp_v0_10 = Text_GetString(NULL, 0, D_88224FB4, 9);
+        temp_v0_10 = Text_GetString(NULL, 0, sPcPokemonText, 9);
         spB4[2]->unk_00.unk_10.unk_00 = (0x228 - Font_MeasureTextExtent(0x10, 0, temp_v0_10)) / 2;
         spB4[2]->unk_00.unk_10.unk_02 = 0x2A;
         spB4[2]->unk_40 = temp_v0_10;
@@ -1695,7 +1695,7 @@ void func_88209B54(unk_func_8820BE14_02C* arg0, s32 arg1, s32 arg2, unk_func_882
         unk_func_8850878C* label;
 
         label = mem_pool_alloc(argA, sizeof(unk_func_8850878C));
-        spA0 = Text_GetString(NULL, 0, D_88224FB4, 0xA);
+        spA0 = Text_GetString(NULL, 0, sPcPokemonText, 0xA);
 
         if (j == 0) {
             sp9C = 0x210 - Font_MeasureTextExtent(0x10, 0, spA0);
@@ -2275,14 +2275,14 @@ s32 LabPC_SwapControllerInput(unk_func_8820B12C* arg0, Controller* arg1) {
         sp50 = temp_v0_8 & 0xFFFF;
         sp54 = temp_v0_8 >> 0x10;
 
-        HAL_Strcpy(sp30, Text_GetString(NULL, 0, D_88224FB4, D_88217FBC[sp54]));
+        HAL_Strcpy(sp30, Text_GetString(NULL, 0, sPcPokemonText, D_88217FBC[sp54]));
 
         if ((sp54 == 1) || (sp54 == 2)) {
             sprintf(&sp30[strlen(sp30)], " %d", sp50 + 1);
         }
 
         Text_SetStringToken(0x25, &sp30);
-        Text_GetString(arg0->unk_00.unk_24->unk_88->unk_40, 0x80, D_88224FB4, 0x11);
+        Text_GetString(arg0->unk_00.unk_24->unk_88->unk_40, 0x80, sPcPokemonText, 0x11);
 
         ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(arg0->unk_00.unk_24->unk_80,
                                                                                 arg0->unk_00.unk_24->unk_88, 2, 0);
@@ -2433,12 +2433,12 @@ void func_8820BE14(unk_func_8820BE14* arg0, s32 arg1, s32 arg2, s32 arg3, Memory
 
     temp_s1 = mem_pool_alloc(arg4, sizeof(unk_func_88509A2C));
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(temp_s1, 0x38, 0x22, GbSave_GetActivePort(),
-                                                                          Text_GetString(NULL, 0, D_88224FB0, 0));
+                                                                          Text_GetString(NULL, 0, sIdLabelText, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s2, temp_s1);
 
     temp_s1_2 = mem_pool_alloc(arg4, sizeof(unk_func_88509E34));
     ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(temp_s1_2, 0, 0,
-                                                                        Text_GetString(NULL, 0, D_88224FB4, 0));
+                                                                        Text_GetString(NULL, 0, sPcPokemonText, 0));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s2, temp_s1_2);
 
     temp_s0_4 = mem_pool_alloc(arg4, sizeof(WidgetNode));
@@ -2456,8 +2456,8 @@ void func_8820BE14(unk_func_8820BE14* arg0, s32 arg1, s32 arg2, s32 arg3, Memory
     arg0->unk_30.unk_18 = 0;
 
     arg0->unk_4C = arg7;
-    arg0->unk_50 = D_88224FB8;
-    arg0->unk_54 = D_88224FBC;
+    arg0->unk_50 = sPokemonNameTable;
+    arg0->unk_54 = sMoveNameTable;
     arg0->unk_58 = arg8;
     arg0->unk_5C = arg9;
     arg0->unk_60 = argA;
@@ -2561,10 +2561,10 @@ void LabPC_ShowPokemon(FontContext* arg0, s32 arg1) {
     }
     Text_InitStringTables();
 
-    D_88224FB0 = Text_GetStringTable(0x2A);
-    D_88224FB4 = Text_GetStringTable(2);
-    D_88224FB8 = Text_GetStringTable(0x24);
-    D_88224FBC = Text_GetStringTable(0x25);
+    sIdLabelText = Text_GetStringTable(0x2A);
+    sPcPokemonText = Text_GetStringTable(2);
+    sPokemonNameTable = Text_GetStringTable(0x24);
+    sMoveNameTable = Text_GetStringTable(0x25);
 
     sp4C = Text_GetStringTable(7);
     sp48 = Text_GetStringTable(6);

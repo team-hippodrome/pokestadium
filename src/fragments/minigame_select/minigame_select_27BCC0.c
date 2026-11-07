@@ -2663,7 +2663,7 @@ s32 MiniGameSelect_Entry(s32 arg0, s32 arg1) {
     D_8250A264 = ASSET_LOAD2(backgrounds, 1, 1);
 
     D_8250A268 = BinArchive_GetFile(D_8250A264, 4);
-    D_8250A47C = D_87806330;
+    D_8250A47C = gMinigameText;
     Save_EnsureBankLoaded(2);
     MiniGameSelect_LoadScene();
     StageContext_Activate(sp24);

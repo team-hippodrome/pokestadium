@@ -17,8 +17,10 @@ from export_asset_media import (
     c_calls,
     normalize_glb,
     numeric,
+    source_text_tables,
     source_textures,
     standard_normals,
+    text_table_names,
     text_table,
     texture_png,
     wav_bytes,
@@ -121,6 +123,55 @@ class TextTests(unittest.TestCase):
         ]:
             with self.subTest(table=table), self.assertRaises(ValueError):
                 text_table(table, "latin-1")
+
+
+class TextNameTests(unittest.TestCase):
+    """Text tables take their keys from semantic C variables, not placeholders."""
+
+    def test_semantic_names_from_source(self):
+        """Literal assignments map table numbers; D_ placeholders are ignored."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "src").mkdir()
+            (root / "src" / "a.c").write_text(
+                "sMoveNameTable = Text_GetStringTable(0x25);\n"
+                "sPokemonNameTable = Text_GetStringTable(36);\n"
+                "D_88016CF4 = Text_GetStringTable(0);\n"
+            )
+            (root / "src" / "b.c").write_text(
+                "sPokemonNameTable = Text_GetStringTable(0x24);\n"
+                "sPcListPokemonNames = Text_GetStringTable(0x24);\n"
+            )
+            names = source_text_tables(root)
+            self.assertNotIn(0, names)
+            self.assertEqual(
+                text_table_names(names), {36: "sPokemonNameTable", 37: "sMoveNameTable"}
+            )
+
+    def test_duplicate_primary_names_stay_unique(self):
+        """Two tables never share one output key."""
+        names = {1: {"sText": 1}, 2: {"sText": 1}}
+        self.assertEqual(text_table_names(names), {1: "sText", 2: "sText_2"})
+
+    def test_export_uses_semantic_keys(self):
+        """JSON and per-table files use the semantic key and keep the number."""
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "src").mkdir()
+            (root / "src" / "a.c").write_text("sCreditsText = Text_GetStringTable(0x2D);\n")
+            table = struct.pack(">II", 1, 8) + b"DIRECTOR\0"
+            unpacker = Unpacker()
+            unpacker.add_file(Path("textdata/45.bin"), table, "textdata/45.bin", ())
+            unpacker.add_file(Path("textdata/7.bin"), table, "textdata/7.bin", ())
+            options = argparse.Namespace(media_types="text", version="us", text_encoding="latin-1")
+            exporter = MediaExporter(unpacker, root, options)
+            self.assertTrue(exporter.run())
+            tables = json.loads(unpacker.files["media/text/all_tables.json"])["tables"]
+            self.assertEqual(tables["sCreditsText"]["table"], 45)
+            self.assertEqual(tables["sCreditsText"]["source_names"], ["sCreditsText"])
+            self.assertEqual(tables["table_7"]["source_names"], [])
+            self.assertIn("media/text/tables/sCreditsText.json", unpacker.files)
+            self.assertIn("media/text/tables/table_7.txt", unpacker.files)
 
 
 class ModelAudioTests(unittest.TestCase):

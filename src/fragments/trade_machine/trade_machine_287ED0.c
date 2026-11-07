@@ -50,12 +50,12 @@ static s32 pad_D_82F144AC;
 static unk_D_82F144B0 D_82F144B0;
 static s32 D_82F144BC;
 static s32 D_82F144C0;
-static char** D_82F144C4;
-static char** D_82F144C8;
-static char** D_82F144CC;
+static char** sPokemonNameTable;
+static char** sMoveNameTable;
+static char** sTypeNameTable;
 
 char** gTradeStrings = NULL;
-char** D_82F13B74 = NULL;
+char** sTradePokemonDetailText = NULL;
 static unk_D_82F13B78 D_82F13B78[2] = {
     { 0x0140, 0x0168, NULL },
     { 0x0000, 0x0000, NULL },
@@ -63,15 +63,15 @@ static unk_D_82F13B78 D_82F13B78[2] = {
 static u16 D_82F13B88 = 0;
 
 char* Trade_GetSpeciesName(s32 arg0) {
-    return Text_GetString(NULL, 0, D_82F144C4, arg0 - 1);
+    return Text_GetString(NULL, 0, sPokemonNameTable, arg0 - 1);
 }
 
 char* Trade_GetMoveName(s32 arg0) {
-    return Text_GetString(NULL, 0, D_82F144C8, arg0 - 1);
+    return Text_GetString(NULL, 0, sMoveNameTable, arg0 - 1);
 }
 
 char* Trade_GetTypeName(s32 arg0) {
-    return Text_GetString(NULL, 0, D_82F144CC, PokemonType_ToDisplayIndex(arg0));
+    return Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(arg0));
 }
 
 void Trade_SetFadeRect(s16 arg0) {
@@ -321,10 +321,10 @@ void Trade_Init(void) {
     ModelRenderer_InitDisplayRoots();
     Text_InitStringTables();
     gTradeStrings = Text_GetStringTable(0x21);
-    D_82F13B74 = Text_GetStringTable(6);
-    D_82F144C4 = Text_GetStringTable(0x24);
-    D_82F144C8 = Text_GetStringTable(0x25);
-    D_82F144CC = Text_GetStringTable(0x26);
+    sTradePokemonDetailText = Text_GetStringTable(6);
+    sPokemonNameTable = Text_GetStringTable(0x24);
+    sMoveNameTable = Text_GetStringTable(0x25);
+    sTypeNameTable = Text_GetStringTable(0x26);
     D_82F13B78[0].unk_04 = Text_GetString(NULL, 0, gTradeStrings, 0);
     D_82F14428 = 0;
     Trade_ResetTextMenu();

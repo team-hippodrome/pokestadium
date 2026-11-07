@@ -160,7 +160,7 @@ typedef struct DioramaPresetData {
 
 extern DioramaAnimData sIntroCameraKeyframes[];
 extern s32 D_86B0E5DC;
-extern char** D_86B0E5E0;
+extern char** sControllerErrorText;
 extern unk_D_86B0FA78* D_86B0FA78;
 extern unk_D_86B0FA7C* D_86B0FA7C;
 extern unk_70D3A0 D_86B10660;
