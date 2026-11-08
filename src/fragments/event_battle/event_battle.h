@@ -61,9 +61,9 @@ typedef struct unk_D_82305AF8 {
     /* 0x0012 */ u16 unk_0012;
     /* 0x0014 */ char unk_0014[4];
     /* 0x0018 */ char unk0018[0x8];
-    /* 0x0020 */ BattleMon unk_0020[6];
+    /* 0x0020 */ BattleMon pokemon[6];
     /* 0x0218 */ u8 unk_0218[6][0xC80];
-} unk_D_82305AF8; // size = 0x4D18
+} EventBattleTrainerParty; // size = 0x4D18
 
 typedef struct EventBattleOptionLabel {
     /* 0x00 */ u8 animState; // 0 = idle, 1 = growing, 2 = shrinking
@@ -88,6 +88,6 @@ typedef struct unk_D_82305978 {
     /* 0x06 */ s16 unk_06;
 } unk_D_82305978; // size = 0x8
 
-u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1);
+u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1);
 
 #endif // _FRAGMENT38_H_

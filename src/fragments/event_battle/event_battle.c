@@ -18,12 +18,12 @@
 
 static char** sEventBattleText;
 static char** sPokemonDetailText;
-static EventBattleMenuState D_82305A28;
+static EventBattleMenuState sEventBattleMenuState;
 static DescriptionPanel sInfoBox;
 static DescriptionPanel sNonEligibleWarning;
 static SettingsWindow sSettingsPanel;
-static EventBattleSelectionOption D_82305A50[6];
-static unk_D_82305AF8 sTrainerCards[2];
+static EventBattleSelectionOption sSelectionOptions[6];
+static EventBattleTrainerParty sTrainerCards[2];
 static EventBattleCupOption D_8230F528[3];
 
 static EventBattleModeEntry gEventBattleModes[] = {
@@ -379,12 +379,12 @@ void EventBattle_DrawInfoBox(DescriptionPanel* panel) {
         y = panel->y + ((60 - opening_progress) / 2);
 
         EventBattle_DrawThinSlicedFrame(x, y, 528, opening_progress, 0x1E, 0x1E, 0x82, 0x96); // #1E1E82
-        if (((60 - opening_progress) == 0) && (D_82305A28.cursorPosition < 8)) {
+        if (((60 - opening_progress) == 0) && (sEventBattleMenuState.cursorPosition < 8)) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
             Font_SetLineHeight(24);
             Font_Printf(x + 32, y + 8,
-                        Text_GetString(NULL, 0, sEventBattleText, D_82305A50[D_82305A28.cursorPosition].description));
+                        Text_GetString(NULL, 0, sEventBattleText, sSelectionOptions[sEventBattleMenuState.cursorPosition].description));
             Font_EndTexturedTextRendering();
         }
     }
@@ -538,7 +538,7 @@ void EventBattle_DrawMonCell(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
 static s16 D_823059B0[] = { 120, 252, 384, 120, 252, 384 };
 static s16 D_823059BC[] = { 4, 4, 4, 48, 48, 48 };
 
-void EventBattle_DrawTeamPanel(unk_D_82305AF8* arg0, s16 arg1, s16 arg2) {
+void EventBattle_DrawTeamPanel(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2) {
     s16 i;
     s16 tmp1;
     s16 tmp2;
@@ -555,11 +555,11 @@ void EventBattle_DrawTeamPanel(unk_D_82305AF8* arg0, s16 arg1, s16 arg2) {
         tmp1 = arg0->unk_0001;
         tmp2 = D_823059B0[i] + arg1;
         tmp3 = D_823059BC[i] + arg2;
-        EventBattle_DrawMonCell(tmp1, tmp2, tmp3, arg0->unk_0020[i].unk_25);
+        EventBattle_DrawMonCell(tmp1, tmp2, tmp3, arg0->pokemon[i].unk_25);
     }
 }
 
-void EventBattle_DrawRuleNotice(unk_D_82305AF8* arg0, s16 arg1, s16 arg2) {
+void EventBattle_DrawRuleNotice(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2) {
     char sp40[256];
     s16 sp3E;
 
@@ -579,7 +579,7 @@ void EventBattle_DrawRuleNotice(unk_D_82305AF8* arg0, s16 arg1, s16 arg2) {
     }
 }
 
-void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
+void EventBattle_DrawTrainerCard(EventBattleTrainerParty* arg0) {
     u8* var_s0;
     s16 i;
     s16 sp58;
@@ -625,7 +625,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp1 = D_823059B0[i] + sp58 + 44;
             tmp2 = D_823059BC[i] + sp56 + 5;
-            Font_Printf(tmp1, tmp2, arg0->unk_0020[i].nickname);
+            Font_Printf(tmp1, tmp2, arg0->pokemon[i].nickname);
         }
 
         Font_SetActive(4, 0);
@@ -633,7 +633,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
         for (i = 0; i < 6; i++) {
             tmp3 = D_823059B0[i] + sp58 + 44;
             tmp4 = D_823059BC[i] + sp56 + 23;
-            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), arg0->unk_0020[i].level);
+            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), arg0->pokemon[i].level);
         }
 
         Font_EndTexturedTextRendering();
@@ -641,7 +641,7 @@ void EventBattle_DrawTrainerCard(unk_D_82305AF8* arg0) {
     }
 }
 
-void EventBattle_UpdateTrainerCardSlide(unk_D_82305AF8* arg0) {
+void EventBattle_UpdateTrainerCardSlide(EventBattleTrainerParty* arg0) {
     switch (arg0->unk_0000) {
         case 2:
             arg0->unk_0006 -= 1;
@@ -671,7 +671,7 @@ void EventBattle_UpdateTrainerCardSlide(unk_D_82305AF8* arg0) {
     }
 }
 
-void EventBattle_InitTrainerCard(unk_D_82305AF8* arg0, s16 arg1, s16 arg2, s16 arg3) {
+void EventBattle_InitTrainerCard(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s16 i;
 
     arg0->unk_0000 = 0;
@@ -685,8 +685,8 @@ void EventBattle_InitTrainerCard(unk_D_82305AF8* arg0, s16 arg1, s16 arg2, s16 a
     GbSave_GetPlayerName(arg3, arg0->unk_0014);
 
     for (i = 0; i < 6; i++) {
-        Deck_ReadEntry(32, arg3, 0, i, &arg0->unk_0020[i]);
-        PokeIcon_LoadModelTextureForMon(arg0->unk_0218[i], 0, &arg0->unk_0020[i]);
+        Deck_ReadEntry(32, arg3, 0, i, &arg0->pokemon[i]);
+        PokeIcon_LoadModelTextureForMon(arg0->unk_0218[i], 0, &arg0->pokemon[i]);
     }
 }
 
@@ -707,14 +707,14 @@ s32 EventBattle_HasLegalMoves(BattleMon* arg0) {
     return var_v1;
 }
 
-u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
+u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
     unk_D_82305978* ptr1;
     s16 sp54[3];
     BattleMon* var_s1;
     s16 i;
     s16 j;
 
-    var_s1 = arg0->unk_0020;
+    var_s1 = arg0->pokemon;
 
     for (i = 0; i < 3; i++) {
         sp54[i] = 999;
@@ -733,9 +733,9 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (var_s1->species.id == arg0->unk_0020[j].species.id) {
+                    if (var_s1->species.id == arg0->pokemon[j].species.id) {
                         var_s1->unk_25 = 1;
-                        arg0->unk_0020[j].unk_25 = 1;
+                        arg0->pokemon[j].unk_25 = 1;
                     }
                 }
             }
@@ -757,7 +757,7 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
     }
 
     for (i = 0, j = 0; i < 6; i++) {
-        if (arg0->unk_0020[i].unk_25 == 0) {
+        if (arg0->pokemon[i].unk_25 == 0) {
             j++;
         }
     }
@@ -771,7 +771,7 @@ u8 EventBattle_CheckTeamLegality(unk_D_82305AF8* arg0, s16 arg1) {
     return arg0->unk_0002;
 }
 
-u8 EventBattle_ValidateTeamForRule(unk_D_82305AF8* arg0, s16 arg1) {
+u8 EventBattle_ValidateTeamForRule(EventBattleTrainerParty* arg0, s16 arg1) {
     arg0->unk_0004 = arg1;
     arg0->unk_0010 = 0;
     arg0->unk_0000 = 2;
@@ -1169,7 +1169,7 @@ void EventBattle_DrawFrame(s16 arg0) {
     EventBattle_DrawTrainerCard(&sTrainerCards[1]);
 
     for (i = 0; i < 6; i++) {
-        EventBattle_DrawRuleCard(&D_82305A50[i]);
+        EventBattle_DrawRuleCard(&sSelectionOptions[i]);
     }
 
     for (i = 0; i < 3; i++) {
@@ -1195,7 +1195,7 @@ void EventBattle_UpdateWidgets(void) {
     EventBattle_UpdateTrainerCardSlide(&sTrainerCards[1]);
 
     for (i = 0; i < 6; i++) {
-        EventBattle_UpdateRuleCardSlide(&D_82305A50[i]);
+        EventBattle_UpdateRuleCardSlide(&sSelectionOptions[i]);
     }
 
     for (i = 0; i < 3; i++) {
@@ -1207,27 +1207,27 @@ void EventBattle_UpdateModeSelect(EventBattleMenuState* arg0) {
     if (arg0->mode == 3) {
         do {
             EventBattle_UpdateWidgets();
-            if (gPlayer1Controller->buttonPressed & 0x800) {
+            if (gPlayer1Controller->buttonPressed & BTN_DUP) {
                 if (arg0->cursorPosition >= 2) {
                     arg0->cursorPosition -= 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x400) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_DDOWN) {
                 if (arg0->cursorPosition < 4) {
                     arg0->cursorPosition += 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x200) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_DLEFT) {
                 if ((arg0->cursorPosition & 1) == 1) {
                     arg0->cursorPosition--;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x100) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_DRIGHT) {
                 if (!(arg0->cursorPosition & 1)) {
                     arg0->cursorPosition++;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x8000) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_A) {
                 switch (arg0->cursorPosition) {
                     case 4:
                         arg0->mode = 5;
@@ -1244,7 +1244,7 @@ void EventBattle_UpdateModeSelect(EventBattleMenuState* arg0) {
                         Audio_PlaySoundEffectById(28);
                         break;
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x4000) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_B) {
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
                 arg0->mode = 2;
             }
@@ -1270,7 +1270,7 @@ void EventBattle_EnterModeSelect(EventBattleMenuState* arg0) {
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (j = 0; j < 6; j++) {
-        D_82305A50[j].visible = 2;
+        sSelectionOptions[j].visible = 2;
     }
 
     for (i = 0; i < 12; i++) {
@@ -1288,7 +1288,7 @@ void EventBattle_ExitModeSelect(EventBattleMenuState* arg0) {
     sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
-        D_82305A50[i].visible = 3;
+        sSelectionOptions[i].visible = 3;
     }
 
     for (j = 0; j < 6; j++) {
@@ -1316,7 +1316,7 @@ void EventBattle_ValidateTeamSelection(EventBattleMenuState* arg0) {
     sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
-        D_82305A50[i].visible = 3;
+        sSelectionOptions[i].visible = 3;
     }
 
     for (j = 0; j < 12; j++) {
@@ -1367,7 +1367,7 @@ void EventBattle_ReturnToModeSelect(EventBattleMenuState* arg0) {
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (i = 0; i < 6; i++) {
-        D_82305A50[i].visible = 2;
+        sSelectionOptions[i].visible = 2;
     }
 
     for (j = 0; j < 12; j++) {
@@ -1417,13 +1417,13 @@ void EventBattle_MarkPartnerPikachu(BattleMon* arg0, s16 arg1) {
     }
 }
 
-void EventBattle_BuildTrainerFromCard(unk_D_82305AF8* arg0) {
+void EventBattle_BuildTrainerFromCard(EventBattleTrainerParty* arg0) {
     s16 i;
     TeamRoster* temp_s4 = Trainer_Create(arg0->unk_0001, arg0->unk_0012, arg0->unk_0014, Text_GetPlayerLabel(1));
 
     for (i = 0; i < 6; i++) {
-        EventBattle_MarkPartnerPikachu(&arg0->unk_0020[i], arg0->unk_0001);
-        Trainer_AddPokemon(temp_s4, &arg0->unk_0020[i]);
+        EventBattle_MarkPartnerPikachu(&arg0->pokemon[i], arg0->unk_0001);
+        Trainer_AddPokemon(temp_s4, &arg0->pokemon[i]);
     }
 
     Team_AddTrainer(arg0->unk_0001, temp_s4);
@@ -1468,48 +1468,48 @@ void EventBattle_StartBattle(EventBattleMenuState* arg0) {
     arg0->mode = 0;
 }
 
-void EventBattle_UpdateActionMenu(EventBattleMenuState* arg0) {
-    u8 temp_s7;
+void EventBattle_UpdateActionMenu(EventBattleMenuState* state) {
+    u8 may_proceed_to_battle;
 
-    temp_s7 = !arg0->mayProceedToBattle;
+    may_proceed_to_battle = !state->mayProceedToBattle;
 
-    if (arg0->mode == 4) {
+    if (state->mode == 4) {
         do {
             EventBattle_UpdateWidgets();
-            if (gPlayer1Controller->buttonPressed & 0x200) {
-                if (temp_s7 < arg0->trainerCardDisplayState) {
-                    arg0->trainerCardDisplayState--;
+            if (gPlayer1Controller->buttonPressed & BTN_DLEFT) {
+                if (may_proceed_to_battle < state->trainerCardDisplayState) {
+                    state->trainerCardDisplayState--;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x100) {
-                if (arg0->trainerCardDisplayState < 2) {
-                    arg0->trainerCardDisplayState++;
+            } else if (gPlayer1Controller->buttonPressed & BTN_DRIGHT) {
+                if (state->trainerCardDisplayState < 2) {
+                    state->trainerCardDisplayState++;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x8000) {
-                switch (arg0->trainerCardDisplayState) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_A) {
+                switch (state->trainerCardDisplayState) {
                     case 0:
-                        arg0->mode = 6;
+                        state->mode = 6;
                         Audio_PlaySoundEffectById(32);
                         break;
 
                     case 1:
-                        arg0->mode = 9;
+                        state->mode = 9;
                         Audio_PlaySoundEffectById(28);
                         break;
 
                     case 2:
-                        arg0->mode = 8;
+                        state->mode = 8;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                         break;
                 }
-            } else if (gPlayer1Controller->buttonPressed & 0x4000) {
+            } else if (gPlayer1Controller->buttonPressed & BTN_B) {
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
-                arg0->trainerCardDisplayState = 2;
-                arg0->mode = 8;
+                state->trainerCardDisplayState = 2;
+                state->mode = 8;
             }
-            EventBattle_DrawFrame(arg0->trainerCardDisplayState + 6);
-        } while (arg0->mode == 4);
+            EventBattle_DrawFrame(state->trainerCardDisplayState + 6);
+        } while (state->mode == 4);
     }
 }
 
@@ -1520,7 +1520,7 @@ void EventBattle_RunSettingsPanel(EventBattleMenuState* arg0) {
     sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
-        D_82305A50[i].visible = 3;
+        sSelectionOptions[i].visible = 3;
     }
 
     for (j = 0; j < 12; j++) {
@@ -1539,7 +1539,7 @@ void EventBattle_RunSettingsPanel(EventBattleMenuState* arg0) {
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (i = 0; i < 6; i++) {
-        D_82305A50[i].visible = 2;
+        sSelectionOptions[i].visible = 2;
     }
 
     for (j = 0; j < 12; j++) {
@@ -1638,12 +1638,12 @@ void EventBattle_InitSelect(EventBattleMenuState* arg0, s16 arg1) {
     EventBattle_InitTrainerCard(&sTrainerCards[0], 64, 92, 0);
     EventBattle_InitTrainerCard(&sTrainerCards[1], 64, 248, 1);
 
-    EventBattle_InitRuleCard(&D_82305A50[0], 68, 132, D_3028E00, Text_GetString(NULL, 0, sEventBattleText, 21), 3, 0);
-    EventBattle_InitRuleCard(&D_82305A50[1], 324, 132, D_3029A80, Text_GetString(NULL, 0, sEventBattleText, 24), 4, 1);
-    EventBattle_InitRuleCard(&D_82305A50[2], 68, 200, D_302A700, Text_GetString(NULL, 0, sEventBattleText, 26), 6, 5);
-    EventBattle_InitRuleCard(&D_82305A50[3], 324, 200, D_302B380, Text_GetString(NULL, 0, sEventBattleText, 25), 5, 3);
-    EventBattle_InitRuleCard(&D_82305A50[4], 68, 268, NULL, Text_GetString(NULL, 0, sEventBattleText, 27), 0, 6);
-    EventBattle_InitRuleCard(&D_82305A50[5], 324, 268, NULL, Text_GetString(NULL, 0, sEventBattleText, 28), 0, 7);
+    EventBattle_InitRuleCard(&sSelectionOptions[0], 68, 132, D_3028E00, Text_GetString(NULL, 0, sEventBattleText, 21), 3, 0);
+    EventBattle_InitRuleCard(&sSelectionOptions[1], 324, 132, D_3029A80, Text_GetString(NULL, 0, sEventBattleText, 24), 4, 1);
+    EventBattle_InitRuleCard(&sSelectionOptions[2], 68, 200, D_302A700, Text_GetString(NULL, 0, sEventBattleText, 26), 6, 5);
+    EventBattle_InitRuleCard(&sSelectionOptions[3], 324, 200, D_302B380, Text_GetString(NULL, 0, sEventBattleText, 25), 5, 3);
+    EventBattle_InitRuleCard(&sSelectionOptions[4], 68, 268, NULL, Text_GetString(NULL, 0, sEventBattleText, 27), 0, 6);
+    EventBattle_InitRuleCard(&sSelectionOptions[5], 324, 268, NULL, Text_GetString(NULL, 0, sEventBattleText, 28), 0, 7);
 
     EventBattle_InitOptionLabel(&D_8230F528[0], 80, 385, Text_GetString(NULL, 0, sEventBattleText, 29));
     EventBattle_InitOptionLabel(&D_8230F528[1], 244, 385, Text_GetString(NULL, 0, sEventBattleText, 30));
@@ -1651,7 +1651,7 @@ void EventBattle_InitSelect(EventBattleMenuState* arg0, s16 arg1) {
 
     if (arg1 == -1) {
         for (i = 2; i >= 0; i--) {
-            if (D_82305A50[i].displayEligibility != 0) {
+            if (sSelectionOptions[i].displayEligibility != 0) {
                 arg0->cursorPosition = i;
             }
         }
@@ -1673,15 +1673,15 @@ s16 EventBattle_ShowSelect(void) {
     GbSave_EnsureMainDataLoaded(0);
     GbSave_EnsureMainDataLoaded(1);
     StageLoader_UpdateSegments();
-    EventBattle_InitSelect(&D_82305A28, D_823059CC);
-    EventBattle_RunSelect(&D_82305A28);
-    D_823059CC = D_82305A28.cursorPosition;
+    EventBattle_InitSelect(&sEventBattleMenuState, D_823059CC);
+    EventBattle_RunSelect(&sEventBattleMenuState);
+    D_823059CC = sEventBattleMenuState.cursorPosition;
     StageLoader_WaitForRetrace();
     Gfx_FreeDisplayListBuffers();
 
     main_pool_pop_state('EVSL');
 
-    return D_82305A28.battleReadyState;
+    return sEventBattleMenuState.battleReadyState;
 }
 
 s32 EventBattle_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
