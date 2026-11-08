@@ -126,19 +126,19 @@ static unk_D_82305978 D_8230597C[] = {
     },
 };
 
-void EventBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+void EventBattle_DrawSelectionCorners(s16 left, s16 top, s16 right, s16 bottom) {
     static s16 D_823059AC = 0;
 
-    s16 temp_ft3 = SINS(D_823059AC) * 2;
+    s16 pulse = SINS(D_823059AC) * 2;
     UNUSED s32 pad[2];
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 240, 212, 104, 255);
 
-    Gfx_DrawTextureIa8(arg0 + temp_ft3, arg1 + temp_ft3, 0x10, 0x10, D_2000C80, 0x10, 0);
-    Gfx_DrawTextureIa8(arg0 + temp_ft3, ((arg1 + arg3) - temp_ft3) - 0x10, 0x10, 0x10, D_2000F80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - temp_ft3) - 0x10, arg1 + temp_ft3, 0x10, 0x10, D_2000D80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - temp_ft3) - 0x10, ((arg1 + arg3) - temp_ft3) - 0x10, 0x10, 0x10, D_2000E80,
+    Gfx_DrawTextureIa8(left + pulse, top + pulse, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(left + pulse, ((top + bottom) - pulse) - 0x10, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((left + right) - pulse) - 0x10, top + pulse, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((left + right) - pulse) - 0x10, ((top + bottom) - pulse) - 0x10, 0x10, 0x10, gTopRightSelectionCorner,
                        0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -146,77 +146,77 @@ void EventBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     D_823059AC += 0x2000;
 }
 
-void EventBattle_DrawPanelFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+void EventBattle_DrawPanelFrame(s16 x, s16 y, s16 width, s16 height) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureIa8(arg0 - 3, arg1 - 3, 8, 8, D_2000340, 8, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 5, arg1 - 3, 8, 8, D_2000380, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 4, arg1 - 3, arg2 - 8, 8, 0, 0, 0, 0x400, 0);
-    Gfx_DrawTextureIa8(arg0 - 3, (arg1 + arg3) - 5, 8, 8, D_20002C0, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 - 3, arg1 + 4, 8, arg3 - 8, 0, 0, 0x400, 0, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 5, (arg1 + arg3) - 5, 8, 8, D_2000300, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 4, (arg1 + arg3) - 5, arg2 - 8, 8, 0, 0, 0, 0x400, 0);
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - 5, arg1 + 4, 8, arg3 - 8, 0, 0, 0x400, 0, 0);
+    Gfx_DrawTextureIa8(x - 3, y - 3, 8, 8, D_2000340, 8, 0);
+    Gfx_DrawTextureIa8((x + width) - 5, y - 3, 8, 8, D_2000380, 8, 0);
+    Gfx_DrawTexturedRectClipped(x + 4, y - 3, width - 8, 8, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTextureIa8(x - 3, (y + height) - 5, 8, 8, D_20002C0, 8, 0);
+    Gfx_DrawTexturedRectClipped(x - 3, y + 4, 8, height - 8, 0, 0, 0x400, 0, 0);
+    Gfx_DrawTextureIa8((x + width) - 5, (y + height) - 5, 8, 8, D_2000300, 8, 0);
+    Gfx_DrawTexturedRectClipped(x + 4, (y + height) - 5, width - 8, 8, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTexturedRectClipped((x + width) - 5, y + 4, 8, height - 8, 0, 0, 0x400, 0, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void EventBattle_DrawSlicedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
-    s16 var_s2;
-    s16 var_s3;
-    s16 temp_a2;
-    s16 temp_s0_32;
+void EventBattle_DrawSlicedFrame(s16 border_x, s16 border_y, s16 x, s16 y, u8 r, u8 g, u8 b, u8 alpha) {
+    s16 height_adjustment;
+    s16 width_adjustment;
+    s16 width;
+    s16 height;
 
-    if (arg2 >= 0x20) {
-        var_s3 = 0x10;
+    if (x >= 0x20) {
+        width_adjustment = 0x10;
     } else {
-        var_s3 = arg2 / 2;
+        width_adjustment = x / 2;
     }
 
-    if (arg3 >= 0x20) {
-        var_s2 = 0x10;
+    if (y >= 0x20) {
+        height_adjustment = 0x10;
     } else {
-        var_s2 = arg3 / 2;
+        height_adjustment = y / 2;
     }
 
-    temp_a2 = arg2 - (var_s3 * 2);
-    temp_s0_32 = arg3 - (var_s2 * 2);
+    width = x - (width_adjustment * 2);
+    height = y - (height_adjustment * 2);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, arg4, arg5, arg6, arg7);
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, alpha);
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20288E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(border_x, border_y, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment, 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+    Gfx_DrawTexturedRectClipped((border_x + x) - width_adjustment, border_y, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment,
                                 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+    Gfx_DrawTexturedRectClipped(border_x, (border_y + y) - height_adjustment, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment,
                                 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                                0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((border_x + x) - width_adjustment, (border_y + y) - height_adjustment, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment,
+                                0x4000 / height_adjustment, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
-    if ((temp_a2 > 0) && (temp_s0_32 > 0)) {
-        Gfx_FillRectRgba(arg0 + var_s3, arg1, temp_a2, var_s2, arg4, arg5, arg6, arg7);
-        Gfx_FillRectRgba(arg0, arg1 + var_s3, arg2, temp_s0_32, arg4, arg5, arg6, arg7);
-        Gfx_FillRectRgba(arg0 + var_s3, arg1 + var_s3 + temp_s0_32, temp_a2, var_s2, arg4, arg5, arg6, arg7);
-    } else if (temp_a2 > 0) {
-        Gfx_FillRectRgba(arg0 + var_s3, arg1, temp_a2, arg3, arg4, arg5, arg6, arg7);
-    } else if (temp_s0_32 > 0) {
-        Gfx_FillRectRgba(arg0, arg1 + var_s2, arg2, temp_s0_32, arg4, arg5, arg6, arg7);
+    if ((width > 0) && (height > 0)) {
+        Gfx_FillRectRgba(border_x + width_adjustment, border_y, width, height_adjustment, r, g, b, alpha);
+        Gfx_FillRectRgba(border_x, border_y + width_adjustment, x, height, r, g, b, alpha);
+        Gfx_FillRectRgba(border_x + width_adjustment, border_y + width_adjustment + height, width, height_adjustment, r, g, b, alpha);
+    } else if (width > 0) {
+        Gfx_FillRectRgba(border_x + width_adjustment, border_y, width, y, r, g, b, alpha);
+    } else if (height > 0) {
+        Gfx_FillRectRgba(border_x, border_y + height_adjustment, x, height, r, g, b, alpha);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -303,24 +303,24 @@ void EventBattle_DrawSmallFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4,
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void EventBattle_DrawHeaderImage(s16 arg0, s16 arg1) {
+void EventBattle_DrawHeaderImage(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, D_2006C00, 0x30, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, D_2007500, 0x30, 0);
+    Gfx_DrawTextureRgba16(x, y, 0x30, 0x18, gPokeBallIconTop, 0x30, 0);
+    Gfx_DrawTextureRgba16(x, y + 0x18, 0x30, 0x18, gPokeBallIconBottom, 0x30, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void EventBattle_DrawTintedBar(s16 arg0, s16 arg1, s16 arg2, Color_RGBA8* arg3, Color_RGBA8* arg4) {
+void EventBattle_DrawTintedBar(s16 x, s16 y, s16 arg2, Color_RGBA8* env_color, Color_RGBA8* arg4) {
     gSPDisplayList(gDisplayListHead++, D_8006F558);
 
-    gDPSetEnvColor(gDisplayListHead++, arg3->r, arg3->g, arg3->b, 255);
+    gDPSetEnvColor(gDisplayListHead++, env_color->r, env_color->g, env_color->b, 255);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, arg4->r, arg4->g, arg4->b, 255);
 
-    Gfx_DrawTextureIa8(arg0, arg1, 0x10, 0x20, D_20003C0, 0x10, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 0x10, arg1, 0x10, 0x20, D_20005C0, 0x10, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 0x10, arg1, arg2 - 0x20, 0x20, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTextureIa8(x, y, 0x10, 0x20, D_20003C0, 0x10, 0);
+    Gfx_DrawTextureIa8((x + arg2) - 0x10, y, 0x10, 0x20, D_20005C0, 0x10, 0);
+    Gfx_DrawTexturedRectClipped(x + 0x10, y, arg2 - 0x20, 0x20, 0, 0, 0, 0x400, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }

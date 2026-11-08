@@ -491,8 +491,8 @@ void RentalRules_DrawHeaderBanner(void) {
     } else {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(48, var_s1 - 8, 48, 24, D_2006C00, 48, 0);
-        Gfx_DrawTextureRgba16(48, var_s1 + 0x10, 48, 24, D_2007500, 48, 0);
+        Gfx_DrawTextureRgba16(48, var_s1 - 8, 48, 24, gPokeBallIconTop, 48, 0);
+        Gfx_DrawTextureRgba16(48, var_s1 + 0x10, 48, 24, gPokeBallIconBottom, 48, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 

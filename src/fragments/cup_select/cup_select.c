@@ -213,11 +213,11 @@ void CupSelect_DrawSelectionCorners(s16 left, s16 bottom, s16 right, s16 top, u8
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, r, g, b, alpha);
 
-    Gfx_DrawTextureIa8((left + pulse) - 8, (bottom + pulse) - 8, 0x10, 0x10, BOTTOM_LEFT_SECTION_CORNER, 0x10, 0);
-    Gfx_DrawTextureIa8((left + pulse) - 8, ((bottom + top) - pulse) - 8, 0x10, 0x10, TOP_LEFT_SECTION_CORNER, 0x10, 0);
-    Gfx_DrawTextureIa8(((left + right) - pulse) - 8, (bottom + pulse) - 8, 0x10, 0x10, BOTTOM_RIGHT_SECTION_CORNER,
+    Gfx_DrawTextureIa8((left + pulse) - 8, (bottom + pulse) - 8, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8((left + pulse) - 8, ((bottom + top) - pulse) - 8, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((left + right) - pulse) - 8, (bottom + pulse) - 8, 0x10, 0x10, gBottomRightSelectionCorner,
                        0x10, 0);
-    Gfx_DrawTextureIa8(((left + right) - pulse) - 8, ((bottom + top) - pulse) - 8, 0x10, 0x10, TOP_RIGHT_SECTION_CORNER,
+    Gfx_DrawTextureIa8(((left + right) - pulse) - 8, ((bottom + top) - pulse) - 8, 0x10, 0x10, gTopRightSelectionCorner,
                        0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -276,7 +276,7 @@ void CupSelect_RenderFrame(s32 mode, s32 counter) {
 
     if (mode == SELECTED_CUP) {
         if ((counter >= 0) && (counter < 11)) {
-            sDivisionListings[0].rotation.y = ((10 - counter) * -20480) / 10;
+            sDivisionListings[0].rotation.y = ((10 - counter) * -0xB000) / 10;
         }
 
         if ((counter >= 2) && (counter < 13)) {
