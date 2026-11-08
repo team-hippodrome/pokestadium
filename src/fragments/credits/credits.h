@@ -3,53 +3,85 @@
 
 #include "global.h"
 
-typedef struct unk_D_86A025A0 {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x02 */ u16 unk_02;
-} unk_D_86A025A0; // size = 0x4
+/**
+ * One entry of sBackgroundSegments: how long one randomly picked arena stays on screen
+ * behind the staff roll before Credits_MainLoop fades to the next one.
+ */
+typedef struct CreditsBackgroundSegment {
+    /* 0x00 */ s8 endMarker; // 0 for a timed segment; -1 ends the arena sequence
+    /* 0x01 */ s8 unk_01;    // 0-7 in order; no reader in this fragment
+    /* 0x02 */ u16 duration; // frames; rewritten at runtime to absorb frame-delta overshoot
+} CreditsBackgroundSegment; // size = 0x4
 
-typedef struct unk_D_86A02750 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ char* unk_04[2];
-} unk_D_86A02750; // size = 0xC
+/**
+ * One centered line of the staff roll. Credits_InitRoleList fills text[0] from textdata
+ * table 45; text[1] keeps its static per-line string (empty in US builds).
+ * sRoleTextColumn selects which column Credits_DrawRoleList prints.
+ */
+typedef struct CreditsRoleLine {
+    /* 0x00 */ s32 style;   // 0 = role heading, 1 = staff name, 2 = 10-pixel blank spacer
+    /* 0x04 */ char* text[2];
+} CreditsRoleLine; // size = 0xC
 
-typedef struct unk_D_86A03014 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x08 */ unk_D_86A02750* unk_08;
-} unk_D_86A03014; // size = 0xC
+/**
+ * One page of the staff roll: lineCount consecutive CreditsRoleLine entries that fade in,
+ * hold and fade out together. Pages are consumed in order by Credits_DrawRoleList; a page
+ * with duration 0 ends the roll and switches to the Pokemon Stadium logo.
+ */
+typedef struct CreditsRolePage {
+    /* 0x00 */ u16 timer;       // frames elapsed on this page, advanced by sFrameDelta
+    /* 0x02 */ u16 duration;    // frames before the next page starts
+    /* 0x04 */ u8 blankFrames;  // trailing frames of the page with no text drawn
+    /* 0x05 */ u8 lineCount;
+    /* 0x08 */ CreditsRoleLine* lines; // only page 0 is static; later pages are chained at runtime
+} CreditsRolePage; // size = 0xC
 
-typedef struct unk_D_86A03170 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s8 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-} unk_D_86A03170; // size = 0x1C
+/**
+ * Orbit camera move used by Credits_InitCameraOrbitBlend. The camera keeps a fixed
+ * rotationX and distance while rotationY is stepped from rotationYStart to rotationYEnd
+ * over the segment. Angles are binary angles (0x10000 = one turn).
+ */
+typedef struct CreditsOrbitShot {
+    /* 0x00 */ s16 rotationYStart;
+    /* 0x02 */ s16 rotationYEnd;
+    /* 0x04 */ s8 rotationYDirection; // 1 = increasing rotationY, -1 = decreasing (wraps through 0x10000)
+    /* 0x06 */ s16 rotationX;
+    /* 0x08 */ s16 distance;          // eye distance from the orbit center
+    /* 0x0C */ f32 fieldOfView;       // vertical field of view, degrees
+    /* 0x10 */ f32 targetHeight;      // y of the look-at point (x and z are 0 for shots 0-5)
+    /* 0x14 */ f32 nearPlane;
+    /* 0x18 */ f32 farPlane;
+} CreditsOrbitShot; // size = 0x1C
 
-typedef struct unk_D_86A04328 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ f32 unk_2C;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-} unk_D_86A04328; // size = 0x38
+/**
+ * Keyframed camera move used by Credits_InitCameraKeyframeBlend: the eye, look direction and
+ * field of view are linearly interpolated from the start to the end values over the segment.
+ * Look directions are in degrees and converted to binary angles; the target is placed 720
+ * units from the eye along that direction.
+ */
+typedef struct CreditsKeyframeShot {
+    /* 0x00 */ Vec3f eyeStart;
+    /* 0x0C */ f32 rotationXStart;
+    /* 0x10 */ f32 rotationYStart;
+    /* 0x14 */ Vec3f eyeEnd;
+    /* 0x20 */ f32 rotationXEnd;
+    /* 0x24 */ f32 rotationYEnd;
+    /* 0x28 */ f32 fieldOfViewStart;
+    /* 0x2C */ f32 fieldOfViewEnd;
+    /* 0x30 */ f32 nearPlane;
+    /* 0x34 */ f32 farPlane;
+} CreditsKeyframeShot; // size = 0x38
 
-extern unk_D_86A03170 D_86A03170[17][6];
+// Orbit shots 0-5 for arenas 0-16; arena 17's row is sOrbitShotsArena17 (see credits_15A2B0.c).
+extern CreditsOrbitShot sOrbitShots[17][6];
 
-extern u16 D_86A05B50;
+// Frames the end logo has been fully opaque; Credits_MainLoop ends at 721, or at 361+ on A/Start.
+extern u16 sLogoHoldTimer;
+
+// Initial text[0]/text[1] pointers for the 187 sRoleLines entries, in pairs. Every one is an
+// empty string in US builds. Credits_InitRoleList replaces each text[0] with a string from
+// textdata table 45; text[1] keeps its placeholder. Other regions place these at other addresses.
+//@src/fragments/credits/credits_15AD80.c
 extern char D_86A05B60;
 extern char D_86A05B64;
 extern char D_86A05B68;
@@ -425,25 +457,30 @@ extern char D_86A0612C;
 extern char D_86A06130;
 extern char D_86A06134;
 
-extern u8 D_86A06210;
-extern u8 D_86A06211;
+// Retrace (video frame) count since the previous Credits_UpdateFrameDelta; every timer steps by it.
+extern u8 sFrameDelta;
+// Selects CreditsRoleLine.text[0] or text[1]; cleared by Credits_InitRoleList and not written
+// elsewhere in this fragment. While 0, Credits_SelectNextScene forces pick 2 to arena 6.
+extern u8 sRoleTextColumn;
 
-extern Vec3f D_86A06248;
+// Center for orbit shots 6-8: (0, targetHeight, 0) from sPivotOrbitShots.
+extern Vec3f sOrbitPivot;
 
-s32 Credits_BackgroundNodePostCallback(s32 arg0, GraphNode* arg1);
-void func_86A013C8(u8 arg0, u8 arg1, unk_D_86A03014* arg2);
-void func_86A01490(void);
+s32 Credits_BackgroundNodePostCallback(s32 event, GraphNode* node);
+void Credits_InitRoleList(u8 initial_frame_delta, u8 is_round_1, CreditsRolePage* pages);
+void Credits_UpdateFrameDelta(void);
 void Credits_DrawRoleList(void);
 
-u16 Credits_GetRoleCount(void);
+u16 Credits_GetRoleLineCount(void);
 
-void Credits_InitCameraKeyframeBlend(CameraNode*, u16, s8, u8);
+void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 duration, s8 arena_index, u8 shot);
 void Credits_StepCameraKeyframeBlend(void);
-void func_86A01CF0(s16*, s16*, s16*, CameraNode*, u16, s8, u8);
-void Credits_StepCameraYawBlend(void);
-void Credits_SelectNextScene(s8*, u8*);
+void Credits_InitCameraOrbitBlend(s16* rotation_x, s16* rotation_y, s16* distance, CameraNode* camera, u16 duration,
+                                  s8 arena_index, u8 shot);
+void Credits_StepCameraOrbitBlend(void);
+void Credits_SelectNextScene(s8* arena_index, u8* shot);
 
-s32 Credits_RandomRange(s32);
-void Credits_DrawContinuePrompt(u8);
+s32 Credits_RandomRange(s32 range);
+void Credits_DrawStadiumLogo(u8 fade_in);
 
 #endif // _FRAGMENT16_H_

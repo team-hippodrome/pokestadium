@@ -1,28 +1,39 @@
 #include "credits.h"
 #include "src/fragments/widget_toolkit/widget_toolkit.h"
 
-u16 D_86A05B50 = 0;
+// Frames the end logo has been fully opaque (see Credits_MainLoop).
+u16 sLogoHoldTimer = 0;
 
-s32 Credits_RandomRange(s32 arg0) {
-    if (arg0 == 0) {
+/**
+ * Returns a pseudo-random value in [0, range) from guRandom and the CPU count register;
+ * returns 0 for an empty range.
+ */
+s32 Credits_RandomRange(s32 range) {
+    if (range == 0) {
         return 0;
     }
-    return ((guRandom() + osGetCount()) / 10) % arg0;
+    return ((guRandom() + osGetCount()) / 10) % range;
 }
 
-void Credits_DrawContinuePrompt(u8 arg0) {
-    static u8 D_86A05B54 = 0;
+/**
+ * Draws the 100x56 RGBA32 Pokemon Stadium logo (segment 3 texture D_304F120 from
+ * kids_club_game_ui, drawn by Widget_DrawStripedBar) at (110, 92). With `fade_in` 0 it is
+ * drawn opaque (intro); otherwise it fades in over 30 calls and then counts sLogoHoldTimer,
+ * which Credits_MainLoop uses to end the credits.
+ */
+void Credits_DrawStadiumLogo(u8 fade_in) {
+    static u8 sLogoFadeFrame = 0; // 0-30 fade-in progress of the end logo
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    if (!arg0) {
+    if (!fade_in) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    } else if (D_86A05B54 < 0x1E) {
-        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, (s32)ROUND_MAX((D_86A05B54 * 255.0f) / 30.0f));
-        D_86A05B54++;
+    } else if (sLogoFadeFrame < 0x1E) {
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, (s32)ROUND_MAX((sLogoFadeFrame * 255.0f) / 30.0f));
+        sLogoFadeFrame++;
     } else {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-        D_86A05B50++;
+        sLogoHoldTimer++;
     }
 
     Widget_DrawStripedBar(0x6E, 0x5C);
@@ -32,6 +43,7 @@ void Credits_DrawContinuePrompt(u8 arg0) {
 
 s32 pad_D_86A05B58[2] = { 0, 0 };
 
+// Initial text pointers for sRoleLines, two per line (see credits.h). All empty in US.
 char D_86A05B60 = '\x00';
 char D_86A05B64 = '\x00';
 char D_86A05B68 = '\x00';
