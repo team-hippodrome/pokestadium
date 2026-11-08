@@ -1243,10 +1243,10 @@
     start: 0x25AA50
     vram: 0x81100000
     subsegments:
-    - [0x25AA50, textbin,   fragments/fatal_error_screen/fatal_error_screen_header]
-    - [0x25AA70, c,      fragments/fatal_error_screen/fatal_error_screen]
-    - [0x25B370, .data,   fragments/fatal_error_screen/fatal_error_screen]
-    - {vram: 0x81100930, type:  .bss, name: fragments/fatal_error_screen/fatal_error_screen}
+    - [0x25AA50, textbin,   fragments/transfer_pak_error/transfer_pak_error_header]
+    - [0x25AA70, c,      fragments/transfer_pak_error/transfer_pak_error]
+    - [0x25B370, .data,   fragments/transfer_pak_error/transfer_pak_error]
+    - {vram: 0x81100930, type:  .bss, name: fragments/transfer_pak_error/transfer_pak_error}
   - name: fragment32_relocs
     type: code
     bss_size: 0x0

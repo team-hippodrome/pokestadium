@@ -225,7 +225,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_spike_cannon.c` | 6 | 6 | 0 | 3 | 5 | 4 | 0 |
 | `src/fragments/minigame_select/minigame_select_281C40.c` | 4 | 4 | 0 | 11 | 1 | 2 | 0 |
 | `src/fragments/battle_engine/battle_engine_hypnosis_screech.c` | 6 | 6 | 0 | 3 | 4 | 4 | 0 |
-| `src/fragments/fatal_error_screen/fatal_error_screen.c` | 6 | 6 | 0 | 4 | 1 | 6 | 0 |
+| `src/fragments/transfer_pak_error/transfer_pak_error.c` | 6 | 6 | 0 | 4 | 1 | 6 | 0 |
 | `src/fragments/gallery_enlarge/gallery_enlarge.c` | 8 | 8 | 1 | 7 | 0 | 1 | 0 |
 | `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 | 6 | 2 | 7 | 0 | 2 | 0 |
 | `src/fragments/particle_data_library/particle_data_library_2554C0.c` | 4 | 4 | 0 | 10 | 1 | 2 | 0 |

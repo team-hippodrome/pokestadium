@@ -1216,9 +1216,9 @@
     start: 0x26F340
     vram: 0x81100000
     subsegments:
-    - [0x26F340, textbin,   fragments/fatal_error_screen/fatal_error_screen_header]
+    - [0x26F340, textbin,   fragments/transfer_pak_error/transfer_pak_error_header]
     - [0x26F360, asm, fragment32_26F360]
-    - {vram: 0x81100A90, type:  bss, name: fragments/fatal_error_screen/fatal_error_screen}
+    - {vram: 0x81100A90, type:  bss, name: fragments/transfer_pak_error/transfer_pak_error}
   - name: fragment32_relocs
     type: code
     bss_size: 0x0
