@@ -904,7 +904,7 @@ typedef struct unk_D_8006FF00 {
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ char* name;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ u8 cupLegalityFlags;
+    /* 0x0C */ u8 cupEligibilityFlags;
     /* 0x0D */ u8 unk_0D;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s16 unk_10;

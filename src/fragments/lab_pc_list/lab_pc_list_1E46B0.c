@@ -709,7 +709,7 @@ s32 LabPCList_FilterByCategoryBit(unk_func_88316128* arg0, u8* arg1) {
         0x03, 0x04, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-    return ((1 << D_8831A244[*arg1]) & ((D_8006FF00 + arg0->unk_08 - 1)->cupLegalityFlags)) != 0;
+    return ((1 << D_8831A244[*arg1]) & ((D_8006FF00 + arg0->unk_08 - 1)->cupEligibilityFlags)) != 0;
 }
 
 typedef struct unk_func_883164C0 {

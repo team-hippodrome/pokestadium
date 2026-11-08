@@ -74,7 +74,7 @@ s32 PikachuReward_CheckEligibleForSurf(BattleMon* arg0, s16 arg1, s16 arg2, s16 
     s32 sp1C = 0;
 
     if ((arg0->species.id > 0) && (arg0->species.id < 0x98)) {
-        if ((PikachuReward_CheckNoSpecialMove(arg0) != 0) && (D_8006FF00[arg0->species.id - 1].cupLegalityFlags & arg3)) {
+        if ((PikachuReward_CheckNoSpecialMove(arg0) != 0) && (D_8006FF00[arg0->species.id - 1].cupEligibilityFlags & arg3)) {
             if ((arg0->level >= arg1) && (arg2 >= arg0->level)) {
                 sp1C = 1;
             }

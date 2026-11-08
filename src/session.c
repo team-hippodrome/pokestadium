@@ -9,7 +9,7 @@
 #include "src/memory.h"
 #include "src/controller.h"
 
-u8 sEventBattleSettings[3] = { 1, 15, 30 };
+u8 gEventBattleSettings[3] = { 1, 15, 30 };
 static s16 D_80075684 = 0;
 
 void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {
@@ -73,7 +73,11 @@ void Team_ResetOpponentHistory(void) {
     gSessionContext.continueCount = 0;
 }
 
-TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* arg3) {
+/* Allocate a trainer slot and initialize its controller, name, and player label.
+ * The player label is drawn by BattlePrep_DrawTrainerStatusIcon.
+ * //@src/fragments/battle_prep/battle_prep_394120.c
+ */
+TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* player_label) {
     s32 i;
     ExtendedRosterInfo* roster_info;
     TeamRoster* roster = NULL;
@@ -107,7 +111,7 @@ TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* 
 
         HAL_Strcpy(roster->trainerName, trainer_name);
         HAL_Strcpy(roster_info->unk_014, trainer_name);
-        HAL_Strcpy(roster_info->unk_220, arg3);
+        HAL_Strcpy(roster_info->unk_220, player_label);
     }
     return roster;
 }
