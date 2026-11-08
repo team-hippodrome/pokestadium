@@ -693,7 +693,7 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/dynamo_game/dynamo_game.c` | 17 |
 | `src/fragments/ekans_game/ekans_game.c` | 68 |
 | `src/fragments/event_battle/event_battle.c` | 56 |
-| `src/fragments/fatal_error_screen/fatal_error_screen.c` | 6 |
+| `src/fragments/transfer_pak_error/transfer_pak_error.c` | 6 |
 | `src/fragments/free_battle_rules/free_battle_rules.c` | 3 |
 | `src/fragments/gallery_album/gallery_album.c` | 30 |
 | `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
