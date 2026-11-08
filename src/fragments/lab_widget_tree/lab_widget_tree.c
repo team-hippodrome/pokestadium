@@ -1,4 +1,4 @@
-#include "widget_tree.h"
+#include "lab_widget_tree.h"
 #include "src/graphics_textures.h"
 #include "src/input.h"
 #include "src/gb_data.h"

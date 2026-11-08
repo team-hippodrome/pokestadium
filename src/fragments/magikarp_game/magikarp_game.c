@@ -5,7 +5,7 @@
 #include "src/stage_loader.h"
 #include "src/graphics_textures.h"
 #include "src/audio_loop_point.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "src/fragments/magikarp_game/magikarp_game.h"
 #include "src/geo_layout.h"

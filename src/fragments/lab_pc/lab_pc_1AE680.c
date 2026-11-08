@@ -11,7 +11,7 @@
 #include "src/audio_sfx.h"
 #include "src/hal_libc.h"
 #include "src/fragments/pokemon_lab_support/pokemon_lab_support.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "src/fragments/lab_widget_tree/lab_widget_tree.h"
 #include "src/memmap.h"
 #include "src/memory.h"
 #include "src/stage_loader.h"
