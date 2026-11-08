@@ -15,7 +15,7 @@
 #include "src/audio_category_fade.h"
 #include "src/gfx_buffer.h"
 #include "src/gfx_rect.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/fragments/particle_math/particle_math.h"
 #include "src/memory.h"
 #include "src/stage_loader.h"
