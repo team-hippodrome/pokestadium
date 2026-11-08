@@ -4,21 +4,28 @@
 #include "global.h"
 #include "src/game_state.h"
 
+// Blink state for the "press A" prompt glyph (PikachuReward_DrawBlinkingStarIcon).
+// Only the first word is accessed in this fragment; the purpose of the remaining
+// 0x1FC bytes of the 0x200-byte BSS block is unknown.
 typedef struct unk_D_832025C8 {
-    /* 0x000 */ s32 unk_00;
+    /* 0x000 */ s32 blinkTimer; // 0..60 frame counter driving the glyph alpha
     /* 0x004 */ char unk04[0x1FC];
 } unk_D_832025C8; // size = 0x200
 
-typedef struct unk_D_832027C8 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x04 */ BattleMon unk_04;
-} unk_D_832027C8; // size = 0x58
+// Location on a Game Boy cartridge of the Pikachu that may learn Surf, plus a
+// working copy of its data. PikachuReward_FindPikachuOnCart fills the location from
+// the picked Pikachu's BattleMon.unk_52/unk_53; PikachuReward_SaveToCartridge writes
+// `pokemon` back to the same slot.
+typedef struct RewardPikachuSource {
+    /* 0x00 */ u8 controllerPort; // Transfer Pak port 0..3, passed to GbSave_LoadPort
+    /* 0x01 */ u8 boxIndex;       // 0 = party (deck 0x20), 1..12 = PC box boxIndex - 1 (deck 0x21)
+    /* 0x02 */ u8 deckSlot;       // raw entry index within that party/box
+    /* 0x04 */ BattleMon pokemon; // copy read from the cartridge; Surf is written here
+} RewardPikachuSource; // size = 0x58
 
-s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1);
-s32 PikachuReward_CheckNoSpecialMove(BattleMon* arg0);
-s32 PikachuReward_CheckEligibleForSurf(BattleMon* arg0, s16 arg1, s16 arg2, s16 arg3);
+s32 PikachuReward_SpinSunburstRays(s32 arg0, DisplayObject* arg1);
+s32 PikachuReward_HasOnlyValidMoves(BattleMon* arg0);
+s32 PikachuReward_MeetsCupRules(BattleMon* arg0, s16 arg1, s16 arg2, s16 arg3);
 s32 PikachuReward_SearchDeckForPikachu(s16 arg0, s16 arg1, s16 arg2);
 s32 PikachuReward_FindPikachuOnCart(void);
 s32 PikachuReward_CountKnownMoves(void);
