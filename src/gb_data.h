@@ -314,10 +314,10 @@ typedef struct GbSavePort {
 #else
 typedef struct GbSavePort {
     /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
+    /* 0x02 */ u8 gameId;
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x05 */ u8 partyCount;
     /* 0x06 */ u8 unk_06[0x13];
     /* 0x19 */ u8 unk_19[0x20];
     /* 0x39 */ char unk39[0x7];

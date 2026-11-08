@@ -2015,7 +2015,7 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
         case 3:
             if (GbTower_ReinitPak(arg0) != 0) {
                 sp24 = 3;
-                if (GbCart_IdentifyGame(arg0) == gGbSavePorts[arg0].unk_02) {
+                if (GbCart_IdentifyGame(arg0) == gGbSavePorts[arg0].gameId) {
                     if (GbTower_VerifyPakStillInserted(arg0, gGbSavePorts[arg0].unk_19) != 0) {
                         sp24 = 2;
                     }
@@ -2036,7 +2036,7 @@ void GbSave_RefreshPortState(s32 arg0) {
 #if defined(VERSION_JP)
         D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_48->unk_955.unk_000;
 #else
-        gGbSavePorts[arg0].unk_05 = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
+        gGbSavePorts[arg0].partyCount = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
 #endif
 
 #if defined(VERSION_JP)
@@ -2093,8 +2093,8 @@ s32 GbSave_ScanAllPorts(void) {
         var_s0->unk_54 = NULL;
 #endif
         var_s0->unk_03 = 1;
-        var_s0->unk_02 = 0;
-        var_s0->unk_05 = 0;
+        var_s0->gameId = 0;
+        var_s0->partyCount = 0;
 
         temp = &var_s0->unk_40;
         *temp++ = 0x500000000000;
@@ -2104,8 +2104,8 @@ s32 GbSave_ScanAllPorts(void) {
 
         if (D_800ACA75 & (1 << i)) {
             var_s0->unk_03 = 2;
-            var_s0->unk_02 = GbCart_IdentifyGame(i);
-            if (var_s0->unk_02) {
+            var_s0->gameId = GbCart_IdentifyGame(i);
+            if (var_s0->gameId) {
                 D_800ACA70 |= (1 << i);
                 if (GbPak_DetectRam(i, var_s0->unk_19) == 0) {
                     Game_ShutdownAndLoadFragment(i, 2);
@@ -2175,7 +2175,7 @@ s32 GbSave_CommitMainData(s32 arg0) {
 #if defined(VERSION_JP)
             D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_48->unk_955.unk_000;
 #else
-            gGbSavePorts[arg0].unk_05 = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
+            gGbSavePorts[arg0].partyCount = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
 #endif
         }
     }
@@ -2707,12 +2707,12 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
     return 0;
 }
 
-s32 GbSave_GetPortGame(s32 arg0) {
-    return gGbSavePorts[arg0].unk_02;
+s32 GbSave_GetPortGame(s32 port) {
+    return gGbSavePorts[port].gameId;
 }
 
-s32 GbSave_GetPartyCount(s32 arg0) {
-    return gGbSavePorts[arg0].unk_05;
+s32 GbSave_GetPartyCount(s32 port) {
+    return gGbSavePorts[port].partyCount;
 }
 
 #if defined(VERSION_JP)
@@ -2881,7 +2881,7 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
     s32 temp_v1 = (gGbSavePorts[arg0].unk_00 & 1) != 0;
 
     if (temp_v1 != 0) {
-        arg1->unk_000 = gGbSavePorts[arg0].unk_02;
+        arg1->unk_000 = gGbSavePorts[arg0].gameId;
         arg1->unk_001 = gGbSavePorts[arg0].unk_04;
         arg1->unk_002 = gGbSavePorts[arg0].unk_40.unk_00;
 

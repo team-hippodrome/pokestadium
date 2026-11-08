@@ -105,8 +105,8 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 s32 GbSave_GetPresentPortMask(void);
 s32 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetPortAvailability(s32 arg0);
-s32 GbSave_GetPortGame(s32 arg0);
-s32 GbSave_GetPartyCount(s32 arg0);
+s32 GbSave_GetPortGame(s32 port);
+s32 GbSave_GetPartyCount(s32 port);
 s32 GbSave_RefreshPlayerIdentity(s32 arg0);
 void GbSave_CopyPlayerIdentity(s32 arg0, GbSavePlayerIdentity* arg1);
 s32 GbSave_GetTrainerId(s32 port);

@@ -1,4 +1,5 @@
 #include "event_battle.h"
+#include "game_state.h"
 #include "src/poke_icon.h"
 #include "src/graphics_textures.h"
 #include "src/input.h"
@@ -15,6 +16,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 #include "src/pokemon_stats.h"
+#include "pokemon.h"
 
 static char** sEventBattleText;
 static char** sPokemonDetailText;
@@ -564,85 +566,89 @@ void EventBattle_DrawTeamPanel(EventBattleTrainerParty* trainer_card, s16 x, s16
     }
 }
 
-void EventBattle_DrawRuleNotice(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2) {
-    char sp40[256];
-    s16 sp3E;
+// Better name: EventBattle_DrawLevelCapViolationWarning
+/*
+    Draws the warning that the 3 lowest leveled pokemon's levels exceed the level cap
+*/
+void EventBattle_DrawRuleNotice(EventBattleTrainerParty* trainer_card, s16 x, s16 y) {
+    char warning_text_buffer[256];
+    s16 alpha;
 
-    if (arg0->unk_0003 == 0) {
-        sp3E = (arg0->unk_0010 >= 0) ? (s16)(SINS((s16)(SINS(arg0->unk_0010) * 16384.0f)) * 127.0f) + 127
-                                     : (s16)(SINS(arg0->unk_0010) * 127.0f) + 127;
+    if (trainer_card->levelCapCompliancePossible == 0) {
+        alpha = (trainer_card->levelCapWarningPhase >= 0) ? (s16)(SINS((s16)(SINS(trainer_card->levelCapWarningPhase) * 16384.0f)) * 127.0f) + 127
+                                     : (s16)(SINS(trainer_card->levelCapWarningPhase) * 127.0f) + 127;
 
-        Gfx_FillRectWithDisplayState(arg1 + 120, arg2 + 4, 396, 88, 0x64, 0x1E, 0x1E, (sp3E * 2) / 3);
+        Gfx_FillRectWithDisplayState(x + 120, y + 4, 396, 88, 0x64, 0x1E, 0x1E, (alpha * 2) / 3);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(16, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, sp3E);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, alpha); // #FFFF00
         Font_SetLineHeight(32);
-        Text_SetNumberToken(3, sCupRules[arg0->ruleset - 1].levelCap);
-        Font_Printf(arg1 + 136, arg2 + 20, Text_GetString(sp40, 256, sEventBattleText, 9));
+        Text_SetNumberToken(3, sCupRules[trainer_card->ruleset - 1].levelCap);
+        Font_Printf(x + 136, y + 20, Text_GetString(warning_text_buffer, 256, sEventBattleText, 9));
         Font_EndTexturedTextRendering();
-        arg0->unk_0010 += 0x300;
+        trainer_card->levelCapWarningPhase += 0x300;
     }
 }
 
-void EventBattle_DrawTrainerCard(EventBattleTrainerParty* arg0) {
-    u8* var_s0;
+void EventBattle_DrawTrainerCard(EventBattleTrainerParty* trainer_card) {
+    u8* port_label;
     s16 i;
-    s16 sp58;
-    s16 sp56;
-    s16 tmp1;
-    s16 tmp2;
-    s16 tmp3;
-    s16 tmp4;
+    s16 x;
+    s16 y;
+    s16 slot_x;
+    s16 slot_y;
+    s16 pokemon_name_x;
+    s16 pokemon_name_y;
 
-    if (arg0->state != 0) {
-        sp58 = arg0->currentX;
-        sp56 = arg0->currentY;
+    if (trainer_card->state != 0) {
+        x = trainer_card->currentX;
+        y = trainer_card->currentY;
 
-        if (arg0->port == 0) {
-            var_s0 = D_3024C80;
+        if (trainer_card->port == 0) {
+            port_label = gPlayer1LabelLarge;
         } else {
-            var_s0 = D_30260C0;
+            port_label = gPlayer2LabelLarge;
         }
 
-        EventBattle_DrawTeamPanel(arg0, sp58, sp56);
+        EventBattle_DrawTeamPanel(trainer_card, x, y);
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(sp58 + 26, sp56 + 8, 72, 18, var_s0, 72, 0);
-        Gfx_DrawTextureRgba16(sp58 + 26, sp56 + 26, 72, 18, var_s0 + 0xA20, 72, 0);
+        Gfx_DrawTextureRgba16(x + 26, y + 8, 72, 18, port_label, 72, 0);
+        Gfx_DrawTextureRgba16(x + 26, y + 26, 72, 18, port_label + 0xA20, 72, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp1 = sPokemonPartySlotXOffsets[i] + sp58 + 2;
-            tmp2 = sPokemonPartySlotYOffsets[i] + sp56 + 2;
-            Gfx_DrawTextureRgba16(tmp1, tmp2, 40, 40, arg0->pokemonIcons[i], 40, 0);
+            slot_x = sPokemonPartySlotXOffsets[i] + x + 2;
+            slot_y = sPokemonPartySlotYOffsets[i] + y + 2;
+            Gfx_DrawTextureRgba16(slot_x, slot_y, 40, 40, trainer_card->pokemonIcons[i], 40, 0);
         }
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        Font_Printf((sp58 - (Font_MeasureTextExtent(8, 0, arg0->trainerName) / 2)) + 62, sp56 + 47, arg0->trainerName);
+        Font_Printf((x - (Font_MeasureTextExtent(8, 0, trainer_card->trainerName) / 2)) + 62, y + 47, trainer_card->trainerName);
         Font_SetActive(4, 0);
-        Font_Printf((sp58 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 62, sp56 + 70, "ID  %05d",
-                    arg0->unk_0012);
+        Font_Printf((x - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 62, y + 70, "ID  %05d",
+                    trainer_card->trainerId);
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp1 = sPokemonPartySlotXOffsets[i] + sp58 + 44;
-            tmp2 = sPokemonPartySlotYOffsets[i] + sp56 + 5;
-            Font_Printf(tmp1, tmp2, arg0->pokemon[i].nickname);
+            slot_x = sPokemonPartySlotXOffsets[i] + x + 44;
+            slot_y = sPokemonPartySlotYOffsets[i] + y + 5;
+            Font_Printf(slot_x, slot_y, trainer_card->pokemon[i].nickname);
         }
 
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp3 = sPokemonPartySlotXOffsets[i] + sp58 + 44;
-            tmp4 = sPokemonPartySlotYOffsets[i] + sp56 + 23;
-            Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), arg0->pokemon[i].level);
+            pokemon_name_x = sPokemonPartySlotXOffsets[i] + x + 44;
+            pokemon_name_y = sPokemonPartySlotYOffsets[i] + y + 23;
+            Font_Printf(pokemon_name_x, pokemon_name_y, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), trainer_card->pokemon[i].level);
         }
 
         Font_EndTexturedTextRendering();
-        EventBattle_DrawRuleNotice(arg0, sp58, sp56);
+        EventBattle_DrawRuleNotice(trainer_card, x, y);
     }
 }
 
@@ -676,25 +682,26 @@ void EventBattle_UpdateTrainerCardSlide(EventBattleTrainerParty* trainer_card) {
     }
 }
 
-void EventBattle_InitTrainerCard(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2, s16 port) {
+void EventBattle_InitTrainerCard(EventBattleTrainerParty* trainer_card, s16 x, s16 y, s16 port) {
     s16 i;
 
-    arg0->state = 0;
-    arg0->port = port;
-    arg0->slideSpeed = 10;
-    arg0->restingX = arg1;
-    arg0->restingY = arg2;
-    arg0->currentX = arg1;
-    arg0->currentY = arg2;
-    arg0->unk_0012 = GbSave_GetTrainerId(port);
-    GbSave_GetPlayerName(port, arg0->trainerName);
+    trainer_card->state = 0;
+    trainer_card->port = port;
+    trainer_card->slideSpeed = 10;
+    trainer_card->restingX = x;
+    trainer_card->restingY = y;
+    trainer_card->currentX = x;
+    trainer_card->currentY = y;
+    trainer_card->trainerId = GbSave_GetTrainerId(port);
+    GbSave_GetPlayerName(port, trainer_card->trainerName);
 
     for (i = 0; i < 6; i++) {
-        Deck_ReadEntry(32, port, 0, i, &arg0->pokemon[i]);
-        PokeIcon_LoadModelTextureForMon(arg0->pokemonIcons[i], 0, &arg0->pokemon[i]);
+        Deck_ReadEntry(32, port, 0, i, &trainer_card->pokemon[i]);
+        PokeIcon_LoadModelTextureForMon(trainer_card->pokemonIcons[i], 0, &trainer_card->pokemon[i]);
     }
 }
 
+// better name: EventBattle_HasValidMoves
 s32 EventBattle_HasLegalMoves(BattleMon* pokemon) {
     s32 i;
     s32 has_legal_moves = 1;
@@ -712,73 +719,74 @@ s32 EventBattle_HasLegalMoves(BattleMon* pokemon) {
     return has_legal_moves;
 }
 
-u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
-    EventBattleCupRules* ptr1;
-    s16 sp54[3];
-    BattleMon* var_s1;
+// better name: EventBattle_CheckTeamEligibility
+u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* trainer_card, s16 cup) {
+    EventBattleCupRules* cup_rules;
+    s16 lowest_level_pokemon_levels[3];
+    BattleMon* pokemon_index;
     s16 i;
     s16 j;
 
-    var_s1 = arg0->pokemon;
+    pokemon_index = trainer_card->pokemon;
 
     for (i = 0; i < 3; i++) {
-        sp54[i] = 999;
+        lowest_level_pokemon_levels[i] = 999;
     }
 
-    for (i = 0; i < 6; i++, var_s1++) {
-        var_s1->unk_25 = 1;
-        if ((var_s1->species.id > 0) && (var_s1->species.id < 152)) {
-            if (EventBattle_HasLegalMoves(var_s1) != 0) {
-                ptr1 = &sCupRules[(arg1 - 1) & 0xFFFFFFFF];
+    for (i = 0; i < 6; i++, pokemon_index++) {
+        pokemon_index->unk_25 = 1;
+        if ((pokemon_index->species.id > 0) && (pokemon_index->species.id < 152)) {
+            if (EventBattle_HasLegalMoves(pokemon_index) != 0) {
+                cup_rules = &sCupRules[(cup - 1) & 0xFFFFFFFF];
 
-                if (D_8006FF00[var_s1->species.id - 1].unk_0C & ptr1->unk_06) {
-                    if ((var_s1->level >= ptr1->minLevel) && (ptr1->maxLevel >= var_s1->level)) {
-                        var_s1->unk_25 = 0;
+                if (D_8006FF00[pokemon_index->species.id - 1].cupLegalityFlags & cup_rules->speciesLegalityFlag) {
+                    if ((pokemon_index->level >= cup_rules->minLevel) && (cup_rules->maxLevel >= pokemon_index->level)) {
+                        pokemon_index->unk_25 = 0;
                     }
                 }
 
                 for (j = 0; j < i; j++) {
-                    if (var_s1->species.id == arg0->pokemon[j].species.id) {
-                        var_s1->unk_25 = 1;
-                        arg0->pokemon[j].unk_25 = 1;
+                    if (pokemon_index->species.id == trainer_card->pokemon[j].species.id) {
+                        pokemon_index->unk_25 = 1;
+                        trainer_card->pokemon[j].unk_25 = 1;
                     }
                 }
             }
         }
 
-        if (sp54[2] >= var_s1->level) {
-            sp54[2] = var_s1->level;
+        if (lowest_level_pokemon_levels[2] >= pokemon_index->level) {
+            lowest_level_pokemon_levels[2] = pokemon_index->level;
         }
 
-        if (sp54[1] >= var_s1->level) {
-            sp54[2] = sp54[1];
-            sp54[1] = var_s1->level;
+        if (lowest_level_pokemon_levels[1] >= pokemon_index->level) {
+            lowest_level_pokemon_levels[2] = lowest_level_pokemon_levels[1];
+            lowest_level_pokemon_levels[1] = pokemon_index->level;
         }
 
-        if (sp54[0] >= var_s1->level) {
-            sp54[1] = sp54[0];
-            sp54[0] = var_s1->level;
+        if (lowest_level_pokemon_levels[0] >= pokemon_index->level) {
+            lowest_level_pokemon_levels[1] = lowest_level_pokemon_levels[0];
+            lowest_level_pokemon_levels[0] = pokemon_index->level;
         }
     }
 
     for (i = 0, j = 0; i < 6; i++) {
-        if (arg0->pokemon[i].unk_25 == 0) {
+        if (trainer_card->pokemon[i].unk_25 == 0) {
             j++;
         }
     }
 
-    arg0->unk_0002 = j == 6;
-    if (arg0->unk_0002) {
-        arg0->unk_0003 = sCupRules[arg1 - 1].levelCap >= (sp54[0] + sp54[1] + sp54[2]);
+    trainer_card->unk_0002 = j == 6;
+    if (trainer_card->unk_0002) {
+        trainer_card->levelCapCompliancePossible = sCupRules[cup - 1].levelCap >= (lowest_level_pokemon_levels[0] + lowest_level_pokemon_levels[1] + lowest_level_pokemon_levels[2]);
     } else {
-        arg0->unk_0003 = 1;
+        trainer_card->levelCapCompliancePossible = 1;
     }
-    return arg0->unk_0002;
+    return trainer_card->unk_0002;
 }
 
 u8 EventBattle_ValidateTeamForRule(EventBattleTrainerParty* arg0, s16 arg1) {
     arg0->ruleset = arg1;
-    arg0->unk_0010 = 0;
+    arg0->levelCapWarningPhase = 0;
     arg0->state = 2;
     return EventBattle_CheckTeamLegality(arg0, arg1);
 }
@@ -821,22 +829,28 @@ void EventBattle_DrawNoticeBanner(DescriptionPanel* warning) {
     }
 }
 
-void EventBattle_UpdateNoticeBanner(DescriptionPanel* arg0) {
-    switch (arg0->expanding) {
+// Better name: EventBattle_UpdateNonEligibleTeam
+/*
+    Displays warning when a team straight-forwardly violates the cup rules.
+    Violations where all pokemon fit the level cap, but all 3 lowest level pokemon
+    exceed the level cap is handled separately
+*/
+void EventBattle_UpdateNoticeBanner(DescriptionPanel* panel) {
+    switch (panel->expanding) {
         case 1:
-            arg0->openingProgress += 7;
-            if (arg0->openingProgress == 56) {
-                if (arg0->partiesNotEligible == 0) {
+            panel->openingProgress += 7;
+            if (panel->openingProgress == 56) {
+                if (panel->partiesNotEligible == 0) {
                     Audio_PlaySoundEffectById(SFX_MENU_ERROR);
                 }
-                arg0->expanding = 0;
+                panel->expanding = 0;
             }
             break;
 
         case 2:
-            arg0->openingProgress -= 7;
-            if (arg0->openingProgress == 0) {
-                arg0->expanding = 0;
+            panel->openingProgress -= 7;
+            if (panel->openingProgress == 0) {
+                panel->expanding = 0;
             }
             break;
     }
@@ -1161,7 +1175,7 @@ void EventBattle_DrawBackground(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void EventBattle_DrawFrame(s16 arg0) {
+void EventBattle_DrawFrame(s16 index) {
     s16 i;
 
     BgStage_DrawFrame();
@@ -1181,9 +1195,9 @@ void EventBattle_DrawFrame(s16 arg0) {
         EventBattle_DrawOptionLabel(&D_8230F528[i]);
     }
 
-    if (arg0 >= 0) {
-        EventBattle_DrawSelectionCorners(gEventBattleModes[arg0].unk_00, gEventBattleModes[arg0].unk_02,
-                                         gEventBattleModes[arg0].unk_04, gEventBattleModes[arg0].unk_06);
+    if (index >= 0) {
+        EventBattle_DrawSelectionCorners(gEventBattleModes[index].left, gEventBattleModes[index].top,
+                                         gEventBattleModes[index].right, gEventBattleModes[index].bottom);
     }
 
     BgStage_AdvanceFrame();
@@ -1208,58 +1222,58 @@ void EventBattle_UpdateWidgets(void) {
     }
 }
 
-void EventBattle_UpdateModeSelect(EventBattleMenuState* arg0) {
-    if (arg0->mode == 3) {
+void EventBattle_UpdateModeSelect(EventBattleMenuState* state) {
+    if (state->mode == 3) {
         do {
             EventBattle_UpdateWidgets();
             if (gPlayer1Controller->buttonPressed & BTN_DUP) {
-                if (arg0->cursorPosition >= 2) {
-                    arg0->cursorPosition -= 2;
+                if (state->cursorPosition >= 2) {
+                    state->cursorPosition -= 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_DDOWN) {
-                if (arg0->cursorPosition < 4) {
-                    arg0->cursorPosition += 2;
+                if (state->cursorPosition < 4) {
+                    state->cursorPosition += 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_DLEFT) {
-                if ((arg0->cursorPosition & 1) == 1) {
-                    arg0->cursorPosition--;
+                if ((state->cursorPosition & 1) == 1) {
+                    state->cursorPosition--;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_DRIGHT) {
-                if (!(arg0->cursorPosition & 1)) {
-                    arg0->cursorPosition++;
+                if (!(state->cursorPosition & 1)) {
+                    state->cursorPosition++;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_A) {
-                switch (arg0->cursorPosition) {
+                switch (state->cursorPosition) {
                     case 4:
-                        arg0->mode = 5;
+                        state->mode = 5;
                         Audio_PlaySoundEffectById(28);
                         break;
 
                     case 5:
-                        arg0->mode = 2;
+                        state->mode = 2;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                         break;
 
                     default:
-                        arg0->mode = 7;
+                        state->mode = 7;
                         Audio_PlaySoundEffectById(28);
                         break;
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_B) {
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
-                arg0->mode = 2;
+                state->mode = 2;
             }
-            EventBattle_DrawFrame(arg0->cursorPosition);
-        } while (arg0->mode == 3);
+            EventBattle_DrawFrame(state->cursorPosition);
+        } while (state->mode == 3);
     }
-    arg0->battleReadyState = 4;
+    state->battleReadyState = 4;
 }
 
-void EventBattle_EnterModeSelect(EventBattleMenuState* arg0) {
+void EventBattle_EnterModeSelect(EventBattleMenuState* state) {
     s16 i;
     s16 j;
 
@@ -1283,10 +1297,10 @@ void EventBattle_EnterModeSelect(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->mode = 3;
+    state->mode = 3;
 }
 
-void EventBattle_ExitModeSelect(EventBattleMenuState* arg0) {
+void EventBattle_ExitModeSelect(EventBattleMenuState* state) {
     s16 i;
     s16 j;
 
@@ -1310,10 +1324,10 @@ void EventBattle_ExitModeSelect(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->mode = 0;
+    state->mode = 0;
 }
 
-void EventBattle_ValidateTeamSelection(EventBattleMenuState* arg0) {
+void EventBattle_ValidateTeamSelection(EventBattleMenuState* state) {
     s16 i;
     s16 j;
     u8 tmp1;
@@ -1330,12 +1344,12 @@ void EventBattle_ValidateTeamSelection(EventBattleMenuState* arg0) {
     }
 
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
-    arg0->mayProceedToBattle = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->cursorPosition].unk_08);
-    arg0->mayProceedToBattle &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->cursorPosition].unk_08);
-    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->mayProceedToBattle);
+    state->mayProceedToBattle = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[state->cursorPosition].unk_08);
+    state->mayProceedToBattle &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[state->cursorPosition].unk_08);
+    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, state->mayProceedToBattle);
 
-    tmp1 = !arg0->mayProceedToBattle;
-    arg0->trainerCardDisplayState = tmp1;
+    tmp1 = !state->mayProceedToBattle;
+    state->trainerCardDisplayState = tmp1;
 
     for (i = tmp1; i < 3; i++) {
         D_8230F528[i].animState = 1;
@@ -1346,15 +1360,15 @@ void EventBattle_ValidateTeamSelection(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->mode = 4;
+    state->mode = 4;
 }
 
-void EventBattle_ReturnToModeSelect(EventBattleMenuState* arg0) {
+void EventBattle_ReturnToModeSelect(EventBattleMenuState* state) {
     u8 temp_v1;
     s16 i;
     s16 j;
 
-    temp_v1 = !arg0->mayProceedToBattle;
+    temp_v1 = !state->mayProceedToBattle;
     sTrainerCards[0].state = 3;
     sTrainerCards[1].state = 3;
     sNonEligibleWarning.expanding = 2;
@@ -1380,7 +1394,7 @@ void EventBattle_ReturnToModeSelect(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->mode = 3;
+    state->mode = 3;
 }
 
 void EventBattle_ValidateInitialSelection(EventBattleMenuState* arg0) {
@@ -1408,37 +1422,37 @@ void EventBattle_ValidateInitialSelection(EventBattleMenuState* arg0) {
     arg0->mode = 4;
 }
 
-void EventBattle_MarkPartnerPikachu(BattleMon* arg0, s16 arg1) {
-    GbSavePlayerIdentity sp30;
-    GbSavePlayerIdentity sp20;
+void EventBattle_MarkPartnerPikachu(BattleMon* pokemon, s16 port) {
+    GbSavePlayerIdentity gb_player1;
+    GbSavePlayerIdentity pb_player2;
 
-    if ((GbSave_GetPortGame(arg1) == 7) && (arg0->species.id == 25)) {
-        GbSave_CopyPlayerIdentity(arg1, &sp20);
-        _bcopy(arg0->unk_46, sp30.unk_02, 11);
-        sp30.unk_00 = arg0->unk_0E;
-        if (GbSave_PlayerIdentityMatches(&sp30, &sp20)) {
-            arg0->unk_52 |= 0x80;
+    if ((GbSave_GetPortGame(port) == 7) && (pokemon->species.id == PIKACHU)) {
+        GbSave_CopyPlayerIdentity(port, &pb_player2);
+        _bcopy(pokemon->unk_46, gb_player1.unk_02, 11);
+        gb_player1.unk_00 = pokemon->unk_0E;
+        if (GbSave_PlayerIdentityMatches(&gb_player1, &pb_player2)) {
+            pokemon->unk_52 |= 0x80;
         }
     }
 }
 
-void EventBattle_BuildTrainerFromCard(EventBattleTrainerParty* arg0) {
+void EventBattle_BuildTrainerFromCard(EventBattleTrainerParty* trainer_card) {
     s16 i;
-    TeamRoster* temp_s4 = Trainer_Create(arg0->port, arg0->unk_0012, arg0->trainerName, Text_GetPlayerLabel(1));
+    TeamRoster* temp_s4 = Trainer_Create(trainer_card->port, trainer_card->trainerId, trainer_card->trainerName, Text_GetPlayerLabel(1));
 
     for (i = 0; i < 6; i++) {
-        EventBattle_MarkPartnerPikachu(&arg0->pokemon[i], arg0->port);
-        Trainer_AddPokemon(temp_s4, &arg0->pokemon[i]);
+        EventBattle_MarkPartnerPikachu(&trainer_card->pokemon[i], trainer_card->port);
+        Trainer_AddPokemon(temp_s4, &trainer_card->pokemon[i]);
     }
 
-    Team_AddTrainer(arg0->port, temp_s4);
+    Team_AddTrainer(trainer_card->port, temp_s4);
 }
 
-void EventBattle_StartBattle(EventBattleMenuState* arg0) {
+void EventBattle_StartBattle(EventBattleMenuState* state) {
     s16 i;
     s16 j;
 
-    Session_SetMode(10, gEventBattleModes[arg0->cursorPosition].unk_08, 0);
+    Session_SetMode(SESSION_MODE_EVENT_BATTLE, gEventBattleModes[state->cursorPosition].unk_08, 0);
     EventBattle_BuildTrainerFromCard(&sTrainerCards[0]);
     EventBattle_BuildTrainerFromCard(&sTrainerCards[1]);
 
@@ -1469,8 +1483,8 @@ void EventBattle_StartBattle(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->battleReadyState = 42;
-    arg0->mode = 0;
+    state->battleReadyState = 42;
+    state->mode = 0;
 }
 
 void EventBattle_UpdateActionMenu(EventBattleMenuState* state) {
@@ -1518,7 +1532,7 @@ void EventBattle_UpdateActionMenu(EventBattleMenuState* state) {
     }
 }
 
-void EventBattle_RunSettingsPanel(EventBattleMenuState* arg0) {
+void EventBattle_RunSettingsPanel(EventBattleMenuState* state) {
     s16 i;
     s16 j;
 
@@ -1552,14 +1566,14 @@ void EventBattle_RunSettingsPanel(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->mode = 3;
+    state->mode = 3;
 }
 
-void EventBattle_ExitWithMode(EventBattleMenuState* arg0) {
+void EventBattle_ExitWithMode(EventBattleMenuState* state) {
     s16 i;
     s16 j;
 
-    Session_SetMode(10, gEventBattleModes[arg0->cursorPosition].unk_08, 0);
+    Session_SetMode(10, gEventBattleModes[state->cursorPosition].unk_08, 0);
 
     sTrainerCards[0].state = 3;
     sTrainerCards[1].state = 3;
@@ -1574,71 +1588,71 @@ void EventBattle_ExitWithMode(EventBattleMenuState* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->battleReadyState = 18;
-    arg0->mode = 0;
+    state->battleReadyState = 18;
+    state->mode = 0;
 }
 
-void EventBattle_RunSelect(EventBattleMenuState* arg0) {
-    while (arg0->mode != 0) {
-        switch (arg0->mode) {
+void EventBattle_RunSelect(EventBattleMenuState* state) {
+    while (state->mode != 0) {
+        switch (state->mode) {
             case 1:
-                EventBattle_EnterModeSelect(arg0);
+                EventBattle_EnterModeSelect(state);
                 break;
 
             case 2:
-                EventBattle_ExitModeSelect(arg0);
+                EventBattle_ExitModeSelect(state);
                 break;
 
             case 3:
-                EventBattle_UpdateModeSelect(arg0);
+                EventBattle_UpdateModeSelect(state);
                 break;
 
             case 4:
-                EventBattle_UpdateActionMenu(arg0);
+                EventBattle_UpdateActionMenu(state);
                 break;
 
             case 7:
-                EventBattle_ValidateTeamSelection(arg0);
+                EventBattle_ValidateTeamSelection(state);
                 break;
 
             case 8:
-                EventBattle_ReturnToModeSelect(arg0);
+                EventBattle_ReturnToModeSelect(state);
                 break;
 
             case 6:
-                EventBattle_StartBattle(arg0);
+                EventBattle_StartBattle(state);
                 break;
 
             case 5:
-                EventBattle_RunSettingsPanel(arg0);
+                EventBattle_RunSettingsPanel(state);
                 break;
 
             case 9:
-                EventBattle_ExitWithMode(arg0);
+                EventBattle_ExitWithMode(state);
                 break;
 
             case 10:
-                EventBattle_ValidateInitialSelection(arg0);
+                EventBattle_ValidateInitialSelection(state);
                 break;
         }
     }
 }
 
-void EventBattle_InitSelect(EventBattleMenuState* arg0, s16 arg1) {
+void EventBattle_InitSelect(EventBattleMenuState* state, s16 selection_index) {
     s16 i;
 
-    if (arg1 == -1) {
-        arg0->mode = 1;
-        arg0->cursorPosition = 2;
+    if (selection_index == -1) {
+        state->mode = 1;
+        state->cursorPosition = 2;
     } else {
-        arg0->mode = 10;
-        arg0->cursorPosition = arg1;
+        state->mode = 10;
+        state->cursorPosition = selection_index;
     }
-    arg0->battleReadyState = 18;
+    state->battleReadyState = 18;
 
     EventBattle_InitInfoBox(&sInfoBox, 56, 380);
     EventBattle_InitNoticeBanner(&sNonEligibleWarning, 270, 192);
-    EventBattle_InitSettingsPanel(&sSettingsPanel, 104, 147, (arg1 + 1) == 0);
+    EventBattle_InitSettingsPanel(&sSettingsPanel, 104, 147, (selection_index + 1) == 0);
 
     EventBattle_InitTrainerCard(&sTrainerCards[0], 64, 92, 0);
     EventBattle_InitTrainerCard(&sTrainerCards[1], 64, 248, 1);
@@ -1654,10 +1668,10 @@ void EventBattle_InitSelect(EventBattleMenuState* arg0, s16 arg1) {
     EventBattle_InitOptionLabel(&D_8230F528[1], 244, 385, Text_GetString(NULL, 0, sEventBattleText, 30));
     EventBattle_InitOptionLabel(&D_8230F528[2], 408, 385, Text_GetString(NULL, 0, sEventBattleText, 31));
 
-    if (arg1 == -1) {
+    if (selection_index == -1) {
         for (i = 2; i >= 0; i--) {
             if (sSelectionOptions[i].displayEligibility != 0) {
-                arg0->cursorPosition = i;
+                state->cursorPosition = i;
             }
         }
     }
