@@ -151,8 +151,8 @@ static s16 D_84002C98[] = { 0, 3, 4, 5, 6, 0 };
 void FreeBattle_DrawHeaderImage(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, D_2006C00, 0x30, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, D_2007500, 0x30, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, gPokeBallIconTop, 0x30, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, gPokeBallIconBottom, 0x30, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -205,10 +205,10 @@ void FreeBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 240, 212, 104, 255);
 
-    Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, D_2000C80, 0x10, 0);
-    Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, D_2000F80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, D_2000D80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, D_2000E80, 0x10, 0);
+    Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, gTopRightSelectionCorner, 0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 

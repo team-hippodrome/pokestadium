@@ -1,5 +1,5 @@
 # AI Disclaimer
-This project is was a collaborative effort by humans that used AI. See [this document](https://github.com/team-hippodrome/pokestadium/AI_ANNOTATION_DISCLAIMER.md) for more information.
+This project is a collaborative effort by humans that used AI. See [this document](https://github.com/team-hippodrome/pokestadium/blob/master/AI_ANNOTATION_DISCLAIMER.md) for more information.
 
 The original pret contributors (the first four years of contributions) did not use AI to our knowledge. Pret has no official relationship with us (Team Hippodrome) other than sharing some members.
 

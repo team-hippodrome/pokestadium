@@ -27,8 +27,8 @@ static s8 sRentalHubTextOffsets[] = {
 void RentalHub_DrawHeaderIcon(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(x, y, 48, 24, POKEBALL_ICON_TOP, 48, 0);
-    Gfx_DrawTextureRgba16(x, y + 24, 48, 24, POKEBALL_ICON_BOTTOM, 48, 0);
+    Gfx_DrawTextureRgba16(x, y, 48, 24, gPokeBallIconTop, 48, 0);
+    Gfx_DrawTextureRgba16(x, y + 24, 48, 24, gPokeBallIconBottom, 48, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -72,10 +72,10 @@ void RentalHub_DrawSelectionCursor(s16 x, s16 y, s16 width, s16 height) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 240, 212, 104, 255);
 
-    Gfx_DrawTextureIa8(x + pulse, y + pulse, 16, 16, BOTTOM_LEFT_SECTION_CORNER, 16, 0);
-    Gfx_DrawTextureIa8(x + pulse, ((y + height) - pulse) - 16, 16, 16, TOP_LEFT_SECTION_CORNER, 16, 0);
-    Gfx_DrawTextureIa8(((x + width) - pulse) - 16, y + pulse, 16, 16, BOTTOM_RIGHT_SECTION_CORNER, 16, 0);
-    Gfx_DrawTextureIa8(((x + width) - pulse) - 16, ((y + height) - pulse) - 16, 16, 16, TOP_RIGHT_SECTION_CORNER, 0x10,
+    Gfx_DrawTextureIa8(x + pulse, y + pulse, 16, 16, gBottomLeftSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(x + pulse, ((y + height) - pulse) - 16, 16, 16, gTopLeftSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(((x + width) - pulse) - 16, y + pulse, 16, 16, gBottomRightSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(((x + width) - pulse) - 16, ((y + height) - pulse) - 16, 16, 16, gTopRightSelectionCorner, 0x10,
                        0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
