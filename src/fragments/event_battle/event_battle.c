@@ -87,42 +87,46 @@ static EventBattleModeEntry gEventBattleModes[] = {
 static s16 D_82305970[] = {
     408, 385, 152, 48, 0, 0,
 };
-static unk_D_82305978 D_8230597C[] = {
+static EventBattleCupRules sCupRules[] = {
+    // duplicate entries due to Nintendo Cup being collapsed into Poke Cup
     {
         50,
         55,
         155,
-        1,
+        0x01,
     },
     {
         50,
         55,
         155,
-        1,
+        0x01,
     },
     {
         50,
         55,
         155,
-        1,
+        0x01,
     },
+    // Petite Cup
     {
         25,
         30,
         80,
-        8,
+        0x08,
     },
+    // Pika Cup
     {
         15,
         20,
         50,
-        16,
+        0x10,
     },
+    // Prime Cup
     {
         1,
         100,
         300,
-        32,
+        0x20,
     },
 };
 
@@ -503,59 +507,60 @@ void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
     }
 }
 
-void EventBattle_InitRuleCard(EventBattleSelectionOption* arg0, s16 arg1, s16 arg2, u8* arg3, s8* arg4, s16 arg5, s16 arg6) {
-    arg0->visible = 0;
-    arg0->slideInProgress = 10;
-    arg0->restingX = arg1;
-    arg0->restingY = arg2;
-    arg0->currentX = arg1;
-    arg0->currentY = arg2;
-    arg0->icon = arg3;
-    arg0->text = arg4;
-    arg0->minLevel = 0;
-    arg0->maxLevel = 0;
-    arg0->description = arg6;
-    arg0->displayEligibility = 1;
+// better name: EventBattle_InitSelectionOption
+void EventBattle_InitRuleCard(EventBattleSelectionOption* option, s16 x, s16 y, u8* icon, s8* text, s16 option_index, s16 description) {
+    option->visible = 0;
+    option->slideInProgress = 10;
+    option->restingX = x;
+    option->restingY = y;
+    option->currentX = x;
+    option->currentY = y;
+    option->icon = icon;
+    option->text = text;
+    option->minLevel = 0;
+    option->maxLevel = 0;
+    option->description = description;
+    option->displayEligibility = 1;
 
-    if (arg5 != 0) {
-        arg0->minLevel = D_8230597C[arg5 - 1].unk_00;
-        arg0->maxLevel = D_8230597C[arg5 - 1].unk_02;
-        arg0->displayEligibility = EventBattle_CheckTeamLegality(&sTrainerCards[0], arg5);
-        arg0->displayEligibility &= EventBattle_CheckTeamLegality(&sTrainerCards[1], arg5);
+    if (option_index != 0) {
+        option->minLevel = sCupRules[option_index - 1].minLevel;
+        option->maxLevel = sCupRules[option_index - 1].maxLevel;
+        option->displayEligibility = EventBattle_CheckTeamLegality(&sTrainerCards[0], option_index);
+        option->displayEligibility &= EventBattle_CheckTeamLegality(&sTrainerCards[1], option_index);
     }
 }
 
-void EventBattle_DrawMonCell(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
-    if (arg3 != 0) {
-        EventBattle_DrawSmallFrame(arg1, arg2, 132, 44, 0x64, 0x1E, 0x1E, 0xFF);
-    } else if (arg0 == 0) {
-        EventBattle_DrawSmallFrame(arg1, arg2, 132, 44, 0x3C, 0x3C, 0xA0, 0xFF);
+void EventBattle_DrawMonCell(s16 port, s16 x, s16 y, s32 is_eligible) {
+    if (is_eligible != 0) {
+        EventBattle_DrawSmallFrame(x, y, 132, 44, 0x64, 0x1E, 0x1E, 0xFF); // #641e1e
+    } else if (port == 0) {
+        EventBattle_DrawSmallFrame(x, y, 132, 44, 0x3C, 0x3C, 0xA0, 0xFF); // #3c3ca0
     } else {
-        EventBattle_DrawSmallFrame(arg1, arg2, 132, 44, 0x1E, 0x64, 0x1E, 0xFF);
+        EventBattle_DrawSmallFrame(x, y, 132, 44, 0x1E, 0x64, 0x1E, 0xFF); // #1e641e
     }
 }
 
-static s16 D_823059B0[] = { 120, 252, 384, 120, 252, 384 };
-static s16 D_823059BC[] = { 4, 4, 4, 48, 48, 48 };
+static s16 sPokemonPartySlotXOffsets[] = { 120, 252, 384, 120, 252, 384 };
+static s16 sPokemonPartySlotYOffsets[] = { 4, 4, 4, 48, 48, 48 };
 
-void EventBattle_DrawTeamPanel(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2) {
+void EventBattle_DrawTeamPanel(EventBattleTrainerParty* trainer_card, s16 x, s16 y) {
     s16 i;
     s16 tmp1;
-    s16 tmp2;
-    s16 tmp3;
+    s16 slot_x;
+    s16 slot_y;
 
-    EventBattle_DrawPanelFrame(arg1, arg2, 520, 96);
-    if (arg0->unk_0001 == 0) {
-        EventBattle_DrawSmallFrame(arg1 + 4, arg2 + 4, 116, 88, 0x64, 0x64, 0xC8, 0xFF);
+    EventBattle_DrawPanelFrame(x, y, 520, 96);
+    if (trainer_card->port == 0) {
+        EventBattle_DrawSmallFrame(x + 4, y + 4, 116, 88, 0x64, 0x64, 0xC8, 0xFF); // #6464C8
     } else {
-        EventBattle_DrawSmallFrame(arg1 + 4, arg2 + 4, 116, 88, 0x1E, 0x82, 0x1E, 0xFF);
+        EventBattle_DrawSmallFrame(x + 4, y + 4, 116, 88, 0x1E, 0x82, 0x1E, 0xFF); // #1e821e
     }
 
     for (i = 0; i < 6; i++) {
-        tmp1 = arg0->unk_0001;
-        tmp2 = D_823059B0[i] + arg1;
-        tmp3 = D_823059BC[i] + arg2;
-        EventBattle_DrawMonCell(tmp1, tmp2, tmp3, arg0->pokemon[i].unk_25);
+        tmp1 = trainer_card->port;
+        slot_x = sPokemonPartySlotXOffsets[i] + x;
+        slot_y = sPokemonPartySlotYOffsets[i] + y;
+        EventBattle_DrawMonCell(tmp1, slot_x, slot_y, trainer_card->pokemon[i].unk_25);
     }
 }
 
@@ -572,7 +577,7 @@ void EventBattle_DrawRuleNotice(EventBattleTrainerParty* arg0, s16 arg1, s16 arg
         Font_SetActive(16, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0, sp3E);
         Font_SetLineHeight(32);
-        Text_SetNumberToken(3, D_8230597C[arg0->unk_0004 - 1].unk_04);
+        Text_SetNumberToken(3, sCupRules[arg0->ruleset - 1].levelCap);
         Font_Printf(arg1 + 136, arg2 + 20, Text_GetString(sp40, 256, sEventBattleText, 9));
         Font_EndTexturedTextRendering();
         arg0->unk_0010 += 0x300;
@@ -589,11 +594,11 @@ void EventBattle_DrawTrainerCard(EventBattleTrainerParty* arg0) {
     s16 tmp3;
     s16 tmp4;
 
-    if (arg0->unk_0000 != 0) {
-        sp58 = arg0->unk_000C;
-        sp56 = arg0->unk_000E;
+    if (arg0->state != 0) {
+        sp58 = arg0->currentX;
+        sp56 = arg0->currentY;
 
-        if (arg0->unk_0001 == 0) {
+        if (arg0->port == 0) {
             var_s0 = D_3024C80;
         } else {
             var_s0 = D_30260C0;
@@ -607,32 +612,32 @@ void EventBattle_DrawTrainerCard(EventBattleTrainerParty* arg0) {
         Gfx_DrawTextureRgba16(sp58 + 26, sp56 + 26, 72, 18, var_s0 + 0xA20, 72, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp1 = D_823059B0[i] + sp58 + 2;
-            tmp2 = D_823059BC[i] + sp56 + 2;
-            Gfx_DrawTextureRgba16(tmp1, tmp2, 40, 40, arg0->unk_0218[i], 40, 0);
+            tmp1 = sPokemonPartySlotXOffsets[i] + sp58 + 2;
+            tmp2 = sPokemonPartySlotYOffsets[i] + sp56 + 2;
+            Gfx_DrawTextureRgba16(tmp1, tmp2, 40, 40, arg0->pokemonIcons[i], 40, 0);
         }
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        Font_Printf((sp58 - (Font_MeasureTextExtent(8, 0, arg0->unk_0014) / 2)) + 62, sp56 + 47, arg0->unk_0014);
+        Font_Printf((sp58 - (Font_MeasureTextExtent(8, 0, arg0->trainerName) / 2)) + 62, sp56 + 47, arg0->trainerName);
         Font_SetActive(4, 0);
         Font_Printf((sp58 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 62, sp56 + 70, "ID  %05d",
                     arg0->unk_0012);
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp1 = D_823059B0[i] + sp58 + 44;
-            tmp2 = D_823059BC[i] + sp56 + 5;
+            tmp1 = sPokemonPartySlotXOffsets[i] + sp58 + 44;
+            tmp2 = sPokemonPartySlotYOffsets[i] + sp56 + 5;
             Font_Printf(tmp1, tmp2, arg0->pokemon[i].nickname);
         }
 
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
-            tmp3 = D_823059B0[i] + sp58 + 44;
-            tmp4 = D_823059BC[i] + sp56 + 23;
+            tmp3 = sPokemonPartySlotXOffsets[i] + sp58 + 44;
+            tmp4 = sPokemonPartySlotYOffsets[i] + sp56 + 23;
             Font_Printf(tmp3, tmp4, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), arg0->pokemon[i].level);
         }
 
@@ -641,74 +646,74 @@ void EventBattle_DrawTrainerCard(EventBattleTrainerParty* arg0) {
     }
 }
 
-void EventBattle_UpdateTrainerCardSlide(EventBattleTrainerParty* arg0) {
-    switch (arg0->unk_0000) {
+void EventBattle_UpdateTrainerCardSlide(EventBattleTrainerParty* trainer_card) {
+    switch (trainer_card->state) {
         case 2:
-            arg0->unk_0006 -= 1;
-            if (arg0->unk_0006 == 0) {
-                arg0->unk_0000 = 1;
+            trainer_card->slideSpeed -= 1;
+            if (trainer_card->slideSpeed == 0) {
+                trainer_card->state = 1;
             }
 
-            if (arg0->unk_0001 == 0) {
-                arg0->unk_000C = arg0->unk_0008 - (arg0->unk_0006 << 6);
+            if (trainer_card->port == 0) {
+                trainer_card->currentX = trainer_card->restingX - (trainer_card->slideSpeed << 6);
             } else {
-                arg0->unk_000C = arg0->unk_0008 + (arg0->unk_0006 << 6);
+                trainer_card->currentX = trainer_card->restingX + (trainer_card->slideSpeed << 6);
             }
             break;
 
         case 3:
-            arg0->unk_0006 += 1;
-            if (arg0->unk_0006 == 10) {
-                arg0->unk_0000 = 0;
+            trainer_card->slideSpeed += 1;
+            if (trainer_card->slideSpeed == 10) {
+                trainer_card->state = 0;
             }
 
-            if (arg0->unk_0001 == 0) {
-                arg0->unk_000C = arg0->unk_0008 - (arg0->unk_0006 << 6);
+            if (trainer_card->port == 0) {
+                trainer_card->currentX = trainer_card->restingX - (trainer_card->slideSpeed << 6);
             } else {
-                arg0->unk_000C = arg0->unk_0008 + (arg0->unk_0006 << 6);
+                trainer_card->currentX = trainer_card->restingX + (trainer_card->slideSpeed << 6);
             }
             break;
     }
 }
 
-void EventBattle_InitTrainerCard(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2, s16 arg3) {
+void EventBattle_InitTrainerCard(EventBattleTrainerParty* arg0, s16 arg1, s16 arg2, s16 port) {
     s16 i;
 
-    arg0->unk_0000 = 0;
-    arg0->unk_0001 = arg3;
-    arg0->unk_0006 = 10;
-    arg0->unk_0008 = arg1;
-    arg0->unk_000A = arg2;
-    arg0->unk_000C = arg1;
-    arg0->unk_000E = arg2;
-    arg0->unk_0012 = GbSave_GetTrainerId(arg3);
-    GbSave_GetPlayerName(arg3, arg0->unk_0014);
+    arg0->state = 0;
+    arg0->port = port;
+    arg0->slideSpeed = 10;
+    arg0->restingX = arg1;
+    arg0->restingY = arg2;
+    arg0->currentX = arg1;
+    arg0->currentY = arg2;
+    arg0->unk_0012 = GbSave_GetTrainerId(port);
+    GbSave_GetPlayerName(port, arg0->trainerName);
 
     for (i = 0; i < 6; i++) {
-        Deck_ReadEntry(32, arg3, 0, i, &arg0->pokemon[i]);
-        PokeIcon_LoadModelTextureForMon(arg0->unk_0218[i], 0, &arg0->pokemon[i]);
+        Deck_ReadEntry(32, port, 0, i, &arg0->pokemon[i]);
+        PokeIcon_LoadModelTextureForMon(arg0->pokemonIcons[i], 0, &arg0->pokemon[i]);
     }
 }
 
-s32 EventBattle_HasLegalMoves(BattleMon* arg0) {
+s32 EventBattle_HasLegalMoves(BattleMon* pokemon) {
     s32 i;
-    s32 var_v1 = 1;
+    s32 has_legal_moves = 1;
 
     for (i = 0; i < 4; i++) {
-        if (arg0->moves[i] == 0) {
+        if (pokemon->moves[i] == 0) {
             break;
         }
 
-        if (arg0->moves[i] >= 166) {
-            var_v1 = 0;
+        if (pokemon->moves[i] >= 166) {
+            has_legal_moves = 0;
         }
     }
 
-    return var_v1;
+    return has_legal_moves;
 }
 
 u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
-    unk_D_82305978* ptr1;
+    EventBattleCupRules* ptr1;
     s16 sp54[3];
     BattleMon* var_s1;
     s16 i;
@@ -724,10 +729,10 @@ u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
         var_s1->unk_25 = 1;
         if ((var_s1->species.id > 0) && (var_s1->species.id < 152)) {
             if (EventBattle_HasLegalMoves(var_s1) != 0) {
-                ptr1 = &D_8230597C[(arg1 - 1) & 0xFFFFFFFF];
+                ptr1 = &sCupRules[(arg1 - 1) & 0xFFFFFFFF];
 
                 if (D_8006FF00[var_s1->species.id - 1].unk_0C & ptr1->unk_06) {
-                    if ((var_s1->level >= ptr1->unk_00) && (ptr1->unk_02 >= var_s1->level)) {
+                    if ((var_s1->level >= ptr1->minLevel) && (ptr1->maxLevel >= var_s1->level)) {
                         var_s1->unk_25 = 0;
                     }
                 }
@@ -764,7 +769,7 @@ u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
 
     arg0->unk_0002 = j == 6;
     if (arg0->unk_0002) {
-        arg0->unk_0003 = D_8230597C[arg1 - 1].unk_04 >= (sp54[0] + sp54[1] + sp54[2]);
+        arg0->unk_0003 = sCupRules[arg1 - 1].levelCap >= (sp54[0] + sp54[1] + sp54[2]);
     } else {
         arg0->unk_0003 = 1;
     }
@@ -772,9 +777,9 @@ u8 EventBattle_CheckTeamLegality(EventBattleTrainerParty* arg0, s16 arg1) {
 }
 
 u8 EventBattle_ValidateTeamForRule(EventBattleTrainerParty* arg0, s16 arg1) {
-    arg0->unk_0004 = arg1;
+    arg0->ruleset = arg1;
     arg0->unk_0010 = 0;
-    arg0->unk_0000 = 2;
+    arg0->state = 2;
     return EventBattle_CheckTeamLegality(arg0, arg1);
 }
 
@@ -1350,8 +1355,8 @@ void EventBattle_ReturnToModeSelect(EventBattleMenuState* arg0) {
     s16 j;
 
     temp_v1 = !arg0->mayProceedToBattle;
-    sTrainerCards[0].unk_0000 = 3;
-    sTrainerCards[1].unk_0000 = 3;
+    sTrainerCards[0].state = 3;
+    sTrainerCards[1].state = 3;
     sNonEligibleWarning.expanding = 2;
 
     for (i = temp_v1; i < 3; i++) {
@@ -1419,14 +1424,14 @@ void EventBattle_MarkPartnerPikachu(BattleMon* arg0, s16 arg1) {
 
 void EventBattle_BuildTrainerFromCard(EventBattleTrainerParty* arg0) {
     s16 i;
-    TeamRoster* temp_s4 = Trainer_Create(arg0->unk_0001, arg0->unk_0012, arg0->unk_0014, Text_GetPlayerLabel(1));
+    TeamRoster* temp_s4 = Trainer_Create(arg0->port, arg0->unk_0012, arg0->trainerName, Text_GetPlayerLabel(1));
 
     for (i = 0; i < 6; i++) {
-        EventBattle_MarkPartnerPikachu(&arg0->pokemon[i], arg0->unk_0001);
+        EventBattle_MarkPartnerPikachu(&arg0->pokemon[i], arg0->port);
         Trainer_AddPokemon(temp_s4, &arg0->pokemon[i]);
     }
 
-    Team_AddTrainer(arg0->unk_0001, temp_s4);
+    Team_AddTrainer(arg0->port, temp_s4);
 }
 
 void EventBattle_StartBattle(EventBattleMenuState* arg0) {
@@ -1442,8 +1447,8 @@ void EventBattle_StartBattle(EventBattleMenuState* arg0) {
         gSessionContext.battleLimitMinutes = sSettingsPanel.battleTime;
         gSessionContext.orderLimitSeconds = sSettingsPanel.moveSelectionTime;
     }
-    sTrainerCards[0].unk_0000 = 3;
-    sTrainerCards[1].unk_0000 = 3;
+    sTrainerCards[0].state = 3;
+    sTrainerCards[1].state = 3;
     sNonEligibleWarning.expanding = 2;
 
     for (i = 0; i < 3; i++) {
@@ -1556,8 +1561,8 @@ void EventBattle_ExitWithMode(EventBattleMenuState* arg0) {
 
     Session_SetMode(10, gEventBattleModes[arg0->cursorPosition].unk_08, 0);
 
-    sTrainerCards[0].unk_0000 = 3;
-    sTrainerCards[1].unk_0000 = 3;
+    sTrainerCards[0].state = 3;
+    sTrainerCards[1].state = 3;
     sNonEligibleWarning.expanding = 2;
 
     for (i = 0; i < 3; i++) {

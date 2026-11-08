@@ -1103,7 +1103,7 @@ extern u8 gInternalIndexToDex[];
 #if !defined(VERSION_JP)
 static char D_800AC890[4][0x20];
 #endif
-static GbSavePort D_800AC910[4];
+static GbSavePort gGbSavePorts[4];
 static u32 D_800ACA70;
 static u8 D_800ACA74;
 static u8 D_800ACA75;
@@ -1618,7 +1618,7 @@ s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
 #if defined(VERSION_JP)
         sp18 = D_800ACA78.unk_1000.unk_14 == D_800AC910[arg0].unk_04;
 #else
-        sp18 = D_800ACA78.unk_FA0.unk_03 == D_800AC910[arg0].unk_04;
+        sp18 = D_800ACA78.unk_FA0.unk_03 == gGbSavePorts[arg0].unk_04;
 #endif
     }
     return sp18;
@@ -1630,7 +1630,7 @@ s32 GbSave_ReadMainData(s32 arg0) {
 #if defined(VERSION_JP)
     GbSaveMainData* temp_s4 = D_800AC910[arg0].unk_48;
 #else
-    GbSaveMainData* temp_s4 = D_800AC910[arg0].unk_50;
+    GbSaveMainData* temp_s4 = gGbSavePorts[arg0].unk_50;
 #endif
 
     sp30 = NULL;
@@ -1643,18 +1643,18 @@ s32 GbSave_ReadMainData(s32 arg0) {
             sp30 = GbSave_VerifyChecksum(&temp_s4->unk_018, &temp_s4->unk_FA0.unk_03);
 #endif
             if (sp30 != 0) {
-                if (D_800AC910[arg0].unk_00 & 0x20) {
+                if (gGbSavePorts[arg0].unk_00 & 0x20) {
 #if defined(VERSION_JP)
                     D_800AC910[arg0].unk_04 = temp_s4->unk_1000.unk_14;
 #else
-                    D_800AC910[arg0].unk_04 = temp_s4->unk_FA0.unk_03;
+                    gGbSavePorts[arg0].unk_04 = temp_s4->unk_FA0.unk_03;
 #endif
-                    D_800AC910[arg0].unk_00 = D_800AC910[arg0].unk_00 & ~0x20;
+                    gGbSavePorts[arg0].unk_00 = gGbSavePorts[arg0].unk_00 & ~0x20;
                 } else {
 #if defined(VERSION_JP)
                     sp30 = D_800AC910[arg0].unk_04 == temp_s4->unk_1000.unk_14;
 #else
-                    sp30 = D_800AC910[arg0].unk_04 == temp_s4->unk_FA0.unk_03;
+                    sp30 = gGbSavePorts[arg0].unk_04 == temp_s4->unk_FA0.unk_03;
 #endif
                 }
                 return sp30;
@@ -1671,7 +1671,7 @@ s32 GbSave_WriteMainData(s32 arg0) {
 #if defined(VERSION_JP)
     GbSaveMainData* temp_s1 = D_800AC910[arg0].unk_48;
 #else
-    GbSaveMainData* temp_s1 = D_800AC910[arg0].unk_50;
+    GbSaveMainData* temp_s1 = gGbSavePorts[arg0].unk_50;
 #endif
 
 #if defined(VERSION_JP)
@@ -1682,7 +1682,7 @@ s32 GbSave_WriteMainData(s32 arg0) {
 #if defined(VERSION_JP)
     D_800AC910[arg0].unk_04 = temp_s1->unk_1000.unk_14;
 #else
-    D_800AC910[arg0].unk_04 = temp_s1->unk_FA0.unk_03;
+    gGbSavePorts[arg0].unk_04 = temp_s1->unk_FA0.unk_03;
 #endif
 
     for (i = 0; i < 4; i++) {
@@ -1699,7 +1699,7 @@ s32 GbSave_InvalidateMainDataChecksum(s32 arg0) {
 #if defined(VERSION_JP)
     GbSaveMainData* temp_s3 = D_800AC910[arg0].unk_48;
 #else
-    GbSaveMainData* temp_s3 = D_800AC910[arg0].unk_50;
+    GbSaveMainData* temp_s3 = gGbSavePorts[arg0].unk_50;
 #endif
     s32 i;
 
@@ -1741,7 +1741,7 @@ s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
 #if defined(VERSION_JP)
     GbSaveBoxPair* sp1C = &D_800AC910[arg0].unk_4C->unk_0000[arg1];
 #else
-    GbSaveBoxPair* sp1C = &D_800AC910[arg0].unk_54->unk_0000[arg1];
+    GbSaveBoxPair* sp1C = &gGbSavePorts[arg0].unk_54->unk_0000[arg1];
 #endif
 
 #if defined(VERSION_JP)
@@ -1756,7 +1756,7 @@ s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
 #if defined(VERSION_JP)
     GbSaveBoxBank* temp_s2 = &D_800AC910[arg0].unk_4C->unk_0000[arg1];
 #else
-    GbSaveBoxBank* temp_s2 = &D_800AC910[arg0].unk_54->unk_0000[arg1];
+    GbSaveBoxBank* temp_s2 = &gGbSavePorts[arg0].unk_54->unk_0000[arg1];
 #endif
     s32 i;
 
@@ -1789,7 +1789,7 @@ void GbSave_ReleasePortBuffers(UNUSED MainPoolBlock* arg0, u32 arg1) {
     GbSavePort* ptr;
 
     if ((arg1 >= 'DAT0') && (arg1 < 'DAT4')) {
-        ptr = D_800AC910 + (arg1 - 'DAT0');
+        ptr = gGbSavePorts + (arg1 - 'DAT0');
 
 #if defined(VERSION_JP)
         ptr->unk_48 = NULL;
@@ -1798,7 +1798,7 @@ void GbSave_ReleasePortBuffers(UNUSED MainPoolBlock* arg0, u32 arg1) {
 #endif
         ptr->unk_00 &= ~0x9;
     } else if ((arg1 >= 'BOX0') && (arg1 < 'BOX4')) {
-        ptr = D_800AC910 + (arg1 - 'BOX0');
+        ptr = gGbSavePorts + (arg1 - 'BOX0');
 
 #if defined(VERSION_JP)
         ptr->unk_4C = NULL;
@@ -1816,14 +1816,14 @@ void GbSave_CheckLocationFlag(s32 arg0) {
 #if defined(VERSION_JP)
     s32 temp_t1 = D_800AC910[arg0].unk_48->unk_080;
 #else
-    s32 temp_t1 = D_800AC910[arg0].unk_50->unk_08A;
+    s32 temp_t1 = gGbSavePorts[arg0].unk_50->unk_08A;
 #endif
 
-    D_800AC910[arg0].unk_00 &= ~0x4000;
+    gGbSavePorts[arg0].unk_00 &= ~0x4000;
 
     for (i = 0; i < 12; i++) {
         if (D_80073640[i] == temp_t1) {
-            D_800AC910[arg0].unk_00 |= 0x4000;
+            gGbSavePorts[arg0].unk_00 |= 0x4000;
             break;
         }
     }
@@ -1833,23 +1833,23 @@ s32 GbSave_OpenMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
 
-    if (D_800AC910[arg0].unk_00 & 1) {
+    if (gGbSavePorts[arg0].unk_00 & 1) {
         return 1;
     }
 
 #if defined(VERSION_JP)
     D_800AC910[arg0].unk_48 = main_pool_alloc_with_func(0x1020, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
 #else
-    D_800AC910[arg0].unk_50 = main_pool_alloc_with_func(0xFC0, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
+    gGbSavePorts[arg0].unk_50 = main_pool_alloc_with_func(0xFC0, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
 #endif
 
 #if defined(VERSION_JP)
     if (D_800AC910[arg0].unk_48 != NULL) {
 #else
-    if (D_800AC910[arg0].unk_50 != NULL) {
+    if (gGbSavePorts[arg0].unk_50 != NULL) {
 #endif
-        D_800AC910[arg0].unk_00 |= 1;
-        if (GbTower_ProbePak(arg0, &sp2F, D_800AC910[arg0].unk_19) == 0) {
+        gGbSavePorts[arg0].unk_00 |= 1;
+        if (GbTower_ProbePak(arg0, &sp2F, gGbSavePorts[arg0].unk_19) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -1862,7 +1862,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
 #if defined(VERSION_JP)
             main_pool_try_free(D_800AC910[arg0].unk_48);
 #else
-            main_pool_try_free(D_800AC910[arg0].unk_50);
+            main_pool_try_free(gGbSavePorts[arg0].unk_50);
 #endif
         }
     }
@@ -1873,7 +1873,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
 s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
     s32 sp1C = 0;
 
-    if (((1 << arg0) & D_800ACA70) && (D_800AC910[arg0].unk_03 == 0)) {
+    if (((1 << arg0) & D_800ACA70) && (gGbSavePorts[arg0].unk_03 == 0)) {
         sp1C = GbSave_OpenMainData(arg0);
         if (sp1C == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
@@ -1890,11 +1890,11 @@ s32 GbSave_OpenBoxData(s32 arg0) {
 
     sp2C = 0;
 
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return 0;
     }
 
-    if (D_800AC910[arg0].unk_00 & 2) {
+    if (gGbSavePorts[arg0].unk_00 & 2) {
         return 1;
     }
 
@@ -1902,18 +1902,18 @@ s32 GbSave_OpenBoxData(s32 arg0) {
     D_800AC910[arg0].unk_4C =
         main_pool_alloc_with_func(sizeof(GbSaveBoxData), 0, arg0 + 'BOX0', GbSave_ReleasePortBuffers);
 #else
-    D_800AC910[arg0].unk_54 =
+    gGbSavePorts[arg0].unk_54 =
         main_pool_alloc_with_func(sizeof(GbSaveBoxData), 0, arg0 + 'BOX0', GbSave_ReleasePortBuffers);
 #endif
 
 #if defined(VERSION_JP)
     if (D_800AC910[arg0].unk_4C != NULL) {
 #else
-    if (D_800AC910[arg0].unk_54 != NULL) {
+    if (gGbSavePorts[arg0].unk_54 != NULL) {
 #endif
-        D_800AC910[arg0].unk_00 |= 2;
+        gGbSavePorts[arg0].unk_00 |= 2;
         if (GbSave_GetBoxCount(arg0) > 0) {
-            if (GbTower_ProbePak(arg0, &sp37, D_800AC910[arg0].unk_19) == 0) {
+            if (GbTower_ProbePak(arg0, &sp37, gGbSavePorts[arg0].unk_19) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -1929,14 +1929,14 @@ s32 GbSave_OpenBoxData(s32 arg0) {
 #if defined(VERSION_JP)
                 main_pool_try_free(D_800AC910[arg0].unk_4C);
 #else
-                main_pool_try_free(D_800AC910[arg0].unk_54);
+                main_pool_try_free(gGbSavePorts[arg0].unk_54);
 #endif
             }
         } else {
 #if defined(VERSION_JP)
             HAL_Memset(D_800AC910[arg0].unk_4C, 0xFF, sizeof(GbSaveBoxData));
 #else
-            HAL_Memset(D_800AC910[arg0].unk_54, 0xFF, sizeof(GbSaveBoxData));
+            HAL_Memset(gGbSavePorts[arg0].unk_54, 0xFF, sizeof(GbSaveBoxData));
 #endif
 
 #if defined(VERSION_JP)
@@ -1947,12 +1947,12 @@ s32 GbSave_OpenBoxData(s32 arg0) {
 #if defined(VERSION_JP)
                 D_800AC910[arg0].unk_4C->unk_0000[0].unk_0000[i].unk_000.unk_000 = 0;
 #else
-                D_800AC910[arg0].unk_54->unk_0000[0].unk_0000[i].unk_000.unk_000 = 0;
+                gGbSavePorts[arg0].unk_54->unk_0000[0].unk_0000[i].unk_000.unk_000 = 0;
 #endif
 #if defined(VERSION_JP)
                 D_800AC910[arg0].unk_4C->unk_0000[1].unk_0000[i].unk_000.unk_000 = 0;
 #else
-                D_800AC910[arg0].unk_54->unk_0000[1].unk_0000[i].unk_000.unk_000 = 0;
+                gGbSavePorts[arg0].unk_54->unk_0000[1].unk_0000[i].unk_000.unk_000 = 0;
 #endif
             }
 
@@ -1967,8 +1967,8 @@ s32 GbSave_LoadPort(s32 arg0) {
     s32 temp_s1 = 0;
 
     if ((1 << arg0) & D_800ACA70) {
-        if (D_800AC910[arg0].unk_03 == 0) {
-            if (GbTower_ProbePak(arg0, &sp2F, D_800AC910[arg0].unk_19) == 0) {
+        if (gGbSavePorts[arg0].unk_03 == 0) {
+            if (GbTower_ProbePak(arg0, &sp2F, gGbSavePorts[arg0].unk_19) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -2015,8 +2015,8 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
         case 3:
             if (GbTower_ReinitPak(arg0) != 0) {
                 sp24 = 3;
-                if (GbCart_IdentifyGame(arg0) == D_800AC910[arg0].unk_02) {
-                    if (GbTower_VerifyPakStillInserted(arg0, D_800AC910[arg0].unk_19) != 0) {
+                if (GbCart_IdentifyGame(arg0) == gGbSavePorts[arg0].unk_02) {
+                    if (GbTower_VerifyPakStillInserted(arg0, gGbSavePorts[arg0].unk_19) != 0) {
                         sp24 = 2;
                     }
                 }
@@ -2028,7 +2028,7 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
 }
 
 void GbSave_RefreshPortState(s32 arg0) {
-    D_800AC910[arg0].unk_00 &= ~0x7000;
+    gGbSavePorts[arg0].unk_00 &= ~0x7000;
 
     if (GbSave_OpenMainData(arg0) != 0) {
         GbSave_RefreshPlayerIdentity(arg0);
@@ -2036,34 +2036,34 @@ void GbSave_RefreshPortState(s32 arg0) {
 #if defined(VERSION_JP)
         D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_48->unk_955.unk_000;
 #else
-        D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_50->unk_9AC.unk_000;
+        gGbSavePorts[arg0].unk_05 = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
 #endif
 
 #if defined(VERSION_JP)
         if (D_800AC910[arg0].unk_48->unk_46D & 0x20) {
 #else
-        if (D_800AC910[arg0].unk_50->unk_477 & 0x20) {
+        if (gGbSavePorts[arg0].unk_50->unk_477 & 0x20) {
 #endif
-            D_800AC910[arg0].unk_00 |= 0x2000;
+            gGbSavePorts[arg0].unk_00 |= 0x2000;
         }
 
 #if defined(VERSION_JP)
         if (D_800AC910[arg0].unk_48->unk_513 & 1) {
 #else
-        if (D_800AC910[arg0].unk_50->unk_51D & 1) {
+        if (gGbSavePorts[arg0].unk_50->unk_51D & 1) {
 #endif
-            D_800AC910[arg0].unk_00 |= 0x1000;
+            gGbSavePorts[arg0].unk_00 |= 0x1000;
         }
 
-        D_800AC910[arg0].unk_03 = 0;
+        gGbSavePorts[arg0].unk_03 = 0;
     } else {
-        D_800AC910[arg0].unk_03 = 3;
+        gGbSavePorts[arg0].unk_03 = 3;
     }
 }
 
 void GbSave_ForceReloadPort(s32 arg0) {
     if ((1 << arg0) & D_800ACA70) {
-        D_800AC910[arg0].unk_00 |= 0x20;
+        gGbSavePorts[arg0].unk_00 |= 0x20;
         GbSave_RefreshPortState(arg0);
     }
 }
@@ -2078,7 +2078,7 @@ s32 GbSave_ScanAllPorts(void) {
     D_800ACA70 = 0;
 
     for (i = 0; i < 4; i++) {
-        GbSavePort* var_s0 = &D_800AC910[i];
+        GbSavePort* var_s0 = &gGbSavePorts[i];
         u64* temp;
 
         var_s0->unk_00 = 0x20;
@@ -2127,14 +2127,14 @@ void GbSave_MarkBoxDataLoaded(s32 arg0) {
 #if defined(VERSION_JP)
     u16 temp_v0 = GbData_ReadU16BE(&D_800AC910[arg0].unk_48->unk_2C2);
 #else
-    u16 temp_v0 = GbData_ReadU16BE(&D_800AC910[arg0].unk_50->unk_2CC);
+    u16 temp_v0 = GbData_ReadU16BE(&gGbSavePorts[arg0].unk_50->unk_2CC);
 #endif
 
     if (!(temp_v0 & 0x8000)) {
 #if defined(VERSION_JP)
         GbData_WriteU16BE(&D_800AC910[arg0].unk_48->unk_2C2, temp_v0 | 0x8000);
 #else
-        GbData_WriteU16BE(&D_800AC910[arg0].unk_50->unk_2CC, temp_v0 | 0x8000);
+        GbData_WriteU16BE(&gGbSavePorts[arg0].unk_50->unk_2CC, temp_v0 | 0x8000);
 #endif
     }
 }
@@ -2143,8 +2143,8 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
 
-    if (D_800AC910[arg0].unk_00 & 2) {
-        if (GbTower_ProbePak(arg0, &sp2F, D_800AC910[arg0].unk_19) == 0) {
+    if (gGbSavePorts[arg0].unk_00 & 2) {
+        if (GbTower_ProbePak(arg0, &sp2F, gGbSavePorts[arg0].unk_19) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -2162,8 +2162,8 @@ s32 GbSave_CommitMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
 
-    if (D_800AC910[arg0].unk_00 & 1) {
-        if (GbTower_ProbePak(arg0, &sp2F, D_800AC910[arg0].unk_19) == 0) {
+    if (gGbSavePorts[arg0].unk_00 & 1) {
+        if (GbTower_ProbePak(arg0, &sp2F, gGbSavePorts[arg0].unk_19) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -2175,7 +2175,7 @@ s32 GbSave_CommitMainData(s32 arg0) {
 #if defined(VERSION_JP)
             D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_48->unk_955.unk_000;
 #else
-            D_800AC910[arg0].unk_05 = D_800AC910[arg0].unk_50->unk_9AC.unk_000;
+            gGbSavePorts[arg0].unk_05 = gGbSavePorts[arg0].unk_50->unk_9AC.unk_000;
 #endif
         }
     }
@@ -2186,7 +2186,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     u8 sp2F;
     s32 sp28;
 
-    if (GbTower_ProbePak(arg0, &sp2F, D_800AC910[arg0].unk_19) == 0) {
+    if (GbTower_ProbePak(arg0, &sp2F, gGbSavePorts[arg0].unk_19) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -2206,7 +2206,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
 void GbSave_ValidateBeforeWrite(s32 arg0) {
     u8 sp27;
 
-    if (GbTower_ProbePak(arg0, &sp27, D_800AC910[arg0].unk_19) == 0) {
+    if (GbTower_ProbePak(arg0, &sp27, gGbSavePorts[arg0].unk_19) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -2244,11 +2244,11 @@ GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
 
     if (temp_v0 > 0) {
         if (arg1 == (temp_v0 - 1)) {
-            sp1C = &D_800AC910[arg0].unk_50[0].unk_B40;
+            sp1C = &gGbSavePorts[arg0].unk_50[0].unk_B40;
         } else if (arg1 < 6) {
-            sp1C = &D_800AC910[arg0].unk_54->unk_0000[0].unk_0000[arg1].unk_000;
+            sp1C = &gGbSavePorts[arg0].unk_54->unk_0000[0].unk_0000[arg1].unk_000;
         } else {
-            sp1C = &D_800AC910[arg0].unk_54->unk_0000[0].unk_0000[arg1].unk_014;
+            sp1C = &gGbSavePorts[arg0].unk_54->unk_0000[0].unk_0000[arg1].unk_014;
         }
     }
     return sp1C;
@@ -2274,7 +2274,7 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
 }
 #else
 void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
-    GbSaveParty* ptr2 = &D_800AC910[arg1].unk_50->unk_9AC;
+    GbSaveParty* ptr2 = &gGbSavePorts[arg1].unk_50->unk_9AC;
 
     Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
     Pokemon_RecalcStats(arg0);
@@ -2301,7 +2301,7 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
 }
 #else
 void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
-    GbSaveParty* sp24 = &D_800AC910[arg1].unk_50->unk_9AC;
+    GbSaveParty* sp24 = &gGbSavePorts[arg1].unk_50->unk_9AC;
 
     Pokemon_ToGbRecordExt(arg0, &sp24->unk_008[arg2]);
     Text_TranscodeName(sp24->unk_152[arg2], arg0->unk_000[0].nickname);
@@ -2450,7 +2450,7 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
 #if defined(VERSION_JP)
     GbSaveMainData* ptr = D_800AC910[arg1].unk_48;
 #else
-    GbSaveMainData* ptr = D_800AC910[arg1].unk_50;
+    GbSaveMainData* ptr = gGbSavePorts[arg1].unk_50;
 #endif
 
     switch (arg0) {
@@ -2489,7 +2489,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 #if defined(VERSION_JP)
     GbSaveMainData* sp1C = D_800AC910[arg1].unk_48;
 #else
-    GbSaveMainData* sp1C = D_800AC910[arg1].unk_50;
+    GbSaveMainData* sp1C = gGbSavePorts[arg1].unk_50;
 #endif
 
     if (arg3 < Deck_GetCount(arg0, arg1, arg2)) {
@@ -2544,7 +2544,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
 #if defined(VERSION_JP)
     GbSaveMainData* sp1C = D_800AC910[arg1].unk_48;
 #else
-    GbSaveMainData* sp1C = D_800AC910[arg1].unk_50;
+    GbSaveMainData* sp1C = gGbSavePorts[arg1].unk_50;
 #endif
     s32 sp18 = Deck_GetCount(arg0, arg1, arg2);
 
@@ -2605,7 +2605,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
 #if defined(VERSION_JP)
         GbSaveMainData* temp_v0 = D_800AC910[arg1].unk_48;
 #else
-        GbSaveMainData* temp_v0 = D_800AC910[arg1].unk_50;
+        GbSaveMainData* temp_v0 = gGbSavePorts[arg1].unk_50;
 #endif
 
         switch (arg0) {
@@ -2647,7 +2647,7 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
 #if defined(VERSION_JP)
         GbSaveMainData* ptr = D_800AC910[arg1].unk_48;
 #else
-        GbSaveMainData* ptr = D_800AC910[arg1].unk_50;
+        GbSaveMainData* ptr = gGbSavePorts[arg1].unk_50;
 #endif
 
         switch (arg0) {
@@ -2690,7 +2690,7 @@ s32 GbSave_GetPresentPortMask(void) {
 }
 
 s32 GbSave_GetSaveState(s32 arg0) {
-    return D_800AC910[arg0].unk_03;
+    return gGbSavePorts[arg0].unk_03;
 }
 
 s32 GbSave_GetPortAvailability(s32 arg0) {
@@ -2708,11 +2708,11 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
 }
 
 s32 GbSave_GetPortGame(s32 arg0) {
-    return D_800AC910[arg0].unk_02;
+    return gGbSavePorts[arg0].unk_02;
 }
 
 s32 GbSave_GetPartyCount(s32 arg0) {
-    return D_800AC910[arg0].unk_05;
+    return gGbSavePorts[arg0].unk_05;
 }
 
 #if defined(VERSION_JP)
@@ -2727,13 +2727,13 @@ s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
 }
 #else
 s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return 0;
     }
 
-    D_800AC910[arg0].unk_40.unk_00 = GbData_ReadU16BE(&D_800AC910[arg0].unk_50->unk_085);
-    _bcopy(&D_800AC910[arg0].unk_50->unk_018, &D_800AC910[arg0].unk_40.unk_02, 0xB);
-    bzero(D_800AC910[arg0].unk_40.unk_0D, 3);
+    gGbSavePorts[arg0].unk_40.unk_00 = GbData_ReadU16BE(&gGbSavePorts[arg0].unk_50->unk_085);
+    _bcopy(&gGbSavePorts[arg0].unk_50->unk_018, &gGbSavePorts[arg0].unk_40.unk_02, 0xB);
+    bzero(gGbSavePorts[arg0].unk_40.unk_0D, 3);
     return 1;
 }
 #endif
@@ -2747,7 +2747,7 @@ void GbSave_CopyPlayerIdentity(s32 arg0, GbSavePlayerIdentity* arg1) {
 }
 #else
 void GbSave_CopyPlayerIdentity(s32 arg0, GbSavePlayerIdentity* arg1) {
-    u64* ptr = &D_800AC910[arg0].unk_40;
+    u64* ptr = &gGbSavePorts[arg0].unk_40;
     u64* ptr2 = arg1;
 
     *ptr2++ = *ptr++;
@@ -2755,23 +2755,23 @@ void GbSave_CopyPlayerIdentity(s32 arg0, GbSavePlayerIdentity* arg1) {
 }
 #endif
 
-s32 GbSave_GetTrainerId(s32 arg0) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+s32 GbSave_GetTrainerId(s32 port) {
+    if (!(gGbSavePorts[port].unk_00 & 1)) {
         return -1;
     }
 #if defined(VERSION_JP)
-    return GbData_ReadU16BE(&D_800AC910[arg0].unk_48->unk_07B);
+    return GbData_ReadU16BE(&D_800AC910[port].unk_48->unk_07B);
 #else
-    return GbData_ReadU16BE(&D_800AC910[arg0].unk_50->unk_085);
+    return GbData_ReadU16BE(&gGbSavePorts[port].unk_50->unk_085);
 #endif
 }
 
 void GbSave_SetTrainerId(s32 arg0, u16 arg1) {
-    if (D_800AC910[arg0].unk_00 & 1) {
+    if (gGbSavePorts[arg0].unk_00 & 1) {
 #if defined(VERSION_JP)
         GbData_WriteU16BE(&D_800AC910[arg0].unk_48->unk_07B, arg1);
 #else
-        GbData_WriteU16BE(&D_800AC910[arg0].unk_50->unk_085, arg1);
+        GbData_WriteU16BE(&gGbSavePorts[arg0].unk_50->unk_085, arg1);
 #endif
     }
 }
@@ -2780,11 +2780,11 @@ s32 GbSave_GetBoxCount(s32 arg0) {
     s32 temp_a0;
     s32 phi_v1 = -1;
 
-    if (D_800AC910[arg0].unk_00 & 1) {
+    if (gGbSavePorts[arg0].unk_00 & 1) {
 #if defined(VERSION_JP)
         temp_a0 = GbData_ReadU16BE(&D_800AC910[arg0].unk_48->unk_2C2) >> 8;
 #else
-        temp_a0 = GbData_ReadU16BE(&D_800AC910[arg0].unk_50->unk_2CC) >> 8;
+        temp_a0 = GbData_ReadU16BE(&gGbSavePorts[arg0].unk_50->unk_2CC) >> 8;
 #endif
         if (temp_a0 & 0x80) {
             phi_v1 = (temp_a0 & 0x7F) + 1;
@@ -2796,70 +2796,70 @@ s32 GbSave_GetBoxCount(s32 arg0) {
 }
 
 char* GbSave_GetPlayerName(s32 arg0, char* arg1) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return NULL;
     }
 #if defined(VERSION_JP)
     return Text_UntranscodeFixedName(arg1, &D_800AC910[arg0].unk_48->unk_018);
 #else
-    return Text_UntranscodeFixedName(arg1, &D_800AC910[arg0].unk_50->unk_018);
+    return Text_UntranscodeFixedName(arg1, &gGbSavePorts[arg0].unk_50->unk_018);
 #endif
 }
 
 char* GbSave_SetPlayerName(s32 arg0, char* arg1) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return NULL;
     }
 #if defined(VERSION_JP)
     return Text_TranscodeName(&D_800AC910[arg0].unk_48->unk_018, arg1);
 #else
-    return Text_TranscodeName(&D_800AC910[arg0].unk_50->unk_018, arg1);
+    return Text_TranscodeName(&gGbSavePorts[arg0].unk_50->unk_018, arg1);
 #endif
 }
 
 char* GbSave_GetSecondaryName(s32 arg0, char* arg1) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return NULL;
     }
 #if defined(VERSION_JP)
     return Text_UntranscodeFixedName(arg1, &D_800AC910[arg0].unk_48->unk_071);
 #else
-    return Text_UntranscodeFixedName(arg1, &D_800AC910[arg0].unk_50->unk_076);
+    return Text_UntranscodeFixedName(arg1, &gGbSavePorts[arg0].unk_50->unk_076);
 #endif
 }
 
 char* GbSave_SetSecondaryName(s32 arg0, char* arg1) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return NULL;
     }
 #if defined(VERSION_JP)
     return Text_TranscodeName(&D_800AC910[arg0].unk_48->unk_071, arg1);
 #else
-    return Text_TranscodeName(&D_800AC910[arg0].unk_50->unk_076, arg1);
+    return Text_TranscodeName(&gGbSavePorts[arg0].unk_50->unk_076, arg1);
 #endif
 }
 
 s32 GbSave_GetStarterChoice(s32 arg0) {
-    if (!(D_800AC910[arg0].unk_00 & 1)) {
+    if (!(gGbSavePorts[arg0].unk_00 & 1)) {
         return -1;
     }
 #if defined(VERSION_JP)
     return D_800AC910[arg0].unk_48->unk_437;
 #else
-    return D_800AC910[arg0].unk_50->unk_441;
+    return gGbSavePorts[arg0].unk_50->unk_441;
 #endif
 }
 
 s32 GbSave_SavedAtPokemonCenter(s32 arg0) {
-    return (D_800AC910[arg0].unk_00 & 0x4000) != 0;
+    return (gGbSavePorts[arg0].unk_00 & 0x4000) != 0;
 }
 
 s32 GbSave_HasPokedex(s32 arg0) {
-    return (D_800AC910[arg0].unk_00 & 0x2000) != 0;
+    return (gGbSavePorts[arg0].unk_00 & 0x2000) != 0;
 }
 
 s32 GbSave_HasProgressFlag1000(s32 arg0) {
-    return (D_800AC910[arg0].unk_00 & 0x1000) != 0;
+    return (gGbSavePorts[arg0].unk_00 & 0x1000) != 0;
 }
 
 #if defined(VERSION_JP)
@@ -2878,15 +2878,15 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
 }
 #else
 s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
-    s32 temp_v1 = (D_800AC910[arg0].unk_00 & 1) != 0;
+    s32 temp_v1 = (gGbSavePorts[arg0].unk_00 & 1) != 0;
 
     if (temp_v1 != 0) {
-        arg1->unk_000 = D_800AC910[arg0].unk_02;
-        arg1->unk_001 = D_800AC910[arg0].unk_04;
-        arg1->unk_002 = D_800AC910[arg0].unk_40.unk_00;
+        arg1->unk_000 = gGbSavePorts[arg0].unk_02;
+        arg1->unk_001 = gGbSavePorts[arg0].unk_04;
+        arg1->unk_002 = gGbSavePorts[arg0].unk_40.unk_00;
 
-        _bcopy(D_800AC910[arg0].unk_40.unk_02, arg1->unk_004, sizeof(arg1->unk_004));
-        _bcopy(&D_800AC910[arg0].unk_50->unk_9AC, (u8*)arg1 + 0xF, sizeof(GbSaveParty));
+        _bcopy(gGbSavePorts[arg0].unk_40.unk_02, arg1->unk_004, sizeof(arg1->unk_004));
+        _bcopy(&gGbSavePorts[arg0].unk_50->unk_9AC, (u8*)arg1 + 0xF, sizeof(GbSaveParty));
     }
     return temp_v1;
 }
@@ -2909,7 +2909,7 @@ void GbSave_MarkSeenBits(char* arg0, s32 arg1, u8* arg2) {
 }
 
 void GbSave_RebuildSeenBitfield(s32 arg0) {
-    GbSavePort* ptr = &D_800AC910[arg0];
+    GbSavePort* ptr = &gGbSavePorts[arg0];
 #if defined(VERSION_JP)
     GbSaveMainData* temp_s0 = ptr->unk_48;
 #else
@@ -2963,19 +2963,19 @@ s32 GbSave_GetSpeciesProgressLevel(s32 arg0, s32 arg1) {
 #if defined(VERSION_JP)
         ptr23 = D_800AC910[arg0].unk_48->unk_01E;
 #else
-        ptr23 = D_800AC910[arg0].unk_50->unk_023;
+        ptr23 = gGbSavePorts[arg0].unk_50->unk_023;
 #endif
 #if defined(VERSION_JP)
         ptr36 = D_800AC910[arg0].unk_48->unk_031;
 #else
-        ptr36 = D_800AC910[arg0].unk_50->unk_036;
+        ptr36 = gGbSavePorts[arg0].unk_50->unk_036;
 #endif
 
         temp_t1 = (arg1 - 1) / 8;
         temp_t2 = (arg1 - 1) % 8;
 
         return ((ptr23[temp_t1] >> temp_t2) & 1) + ((ptr36[temp_t1] >> temp_t2) & 1) +
-               ((D_800AC910[arg0].unk_06[temp_t1] >> temp_t2) & 1);
+               ((gGbSavePorts[arg0].unk_06[temp_t1] >> temp_t2) & 1);
     }
     return 0;
 }
@@ -2991,14 +2991,14 @@ void GbSave_SetSeenOwnedBits(s32 arg0, s32 arg1, s32 arg2) {
 #if defined(VERSION_JP)
         temp_v0 = D_800AC910[arg0].unk_48->unk_01E;
 #else
-        temp_v0 = D_800AC910[arg0].unk_50->unk_023;
+        temp_v0 = gGbSavePorts[arg0].unk_50->unk_023;
 #endif
 #if defined(VERSION_JP)
         temp_a3 = D_800AC910[arg0].unk_48->unk_031;
 #else
-        temp_a3 = D_800AC910[arg0].unk_50->unk_036;
+        temp_a3 = gGbSavePorts[arg0].unk_50->unk_036;
 #endif
-        temp_v1 = &D_800AC910[arg0].unk_06;
+        temp_v1 = &gGbSavePorts[arg0].unk_06;
 
         var_a2 = (arg1 - 1) / 8;
         var_a3 = (arg1 - 1) % 8;
@@ -3031,7 +3031,7 @@ s32 GbSave_CountSpeciesProgressField036(s32 arg0) {
 #if defined(VERSION_JP)
         temp_v1 += (D_800AC910[arg0].unk_48->unk_031[i / 8] >> (i % 8)) & 1;
 #else
-        temp_v1 += (D_800AC910[arg0].unk_50->unk_036[i / 8] >> (i % 8)) & 1;
+        temp_v1 += (gGbSavePorts[arg0].unk_50->unk_036[i / 8] >> (i % 8)) & 1;
 #endif
     }
 
@@ -3046,7 +3046,7 @@ s32 GbSave_CountSpeciesProgressField023(s32 arg0) {
 #if defined(VERSION_JP)
         temp_v1 += (D_800AC910[arg0].unk_48->unk_01E[i / 8] >> (i % 8)) & 1;
 #else
-        temp_v1 += (D_800AC910[arg0].unk_50->unk_023[i / 8] >> (i % 8)) & 1;
+        temp_v1 += (gGbSavePorts[arg0].unk_50->unk_023[i / 8] >> (i % 8)) & 1;
 #endif
     }
 
@@ -3058,7 +3058,7 @@ s32 GbSave_CountSpeciesProgressField06(s32 arg0) {
     s32 temp_v1 = 0;
 
     for (i = 0; i < 0x97; i++) {
-        temp_v1 += (D_800AC910[arg0].unk_06[i / 8] >> (i % 8)) & 1;
+        temp_v1 += (gGbSavePorts[arg0].unk_06[i / 8] >> (i % 8)) & 1;
     }
 
     return temp_v1;

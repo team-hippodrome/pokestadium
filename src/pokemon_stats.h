@@ -109,7 +109,7 @@ s32 GbSave_GetPortGame(s32 arg0);
 s32 GbSave_GetPartyCount(s32 arg0);
 s32 GbSave_RefreshPlayerIdentity(s32 arg0);
 void GbSave_CopyPlayerIdentity(s32 arg0, GbSavePlayerIdentity* arg1);
-s32 GbSave_GetTrainerId(s32 arg0);
+s32 GbSave_GetTrainerId(s32 port);
 void GbSave_SetTrainerId(s32 arg0, u16 arg1);
 s32 GbSave_GetBoxCount(s32 arg0);
 char* GbSave_GetPlayerName(s32 arg0, char* arg1);
