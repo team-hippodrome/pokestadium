@@ -6,8 +6,6 @@ This disclaimer only covers annotation. We do not keep a trail of what functions
 
 ## Substantial Human Involvement
 These sections of the code involve a substantial degree of human verification for their annotation, or are planned to require such. They provide fundamental functionality to play the game without a transfer pak.
-- All code outside of a fragment
-- Fragment 61 (still unnamed, likely pokemon team registration)
 - `area_select`
 - `battle_engine`
 - `battle_order_selection`
@@ -19,6 +17,8 @@ These sections of the code involve a substantial degree of human verification fo
 
 ## Planned for substantial human Involvement
 These unannotated fragments are planned to require substantial human involvement.
+- All code outside of a fragment
+- Fragment 61 (still unnamed, likely pokemon team registration)
 - `free_battle_rules`
 - `options`
 - `particle_data_library`
