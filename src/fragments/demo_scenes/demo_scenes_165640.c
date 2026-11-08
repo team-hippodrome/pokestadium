@@ -326,7 +326,7 @@ void ClearCeremony_LoadPartyModel(void) {
     sCeremonyModel->displayObject.effectSlot = 0;
     ClearCeremony_LoadSpeciesBattleData();
     sCeremonyModel->displayObject.position.y += sSpeciesModelDimensions.unk_08;
-    sCeremonyModel->cryTrackActive = 0;
+    sCeremonyModel->idleCueActive = 0;
     ModelAnim_SetEventFrame(&sCeremonyModel->displayObject, 0);
     ModelAnim_SetEventTrack(&sCeremonyModel->displayObject, -1);
 }
@@ -536,12 +536,12 @@ void ClearCeremony_DimArenaTint(void) {
  * event track; when it nears its end, clears it. The "cry" meaning of byte 0xA51 is not yet verified.
  */
 void ClearCeremony_UpdateCryEventTrack(void) {
-    if (((sCeremonyModel->frameTimer % 50) == 0) && (sCeremonyModel->cryTrackActive == 0) && (sSpeciesBattleCues[0xA51] != 0xFF)) {
+    if (((sCeremonyModel->frameTimer % 50) == 0) && (sCeremonyModel->idleCueActive == 0) && (sSpeciesBattleCues[0xA51] != 0xFF)) {
         ModelAnim_ClearEventTrack(&sCeremonyModel->displayObject);
         ModelAnim_SetEventTrack(&sCeremonyModel->displayObject, sSpeciesBattleCues[0xA51]);
-        sCeremonyModel->cryTrackActive = 1;
-    } else if ((sCeremonyModel->cryTrackActive == 1) && (ModelAnim_IsEventTrackNearEnd(&sCeremonyModel->displayObject) == 1)) {
-        sCeremonyModel->cryTrackActive = 0;
+        sCeremonyModel->idleCueActive = 1;
+    } else if ((sCeremonyModel->idleCueActive == 1) && (ModelAnim_IsEventTrackNearEnd(&sCeremonyModel->displayObject) == 1)) {
+        sCeremonyModel->idleCueActive = 0;
         ModelAnim_SetEventFrame(&sCeremonyModel->displayObject, 0);
         ModelAnim_SetEventTrack(&sCeremonyModel->displayObject, -1);
     }
@@ -712,7 +712,7 @@ s32 ClearCeremony_UpdateSequence(void) {
         case 0:
             ClearCeremony_SetupOrbitCamera();
             ClearCeremony_UpdateCameraKeyframe(sCeremonyCamera->camera);
-            sCeremonyModel->cryTrackActive = 0;
+            sCeremonyModel->idleCueActive = 0;
             sCeremonyModel->sequenceStep += 1;
             break;
 
@@ -736,7 +736,7 @@ s32 ClearCeremony_UpdateSequence(void) {
             if (WipeTransition_GetState() == 1) {
                 sCeremonyModel->partySlot++;
                 if (sCeremonyModel->partySlot == 6) {
-                    sCeremonyModel->cryTrackActive = 0;
+                    sCeremonyModel->idleCueActive = 0;
                     ClearCeremony_LoadTrophyModel();
                     ClearCeremony_SetupTrophyCamera();
                     sNicknamePanel->drawState = 3;
@@ -744,7 +744,7 @@ s32 ClearCeremony_UpdateSequence(void) {
                     WipeTransition_Start(2, 0x1E);
                     sCeremonyModel->sequenceStep = 6;
                 } else {
-                    sCeremonyModel->cryTrackActive = 0;
+                    sCeremonyModel->idleCueActive = 0;
                     ClearCeremony_ReplacePartyModel();
                     ClearCeremony_SetupOrbitCamera();
                     sNicknamePanel->drawState = 3;
