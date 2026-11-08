@@ -44,7 +44,7 @@ FontContext* Font_Init(s32 load_size, s32 side);
 void Font_Free(void);
 void Font_LoadSizes(s32 arg0);
 void Font_UnloadSizes(s32 arg0);
-void Font_SetActive(s32 mask, s32 arg1);
+void Font_SetActive(s32 mask, s32 letter_spacing);
 s32 Font_GetSetInfo(s32 arg0, FontSet* arg1);
 s16 Font_DrawChar(s16 arg0, s16 arg1, s16 arg2);
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size);

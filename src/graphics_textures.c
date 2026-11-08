@@ -467,10 +467,10 @@ void Font_UnloadSizes(s32 arg0) {
     }
 }
 
-void Font_SetActive(s32 mask, s32 arg1) {
+void Font_SetActive(s32 mask, s32 letter_spacing) {
     if (gFontContext != NULL) {
         gFontContext->setIndex = Font_GetSetIndexFromMask(mask);
-        gFontContext->letterSpacing = arg1;
+        gFontContext->letterSpacing = letter_spacing;
         gFontContext->flags &= ~2;
     }
 }

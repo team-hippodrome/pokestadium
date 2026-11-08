@@ -188,5 +188,7 @@ Hex is for bit structure. Decimal is for quantities.
 ### Either is acceptable
 - One-off powers of 2 and values one less than a power of 2 (`16` / `0x10`, `255` / `0xFF`, `4096` / `0x1000`). Pick whichever matches the role of the number: a count reads better in decimal, a width or alignment reads better in hex.
 
-### Do not churn
-Never change the base of an existing literal unless you are already editing that line for a functional reason. Matching the surrounding code beats matching this guide. A diff that only flips 15 to 0xF will be rejected.
+Do not change an existing literal from one acceptable form to the other (for example `15` to `0xF`) unless you are already editing that line for a functional reason. Matching the surrounding code beats matching this guide. A diff that only flips such a literal will be rejected.
+
+### Everything else
+A literal that falls under "Must be hex" or "Must be decimal" must use that base. Correct it even when the line is otherwise unchanged. For example, `buttonPressed & 512` becomes `0x200`, and `i < 0x10` as a loop bound becomes `16`.

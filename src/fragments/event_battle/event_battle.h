@@ -13,8 +13,8 @@ typedef struct unk_D_82305A28 {
 } unk_D_82305A28; // size = 0x8
 
 typedef struct unk_D_82305A50 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x00 */ u8 visible;
+    /* 0x01 */ u8 displayEligibility;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
@@ -25,15 +25,15 @@ typedef struct unk_D_82305A50 {
     /* 0x14 */ s16 unk_14;
     /* 0x16 */ s16 unk_16;
     /* 0x18 */ s16 unk_18;
-} unk_D_82305A50; // size = 0x1C
+} EventBattleSelectionOption; // size = 0x1C
 
-typedef struct SlidingPanel {
-    /* 0x00 */ u8 unk_00;
+typedef struct DescriptionPanel {
+    /* 0x00 */ u8 expanding;
     /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} SlidingPanel; // size = 0x8
+    /* 0x02 */ s16 openingProgress;
+    /* 0x04 */ s16 x;
+    /* 0x06 */ s16 y;
+} DescriptionPanel; // size = 0x8
 
 typedef struct unk_D_82305A40 {
     /* 0x00 */ u8 unk_00;
@@ -65,13 +65,13 @@ typedef struct unk_D_82305AF8 {
     /* 0x0218 */ u8 unk_0218[6][0xC80];
 } unk_D_82305AF8; // size = 0x4D18
 
-typedef struct unk_D_8230F528 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ char* unk_08;
-} unk_D_8230F528; // size = 0x0C
+typedef struct EventBattleOptionLabel {
+    /* 0x00 */ u8 animState; // 0 = idle, 1 = growing, 2 = shrinking
+    /* 0x02 */ s16 height;   // grows/shrinks by 6 per update between 6 and 48
+    /* 0x04 */ s16 x;
+    /* 0x06 */ s16 y;        // vertical center of the 48-pixel-tall label
+    /* 0x08 */ char* text;
+} EventBattleOptionLabel; // size = 0x0C
 
 typedef struct EventBattleModeEntry {
     /* 0x00 */ s16 unk_00;
