@@ -713,7 +713,8 @@ void BattlePrep_RunPerfectReveal(void) {
 
 /**
  * Shows the opponent ladder after a cup or castle battle and, on a win, stamps the defeated
- * opponent's portrait.
+ * opponent's portrait. Stamps follow the round index (roundOrDemoId), not the opponents actually
+ * fought: skipping rounds leaves stamped placeholder portraits in the skipped slots.
  */
 void BattlePrep_RunOpponentLadderResult(void) {
     s32 i;
@@ -887,7 +888,8 @@ s32 BattlePrep_SpendContinueAndSave(void) {
  * Try once more / Change team combination / Quit menu. Try once more (0x21) returns to
  * entry Pokemon selection; Change team combination (0x81) returns to the Free Battle rules
  * screen, where the controller ports assigned to each team can be changed; Quit (0x1)
- * returns to the area select.
+ * returns to the area select. Once the winner's winCount reaches 99, Try once more is disabled
+ * and the cursor starts on Change team combination.
  */
 s32 BattlePrep_ShowFreeBattleResult(void) {
     s32 var_v0;
@@ -956,7 +958,9 @@ s32 BattlePrep_ShowSimpleResult(void) {
 /**
  * Stadium cup (modes 1-6) result. On a win: ladder mark, badge grid, then Keep battling?
  * (or cup clear after the final, roundOrDemoId 8). On a loss: progress header plus the
- * Continue / Save / Re-enter / From the start / Quit menu.
+ * Continue / Save / Re-enter / From the start / Quit menu. A cup final win hands off to the
+ * cup clear ceremony (mode 17); observed transitionFlags 0x403 (Poke Ball) and 0x40B (Master
+ * Ball, which also raises the GB Tower unlock tier).
  */
 s32 BattlePrep_ShowCupResult(void) {
     UNUSED s32 pad[2];
@@ -1072,7 +1076,8 @@ s32 BattlePrep_ShowCupResult(void) {
 
 /**
  * Gym Leader Castle (mode 7) result. A win shows Keep battling? or, after a gym leader or the
- * rival, returns phase 3. A loss shows Re-enter / Re-start at this GYM / Quit.
+ * rival, returns phase 3. A loss shows Re-enter / Re-start at this GYM / Quit. Observed
+ * transitionFlags: 0x501 after the Elite Four clear and 0x201 after the rival clear.
  */
 s32 BattlePrep_ShowCastleResult(void) {
     s32 sp28;
@@ -1164,7 +1169,7 @@ s32 BattlePrep_ShowCastleResult(void) {
 }
 
 /**
- * Mewtwo (mode 8) result. A loss offers Battle again / Quit; a win sets transitionFlags 0x4.
+ * Mewtwo (mode 8) result. A loss offers Battle again / Quit; a win sets transitionFlags 0x5 (0x4 plus 0x1).
  */
 s32 BattlePrep_ShowMewtwoResult(void) {
     s32 var_v0;
