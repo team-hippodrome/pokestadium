@@ -76,7 +76,7 @@ void N64Logo_WaitForElapsed(u64 start_time) {
  * Game_ShutdownAndLoadFragment. //@src/pokemon_stats.c //@src/gb_tower.c
  * Allocations made during the scan are released when the 'GPAK' pool state is popped.
  */
-void N64Logo_ScanGbSavePorts(void) {
+void N64Logo_ScanTransferPaks(void) {
     main_pool_push_state('GPAK');
 
     GbSave_ScanAllPorts();
@@ -130,7 +130,7 @@ s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);
     sound_start_time = osGetTime();
-    N64Logo_ScanGbSavePorts();
+    N64Logo_ScanTransferPaks();
     N64Logo_WaitForElapsed(sound_start_time);
     StageFade_Start(0x10);
     BgStage_RunUntilCondition(0x10, N64Logo_DrawFrame);
