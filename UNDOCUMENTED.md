@@ -28,7 +28,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/credits/credits_158A00.c` | 18 | 17 | 3 | 408 | 8 | 9 | 0 |
 | `src/fragments/credits/credits_15AD80.c` | 2 | 2 | 0 | 376 | 0 | 2 | 0 |
 | `src/fragments/pokedex/pokedex_2190D0.c` | 17 | 17 | 2 | 339 | 8 | 8 | 0 |
-| `src/fragments/widget_tree/widget_tree.c` | 148 | 148 | 4 | 12 | 49 | 148 | 0 |
+| `src/fragments/lab_widget_tree/lab_widget_tree.c` | 148 | 148 | 4 | 12 | 49 | 148 | 0 |
 | `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 | 99 | 4 | 76 | 38 | 98 | 0 |
 | `src/fragments/lab_pc_list/lab_pc_list_1CEA00.c` | 92 | 92 | 3 | 58 | 33 | 91 | 0 |
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 | 49 | 2 | 171 | 25 | 25 | 0 |
@@ -60,7 +60,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/pokedex/pokedex_214920.c` | 47 | 47 | 3 | 38 | 9 | 37 | 0 |
 | `src/fragments/gallery_camera/gallery_camera_14CA70.c` | 35 | 35 | 1 | 81 | 4 | 12 | 0 |
 | `src/fragments/battle_engine/battle_engine_water_and_beam_effects.c` | 91 | 61 | 0 | 0 | 4 | 67 | 0 |
-| `src/fragments/widget_toolkit/widget_toolkit_2.c` | 17 | 16 | 4 | 96 | 6 | 9 | 0 |
+| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 | 16 | 4 | 96 | 6 | 9 | 0 |
 | `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 | 41 | 0 | 19 | 28 | 40 | 0 |
 | `src/audio_commands_category2.c` | 28 | 28 | 0 | 57 | 14 | 26 | 0 |
 | `src/33FE0.c` | 44 | 44 | 20 | 28 | 20 | 11 | 0 |
@@ -80,7 +80,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/gallery_snap/gallery_snap.c` | 27 | 27 | 2 | 46 | 14 | 12 | 0 |
 | `src/libnumus/player.c` | 104 | 68 | 0 | 0 | 13 | 18 | 0 |
 | `src/fragments/magikarp_game/magikarp_game.c` | 30 | 30 | 2 | 50 | 7 | 9 | 0 |
-| `src/fragments/widget_toolkit/widget_toolkit.c` | 21 | 21 | 0 | 53 | 6 | 18 | 0 |
+| `src/fragments/minigame_hud/minigame_hud.c` | 21 | 21 | 0 | 53 | 6 | 18 | 0 |
 | `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 | 0 | 4 | 50 | 23 | 17 | 0 |
 | `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 | 86 | 0 | 7 | 0 | 0 | 0 |
 | `src/status_icons.c` | 2 | 2 | 0 | 88 | 0 | 2 | 0 |
@@ -204,7 +204,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 | 13 | 4 | 4 | 0 | 0 | 0 |
 | `src/fragments/battle_engine/battle_engine_sing_ripple.c` | 7 | 7 | 0 | 4 | 5 | 5 | 0 |
 | `src/fragments/demo_scenes/demo_scenes_169A40.c` | 9 | 9 | 0 | 9 | 2 | 1 | 0 |
-| `src/fragments/widget_toolkit/widget_toolkit_1.c` | 5 | 5 | 0 | 11 | 3 | 2 | 0 |
+| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 | 5 | 0 | 11 | 3 | 2 | 0 |
 | `src/gfx_rect.c` | 13 | 13 | 0 | 2 | 0 | 6 | 0 |
 | `src/fragments/battle_engine/battle_engine_3597B0.c` | 5 | 5 | 0 | 11 | 2 | 2 | 0 |
 | `src/fragments/battle_engine/battle_engine_petal_dance.c` | 6 | 6 | 0 | 4 | 6 | 4 | 0 |
@@ -225,7 +225,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_spike_cannon.c` | 6 | 6 | 0 | 3 | 5 | 4 | 0 |
 | `src/fragments/minigame_select/minigame_select_281C40.c` | 4 | 4 | 0 | 11 | 1 | 2 | 0 |
 | `src/fragments/battle_engine/battle_engine_hypnosis_screech.c` | 6 | 6 | 0 | 3 | 4 | 4 | 0 |
-| `src/fragments/fatal_error_screen/fatal_error_screen.c` | 6 | 6 | 0 | 4 | 1 | 6 | 0 |
+| `src/fragments/transfer_pak_error/transfer_pak_error.c` | 6 | 6 | 0 | 4 | 1 | 6 | 0 |
 | `src/fragments/gallery_enlarge/gallery_enlarge.c` | 8 | 8 | 1 | 7 | 0 | 1 | 0 |
 | `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 | 6 | 2 | 7 | 0 | 2 | 0 |
 | `src/fragments/particle_data_library/particle_data_library_2554C0.c` | 4 | 4 | 0 | 10 | 1 | 2 | 0 |
@@ -380,7 +380,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `unk_func_80026268_arg0_raw` | `src/gallery.c` | 29 | 29 |
 | `unk_D_86B0E5D4_04` | `src/fragments/demo_scenes/demo_scenes.h` | 28 | 28 |
 | `RentalCarouselState` | `src/fragments/rental_team_selection/rental_team_selection.h` | 27 | 27 |
-| `unk_func_88205880_0098_008` | `src/fragments/widget_tree/widget_tree.h` | 26 | 26 |
+| `unk_func_88205880_0098_008` | `src/fragments/lab_widget_tree/lab_widget_tree.h` | 26 | 26 |
 | `BattleMon` | `src/game_state.h` | 31 | 24 |
 | `BattleAiScoredMove` | `src/fragments/battle_engine/battle_engine.h` | 23 | 23 |
 | `RentalTeamTray` | `src/fragments/rental_team_selection/rental_team_selection.h` | 23 | 23 |
@@ -404,7 +404,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `unk_func_8830867C` | `src/fragments/lab_pc_list/lab_pc_list.h` | 20 | 20 |
 | `BattleMonRuntime` | `src/3D140.h` | 51 | 19 |
 | `unk_D_86404778` | `src/fragments/drowzee_game/drowzee_game.h` | 19 | 19 |
-| `unk_func_88203ED8` | `src/fragments/widget_tree/widget_tree.h` | 18 | 18 |
+| `unk_func_88203ED8` | `src/fragments/lab_widget_tree/lab_widget_tree.h` | 18 | 18 |
 | `unk_func_888044BC_038_02C_000` | `src/fragments/pokedex/pokedex.h` | 18 | 18 |
 | `GbPokemonRecord` | `src/gb_data.h` | 17 | 17 |
 | `Strip400State` | `src/fragments/battle_engine/battle_engine_lasso.c` | 17 | 17 |

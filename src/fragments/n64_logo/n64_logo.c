@@ -12,9 +12,13 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+/**
+ * Draws the 128x112 RGBA16 "NINTENDO 64" logo (n64_logo_texture, loaded at segment 0x02)
+ * centered at screen (96, 64)-(223, 175), as seven 128x16 strips in COPY mode.
+ */
 void N64Logo_DrawLogoTexture(void) {
-    s32 var_t4;
-    u8* var_t5;
+    s32 rect_y;
+    u8* texture_strip;
     u32 tmp = 0xF;
 
     gDPPipeSync(gDisplayListHead++);
@@ -24,11 +28,11 @@ void N64Logo_DrawLogoTexture(void) {
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
     gDPPipeSync(gDisplayListHead++);
 
-    var_t5 = D_2000000;
-    for (var_t4 = 0x40; var_t4 < 0xB0; var_t4 += 0x10, var_t5 += 0x1000) {
-        gDPLoadTextureBlock(gDisplayListHead++, var_t5, G_IM_FMT_RGBA, G_IM_SIZ_16b, 128, 16, 0,
+    texture_strip = D_2000000;
+    for (rect_y = 0x40; rect_y < 0xB0; rect_y += 0x10, texture_strip += 0x1000) {
+        gDPLoadTextureBlock(gDisplayListHead++, texture_strip, G_IM_FMT_RGBA, G_IM_SIZ_16b, 128, 16, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 7, 4, G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, 0x0180, var_t4 << 2, 0x037C, (var_t4 + tmp) << 2, G_TX_RENDERTILE, 0, 0,
+        gSPTextureRectangle(gDisplayListHead++, 0x0180, rect_y << 2, 0x037C, (rect_y + tmp) << 2, G_TX_RENDERTILE, 0, 0,
                             0x1000, 0x0400);
     }
 
@@ -36,6 +40,9 @@ void N64Logo_DrawLogoTexture(void) {
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 }
 
+/**
+ * Per-frame draw callback: clears the framebuffer to black (RGBA5551 0x0001) and draws the logo.
+ */
 s32 N64Logo_DrawFrame(UNUSED u8 arg0) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
@@ -44,15 +51,32 @@ s32 N64Logo_DrawFrame(UNUSED u8 arg0) {
     return 0;
 }
 
-void N64Logo_WaitForElapsed(u64 arg0) {
-    u32 temp_ret = 0xF;
+/**
+ * Busy-waits until 1,000,000 microseconds (1 second) have passed since start_time.
+ * ticks * 64 / 3000 is the libultra OS_CYCLES_TO_USEC conversion for the 46.875 MHz counter.
+ */
+void N64Logo_WaitForElapsed(u64 start_time) {
+    u32 elapsed_usec = 0xF;
 
-    while (temp_ret < 0xF4240) {
-        temp_ret = __ull_div(__ll_mul(osGetTime() - arg0, 0x40), 0xBB8);
+    while (elapsed_usec < 0xF4240) {
+        elapsed_usec = __ull_div(__ll_mul(osGetTime() - start_time, 0x40), 0xBB8);
     }
 }
 
-void N64Logo_ScanGbSavePorts(void) {
+/**
+ * Boot-time Transfer Pak scan, run once while the logo is held on screen.
+ * GbSave_ScanAllPorts (via GbTower_ScanPaks) initializes every plugged-in Transfer Pak,
+ * identifies supported Pokemon Red/Green/Blue/Yellow cartridges for the region, checks
+ * cartridge RAM, resets the per-port Game Boy save cache and enables disconnect polling for
+ * ports holding a recognized Pokemon cartridge. This is the only caller of
+ * GbSave_ScanAllPorts, so later Transfer Pak features rely on this boot scan.
+ * N64Logo_Main starts its 1-second hold timer before the scan, so the controller-bus work
+ * overlaps the logo instead of adding a blank delay.
+ * A faulty pak or cartridge sends the game straight to the fatal error screen via
+ * Game_ShutdownAndLoadFragment. //@src/pokemon_stats.c //@src/gb_tower.c
+ * Allocations made during the scan are released when the 'GPAK' pool state is popped.
+ */
+void N64Logo_ScanTransferPaks(void) {
     main_pool_push_state('GPAK');
 
     GbSave_ScanAllPorts();
@@ -60,21 +84,28 @@ void N64Logo_ScanGbSavePorts(void) {
     main_pool_pop_state('GPAK');
 }
 
+/**
+ * Boot logo sequence, loaded by State_N64LogoIntro and State_FastN64Logo. //@src/game_state.c
+ * Fades in the Nintendo 64 logo, applies the saved sound options (bit 0 = mono output,
+ * bit 1 = Announcer voice off, as in Options_ApplySoundSettings), plays SFX_N64_LOGO, scans the
+ * Transfer Paks while holding the logo for at least 1 second from the sound, then fades out.
+ * Returns 2.
+ */
 s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
-    u64 sp30;
-    StageContext* sp2C;
-    u16 sp2A;
+    u64 sound_start_time;
+    StageContext* stage_context;
+    u16 sound_options;
 
     main_pool_push_state('LOGO');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
-    sp2C = StageContext_Allocate(0, 1, 2, 0, 2, 1);
+    stage_context = StageContext_Allocate(0, 1, 2, 0, 2, 1);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, n64_logo_texture, 0);
 
     Save_EnsureBankLoaded(2);
-    StageContext_Activate(sp2C);
+    StageContext_Activate(stage_context);
     StageFade_Start(1);
     BgStage_RunUntilCondition(3, N64Logo_DrawFrame);
 #if !defined(VERSION_JP)
@@ -83,24 +114,24 @@ s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     Text_LoadPlayerLabels();
     Text_LoadNameTable();
 #endif
-    Save_GetOptionsField02(&sp2A);
+    Save_GetOptionsField02(&sound_options);
 
-    if (sp2A & 1) {
+    if (sound_options & 1) {
         Audio_SetMonoOutput(1);
     } else {
         Audio_SetMonoOutput(0);
     }
 
-    if (sp2A & 2) {
+    if (sound_options & 2) {
         Audio_SetVoiceEnabled(0);
     } else {
         Audio_SetVoiceEnabled(1);
     }
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);
-    sp30 = osGetTime();
-    N64Logo_ScanGbSavePorts();
-    N64Logo_WaitForElapsed(sp30);
+    sound_start_time = osGetTime();
+    N64Logo_ScanTransferPaks();
+    N64Logo_WaitForElapsed(sound_start_time);
     StageFade_Start(0x10);
     BgStage_RunUntilCondition(0x10, N64Logo_DrawFrame);
     StageContext_Deactivate();

@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "src/fragments/pokemon_lab_support/pokemon_lab_support.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "src/fragments/lab_widget_tree/lab_widget_tree.h"
 #include "src/fragments/lab_ui_support/lab_ui_support.h"
 #include "src/gb_save.h"
 
