@@ -15,7 +15,7 @@ typedef struct unk_D_82305A28 {
 typedef struct unk_D_82305A50 {
     /* 0x00 */ u8 visible;
     /* 0x01 */ u8 displayEligibility;
-    /* 0x02 */ s16 unk_02;
+    /* 0x02 */ s16 slideInProgress;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;

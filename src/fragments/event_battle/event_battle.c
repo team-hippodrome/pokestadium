@@ -473,28 +473,28 @@ void EventBattle_DrawRuleCard(EventBattleSelectionOption* arg0) {
 void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
     switch (arg0->visible) {
         case 2:
-            arg0->unk_02 -= 1;
-            if (arg0->unk_02 == 0) {
+            arg0->slideInProgress -= 1;
+            if (arg0->slideInProgress == 0) {
                 arg0->visible = 1;
             }
 
             if (arg0->unk_04 < 320) {
-                arg0->unk_08 = arg0->unk_04 - (arg0->unk_02 << 5);
+                arg0->unk_08 = arg0->unk_04 - (arg0->slideInProgress << 5);
             } else {
-                arg0->unk_08 = arg0->unk_04 + (arg0->unk_02 << 5);
+                arg0->unk_08 = arg0->unk_04 + (arg0->slideInProgress << 5);
             }
             break;
 
         case 3:
-            arg0->unk_02 += 1;
-            if (arg0->unk_02 == 10) {
+            arg0->slideInProgress += 1;
+            if (arg0->slideInProgress == 10) {
                 arg0->visible = 0;
             }
 
             if (arg0->unk_04 < 320) {
-                arg0->unk_08 = arg0->unk_04 - (arg0->unk_02 << 5);
+                arg0->unk_08 = arg0->unk_04 - (arg0->slideInProgress << 5);
             } else {
-                arg0->unk_08 = arg0->unk_04 + (arg0->unk_02 << 5);
+                arg0->unk_08 = arg0->unk_04 + (arg0->slideInProgress << 5);
             }
             break;
     }
@@ -502,7 +502,7 @@ void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
 
 void EventBattle_InitRuleCard(EventBattleSelectionOption* arg0, s16 arg1, s16 arg2, u8* arg3, s8* arg4, s16 arg5, s16 arg6) {
     arg0->visible = 0;
-    arg0->unk_02 = 10;
+    arg0->slideInProgress = 10;
     arg0->unk_04 = arg1;
     arg0->unk_06 = arg2;
     arg0->unk_08 = arg1;

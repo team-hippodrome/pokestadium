@@ -276,7 +276,7 @@ void CupSelect_RenderFrame(s32 mode, s32 counter) {
 
     if (mode == SELECTED_CUP) {
         if ((counter >= 0) && (counter < 11)) {
-            sDivisionListings[0].rotation.y = ((10 - counter) * -0xB000) / 10;
+            sDivisionListings[0].rotation.y = ((10 - counter) * -20480) / 10;
         }
 
         if ((counter >= 2) && (counter < 13)) {
