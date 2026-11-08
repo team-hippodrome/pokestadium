@@ -5,26 +5,26 @@
 #include "src/game_state.h"
 
 typedef struct unk_D_82305A28 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} unk_D_82305A28; // size = 0x8
+    /* 0x00 */ u8 mode;
+    /* 0x01 */ u8 mayProceedToBattle;
+    /* 0x02 */ s16 cursorPosition;
+    /* 0x04 */ s16 trainerCardDisplayState;
+    /* 0x06 */ s16 battleReadyState;
+} EventBattleMenuState; // size = 0x8
 
 typedef struct unk_D_82305A50 {
     /* 0x00 */ u8 visible;
     /* 0x01 */ u8 displayEligibility;
     /* 0x02 */ s16 slideInProgress;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ u8* unk_0C;
-    /* 0x10 */ char* unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
+    /* 0x04 */ s16 restingX;
+    /* 0x06 */ s16 restingY;
+    /* 0x08 */ s16 currentX;
+    /* 0x0A */ s16 currentY;
+    /* 0x0C */ u8* icon;
+    /* 0x10 */ char* text;
+    /* 0x14 */ s16 minLevel;
+    /* 0x16 */ s16 maxLevel;
+    /* 0x18 */ s16 description;
 } EventBattleSelectionOption; // size = 0x1C
 
 typedef struct DescriptionPanel {

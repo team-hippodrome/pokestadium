@@ -18,7 +18,7 @@
 
 static char** sEventBattleText;
 static char** sPokemonDetailText;
-static unk_D_82305A28 D_82305A28;
+static EventBattleMenuState D_82305A28;
 static DescriptionPanel sInfoBox;
 static DescriptionPanel sNonEligibleWarning;
 static SettingsWindow sSettingsPanel;
@@ -379,12 +379,12 @@ void EventBattle_DrawInfoBox(DescriptionPanel* panel) {
         y = panel->y + ((60 - opening_progress) / 2);
 
         EventBattle_DrawThinSlicedFrame(x, y, 528, opening_progress, 0x1E, 0x1E, 0x82, 0x96); // #1E1E82
-        if (((60 - opening_progress) == 0) && (D_82305A28.unk_02 < 8)) {
+        if (((60 - opening_progress) == 0) && (D_82305A28.cursorPosition < 8)) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
             Font_SetLineHeight(24);
             Font_Printf(x + 32, y + 8,
-                        Text_GetString(NULL, 0, sEventBattleText, D_82305A50[D_82305A28.unk_02].unk_18));
+                        Text_GetString(NULL, 0, sEventBattleText, D_82305A50[D_82305A28.cursorPosition].description));
             Font_EndTexturedTextRendering();
         }
     }
@@ -416,56 +416,58 @@ void EventBattle_InitInfoBox(DescriptionPanel* panel, s16 x, s16 y) {
 }
 
 // better name: EventBattle_DrawSelectionOption
-void EventBattle_DrawRuleCard(EventBattleSelectionOption* arg0) {
-    s16 temp_s1;
-    s16 temp_s2;
+void EventBattle_DrawRuleCard(EventBattleSelectionOption* selection_option) {
+    s16 x;
+    s16 y;
 
-    if (arg0->visible != 0) {
-        temp_s1 = arg0->unk_08;
-        temp_s2 = arg0->unk_0A;
+    if (selection_option->visible != 0) {
+        x = selection_option->currentX;
+        y = selection_option->currentY;
 
-        EventBattle_DrawPanelFrame(temp_s1, temp_s2, 248, 56);
+        EventBattle_DrawPanelFrame(x, y, 248, 56);
 
         gSPDisplayList(gDisplayListHead++, D_8006F470);
 
-        if (arg0->unk_0C != NULL) {
-            if (arg0->displayEligibility != 0) {
-                Gfx_FillRectRgb(temp_s1 + 4, temp_s2 + 4, 240, 48, 0x1E, 0x1E, 0x64);
+        if (selection_option->icon != NULL) {
+            if (selection_option->displayEligibility != 0) {
+                Gfx_FillRectRgb(x + 4, y + 4, 240, 48, 0x1E, 0x1E, 0x64);
             } else {
-                Gfx_FillRectRgb(temp_s1 + 4, temp_s2 + 4, 240, 48, 0x64, 0x1E, 0x1E);
+                Gfx_FillRectRgb(x + 4, y + 4, 240, 48, 0x64, 0x1E, 0x1E);
             }
 
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(temp_s1 + 8, temp_s2 + 8, 40, 40, arg0->unk_0C, 40, 0);
+            Gfx_DrawTextureRgba16(x + 8, y + 8, 40, 40, selection_option->icon, 40, 0);
         } else {
-            Gfx_FillRectRgb(temp_s1 + 4, temp_s2 + 4, 240, 48, 0x1E, 0x5A, 0x1E);
+            Gfx_FillRectRgb(x + 4, y + 4, 240, 48, 0x1E, 0x5A, 0x1E);
         }
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
-        if (arg0->unk_0C != NULL) {
-            s32 sp3C = temp_s2 + 8;
-            char sp44[64];
+        if (selection_option->icon != NULL) {
+            s32 text_y = y + 8;
+            char format[64];
 
             Font_SetActive(8, 0);
 
-            if (arg0->displayEligibility != 0) {
-                Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            // Cup Title Color
+            if (selection_option->displayEligibility != 0) {
+                Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             } else {
-                Gfx_SetEnvColor(0xDC, 0x37, 0x37, 0xFF);
+                Gfx_SetEnvColor(0xDC, 0x37, 0x37, 0xFF); // #DC3737
             }
 
-            Font_Printf(temp_s1 + 52, sp3C, arg0->unk_10);
+            Font_Printf(x + 52, text_y, selection_option->text);
             Font_SetActive(4, 0);
-            Gfx_SetEnvColor(0x92, 0xC1, 0xFF, 0xFF);
-            sprintf(sp44, "%s%d~%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), arg0->unk_14, arg0->unk_16);
-            Font_Printf((temp_s1 - (s16)Font_MeasureTextExtent(4, 0, sp44)) + 234, temp_s2 + 32, sp44);
+            // Cup Level Range Color
+            Gfx_SetEnvColor(0x92, 0xC1, 0xFF, 0xFF); // #92C1FF
+            sprintf(format, "%s%d~%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), selection_option->minLevel, selection_option->maxLevel);
+            Font_Printf((x - (s16)Font_MeasureTextExtent(4, 0, format)) + 234, y + 32, format);
         } else {
             Font_SetActive(8, 0);
-            Font_Printf((temp_s1 - ((s16)Font_MeasureTextExtent(8, 0, arg0->unk_10) / 2)) + 122, temp_s2 + 18,
-                        arg0->unk_10);
+            Font_Printf((x - ((s16)Font_MeasureTextExtent(8, 0, selection_option->text) / 2)) + 122, y + 18,
+                        selection_option->text);
         }
         Font_EndTexturedTextRendering();
     }
@@ -479,10 +481,10 @@ void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
                 arg0->visible = 1;
             }
 
-            if (arg0->unk_04 < 320) {
-                arg0->unk_08 = arg0->unk_04 - (arg0->slideInProgress << 5);
+            if (arg0->restingX < 320) {
+                arg0->currentX = arg0->restingX - (arg0->slideInProgress << 5);
             } else {
-                arg0->unk_08 = arg0->unk_04 + (arg0->slideInProgress << 5);
+                arg0->currentX = arg0->restingX + (arg0->slideInProgress << 5);
             }
             break;
 
@@ -492,10 +494,10 @@ void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
                 arg0->visible = 0;
             }
 
-            if (arg0->unk_04 < 320) {
-                arg0->unk_08 = arg0->unk_04 - (arg0->slideInProgress << 5);
+            if (arg0->restingX < 320) {
+                arg0->currentX = arg0->restingX - (arg0->slideInProgress << 5);
             } else {
-                arg0->unk_08 = arg0->unk_04 + (arg0->slideInProgress << 5);
+                arg0->currentX = arg0->restingX + (arg0->slideInProgress << 5);
             }
             break;
     }
@@ -504,20 +506,20 @@ void EventBattle_UpdateRuleCardSlide(EventBattleSelectionOption* arg0) {
 void EventBattle_InitRuleCard(EventBattleSelectionOption* arg0, s16 arg1, s16 arg2, u8* arg3, s8* arg4, s16 arg5, s16 arg6) {
     arg0->visible = 0;
     arg0->slideInProgress = 10;
-    arg0->unk_04 = arg1;
-    arg0->unk_06 = arg2;
-    arg0->unk_08 = arg1;
-    arg0->unk_0A = arg2;
-    arg0->unk_0C = arg3;
-    arg0->unk_10 = arg4;
-    arg0->unk_14 = 0;
-    arg0->unk_16 = 0;
-    arg0->unk_18 = arg6;
+    arg0->restingX = arg1;
+    arg0->restingY = arg2;
+    arg0->currentX = arg1;
+    arg0->currentY = arg2;
+    arg0->icon = arg3;
+    arg0->text = arg4;
+    arg0->minLevel = 0;
+    arg0->maxLevel = 0;
+    arg0->description = arg6;
     arg0->displayEligibility = 1;
 
     if (arg5 != 0) {
-        arg0->unk_14 = D_8230597C[arg5 - 1].unk_00;
-        arg0->unk_16 = D_8230597C[arg5 - 1].unk_02;
+        arg0->minLevel = D_8230597C[arg5 - 1].unk_00;
+        arg0->maxLevel = D_8230597C[arg5 - 1].unk_02;
         arg0->displayEligibility = EventBattle_CheckTeamLegality(&sTrainerCards[0], arg5);
         arg0->displayEligibility &= EventBattle_CheckTeamLegality(&sTrainerCards[1], arg5);
     }
@@ -1201,58 +1203,58 @@ void EventBattle_UpdateWidgets(void) {
     }
 }
 
-void EventBattle_UpdateModeSelect(unk_D_82305A28* arg0) {
-    if (arg0->unk_00 == 3) {
+void EventBattle_UpdateModeSelect(EventBattleMenuState* arg0) {
+    if (arg0->mode == 3) {
         do {
             EventBattle_UpdateWidgets();
             if (gPlayer1Controller->buttonPressed & 0x800) {
-                if (arg0->unk_02 >= 2) {
-                    arg0->unk_02 -= 2;
+                if (arg0->cursorPosition >= 2) {
+                    arg0->cursorPosition -= 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x400) {
-                if (arg0->unk_02 < 4) {
-                    arg0->unk_02 += 2;
+                if (arg0->cursorPosition < 4) {
+                    arg0->cursorPosition += 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x200) {
-                if ((arg0->unk_02 & 1) == 1) {
-                    arg0->unk_02--;
+                if ((arg0->cursorPosition & 1) == 1) {
+                    arg0->cursorPosition--;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x100) {
-                if (!(arg0->unk_02 & 1)) {
-                    arg0->unk_02++;
+                if (!(arg0->cursorPosition & 1)) {
+                    arg0->cursorPosition++;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x8000) {
-                switch (arg0->unk_02) {
+                switch (arg0->cursorPosition) {
                     case 4:
-                        arg0->unk_00 = 5;
+                        arg0->mode = 5;
                         Audio_PlaySoundEffectById(28);
                         break;
 
                     case 5:
-                        arg0->unk_00 = 2;
+                        arg0->mode = 2;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                         break;
 
                     default:
-                        arg0->unk_00 = 7;
+                        arg0->mode = 7;
                         Audio_PlaySoundEffectById(28);
                         break;
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x4000) {
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
-                arg0->unk_00 = 2;
+                arg0->mode = 2;
             }
-            EventBattle_DrawFrame(arg0->unk_02);
-        } while (arg0->unk_00 == 3);
+            EventBattle_DrawFrame(arg0->cursorPosition);
+        } while (arg0->mode == 3);
     }
-    arg0->unk_06 = 4;
+    arg0->battleReadyState = 4;
 }
 
-void EventBattle_EnterModeSelect(unk_D_82305A28* arg0) {
+void EventBattle_EnterModeSelect(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
 
@@ -1276,10 +1278,10 @@ void EventBattle_EnterModeSelect(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 3;
+    arg0->mode = 3;
 }
 
-void EventBattle_ExitModeSelect(unk_D_82305A28* arg0) {
+void EventBattle_ExitModeSelect(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
 
@@ -1303,10 +1305,10 @@ void EventBattle_ExitModeSelect(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 0;
+    arg0->mode = 0;
 }
 
-void EventBattle_ValidateTeamSelection(unk_D_82305A28* arg0) {
+void EventBattle_ValidateTeamSelection(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
     u8 tmp1;
@@ -1323,12 +1325,12 @@ void EventBattle_ValidateTeamSelection(unk_D_82305A28* arg0) {
     }
 
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
-    arg0->unk_01 = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->unk_02].unk_08);
-    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->unk_02].unk_08);
-    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->unk_01);
+    arg0->mayProceedToBattle = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->cursorPosition].unk_08);
+    arg0->mayProceedToBattle &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->cursorPosition].unk_08);
+    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->mayProceedToBattle);
 
-    tmp1 = !arg0->unk_01;
-    arg0->unk_04 = tmp1;
+    tmp1 = !arg0->mayProceedToBattle;
+    arg0->trainerCardDisplayState = tmp1;
 
     for (i = tmp1; i < 3; i++) {
         D_8230F528[i].animState = 1;
@@ -1339,15 +1341,15 @@ void EventBattle_ValidateTeamSelection(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 4;
+    arg0->mode = 4;
 }
 
-void EventBattle_ReturnToModeSelect(unk_D_82305A28* arg0) {
+void EventBattle_ReturnToModeSelect(EventBattleMenuState* arg0) {
     u8 temp_v1;
     s16 i;
     s16 j;
 
-    temp_v1 = !arg0->unk_01;
+    temp_v1 = !arg0->mayProceedToBattle;
     sTrainerCards[0].unk_0000 = 3;
     sTrainerCards[1].unk_0000 = 3;
     sNonEligibleWarning.expanding = 2;
@@ -1373,21 +1375,21 @@ void EventBattle_ReturnToModeSelect(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 3;
+    arg0->mode = 3;
 }
 
-void EventBattle_ValidateInitialSelection(unk_D_82305A28* arg0) {
+void EventBattle_ValidateInitialSelection(EventBattleMenuState* arg0) {
     u8 temp_v1;
     s16 i;
     s16 j;
 
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
-    arg0->unk_01 = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->unk_02].unk_08);
-    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->unk_02].unk_08);
-    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->unk_01);
+    arg0->mayProceedToBattle = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->cursorPosition].unk_08);
+    arg0->mayProceedToBattle &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->cursorPosition].unk_08);
+    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->mayProceedToBattle);
 
-    temp_v1 = !arg0->unk_01;
-    arg0->unk_04 = temp_v1;
+    temp_v1 = !arg0->mayProceedToBattle;
+    arg0->trainerCardDisplayState = temp_v1;
 
     for (i = temp_v1; i < 3; i++) {
         D_8230F528[i].animState = 1;
@@ -1398,7 +1400,7 @@ void EventBattle_ValidateInitialSelection(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 4;
+    arg0->mode = 4;
 }
 
 void EventBattle_MarkPartnerPikachu(BattleMon* arg0, s16 arg1) {
@@ -1427,11 +1429,11 @@ void EventBattle_BuildTrainerFromCard(unk_D_82305AF8* arg0) {
     Team_AddTrainer(arg0->unk_0001, temp_s4);
 }
 
-void EventBattle_StartBattle(unk_D_82305A28* arg0) {
+void EventBattle_StartBattle(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
 
-    Session_SetMode(10, gEventBattleModes[arg0->unk_02].unk_08, 0);
+    Session_SetMode(10, gEventBattleModes[arg0->cursorPosition].unk_08, 0);
     EventBattle_BuildTrainerFromCard(&sTrainerCards[0]);
     EventBattle_BuildTrainerFromCard(&sTrainerCards[1]);
 
@@ -1462,56 +1464,56 @@ void EventBattle_StartBattle(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_06 = 42;
-    arg0->unk_00 = 0;
+    arg0->battleReadyState = 42;
+    arg0->mode = 0;
 }
 
-void EventBattle_UpdateActionMenu(unk_D_82305A28* arg0) {
+void EventBattle_UpdateActionMenu(EventBattleMenuState* arg0) {
     u8 temp_s7;
 
-    temp_s7 = !arg0->unk_01;
+    temp_s7 = !arg0->mayProceedToBattle;
 
-    if (arg0->unk_00 == 4) {
+    if (arg0->mode == 4) {
         do {
             EventBattle_UpdateWidgets();
             if (gPlayer1Controller->buttonPressed & 0x200) {
-                if (temp_s7 < arg0->unk_04) {
-                    arg0->unk_04--;
+                if (temp_s7 < arg0->trainerCardDisplayState) {
+                    arg0->trainerCardDisplayState--;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x100) {
-                if (arg0->unk_04 < 2) {
-                    arg0->unk_04++;
+                if (arg0->trainerCardDisplayState < 2) {
+                    arg0->trainerCardDisplayState++;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x8000) {
-                switch (arg0->unk_04) {
+                switch (arg0->trainerCardDisplayState) {
                     case 0:
-                        arg0->unk_00 = 6;
+                        arg0->mode = 6;
                         Audio_PlaySoundEffectById(32);
                         break;
 
                     case 1:
-                        arg0->unk_00 = 9;
+                        arg0->mode = 9;
                         Audio_PlaySoundEffectById(28);
                         break;
 
                     case 2:
-                        arg0->unk_00 = 8;
+                        arg0->mode = 8;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                         break;
                 }
             } else if (gPlayer1Controller->buttonPressed & 0x4000) {
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
-                arg0->unk_04 = 2;
-                arg0->unk_00 = 8;
+                arg0->trainerCardDisplayState = 2;
+                arg0->mode = 8;
             }
-            EventBattle_DrawFrame(arg0->unk_04 + 6);
-        } while (arg0->unk_00 == 4);
+            EventBattle_DrawFrame(arg0->trainerCardDisplayState + 6);
+        } while (arg0->mode == 4);
     }
 }
 
-void EventBattle_RunSettingsPanel(unk_D_82305A28* arg0) {
+void EventBattle_RunSettingsPanel(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
 
@@ -1545,14 +1547,14 @@ void EventBattle_RunSettingsPanel(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_00 = 3;
+    arg0->mode = 3;
 }
 
-void EventBattle_ExitWithMode(unk_D_82305A28* arg0) {
+void EventBattle_ExitWithMode(EventBattleMenuState* arg0) {
     s16 i;
     s16 j;
 
-    Session_SetMode(10, gEventBattleModes[arg0->unk_02].unk_08, 0);
+    Session_SetMode(10, gEventBattleModes[arg0->cursorPosition].unk_08, 0);
 
     sTrainerCards[0].unk_0000 = 3;
     sTrainerCards[1].unk_0000 = 3;
@@ -1567,13 +1569,13 @@ void EventBattle_ExitWithMode(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    arg0->unk_06 = 18;
-    arg0->unk_00 = 0;
+    arg0->battleReadyState = 18;
+    arg0->mode = 0;
 }
 
-void EventBattle_RunSelect(unk_D_82305A28* arg0) {
-    while (arg0->unk_00 != 0) {
-        switch (arg0->unk_00) {
+void EventBattle_RunSelect(EventBattleMenuState* arg0) {
+    while (arg0->mode != 0) {
+        switch (arg0->mode) {
             case 1:
                 EventBattle_EnterModeSelect(arg0);
                 break;
@@ -1617,17 +1619,17 @@ void EventBattle_RunSelect(unk_D_82305A28* arg0) {
     }
 }
 
-void EventBattle_InitSelect(unk_D_82305A28* arg0, s16 arg1) {
+void EventBattle_InitSelect(EventBattleMenuState* arg0, s16 arg1) {
     s16 i;
 
     if (arg1 == -1) {
-        arg0->unk_00 = 1;
-        arg0->unk_02 = 2;
+        arg0->mode = 1;
+        arg0->cursorPosition = 2;
     } else {
-        arg0->unk_00 = 10;
-        arg0->unk_02 = arg1;
+        arg0->mode = 10;
+        arg0->cursorPosition = arg1;
     }
-    arg0->unk_06 = 18;
+    arg0->battleReadyState = 18;
 
     EventBattle_InitInfoBox(&sInfoBox, 56, 380);
     EventBattle_InitNoticeBanner(&sNonEligibleWarning, 270, 192);
@@ -1650,7 +1652,7 @@ void EventBattle_InitSelect(unk_D_82305A28* arg0, s16 arg1) {
     if (arg1 == -1) {
         for (i = 2; i >= 0; i--) {
             if (D_82305A50[i].displayEligibility != 0) {
-                arg0->unk_02 = i;
+                arg0->cursorPosition = i;
             }
         }
     }
@@ -1673,13 +1675,13 @@ s16 EventBattle_ShowSelect(void) {
     StageLoader_UpdateSegments();
     EventBattle_InitSelect(&D_82305A28, D_823059CC);
     EventBattle_RunSelect(&D_82305A28);
-    D_823059CC = D_82305A28.unk_02;
+    D_823059CC = D_82305A28.cursorPosition;
     StageLoader_WaitForRetrace();
     Gfx_FreeDisplayListBuffers();
 
     main_pool_pop_state('EVSL');
 
-    return D_82305A28.unk_06;
+    return D_82305A28.battleReadyState;
 }
 
 s32 EventBattle_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
