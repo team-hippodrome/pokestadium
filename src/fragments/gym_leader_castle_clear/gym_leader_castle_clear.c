@@ -35,16 +35,16 @@ typedef struct ClearTextKeyframe {
 } ClearTextKeyframe; // size = 0x14
 
 /**
- * Closing iris wipe drawn by GymLeaderCastleClear_DrawIrisWipe.
+ * Closing star wipe drawn by GymLeaderCastleClear_DrawStarWipe.
  * state: 0 = inactive, 1 = closing, 2 = closed (screen fully black).
  * timer counts down from duration; scale shrinks the starburst cutout from 7.0 to 0.0 as timer reaches 0.
  */
-typedef struct IrisWipe {
+typedef struct StarWipe {
     /* 0x00 */ s16 state;
     /* 0x02 */ s16 timer;
     /* 0x04 */ s16 duration;
     /* 0x08 */ f32 scale;
-} IrisWipe; // size = 0xC
+} StarWipe; // size = 0xC
 
 /**
  * Alpha ramp for the castle background image.
@@ -59,9 +59,9 @@ typedef struct BackgroundFade {
 // Shared `backgrounds` archive; file 14 is the 320x240 castle exterior image.
 static BinArchive* sBackgroundArchive;
 static u8* sBackgroundImage;
-// Screen sequence: 0 = waiting for stage fade-in, 1 = banner/CLEAR animations, 2 = iris wipe closing.
+// Screen sequence: 0 = waiting for stage fade-in, 1 = banner/CLEAR animations, 2 = star wipe closing.
 static s16 sSequenceState;
-// Frames counted after both animations finish; starts the background ramp at 1 and the iris wipe at 30.
+// Frames counted after both animations finish; starts the background ramp at 1 and the star wipe at 30.
 static s16 sHoldTimer;
 // Set from gSessionContext.inRound2; enables the "R-2" badge beside the banner.
 static s16 sShowRound2Badge;
@@ -76,7 +76,7 @@ static GraphNode* sClearTextGraphNode;
 static CastleClearObject sScreenObjects[2];
 static CastleClearObject* sBannerObject;
 static CastleClearObject* sClearTextObject;
-static IrisWipe sIrisWipe;
+static StarWipe sStarWipe;
 static BackgroundFade sBackgroundFade;
 
 // Two 200x14 quads forming the 200x28 "GYM LEADER CASTLE" banner (top and bottom halves of the lettering).
@@ -319,30 +319,30 @@ s32 GymLeaderCastleClear_GeoClearTextCallback(s32 arg0, GraphNode* arg1) {
 }
 
 /**
- * Resets the iris wipe to inactive (fully open).
+ * Resets the star wipe to inactive (fully open).
  */
-void GymLeaderCastleClear_InitIrisWipe(void) {
-    sIrisWipe.state = 0;
-    sIrisWipe.timer = 0;
-    sIrisWipe.scale = 7.0f;
+void GymLeaderCastleClear_InitStarWipe(void) {
+    sStarWipe.state = 0;
+    sStarWipe.timer = 0;
+    sStarWipe.scale = 7.0f;
 }
 
 /**
- * Advances a closing iris wipe by one frame; scale = 7.0 * timer / duration, and state becomes 2 at 0.
+ * Advances a closing star wipe by one frame; scale = 7.0 * timer / duration, and state becomes 2 at 0.
  */
-void GymLeaderCastleClear_UpdateIrisWipe(void) {
+void GymLeaderCastleClear_UpdateStarWipe(void) {
     s32 finished;
 
-    switch (sIrisWipe.state) {
+    switch (sStarWipe.state) {
         case 1:
-            sIrisWipe.timer--;
-            sIrisWipe.scale = (sIrisWipe.timer * 7.0f) / sIrisWipe.duration;
+            sStarWipe.timer--;
+            sStarWipe.scale = (sStarWipe.timer * 7.0f) / sStarWipe.duration;
 
-            finished = sIrisWipe.timer <= 0;
+            finished = sStarWipe.timer <= 0;
             if (finished) {
-                sIrisWipe.state = 2;
-                sIrisWipe.timer = sIrisWipe.duration = 0;
-                sIrisWipe.scale = 0.0f;
+                sStarWipe.state = 2;
+                sStarWipe.timer = sStarWipe.duration = 0;
+                sStarWipe.scale = 0.0f;
             }
             break;
 
@@ -353,12 +353,12 @@ void GymLeaderCastleClear_UpdateIrisWipe(void) {
 }
 
 /**
- * Draws the iris wipe. The cutout is the 64x64 I4 texture at gym_leader_castle_clear_gfx 0x2C00 (one quadrant
- * of a starburst), mirrored on both axes into a 128x128 starburst scaled by sIrisWipe.scale and centered on
+ * Draws the star wipe. The cutout is the 64x64 I4 texture at gym_leader_castle_clear_gfx 0x2C00 (one quadrant
+ * of a starburst), mirrored on both axes into a 128x128 starburst scaled by sStarWipe.scale and centered on
  * screen. The combiner makes the area outside the starburst opaque black, and fill rectangles blacken the
  * screen outside the textured rectangle. When closed, the whole screen is filled black.
  */
-void GymLeaderCastleClear_DrawIrisWipe(void) {
+void GymLeaderCastleClear_DrawStarWipe(void) {
     s16 clamped_y1;
     s16 y2;
     s16 clamped_x1;
@@ -370,20 +370,20 @@ void GymLeaderCastleClear_DrawIrisWipe(void) {
     s32 texture_step;
 
     Gfx_SetScissorRect(&gDisplayListHead, 0, 0, 640, 480);
-    if (sIrisWipe.state == 0) {
+    if (sStarWipe.state == 0) {
         return;
     }
 
-    if ((sIrisWipe.scale <= 0.0f) || (sIrisWipe.state == 2)) {
+    if ((sStarWipe.scale <= 0.0f) || (sStarWipe.state == 2)) {
         gSPDisplayList(gDisplayListHead++, D_8006F4C0);
         gDPSetFillColor(gDisplayListHead++, 0x00010001);
         gDPFillRectangle(gDisplayListHead++, 0, 0, 639, 479);
         return;
     }
 
-    texture_step = ROUND_MAX(1024.0f / sIrisWipe.scale);
-    width = ROUND_MAX(128.0f * sIrisWipe.scale);
-    height = ROUND_MAX(128.0f * sIrisWipe.scale);
+    texture_step = ROUND_MAX(1024.0f / sStarWipe.scale);
+    width = ROUND_MAX(128.0f * sStarWipe.scale);
+    height = ROUND_MAX(128.0f * sStarWipe.scale);
 
     x1 = (640 - width) / 2;
     y1 = (480 - height) / 2;
@@ -440,13 +440,13 @@ void GymLeaderCastleClear_DrawIrisWipe(void) {
 }
 
 /**
- * Starts closing the iris wipe over `duration` frames (ignored if duration is not positive).
+ * Starts closing the star wipe over `duration` frames (ignored if duration is not positive).
  */
-void GymLeaderCastleClear_StartIrisWipe(s16 duration) {
+void GymLeaderCastleClear_StartStarWipe(s16 duration) {
     if (duration > 0) {
-        sIrisWipe.state = 1;
-        sIrisWipe.timer = sIrisWipe.duration = duration;
-        sIrisWipe.scale = 7.0f;
+        sStarWipe.state = 1;
+        sStarWipe.timer = sStarWipe.duration = duration;
+        sStarWipe.scale = 7.0f;
     }
 }
 
@@ -621,12 +621,12 @@ void GymLeaderCastleClear_InitState(void) {
     }
     sRound2BadgeY = -100;
     sRound2BadgeX = sRound2BadgeY;
-    GymLeaderCastleClear_InitIrisWipe();
+    GymLeaderCastleClear_InitStarWipe();
     GymLeaderCastleClear_InitBackgroundFade();
 }
 
 /**
- * Draws one frame: castle background, banner and "CLEAR" models, optional "R-2" badge, then the iris wipe.
+ * Draws one frame: castle background, banner and "CLEAR" models, optional "R-2" badge, then the star wipe.
  */
 void GymLeaderCastleClear_Draw(void) {
     BgStage_DrawFrame();
@@ -635,14 +635,14 @@ void GymLeaderCastleClear_Draw(void) {
     if (sShowRound2Badge != 0) {
         GymLeaderCastleClear_DrawRound2Badge();
     }
-    GymLeaderCastleClear_DrawIrisWipe();
+    GymLeaderCastleClear_DrawStarWipe();
     BgStage_AdvanceFrame();
 }
 
 /**
  * Advances the screen sequence once per frame and returns 0 when the screen is finished.
  * After the stage fade-in completes, the banner slides in; once it settles the "CLEAR" text pops in.
- * When both are finished, the background ramps to full brightness, and 30 frames later the iris wipe closes
+ * When both are finished, the background ramps to full brightness, and 30 frames later the star wipe closes
  * over 15 frames with the clear color set to black. The screen ends when the wipe is fully closed.
  */
 s32 GymLeaderCastleClear_AdvanceState(void) {
@@ -673,7 +673,7 @@ s32 GymLeaderCastleClear_AdvanceState(void) {
                         if (sHoldTimer >= 30) {
                             sSequenceState = 2;
                             sHoldTimer = 0;
-                            GymLeaderCastleClear_StartIrisWipe(0xF);
+                            GymLeaderCastleClear_StartStarWipe(0xF);
                             StageContext_SetClearColor(1);
                         }
                         break;
@@ -682,7 +682,7 @@ s32 GymLeaderCastleClear_AdvanceState(void) {
             break;
 
         case 2:
-            if (sIrisWipe.state == 2) {
+            if (sStarWipe.state == 2) {
                 keep_running = 0;
             }
             break;
@@ -700,7 +700,7 @@ void GymLeaderCastleClear_RunLoop(void) {
 
     do {
         GymLeaderCastleClear_ReadInputs();
-        GymLeaderCastleClear_UpdateIrisWipe();
+        GymLeaderCastleClear_UpdateStarWipe();
         GymLeaderCastleClear_UpdateBackgroundFade();
         GymLeaderCastleClear_Draw();
     } while (GymLeaderCastleClear_AdvanceState() != 0);
