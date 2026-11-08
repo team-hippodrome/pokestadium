@@ -57,7 +57,7 @@
 -> - [0x165870, .rodata, fragments/minigame_sample8_viewer/minigame_sample8_viewer]
 
 # demo_scenes_169A40: the shared C compiles to the Japanese code unchanged. Its .bss is 0x190
-# bytes, as in US: the last 0x10 (ModeSettings D_86B10830 plus padding, at 0x86B10650) were
+# bytes, as in US: the last 0x10 (ModeSettings sMewtwoModeSettings plus padding, at 0x86B10650) were
 # the start of the porter's demo_scenes_16A0E0 bss, which therefore begins at 0x86B10660.
 - [0x1820E0, asm, fragments/demo_scenes/demo_scenes_169A40]
 -> - [0x1820E0, c, fragments/demo_scenes/demo_scenes_169A40]
@@ -363,8 +363,8 @@
 - [0x83D00, rodata, minigame_dispatch]
 -> - [0x83D00, .rodata, minigame_dispatch]
 
-# demo_scenes_161590: the Japanese build has no Diorama_DrawEndCaption (#if !defined(VERSION_JP)),
-# so the file is Diorama_DrawEndBackgroundTiles and Diorama_DrawFullscreenTexture only and has no
+# demo_scenes_161590: the Japanese build has no Diorama_DrawNoControllerWarning (#if !defined(VERSION_JP)),
+# so the file is Diorama_DrawTitleBackground and Diorama_DrawFullscreenTexture only and has no
 # .data (the caption scroll counter D_86B0BD50 is the whole US .data). The porter segment also held
 # demo_scenes_161E60 code from 0x17A6C0 (Completion_LightAngleCallbackA onward), which stays assembly.
 - [0x179F70, asm, fragments/demo_scenes/demo_scenes_161590]
@@ -441,7 +441,7 @@
 -> - [0x376D70, .rodata, fragments/battle_engine/battle_engine_intro]
 
 # demo_scenes_15FA60: built from C with the Japanese differences under VERSION_JP (A/B-only skip
-# in Diorama_UpdateStateMachine, no Diorama_DrawEndCaption call or string table, mode settings
+# in Diorama_UpdateStateMachine, no Diorama_DrawNoControllerWarning call or string table, mode settings
 # compared with 0x1FE). Its .rodata is 0x1865B0..0x1865E0 (see the demo_scenes cut above).
 - [0x178470, asm, fragments/demo_scenes/demo_scenes_15FA60]
 -> - [0x178470, c, fragments/demo_scenes/demo_scenes_15FA60]
