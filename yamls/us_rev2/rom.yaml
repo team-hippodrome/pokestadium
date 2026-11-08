@@ -653,19 +653,19 @@
     start: 0x108190
     vram: 0x87800000
     subsegments:
-    - [0x108190, textbin, fragments/widget_toolkit/widget_toolkit_header]
-    - [0x1081B0, c,       fragments/widget_toolkit/widget_toolkit]
-    - [0x10A4F0, c,       fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10AB60, c,       fragments/widget_toolkit/widget_toolkit_2]
-    - [0x10E4D0, .data,   fragments/widget_toolkit/widget_toolkit]
-    - [0x10E530, .data,   fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10E690, .data,   fragments/widget_toolkit/widget_toolkit_2]
-    - [0x117B70, .rodata, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x117B80, .rodata, fragments/widget_toolkit/widget_toolkit_2]
+    - [0x108190, textbin, fragments/minigame_hud/minigame_hud_header]
+    - [0x1081B0, c,       fragments/minigame_hud/minigame_hud]
+    - [0x10A4F0, c,       fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10AB60, c,       fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x10E4D0, .data,   fragments/minigame_hud/minigame_hud]
+    - [0x10E530, .data,   fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10E690, .data,   fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x117B70, .rodata, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x117B80, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
 
-    - {vram: 0x8780FA30, type:  .bss, name: fragments/widget_toolkit/widget_toolkit}
-    - {vram: 0x8780FAD0, type:  .bss, name: fragments/widget_toolkit/widget_toolkit_1}
-    - {vram: 0x8780FC50, type:  .bss, name: fragments/widget_toolkit/widget_toolkit_2}
+    - {vram: 0x8780FA30, type:  .bss, name: fragments/minigame_hud/minigame_hud}
+    - {vram: 0x8780FAD0, type:  .bss, name: fragments/minigame_hud/minigame_hud_countdown}
+    - {vram: 0x8780FC50, type:  .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 
   - name: fragment2_relocs
     type: code
@@ -1276,12 +1276,12 @@
     start: 0x1EAAC0
     vram: 0x88500000
     subsegments:
-    - [0x1EAAC0, textbin,   fragments/widget_tree/widget_tree_header]
-    - [0x1EAAE0, c,         fragments/widget_tree/widget_tree]
-    - [0x1F7A40, .data,     fragments/widget_tree/widget_tree]
-    - [0x1F7A70, .rodata,   fragments/widget_tree/widget_tree]
+    - [0x1EAAC0, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
+    - [0x1EAAE0, c,         fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F7A40, .data,     fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F7A70, .rodata,   fragments/lab_widget_tree/lab_widget_tree]
 
-    - {vram: 0x8850CFE0, type:  .bss, name: fragments/widget_tree/widget_tree}
+    - {vram: 0x8850CFE0, type:  .bss, name: fragments/lab_widget_tree/lab_widget_tree}
 
   - name: fragment26_relocs
     type: code

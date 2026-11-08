@@ -516,17 +516,17 @@
     start: 0x1087A0
     vram: 0x87800000
     subsegments:
-    - [0x1087A0, textbin, fragments/widget_toolkit/widget_toolkit_header]
-    - [0x1087C0, c,       fragments/widget_toolkit/widget_toolkit]
-    - [0x10AB00, asm, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10B170, asm, fragments/widget_toolkit/widget_toolkit_2]
-    - [0x10EAE0, .data,   fragments/widget_toolkit/widget_toolkit]
-    - [0x10EB40, data, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10ECA0, data, fragments/widget_toolkit/widget_toolkit_2]
-    - [0x118190, rodata, fragments/widget_toolkit/widget_toolkit_2]
-    - {vram: 0x8780FA30, type:  .bss, name: fragments/widget_toolkit/widget_toolkit}
-    - {vram: 0x8780FAD0, type:  bss, name: fragments/widget_toolkit/widget_toolkit_1}
-    - {vram: 0x8780FC50, type:  bss, name: fragments/widget_toolkit/widget_toolkit_2}
+    - [0x1087A0, textbin, fragments/minigame_hud/minigame_hud_header]
+    - [0x1087C0, c,       fragments/minigame_hud/minigame_hud]
+    - [0x10AB00, asm, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10B170, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x10EAE0, .data,   fragments/minigame_hud/minigame_hud]
+    - [0x10EB40, data, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10ECA0, data, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x118190, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+    - {vram: 0x8780FA30, type:  .bss, name: fragments/minigame_hud/minigame_hud}
+    - {vram: 0x8780FAD0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+    - {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
     type: code
     bss_size: 0x0
@@ -1077,10 +1077,10 @@
     start: 0x1EB0F0
     vram: 0x88500000
     subsegments:
-    - [0x1EB0F0, textbin,   fragments/widget_tree/widget_tree_header]
-    - [0x1EB110, c,         fragments/widget_tree/widget_tree]
-    - [0x1F8070, .data,     fragments/widget_tree/widget_tree]
-    - [0x1F80A0, .rodata,   fragments/widget_tree/widget_tree]
+    - [0x1EB0F0, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
+    - [0x1EB110, c,         fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F8070, .data,     fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F80A0, .rodata,   fragments/lab_widget_tree/lab_widget_tree]
   - name: fragment26_relocs
     type: code
     bss_size: 0x0
