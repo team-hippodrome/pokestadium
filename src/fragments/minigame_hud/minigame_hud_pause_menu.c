@@ -1,5 +1,5 @@
 #include "global.h"
-#include "widget_toolkit.h"
+#include "minigame_hud.h"
 #include "src/audio_sfx.h"
 #include "src/audio_commands_category2.h"
 #include "src/audio_loop_point.h"
