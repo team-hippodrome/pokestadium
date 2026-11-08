@@ -1,5 +1,5 @@
 #include "global.h"
-#include "widget_toolkit.h"
+#include "minigame_hud.h"
 #include "src/gfx_buffer.h"
 #include "src/geo_node.h"
 #include "src/model_renderer.h"
@@ -106,7 +106,7 @@ void Widget_CountdownInit(void) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/widget_toolkit/widget_toolkit_1/Widget_CountdownUpdate.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/minigame_hud/minigame_hud_countdown/Widget_CountdownUpdate.s")
 #else
 void Widget_CountdownUpdate(void) {
     s32 i;

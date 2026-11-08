@@ -13,7 +13,7 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 #include "src/util.h"
-#include "fragments/widget_tree/widget_tree.h"
+#include "fragments/lab_widget_tree/lab_widget_tree.h"
 #include "fragments/pokemon_lab_support/pokemon_lab_support.h"
 
 static char** D_8861C510;
