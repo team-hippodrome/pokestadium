@@ -9,7 +9,7 @@
 #include "src/memory.h"
 #include "src/controller.h"
 
-u8 D_80075680[3] = { 1, 15, 30 };
+u8 gEventBattleSettings[3] = { 1, 15, 30 };
 static s16 D_80075684 = 0;
 
 void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {
@@ -73,43 +73,47 @@ void Team_ResetOpponentHistory(void) {
     gSessionContext.continueCount = 0;
 }
 
-TeamRoster* Trainer_Create(s32 arg0, s16 arg1, char* arg2, char* arg3) {
+/* Allocate a trainer slot and initialize its controller, name, and player label.
+ * The player label is drawn by BattlePrep_DrawTrainerStatusIcon.
+ * //@src/fragments/battle_prep/battle_prep_394120.c
+ */
+TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* player_label) {
     s32 i;
-    ExtendedRosterInfo* sp20;
-    TeamRoster* sp1C = NULL;
+    ExtendedRosterInfo* roster_info;
+    TeamRoster* roster = NULL;
 
     for (i = 0; i < 4; i++) {
         if ((gSessionContext.trainerSlots + i)->isHuman == 0) {
-            sp1C = &gSessionContext.trainerSlots[i];
-            sp20 = &gSessionContext.rosterInfo[i];
+            roster = &gSessionContext.trainerSlots[i];
+            roster_info = &gSessionContext.rosterInfo[i];
             break;
         }
     }
 
-    if (sp1C != NULL) {
-        if (arg0 == -1) {
-            sp1C->isHuman = 3;
-            sp1C->controllerPort = 1;
-            sp1C->controller = &gControllers[0];
+    if (roster != NULL) {
+        if (port == -1) {
+            roster->isHuman = 3;
+            roster->controllerPort = 1;
+            roster->controller = &gControllers[0];
         } else {
-            sp1C->isHuman = 1;
-            sp1C->controllerPort = arg0;
-            sp1C->controller = &gControllers[arg0];
+            roster->isHuman = 1;
+            roster->controllerPort = port;
+            roster->controller = &gControllers[port];
         }
 
-        sp1C->unk_018 = 0;
-        sp1C->rosterInfo = sp20;
-        sp1C->numberOfPokemonBrought = 0;
+        roster->unk_018 = 0;
+        roster->rosterInfo = roster_info;
+        roster->numberOfPokemonBrought = 0;
 
-        sp20->unk_000 = 0;
-        sp20->numberOfPokemonCanBePicked = 0;
-        sp20->unk_003 = 1;
+        roster_info->unk_000 = 0;
+        roster_info->numberOfPokemonCanBePicked = 0;
+        roster_info->unk_003 = 1;
 
-        HAL_Strcpy(sp1C->trainerName, arg2);
-        HAL_Strcpy(sp20->unk_014, arg2);
-        HAL_Strcpy(sp20->unk_220, arg3);
+        HAL_Strcpy(roster->trainerName, trainer_name);
+        HAL_Strcpy(roster_info->unk_014, trainer_name);
+        HAL_Strcpy(roster_info->unk_220, player_label);
     }
-    return sp1C;
+    return roster;
 }
 
 void Team_AddTrainer(s32 arg0, TeamRoster* arg1) {

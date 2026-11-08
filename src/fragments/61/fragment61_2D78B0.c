@@ -121,11 +121,11 @@ void TeamSelection_DrawAnimatedGoldCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 240, 212, 104, 255);
 
-    Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, BOTTOM_LEFT_SECTION_CORNER, 0x10, 0);
-    Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, TOP_LEFT_SECTION_CORNER, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, BOTTOM_RIGHT_SECTION_CORNER, 0x10, 0);
+    Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
     Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10,
-                       TOP_RIGHT_SECTION_CORNER, 0x10, 0);
+                       gTopRightSelectionCorner, 0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -255,8 +255,8 @@ void TeamSelection_DrawTexturedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
 void TeamSelection_DrawHeaderBackdrop(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, D_2006C00, 0x30, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, D_2007500, 0x30, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, gPokeBallIconTop, 0x30, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, gPokeBallIconBottom, 0x30, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
