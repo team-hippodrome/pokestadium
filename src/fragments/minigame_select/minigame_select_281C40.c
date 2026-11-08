@@ -1,5 +1,5 @@
 #include "minigame_select.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "save_data.h"
 
 void KidsClub_LoadDifficultySetting(void) {

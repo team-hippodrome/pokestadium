@@ -6,7 +6,7 @@
 #include "src/input.h"
 // #include "src/jpeg_stream.h"
 #include "src/controller.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 
 s16 minigameState = 0;
 s16 minigameInputLock = 0;
