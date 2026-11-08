@@ -1,5 +1,5 @@
 #include "credits.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 
 u16 D_86A05B50 = 0;
 

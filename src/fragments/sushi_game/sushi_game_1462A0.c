@@ -6,7 +6,7 @@
 #include "src/model_renderer.h"
 #include "src/audio_commands_category2.h"
 #include "src/matrix.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/fragments/minigame_actor_framework/minigame_actor_framework.h"
 #include "src/fragments/particle_math/particle_math.h"
 #include "src/memmap.h"

@@ -5,7 +5,7 @@
 #include "src/audio_commands_category2.h"
 #include "src/gfx_buffer.h"
 #include "src/matrix.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/memory.h"
 
 static const u32 D_868074B0[] = { 0xA4A2A4AC, 0xA4EA0000 }; // "あがり"
