@@ -87,7 +87,7 @@ void N64Logo_ScanGbSavePorts(void) {
 /**
  * Boot logo sequence, loaded by State_N64LogoIntro and State_FastN64Logo. //@src/game_state.c
  * Fades in the Nintendo 64 logo, applies the saved sound options (bit 0 = mono output,
- * bit 1 = Pokemon voices off, as in Options_ApplySoundSettings), plays SFX_N64_LOGO, scans the
+ * bit 1 = Announcer voice off, as in Options_ApplySoundSettings), plays SFX_N64_LOGO, scans the
  * Transfer Paks while holding the logo for at least 1 second from the sound, then fades out.
  * Returns 2.
  */
