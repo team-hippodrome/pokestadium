@@ -19,7 +19,7 @@ s32 GymLeaderCastleClear_GeoBannerCallback(s32, GraphNode*);
 /**
  * One keyframe of the "CLEAR" text pop-in, read from sClearTextKeyframes.
  * duration is the frame count used to interpolate from this keyframe to the next; -1 marks the final keyframe.
- * scale is the uniform model scale. prim*/env* are the RGB primitive/environment colors fed to the
+ * scale is the uniform model scale. The prim and env fields are the RGB primitive/environment colors fed to the
  * G_CC_BLENDPEDECALA combiner in sClearTextDL (bright texels take the primitive color, dark texels the
  * environment color).
  */
