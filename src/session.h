@@ -4,7 +4,7 @@
 #include "global.h"
 #include "game_state.h"
 
-extern u8 D_80075680[3];
+extern u8 sEventBattleSettings[3];
 
 void Team_ClearTrainerSlot(BattleSessionTeams* arg0);
 void Session_SetMode(s32 arg0, s32 arg1, s32 arg2);

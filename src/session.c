@@ -9,7 +9,7 @@
 #include "src/memory.h"
 #include "src/controller.h"
 
-u8 D_80075680[3] = { 1, 15, 30 };
+u8 sEventBattleSettings[3] = { 1, 15, 30 };
 static s16 D_80075684 = 0;
 
 void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {

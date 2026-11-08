@@ -19,12 +19,12 @@
 static char** sEventBattleText;
 static char** sPokemonDetailText;
 static unk_D_82305A28 D_82305A28;
-static DescriptionPanel D_82305A30;
-static DescriptionPanel D_82305A38;
-static unk_D_82305A40 D_82305A40;
+static DescriptionPanel sInfoBox;
+static DescriptionPanel sNonEligibleWarning;
+static SettingsWindow sSettingsPanel;
 static EventBattleSelectionOption D_82305A50[6];
-static unk_D_82305AF8 D_82305AF8[2];
-static EventBattleOptionLabel D_8230F528[3];
+static unk_D_82305AF8 sTrainerCards[2];
+static EventBattleCupOption D_8230F528[3];
 
 static EventBattleModeEntry gEventBattleModes[] = {
     {
@@ -415,6 +415,7 @@ void EventBattle_InitInfoBox(DescriptionPanel* panel, s16 x, s16 y) {
     panel->y = y;
 }
 
+// better name: EventBattle_DrawSelectionOption
 void EventBattle_DrawRuleCard(EventBattleSelectionOption* arg0) {
     s16 temp_s1;
     s16 temp_s2;
@@ -517,8 +518,8 @@ void EventBattle_InitRuleCard(EventBattleSelectionOption* arg0, s16 arg1, s16 ar
     if (arg5 != 0) {
         arg0->unk_14 = D_8230597C[arg5 - 1].unk_00;
         arg0->unk_16 = D_8230597C[arg5 - 1].unk_02;
-        arg0->displayEligibility = EventBattle_CheckTeamLegality(&D_82305AF8[0], arg5);
-        arg0->displayEligibility &= EventBattle_CheckTeamLegality(&D_82305AF8[1], arg5);
+        arg0->displayEligibility = EventBattle_CheckTeamLegality(&sTrainerCards[0], arg5);
+        arg0->displayEligibility &= EventBattle_CheckTeamLegality(&sTrainerCards[1], arg5);
     }
 }
 
@@ -775,16 +776,17 @@ u8 EventBattle_ValidateTeamForRule(unk_D_82305AF8* arg0, s16 arg1) {
     return EventBattle_CheckTeamLegality(arg0, arg1);
 }
 
-void EventBattle_DrawNoticeBanner(DescriptionPanel* arg0) {
-    s16 temp_s3;
-    s16 temp_s2;
+// better name: EventBattle_DrawNonEligiblePartyWarning
+void EventBattle_DrawNoticeBanner(DescriptionPanel* warning) {
+    s16 x;
+    s16 height;
     s16 i;
-    s16 sp58;
+    s16 y;
 
-    if (arg0->openingProgress > 0) {
-        temp_s2 = arg0->openingProgress / 4;
-        temp_s3 = arg0->x;
-        sp58 = arg0->y + ((56 - arg0->openingProgress) / 2);
+    if (warning->openingProgress > 0) {
+        height = warning->openingProgress / 4;
+        x = warning->x;
+        y = warning->y + ((56 - warning->openingProgress) / 2);
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -793,18 +795,18 @@ void EventBattle_DrawNoticeBanner(DescriptionPanel* arg0) {
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
 
-            Gfx_DrawTexturedRectClipped(temp_s3, sp58 + (i * temp_s2), 100, temp_s2, 0, 0, 0x400, 0x3800 / temp_s2, 0);
+            Gfx_DrawTexturedRectClipped(x, y + (i * height), 100, height, 0, 0, 0x400, 0x3800 / height, 0);
         }
 
-        if ((arg0->unk_01 == 0) && (arg0->openingProgress == 56)) {
-            EventBattle_DrawSlicedFrame(112, sp58 + 8, 416, 40, 0, 0, 0, 0x96);
+        if ((warning->partiesNotEligible == 0) && (warning->openingProgress == 56)) {
+            EventBattle_DrawSlicedFrame(112, y + 8, 416, 40, 0, 0, 0, 0x96);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
             Font_BeginTranslucentTextRendering();
             Font_SetActive(16, 0);
             Gfx_SetEnvColor(0xFF, 0x50, 0x64, 0xFF);
-            Font_Printf(144, sp58 + 14, Text_GetString(NULL, 0, sEventBattleText, 10));
+            Font_Printf(144, y + 14, Text_GetString(NULL, 0, sEventBattleText, 10));
             Font_EndTexturedTextRendering();
         } else {
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -817,7 +819,7 @@ void EventBattle_UpdateNoticeBanner(DescriptionPanel* arg0) {
         case 1:
             arg0->openingProgress += 7;
             if (arg0->openingProgress == 56) {
-                if (arg0->unk_01 == 0) {
+                if (arg0->partiesNotEligible == 0) {
                     Audio_PlaySoundEffectById(SFX_MENU_ERROR);
                 }
                 arg0->expanding = 0;
@@ -833,255 +835,262 @@ void EventBattle_UpdateNoticeBanner(DescriptionPanel* arg0) {
     }
 }
 
-void EventBattle_InitNoticeBanner(DescriptionPanel* arg0, s16 arg1, s16 arg2) {
-    arg0->expanding = 0;
-    arg0->openingProgress = 0;
-    arg0->x = arg1;
-    arg0->y = arg2;
+void EventBattle_InitNoticeBanner(DescriptionPanel* panel, s16 x, s16 arg2) {
+    panel->expanding = 0;
+    panel->openingProgress = 0;
+    panel->x = x;
+    panel->y = arg2;
 }
 
-void EventBattle_ShowNoticeBanner(DescriptionPanel* arg0, s32 arg1) {
-    arg0->unk_01 = arg1;
-    arg0->expanding = 1;
+// Better name: EventBattle_SetNoticeBannerVisibility
+void EventBattle_ShowNoticeBanner(DescriptionPanel* panel, s32 eligible_parties) {
+    panel->partiesNotEligible = eligible_parties;
+    panel->expanding = 1;
 }
 
-void EventBattle_DrawOptionLabel(EventBattleOptionLabel* arg0) {
+void EventBattle_DrawOptionLabel(EventBattleCupOption* option) {
     UNUSED s32 pad;
-    s16 sp3A;
-    s16 sp38;
-    s16 sp36;
+    s16 opening_progress;
+    s16 x;
+    s16 y;
 
-    if (arg0->height >= 10) {
-        sp3A = arg0->height;
-        sp38 = arg0->x;
-        sp36 = arg0->y + ((48 - sp3A) / 2);
-        EventBattle_DrawPanelFrame(sp38, sp36, 152, sp3A);
+    if (option->openingProgress >= 10) {
+        opening_progress = option->openingProgress;
+        x = option->x;
+        y = option->y + ((48 - opening_progress) / 2);
+        EventBattle_DrawPanelFrame(x, y, 152, opening_progress);
 
         gSPDisplayList(gDisplayListHead++, D_8006F470);
 
-        Gfx_FillRectRgb(sp38 + 4, sp36 + 4, 144, sp3A - 8, 0x3C, 0x3C, 0xA0);
+        Gfx_FillRectRgb(x + 4, y + 4, 144, opening_progress - 8, 0x3C, 0x3C, 0xA0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-        if (arg0->height == 48) {
+        if (option->openingProgress == 48) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(16, 0);
-            Font_Printf((sp38 - ((s16)Font_MeasureTextExtent(16, 0, arg0->text) / 2)) + 76, sp36 + 11,
-                        arg0->text);
+            Font_Printf((x - ((s16)Font_MeasureTextExtent(16, 0, option->text) / 2)) + 76, y + 11,
+                        option->text);
             Font_EndTexturedTextRendering();
         }
     }
 }
 
-void EventBattle_UpdateOptionLabel(EventBattleOptionLabel* arg0) {
-    switch (arg0->animState) {
+void EventBattle_UpdateOptionLabel(EventBattleCupOption* option) {
+    switch (option->animState) {
         case 1:
-            arg0->height += 6;
-            if (arg0->height == 48) {
-                arg0->animState = 0;
+            option->openingProgress += 6;
+            if (option->openingProgress == 48) {
+                option->animState = 0;
             }
             break;
 
         case 2:
-            arg0->height -= 6;
-            if (arg0->height == 6) {
-                arg0->animState = 0;
+            option->openingProgress -= 6;
+            if (option->openingProgress == 6) {
+                option->animState = 0;
             }
             break;
     }
 }
 
-void EventBattle_InitOptionLabel(EventBattleOptionLabel* arg0, s16 arg1, s16 arg2, s8* arg3) {
-    arg0->animState = 0;
-    arg0->height = 6;
-    arg0->x = arg1;
-    arg0->y = arg2;
-    arg0->text = arg3;
+void EventBattle_InitOptionLabel(EventBattleCupOption* option, s16 x, s16 y, s8* text) {
+    option->animState = 0;
+    option->openingProgress = 6;
+    option->x = x;
+    option->y = y;
+    option->text = text;
 }
 
-void EventBattle_DrawSettingLine(unk_D_82305A40* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    char sp30[64];
+void EventBattle_DrawSettingLine(SettingsWindow* settings_window, s16 option_index, s16 option_label, s16 current_setting, s16 current_setting_format) {
+    char text[64];
     UNUSED s32 pad;
 
-    if (((arg1 == 1) || (arg1 == 2)) && (arg0->unk_01 == 0)) {
-        Gfx_SetEnvColor(0x50, 0x50, 0xB4, 0xFF);
-    } else if (arg1 == arg0->unk_0C) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+    if (((option_index == 1) || (option_index == 2)) && (settings_window->timeLimitsOn == 0)) {
+        Gfx_SetEnvColor(0x50, 0x50, 0xB4, 0xFF); // #5050B4
+    } else if (option_index == settings_window->cursorPosition) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
     } else {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
     }
 
-    Font_Printf(arg0->unk_08 + 52, arg0->unk_0A + arg1 * 33 + 47, Text_GetString(NULL, 0, sEventBattleText, arg2));
+    Font_Printf(settings_window->x + 52, settings_window->y + option_index * 33 + 47, Text_GetString(NULL, 0, sEventBattleText, option_label));
 
-    if (arg3 >= 0) {
-        Text_SetNumberToken(2, arg4);
-        Text_GetString(sp30, sizeof(sp30), sEventBattleText, arg3);
-        Font_Printf((arg0->unk_08 - (Font_MeasureTextExtent(0, 0, sp30) / 2)) + 344,
-                    arg0->unk_0A + arg1 * 33 + 47, sp30, arg4);
+    if (current_setting >= 0) {
+        Text_SetNumberToken(2, current_setting_format);
+        Text_GetString(text, sizeof(text), sEventBattleText, current_setting);
+        Font_Printf((settings_window->x - (Font_MeasureTextExtent(0, 0, text) / 2)) + 344,
+                    settings_window->y + option_index * 33 + 47, text, current_setting_format);
     }
 }
 
-void EventBattle_DrawSettingBar(s16 arg0, s16 arg1, s16 arg2) {
-    if (arg2 != 0) {
-        Gfx_SetEnvColor(0x82, 0x1E, 0x1E, 0xFF);
+void EventBattle_DrawSettingBar(s16 x, s16 y, s16 time_limits_on) {
+    if (time_limits_on != 0) {
+        Gfx_SetEnvColor(0x82, 0x1E, 0x1E, 0xFF); // #821E1E
     } else {
-        Gfx_SetEnvColor(0x32, 0x32, 0x96, 0xFF);
+        Gfx_SetEnvColor(0x32, 0x32, 0x96, 0xFF); // #323296
     }
 
-    Gfx_DrawTextureI4(arg0, arg1, 16, 28, D_30242C0, 16, 0);
-    Gfx_DrawTextureI4(arg0 + 104, arg1, 16, 28, D_30243A0, 16, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 16, arg1, 88, 28, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTextureI4(x, y, 16, 28, D_30242C0, 16, 0);
+    Gfx_DrawTextureI4(x + 104, y, 16, 28, D_30243A0, 16, 0);
+    Gfx_DrawTexturedRectClipped(x + 16, y, 88, 28, 0, 0, 0, 0x400, 0);
 }
 
-void EventBattle_DrawSpinnerArrows(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    static s16 D_823059C8 = 0;
+// Better name: EventBattle_DrawOptionArrows
+/*
+    Draws the option arrows for Battle Time and Move Selection Time when they are hovered over
+*/
+void EventBattle_DrawSpinnerArrows(s16 x, s16 y, s16 cursor_position, s16 option_setting) {
+    static s16 sOptionArrowPhase = 0;
 
-    s16 sp36 = SINS(D_823059C8) * 2;
+    s16 phase = SINS(sOptionArrowPhase) * 2;
 
-    if (arg2 == 1) {
-        if (arg3 >= 6) {
-            Gfx_DrawTextureRgba16(arg0 - sp36, arg1 + (arg2 * 33), 20, 32, D_302FBC0, 20, 0);
+    if (cursor_position == 1) {
+        // Draw left arrow for Battle Time
+        if (option_setting >= 6) {
+            Gfx_DrawTextureRgba16(x - phase, y + (cursor_position * 33), 20, 32, D_302FBC0, 20, 0);
         }
-
-        if (arg3 < 90) {
-            Gfx_DrawTextureRgba16(arg0 + sp36 + 148, arg1 + (arg2 * 33), 20, 32, D_30300C0, 20, 0);
+        // Draw right arrow for Battle Time
+        if (option_setting < 90) {
+            Gfx_DrawTextureRgba16(x + phase + 148, y + (cursor_position * 33), 20, 32, D_30300C0, 20, 0);
         }
     } else {
-        if (arg3 >= 11) {
-            Gfx_DrawTextureRgba16(arg0 - sp36, arg1 + (arg2 * 33), 20, 32, D_302FBC0, 20, 0);
+        // Draw left arrow for Move Selection Time
+        if (option_setting >= 11) {
+            Gfx_DrawTextureRgba16(x - phase, y + (cursor_position * 33), 20, 32, D_302FBC0, 20, 0);
         }
-
-        if (arg3 < 90) {
-            Gfx_DrawTextureRgba16(arg0 + sp36 + 148, arg1 + (arg2 * 33), 20, 32, D_30300C0, 20, 0);
+        // Draw right arrow for Move Selection Time
+        if (option_setting < 90) {
+            Gfx_DrawTextureRgba16(x + phase + 148, y + (cursor_position * 33), 20, 32, D_30300C0, 20, 0);
         }
     }
-    D_823059C8 += 0x2000;
+    sOptionArrowPhase += 0x2000;
 }
 
-void EventBattle_DrawSettingsPanel(unk_D_82305A40* arg0) {
-    char* sp54;
-    s16 var_a3;
-    s16 temp_s1;
-    s16 temp_s2;
+void EventBattle_DrawSettingsPanel(SettingsWindow* settings_window) {
+    char* title_string;
+    s16 time_limits_index;
+    s16 y;
+    s16 x;
     UNUSED s16 pad;
-    s16 sp4A;
+    s16 opening_progress;
 
-    if (arg0->unk_06 >= 15) {
-        sp4A = arg0->unk_06;
-        temp_s2 = arg0->unk_08;
-        temp_s1 = arg0->unk_0A + ((186 - sp4A) / 2);
+    if (settings_window->openingProgress >= 15) {
+        opening_progress = settings_window->openingProgress;
+        x = settings_window->x;
+        y = settings_window->y + ((186 - opening_progress) / 2);
 
-        Ui_DrawBorderedPanelNoFill(temp_s2, temp_s1, 446, sp4A);
+        Ui_DrawBorderedPanelNoFill(x, y, 446, opening_progress);
 
-        if (sp4A == 186) {
-            EventBattle_DrawSmallFrame(temp_s2 + 7, temp_s1 + 7, 432, 32, 0x82, 0x1E, 0x1E, 0xFF);
-            EventBattle_DrawSmallFrame(temp_s2 + 7, temp_s1 + 39, 432, 140, 0x1E, 0x1E, 0x64, 0xFF);
-            Ui_DrawAnimatedTextureMarker(temp_s2 + 14, temp_s1 + (arg0->unk_0C * 33) + 49);
+        if (opening_progress == 186) {
+            EventBattle_DrawSmallFrame(x + 7, y + 7, 432, 32, 0x82, 0x1E, 0x1E, 0xFF); // #821E1E
+            EventBattle_DrawSmallFrame(x + 7, y + 39, 432, 140, 0x1E, 0x1E, 0x64, 0xFF); // #1E1E64
+            Ui_DrawAnimatedTextureMarker(x + 14, y + (settings_window->cursorPosition * 33) + 49);
 
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            if (arg0->unk_01 == 1) {
-                if (arg0->unk_0C == 1) {
-                    EventBattle_DrawSpinnerArrows(temp_s2 + 260, temp_s1 + 45, arg0->unk_0C, arg0->unk_02);
+            if (settings_window->timeLimitsOn == 1) {
+                if (settings_window->cursorPosition == 1) {
+                    EventBattle_DrawSpinnerArrows(x + 260, y + 45, settings_window->cursorPosition, settings_window->battleTime);
                 }
 
-                if (arg0->unk_0C == 2) {
-                    EventBattle_DrawSpinnerArrows(temp_s2 + 260, temp_s1 + 45, arg0->unk_0C, arg0->unk_04);
+                if (settings_window->cursorPosition == 2) {
+                    EventBattle_DrawSpinnerArrows(x + 260, y + 45, settings_window->cursorPosition, settings_window->moveSelectionTime);
                 }
             }
 
-            EventBattle_DrawSettingBar(temp_s2 + 284, temp_s1 + 46, 1);
-            EventBattle_DrawSettingBar(temp_s2 + 284, temp_s1 + 79, arg0->unk_01);
-            EventBattle_DrawSettingBar(temp_s2 + 284, temp_s1 + 112, arg0->unk_01);
+            EventBattle_DrawSettingBar(x + 284, y + 46, 1);
+            EventBattle_DrawSettingBar(x + 284, y + 79, settings_window->timeLimitsOn);
+            EventBattle_DrawSettingBar(x + 284, y + 112, settings_window->timeLimitsOn);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
             Font_BeginTranslucentTextRendering();
             Font_SetActive(16, 0);
-            sp54 = Text_GetString(NULL, 0, sEventBattleText, 11);
-            Font_Printf((temp_s2 - (Font_MeasureTextExtent(16, 0, sp54) / 2)) + 223, temp_s1 + 10, sp54);
+            title_string = Text_GetString(NULL, 0, sEventBattleText, 11);
+            Font_Printf((x - (Font_MeasureTextExtent(16, 0, title_string) / 2)) + 223, y + 10, title_string);
 
-            if (arg0->unk_01 == 1) {
-                var_a3 = 12;
+            if (settings_window->timeLimitsOn == 1) {
+                time_limits_index = 12;
             } else {
-                var_a3 = 13;
+                time_limits_index = 13;
             }
 
-            EventBattle_DrawSettingLine(arg0, 0, 14, var_a3, 0);
-            EventBattle_DrawSettingLine(arg0, 1, 16, 15, arg0->unk_02);
-            EventBattle_DrawSettingLine(arg0, 2, 17, 18, arg0->unk_04);
-            EventBattle_DrawSettingLine(arg0, 3, 19, -1, 0);
+            EventBattle_DrawSettingLine(settings_window, 0, 14, time_limits_index, 0);
+            EventBattle_DrawSettingLine(settings_window, 1, 16, 15, settings_window->battleTime);
+            EventBattle_DrawSettingLine(settings_window, 2, 17, 18, settings_window->moveSelectionTime);
+            EventBattle_DrawSettingLine(settings_window, 3, 19, -1, 0);
             Font_EndTexturedTextRendering();
         } else {
-            EventBattle_DrawSmallFrame(temp_s2 + 7, temp_s1 + 7, 432, sp4A - 14, 0x1E, 0x1E, 0x64, 0xFF);
+            EventBattle_DrawSmallFrame(x + 7, y + 7, 432, opening_progress - 14, 0x1E, 0x1E, 0x64, 0xFF); // #1E1E64
         }
     }
 }
 
-void EventBattle_UpdateSettingsPanel(unk_D_82305A40* arg0) {
-    s32 temp_v0_2;
+void EventBattle_UpdateSettingsPanel(SettingsWindow* settings_window) {
+    s32 held_input;
 
-    switch (arg0->unk_00) {
+    switch (settings_window->state) {
         case 1:
-            temp_v0_2 = Input_GetRepeatedDPad();
-            if ((temp_v0_2 == 0x200) && (arg0->unk_01 == 1)) {
-                if (arg0->unk_0C == 1) {
-                    if (arg0->unk_02 >= 6) {
-                        arg0->unk_02 -= 5;
+            held_input = Input_GetRepeatedDPad();
+            if ((held_input == BTN_DLEFT) && (settings_window->timeLimitsOn == 1)) {
+                if (settings_window->cursorPosition == 1) {
+                    if (settings_window->battleTime >= 6) {
+                        settings_window->battleTime -= 5;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
                 }
 
-                if (arg0->unk_0C == 2) {
-                    if (arg0->unk_04 >= 11) {
-                        arg0->unk_04 -= 10;
+                if (settings_window->cursorPosition == 2) {
+                    if (settings_window->moveSelectionTime >= 11) {
+                        settings_window->moveSelectionTime -= 10;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
                 }
-            } else if ((temp_v0_2 == 0x100) && (arg0->unk_01 == 1)) {
-                if (arg0->unk_0C == 1) {
-                    if (arg0->unk_02 < 90) {
-                        arg0->unk_02 += 5;
+            } else if ((held_input == BTN_DLEFT) && (settings_window->timeLimitsOn == 1)) {
+                if (settings_window->cursorPosition == 1) {
+                    if (settings_window->battleTime < 90) {
+                        settings_window->battleTime += 5;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
                 }
 
-                if (arg0->unk_0C == 2) {
-                    if (arg0->unk_04 < 90) {
-                        arg0->unk_04 += 10;
+                if (settings_window->cursorPosition == 2) {
+                    if (settings_window->moveSelectionTime < 90) {
+                        settings_window->moveSelectionTime += 10;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
                 }
             } else {
-                if (gPlayer1Controller->buttonPressed & 0x800) {
-                    if (arg0->unk_0C > 0) {
-                        arg0->unk_0C--;
+                if (gPlayer1Controller->buttonPressed & BTN_DUP) {
+                    if (settings_window->cursorPosition > 0) {
+                        settings_window->cursorPosition--;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
-                } else if (gPlayer1Controller->buttonPressed & 0x400) {
-                    if (arg0->unk_0C < 3) {
-                        arg0->unk_0C++;
+                } else if (gPlayer1Controller->buttonPressed & BTN_DDOWN) {
+                    if (settings_window->cursorPosition < 3) {
+                        settings_window->cursorPosition++;
                         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                     }
-                } else if (gPlayer1Controller->buttonPressed & 0x8000) {
-                    if (arg0->unk_0C == 0) {
-                        arg0->unk_01 ^= 1;
+                } else if (gPlayer1Controller->buttonPressed & BTN_A) {
+                    if (settings_window->cursorPosition == 0) {
+                        settings_window->timeLimitsOn ^= 1;
                         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
                     }
 
-                    if (arg0->unk_0C == 3) {
-                        D_80075680[0] = arg0->unk_01;
-                        D_80075680[1] = arg0->unk_02;
-                        D_80075680[2] = arg0->unk_04;
-                        arg0->unk_00 = 3;
-                        Audio_PlaySoundEffectById(29);
+                    if (settings_window->cursorPosition == 3) {
+                        sEventBattleSettings[0] = settings_window->timeLimitsOn;
+                        sEventBattleSettings[1] = settings_window->battleTime;
+                        sEventBattleSettings[2] = settings_window->moveSelectionTime;
+                        settings_window->state = 3;
+                        Audio_PlaySoundEffectById(SFX_BIG_CONFIRM);
                     }
                 } else {
-                    if (gPlayer1Controller->buttonPressed & 0x4000) {
-                        arg0->unk_01 = D_80075680[0];
-                        arg0->unk_02 = D_80075680[1];
-                        arg0->unk_04 = D_80075680[2];
-                        arg0->unk_00 = 3;
+                    if (gPlayer1Controller->buttonPressed & BTN_B) {
+                        settings_window->timeLimitsOn = sEventBattleSettings[0];
+                        settings_window->battleTime = sEventBattleSettings[1];
+                        settings_window->moveSelectionTime = sEventBattleSettings[2];
+                        settings_window->state = 3;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                     }
                 }
@@ -1089,40 +1098,40 @@ void EventBattle_UpdateSettingsPanel(unk_D_82305A40* arg0) {
             break;
 
         case 2:
-            arg0->unk_06 += 22;
-            if (arg0->unk_06 == 186) {
+            settings_window->openingProgress += 22;
+            if (settings_window->openingProgress == 186) {
                 Input_SetRepeatController(gPlayer1Controller);
-                arg0->unk_00 = 1;
+                settings_window->state = 1;
             }
             break;
 
         case 3:
-            arg0->unk_06 -= 22;
-            if (arg0->unk_06 == 10) {
-                arg0->unk_00 = 0;
+            settings_window->openingProgress -= 22;
+            if (settings_window->openingProgress == 10) {
+                settings_window->state = 0;
             }
             break;
     }
 }
 
-void EventBattle_InitSettingsPanel(unk_D_82305A40* arg0, s16 arg1, s16 arg2, s32 arg3) {
-    arg0->unk_00 = 0;
-    arg0->unk_06 = 10;
-    arg0->unk_08 = arg1;
-    arg0->unk_0A = arg2;
-    arg0->unk_0C = 0;
+void EventBattle_InitSettingsPanel(SettingsWindow* settings_window, s16 x, s16 y, s32 set_rules) {
+    settings_window->state = 0;
+    settings_window->openingProgress = 10;
+    settings_window->x = x;
+    settings_window->y = y;
+    settings_window->cursorPosition = 0;
 
-    if (arg3 != 0) {
-        arg0->unk_01 = D_80075680[0];
-        arg0->unk_02 = D_80075680[1];
-        arg0->unk_04 = D_80075680[2];
+    if (set_rules != 0) {
+        settings_window->timeLimitsOn = sEventBattleSettings[0];
+        settings_window->battleTime = sEventBattleSettings[1];
+        settings_window->moveSelectionTime = sEventBattleSettings[2];
     }
 }
 
-void EventBattle_OpenSettingsPanel(unk_D_82305A40* arg0) {
+void EventBattle_OpenSettingsPanel(SettingsWindow* settings_panel) {
     Audio_PlaySoundEffectById(SFX_PANEL_OPEN);
-    arg0->unk_00 = 2;
-    arg0->unk_0C = 0;
+    settings_panel->state = 2;
+    settings_panel->cursorPosition = 0;
 }
 
 void EventBattle_DrawBackground(void) {
@@ -1137,7 +1146,7 @@ void EventBattle_DrawBackground(void) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, 110, 160, 170, 255);
     gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, D_302EBC0, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gEventBattleBackground, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 7, 6, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped(0, 0, 640, 480, 0, 0, 0x400, 0x400, 0);
@@ -1151,11 +1160,11 @@ void EventBattle_DrawFrame(s16 arg0) {
     BgStage_DrawFrame();
     EventBattle_DrawBackground();
     EventBattle_DrawTitleBar();
-    EventBattle_DrawInfoBox(&D_82305A30);
-    EventBattle_DrawNoticeBanner(&D_82305A38);
-    EventBattle_DrawSettingsPanel(&D_82305A40);
-    EventBattle_DrawTrainerCard(&D_82305AF8[0]);
-    EventBattle_DrawTrainerCard(&D_82305AF8[1]);
+    EventBattle_DrawInfoBox(&sInfoBox);
+    EventBattle_DrawNoticeBanner(&sNonEligibleWarning);
+    EventBattle_DrawSettingsPanel(&sSettingsPanel);
+    EventBattle_DrawTrainerCard(&sTrainerCards[0]);
+    EventBattle_DrawTrainerCard(&sTrainerCards[1]);
 
     for (i = 0; i < 6; i++) {
         EventBattle_DrawRuleCard(&D_82305A50[i]);
@@ -1177,11 +1186,11 @@ void EventBattle_UpdateWidgets(void) {
     s16 i;
 
     Controller_PollInputs();
-    EventBattle_UpdateInfoBox(&D_82305A30);
-    EventBattle_UpdateNoticeBanner(&D_82305A38);
-    EventBattle_UpdateSettingsPanel(&D_82305A40);
-    EventBattle_UpdateTrainerCardSlide(&D_82305AF8[0]);
-    EventBattle_UpdateTrainerCardSlide(&D_82305AF8[1]);
+    EventBattle_UpdateInfoBox(&sInfoBox);
+    EventBattle_UpdateNoticeBanner(&sNonEligibleWarning);
+    EventBattle_UpdateSettingsPanel(&sSettingsPanel);
+    EventBattle_UpdateTrainerCardSlide(&sTrainerCards[0]);
+    EventBattle_UpdateTrainerCardSlide(&sTrainerCards[1]);
 
     for (i = 0; i < 6; i++) {
         EventBattle_UpdateRuleCardSlide(&D_82305A50[i]);
@@ -1255,7 +1264,7 @@ void EventBattle_EnterModeSelect(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    D_82305A30.expanding = 1;
+    sInfoBox.expanding = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (j = 0; j < 6; j++) {
@@ -1274,7 +1283,7 @@ void EventBattle_ExitModeSelect(unk_D_82305A28* arg0) {
     s16 i;
     s16 j;
 
-    D_82305A30.expanding = 2;
+    sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
         D_82305A50[i].visible = 3;
@@ -1302,7 +1311,7 @@ void EventBattle_ValidateTeamSelection(unk_D_82305A28* arg0) {
     s16 j;
     u8 tmp1;
 
-    D_82305A30.expanding = 2;
+    sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
         D_82305A50[i].visible = 3;
@@ -1314,9 +1323,9 @@ void EventBattle_ValidateTeamSelection(unk_D_82305A28* arg0) {
     }
 
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
-    arg0->unk_01 = EventBattle_ValidateTeamForRule(&D_82305AF8[0], gEventBattleModes[arg0->unk_02].unk_08);
-    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&D_82305AF8[1], gEventBattleModes[arg0->unk_02].unk_08);
-    EventBattle_ShowNoticeBanner(&D_82305A38, arg0->unk_01);
+    arg0->unk_01 = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->unk_02].unk_08);
+    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->unk_02].unk_08);
+    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->unk_01);
 
     tmp1 = !arg0->unk_01;
     arg0->unk_04 = tmp1;
@@ -1339,9 +1348,9 @@ void EventBattle_ReturnToModeSelect(unk_D_82305A28* arg0) {
     s16 j;
 
     temp_v1 = !arg0->unk_01;
-    D_82305AF8[0].unk_0000 = 3;
-    D_82305AF8[1].unk_0000 = 3;
-    D_82305A38.expanding = 2;
+    sTrainerCards[0].unk_0000 = 3;
+    sTrainerCards[1].unk_0000 = 3;
+    sNonEligibleWarning.expanding = 2;
 
     for (i = temp_v1; i < 3; i++) {
         D_8230F528[i].animState = 2;
@@ -1352,7 +1361,7 @@ void EventBattle_ReturnToModeSelect(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    D_82305A30.expanding = 1;
+    sInfoBox.expanding = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (i = 0; i < 6; i++) {
@@ -1373,9 +1382,9 @@ void EventBattle_ValidateInitialSelection(unk_D_82305A28* arg0) {
     s16 j;
 
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
-    arg0->unk_01 = EventBattle_ValidateTeamForRule(&D_82305AF8[0], gEventBattleModes[arg0->unk_02].unk_08);
-    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&D_82305AF8[1], gEventBattleModes[arg0->unk_02].unk_08);
-    EventBattle_ShowNoticeBanner(&D_82305A38, arg0->unk_01);
+    arg0->unk_01 = EventBattle_ValidateTeamForRule(&sTrainerCards[0], gEventBattleModes[arg0->unk_02].unk_08);
+    arg0->unk_01 &= EventBattle_ValidateTeamForRule(&sTrainerCards[1], gEventBattleModes[arg0->unk_02].unk_08);
+    EventBattle_ShowNoticeBanner(&sNonEligibleWarning, arg0->unk_01);
 
     temp_v1 = !arg0->unk_01;
     arg0->unk_04 = temp_v1;
@@ -1423,17 +1432,17 @@ void EventBattle_StartBattle(unk_D_82305A28* arg0) {
     s16 j;
 
     Session_SetMode(10, gEventBattleModes[arg0->unk_02].unk_08, 0);
-    EventBattle_BuildTrainerFromCard(&D_82305AF8[0]);
-    EventBattle_BuildTrainerFromCard(&D_82305AF8[1]);
+    EventBattle_BuildTrainerFromCard(&sTrainerCards[0]);
+    EventBattle_BuildTrainerFromCard(&sTrainerCards[1]);
 
-    if (D_82305A40.unk_01 == 1) {
-        gSessionContext.timeLimitsEnabled = D_82305A40.unk_01;
-        gSessionContext.battleLimitMinutes = D_82305A40.unk_02;
-        gSessionContext.orderLimitSeconds = D_82305A40.unk_04;
+    if (sSettingsPanel.timeLimitsOn == 1) {
+        gSessionContext.timeLimitsEnabled = sSettingsPanel.timeLimitsOn;
+        gSessionContext.battleLimitMinutes = sSettingsPanel.battleTime;
+        gSessionContext.orderLimitSeconds = sSettingsPanel.moveSelectionTime;
     }
-    D_82305AF8[0].unk_0000 = 3;
-    D_82305AF8[1].unk_0000 = 3;
-    D_82305A38.expanding = 2;
+    sTrainerCards[0].unk_0000 = 3;
+    sTrainerCards[1].unk_0000 = 3;
+    sNonEligibleWarning.expanding = 2;
 
     for (i = 0; i < 3; i++) {
         D_8230F528[i].animState = 2;
@@ -1506,7 +1515,7 @@ void EventBattle_RunSettingsPanel(unk_D_82305A28* arg0) {
     s16 i;
     s16 j;
 
-    D_82305A30.expanding = 2;
+    sInfoBox.expanding = 2;
 
     for (i = 0; i < 6; i++) {
         D_82305A50[i].visible = 3;
@@ -1517,14 +1526,14 @@ void EventBattle_RunSettingsPanel(unk_D_82305A28* arg0) {
         EventBattle_DrawFrame(-1);
     }
 
-    EventBattle_OpenSettingsPanel(&D_82305A40);
+    EventBattle_OpenSettingsPanel(&sSettingsPanel);
 
-    while (D_82305A40.unk_00 != 0) {
+    while (sSettingsPanel.state != 0) {
         EventBattle_UpdateWidgets();
         EventBattle_DrawFrame(-1);
     }
 
-    D_82305A30.expanding = 1;
+    sInfoBox.expanding = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
     for (i = 0; i < 6; i++) {
@@ -1545,9 +1554,9 @@ void EventBattle_ExitWithMode(unk_D_82305A28* arg0) {
 
     Session_SetMode(10, gEventBattleModes[arg0->unk_02].unk_08, 0);
 
-    D_82305AF8[0].unk_0000 = 3;
-    D_82305AF8[1].unk_0000 = 3;
-    D_82305A38.expanding = 2;
+    sTrainerCards[0].unk_0000 = 3;
+    sTrainerCards[1].unk_0000 = 3;
+    sNonEligibleWarning.expanding = 2;
 
     for (i = 0; i < 3; i++) {
         D_8230F528[i].animState = 2;
@@ -1620,12 +1629,12 @@ void EventBattle_InitSelect(unk_D_82305A28* arg0, s16 arg1) {
     }
     arg0->unk_06 = 18;
 
-    EventBattle_InitInfoBox(&D_82305A30, 56, 380);
-    EventBattle_InitNoticeBanner(&D_82305A38, 270, 192);
-    EventBattle_InitSettingsPanel(&D_82305A40, 104, 147, (arg1 + 1) == 0);
+    EventBattle_InitInfoBox(&sInfoBox, 56, 380);
+    EventBattle_InitNoticeBanner(&sNonEligibleWarning, 270, 192);
+    EventBattle_InitSettingsPanel(&sSettingsPanel, 104, 147, (arg1 + 1) == 0);
 
-    EventBattle_InitTrainerCard(&D_82305AF8[0], 64, 92, 0);
-    EventBattle_InitTrainerCard(&D_82305AF8[1], 64, 248, 1);
+    EventBattle_InitTrainerCard(&sTrainerCards[0], 64, 92, 0);
+    EventBattle_InitTrainerCard(&sTrainerCards[1], 64, 248, 1);
 
     EventBattle_InitRuleCard(&D_82305A50[0], 68, 132, D_3028E00, Text_GetString(NULL, 0, sEventBattleText, 21), 3, 0);
     EventBattle_InitRuleCard(&D_82305A50[1], 324, 132, D_3029A80, Text_GetString(NULL, 0, sEventBattleText, 24), 4, 1);

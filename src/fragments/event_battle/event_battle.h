@@ -29,22 +29,22 @@ typedef struct unk_D_82305A50 {
 
 typedef struct DescriptionPanel {
     /* 0x00 */ u8 expanding;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 partiesNotEligible;
     /* 0x02 */ s16 openingProgress;
     /* 0x04 */ s16 x;
     /* 0x06 */ s16 y;
 } DescriptionPanel; // size = 0x8
 
 typedef struct unk_D_82305A40 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x00 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-} unk_D_82305A40; // size = 0x10
+    /* 0x00 */ u8 state;
+    /* 0x00 */ u8 timeLimitsOn;
+    /* 0x02 */ s16 battleTime;
+    /* 0x04 */ s16 moveSelectionTime;
+    /* 0x06 */ s16 openingProgress;
+    /* 0x08 */ s16 x;
+    /* 0x0A */ s16 y;
+    /* 0x0C */ s16 cursorPosition;
+} SettingsWindow; // size = 0x10
 
 typedef struct unk_D_82305AF8 {
     /* 0x0000 */ u8 unk_0000;
@@ -67,11 +67,11 @@ typedef struct unk_D_82305AF8 {
 
 typedef struct EventBattleOptionLabel {
     /* 0x00 */ u8 animState; // 0 = idle, 1 = growing, 2 = shrinking
-    /* 0x02 */ s16 height;   // grows/shrinks by 6 per update between 6 and 48
+    /* 0x02 */ s16 openingProgress;   // grows/shrinks by 6 per update between 6 and 48
     /* 0x04 */ s16 x;
     /* 0x06 */ s16 y;        // vertical center of the 48-pixel-tall label
     /* 0x08 */ char* text;
-} EventBattleOptionLabel; // size = 0x0C
+} EventBattleCupOption; // size = 0x0C
 
 typedef struct EventBattleModeEntry {
     /* 0x00 */ s16 unk_00;

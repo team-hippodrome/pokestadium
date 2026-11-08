@@ -27,6 +27,7 @@
 #define SFX_PANEL_OPEN 0x04
 #define SFX_MENU_ERROR 0x08
 #define SFX_N64_LOGO 0x0A
+#define SFX_BIG_CONFIRM 0x1D
 #define SFX_TITLE_START 0x0F
 #define SFX_MOVE_SWAP 0x18 // PC Pokemon, item, box and move reordering.
 #define SFX_ZOOM_IN 0x19   // Gallery enlargement and Pokedex area detail.
@@ -292,7 +293,7 @@ extern u8 D_302FBC0[];
 extern u8 D_30300C0[];
 extern u8 D_30242C0[];
 extern u8 D_30243A0[];
-extern u8 D_302EBC0[];
+extern u8 gEventBattleBackground[];
 extern u8 D_201D820[];
 extern u8 D_201DB20[];
 extern u8 D_201DE20[];

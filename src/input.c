@@ -3,35 +3,35 @@
 
 static s32 pad_D_800AC880[0x2];
 static s32 D_800AC888;
-static Controller* D_800AC88C;
+static Controller* gController;
 
 void Input_ResetRepeatState(void) {
 }
 
 void Input_SetRepeatController(Controller* arg0) {
     D_800AC888 = 0xA;
-    D_800AC88C = arg0;
+    gController = arg0;
 }
 
 s32 Input_GetRepeatedDPad(void) {
-    if (D_800AC88C->buttonPressed & 0x800) {
+    if (gController->buttonPressed & BTN_DUP) {
         D_800AC888 = 0xA;
-        return 0x800;
+        return BTN_DUP;
     }
 
-    if (D_800AC88C->buttonPressed & 0x400) {
+    if (gController->buttonPressed & BTN_DDOWN) {
         D_800AC888 = 0xA;
-        return 0x400;
+        return BTN_DDOWN;
     }
 
-    if (D_800AC88C->buttonPressed & 0x200) {
+    if (gController->buttonPressed & BTN_DLEFT) {
         D_800AC888 = 0xA;
-        return 0x200;
+        return BTN_DLEFT;
     }
 
-    if (D_800AC88C->buttonPressed & 0x100) {
+    if (gController->buttonPressed & BTN_DRIGHT) {
         D_800AC888 = 0xA;
-        return 0x100;
+        return BTN_DRIGHT;
     }
 
     D_800AC888--;
@@ -39,24 +39,24 @@ s32 Input_GetRepeatedDPad(void) {
         D_800AC888 = 0;
 
         // clang-format off
-        if (D_800AC88C->buttonDown & 0x800) {
-            D_800AC888 = 2; return 0x800;
+        if (gController->buttonDown & BTN_DUP) {
+            D_800AC888 = 2; return BTN_DUP;
         }
         // clang-format on
 
-        if (D_800AC88C->buttonDown & 0x400) {
+        if (gController->buttonDown & BTN_DDOWN) {
             D_800AC888 = 2;
-            return 0x400;
+            return BTN_DDOWN;
         }
 
-        if (D_800AC88C->buttonDown & 0x200) {
+        if (gController->buttonDown & BTN_DLEFT) {
             D_800AC888 = 2;
-            return 0x200;
+            return BTN_DLEFT;
         }
 
-        if (D_800AC88C->buttonDown & 0x100) {
+        if (gController->buttonDown & BTN_DRIGHT) {
             D_800AC888 = 2;
-            return 0x100;
+            return BTN_DRIGHT;
         }
     }
 
