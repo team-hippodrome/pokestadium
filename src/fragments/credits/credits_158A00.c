@@ -18,35 +18,45 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-typedef struct unk_D_86A02700 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ Color_RGB8 unk_03[4];
-} unk_D_86A02700; // size = 0x10
+/**
+ * Staff-roll color keyframe read by Credits_InterpolateRoleColor. colors[0]/[1] are the
+ * env/prim colors for role headings and colors[2]/[3] those for staff names.
+ */
+typedef struct CreditsRoleColorKeyframe {
+    /* 0x00 */ u16 frame; // page timer value at which this keyframe applies
+    /* 0x02 */ u8 alpha;
+    /* 0x03 */ Color_RGB8 colors[4];
+} CreditsRoleColorKeyframe; // size = 0x10
 
-static unk_D_8690A610 D_86A06170;
-static struct GraphNode D_86A06190;
-static struct GraphNode D_86A061A8;
-static struct GraphNode D_86A061C0;
-static s8 D_86A061D8;
-static u8 D_86A061D9;
-static BinArchive* D_86A061DC;
-static Color_RGBA8_u32 D_86A061E0;
-static GraphNode* D_86A061E4;
-static CameraNode* D_86A061E8;
-static s16 D_86A061EC;
-static s16 D_86A061EE;
-static s16 D_86A061F0;
+// Fog node of sArenaGeoLayout; callbackArg is 1 when the arena supplied fog parameters.
+static unk_D_8690A610 sArenaFog;
+// Containers for the geo layouts returned by arena archive entries 0, 1 and 3.
+static struct GraphNode sArenaLayout0;
+static struct GraphNode sArenaLayout1;
+static struct GraphNode sArenaLayout3;
+static s8 sArenaIndex; // stadium_models arena file shown behind the roll; -1 = none
+static u8 sCameraShot; // 0-5 orbit, 6-8 pivot orbit, 9-14 keyframe blend
+static BinArchive* sStadiumModelArchive; // stadium_models; entry N is battle arena N
+static Color_RGBA8_u32 sArenaTintColor; // copied to textureTint by Credits_BackgroundNodePostCallback
+static GraphNode* sArenaRoot;
+static CameraNode* sArenaCamera;
+// Orbit camera state passed to Camera_ComputeEyeFromAngles by Credits_UpdateCamera.
+static s16 sCameraRotationX;
+static s16 sCameraRotationY;
+static s16 sCameraDistance;
 static s32 pad_D_86A061F8[2];
-static FontContext* D_86A06200;
+static FontContext* sFontContext;
 static s32 pad_D_86A06208[2];
-u8 D_86A06210;
-u8 D_86A06211;
-u8 D_86A06212;
-unk_D_86A03014* D_86A06214;
-u32 D_86A0621C;
+u8 sFrameDelta;
+u8 sRoleTextColumn;
+u8 sFrameDeltaPrimed; // 0 until Credits_UpdateFrameDelta has a previous retrace count
+CreditsRolePage* sCurrentRolePage; // NULL after the last page; the end logo is drawn instead
+u32 sLastRetraceCount; // D_800A62E0.unk_A34 at the previous Credits_UpdateFrameDelta
 
-unk_D_86A025A0 D_86A025A0[9] = {
+// Arena backdrop schedule: eight timed segments (1320 or 1080 frames, 9120 in total, the
+// same as the sRolePages durations) and an end marker.
+// Segment 3 also reloads a new arena at 1/3 and 2/3 of its duration (Credits_MainLoop).
+CreditsBackgroundSegment sBackgroundSegments[9] = {
     {
         0x00,
         0x00,
@@ -93,10 +103,16 @@ unk_D_86A025A0 D_86A025A0[9] = {
         0x0000,
     },
 };
-u8 D_86A025C4 = 0;
-u32 D_86A025C8 = 0;
-u16 D_86A025CC = 0;
-u32 D_86A025D0[] = {
+u8 sSegmentIndex = 0; // index into sBackgroundSegments
+// Value from arena archive entry 2 (the battle backdrop). Credits_DrawFrame fills the frame
+// with it when below 0x10000 (RGBA5551), with 1 when 0 or -1, and with 0xA6BF when it is a
+// texture address. //@src/fragments/battle_engine/battle_engine_main.c Battle_DrawStageBackdrop
+u32 sArenaBackdrop = 0;
+u16 sSegmentTimer = 0; // frames elapsed in the current backdrop segment
+// Root geo layout: camera, fog, then three arena layout containers each wrapped by
+// Credits_BackgroundNodePostCallback, then the model renderer display root D_800AC840
+// (reset by ModelRenderer_InitDisplayRoots). //@src/model_renderer.c
+u32 sArenaGeoLayout[] = {
     0x0C00FFFF,
     0x05000000,
     0x0B00001E,
@@ -109,7 +125,7 @@ u32 D_86A025D0[] = {
     0x0D000000,
     0x05000000,
     0x07000000,
-    &D_86A06170,
+    &sArenaFog,
     0x14000000,
     0x002D0019,
     0xFFFFFF28,
@@ -127,7 +143,7 @@ u32 D_86A025D0[] = {
     0x00000000,
     0x05000000,
     0x07000000,
-    &D_86A06190,
+    &sArenaLayout0,
     0x06000000,
     0x06000000,
     0x0F000003,
@@ -143,7 +159,7 @@ u32 D_86A025D0[] = {
     0x00000000,
     0x05000000,
     0x07000000,
-    &D_86A061A8,
+    &sArenaLayout1,
     0x06000000,
     0x06000000,
     0x0F000002,
@@ -159,7 +175,7 @@ u32 D_86A025D0[] = {
     0x00000000,
     0x05000000,
     0x07000000,
-    &D_86A061C0,
+    &sArenaLayout3,
     0x06000000,
     0x06000000,
     0x0F000003,
@@ -173,343 +189,403 @@ u32 D_86A025D0[] = {
     0x01000000,
 };
 
-s32 Credits_BackgroundNodePostCallback(s32 arg0, GraphNode* arg1) {
-    DisplayObject* ptr = (DisplayObject*)arg1;
+/**
+ * Geo callback wrapped around each arena layout container in sArenaGeoLayout. On event 2 it
+ * copies sArenaTintColor into the node's textureTint, matching the battle engine's stage tint
+ * callback. //@src/fragments/battle_engine/battle_engine_main.c Battle_StageMaterialTintCallback
+ */
+s32 Credits_BackgroundNodePostCallback(s32 event, GraphNode* node) {
+    DisplayObject* object = (DisplayObject*)node;
 
-    if (arg0 == 2) {
-        ptr->textureTint.rgba = D_86A061E0.rgba;
+    if (event == 2) {
+        object->textureTint.rgba = sArenaTintColor.rgba;
     }
     return 0;
 }
 
+/**
+ * Sets the arena texture tint. A non-white tint disables fog; white re-enables it only when
+ * the arena supplied fog parameters (sArenaFog.node.callbackArg == 1).
+ * Same operation as Battle_SetStageTintColor. //@src/fragments/battle_engine/battle_engine_main.c
+ */
 void Credits_SetBackgroundTint(u8 r, u8 g, u8 b) {
-    u8 v = r & g & b;
+    u8 white_mask = r & g & b;
 
-    D_86A061E0.r = r;
-    D_86A061E0.g = g;
-    D_86A061E0.b = b;
+    sArenaTintColor.r = r;
+    sArenaTintColor.g = g;
+    sArenaTintColor.b = b;
 
-    if (v == 0xFF) {
-        if (D_86A06170.node.callbackArg == 1) {
-            D_86A06170.node.flags |= 1;
+    if (white_mask == 0xFF) {
+        if (sArenaFog.node.callbackArg == 1) {
+            sArenaFog.node.flags |= 1;
         }
     } else {
-        D_86A06170.node.flags &= ~1;
+        sArenaFog.node.flags &= ~1;
     }
 }
 
-void Credits_LoadBackgroundScene(s8 arg0, u8 arg1) {
-    MemoryBlock* sp2C;
-    FragmentEntry sp28;
-    u32* temp_v0;
-    unk_D_8690A610_018* temp_v0_4;
+/**
+ * Loads battle arena `arena_index` from stadium_models as the staff-roll backdrop: entries 0,
+ * 1 and 3 are geo layouts for the three layout containers, entry 2 is the backdrop value and
+ * entry 4 optional fog parameters (same selectors as the battle engine's arena load). Then
+ * starts the camera move `shot` for the current segment: 0-8 orbit blends, 9-14 keyframe
+ * blends (40 frames shorter in segment 7), and any other value (0xFF) keeps the current move
+ * but restores its target height and distance. Waits for the frame in flight first.
+ */
+void Credits_LoadBackgroundScene(s8 arena_index, u8 shot) {
+    MemoryBlock* layout_pool;
+    FragmentEntry arena_entry;
+    u32* arena_layout;
+    unk_D_8690A610_018* fog_parameters;
 
     while (Display_IsFrameReady() == 0) {}
 
-    GeoNode_CreateContainer(NULL, &D_86A06190);
-    GeoNode_CreateContainer(NULL, &D_86A061A8);
-    GeoNode_CreateContainer(NULL, &D_86A061C0);
+    GeoNode_CreateContainer(NULL, &sArenaLayout0);
+    GeoNode_CreateContainer(NULL, &sArenaLayout1);
+    GeoNode_CreateContainer(NULL, &sArenaLayout3);
 
     main_pool_pop_state('BACK');
 
     main_pool_push_state('BACK');
 
-    sp28 = BinArchive_GetFile(D_86A061DC, arg0);
-    sp2C = MainPool_AllocState(main_pool_get_available(), 0);
+    arena_entry = BinArchive_GetFile(sStadiumModelArchive, arena_index);
+    layout_pool = MainPool_AllocState(main_pool_get_available(), 0);
 
-    temp_v0 = sp28(0, 0);
-    if (temp_v0 != NULL) {
-        GraphNode_AppendChild(&D_86A06190, process_geo_layout(sp2C, temp_v0));
+    arena_layout = arena_entry(0, 0);
+    if (arena_layout != NULL) {
+        GraphNode_AppendChild(&sArenaLayout0, process_geo_layout(layout_pool, arena_layout));
     }
 
-    temp_v0 = sp28(1, 0);
-    if (temp_v0 != NULL) {
-        GraphNode_AppendChild(&D_86A061A8, process_geo_layout(sp2C, temp_v0));
+    arena_layout = arena_entry(1, 0);
+    if (arena_layout != NULL) {
+        GraphNode_AppendChild(&sArenaLayout1, process_geo_layout(layout_pool, arena_layout));
     }
 
-    temp_v0 = sp28(3, 0);
-    if (temp_v0 != NULL) {
-        GraphNode_AppendChild(&D_86A061C0, process_geo_layout(sp2C, temp_v0));
+    arena_layout = arena_entry(3, 0);
+    if (arena_layout != NULL) {
+        GraphNode_AppendChild(&sArenaLayout3, process_geo_layout(layout_pool, arena_layout));
     }
 
-    D_86A025C8 = sp28(2, 0);
-    MainPool_FinalizeAllocation(sp2C);
+    sArenaBackdrop = arena_entry(2, 0);
+    MainPool_FinalizeAllocation(layout_pool);
 
-    temp_v0_4 = sp28(4, 0);
-    if (temp_v0_4 == NULL) {
-        D_86A06170.node.callbackArg = 0;
-        D_86A06170.node.flags &= ~1;
+    fog_parameters = arena_entry(4, 0);
+    if (fog_parameters == NULL) {
+        sArenaFog.node.callbackArg = 0;
+        sArenaFog.node.flags &= ~1;
     } else {
-        D_86A06170.unk_18.unk_00 = temp_v0_4->unk_00;
-        D_86A06170.unk_18.unk_02 = temp_v0_4->unk_02;
-        D_86A06170.unk_18.unk_04.rgba = temp_v0_4->unk_04.rgba;
-        D_86A06170.node.callbackArg = 1;
+        sArenaFog.unk_18.unk_00 = fog_parameters->unk_00;
+        sArenaFog.unk_18.unk_02 = fog_parameters->unk_02;
+        sArenaFog.unk_18.unk_04.rgba = fog_parameters->unk_04.rgba;
+        sArenaFog.node.callbackArg = 1;
     }
 
     Credits_SetBackgroundTint(0xFF, 0xFF, 0xFF);
 
-    if (arg1 < 6) {
-        func_86A01CF0(&D_86A061EC, &D_86A061EE, &D_86A061F0, D_86A061E8, D_86A025A0[D_86A025C4].unk_02, arg0, arg1);
-    } else if (arg1 < 9) {
-        func_86A01CF0(&D_86A061EC, &D_86A061EE, &D_86A061F0, D_86A061E8, D_86A025A0[D_86A025C4].unk_02, arg0, arg1);
-    } else if (arg1 < 0xF) {
-        if (D_86A025C4 == 7) {
-            Credits_InitCameraKeyframeBlend(D_86A061E8, D_86A025A0[D_86A025C4].unk_02 - 0x28, arg0, arg1);
+    if (shot < 6) {
+        Credits_InitCameraOrbitBlend(&sCameraRotationX, &sCameraRotationY, &sCameraDistance, sArenaCamera, sBackgroundSegments[sSegmentIndex].duration, arena_index, shot);
+    } else if (shot < 9) {
+        Credits_InitCameraOrbitBlend(&sCameraRotationX, &sCameraRotationY, &sCameraDistance, sArenaCamera, sBackgroundSegments[sSegmentIndex].duration, arena_index, shot);
+    } else if (shot < 0xF) {
+        if (sSegmentIndex == 7) {
+            Credits_InitCameraKeyframeBlend(sArenaCamera, sBackgroundSegments[sSegmentIndex].duration - 0x28, arena_index, shot);
         } else {
-            Credits_InitCameraKeyframeBlend(D_86A061E8, D_86A025A0[D_86A025C4].unk_02, arg0, arg1);
+            Credits_InitCameraKeyframeBlend(sArenaCamera, sBackgroundSegments[sSegmentIndex].duration, arena_index, shot);
         }
     } else {
-        D_86A061E8->view.targetPosition.y = D_86A03170[arg0][D_86A061D9].unk_10;
-        D_86A061F0 = D_86A03170[arg0][D_86A061D9].unk_08;
+        sArenaCamera->view.targetPosition.y = sOrbitShots[arena_index][sCameraShot].targetHeight;
+        sCameraDistance = sOrbitShots[arena_index][sCameraShot].distance;
     }
 }
 
+/**
+ * Reads the controllers once per frame; Credits_MainLoop checks gPlayer1Controller to skip
+ * the end logo.
+ */
 void Credits_PollInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/**
+ * Recomputes the camera from the orbit state. Shots 0-5 place the eye around the look-at point
+ * at sCameraDistance; shots 6-8 place both eye and target on the same ray from sOrbitPivot
+ * (target 500 units farther), so the camera looks outward from the pivot. Keyframe shots
+ * (9-14) are left to Credits_StepCameraKeyframeBlend.
+ */
 void Credits_UpdateCamera(void) {
-    if (D_86A061D9 < 6) {
-        Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0,
-                                    D_86A061EC, D_86A061EE);
-    } else if (D_86A061D9 < 9) {
-        Camera_ComputeEyeFromAngles(&D_86A06248, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC, D_86A061EE);
-        Camera_ComputeEyeFromAngles(&D_86A06248, &D_86A061E8->view.targetPosition, D_86A061F0 + 500.0f, D_86A061EC,
-                                    D_86A061EE);
+    if (sCameraShot < 6) {
+        Camera_ComputeEyeFromAngles(&sArenaCamera->view.targetPosition, &sArenaCamera->view.eyePosition, sCameraDistance,
+                                    sCameraRotationX, sCameraRotationY);
+    } else if (sCameraShot < 9) {
+        Camera_ComputeEyeFromAngles(&sOrbitPivot, &sArenaCamera->view.eyePosition, sCameraDistance, sCameraRotationX, sCameraRotationY);
+        Camera_ComputeEyeFromAngles(&sOrbitPivot, &sArenaCamera->view.targetPosition, sCameraDistance + 500.0f, sCameraRotationX,
+                                    sCameraRotationY);
     }
 }
 
+/**
+ * Draws a full-screen black rectangle that fades the backdrop in over the first 8 frames of a
+ * segment and out over its last 40 frames. Nothing is drawn after the end marker.
+ */
 void Credits_DrawFadeOverlay(void) {
-    u8 temp_v1_2;
+    u8 alpha;
 
-    if (D_86A025A0[D_86A025C4].unk_00 != -1) {
-        if (D_86A025CC < 8) {
-            temp_v1_2 = (s8)ROUND_MAX(((-(f32)D_86A025CC / 8) + 1.0f) * 255.0f);
-            if (temp_v1_2 != 0) {
-                Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, temp_v1_2);
+    if (sBackgroundSegments[sSegmentIndex].endMarker != -1) {
+        if (sSegmentTimer < 8) {
+            alpha = (s8)ROUND_MAX(((-(f32)sSegmentTimer / 8) + 1.0f) * 255.0f);
+            if (alpha != 0) {
+                Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, alpha);
             }
         } else {
-            if ((D_86A025A0[D_86A025C4].unk_02 - 0x28) < D_86A025CC) {
-                s32 tmp = D_86A025A0[D_86A025C4].unk_02;
+            if ((sBackgroundSegments[sSegmentIndex].duration - 0x28) < sSegmentTimer) {
+                s32 duration = sBackgroundSegments[sSegmentIndex].duration;
 
-                temp_v1_2 = (s32)ROUND_MAX((((D_86A025CC - tmp) + 0x28) * 255.0f) / 40.0f);
-                if (temp_v1_2 != 0) {
-                    Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, temp_v1_2);
+                alpha = (s32)ROUND_MAX((((sSegmentTimer - duration) + 0x28) * 255.0f) / 40.0f);
+                if (alpha != 0) {
+                    Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, alpha);
                 }
             }
         }
     }
 }
 
-void Credits_UpdateSceneTransition(u8 arg0) {
-    if ((arg0 == 1) || (arg0 == 2)) {
+/**
+ * Draws the 2D layer over the arena for draw modes 1 (main roll) and 2 (outro): the backdrop
+ * fade, then the staff roll, which is held back for the first 240 frames of segment 0.
+ */
+void Credits_DrawFadeAndRoleList(u8 draw_mode) {
+    if ((draw_mode == 1) || (draw_mode == 2)) {
         Credits_DrawFadeOverlay();
-        if ((D_86A025C4 != 0) || (D_86A025CC >= 0xF0)) {
+        if ((sSegmentIndex != 0) || (sSegmentTimer >= 0xF0)) {
             Credits_DrawRoleList();
         }
     }
 }
 
-void Credits_DrawFrame(u8 arg0) {
+/**
+ * Renders one frame. The frame is first filled from sArenaBackdrop (see its declaration).
+ * Draw mode 0 shows only the Pokemon Stadium logo (intro); modes 1 and 2 render the arena
+ * scene graph and then Credits_DrawFadeAndRoleList.
+ */
+void Credits_DrawFrame(u8 draw_mode) {
     BgStage_DrawFrame();
 
-    if ((D_86A025C8 == -1) || (D_86A025C8 == 0)) {
+    if ((sArenaBackdrop == -1) || (sArenaBackdrop == 0)) {
         GfxImage_FillCurrent(&gDisplayListHead, 1);
-    } else if (D_86A025C8 < 0x10000) {
-        GfxImage_FillCurrent(&gDisplayListHead, D_86A025C8);
+    } else if (sArenaBackdrop < 0x10000) {
+        GfxImage_FillCurrent(&gDisplayListHead, sArenaBackdrop);
     } else {
         GfxImage_FillCurrent(&gDisplayListHead, 0xA6BF);
     }
 
-    if (arg0 == 0) {
-        Credits_DrawContinuePrompt(0);
+    if (draw_mode == 0) {
+        Credits_DrawStadiumLogo(0);
     } else {
-        Geo_RenderRootNode(D_86A061E4);
-        Credits_UpdateSceneTransition(arg0);
+        Geo_RenderRootNode(sArenaRoot);
+        Credits_DrawFadeAndRoleList(draw_mode);
     }
 
     BgStage_AdvanceFrame();
 }
 
+/**
+ * Intro: fades out all audio, then shows the Pokemon Stadium logo for 240 frames: a 30-frame
+ * fade in from black, a 90-frame hold and a 120-frame fade to black.
+ */
 void Credits_IntroLoop(void) {
     u8 i;
     u8 j;
-    u8 sp35;
-    s32 var_s1;
+    u8 phase_frames;
+    s32 frame_count;
 
     Audio_FadeOutAll(0x1E);
 
     for (i = 0; i < 3; i++) {
-        var_s1 = sp35;
+        frame_count = phase_frames;
 
         switch (i) {
             case 0:
-                sp35 = 0x1E;
-                StageFade_StartFromOpaque(sp35);
-                var_s1 = 0x1E;
+                phase_frames = 0x1E;
+                StageFade_StartFromOpaque(phase_frames);
+                frame_count = 0x1E;
                 break;
 
             case 1:
-                sp35 = 0x5A;
-                var_s1 = sp35;
+                phase_frames = 0x5A;
+                frame_count = phase_frames;
                 break;
 
             case 2:
-                sp35 = 0x78;
-                StageFade_StartFromTransparent(sp35);
-                var_s1 = sp35;
+                phase_frames = 0x78;
+                StageFade_StartFromTransparent(phase_frames);
+                frame_count = phase_frames;
                 break;
 
             default:
-                var_s1 = sp35;
+                frame_count = phase_frames;
                 break;
         }
 
-        for (j = 0; j < var_s1; j++) {
+        for (j = 0; j < frame_count; j++) {
             Credits_PollInput();
             Credits_DrawFrame(0);
         }
     }
 }
 
-void Credits_MainLoop(s32 arg0) {
-    static u8 D_86A026F8 = 0;
+/**
+ * Main staff-roll loop. Starts music track 0x42 when `is_round_1` is set and 0x43 otherwise,
+ * then each frame advances sFrameDelta, the camera move and the backdrop segment timer.
+ * When a segment ends it picks and loads the next arena (segment 3 also swaps arenas at 1/3
+ * and 2/3 of its length keeping the camera move); after the end marker the arena is cleared.
+ * Exits 721 frames after the end logo is fully opaque, or after 361 frames on A or Start.
+ */
+void Credits_MainLoop(s32 is_round_1) {
+    // Extra arena swaps already made during segment 3 (at most 2).
+    static u8 sSegment3ReloadCount = 0;
 
-    s32 var_s6 = 1;
+    s32 running = 1;
 
     StageLoader_RunFrames(0x3C);
     StageFade_StartFromOpaque(0xB4);
 
-    if (arg0 != 0) {
+    if (is_round_1 != 0) {
         Audio_StartMusicTrack(0x42);
     } else {
         Audio_StartMusicTrack(0x43);
     }
 
-    Credits_SelectNextScene(&D_86A061D8, &D_86A061D9);
-    Credits_LoadBackgroundScene(D_86A061D8, D_86A061D9);
+    Credits_SelectNextScene(&sArenaIndex, &sCameraShot);
+    Credits_LoadBackgroundScene(sArenaIndex, sCameraShot);
 
-    while (var_s6 != 0) {
-        func_86A01490();
+    while (running != 0) {
+        Credits_UpdateFrameDelta();
         Particle_UpdateFrameCounters();
 
-        if (D_86A025A0[D_86A025C4].unk_02 != 0) {
-            if (D_86A025A0[D_86A025C4].unk_00 != -1) {
-                if (D_86A061D9 < 9) {
-                    Credits_StepCameraYawBlend();
+        if (sBackgroundSegments[sSegmentIndex].duration != 0) {
+            if (sBackgroundSegments[sSegmentIndex].endMarker != -1) {
+                if (sCameraShot < 9) {
+                    Credits_StepCameraOrbitBlend();
                 } else {
                     Credits_StepCameraKeyframeBlend();
                 }
             }
 
-            if (D_86A025CC >= D_86A025A0[D_86A025C4].unk_02) {
-                D_86A025C4++;
-                if (D_86A025A0[D_86A025C4].unk_02 != 0) {
-                    D_86A025A0[D_86A025C4].unk_02 =
-                        D_86A025A0[D_86A025C4 - 1].unk_02 + (D_86A025A0[D_86A025C4].unk_02 - D_86A025CC);
+            if (sSegmentTimer >= sBackgroundSegments[sSegmentIndex].duration) {
+                sSegmentIndex++;
+                if (sBackgroundSegments[sSegmentIndex].duration != 0) {
+                    sBackgroundSegments[sSegmentIndex].duration =
+                        sBackgroundSegments[sSegmentIndex - 1].duration + (sBackgroundSegments[sSegmentIndex].duration - sSegmentTimer);
                 }
 
-                D_86A025CC = 0;
+                sSegmentTimer = 0;
 
-                if (D_86A025A0[D_86A025C4].unk_00 != -1) {
-                    Credits_SelectNextScene(&D_86A061D8, &D_86A061D9);
-                    Credits_LoadBackgroundScene(D_86A061D8, D_86A061D9);
+                if (sBackgroundSegments[sSegmentIndex].endMarker != -1) {
+                    Credits_SelectNextScene(&sArenaIndex, &sCameraShot);
+                    Credits_LoadBackgroundScene(sArenaIndex, sCameraShot);
                 } else {
-                    D_86A061D8 = -1;
-                    D_86A025C8 = 0;
+                    sArenaIndex = -1;
+                    sArenaBackdrop = 0;
 
-                    GeoNode_CreateContainer(NULL, &D_86A06190);
-                    GeoNode_CreateContainer(NULL, &D_86A061A8);
-                    GeoNode_CreateContainer(NULL, &D_86A061C0);
+                    GeoNode_CreateContainer(NULL, &sArenaLayout0);
+                    GeoNode_CreateContainer(NULL, &sArenaLayout1);
+                    GeoNode_CreateContainer(NULL, &sArenaLayout3);
 
-                    D_86A06170.node.flags &= ~1;
-                    if (D_86A025A0[D_86A025C4].unk_02 == 0) {
+                    sArenaFog.node.flags &= ~1;
+                    if (sBackgroundSegments[sSegmentIndex].duration == 0) {
                         main_pool_pop_state('BACK');
                     }
                 }
-            } else if ((D_86A025C4 == 3) && (D_86A026F8 < 2) &&
-                       (D_86A025CC >= (((D_86A025A0[D_86A025C4].unk_02 * (D_86A026F8 + 1)) / 3) - 1))) {
-                Credits_SelectNextScene(&D_86A061D8, &D_86A061D9);
-                Credits_LoadBackgroundScene(D_86A061D8, 0xFF);
-                D_86A026F8++;
+            } else if ((sSegmentIndex == 3) && (sSegment3ReloadCount < 2) &&
+                       (sSegmentTimer >= (((sBackgroundSegments[sSegmentIndex].duration * (sSegment3ReloadCount + 1)) / 3) - 1))) {
+                Credits_SelectNextScene(&sArenaIndex, &sCameraShot);
+                Credits_LoadBackgroundScene(sArenaIndex, 0xFF);
+                sSegment3ReloadCount++;
             }
         }
 
         Credits_PollInput();
         Credits_UpdateCamera();
 
-        if (D_86A05B50 >= 0x2D1) {
-            var_s6 = 0;
-        } else if ((D_86A05B50 >= 0x169) &&
+        if (sLogoHoldTimer >= 0x2D1) {
+            running = 0;
+        } else if ((sLogoHoldTimer >= 0x169) &&
                    ((gPlayer1Controller->buttonPressed & 0x1000) || (gPlayer1Controller->buttonPressed & 0x8000))) {
-            var_s6 = 0;
+            running = 0;
         }
 
         Credits_DrawFrame(1);
 
-        if (D_86A025A0[D_86A025C4].unk_02 != 0) {
-            D_86A025CC += D_86A06210;
+        if (sBackgroundSegments[sSegmentIndex].duration != 0) {
+            sSegmentTimer += sFrameDelta;
         }
     }
 }
 
 static s32 pad_D_86A026FC = 0;
-unk_D_86A02700 D_86A02700[] = {
+// Page color/alpha keyframes: invisible at frame 0, opaque with lighter colors at frame 8,
+// settled colors from frame 30, then a 20-frame fade out. Frames for keyframes 3 and 4 are
+// rewritten per page by Credits_InterpolateRoleColor.
+CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
     {
         0,
         0,
         {
-            { 0xFF, 0, 0xE6 },
-            { 0xFF, 0xC8, 0xFF },
-            { 0, 0x46, 0xFF },
-            { 0x64, 0xFF, 0xFF },
+            { 0xFF, 0, 0xE6 }, // #FF00E6
+            { 0xFF, 0xC8, 0xFF }, // #FFC8FF
+            { 0, 0x46, 0xFF }, // #0046FF
+            { 0x64, 0xFF, 0xFF }, // #64FFFF
         },
     },
     {
         8,
         0xFF,
         {
-            { 0xFF, 0xC8, 0xFF },
-            { 0xFF, 0xFF, 0xFF },
-            { 0x64, 0xFF, 0xFF },
-            { 0xFF, 0xFF, 0xFF },
+            { 0xFF, 0xC8, 0xFF }, // #FFC8FF
+            { 0xFF, 0xFF, 0xFF }, // #FFFFFF
+            { 0x64, 0xFF, 0xFF }, // #64FFFF
+            { 0xFF, 0xFF, 0xFF }, // #FFFFFF
         },
     },
     {
         0x1E,
         0xFF,
         {
-            { 0xFF, 0, 0xFF },
-            { 0xFF, 0xC8, 0xFF },
-            { 0, 0x46, 0xFF },
-            { 0x64, 0xFF, 0xFF },
+            { 0xFF, 0, 0xFF }, // #FF00FF
+            { 0xFF, 0xC8, 0xFF }, // #FFC8FF
+            { 0, 0x46, 0xFF }, // #0046FF
+            { 0x64, 0xFF, 0xFF }, // #64FFFF
         },
     },
     {
         0x153,
         0xFF,
         {
-            { 0xFF, 0, 0xFF },
-            { 0xFF, 0xC8, 0xFF },
-            { 0, 0x46, 0xFF },
-            { 0x64, 0xFF, 0xFF },
+            { 0xFF, 0, 0xFF }, // #FF00FF
+            { 0xFF, 0xC8, 0xFF }, // #FFC8FF
+            { 0, 0x46, 0xFF }, // #0046FF
+            { 0x64, 0xFF, 0xFF }, // #64FFFF
         },
     },
     {
         0x167,
         0,
         {
-            { 0xFF, 0, 0xE6 },
-            { 0xFF, 0xC8, 0xFF },
-            { 0, 0x46, 0xFF },
-            { 0x64, 0xFF, 0xFF },
+            { 0xFF, 0, 0xE6 }, // #FF00E6
+            { 0xFF, 0xC8, 0xFF }, // #FFC8FF
+            { 0, 0x46, 0xFF }, // #0046FF
+            { 0x64, 0xFF, 0xFF }, // #64FFFF
         },
     },
 };
 
-static unk_D_86A02750 D_86A02750[] = {
+// The 187 staff-roll lines in display order, one per string of textdata table 45 (US 1.0
+// assets/us/textdata/45.bin). Entry 0 is "DIRECTOR" / "Takao Shimizu" ...; the last is
+// "EXECUTIVE PRODUCER" / "Hiroshi Yamauchi". Style 2 entries are blank spacers whose table
+// strings are empty (lines 126 and 155).
+static CreditsRoleLine sRoleLines[] = {
     {
         0,
         { &D_86A05B60, &D_86A05B64 },
@@ -1260,13 +1336,16 @@ static unk_D_86A02750 D_86A02750[] = {
     },
 };
 
-unk_D_86A03014 D_86A03014[29] = {
+// The staff roll in 27 pages followed by two terminators (duration 0). Page 0 points at
+// sRoleLines; Credits_DrawRoleList chains each following page to the line after the previous
+// page's last line. Durations sum to 9120 frames, the same total as sBackgroundSegments.
+CreditsRolePage sRolePages[29] = {
     {
         0,
         360,
         40,
         6,
-        D_86A02750,
+        sRoleLines,
     },
     {
         0,
@@ -1466,6 +1545,10 @@ unk_D_86A03014 D_86A03014[29] = {
     },
 };
 
+/**
+ * Outro: fades audio categories 1 and 2 and the screen to black over 120 frames, then waits
+ * 60 frames.
+ */
 void Credits_OutroLoop(void) {
     u8 i;
 
@@ -1481,56 +1564,70 @@ void Credits_OutroLoop(void) {
     StageLoader_RunFrames(0x3C);
 }
 
+/**
+ * Takes the camera node from the root of sArenaGeoLayout and sets the initial orbit
+ * (rotationX 0x100, rotationY 0, distance 120) and clip planes.
+ */
 void Credits_InitCamera(void) {
-    D_86A061E8 = D_86A061E4->children;
-    D_86A061EC = 0x100;
-    D_86A061EE = 0;
-    D_86A061F0 = 0x78;
+    sArenaCamera = sArenaRoot->children;
+    sCameraRotationX = 0x100;
+    sCameraRotationY = 0;
+    sCameraDistance = 0x78;
 
-    D_86A061E8->perspective.nearPlane = 50.0f;
-    D_86A061E8->perspective.farPlane = 6400.0f;
-    Camera_ComputeEyeFromAngles(&D_86A061E8->view.targetPosition, &D_86A061E8->view.eyePosition, D_86A061F0, D_86A061EC,
-                                D_86A061EE);
+    sArenaCamera->perspective.nearPlane = 50.0f;
+    sArenaCamera->perspective.farPlane = 6400.0f;
+    Camera_ComputeEyeFromAngles(&sArenaCamera->view.targetPosition, &sArenaCamera->view.eyePosition, sCameraDistance, sCameraRotationX,
+                                sCameraRotationY);
 }
 
-void Credits_InitScene(s32 arg0) {
-    MemoryBlock* sp2C;
+/**
+ * Opens the stadium_models archive, builds sArenaGeoLayout with an empty arena, prepares the
+ * staff roll from sRolePages and pushes the 'BACK' pool state that each arena load replaces.
+ */
+void Credits_InitScene(s32 is_round_1) {
+    MemoryBlock* layout_pool;
     MemoryBlock* temp_v0;
 
-    D_86A061DC = ASSET_LOAD2(stadium_models, 1, 1);
-    GeoNode_CreateFog(0, &D_86A06170, 0x3C0, 0x3E8, 0xFF, 0xFF, 0xFF, 0xFF);
-    GeoNode_CreateContainer(NULL, &D_86A06190);
-    GeoNode_CreateContainer(NULL, &D_86A061A8);
-    GeoNode_CreateContainer(NULL, &D_86A061C0);
+    sStadiumModelArchive = ASSET_LOAD2(stadium_models, 1, 1);
+    GeoNode_CreateFog(0, &sArenaFog, 0x3C0, 0x3E8, 0xFF, 0xFF, 0xFF, 0xFF);
+    GeoNode_CreateContainer(NULL, &sArenaLayout0);
+    GeoNode_CreateContainer(NULL, &sArenaLayout1);
+    GeoNode_CreateContainer(NULL, &sArenaLayout3);
     Credits_SetBackgroundTint(0xFF, 0xFF, 0xFF);
-    sp2C = MainPool_AllocState(main_pool_get_available(), 0);
-    D_86A061E4 = process_geo_layout(sp2C, &D_86A025D0);
-    MainPool_FinalizeAllocation(sp2C);
+    layout_pool = MainPool_AllocState(main_pool_get_available(), 0);
+    sArenaRoot = process_geo_layout(layout_pool, &sArenaGeoLayout);
+    MainPool_FinalizeAllocation(layout_pool);
     ModelRenderer_InitDisplayRoots();
     Credits_InitCamera();
-    func_86A013C8(1, arg0, D_86A03014);
-    D_86A061D8 = -1;
+    Credits_InitRoleList(1, is_round_1, sRolePages);
+    sArenaIndex = -1;
 
     main_pool_push_state('BACK');
 }
 
-s32 Credits_Main(s32 arg0, s32 arg1) {
-    StageContext* sp24;
+/**
+ * Fragment entry for the staff credits. State_RunCredits passes `is_round_1` = 1 unless
+ * gSessionContext.inRound2 is set; Kids Club dispatch case 11 passes 0. Runs the logo
+ * intro, the staff roll over random battle arenas and the outro.
+ * //@src/game_state.c State_RunCredits //@src/minigame_dispatch.c
+ */
+s32 Credits_Main(s32 unused, s32 is_round_1) {
+    StageContext* stage_context;
 
     main_pool_push_state('ROLE');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
-    sp24 = StageContext_Allocate(0, 1, 3, 1, 1, 1);
-    D_86A06200 = Font_Init(4, 0);
+    stage_context = StageContext_Allocate(0, 1, 3, 1, 1, 1);
+    sFontContext = Font_Init(4, 0);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, kids_club_game_ui, 0);
     FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
 
-    Credits_InitScene(arg1);
-    StageContext_Activate(sp24);
+    Credits_InitScene(is_round_1);
+    StageContext_Activate(stage_context);
     Credits_IntroLoop();
-    Credits_MainLoop(arg1);
+    Credits_MainLoop(is_round_1);
     Credits_OutroLoop();
     StageContext_Deactivate();
     Font_Free();
@@ -1541,47 +1638,53 @@ s32 Credits_Main(s32 arg0, s32 arg1) {
     return 0;
 }
 
-s32 Credits_InterpolateRoleColor(Color_RGBA8_u32* arg0, u16 arg1, u16 arg2, u8 arg3) {
+/**
+ * Computes the four staff-roll colors for page time `timer` by linear interpolation between
+ * sRoleColorKeyframes. Keyframes 3 and 4 are moved so the fade out ends 1 frame before the
+ * page's trailing blank period. Returns 0 (draw nothing) once timer reaches
+ * duration - blank_frames, otherwise 1.
+ */
+s32 Credits_InterpolateRoleColor(Color_RGBA8_u32* colors, u16 timer, u16 duration, u8 blank_frames) {
     u8 i;
     u8 j;
-    u8 temp_fv1;
+    u8 alpha;
 
-    if (arg1 >= (arg2 - arg3)) {
+    if (timer >= (duration - blank_frames)) {
         return 0;
     }
 
-    D_86A02700[3].unk_00 = (arg2 - arg3) - 0x15;
-    D_86A02700[4].unk_00 = (arg2 - arg3) - 1;
+    sRoleColorKeyframes[3].frame = (duration - blank_frames) - 0x15;
+    sRoleColorKeyframes[4].frame = (duration - blank_frames) - 1;
 
     for (i = 0; i < 5; i++) {
-        if (arg1 == D_86A02700[i].unk_00) {
+        if (timer == sRoleColorKeyframes[i].frame) {
             for (j = 0; j < 4; j++) {
-                Color_SetRGBA(&arg0[j], D_86A02700[i].unk_03[j].r, D_86A02700[i].unk_03[j].g, D_86A02700[i].unk_03[j].b,
-                              D_86A02700[i].unk_02);
+                Color_SetRGBA(&colors[j], sRoleColorKeyframes[i].colors[j].r, sRoleColorKeyframes[i].colors[j].g, sRoleColorKeyframes[i].colors[j].b,
+                              sRoleColorKeyframes[i].alpha);
             }
             break;
         }
 
-        if ((D_86A02700[i].unk_00 < arg1) && (arg1 < D_86A02700[i + 1].unk_00)) {
-            temp_fv1 =
-                (s32)ROUND_MAX((((D_86A02700[i + 1].unk_02 - D_86A02700[i].unk_02) * (arg1 - D_86A02700[i].unk_00)) /
-                                (f32)(D_86A02700[i + 1].unk_00 - D_86A02700[i].unk_00)) +
-                               D_86A02700[i].unk_02);
+        if ((sRoleColorKeyframes[i].frame < timer) && (timer < sRoleColorKeyframes[i + 1].frame)) {
+            alpha =
+                (s32)ROUND_MAX((((sRoleColorKeyframes[i + 1].alpha - sRoleColorKeyframes[i].alpha) * (timer - sRoleColorKeyframes[i].frame)) /
+                                (f32)(sRoleColorKeyframes[i + 1].frame - sRoleColorKeyframes[i].frame)) +
+                               sRoleColorKeyframes[i].alpha);
 
             for (j = 0; j < 4; j++) {
-                arg0[j].r = (s32)ROUND_MAX(
-                    (((D_86A02700[i + 1].unk_03[j].r - D_86A02700[i].unk_03[j].r) * (arg1 - D_86A02700[i].unk_00)) /
-                     (f32)(D_86A02700[i + 1].unk_00 - D_86A02700[i].unk_00)) +
-                    D_86A02700[i].unk_03[j].r);
-                arg0[j].g = (s32)ROUND_MAX(
-                    (((D_86A02700[i + 1].unk_03[j].g - D_86A02700[i].unk_03[j].g) * (arg1 - D_86A02700[i].unk_00)) /
-                     (f32)(D_86A02700[i + 1].unk_00 - D_86A02700[i].unk_00)) +
-                    D_86A02700[i].unk_03[j].g);
-                arg0[j].b = (s32)ROUND_MAX(
-                    (((D_86A02700[i + 1].unk_03[j].b - D_86A02700[i].unk_03[j].b) * (arg1 - D_86A02700[i].unk_00)) /
-                     (f32)(D_86A02700[i + 1].unk_00 - D_86A02700[i].unk_00)) +
-                    D_86A02700[i].unk_03[j].b);
-                arg0[j].a = temp_fv1;
+                colors[j].r = (s32)ROUND_MAX(
+                    (((sRoleColorKeyframes[i + 1].colors[j].r - sRoleColorKeyframes[i].colors[j].r) * (timer - sRoleColorKeyframes[i].frame)) /
+                     (f32)(sRoleColorKeyframes[i + 1].frame - sRoleColorKeyframes[i].frame)) +
+                    sRoleColorKeyframes[i].colors[j].r);
+                colors[j].g = (s32)ROUND_MAX(
+                    (((sRoleColorKeyframes[i + 1].colors[j].g - sRoleColorKeyframes[i].colors[j].g) * (timer - sRoleColorKeyframes[i].frame)) /
+                     (f32)(sRoleColorKeyframes[i + 1].frame - sRoleColorKeyframes[i].frame)) +
+                    sRoleColorKeyframes[i].colors[j].g);
+                colors[j].b = (s32)ROUND_MAX(
+                    (((sRoleColorKeyframes[i + 1].colors[j].b - sRoleColorKeyframes[i].colors[j].b) * (timer - sRoleColorKeyframes[i].frame)) /
+                     (f32)(sRoleColorKeyframes[i + 1].frame - sRoleColorKeyframes[i].frame)) +
+                    sRoleColorKeyframes[i].colors[j].b);
+                colors[j].a = alpha;
             }
 
             break;
@@ -1598,10 +1701,10 @@ s32 Credits_InterpolateRoleColor(Color_RGBA8_u32* arg0, u16 arg1, u16 arg2, u8 a
  *
  * IDO emits a block-scope static's `.lcomm` in its internal symbol-table walk order, which
  * for this translation unit interleaves the file's statics and globals with the externs
- * referenced by the D_86A02700/D_86A03014 tables. On its own, this static's `.lcomm` would
- * be emitted just ahead of D_86A06210 and the bss globals would slide four bytes. The six
+ * referenced by the sRoleColorKeyframes/sRolePages tables. On its own, this static's `.lcomm` would
+ * be emitted just ahead of sFrameDelta and the bss globals would slide four bytes. The six
  * never-defined `lcomm_walk_pad_*` prototypes below exist only to grow that symbol table
- * so the walk places this static between D_86A06214 and D_86A0621C; they emit no code,
+ * so the walk places this static between sCurrentRolePage and sLastRetraceCount; they emit no code,
  * data, or bss. Deleting any one of them, or adding another, shifts the bss layout.
  */
 static void lcomm_walk_pad_0(void);
@@ -1611,142 +1714,160 @@ static void lcomm_walk_pad_3(void);
 static void lcomm_walk_pad_4(void);
 static void lcomm_walk_pad_5(void);
 
-void func_86A013C8(u8 arg0, u8 arg1, unk_D_86A03014* arg2) {
+/**
+ * Prepares the staff roll: loads every string of textdata table 45 (the US staff credits)
+ * into sRoleLines[i].text[0], sets the starting frame delta, clears the text column and
+ * frame-delta history, and makes `pages` the current page. `is_round_1` is unused.
+ */
+void Credits_InitRoleList(u8 initial_frame_delta, u8 is_round_1, CreditsRolePage* pages) {
     static char** sCreditsText;
 
     u16 i;
-    u16 sp2C;
-    unk_D_86A02750* ptr;
+    u16 line_count;
+    CreditsRoleLine* line;
 
-    sp2C = Credits_GetRoleCount();
+    line_count = Credits_GetRoleLineCount();
     Text_InitStringTables();
     sCreditsText = Text_GetStringTable(0x2D);
 
-    for (i = 0, ptr = D_86A02750; i < sp2C; i++, ptr++) {
-        ptr->unk_04[0] = Text_GetString(NULL, 0, sCreditsText, i);
+    for (i = 0, line = sRoleLines; i < line_count; i++, line++) {
+        line->text[0] = Text_GetString(NULL, 0, sCreditsText, i);
     }
 
-    D_86A06210 = arg0;
-    D_86A06211 = 0;
-    D_86A06212 = 0;
-    D_86A06214 = arg2;
+    sFrameDelta = initial_frame_delta;
+    sRoleTextColumn = 0;
+    sFrameDeltaPrimed = 0;
+    sCurrentRolePage = pages;
 }
 
 /**
- * The wrap-around arm widens the counter to 64 bits before subtracting, which is what makes
+ * Sets sFrameDelta to the number of retraces (D_800A62E0.unk_A34, incremented by
+ * Sched_HandleRetrace) since the previous call, so the staff roll and camera keep real-time
+ * speed when frames are dropped. The first call only records the count.
+ * //@src/scheduler.c Sched_HandleRetrace
+ *
+ * FAKE: the wrap-around arm widens the counter to 64 bits before subtracting, which is what makes
  * IDO stage the value through the low half of a register pair (addiu t5, v0, 0) and only then
  * do the 32-bit subtract (subu t9, t5, v1). The two chained 0x100000000 subtractions cancel
  * out of the low word (the result is truncated to 8 bits anyway), but they are what puts the
  * pair at t4:t5 instead of t2:t3.
  */
-void func_86A01490(void) {
-    s32 temp_v0 = D_800A62E0.unk_A34;
+void Credits_UpdateFrameDelta(void) {
+    s32 retrace_count = D_800A62E0.unk_A34;
 
-    if (D_86A06212 == 0) {
-        D_86A06212 = 1;
-    } else if ((u32)D_86A0621C < (u32)temp_v0) {
-        D_86A06210 = temp_v0 - D_86A0621C;
+    if (sFrameDeltaPrimed == 0) {
+        sFrameDeltaPrimed = 1;
+    } else if ((u32)sLastRetraceCount < (u32)retrace_count) {
+        sFrameDelta = retrace_count - sLastRetraceCount;
     } else {
-        D_86A06210 = ((u64)(u32)temp_v0 - 0x100000000ULL - 0x100000000ULL) - D_86A0621C;
+        sFrameDelta = ((u64)(u32)retrace_count - 0x100000000ULL - 0x100000000ULL) - sLastRetraceCount;
     }
-    D_86A0621C = temp_v0;
+    sLastRetraceCount = retrace_count;
 }
 
+/**
+ * Draws and advances the current staff-roll page. Lines are centered horizontally at x 160;
+ * the block is centered vertically using 17 pixels per printed line, 12 extra pixels before a
+ * heading that follows a name, 4 before a name that follows a heading and 10 per spacer.
+ * Headings use colors 0/1 and names colors 2/3 from Credits_InterpolateRoleColor. When the
+ * page timer reaches its duration the next page is chained to the following lines and its
+ * duration absorbs the overshoot; after the last page the Pokemon Stadium logo fades in.
+ */
 void Credits_DrawRoleList(void) {
-    u8 var_a1;
-    u8 var_s0;
-    u8 var_s1;
+    u8 heading_gap;
+    u8 heading_count;
+    u8 spacer_count;
     u8 i;
-    s32 var_s5;
-    Color_RGBA8_u32 sp60[4];
-    u16 var_s11;
-    unk_D_86A02750* ptr;
-    unk_D_86A03014 sp4C;
+    s32 current_style;
+    Color_RGBA8_u32 colors[4];
+    u16 y;
+    CreditsRoleLine* line;
+    CreditsRolePage finished_page;
 
-    if (D_86A06214 == NULL) {
-        Credits_DrawContinuePrompt(1);
+    if (sCurrentRolePage == NULL) {
+        Credits_DrawStadiumLogo(1);
         return;
     }
 
-    var_s0 = 0;
-    var_s1 = 0;
+    heading_count = 0;
+    spacer_count = 0;
 
-    if (Credits_InterpolateRoleColor(sp60, D_86A06214->unk_00, D_86A06214->unk_02, D_86A06214->unk_04) != 0) {
+    if (Credits_InterpolateRoleColor(colors, sCurrentRolePage->timer, sCurrentRolePage->duration, sCurrentRolePage->blankFrames) != 0) {
         Font_BeginTranslucentTextRendering();
         Font_EnableTwoCycleTexturing();
         Font_SetActive(4, 0);
 
-        var_s5 = 0;
+        current_style = 0;
 
-        Gfx_SetEnvColor(sp60[0].r, sp60[0].g, sp60[0].b, sp60[0].a);
-        Gfx_SetPrimColor(sp60[1].r, sp60[1].g, sp60[1].b, sp60[1].a);
+        Gfx_SetEnvColor(colors[0].r, colors[0].g, colors[0].b, colors[0].a);
+        Gfx_SetPrimColor(colors[1].r, colors[1].g, colors[1].b, colors[1].a);
 
-        ptr = D_86A06214->unk_08;
-        for (i = 0; i < D_86A06214->unk_05; i++, ptr++) {
-            switch (ptr->unk_00) {
+        line = sCurrentRolePage->lines;
+        for (i = 0; i < sCurrentRolePage->lineCount; i++, line++) {
+            switch (line->style) {
                 case 0:
-                    var_s0++;
+                    heading_count++;
                     break;
 
                 case 2:
-                    var_s1++;
+                    spacer_count++;
                     break;
             }
         }
 
-        if (var_s0 >= 2) {
-            var_a1 = ((var_s0 * 4) + (var_s0 * 0xC) + (var_s1 * 0xA)) - 0xC;
+        if (heading_count >= 2) {
+            heading_gap = ((heading_count * 4) + (heading_count * 0xC) + (spacer_count * 0xA)) - 0xC;
         } else {
-            var_a1 = (var_s0 * 4) + (var_s1 * 0xA);
+            heading_gap = (heading_count * 4) + (spacer_count * 0xA);
         }
 
-        var_s11 = (((-((D_86A06214->unk_05 - var_s1) * 0x11) - var_a1) + 0xF0) / 2) & 0xFFFF;
+        y = (((-((sCurrentRolePage->lineCount - spacer_count) * 0x11) - heading_gap) + 0xF0) / 2) & 0xFFFF;
 
-        for (i = 0, ptr = D_86A06214->unk_08; i < D_86A06214->unk_05; i++, ptr++) {
-            if (ptr->unk_00 == 2) {
-                var_s11 += 0xA;
+        for (i = 0, line = sCurrentRolePage->lines; i < sCurrentRolePage->lineCount; i++, line++) {
+            if (line->style == 2) {
+                y += 0xA;
                 continue;
             }
 
-            if (var_s5 != ptr->unk_00) {
-                switch (ptr->unk_00) {
+            if (current_style != line->style) {
+                switch (line->style) {
                     case 0:
-                        Gfx_SetEnvColor(sp60[0].r, sp60[0].g, sp60[0].b, sp60[0].a);
-                        Gfx_SetPrimColor(sp60[1].r, sp60[1].g, sp60[1].b, sp60[1].a);
-                        var_s5 = 0;
-                        var_s11 += 0xC;
+                        Gfx_SetEnvColor(colors[0].r, colors[0].g, colors[0].b, colors[0].a);
+                        Gfx_SetPrimColor(colors[1].r, colors[1].g, colors[1].b, colors[1].a);
+                        current_style = 0;
+                        y += 0xC;
                         break;
 
                     case 1:
-                        Gfx_SetEnvColor(sp60[2].r, sp60[2].g, sp60[2].b, sp60[2].a);
-                        Gfx_SetPrimColor(sp60[3].r, sp60[3].g, sp60[3].b, sp60[3].a);
-                        var_s5 = 1;
-                        var_s11 += 4;
+                        Gfx_SetEnvColor(colors[2].r, colors[2].g, colors[2].b, colors[2].a);
+                        Gfx_SetPrimColor(colors[3].r, colors[3].g, colors[3].b, colors[3].a);
+                        current_style = 1;
+                        y += 4;
                         break;
                 }
             }
 
-            Font_Printf(0xA0 - (Font_MeasureTextExtent(0, 0, ptr->unk_04[D_86A06211]) / 2), (var_s11 * 4) >> 2,
-                        ptr->unk_04[D_86A06211]);
-            var_s11 += 0x11;
+            Font_Printf(0xA0 - (Font_MeasureTextExtent(0, 0, line->text[sRoleTextColumn]) / 2), (y * 4) >> 2,
+                        line->text[sRoleTextColumn]);
+            y += 0x11;
         }
 
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
 
-    D_86A06214->unk_00 = D_86A06214->unk_00 + D_86A06210;
-    if (D_86A06214->unk_00 >= D_86A06214->unk_02) {
-        sp4C = *D_86A06214;
+    sCurrentRolePage->timer = sCurrentRolePage->timer + sFrameDelta;
+    if (sCurrentRolePage->timer >= sCurrentRolePage->duration) {
+        finished_page = *sCurrentRolePage;
 
-        D_86A06214++;
+        sCurrentRolePage++;
 
-        D_86A06214->unk_08 = &sp4C.unk_08[sp4C.unk_05];
-        if (D_86A06214->unk_02 == 0) {
-            D_86A06214 = NULL;
+        sCurrentRolePage->lines = &finished_page.lines[finished_page.lineCount];
+        if (sCurrentRolePage->duration == 0) {
+            sCurrentRolePage = NULL;
         } else {
-            D_86A06214->unk_02 = (D_86A06214->unk_02 - sp4C.unk_00) + sp4C.unk_02;
-            D_86A06214->unk_00 = 0;
+            sCurrentRolePage->duration = (sCurrentRolePage->duration - finished_page.timer) + finished_page.duration;
+            sCurrentRolePage->timer = 0;
         }
     }
 }
