@@ -5,7 +5,7 @@ This is a disclaimer of what sections of the repo had the most human involvement
 This disclaimer only covers annotation. We do not keep a trail of what functions were matched by a human vs matched by an AI because the distinction is not helpful given the availability of a deterministic oracle for matching. Annotation has no such oracle, which is why we record provence for it in this document.
 
 ## Substantial Human Involvement
-These sections of the code involve a substantial degree of human verification for their annotation, or are planned to require such.
+These sections of the code involved a substantial degree of human verification for their annotation
 - `area_select`
 - `battle_engine`
 - `battle_order_selection`
