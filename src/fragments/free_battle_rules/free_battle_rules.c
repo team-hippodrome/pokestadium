@@ -14,27 +14,36 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-typedef struct unk_D_84002D18 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} unk_D_84002D18; // size = 0x4
+typedef struct TagTeamSelection {
+    /* 0x00 */ s16 leftSideTeam;
+    /* 0x02 */ s16 rightSideTeam;
+} TagTeamSelection; // size = 0x4
 
-typedef struct unk_D_84002D28 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-} unk_D_84002D28; // size >= 0xA
+typedef struct ComDifficultyWindow {
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
+    /* 0x04 */ s16 openTicks;
+    /* 0x06 */ s16 nextState;
+    /* 0x08 */ s16 hoveredDifficulty;
+} ComDifficultyWindow; // size = 0xA
 
-typedef struct unk_D_84002BE8 {
-    /* 0x00 */ s16 unk_00;
+typedef struct TagTeamOption {
+    /* 0x00 */ s16 controllerMask;
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ u8* unk_08;
-    /* 0x0C */ u8* unk_0C;
-} unk_D_84002BE8; // size = 0x10
+    /* 0x04 */ s16 x;
+    /* 0x06 */ s16 y;
+    /* 0x08 */ u8* firstPlayerIcon;
+    /* 0x0C */ u8* secondPlayerIcon;
+} TagTeamOption; // size = 0x10
+
+#define FB_STATE_SELECT_LEFT_SIDE 1
+#define FB_STATE_SELECT_RIGHT_SIDE 2
+#define FB_STATE_SELECT_RULESET 3
+#define FB_STATE_SELECT_COM_DIFFICULTY 4
+#define FB_STATE_OPENING_COM_DIFFICULTY_WINDOW 5
+#define FB_STATE_CLOSING_COM_DIFFICULTY_WINDOW 6
+#define FB_STATE_CONFIRM 7
+#define FB_STATE_EXIT 8
 
 static char** sRuleSelectText;
 static char** sPokemonDetailText;
@@ -44,19 +53,19 @@ static s32 pad_D_84002D08_us_rev2;
 static BinArchive* D_84002D08;
 static u8* D_84002D0C;
 static s32 pad_D_84002D10;
-static s16 D_84002D14;
-static s16 D_84002D16;
+static s16 sConnectedControllers;
+static s16 sSettingsState;
 #if defined(VERSION_US_REV2)
 static s32 pad_D_84002D18_us_rev2;
 #endif
-static unk_D_84002D18 D_84002D18;
+static TagTeamSelection sTagTeamSelection;
 static s32 pad_D_84002D1C;
-static s16 D_84002D20;
-static unk_D_84002D28 D_84002D28;
+static s16 sHoveredRuleset;
+static ComDifficultyWindow sComDifficultyWindow;
 
-static s16 D_84002BE0 = 2;
-static s16 D_84002BE4 = 0;
-static unk_D_84002BE8 D_84002BE8[11] = {
+static s16 sPanelDrawBudget = 2;
+static s16 sComDifficulty = 0;
+static TagTeamOption sTagTeamOptions[11] = {
     {
         1,
         0,
@@ -130,7 +139,7 @@ static unk_D_84002BE8 D_84002BE8[11] = {
         0x03009E70,
     },
     {
-        10,
+        0xA,
         15,
         336,
         36,
@@ -138,7 +147,7 @@ static unk_D_84002BE8 D_84002BE8[11] = {
         0x0300A5C0,
     },
     {
-        12,
+        0xC,
         15,
         336,
         66,
@@ -146,216 +155,218 @@ static unk_D_84002BE8 D_84002BE8[11] = {
         0x0300A5C0,
     },
 };
-static s16 D_84002C98[] = { 0, 3, 4, 5, 6, 0 };
+static s16 sRulesetCategories[] = { 0, 3, 4, 5, 6, 0 };
 
-void FreeBattle_DrawHeaderImage(s16 arg0, s16 arg1) {
+void FreeBattle_DrawPokeBallIcon(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x30, 0x18, gPokeBallIconTop, 0x30, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x18, 0x30, 0x18, gPokeBallIconBottom, 0x30, 0);
+    Gfx_DrawTextureRgba16(x, y, 48, 24, gPokeBallIconTop, 48, 0);
+    Gfx_DrawTextureRgba16(x, y + 24, 48, 24, gPokeBallIconBottom, 48, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void FreeBattle_DrawBannerImage(s16 arg0, s16 arg1) {
+void FreeBattle_DrawVsIcon(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x64, 0x14, D_200B3E0, 0x64, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x14, 0x64, 0x14, D_200C380, 0x64, 0);
-    Gfx_DrawTextureRgba16(arg0, arg1 + 0x28, 0x64, 0x10, D_200D320, 0x64, 0);
+    Gfx_DrawTextureRgba16(x, y, 100, 20, gVsTop, 100, 0);
+    Gfx_DrawTextureRgba16(x, y + 20, 100, 20, gVsMiddle, 100, 0);
+    Gfx_DrawTextureRgba16(x, y + 40, 100, 16, gVsBottom, 100, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void FreeBattle_DrawTintedBar(s16 arg0, s16 arg1, s16 arg2, Color_RGBA8* arg3, Color_RGBA8* arg4) {
+void FreeBattle_DrawTintedBar(s16 x, s16 y, s16 width, Color_RGBA8* env_color, Color_RGBA8* prim_color) {
     gSPDisplayList(gDisplayListHead++, D_8006F558);
-    gDPSetEnvColor(gDisplayListHead++, arg3->r, arg3->g, arg3->b, 255);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, arg4->r, arg4->g, arg4->b, 255);
+    gDPSetEnvColor(gDisplayListHead++, env_color->r, env_color->g, env_color->b, 255);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_color->r, prim_color->g, prim_color->b, 255);
 
-    Gfx_DrawTextureIa8(arg0, arg1, 0x10, 0x20, D_20003C0, 0x10, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 0x10, arg1, 0x10, 0x20, D_20005C0, 0x10, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 0x10, arg1, arg2 - 0x20, 0x20, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTextureIa8(x, y, 16, 32, D_20003C0, 0x10, 0);
+    Gfx_DrawTextureIa8((x + width) - 16, y, 16, 32, D_20005C0, 0x10, 0);
+    Gfx_DrawTexturedRectClipped(x + 16, y, width - 32, 32, 0, 0, 0, 0x400, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
 void FreeBattle_DrawTitleBar(void) {
-    Color_RGBA8 sp2C;
-    Color_RGBA8 sp28;
+    Color_RGBA8 fill_color;
+    Color_RGBA8 border_color;
 
-    Color_SetRGB(&sp2C, 0x64, 0x64, 0xC8);
-    Color_SetRGB(&sp28, 0x28, 0x28, 0x8C);
-    FreeBattle_DrawTintedBar(0x48, 0x28, 0x208, &sp2C, &sp28);
-    FreeBattle_DrawHeaderImage(0x30, 0x20);
+    Color_SetRGB(&fill_color, 0x64, 0x64, 0xC8); // #6464C8
+    Color_SetRGB(&border_color, 0x28, 0x28, 0x8C); // #28288C
+    FreeBattle_DrawTintedBar(72, 40, 520, &fill_color, &border_color);
+    FreeBattle_DrawPokeBallIcon(48, 32);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
-    Gfx_SetEnvColor(0, 0, 0, 0xFF);
-    Font_Printf(0x6A, 0x2C, Text_GetString(NULL, 0, sRuleSelectText, 0));
-    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
-    Font_Printf(0x68, 0x2A, Text_GetString(NULL, 0, sRuleSelectText, 0));
+    Gfx_SetEnvColor(0, 0, 0, 0xFF); // #000000
+    Font_Printf(106, 44, Text_GetString(NULL, 0, sRuleSelectText, 0));
+    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF); // #FFFF77
+    Font_Printf(104, 42, Text_GetString(NULL, 0, sRuleSelectText, 0));
     Font_EndTexturedTextRendering();
 }
 
-void FreeBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    static s16 D_84002CA4 = 0;
+void FreeBattle_DrawSelectionCorners(s16 x, s16 y, s16 width, s16 height) {
+    static s16 sSelectionCornerPhase = 0;
 
-    s16 sp56 = SINS(D_84002CA4) * 2;
+    s16 selection_corner_phase = SINS(sSelectionCornerPhase) * 2;
     UNUSED s32 pad[2];
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, 240, 212, 104, 255);
+    gDPSetEnvColor(gDisplayListHead++, 0xF0, 0xD4, 0x68, 255); // #f0d468
 
-    Gfx_DrawTextureIa8(arg0 + sp56, arg1 + sp56, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
-    Gfx_DrawTextureIa8(arg0 + sp56, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, arg1 + sp56, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 0x10, ((arg1 + arg3) - sp56) - 0x10, 0x10, 0x10, gTopRightSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(x + selection_corner_phase, y + selection_corner_phase, 16, 16, gBottomLeftSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(x + selection_corner_phase, ((y + height) - selection_corner_phase) - 16, 16, 16, gTopLeftSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(((x + width) - selection_corner_phase) - 16, y + selection_corner_phase, 16, 16, gBottomRightSelectionCorner, 16, 0);
+    Gfx_DrawTextureIa8(((x + width) - selection_corner_phase) - 16, ((y + height) - selection_corner_phase) - 16, 16, 16, gTopRightSelectionCorner, 16, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    D_84002CA4 += 0x2000;
+    sSelectionCornerPhase += 0x2000;
 }
 
-void FreeBattle_DrawPanelFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+void FreeBattle_DrawPanelFrame(s16 x, s16 y, s16 width, s16 height) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Gfx_DrawTextureIa8(arg0 - 3, arg1 - 3, 8, 8, D_2000340, 8, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 5, arg1 - 3, 8, 8, D_2000380, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 4, arg1 - 3, arg2 - 8, 8, 0, 0, 0, 0x400, 0);
-    Gfx_DrawTextureIa8(arg0 - 3, (arg1 + arg3) - 5, 8, 8, D_20002C0, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 - 3, arg1 + 4, 8, arg3 - 8, 0, 0, 0x400, 0, 0);
-    Gfx_DrawTextureIa8((arg0 + arg2) - 5, (arg1 + arg3) - 5, 8, 8, D_2000300, 8, 0);
-    Gfx_DrawTexturedRectClipped(arg0 + 4, (arg1 + arg3) - 5, arg2 - 8, 8, 0, 0, 0, 0x400, 0);
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - 5, arg1 + 4, 8, arg3 - 8, 0, 0, 0x400, 0, 0);
+    Gfx_DrawTextureIa8(x - 3, y - 3, 8, 8, D_2000340, 8, 0);
+    Gfx_DrawTextureIa8((x + width) - 5, y - 3, 8, 8, D_2000380, 8, 0);
+    Gfx_DrawTexturedRectClipped(x + 4, y - 3, width - 8, 8, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTextureIa8(x - 3, (y + height) - 5, 8, 8, D_20002C0, 8, 0);
+    Gfx_DrawTexturedRectClipped(x - 3, y + 4, 8, height - 8, 0, 0, 0x400, 0, 0);
+    Gfx_DrawTextureIa8((x + width) - 5, (y + height) - 5, 8, 8, D_2000300, 8, 0);
+    Gfx_DrawTexturedRectClipped(x + 4, (y + height) - 5, width - 8, 8, 0, 0, 0, 0x400, 0);
+    Gfx_DrawTexturedRectClipped((x + width) - 5, y + 4, 8, height - 8, 0, 0, 0x400, 0, 0);
 
     gSPDisplayList(gDisplayListHead++, D_8006F470);
 
-    Gfx_FillRectRgb(arg0 + 4, arg1 + 4, arg2 - 8, arg3 - 8, 0x3C, 0x3C, 0xA0);
+    Gfx_FillRectRgb(x + 4, y + 4, width - 8, height - 8, 0x3C, 0x3C, 0xA0); // #3c3ca0
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void FreeBattle_DrawSlicedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
-    s16 temp_a2;
-    s16 temp_s0_32;
-    s16 var_s2;
-    s16 var_s3;
+void FreeBattle_DrawRoundedPanel(s16 x, s16 y, s16 raw_width, s16 raw_height, u8 r, u8 g, u8 b, u8 alpha) {
+    s16 width;
+    s16 height;
+    s16 height_adjustment;
+    s16 width_adjustment;
 
-    if (arg2 >= 0x20) {
-        var_s3 = 0x10;
+    if (raw_width >= 32) {
+        width_adjustment = 16;
     } else {
-        var_s3 = arg2 / 2;
+        width_adjustment = raw_width / 2;
     }
 
-    if (arg3 >= 0x20) {
-        var_s2 = 0x10;
+    if (raw_height >= 32) {
+        height_adjustment = 16;
     } else {
-        var_s2 = arg3 / 2;
+        height_adjustment = raw_height / 2;
     }
-    temp_a2 = arg2 - (var_s3 * 2);
-    temp_s0_32 = arg3 - (var_s2 * 2);
+    width = raw_width - (width_adjustment * 2);
+    height = raw_height - (height_adjustment * 2);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, arg4, arg5, arg6, arg7);
+    gDPSetEnvColor(gDisplayListHead++, r, g, b, alpha);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20288E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped(x, y, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment, 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028960, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, arg1, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+    Gfx_DrawTexturedRectClipped((x + raw_width) - width_adjustment, y, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment,
                                 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_20287E0, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(arg0, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3, 0x4000 / var_s2,
+    Gfx_DrawTexturedRectClipped(x, (y + raw_height) - height_adjustment, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment, 0x4000 / height_adjustment,
                                 0);
 
     gDPLoadTextureBlock_4b(gDisplayListHead++, D_2028860, G_IM_FMT_I, 16, 16, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped((arg0 + arg2) - var_s3, (arg1 + arg3) - var_s2, var_s3, var_s2, 0, 0, 0x4000 / var_s3,
-                                0x4000 / var_s2, 0);
+    Gfx_DrawTexturedRectClipped((x + raw_width) - width_adjustment, (y + raw_height) - height_adjustment, width_adjustment, height_adjustment, 0, 0, 0x4000 / width_adjustment,
+                                0x4000 / height_adjustment, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiTranslucentFillDL);
 
-    if ((temp_a2 > 0) && (temp_s0_32 > 0)) {
-        Gfx_FillRectRgba(arg0 + var_s3, arg1, temp_a2, var_s2, arg4, arg5, arg6, arg7);
-        Gfx_FillRectRgba(arg0, arg1 + var_s3, arg2, temp_s0_32, arg4, arg5, arg6, arg7);
-        Gfx_FillRectRgba(arg0 + var_s3, arg1 + var_s3 + temp_s0_32, temp_a2, var_s2, arg4, arg5, arg6, arg7);
-    } else if (temp_a2 > 0) {
-        Gfx_FillRectRgba(arg0 + var_s3, arg1, temp_a2, arg3, arg4, arg5, arg6, arg7);
-    } else if (temp_s0_32 > 0) {
-        Gfx_FillRectRgba(arg0, arg1 + var_s2, arg2, temp_s0_32, arg4, arg5, arg6, arg7);
+    if ((width > 0) && (height > 0)) {
+        Gfx_FillRectRgba(x + width_adjustment, y, width, height_adjustment, r, g, b, alpha);
+        Gfx_FillRectRgba(x, y + width_adjustment, raw_width, height, r, g, b, alpha);
+        Gfx_FillRectRgba(x + width_adjustment, y + width_adjustment + height, width, height_adjustment, r, g, b, alpha);
+    } else if (width > 0) {
+        Gfx_FillRectRgba(x + width_adjustment, y, width, raw_height, r, g, b, alpha);
+    } else if (height > 0) {
+        Gfx_FillRectRgba(x, y + height_adjustment, raw_width, height, r, g, b, alpha);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-s32 FreeBattle_IsRuleAvailable(s16 arg0) {
-    unk_D_84002BE8* ptr = &D_84002BE8[arg0];
-    s16 t = ptr->unk_00;
-    s32 var_v1 = 0;
+// Once a side is confirmed, only its selected option remains enabled for drawing.
+s32 FreeBattle_IsTagTeamOptionEnabled(s16 option_index) {
+    TagTeamOption* option = &sTagTeamOptions[option_index];
+    UNUSED s16 t = option->controllerMask;
+    s32 is_available = 0;
 
-    if (arg0 < 4) {
-        if (D_84002D16 >= 2) {
-            var_v1 = arg0 == D_84002D18.unk_00;
+    if (option_index < 4) {
+        if (sSettingsState >= 2) {
+            is_available = option_index == sTagTeamSelection.leftSideTeam;
         } else {
-            var_v1 = ptr->unk_00 == (ptr->unk_00 & D_84002D14);
+            is_available = option->controllerMask == (option->controllerMask & sConnectedControllers);
         }
-    } else if (arg0 < 11) {
-        if (D_84002D16 >= 3) {
-            var_v1 = arg0 == (D_84002D18.unk_02 + 4);
+    } else if (option_index < 11) {
+        if (sSettingsState >= 3) {
+            is_available = option_index == (sTagTeamSelection.rightSideTeam + 4);
         } else {
-            s16 tmp = (~D_84002BE8[D_84002D18.unk_00].unk_00 & D_84002D14);
+            s16 tmp = (~sTagTeamOptions[sTagTeamSelection.leftSideTeam].controllerMask & sConnectedControllers);
 
-            var_v1 = ptr->unk_00 == (ptr->unk_00 & tmp);
+            is_available = option->controllerMask == (option->controllerMask & tmp);
         }
     }
-    return var_v1;
+    return is_available;
 }
 
-void FreeBattle_DrawRuleMark(s16 arg0, s16 arg1, s16 arg2) {
-    if (FreeBattle_IsRuleAvailable(arg2) != 0) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+void FreeBattle_DrawTeamAmpersand(s16 x, s16 y, s16 option_index) {
+    if (FreeBattle_IsTagTeamOptionEnabled(option_index) != 0) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
     } else {
-        Gfx_SetEnvColor(0x64, 0x64, 0x64, 0x82);
+        Gfx_SetEnvColor(0x64, 0x64, 0x64, 0x82); // #646464
     }
-    Font_DrawCharAt(arg0, arg1, 0x26);
+    Font_DrawCharAt(x, y, 38);
 }
 
-void FreeBattle_DrawRuleGrid(void) {
+// Upper window: choose the controller combination for each battle side.
+void FreeBattle_DrawTagTeamWindow(void) {
     s32 i;
-    s16 temp_s2;
-    s16 temp_s3;
-    s32 var_t1;
-    unk_D_84002BE8* ptr;
-    s16 tmp1;
-    s16 tmp2;
+    s16 x;
+    s16 y;
+    s32 player_icon_color_overlay;
+    TagTeamOption* side_selection;
+    s16 corner_x;
+    s16 corner_y;
 
-    FreeBattle_DrawSlicedFrame(0x64, 0x72, 0x1B0, 0x80, 0, 0, 0, 0xFF);
-    FreeBattle_DrawBannerImage(0x10A, 0x96);
+    FreeBattle_DrawRoundedPanel(100, 114, 432, 0x80, 0, 0, 0, 0xFF);
+    FreeBattle_DrawVsIcon(266, 150);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     for (i = 0; i < 11; i++) {
-        temp_s2 = D_84002BE8[i].unk_04 + 0x64;
-        temp_s3 = D_84002BE8[i].unk_06 + 0x72;
+        x = sTagTeamOptions[i].x + 100;
+        y = sTagTeamOptions[i].y + 114;
 
-        if (FreeBattle_IsRuleAvailable(i) != 0) {
-            var_t1 = 0xFF;
+        if (FreeBattle_IsTagTeamOptionEnabled(i) != 0) {
+            player_icon_color_overlay = 0xFF; // #FFFFFF
         } else {
-            var_t1 = 0x82;
+            player_icon_color_overlay = 0x82; // #828282
         }
 
-        gDPSetEnvColor(gDisplayListHead++, var_t1, var_t1, var_t1, var_t1);
+        gDPSetEnvColor(gDisplayListHead++, player_icon_color_overlay, player_icon_color_overlay, player_icon_color_overlay, player_icon_color_overlay);
 
-        Gfx_DrawTextureRgba16(temp_s2, temp_s3, 0x24, 0x1A, D_84002BE8[i].unk_08, 0x24, 0);
-        if (D_84002BE8[i].unk_0C != NULL) {
-            Gfx_DrawTextureRgba16(temp_s2 + 0x30, temp_s3, 0x24, 0x1A, D_84002BE8[i].unk_0C, 0x24, 0);
+        Gfx_DrawTextureRgba16(x, y, 36, 26, sTagTeamOptions[i].firstPlayerIcon, 36, 0);
+        if (sTagTeamOptions[i].secondPlayerIcon != NULL) {
+            Gfx_DrawTextureRgba16(x + 48, y, 36, 26, sTagTeamOptions[i].secondPlayerIcon, 36, 0);
         }
     }
 
@@ -365,298 +376,301 @@ void FreeBattle_DrawRuleGrid(void) {
     Font_SetActive(0x10, 0);
 
     for (i = 0; i < 11; i++) {
-        if (D_84002BE8[i].unk_0C != NULL) {
-            FreeBattle_DrawRuleMark(D_84002BE8[i].unk_04 + 0x87, D_84002BE8[i].unk_06 + 0x73, i);
+        if (sTagTeamOptions[i].secondPlayerIcon != NULL) {
+            FreeBattle_DrawTeamAmpersand(sTagTeamOptions[i].x + 135, sTagTeamOptions[i].y + 115, i);
         }
     }
 
     Font_SetActive(0x10, 0);
 
-    if ((D_84002D16 == 1) || (D_84002D16 == 2)) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    if ((sSettingsState == 1) || (sSettingsState == 2)) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
     } else {
-        Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF);
+        Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF); // #7878C8
     }
 
-    Font_Printf(0x64, 0x5A, Text_GetString(NULL, 0, sRuleSelectText, 1));
+    Font_Printf(100, 90, Text_GetString(NULL, 0, sRuleSelectText, 1));
     Font_EndTexturedTextRendering();
 
-    if (D_84002D16 == 1) {
-        ptr = &D_84002BE8[D_84002D18.unk_00];
-        tmp1 = ptr->unk_04 + 0x64;
-        tmp2 = ptr->unk_06 + 0x72;
-        FreeBattle_DrawSelectionCorners(tmp1 - 4, tmp2 - 2, ((ptr->unk_0C == NULL) ? 0x24 : 0x54) + 8, 0x1E);
-    } else if (D_84002D16 == 2) {
-        ptr = &D_84002BE8[D_84002D18.unk_02];
-        tmp1 = ptr[4].unk_04 + 0x64;
-        tmp2 = ptr[4].unk_06 + 0x72;
-        FreeBattle_DrawSelectionCorners(tmp1 - 4, tmp2 - 2, ((ptr[4].unk_0C == NULL) ? 0x24 : 0x54) + 8, 0x1E);
+    if (sSettingsState == FB_STATE_SELECT_LEFT_SIDE) {
+        side_selection = &sTagTeamOptions[sTagTeamSelection.leftSideTeam];
+        corner_x = side_selection->x + 100;
+        corner_y = side_selection->y + 114;
+        FreeBattle_DrawSelectionCorners(corner_x - 4, corner_y - 2, ((side_selection->secondPlayerIcon == NULL) ? 36 : 84) + 8, 30);
+    } else if (sSettingsState == FB_STATE_SELECT_RIGHT_SIDE) {
+        side_selection = &sTagTeamOptions[sTagTeamSelection.rightSideTeam];
+        corner_x = side_selection[4].x + 100;
+        corner_y = side_selection[4].y + 114;
+        FreeBattle_DrawSelectionCorners(corner_x - 4, corner_y - 2, ((side_selection[4].secondPlayerIcon == NULL) ? 36 : 84) + 8, 30);
     }
 }
 
-void FreeBattle_UpdateRuleRowSelect(void) {
-    s32 sp24 = D_84002D18.unk_00;
+void FreeBattle_UpdateLeftTagTeam(void) {
+    s32 left_side_team = sTagTeamSelection.leftSideTeam;
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
-        D_84002D18.unk_02 = 0;
-        while (FreeBattle_IsRuleAvailable(D_84002D18.unk_02 + 4) == 0) {
-            D_84002D18.unk_02++;
+        sTagTeamSelection.rightSideTeam = 0;
+        while (FreeBattle_IsTagTeamOptionEnabled(sTagTeamSelection.rightSideTeam + 4) == 0) {
+            sTagTeamSelection.rightSideTeam++;
         }
-        D_84002D16 = 2;
+        sSettingsState = FB_STATE_SELECT_RIGHT_SIDE;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
-        D_84002D16 = 8;
+        sSettingsState = FB_STATE_EXIT;
     } else {
         do {
             if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
-                D_84002D18.unk_00 = (D_84002D18.unk_00 + 3) % 4;
+                sTagTeamSelection.leftSideTeam = (sTagTeamSelection.leftSideTeam + 3) % 4;
             } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
-                D_84002D18.unk_00 = (D_84002D18.unk_00 + 1) % 4;
+                sTagTeamSelection.leftSideTeam = (sTagTeamSelection.leftSideTeam + 1) % 4;
             }
-        } while (FreeBattle_IsRuleAvailable(D_84002D18.unk_00) == 0);
+        } while (FreeBattle_IsTagTeamOptionEnabled(sTagTeamSelection.leftSideTeam) == 0);
 
-        if (sp24 != D_84002D18.unk_00) {
+        if (left_side_team != sTagTeamSelection.leftSideTeam) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
         }
     }
 }
 
-void FreeBattle_UpdateRuleOptionSelect(void) {
-    s32 sp34 = D_84002D18.unk_02;
+void FreeBattle_UpdateRightTagTeam(void) {
+    s32 current_selection = sTagTeamSelection.rightSideTeam;
     s32 i;
-    s32 var_a0;
-    s32 var_s1;
-    s32 var_s4;
+    s32 horizontal_movement;
+    s32 vertical_movement;
+    s32 loop_or_continue;
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
-        if (D_84002D18.unk_02 == 3) {
-            D_84002D16 = 5;
+        if (sTagTeamSelection.rightSideTeam == 3) {
+            sSettingsState = 5;
         } else {
-            D_84002D20 = 0;
-            D_84002D16 = 3;
+            sHoveredRuleset = 0;
+            sSettingsState = 3;
         }
         return;
     }
 
-    var_s4 = 0;
+    loop_or_continue = 0;
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
-        D_84002D18.unk_02 = -1;
-        D_84002D16 = 1;
+        sTagTeamSelection.rightSideTeam = -1;
+        sSettingsState = 1;
         return;
     }
 
-    var_a0 = D_84002D18.unk_02 / 4;
-    var_s1 = D_84002D18.unk_02 % 4;
+    horizontal_movement = sTagTeamSelection.rightSideTeam / 4;
+    vertical_movement = sTagTeamSelection.rightSideTeam % 4;
 
-    if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DLEFT) && (var_a0 == 1)) {
-        var_a0 = 0;
-        var_s4 = 1;
-    } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DRIGHT) && (var_a0 == 0)) {
-        var_a0 = 1;
-        var_s4 = 1;
+    if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DLEFT) && (horizontal_movement == 1)) {
+        horizontal_movement = 0;
+        loop_or_continue = 1;
+    } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DRIGHT) && (horizontal_movement == 0)) {
+        horizontal_movement = 1;
+        loop_or_continue = 1;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
-        var_s1 = (var_s1 + 3) % 4;
-        var_s4 = -1;
+        vertical_movement = (vertical_movement + 3) % 4;
+        loop_or_continue = -1;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
-        var_s1 = (var_s1 + 1) % 4;
-        var_s4 = 1;
+        vertical_movement = (vertical_movement + 1) % 4;
+        loop_or_continue = 1;
     }
 
-    if (var_s4 != 0) {
+    if (loop_or_continue != 0) {
         for (i = 0; i < 4; i++) {
-            if (FreeBattle_IsRuleAvailable(var_a0 * 4 + var_s1 + 4) != 0) {
+            if (FreeBattle_IsTagTeamOptionEnabled(horizontal_movement * 4 + vertical_movement + 4) != 0) {
                 break;
             }
-            var_s1 = (var_s1 + var_s4 + 4) % 4;
+            vertical_movement = (vertical_movement + loop_or_continue + 4) % 4;
         }
 
         if (i != 4) {
-            D_84002D18.unk_02 = var_a0 * 4 + var_s1;
+            sTagTeamSelection.rightSideTeam = horizontal_movement * 4 + vertical_movement;
         }
     }
 
-    if (sp34 != D_84002D18.unk_02) {
+    if (current_selection != sTagTeamSelection.rightSideTeam) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     }
 }
 
-void FreeBattle_ClearRuleSelection(void) {
-    D_84002D18.unk_00 = -1;
-    D_84002D18.unk_02 = -1;
+void FreeBattle_ClearTagTeamSelection(void) {
+    sTagTeamSelection.leftSideTeam = -1;
+    sTagTeamSelection.rightSideTeam = -1;
 }
 
-s32 FreeBattle_SelectionHasSubrule(void) {
+// A second player icon identifies a two-controller tag team on either side.
+s32 FreeBattle_SelectionHasTagTeam(void) {
     s32 var_v1 = 0;
 
-    if ((D_84002D18.unk_00 != -1) && (D_84002BE8[D_84002D18.unk_00].unk_0C != 0)) {
+    if ((sTagTeamSelection.leftSideTeam != -1) && (sTagTeamOptions[sTagTeamSelection.leftSideTeam].secondPlayerIcon != 0)) {
         var_v1 = 1;
     }
 
-    if ((D_84002D18.unk_02 != -1) && (D_84002BE8[D_84002D18.unk_02 + 4].unk_0C != 0)) {
+    if ((sTagTeamSelection.rightSideTeam != -1) && (sTagTeamOptions[sTagTeamSelection.rightSideTeam + 4].secondPlayerIcon != 0)) {
         var_v1 = 1;
     }
     return var_v1;
 }
 
-void FreeBattle_DrawLevelOptionLine(s16 arg0, s16 arg1, s16 arg2, char* arg3) {
-    if ((arg2 != 0) && (FreeBattle_SelectionHasSubrule() != 0)) {
-        Gfx_SetEnvColor(0x3C, 0x3C, 0x3C, 0xFF);
-    } else if (arg2 == D_84002D20) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+void FreeBattle_DrawRulesetOptionText(s16 box_x, s16 box_y, s16 option_index, char* text) {
+    if ((option_index != 0) && (FreeBattle_SelectionHasTagTeam() != 0)) {
+        Gfx_SetEnvColor(0x3C, 0x3C, 0x3C, 0xFF); // #3c3c3c
+    } else if (option_index == sHoveredRuleset) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #ffff00
     } else {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
     }
-    Font_Printf(arg0, arg1 + (arg2 * 0x18), arg3);
+    Font_Printf(box_x, box_y + (option_index * 24), text);
 }
 
 void func_84001AD8(void) {
 }
 
-void FreeBattle_DrawLevelSelectPanel(void) {
+// Lower window: cup rules and their corresponding Pokemon level ranges.
+void FreeBattle_DrawRulesetWindow(void) {
     UNUSED s32 pad;
-    char sp2C[128];
+    char buffer[128];
 
-    FreeBattle_DrawSlicedFrame(0x64, 0x10C, 0x1B0, 0x84, 0, 0, 0, 0xFF);
+    FreeBattle_DrawRoundedPanel(100, 268, 432, 132, 0, 0, 0, 0xFF);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 0, Text_GetString(NULL, 0, sRuleSelectText, 2));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 1, Text_GetString(NULL, 0, sRuleSelectText, 3));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 2, Text_GetString(NULL, 0, sRuleSelectText, 6));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 3, Text_GetString(NULL, 0, sRuleSelectText, 7));
-    FreeBattle_DrawLevelOptionLine(0x94, 0x114, 4, Text_GetString(NULL, 0, sRuleSelectText, 8));
+    FreeBattle_DrawRulesetOptionText(148, 276, 0, Text_GetString(NULL, 0, sRuleSelectText, 2));
+    FreeBattle_DrawRulesetOptionText(148, 276, 1, Text_GetString(NULL, 0, sRuleSelectText, 3));
+    FreeBattle_DrawRulesetOptionText(148, 276, 2, Text_GetString(NULL, 0, sRuleSelectText, 6));
+    FreeBattle_DrawRulesetOptionText(148, 276, 3, Text_GetString(NULL, 0, sRuleSelectText, 7));
+    FreeBattle_DrawRulesetOptionText(148, 276, 4, Text_GetString(NULL, 0, sRuleSelectText, 8));
     Font_SetActive(4, 0);
 
-    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
-    FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 0, sp2C);
-    sprintf(sp2C, "%s50~55", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
-    FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 1, sp2C);
-    sprintf(sp2C, "%s25~30", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
-    FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 2, sp2C);
-    sprintf(sp2C, "%s15~20", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
-    FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 3, sp2C);
-    sprintf(sp2C, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 0x15));
-    FreeBattle_DrawLevelOptionLine(0x1AE, 0x118, 4, sp2C);
+    sprintf(buffer, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 21));
+    FreeBattle_DrawRulesetOptionText(430, 280, 0, buffer);
+    sprintf(buffer, "%s50~55", Text_GetString(NULL, 0, sPokemonDetailText, 21));
+    FreeBattle_DrawRulesetOptionText(430, 280, 1, buffer);
+    sprintf(buffer, "%s25~30", Text_GetString(NULL, 0, sPokemonDetailText, 21));
+    FreeBattle_DrawRulesetOptionText(430, 280, 2, buffer);
+    sprintf(buffer, "%s15~20", Text_GetString(NULL, 0, sPokemonDetailText, 21));
+    FreeBattle_DrawRulesetOptionText(430, 280, 3, buffer);
+    sprintf(buffer, "%s1~100", Text_GetString(NULL, 0, sPokemonDetailText, 21));
+    FreeBattle_DrawRulesetOptionText(430, 280, 4, buffer);
 
     Font_SetActive(0x10, 0);
 
-    if (D_84002D16 == 3) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    if (sSettingsState == FB_STATE_SELECT_RULESET) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
     } else {
-        Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF);
+        Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF); // #7878c8
     }
 
-    Font_Printf(0x64, 0xF4, Text_GetString(NULL, 0, sRuleSelectText, 9));
+    Font_Printf(100, 244, Text_GetString(NULL, 0, sRuleSelectText, 9));
     Font_EndTexturedTextRendering();
 
-    if (D_84002D16 == 3) {
-        Ui_DrawAnimatedTextureMarker(0x6C, (D_84002D20 * 0x18) + 0x114);
+    if (sSettingsState == 3) {
+        Ui_DrawAnimatedTextureMarker(108, (sHoveredRuleset * 24) + 276);
     }
 }
 
-void FreeBattle_UpdateLevelSelect(void) {
+void FreeBattle_UpdateRulesetSelection(void) {
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        Audio_PlaySoundEffectById(0x26);
-        D_84002D16 = 7;
+        Audio_PlaySoundEffectById(SFX_FREE_BATTLE_RULE_CONFIRM);
+        sSettingsState = FB_STATE_CONFIRM;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
-        D_84002D20 = -1;
-        D_84002D16 = 2;
-    } else if (FreeBattle_SelectionHasSubrule() == 0) {
+        sHoveredRuleset = -1;
+        sSettingsState = FB_STATE_SELECT_RIGHT_SIDE;
+    } else if (FreeBattle_SelectionHasTagTeam() == 0) {
         if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            D_84002D20 = (D_84002D20 + 4) % 5;
+            sHoveredRuleset = (sHoveredRuleset + 4) % 5;
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            D_84002D20 = (D_84002D20 + 1) % 5;
+            sHoveredRuleset = (sHoveredRuleset + 1) % 5;
         }
     }
 }
 
-void FreeBattle_ClearLevelSelection(void) {
-    D_84002D20 = -1;
+void FreeBattle_ClearRulesetSelection(void) {
+    sHoveredRuleset = -1;
 }
 
-void FreeBattle_DrawConfirmLine(s16 arg0, char* arg1) {
-    if (arg0 == D_84002D28.unk_08) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+void FreeBattle_DrawComDifficultyText(s16 position, char* text) {
+    if (position == sComDifficultyWindow.hoveredDifficulty) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);  // #ffff00
     } else {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
     }
-    Font_Printf(D_84002D28.unk_00 + 0x34, D_84002D28.unk_02 + (arg0 * 0x1C) + 0x2B, arg1);
+    Font_Printf(sComDifficultyWindow.x + 52, sComDifficultyWindow.y + (position * 28) + 43, text);
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_DrawConfirmPanel.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_DrawComDifficultyWindow.s")
 #else
-void FreeBattle_DrawConfirmPanel(void) {
-    if (D_84002D28.unk_04 > 0) {
-        s16 tmp = D_84002D28.unk_04 * 0x11;
+// Popup shown when the right-side option is COM
+void FreeBattle_DrawComDifficultyWindow(void) {
+    if (sComDifficultyWindow.openTicks > 0) {
+        s16 opening_progress = sComDifficultyWindow.openTicks * 17;
 
-        Ui_DrawBorderedPanel(D_84002D28.unk_00, D_84002D28.unk_02 + (s16)((0x88 - tmp) / 2), 0x98, tmp, 0x2121);
-        if (D_84002D28.unk_04 == 8) {
+        Ui_DrawBorderedPanel(sComDifficultyWindow.x, sComDifficultyWindow.y + (s16)((136 - opening_progress) / 2), 152, opening_progress, 0x2121); // #212100
+        if (sComDifficultyWindow.openTicks == 8) {
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(D_84002D28.unk_00 + 0xC, D_84002D28.unk_02 + 0xA, 0x24, 0x1A, gComPlayerLabelIcon, 0x24, 0);
+            Gfx_DrawTextureRgba16(sComDifficultyWindow.x + 12, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-            Ui_DrawAnimatedTextureMarker(D_84002D28.unk_00 + 0xC,
-                                         D_84002D28.unk_02 + (D_84002D28.unk_08 * 0x1C) + 0x2B);
+            Ui_DrawAnimatedTextureMarker(sComDifficultyWindow.x + 12,
+                                         sComDifficultyWindow.y + (sComDifficultyWindow.hoveredDifficulty * 28) + 43);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf(D_84002D28.unk_00 + 0x30, D_84002D28.unk_02 + 0xB, Text_GetString(NULL, 0, sRuleSelectText, 0xA));
-            FreeBattle_DrawConfirmLine(0, Text_GetString(NULL, 0, sRuleSelectText, 0xB));
-            FreeBattle_DrawConfirmLine(1, Text_GetString(NULL, 0, sRuleSelectText, 0xC));
-            FreeBattle_DrawConfirmLine(2, Text_GetString(NULL, 0, sRuleSelectText, 0xD));
+            Font_Printf(sComDifficultyWindow.x + 48, sComDifficultyWindow.y + 11, Text_GetString(NULL, 0, sRuleSelectText, 10));
+            FreeBattle_DrawComDifficultyText(0, Text_GetString(NULL, 0, sRuleSelectText, 11));
+            FreeBattle_DrawComDifficultyText(1, Text_GetString(NULL, 0, sRuleSelectText, 12));
+            FreeBattle_DrawComDifficultyText(2, Text_GetString(NULL, 0, sRuleSelectText, 13));
             Font_EndTexturedTextRendering();
         }
     }
 }
 #endif
 
-void FreeBattle_InitConfirmPanel(void) {
-    D_84002D28.unk_00 = 0x190;
-    D_84002D28.unk_02 = 0x64;
-    D_84002D28.unk_04 = 0;
-    D_84002D28.unk_08 = 1;
+void FreeBattle_InitComDifficultyWindow(void) {
+    sComDifficultyWindow.x = 400;
+    sComDifficultyWindow.y = 100;
+    sComDifficultyWindow.openTicks = 0;
+    sComDifficultyWindow.hoveredDifficulty = 1;
 }
 
-void FreeBattle_OpenConfirmPanel(void) {
-    D_84002BE0 = 2;
-    D_84002D28.unk_04++;
-    if (D_84002D28.unk_04 == 8) {
-        D_84002D16 = 4;
+void FreeBattle_OpenComDifficultyWindow(void) {
+    sPanelDrawBudget = 2;
+    sComDifficultyWindow.openTicks++;
+    if (sComDifficultyWindow.openTicks == 8) {
+        sSettingsState = 4;
     }
 }
 
-void FreeBattle_CloseConfirmPanel(void) {
-    D_84002BE0 = 2;
-    D_84002D28.unk_04--;
-    if (D_84002D28.unk_04 == 0) {
-        D_84002D16 = D_84002D28.unk_06;
+void FreeBattle_CloseComDifficultyWindow(void) {
+    sPanelDrawBudget = 2;
+    sComDifficultyWindow.openTicks--;
+    if (sComDifficultyWindow.openTicks == 0) {
+        sSettingsState = sComDifficultyWindow.nextState;
     }
 }
 
-void FreeBattle_UpdateConfirmDialog(void) {
+void FreeBattle_UpdateComDifficulty(void) {
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        D_84002BE4 = D_84002D28.unk_08;
-        D_84002D28.unk_06 = 3;
-        D_84002D20 = 0;
-        D_84002D16 = 6;
+        sComDifficulty = sComDifficultyWindow.hoveredDifficulty;
+        sComDifficultyWindow.nextState = FB_STATE_SELECT_RULESET;
+        sHoveredRuleset = 0;
+        sSettingsState = FB_STATE_CLOSING_COM_DIFFICULTY_WINDOW;
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
-        D_84002D28.unk_06 = 2;
-        D_84002D16 = 6;
+        sComDifficultyWindow.nextState = FB_STATE_SELECT_RIGHT_SIDE;
+        sSettingsState = FB_STATE_CLOSING_COM_DIFFICULTY_WINDOW;
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        D_84002D28.unk_08 = (D_84002D28.unk_08 + 2) % 3;
+        sComDifficultyWindow.hoveredDifficulty = (sComDifficultyWindow.hoveredDifficulty + 2) % 3;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        D_84002D28.unk_08 = (D_84002D28.unk_08 + 1) % 3;
+        sComDifficultyWindow.hoveredDifficulty = (sComDifficultyWindow.hoveredDifficulty + 1) % 3;
     }
 }
 
@@ -668,13 +682,13 @@ void FreeBattle_PollInputs(void) {
 
 void FreeBattle_DrawFrame(void) {
     BgStage_DrawFrame();
-    if (D_84002BE0 > 0) {
-        FreeBattle_DrawPanelFrame(0x4C, 0x54, 0x1E8, 0x150);
-        D_84002BE0 -= 1;
+    if (sPanelDrawBudget > 0) {
+        FreeBattle_DrawPanelFrame(76, 84, 488, 336);
+        sPanelDrawBudget -= 1;
     }
-    FreeBattle_DrawRuleGrid();
-    FreeBattle_DrawLevelSelectPanel();
-    FreeBattle_DrawConfirmPanel();
+    FreeBattle_DrawTagTeamWindow();
+    FreeBattle_DrawRulesetWindow();
+    FreeBattle_DrawComDifficultyWindow();
     BgStage_AdvanceFrame();
 }
 
@@ -714,14 +728,14 @@ void FreeBattle_SlideInPanel(void) {
 
     Audio_PlaySoundEffectById(SFX_PANEL_OPEN);
 
-    for (i = 0x10; i < 0x170; i += 0x20) {
+    for (i = 16; i < 368; i += 32) {
         FreeBattle_PollInputs();
         BgStage_DrawFrame();
         Gfx_DrawTiledRgba16Image(D_84002D0C);
         FreeBattle_DrawTitleBar();
         tmp = i;
-        tmp = (0x150 - tmp) / 2;
-        FreeBattle_DrawPanelFrame(0x4C, tmp + 0x54, 0x1E8, i);
+        tmp = (336 - tmp) / 2;
+        FreeBattle_DrawPanelFrame(76, tmp + 84, 488, i);
         BgStage_AdvanceFrame();
     }
 }
@@ -734,7 +748,7 @@ void FreeBattle_SlideOutPanel(void) {
         BgStage_DrawFrame();
         Gfx_DrawTiledRgba16Image(D_84002D0C);
         FreeBattle_DrawTitleBar();
-        FreeBattle_DrawPanelFrame(0x4C, (s16)((0x16C - (s16)(0xE + i * 0x23)) / 2) + 0x54, 0x1E8, 0xE + i * 0x23);
+        FreeBattle_DrawPanelFrame(76, (s16)((364 - (s16)(14 + i * 35)) / 2) + 84, 488, 14 + i * 35);
         BgStage_AdvanceFrame();
     }
 
@@ -746,36 +760,36 @@ void FreeBattle_SlideOutPanel(void) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_ApplyRuleSelection.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_ApplySettings.s")
 #else
-void FreeBattle_ApplyRuleSelection(void) {
-    char sp44[12];
+void FreeBattle_ApplySettings(void) {
+    char port_player_name[12];
     TeamRoster* temp_v0;
     s32 i;
 
-    Session_SetMode(0, D_84002C98[D_84002D20], 0);
+    Session_SetMode(0, sRulesetCategories[sHoveredRuleset], 0);
 
     for (i = 0; i < 4; i++) {
-        if (D_84002BE8[D_84002D18.unk_00].unk_00 & (1 << i)) {
-            sprintf(sp44, "%dP", i + 1);
-            Team_AddTrainer(0, Trainer_Create(i, 0, sp44, Text_GetPlayerLabel(1)));
+        if (sTagTeamOptions[sTagTeamSelection.leftSideTeam].controllerMask & (1 << i)) {
+            sprintf(port_player_name, "%dP", i + 1);
+            Team_AddTrainer(0, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
         }
     }
 
-    if (D_84002D18.unk_02 == 3) {
-        gSessionContext.aiDifficulty = D_84002BE4;
+    if (sTagTeamSelection.rightSideTeam == 3) {
+        gSessionContext.aiDifficulty = sComDifficulty;
         temp_v0 = Trainer_Create(-1, 0, "COM", Text_GetPlayerLabel(3));
         Team_AddTrainer(1, temp_v0);
-        if (D_84002D18.unk_00 == 3) {
+        if (sTagTeamSelection.leftSideTeam == 3) {
             temp_v0->controllerPort = 2;
         } else {
             temp_v0->controllerPort = 3;
         }
     } else {
         for (i = 0; i < 4; i++) {
-            if (D_84002BE8[D_84002D18.unk_02 + 4].unk_00 & (1 << i)) {
-                sprintf(sp44, "%dP", i + 1);
-                Team_AddTrainer(1, Trainer_Create(i, 0, sp44, Text_GetPlayerLabel(1)));
+            if (sTagTeamOptions[sTagTeamSelection.rightSideTeam + 4].controllerMask & (1 << i)) {
+                sprintf(port_player_name, "%dP", i + 1);
+                Team_AddTrainer(1, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
             }
         }
     }
@@ -792,76 +806,76 @@ void FreeBattle_ApplyRuleSelection(void) {
 }
 #endif
 
-s32 FreeBattle_RuleSelectLoop(void) {
-    D_84002D16 = 0;
-    Audio_PlayMusicIfChanged(0x2D);
-    FreeBattle_ClearRuleSelection();
-    FreeBattle_ClearLevelSelection();
-    FreeBattle_InitConfirmPanel();
+s32 FreeBattle_SettingsLoop(void) {
+    sSettingsState = 0;
+    Audio_PlayMusicIfChanged(45);
+    FreeBattle_ClearTagTeamSelection();
+    FreeBattle_ClearRulesetSelection();
+    FreeBattle_InitComDifficultyWindow();
     FreeBattle_FadeIn();
     FreeBattle_SlideInPanel();
-    D_84002D16 = 1;
-    D_84002D18.unk_00 = 0;
+    sSettingsState = 1;
+    sTagTeamSelection.leftSideTeam = 0;
 
-    while ((D_84002D16 != 7) && (D_84002D16 != 8)) {
+    while ((sSettingsState != FB_STATE_CONFIRM) && (sSettingsState != FB_STATE_EXIT)) {
         FreeBattle_PollInputs();
-        switch (D_84002D16) {
+        switch (sSettingsState) {
             case 1:
-                FreeBattle_UpdateRuleRowSelect();
+                FreeBattle_UpdateLeftTagTeam();
                 break;
             case 2:
-                FreeBattle_UpdateRuleOptionSelect();
+                FreeBattle_UpdateRightTagTeam();
                 break;
             case 3:
-                FreeBattle_UpdateLevelSelect();
+                FreeBattle_UpdateRulesetSelection();
                 break;
             case 4:
-                FreeBattle_UpdateConfirmDialog();
+                FreeBattle_UpdateComDifficulty();
                 break;
             case 5:
-                FreeBattle_OpenConfirmPanel();
+                FreeBattle_OpenComDifficultyWindow();
                 break;
             case 6:
-                FreeBattle_CloseConfirmPanel();
+                FreeBattle_CloseComDifficultyWindow();
                 break;
         }
         FreeBattle_DrawFrame();
     }
 
-    if (D_84002D16 == 8) {
+    if (sSettingsState == FB_STATE_EXIT) {
         FreeBattle_SlideOutPanel();
         FreeBattle_FadeOut();
         return 0;
     }
 
-    FreeBattle_ApplyRuleSelection();
+    FreeBattle_ApplySettings();
     FreeBattle_SlideOutPanel();
     return 1;
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_RuleSelectMain.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_SettingsMain.s")
 #else
-s32 FreeBattle_RuleSelectMain(s32 arg0, s32 arg1) {
-    s32 sp1C;
+s32 FreeBattle_SettingsMain(UNUSED s32 arg0, UNUSED s32 arg1) {
+    s32 active;
 
     main_pool_push_state('RULE');
 
-    Font_Init(0x1C, 0);
+    Font_Init(28, 0);
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     ASSET_LOAD(D_3000000, order_select_ui, 0);
     Text_InitStringTables();
-    sRuleSelectText = Text_GetStringTable(0xF);
+    sRuleSelectText = Text_GetStringTable(15);
     sPokemonDetailText = Text_GetStringTable(6);
     D_84002D08 = ASSET_LOAD2(backgrounds, 1, 1);
     D_84002D0C = BinArchive_GetFile(D_84002D08, 6);
-    D_84002D14 = Cont_GetControllerBits();
+    sConnectedControllers = Cont_GetControllerBits();
     StageLoader_UpdateSegments();
-    sp1C = FreeBattle_RuleSelectLoop();
+    active = FreeBattle_SettingsLoop();
     StageLoader_WaitForRetrace();
 
     main_pool_pop_state('RULE');
-    return sp1C;
+    return active;
 }
 #endif
