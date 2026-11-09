@@ -3,39 +3,43 @@
 
 #include "global.h"
 
-void FreeBattle_DrawHeaderImage(s16 arg0, s16 arg1);
-void FreeBattle_DrawBannerImage(s16 arg0, s16 arg1);
-void FreeBattle_DrawTintedBar(s16 arg0, s16 arg1, s16 arg2, Color_RGBA8* arg3, Color_RGBA8* arg4);
+void FreeBattle_DrawPokeBallIcon(s16 x, s16 y);
+void FreeBattle_DrawVsIcon(s16 x, s16 y);
+void FreeBattle_DrawTintedBar(s16 x, s16 y, s16 width, Color_RGBA8* env_color, Color_RGBA8* prim_color);
 void FreeBattle_DrawTitleBar(void);
-void FreeBattle_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
-void FreeBattle_DrawPanelFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
-void FreeBattle_DrawSlicedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7);
-s32 FreeBattle_IsRuleAvailable(s16 arg0);
-void FreeBattle_DrawRuleMark(s16 arg0, s16 arg1, s16 arg2);
-void FreeBattle_DrawRuleGrid(void);
-void FreeBattle_UpdateRuleRowSelect(void);
-void FreeBattle_UpdateRuleOptionSelect(void);
-void FreeBattle_ClearRuleSelection(void);
-s32 FreeBattle_SelectionHasSubrule(void);
-void FreeBattle_DrawLevelOptionLine(s16 arg0, s16 arg1, s16 arg2, char* arg3);
+void FreeBattle_DrawSelectionCorners(s16 x, s16 y, s16 width, s16 height);
+void FreeBattle_DrawPanelFrame(s16 x, s16 y, s16 width, s16 height);
+void FreeBattle_DrawRoundedPanel(s16 x, s16 y, s16 raw_width, s16 raw_height, u8 r, u8 g, u8 b, u8 alpha);
+
+// Tag-team selection window.
+s32 FreeBattle_IsTagTeamOptionEnabled(s16 option_index);
+void FreeBattle_DrawTeamAmpersand(s16 x, s16 y, s16 option_index);
+void FreeBattle_DrawTagTeamWindow(void);
+void FreeBattle_UpdateLeftTagTeam(void);
+void FreeBattle_UpdateRightTagTeam(void);
+void FreeBattle_ClearTagTeamSelection(void);
+s32 FreeBattle_SelectionHasTagTeam(void);
+// Ruleset selection window.
+void FreeBattle_DrawRulesetOptionText(s16 box_x, s16 box_y, s16 option_index, char* text);
 void func_84001AD8(void);
-void FreeBattle_DrawLevelSelectPanel(void);
-void FreeBattle_UpdateLevelSelect(void);
-void FreeBattle_ClearLevelSelection(void);
-void FreeBattle_DrawConfirmLine(s16 arg0, char* arg1);
-void FreeBattle_DrawConfirmPanel(void);
-void FreeBattle_InitConfirmPanel(void);
-void FreeBattle_OpenConfirmPanel(void);
-void FreeBattle_CloseConfirmPanel(void);
-void FreeBattle_UpdateConfirmDialog(void);
+void FreeBattle_DrawRulesetWindow(void);
+void FreeBattle_UpdateRulesetSelection(void);
+void FreeBattle_ClearRulesetSelection(void);
+// COM difficulty popup.
+void FreeBattle_DrawComDifficultyText(s16 arg0, char* arg1);
+void FreeBattle_DrawComDifficultyWindow(void);
+void FreeBattle_InitComDifficultyWindow(void);
+void FreeBattle_OpenComDifficultyWindow(void);
+void FreeBattle_CloseComDifficultyWindow(void);
+void FreeBattle_UpdateComDifficulty(void);
 void FreeBattle_PollInputs(void);
 void FreeBattle_DrawFrame(void);
 void FreeBattle_FadeIn(void);
 void FreeBattle_FadeOut(void);
 void FreeBattle_SlideInPanel(void);
 void FreeBattle_SlideOutPanel(void);
-void FreeBattle_ApplyRuleSelection(void);
-s32 FreeBattle_RuleSelectLoop(void);
-s32 FreeBattle_RuleSelectMain(s32 arg0, s32 arg1);
+void FreeBattle_ApplySettings(void);
+s32 FreeBattle_SettingsLoop(void);
+s32 FreeBattle_SettingsMain(s32 arg0, s32 arg1);
 
 #endif // _FRAGMENT58_H_
