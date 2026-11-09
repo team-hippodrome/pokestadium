@@ -2,6 +2,10 @@
 #include "src/gfx_buffer.h"
 #include "src/fragments/drowzee_game/drowzee_game.h"
 
+/**
+ * Geo callback (jump-table slot 0x1D8). Writes one of two raw G_SETCOMBINE commands, chosen by
+ * drowzee_game's D_86402848 flag.
+ */
 void DisplayList_InitToggledBlendModeSegment(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
 

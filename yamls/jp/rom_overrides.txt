@@ -382,7 +382,7 @@
 - [0xC0F0, asm, libleo/bootdisk]
 -> - [0xC0F0, c, libleo/bootdisk]
 -> - [0xC550, hasm, ../../src/libleo/bootstrap]
-# particle_data_library_258080: the Japanese func_81003A54 takes the species name from
+# particle_data_library_258080: the Japanese DisplayList_BuildDigitOrGlyphSegment takes the species name from
 # D_8006FF00, reads it as two-byte EUC-JP characters for Font_MapGlyphCode, spaces them by 22
 # instead of 32 and loads glyphs from D_3000210; DisplayList_BuildDigitDisplayBackground uses
 # another environment color (all under VERSION_JP in the shared C). The file's 0x30-byte .data
