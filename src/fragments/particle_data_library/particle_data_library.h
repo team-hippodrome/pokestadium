@@ -12,8 +12,9 @@
  * move. About half the slots jump to this fragment's own functions (animated textures, scrolling
  * panels, conditional parts, minigame and Hall of Fame glyph helpers, and the species particle
  * effects in particle_data_library_2558B0.c); the rest jump to battle-engine move effect, minigame
- * and ParticleGfx functions. BattleScene_Init loads it once per battle; move animations then reach
- * it through those slots without loading it again.
+ * and ParticleGfx functions. Many fragments that draw 3D models load it with FRAGMENT_LOAD
+ * (battle engine, battle prep, demo scenes, minigames, gallery, Pokedex, Hall of Fame and others);
+ * in battle, move animations then reach it through those slots without loading it again.
  *
  * Runtime notes (US 1.0 debugger): in a Metronome run of all 163 moves (Pidgey vs a Splash
  * opponent), 118 moves called battle-engine slots and none called this fragment's own effect slots.
