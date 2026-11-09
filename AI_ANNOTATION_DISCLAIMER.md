@@ -11,7 +11,9 @@ These sections of the code involve a substantial degree of human verification fo
 - `battle_order_selection`
 - `cup_select`
 - `event_battle`
+- `free_battle_rules`
 - `gym_leader_castle`
+- `options`
 - `rental_hub`
 - `rental_rules`
 
@@ -19,8 +21,6 @@ These sections of the code involve a substantial degree of human verification fo
 These unannotated fragments are planned to require substantial human involvement.
 - All code outside of a fragment
 - Fragment 61 (still unnamed, likely pokemon team registration)
-- `free_battle_rules`
-- `options`
 - `particle_data_library`
 - `rental_team_selection`
 - `stadium_select`
