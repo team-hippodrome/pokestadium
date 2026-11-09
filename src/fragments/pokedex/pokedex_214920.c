@@ -6316,7 +6316,7 @@ s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     D_8882692C = PokeIcon_AllocFramebuffers(1);
     PokeIcon_OpenModelArchives();
 
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_04000000, fragment29_misc_1, 0);

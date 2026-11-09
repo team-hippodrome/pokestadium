@@ -36,7 +36,7 @@ These Fragments had a human in the loop verifying their status.
 - `gym_leader_castle_clear`
 - `n64_logo`
 - `pikachu_reward`
-- `particle_data_library`
+- `model_callback_library`
 
 ## AI-Generated
 These fragments had annotation almost entirely done by AI agents with minimal human involvement. Their annotations may contain hallucinations but should be of higher quality than unassigned fragments.

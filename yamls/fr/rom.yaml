@@ -1199,30 +1199,30 @@
     start: 0x255A40
     vram: 0x81000000
     subsegments:
-    - [0x255A40, textbin,   fragments/particle_data_library/particle_data_library_header]
+    - [0x255A40, textbin,   fragments/model_callback_library/model_callback_library_header]
     - [0x255A60, textbin,    fragments/31/fragment31_unk_table] # what is this?
-    - [0x255C40, c,      fragments/particle_data_library/particle_data_library_2554C0]
-    - [0x255F20, c,      fragments/particle_data_library/particle_data_library_2557A0]
-    - [0x256030, c,      fragments/particle_data_library/particle_data_library_2558B0]
-    - [0x257ED0, c,      fragments/particle_data_library/particle_data_library_257750]
-    - [0x257F70, c,      fragments/particle_data_library/particle_data_library_2577F0]
-    - [0x258270, c,      fragments/particle_data_library/particle_data_library_257AF0]
-    - [0x258560, c,      fragments/particle_data_library/particle_data_library_257DE0]
-    - [0x258640, c,      fragments/particle_data_library/particle_data_library_257EC0]
-    - [0x258720, c,      fragments/particle_data_library/particle_data_library_257FA0]
-    - [0x258800, asm, fragments/particle_data_library/particle_data_library_258080]
-    - [0x2597C0, c,      fragments/particle_data_library/particle_data_library_259030]
-    - [0x259850, c,      fragments/particle_data_library/particle_data_library_2590C0]
-    - [0x259A20, .data,  fragments/particle_data_library/particle_data_library_2554C0]
-    - [0x259A30, .data,  fragments/particle_data_library/particle_data_library_2558B0]
-    - [0x259BC0, .data,  fragments/particle_data_library/particle_data_library_2577F0]
-    - [0x259BE0, data, fragments/particle_data_library/particle_data_library_258080]
-    - [0x259C10, .rodata, fragments/particle_data_library/particle_data_library_2554C0]
-    - [0x259C70, .rodata, fragments/particle_data_library/particle_data_library_2558B0]
+    - [0x255C40, c,      fragments/model_callback_library/model_callback_library_2554C0]
+    - [0x255F20, c,      fragments/model_callback_library/model_callback_library_2557A0]
+    - [0x256030, c,      fragments/model_callback_library/model_callback_library_2558B0]
+    - [0x257ED0, c,      fragments/model_callback_library/model_callback_library_257750]
+    - [0x257F70, c,      fragments/model_callback_library/model_callback_library_2577F0]
+    - [0x258270, c,      fragments/model_callback_library/model_callback_library_257AF0]
+    - [0x258560, c,      fragments/model_callback_library/model_callback_library_257DE0]
+    - [0x258640, c,      fragments/model_callback_library/model_callback_library_257EC0]
+    - [0x258720, c,      fragments/model_callback_library/model_callback_library_257FA0]
+    - [0x258800, asm, fragments/model_callback_library/model_callback_library_258080]
+    - [0x2597C0, c,      fragments/model_callback_library/model_callback_library_259030]
+    - [0x259850, c,      fragments/model_callback_library/model_callback_library_2590C0]
+    - [0x259A20, .data,  fragments/model_callback_library/model_callback_library_2554C0]
+    - [0x259A30, .data,  fragments/model_callback_library/model_callback_library_2558B0]
+    - [0x259BC0, .data,  fragments/model_callback_library/model_callback_library_2577F0]
+    - [0x259BE0, data, fragments/model_callback_library/model_callback_library_258080]
+    - [0x259C10, .rodata, fragments/model_callback_library/model_callback_library_2554C0]
+    - [0x259C70, .rodata, fragments/model_callback_library/model_callback_library_2558B0]
     - [0x25A220, rodata, fragment31_25A220]
-    - {vram: 0x810047F0, type: .bss, name: fragments/particle_data_library/particle_data_library_2558B0}
-    - {vram: 0x81004B70, type: .bss, name: fragments/particle_data_library/particle_data_library_2577F0}
-    - {vram: 0x81004B80, type: bss, name: fragments/particle_data_library/particle_data_library_258080}
+    - {vram: 0x810047F0, type: .bss, name: fragments/model_callback_library/model_callback_library_2558B0}
+    - {vram: 0x81004B70, type: .bss, name: fragments/model_callback_library/model_callback_library_2577F0}
+    - {vram: 0x81004B80, type: bss, name: fragments/model_callback_library/model_callback_library_258080}
   - name: fragment31_relocs
     type: code
     bss_size: 0x0

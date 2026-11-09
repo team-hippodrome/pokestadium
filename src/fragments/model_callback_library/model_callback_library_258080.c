@@ -1,4 +1,4 @@
-#include "particle_data_library.h"
+#include "model_callback_library.h"
 #include "src/fragments/clefairy_game/clefairy_game.h"
 #include "src/fragments/rattata_game/rattata_game.h"
 #include "src/fragments/victory_palace/victory_palace.h"
@@ -297,7 +297,7 @@ s32 Util_Strlen(s8* arg0) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/particle_data_library/particle_data_library_258080/DisplayList_BuildDigitOrGlyphSegment.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/model_callback_library/model_callback_library_258080/DisplayList_BuildDigitOrGlyphSegment.s")
 #else
 /**
  * Loads one 16x16 IA8 glyph from the font sheet. Glyphs 0-2 are the hundreds, tens and units of

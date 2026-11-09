@@ -1037,7 +1037,7 @@ void BattlePrepRoster_Load(unk_D_84B25A28* arg0, BinArchive* arg1) {
     u8* sp20 = BinArchive_GetFile(arg1, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
 
     PokeIcon_OpenModelArchives();
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     if (arg0->unk_02 == 1) {
         BattlePrepRoster_LoadDexIdsDouble(arg0);
