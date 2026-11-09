@@ -35,6 +35,7 @@
 #define SFX_PAUSE 0x23
 #define SFX_RESUME 0x24
 #define SFX_PAK_CURSOR 0x25  // Transfer Pak and trade-machine port selection.
+#define SFX_FREE_BATTLE_RULE_CONFIRM 0x26
 #define SFX_PAGE_CHANGE 0x27 // Gallery pages and Pokemon boxes.
 #define SFX_TROPHY_APPEAR 0x28
 #define SFX_PAK_LAB_SELECT 0x2A
@@ -602,9 +603,9 @@ extern u8 D_300E820[];
 extern u8 D_300ED30[];
 extern u8 D_300F580[];
 extern u8 D_3022AA0[];
-extern u8 D_200B3E0[];
-extern u8 D_200C380[];
-extern u8 D_200D320[];
+extern u8 gVsTop[];
+extern u8 gVsMiddle[];
+extern u8 gVsBottom[];
 extern u8 gComPlayerLabelIcon[];
 extern u8 D_302E440[];
 extern u8 D_302E840[];
