@@ -436,13 +436,13 @@ s32 PokeIcon_AreSlotsIdle(unk_func_8001A024* arg0) {
     return 1;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/poke_icon/PokeIcon_OpenModelArchive.s")
-#else
 void PokeIcon_OpenModelArchive(void) {
+#if defined(VERSION_US_REV2)
+    D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x81D000, NULL, 1, 1);
+#else
     D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x820000, NULL, 1, 1);
-}
 #endif
+}
 
 void PokeIcon_LoadModelTexture(u16* arg0, s32 arg1) {
     BinArchive* temp_v1;
