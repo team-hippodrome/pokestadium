@@ -325,24 +325,19 @@ ModelLoadContext* PokeIcon_AllocFramebuffers(u32 flags) {
     return temp_v0;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/display_object_textures/PokeIcon_OpenModelArchives.s")
-#else
 void PokeIcon_OpenModelArchives(void) {
+#if defined(VERSION_US_REV2)
+    D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x919000, 0, 1, 1);
+    D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8C7000, 0, 1, 1);
+#elif defined(VERSION_JP)
     D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x920000, NULL, 1, 1);
-    // The second archive's ROM offset moved between releases: 0x8CC000 in US 1.0, 0x8C8000 in
-    // the Japanese release (yamls/<version>/rom.yaml, the unnamed bin segment that keeps the US
-    // offset 8CC000 as its name). European releases place it elsewhere again (Spain: 0x8A8000)
-    // and still build this file from assembly, so they need their own value here before the file
-    // can be C for them.
-#if defined(VERSION_JP)
     D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8C8000, NULL, 1, 1);
 #else
+    D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x920000, NULL, 1, 1);
     D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8CC000, NULL, 1, 1);
 #endif
     D_800ABE10.unk_A04.unk_08 = main_pool_alloc(0x28000, 1);
 }
-#endif
 
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2) {
     s32 sp1C;
