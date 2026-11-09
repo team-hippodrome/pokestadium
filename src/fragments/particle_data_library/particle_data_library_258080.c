@@ -12,28 +12,36 @@ typedef struct {
 } Keyframe;                   // size = 0x04
 
 // .bss
-static s32 D_81004B70;
+static s32 sScrollingIconFrame0;
 static u8 pad_D_81004B78[0x8];
-static s32 D_81004B80;
+static s32 sScrollingIconFrame1;
 static u8 pad_D_81004B88[0x8];
-static s32 D_81004B90;
+static s32 sScrollingIconFrame2;
 static u8 pad_D_81004B98[0x8];
-static s32 D_81004BA0;
+static s32 sScrollingIconFrame3;
 static u8 pad_D_81004BA8[0x8];
-static s32 D_81004BB0;
-static char D_81004BB8[0x28];
+static s32 sDigitGlyphIndex;
+static char sNameBuffer[0x28];
 
+/**
+ * Loads a 32x64 CI8 texture with a 256-color palette (arg1), choosing the image row from
+ * rattata_game's D_862082A0[0] and one of four animation frames from sScrollingIconFrame0.
+ */
 void DisplayList_BuildScrollingIconSegment0(Gfx* gfx, u16* arg1, u8* arg2) {
     gDPPipeSync(gfx++);
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
     gDPLoadTLUT_pal256(gfx++, arg1);
-    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[0] * 4) & ~0x1F) + ((D_81004B70 & 3) << 0xB)), G_IM_FMT_CI,
+    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[0] * 4) & ~0x1F) + ((sScrollingIconFrame0 & 3) << 0xB)), G_IM_FMT_CI,
                        G_IM_SIZ_8b, 0x20, 0x40, 0, 0, 0x20 - 1, 0x40 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                        G_TX_NOMIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPEndDisplayList(gfx++);
 }
 
+/**
+ * Geo callback (jump-table slot 0x180). arg0 == 0 resets the frame counter; the build pass
+ * builds DisplayList_BuildScrollingIconSegment0 and advances it. Only non-species models reference it.
+ */
 void DisplayList_InitScrollingIconSegment0(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
     DisplayListAddresses* addresses;
@@ -41,28 +49,36 @@ void DisplayList_InitScrollingIconSegment0(s32 arg0, DisplayListState* state) {
     addresses = state->addresses;
     switch (arg0) {
         case 0:
-            D_81004B70 = 0;
+            sScrollingIconFrame0 = 0;
             return;
         case 2:
             gfx = Gfx_AllocDisplayList(0xA0);
             state->gfx = gfx;
             DisplayList_BuildScrollingIconSegment0(gfx, addresses->segments[0], addresses->segments[1]);
-            D_81004B70 += 1;
+            sScrollingIconFrame0 += 1;
             return;
     }
 }
 
+/**
+ * Loads a 32x64 CI8 texture with a 256-color palette (arg1), choosing the image row from
+ * rattata_game's D_862082A0[1] and one of four animation frames from sScrollingIconFrame1.
+ */
 void DisplayList_BuildScrollingIconSegment1(Gfx* gfx, u16* arg1, u8* arg2) {
     gDPPipeSync(gfx++);
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
     gDPLoadTLUT_pal256(gfx++, arg1);
-    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[1] * 4) & ~0x1F) + ((D_81004B80 & 3) << 0xB)), G_IM_FMT_CI,
+    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[1] * 4) & ~0x1F) + ((sScrollingIconFrame1 & 3) << 0xB)), G_IM_FMT_CI,
                        G_IM_SIZ_8b, 0x20, 0x40, 0, 0, 0x20 - 1, 0x40 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                        G_TX_NOMIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPEndDisplayList(gfx++);
 }
 
+/**
+ * Geo callback (jump-table slot 0x188). arg0 == 0 resets the frame counter; the build pass
+ * builds DisplayList_BuildScrollingIconSegment1 and advances it. Only non-species models reference it.
+ */
 void DisplayList_InitScrollingIconSegment1(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
     DisplayListAddresses* addresses;
@@ -70,28 +86,36 @@ void DisplayList_InitScrollingIconSegment1(s32 arg0, DisplayListState* state) {
     addresses = state->addresses;
     switch (arg0) { /* irregular */
         case 0:
-            D_81004B80 = 0;
+            sScrollingIconFrame1 = 0;
             return;
         case 2:
             gfx = Gfx_AllocDisplayList(0xA0);
             state->gfx = gfx;
             DisplayList_BuildScrollingIconSegment1(gfx, addresses->segments[0], addresses->segments[1]);
-            D_81004B80 += 1;
+            sScrollingIconFrame1 += 1;
             return;
     }
 }
 
+/**
+ * Loads a 32x64 CI8 texture with a 256-color palette (arg1), choosing the image row from
+ * rattata_game's D_862082A0[2] and one of four animation frames from sScrollingIconFrame2.
+ */
 void DisplayList_BuildScrollingIconSegment2(Gfx* gfx, u16* arg1, u8* arg2) {
     gDPPipeSync(gfx++);
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
     gDPLoadTLUT_pal256(gfx++, arg1);
-    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[2] * 4) & ~0x1F) + ((D_81004B90 & 3) << 0xB)), G_IM_FMT_CI,
+    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[2] * 4) & ~0x1F) + ((sScrollingIconFrame2 & 3) << 0xB)), G_IM_FMT_CI,
                        G_IM_SIZ_8b, 0x20, 0x40, 0, 0, 0x20 - 1, 0x40 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                        G_TX_NOMIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPEndDisplayList(gfx++);
 }
 
+/**
+ * Geo callback (jump-table slot 0x190). arg0 == 0 resets the frame counter; the build pass
+ * builds DisplayList_BuildScrollingIconSegment2 and advances it. Only non-species models reference it.
+ */
 void DisplayList_InitScrollingIconSegment2(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
     DisplayListAddresses* addresses;
@@ -99,28 +123,36 @@ void DisplayList_InitScrollingIconSegment2(s32 arg0, DisplayListState* state) {
     addresses = state->addresses;
     switch (arg0) { /* irregular */
         case 0:
-            D_81004B90 = 0;
+            sScrollingIconFrame2 = 0;
             return;
         case 2:
             gfx = Gfx_AllocDisplayList(0xA0);
             state->gfx = gfx;
             DisplayList_BuildScrollingIconSegment2(gfx, addresses->segments[0], addresses->segments[1]);
-            D_81004B90 += 1;
+            sScrollingIconFrame2 += 1;
             return;
     }
 }
 
+/**
+ * Loads a 32x64 CI8 texture with a 256-color palette (arg1), choosing the image row from
+ * rattata_game's D_862082A0[3] and one of four animation frames from sScrollingIconFrame3.
+ */
 void DisplayList_BuildScrollingIconSegment3(Gfx* gfx, u16* arg1, u8* arg2) {
     gDPPipeSync(gfx++);
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetTextureLUT(gfx++, G_TT_RGBA16);
     gDPLoadTLUT_pal256(gfx++, arg1);
-    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[3] * 4) & ~0x1F) + ((D_81004BA0 & 3) << 0xB)), G_IM_FMT_CI,
+    gDPLoadTextureTile(gfx++, (arg2 + ((D_862082A0[3] * 4) & ~0x1F) + ((sScrollingIconFrame3 & 3) << 0xB)), G_IM_FMT_CI,
                        G_IM_SIZ_8b, 0x20, 0x40, 0, 0, 0x20 - 1, 0x40 - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                        G_TX_NOMIRROR | G_TX_CLAMP, 5, 6, G_TX_NOLOD, G_TX_NOLOD);
     gSPEndDisplayList(gfx++);
 }
 
+/**
+ * Geo callback (jump-table slot 0x198). arg0 == 0 resets the frame counter; the build pass
+ * builds DisplayList_BuildScrollingIconSegment3 and advances it. Only non-species models reference it.
+ */
 void DisplayList_InitScrollingIconSegment3(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
     DisplayListAddresses* addresses;
@@ -128,17 +160,21 @@ void DisplayList_InitScrollingIconSegment3(s32 arg0, DisplayListState* state) {
     addresses = state->addresses;
     switch (arg0) { /* irregular */
         case 0:
-            D_81004BA0 = 0;
+            sScrollingIconFrame3 = 0;
             return;
         case 2:
             gfx = Gfx_AllocDisplayList(0xA0);
             state->gfx = gfx;
             DisplayList_BuildScrollingIconSegment3(gfx, addresses->segments[0], addresses->segments[1]);
-            D_81004BA0 += 1;
+            sScrollingIconFrame3 += 1;
             return;
     }
 }
 
+/**
+ * Geo callback (jump-table slot 0x1B0). Writes a raw G_SETTILESIZE command whose offsets grow with
+ * a 7-bit counter, so the texture slides each frame.
+ */
 void DisplayList_InitPulsingRectSegment(s32 arg0, DisplayListState* state) {
     static u8 D_81004190 = 0;
     s32 temp_a1;
@@ -160,6 +196,10 @@ void DisplayList_InitPulsingRectSegment(s32 arg0, DisplayListState* state) {
     }
 }
 
+/**
+ * Geo callback (jump-table slot 0x1B8). Interpolates the primitive color through a 50-frame
+ * red-yellow-green-blue-purple keyframe loop and scrolls two 320x64 tiles in opposite directions.
+ */
 void DisplayList_InitColorCycleBoxSegment(s32 arg0, DisplayListState* state) {
     static u8 D_81004194 = 0;
     static u8 D_81004198 = 0;
@@ -207,6 +247,11 @@ void DisplayList_InitColorCycleBoxSegment(s32 arg0, DisplayListState* state) {
     }
 }
 
+/**
+ * Writes the setup for the digit/name glyph plate: calls D_810041D0, sets the primitive alpha
+ * from D_800AF770[5], the environment color, and loads the 4-bit texture at D_3008000. Resets
+ * sDigitGlyphIndex so the following glyph callbacks start at the first digit.
+ */
 void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
     s32 temp_a3;
 
@@ -229,9 +274,12 @@ void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xF2000000;    _gfx->words.w1 = 0x7C03C;    }
     // clang-format on
     gSPEndDisplayList(gfx++);
-    D_81004BB0 = 0;
+    sDigitGlyphIndex = 0;
 }
 
+/**
+ * Returns the length of a NUL-terminated string.
+ */
 s32 Util_Strlen(s8* arg0) {
     s32 var_v1;
     s8 temp_t7;
@@ -249,9 +297,14 @@ s32 Util_Strlen(s8* arg0) {
 }
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/particle_data_library/particle_data_library_258080/func_81003A54.s")
+#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/particle_data_library/particle_data_library_258080/DisplayList_BuildDigitOrGlyphSegment.s")
 #else
-void func_81003A54(Gfx* gfx) {
+/**
+ * Loads one 16x16 IA8 glyph from the font sheet. Glyphs 0-2 are the hundreds, tens and units of
+ * D_800AF770[effectSlot % 5] + 1. Later glyphs spell that species' name (from gVictoryPokemonNames),
+ * shifted right by (10 - name length) * 32 units. Advances sDigitGlyphIndex.
+ */
+void DisplayList_BuildDigitOrGlyphSegment(Gfx* gfx) {
     u16 temp_v1;
     u8 sp4D;
     s32 pad[4];
@@ -262,7 +315,7 @@ void func_81003A54(Gfx* gfx) {
     s32 sp2C;
 
     temp_t0 = D_800AF770[var_v0];
-    switch (D_81004BB0) {
+    switch (sDigitGlyphIndex) {
         case 0:
             sp4D = (((s32)(temp_t0 + 1) / 100) + 0x10) & 0xFF;
             break;
@@ -278,15 +331,15 @@ void func_81003A54(Gfx* gfx) {
 #else
             sp34 = Text_GetString(0, 0, gVictoryPokemonNames, temp_t0);
 #endif
-            sprintf(D_81004BB8, "%s     ", sp34);
-            temp_v1 = D_81004BB0 - 3;
+            sprintf(sNameBuffer, "%s     ", sp34);
+            temp_v1 = sDigitGlyphIndex - 3;
 #if defined(VERSION_JP)
             // Japanese names are two-byte EUC-JP characters; masking the pair with 0x7F7F gives
             // the JIS code that this build's Font_MapGlyphCode maps to a glyph index.
             //@asm/jp/graphics_textures.s
-            sp4D = Font_MapGlyphCode((u16)(((D_81004BB8[temp_v1 * 2] << 8) + D_81004BB8[temp_v1 * 2 + 1]) & 0x7F7F));
+            sp4D = Font_MapGlyphCode((u16)(((sNameBuffer[temp_v1 * 2] << 8) + sNameBuffer[temp_v1 * 2 + 1]) & 0x7F7F));
 #else
-            sp4D = Font_MapGlyphCode((u8)D_81004BB8[temp_v1]);
+            sp4D = Font_MapGlyphCode((u8)sNameBuffer[temp_v1]);
 #endif
             sp2C = 0xA - Util_Strlen((s8*)sp34);
             sp30 = Gfx_AllocDisplayList(sizeof(Mtx));
@@ -311,10 +364,13 @@ void func_81003A54(Gfx* gfx) {
                        G_TX_NOMIRROR | G_TX_CLAMP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
 #endif
     gSPEndDisplayList(gfx++);
-    D_81004BB0++;
+    sDigitGlyphIndex++;
 }
 #endif
 
+/**
+ * Geo callback (jump-table slot 0x1C8). Builds DisplayList_BuildDigitDisplayBackground.
+ */
 void DisplayList_InitDigitDisplayBackground(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
 
@@ -325,12 +381,16 @@ void DisplayList_InitDigitDisplayBackground(s32 arg0, DisplayListState* state) {
     }
 }
 
+/**
+ * Geo callback (jump-table slot 0x1C0). Builds DisplayList_BuildDigitOrGlyphSegment; each call
+ * draws the next glyph.
+ */
 void DisplayList_InitDigitOrGlyphSegment(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
 
     if (arg0 == 2) {
         gfx = Gfx_AllocDisplayList(0xA0);
         state->gfx = gfx;
-        func_81003A54(gfx);
+        DisplayList_BuildDigitOrGlyphSegment(gfx);
     }
 }
