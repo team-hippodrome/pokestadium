@@ -1110,7 +1110,7 @@ void BattlePrepTeamIcons_Load(unk_D_84B25A58* arg0, BinArchive* arg1) {
 
     PokeIcon_OpenModelArchives();
 
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     if (arg0->unk_02 == 1) {
         BattlePrepTeamIcons_LoadDexIdsDouble(arg0);

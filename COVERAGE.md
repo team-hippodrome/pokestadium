@@ -92,7 +92,7 @@ Shared C files the US build compiles that `de` still builds from its own disasse
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
 | `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 1 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 1 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |
 | `src/fragments/pokedex/pokedex_214920.c` | 47 |
 | `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
@@ -202,7 +202,7 @@ Shared C files the US build compiles that `es` still builds from its own disasse
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
 | `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 1 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 1 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |
 | `src/fragments/pokedex/pokedex_214920.c` | 47 |
 | `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
@@ -379,7 +379,7 @@ Shared C files the US build compiles that `eu_rev1` still builds from its own di
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
 | `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 1 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 1 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |
 | `src/fragments/rattata_game/rattata_game.c` | 30 |
 | `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
@@ -487,7 +487,7 @@ Shared C files the US build compiles that `fr` still builds from its own disasse
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
 | `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 1 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 1 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |
 | `src/fragments/pokedex/pokedex_214920.c` | 47 |
 | `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
@@ -598,7 +598,7 @@ Shared C files the US build compiles that `it` still builds from its own disasse
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
 | `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 1 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 1 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |
 | `src/fragments/pokedex/pokedex_214920.c` | 47 |
 | `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
@@ -730,7 +730,7 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
 | `src/fragments/minigame_select/minigame_select_2804C0.c` | 19 |
 | `src/fragments/options/options.c` | 14 |
-| `src/fragments/particle_data_library/particle_data_library_2558B0.c` | 10 |
+| `src/fragments/model_callback_library/model_callback_library_2558B0.c` | 10 |
 | `src/fragments/particle_math/particle_math_261F90.c` | 83 |
 | `src/fragments/particle_math/particle_math_26E540.c` | 2 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 1 |

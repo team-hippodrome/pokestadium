@@ -198,14 +198,14 @@
 -> - [0x201B20, .data, fragments/pokemon_lab_support/pokemon_lab_support]
 -> - [0x201C20, .rodata, fragments/pokemon_lab_support/pokemon_lab_support]
 
-# particle_data_library_2554C0: the Japanese .rodata has no "DUMMY NAME" string (VERSION_JP in
+# model_callback_library_2554C0: the Japanese .rodata has no "DUMMY NAME" string (VERSION_JP in
 # the shared C), so it is 0x50 bytes from D_810041D0 (rom 0x26E3A0). The rest of that rodata
 # blob from 0x26E3F0 begins with jtbl_81003B40_jp, used by fragment31_26AEA0 (the US
-# particle_data_library_2558B0), and is named after that file. The cut is in the 258080 block below.
-- [0x26AAB0, asm, fragments/particle_data_library/particle_data_library_2554C0]
--> - [0x26AAB0, c, fragments/particle_data_library/particle_data_library_2554C0]
-- [0x26E210, data, fragments/particle_data_library/particle_data_library_2554C0]
--> - [0x26E210, .data, fragments/particle_data_library/particle_data_library_2554C0]
+# model_callback_library_2558B0), and is named after that file. The cut is in the 258080 block below.
+- [0x26AAB0, asm, fragments/model_callback_library/model_callback_library_2554C0]
+-> - [0x26AAB0, c, fragments/model_callback_library/model_callback_library_2554C0]
+- [0x26E210, data, fragments/model_callback_library/model_callback_library_2554C0]
+-> - [0x26E210, .data, fragments/model_callback_library/model_callback_library_2554C0]
 
 # cup_select: the shared C compiles to the Japanese bytes unchanged. The porter's 0x8A0 data
 # blob at 0x2D6070 is the file's 0x890 .data followed by its 0x10 .rodata (the US layout,
@@ -382,22 +382,22 @@
 - [0xC0F0, asm, libleo/bootdisk]
 -> - [0xC0F0, c, libleo/bootdisk]
 -> - [0xC550, hasm, ../../src/libleo/bootstrap]
-# particle_data_library_258080: the Japanese DisplayList_BuildDigitOrGlyphSegment takes the species name from
+# model_callback_library_258080: the Japanese DisplayList_BuildDigitOrGlyphSegment takes the species name from
 # D_8006FF00, reads it as two-byte EUC-JP characters for Font_MapGlyphCode, spaces them by 22
 # instead of 32 and loads glyphs from D_3000210; DisplayList_BuildDigitDisplayBackground uses
 # another environment color (all under VERSION_JP in the shared C). The file's 0x30-byte .data
-# runs 0x10 past the porter's data blob into the particle_data_library_2554C0 rodata blob, whose
+# runs 0x10 past the porter's data blob into the model_callback_library_2554C0 rodata blob, whose
 # start moves to 0x26E3A0 (D_810041D0); the file's 0x10-byte .rodata is that blob's last 0x10 bytes.
-- [0x26CFF0, asm, fragments/particle_data_library/particle_data_library_258080]
--> - [0x26CFF0, c, fragments/particle_data_library/particle_data_library_258080]
-- [0x26E370, data, fragments/particle_data_library/particle_data_library_258080]
--> - [0x26E370, .data, fragments/particle_data_library/particle_data_library_258080]
-- [0x26E390, rodata, fragments/particle_data_library/particle_data_library_2554C0]
--> - [0x26E3A0, .rodata, fragments/particle_data_library/particle_data_library_2554C0]
--> - [0x26E3F0, rodata, fragments/particle_data_library/particle_data_library_2558B0]
--> - [0x26E890, .rodata, fragments/particle_data_library/particle_data_library_258080]
-- {vram: 0x81004380, type: bss, name: fragments/particle_data_library/particle_data_library_258080}
--> - {vram: 0x81004380, type: .bss, name: fragments/particle_data_library/particle_data_library_258080}
+- [0x26CFF0, asm, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x26CFF0, c, fragments/model_callback_library/model_callback_library_258080]
+- [0x26E370, data, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x26E370, .data, fragments/model_callback_library/model_callback_library_258080]
+- [0x26E390, rodata, fragments/model_callback_library/model_callback_library_2554C0]
+-> - [0x26E3A0, .rodata, fragments/model_callback_library/model_callback_library_2554C0]
+-> - [0x26E3F0, rodata, fragments/model_callback_library/model_callback_library_2558B0]
+-> - [0x26E890, .rodata, fragments/model_callback_library/model_callback_library_258080]
+- {vram: 0x81004380, type: bss, name: fragments/model_callback_library/model_callback_library_258080}
+-> - {vram: 0x81004380, type: .bss, name: fragments/model_callback_library/model_callback_library_258080}
 # battle_hud: the Japanese build has no ModelRenderer_GetObjectType, and its
 # ModelAnim_StartDisplayObjectAnimation takes the display object effectSlot (Model_InitDisplayObject
 # loads it from offset 0xA6) instead of the DisplayObject pointer (all under VERSION_JP in the
