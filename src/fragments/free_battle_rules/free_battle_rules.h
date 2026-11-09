@@ -26,7 +26,7 @@ void FreeBattle_DrawRulesetWindow(void);
 void FreeBattle_UpdateRulesetSelection(void);
 void FreeBattle_ClearRulesetSelection(void);
 // COM difficulty popup.
-void FreeBattle_DrawComDifficultyText(s16 arg0, char* arg1);
+void FreeBattle_DrawComDifficultyText(s16 position, char* text);
 void FreeBattle_DrawComDifficultyWindow(void);
 void FreeBattle_InitComDifficultyWindow(void);
 void FreeBattle_OpenComDifficultyWindow(void);
