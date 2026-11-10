@@ -32,10 +32,10 @@ typedef struct unk_D_84B1A598 {
 } unk_D_84B1A598; // size >= 0xB410
 
 typedef struct BattlePrepRuleWindow {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 selected_option;
+    /* 0x00 */ u8 state;
+    /* 0x01 */ u8 kind;
+    /* 0x02 */ s16 openingProgress;
+    /* 0x04 */ s16 selectedOption;
     /* 0x06 */ char unk06[0x2];
 } BattlePrepTextWindow; // size >= 0x8
 
@@ -162,12 +162,12 @@ typedef struct unk_func_84B067B4 {
 typedef struct BattlePrepRuleWindowLayout {
     /* 0x00 */ s16 x;
     /* 0x02 */ s16 y;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06; // ruleset?
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
+    /* 0x04 */ s16 width;
+    /* 0x06 */ s16 restingHeight; // ruleset?
+    /* 0x08 */ s16 optionCount;
+    /* 0x0A */ s16 color;
+    /* 0x0C */ s16 isKind8;
+    /* 0x0E */ s16 disabledRows;
     /* 0x10 */ s16 unk_10;
 } BattlePrepTextWindowLayout; // size = 0x12
 

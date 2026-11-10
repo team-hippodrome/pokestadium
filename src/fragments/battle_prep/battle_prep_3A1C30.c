@@ -1,4 +1,5 @@
 #include "battle_prep.h"
+#include "game_state.h"
 #include "src/geo_render.h"
 #include "src/model_renderer.h"
 #include "src/graphics_textures.h"
@@ -142,7 +143,7 @@ void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* text_window, s16 x, s16 y)
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    Gfx_DrawTexturedRectClipped(x, y + (text_window->selected_option * 14) + 1, 16, 11, 0, 0, 0x800, 0x800, 0);
+    Gfx_DrawTexturedRectClipped(x, y + (text_window->selectedOption * 14) + 1, 16, 11, 0, 0, 0x800, 0x800, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -156,7 +157,7 @@ void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* text_window, s16 x, s16 y)
 void BattlePrep_DrawRuleOption(BattlePrepTextWindow* text_window, s16 x, s16 y, s16 option_index, s32 is_selectable, s8* text) {
     if (is_selectable == 0) {
         Gfx_SetEnvColor(0x64, 0x64, 0x64, 0xFF); // #646464
-    } else if (option_index == text_window->selected_option) {
+    } else if (option_index == text_window->selectedOption) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #ffff00
     } else {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
@@ -176,7 +177,7 @@ void BattlePrep_DrawKeepBattlingPrompt(BattlePrepTextWindow* text_window, Battle
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 34, window_layout->y + 24, 0, 1, BattlePrep_GetString(42));
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 34, window_layout->y + 24, 1, 1, BattlePrep_GetString(43));
 
-    if (window_layout->unk_06 == 72) {
+    if (window_layout->restingHeight == 72) {
         Font_SetActive(1, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
         Font_Printf(window_layout->x + 74, window_layout->y + 54, "%s%d", BattlePrep_GetString(44),
@@ -218,6 +219,10 @@ void BattlePrep_DrawCupLossMenu(BattlePrepTextWindow* text_window, BattlePrepTex
  */
 void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
     // FAKE: triple Negation
+    // TODO: find out what sets this to true, it's not:
+    // - being passed the first trainer
+    // - being in the elite 4
+    // - being in the champion
     s32 sp2C = !!(gSessionContext.sessionFlags & 0x2);
 
     sp2C = !sp2C;
@@ -233,53 +238,54 @@ void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* text_window, BattlePrep
 /**
  * Rule window kind 5: Free Battle menu (Try once more / Change team combination / Quit).
  */
-void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    s32 one_player_had_99_wins = gSessionContext.battleSides[0].winCount < 99 && gSessionContext.battleSides[1].winCount < 99;
+void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    s32 one_player_has_99_wins = gSessionContext.battleSides[0].winCount < 99 && gSessionContext.battleSides[1].winCount < 99;
 
-    BattlePrep_DrawCursorArrow(arg0, arg1->x + 5, arg1->y + 6);
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 26, arg1->y + 6, 0, one_player_had_99_wins, BattlePrep_GetString(51));
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 26, arg1->y + 6, 1, 1, BattlePrep_GetString(52));
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 26, arg1->y + 6, 2, 1, BattlePrep_GetString(49));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, one_player_has_99_wins, BattlePrep_GetString(51));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, BattlePrep_GetString(52));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
 }
 
 /**
  * Rule window kind 6: Mewtwo loss menu (Battle again / Quit).
  */
-void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    BattlePrep_DrawCursorArrow(arg0, arg1->x + 5, arg1->y + 6);
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 26, arg1->y + 6, 0, 1, BattlePrep_GetString(53));
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 26, arg1->y + 6, 1, 1, BattlePrep_GetString(49));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, 1, BattlePrep_GetString(53));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
 }
 
 /**
  * Rule window kind 7: cup name, ball class and BATTLE N label.
+ * Displays upon loading a suspending run from the pre-area select menu
  */
-void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    char* temp_v0;
+void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    char* string;
 
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(4, 0);
-    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF);
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
 
-    if ((gSessionContext.mode == 3) || (gSessionContext.mode == 6)) {
-        temp_v0 = BattlePrep_GetString(gSessionContext.mode - 1);
-        Font_Printf((arg1->x - (Font_MeasureTextExtent(4, 0, temp_v0) / 2)) + 100, arg1->y + 6, temp_v0);
-        temp_v0 = BattlePrep_GetString(gSessionContext.modeSelection + 7);
-        Font_Printf((arg1->x - (Font_MeasureTextExtent(4, 0, temp_v0) / 2)) + 100, arg1->y + 24, temp_v0);
-        temp_v0 = BattlePrep_GetString(gSessionContext.roundOrDemoId + 10);
-        Font_Printf((arg1->x - (Font_MeasureTextExtent(4, 0, temp_v0) / 2)) + 100, arg1->y + 42, temp_v0);
+    if ((gSessionContext.mode == RULE_CATEGORY_NINTENDO_CUP_99) || (gSessionContext.mode == RULE_CATEGORY_PRIME_CUP)) {
+        string = BattlePrep_GetString(gSessionContext.mode - 1);
+        Font_Printf((window_layout->x - (Font_MeasureTextExtent(4, 0, string) / 2)) + 100, window_layout->y + 6, string);
+        string = BattlePrep_GetString(gSessionContext.modeSelection + 7);
+        Font_Printf((window_layout->x - (Font_MeasureTextExtent(4, 0, string) / 2)) + 100, window_layout->y + 24, string);
+        string = BattlePrep_GetString(gSessionContext.roundOrDemoId + 10);
+        Font_Printf((window_layout->x - (Font_MeasureTextExtent(4, 0, string) / 2)) + 100, window_layout->y + 42, string);
     } else {
-        temp_v0 = BattlePrep_GetString(gSessionContext.mode - 1);
-        Font_Printf((arg1->x - (Font_MeasureTextExtent(4, 0, temp_v0) / 2)) + 100, arg1->y + 10, temp_v0);
-        temp_v0 = BattlePrep_GetString(gSessionContext.roundOrDemoId + 10);
-        Font_Printf((arg1->x - (Font_MeasureTextExtent(4, 0, temp_v0) / 2)) + 100, arg1->y + 38, temp_v0);
+        string = BattlePrep_GetString(gSessionContext.mode - 1);
+        Font_Printf((window_layout->x - (Font_MeasureTextExtent(4, 0, string) / 2)) + 100, window_layout->y + 10, string);
+        string = BattlePrep_GetString(gSessionContext.roundOrDemoId + 10);
+        Font_Printf((window_layout->x - (Font_MeasureTextExtent(4, 0, string) / 2)) + 100, window_layout->y + 38, string);
     }
 
     Font_DisableTwoCycleTexturing();
@@ -291,32 +297,34 @@ void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* arg0, BattlePrepText
 #else
 /**
  * Rule window kind 8: gym name with BATTLE, TRAINER N / GYM LEADER / ELITE FOUR N.
+ * Displays upon loading a suspending run from the pre-area select menu
  */
-void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    s32 sp12C;
-    char sp2C[256];
+void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    s32 text_length;
+    char buffer[256];
 
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(4, 0);
-    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF);
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
 
-    sprintf(sp2C, "%s %s", BattlePrep_GetString(gSessionContext.modeSelection + 19), BattlePrep_GetString(54));
-    sp12C = Font_MeasureTextExtent(4, 0, sp2C);
-    Font_Printf((arg1->x - (sp12C / 2)) + 100, arg1->y + 10, sp2C);
+    sprintf(buffer, "%s %s", BattlePrep_GetString(gSessionContext.modeSelection + 19), BattlePrep_GetString(54));
+    text_length = Font_MeasureTextExtent(4, 0, buffer);
+    Font_Printf((window_layout->x - (text_length / 2)) + 100, window_layout->y + 10, buffer);
 
-    if (gSessionContext.modeSelection < 9) {
-        if (gSessionContext.modeSelection == 8) {
-            sprintf(sp2C, "%s %d", BattlePrep_GetString(27), gSessionContext.roundOrDemoId);
-            sp12C = Font_MeasureTextExtent(4, 0, sp2C);
-            Font_Printf((arg1->x - (sp12C / 2)) + 100, arg1->y + 38, sp2C);
+    if (gSessionContext.modeSelection < SESSION_MODE_BATTLE_NOW) {
+        // It is impossible to suspend the game on Vs Mewtwo so this never happens
+        if (gSessionContext.modeSelection == SESSION_MODE_VS_MEWTWO) {
+            sprintf(buffer, "%s %d", BattlePrep_GetString(27), gSessionContext.roundOrDemoId);
+            text_length = Font_MeasureTextExtent(4, 0, buffer);
+            Font_Printf((window_layout->x - (text_length / 2)) + 100, window_layout->y + 38, buffer);
         } else if (gSessionContext.roundOrDemoId < 4) {
-            sprintf(&sp2C, "%s %d", BattlePrep_GetString(55), gSessionContext.roundOrDemoId);
-            sp12C = Font_MeasureTextExtent(4, 0, sp2C);
-            Font_Printf((arg1->x - (sp12C / 2)) + 100, arg1->y + 38, sp2C);
+            sprintf(&buffer, "%s %d", BattlePrep_GetString(55), gSessionContext.roundOrDemoId);
+            text_length = Font_MeasureTextExtent(4, 0, buffer);
+            Font_Printf((window_layout->x - (text_length / 2)) + 100, window_layout->y + 38, buffer);
         } else {
-            sp12C = Font_MeasureTextExtent(4, 0, BattlePrep_GetString(gSessionContext.modeSelection + 29));
-            Font_Printf((arg1->x - (sp12C / 2)) + 100, arg1->y + 38,
+            text_length = Font_MeasureTextExtent(4, 0, BattlePrep_GetString(gSessionContext.modeSelection + 29));
+            Font_Printf((window_layout->x - (text_length / 2)) + 100, window_layout->y + 38,
                         BattlePrep_GetString(gSessionContext.modeSelection + 29));
         }
     }
@@ -329,17 +337,17 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* arg0, BattlePrepT
 /**
  * Draws the COM (D_3025200) or 1P-4P controller tag for a battle side.
  */
-void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
-    static u8* D_84B17608[] = { D_3025950, D_30260A0, D_30267F0, D_3026F40 };
+void BattlePrep_DrawPlayerTag(s16 x, s16 y, BattleSessionTeams* session_teams) {
+    static u8* sPortIcons[] = { D_3025950, D_30260A0, D_30267F0, D_3026F40 };
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    if (arg2->tagTeamSize == 1) {
-        if (arg2->tagTeamMember[0]->isHuman & 0x2) {
-            Gfx_DrawTextureRgba16(arg0 + 26, arg1 + 3, 36, 26, D_3025200, 36, 0);
+    if (session_teams->tagTeamSize == 1) {
+        if (session_teams->tagTeamMember[0]->isHuman & 0x2) {
+            Gfx_DrawTextureRgba16(x + 26, y + 3, 36, 26, gComIconSmall, 36, 0);
             if (0) {}
         } else {
-            Gfx_DrawTextureRgba16(arg0 + 26, arg1 + 3, 36, 26, D_84B17608[arg2->tagTeamMember[0]->controllerPort],
+            Gfx_DrawTextureRgba16(x + 26, y + 3, 36, 26, sPortIcons[session_teams->tagTeamMember[0]->controllerPort],
                                   36, 0);
         }
 
@@ -347,13 +355,13 @@ void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
         return;
     }
 
-    if (arg2->tagTeamMember[0]->controllerPort < arg2->tagTeamMember[1]->controllerPort) {
-        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 36, 26, D_84B17608[arg2->tagTeamMember[0]->controllerPort], 36, 0);
-        Gfx_DrawTextureRgba16(arg0 + 48, arg1 + 3, 36, 26, D_84B17608[arg2->tagTeamMember[1]->controllerPort], 36,
+    if (session_teams->tagTeamMember[0]->controllerPort < session_teams->tagTeamMember[1]->controllerPort) {
+        Gfx_DrawTextureRgba16(x + 6, y + 3, 36, 26, sPortIcons[session_teams->tagTeamMember[0]->controllerPort], 36, 0);
+        Gfx_DrawTextureRgba16(x + 48, y + 3, 36, 26, sPortIcons[session_teams->tagTeamMember[1]->controllerPort], 36,
                               0);
     } else {
-        Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 3, 36, 26, D_84B17608[arg2->tagTeamMember[1]->controllerPort], 36, 0);
-        Gfx_DrawTextureRgba16(arg0 + 48, arg1 + 3, 36, 26, D_84B17608[arg2->tagTeamMember[0]->controllerPort], 36,
+        Gfx_DrawTextureRgba16(x + 6, y + 3, 36, 26, sPortIcons[session_teams->tagTeamMember[1]->controllerPort], 36, 0);
+        Gfx_DrawTextureRgba16(x + 48, y + 3, 36, 26, sPortIcons[session_teams->tagTeamMember[0]->controllerPort], 36,
                               0);
     }
 
@@ -361,7 +369,7 @@ void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
-    Font_DrawCharAt(arg0 + 36, arg1 + 8, 38);
+    Font_DrawCharAt(x + 36, y + 8, 38);
     Font_EndTexturedTextRendering();
 }
 
@@ -369,39 +377,41 @@ void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
  * Sets the text color for a side's win count; the side that won this battle pulses yellow.
  */
 void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0) {
-    static s16 D_84B17618 = 0;
+    static s16 sWinCountHighlightPhase = 0;
 
     if (arg0->wonBattle == 1) {
-        Gfx_SetEnvColor(0xFF, (SINS((s32)(SINS(D_84B17618) * 16384.0f)) * 100.0f) + 155.0f, 0x37, 0xFF);
-        D_84B17618 += 0x400;
+        Gfx_SetEnvColor(0xFF, (SINS((s32)(SINS(sWinCountHighlightPhase) * 16384.0f)) * 100.0f) + 155.0f, 0x37, 0xFF);
+        // Lowest -> middle -> highest: #ff3737 #ffaa37 #ffff37
+        sWinCountHighlightPhase += 0x400;
     } else {
-        Gfx_SetEnvColor(0xFF, 0x37, 0x37, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0x37, 0x37, 0xFF); // #ff3737
     }
 }
 
 /**
  * Rule window kind 9: Free Battle "Record" with each side's win(s) count.
  */
-void BattlePrep_DrawWinRecord(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    BattlePrep_DrawBorderedRect(arg1->x + 8, arg1->y + 20, 168, 0x20, 0, 0, 0, 0xFF);
-    BattlePrep_DrawBorderedRect(arg1->x + 8, arg1->y + 68, 168, 0x20, 0, 0, 0, 0xFF);
-    BattlePrep_DrawPlayerTag(arg1->x + 8, arg1->y + 20, gSessionContext.battleSides);
-    BattlePrep_DrawPlayerTag(arg1->x + 8, arg1->y + 68, &gSessionContext.battleSides[1]);
+void BattlePrep_DrawWinRecord(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 20, 168, 0x20, 0, 0, 0, 0xFF);
+    BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 68, 168, 0x20, 0, 0, 0, 0xFF);
+    BattlePrep_DrawPlayerTag(window_layout->x + 8, window_layout->y + 20, gSessionContext.battleSides);
+    BattlePrep_DrawPlayerTag(window_layout->x + 8, window_layout->y + 68, &gSessionContext.battleSides[1]);
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(4, 0);
-    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF);
-    Font_Printf(arg1->x + 0x40, arg1->y + 2, BattlePrep_GetString(56));
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
+    // "Record" in green
+    Font_Printf(window_layout->x + 64, window_layout->y + 2, BattlePrep_GetString(56));
     Font_DisableTwoCycleTexturing();
     Font_SetActive(16, 0);
     BattlePrep_SetWinCountColor(&gSessionContext.battleSides[0]);
-    Font_Printf(arg1->x + 92, arg1->y + 24, "%2d", gSessionContext.battleSides[0].winCount);
+    Font_Printf(window_layout->x + 92, window_layout->y + 24, "%2d", gSessionContext.battleSides[0].winCount);
     BattlePrep_SetWinCountColor(&gSessionContext.battleSides[1]);
-    Font_Printf(arg1->x + 92, arg1->y + 72, "%2d", gSessionContext.battleSides[1].winCount);
+    Font_Printf(window_layout->x + 92, window_layout->y + 72, "%2d", gSessionContext.battleSides[1].winCount);
     Font_SetActive(4, 0);
-    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-    Font_Printf(arg1->x + 130, arg1->y + 0x1F, BattlePrep_GetString(57));
-    Font_Printf(arg1->x + 130, arg1->y + 79, BattlePrep_GetString(57));
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+    Font_Printf(window_layout->x + 130, window_layout->y + 31, BattlePrep_GetString(57));
+    Font_Printf(window_layout->x + 130, window_layout->y + 79, BattlePrep_GetString(57));
     Font_EndTexturedTextRendering();
 }
 
@@ -409,147 +419,151 @@ void BattlePrep_DrawWinRecord(BattlePrepTextWindow* arg0, BattlePrepTextWindowLa
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawOverwriteSavePrompt.s")
 #else
 /**
- * Rule window kind 10: overwrite-saved-battle-data prompt.
+ * Rule window kind 10: over write suspended battle data prompt
  */
-void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1) {
-    SessionContinueData sp50;
-    UNUSED s32 pad;
-    s32 sp48;
-    s32 temp_v0;
 
-    Session_LoadContinueRecord(&sp50, NULL);
-    BattlePrep_DrawBorderedRect(arg1->x + 0x10, arg1->y + 20, 168, 60, 0, 0, 0, 0xFF);
-    BattlePrep_DrawBorderedRect(arg1->x + 0x10, arg1->y + 96, 168, 34, 0, 0, 0, 0xFF);
-    BattlePrep_DrawCursorArrow(arg0, arg1->x + 20, arg1->y + 100);
+// better name: BattlePrep_DrawOverwriteSuspendDataPrompt
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+    SessionContinueData suspend_record;
+    UNUSED s32 pad;
+    s32 warning_length;
+    s32 icon_offset_x;
+
+    Session_LoadContinueRecord(&suspend_record, NULL);
+    BattlePrep_DrawBorderedRect(window_layout->x + 16, window_layout->y + 20, 168, 60, 0, 0, 0, 0xFF);
+    BattlePrep_DrawBorderedRect(window_layout->x + 16, window_layout->y + 96, 168, 34, 0, 0, 0, 0xFF);
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 20, window_layout->y + 100);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    Font_Printf(arg1->x + 0x10, arg1->y + 6, BattlePrep_GetString(58));
-    Font_Printf(arg1->x + 0x10, arg1->y + 82, BattlePrep_GetString(59));
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 42, arg1->y + 100, 0, 1, BattlePrep_GetString(60));
-    BattlePrep_DrawRuleOption(arg0, arg1->x + 42, arg1->y + 100, 1, 1, BattlePrep_GetString(61));
-    Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF);
+    Font_Printf(window_layout->x + 16, window_layout->y + 6, BattlePrep_GetString(58));
+    Font_Printf(window_layout->x + 16, window_layout->y + 82, BattlePrep_GetString(59));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 42, window_layout->y + 100, 0, 1, BattlePrep_GetString(60));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 42, window_layout->y + 100, 1, 1, BattlePrep_GetString(61));
+    Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF); // #ff6464
 
-    if (sp50.unk_00 == 7) {
-        Font_Printf(arg1->x + 30, arg1->y + 23, BattlePrep_GetString(sp50.unk_00 - 1));
-        Font_Printf(arg1->x + 30, arg1->y + 38, BattlePrep_GetString(sp50.unk_01 + 19));
-        if (sp50.unk_01 < 8) {
-            if (sp50.unk_02 < 4) {
-                Font_Printf(arg1->x + 30, arg1->y + 53, "%s %d", BattlePrep_GetString(55), sp50.unk_02);
+    if (suspend_record.sessionMode == SESSION_MODE_GYM_LEADER_CASTLE) {
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, BattlePrep_GetString(suspend_record.sessionMode - 1));
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, BattlePrep_GetString(suspend_record.cupOrGymIndex + 19));
+        if (suspend_record.cupOrGymIndex < 8) {
+            if (suspend_record.trainerIndex < 4) {
+                Font_Printf(window_layout->x + 30, window_layout->y + 53, "%s %d", BattlePrep_GetString(55), suspend_record.trainerIndex);
             } else {
-                Font_Printf(arg1->x + 30, arg1->y + 53, BattlePrep_GetString(62));
+                Font_Printf(window_layout->x + 30, window_layout->y + 53, BattlePrep_GetString(62));
             }
         } else {
-            Font_Printf(arg1->x + 30, arg1->y + 53, "%s %d", BattlePrep_GetString(27), sp50.unk_02);
+            Font_Printf(window_layout->x + 30, window_layout->y + 53, "%s %d", BattlePrep_GetString(27), suspend_record.trainerIndex);
         }
-    } else if ((sp50.unk_00 == 3) || (sp50.unk_00 == 6)) {
-        Font_Printf(arg1->x + 30, arg1->y + 23, BattlePrep_GetString(sp50.unk_00 - 1));
-        Font_Printf(arg1->x + 30, arg1->y + 38, BattlePrep_GetString(sp50.unk_01 + 7));
-        Font_Printf(arg1->x + 30, arg1->y + 53, BattlePrep_GetString(sp50.unk_02 + 10));
+    } else if ((suspend_record.sessionMode == SESSION_MODE_NINTENDO_CUP_99) || (suspend_record.sessionMode == SESSION_MODE_PRIME_CUP)) {
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, BattlePrep_GetString(suspend_record.sessionMode - 1));
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, BattlePrep_GetString(suspend_record.cupOrGymIndex + 7));
+        Font_Printf(window_layout->x + 30, window_layout->y + 53, BattlePrep_GetString(suspend_record.trainerIndex + 10));
     } else {
-        Font_Printf(arg1->x + 30, arg1->y + 23, BattlePrep_GetString(sp50.unk_00 - 1));
-        Font_Printf(arg1->x + 30, arg1->y + 38, BattlePrep_GetString(sp50.unk_02 + 10));
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, BattlePrep_GetString(suspend_record.sessionMode - 1));
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, BattlePrep_GetString(suspend_record.trainerIndex + 10));
     }
 
-    if (sp50.unk_00 != 7) {
+    if (suspend_record.sessionMode != SESSION_MODE_GYM_LEADER_CASTLE) {
         Font_SetActive(1, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(arg1->x + 100, arg1->y + 67, "%s %d", BattlePrep_GetString(44), sp50.unk_04);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+        Font_Printf(window_layout->x + 100, window_layout->y + 67, "%s %d", BattlePrep_GetString(44), suspend_record.continueCount);
     }
 
-    if (arg0->selected_option == 0) {
-        sp48 = (arg1->unk_04 - Font_MeasureTextExtent(1, 0, BattlePrep_GetString(63))) / 2;
+    if (text_window->selectedOption == 0) {
+        // "Previous saved data will be deleted" shown when you are hovering over "save"
+        warning_length = (window_layout->width - Font_MeasureTextExtent(1, 0, BattlePrep_GetString(63))) / 2;
         Font_SetActive(1, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #ffff00
         Font_SetLineHeight(12);
-        Font_Printf(arg1->x + sp48, arg1->y + 134, BattlePrep_GetString(63));
+        Font_Printf(window_layout->x + warning_length, window_layout->y + 134, BattlePrep_GetString(63));
     }
 
     Font_EndTexturedTextRendering();
 
-    if (sp50.unk_03 == 1) {
-        temp_v0 = Font_MeasureTextExtent(1, 0, BattlePrep_GetString(sp50.unk_00 - 1));
+    if (suspend_record.inRound2 == 1) {
+        icon_offset_x = Font_MeasureTextExtent(1, 0, BattlePrep_GetString(suspend_record.sessionMode - 1));
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(arg1->x + temp_v0 + 0x20, arg1->y + 0x15, 0x10, 0x10, D_3027690, 0x10, 0);
+        Gfx_DrawTextureRgba16(window_layout->x + icon_offset_x + 32, window_layout->y + 21, 16, 16, gSmallRound2Icon, 0x10, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
 #endif
 
+// Better name: BattlePrep_DrawTextWindow
 /**
- * Draws the active rule window: grows the panel vertically while opening (unk_02 < 4), then draws
+ * Draws the active text window: grows the panel vertically while opening, then draws
  * the full panel and the contents for window kind unk_01 (1-10).
  */
-void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* arg0) {
-    BattlePrepTextWindowLayout* temp_s0;
-    s16 temp_a1;
-    s16 var_a3;
+void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* text_window) {
+    BattlePrepTextWindowLayout* window_layout;
+    s16 y;
+    s16 height;
 
-    if ((arg0->unk_00 != 0) && (arg0->unk_02 > 0)) {
-        temp_s0 = &gBattlePrepRuleWindowLayouts[arg0->unk_01 - 1];
+    if ((text_window->state != 0) && (text_window->openingProgress > 0)) {
+        window_layout = &gBattlePrepRuleWindowLayouts[text_window->kind - 1];
 
-        if (arg0->unk_02 < 4) {
-            var_a3 = (temp_s0->unk_06 * arg0->unk_02) / 4;
-            if (var_a3 < 0x10) {
-                var_a3 = 0x10;
+        if (text_window->openingProgress < 4) {
+            height = (window_layout->restingHeight * text_window->openingProgress) / 4;
+            if (height < 16) {
+                height = 16;
             }
 
-            temp_a1 = temp_s0->y + ((temp_s0->unk_06 - var_a3) / 2);
-            if (temp_s0->unk_0C == 0) {
-                Ui_DrawBorderedPanel(temp_s0->x, temp_a1, temp_s0->unk_04, var_a3, temp_s0->unk_0A);
+            y = window_layout->y + ((window_layout->restingHeight - height) / 2);
+            if (window_layout->isKind8 == 0) {
+                Ui_DrawBorderedPanel(window_layout->x, y, window_layout->width, height, window_layout->color);
             } else {
-                BattlePrep_DrawBorderedRect(temp_s0->x, temp_a1, temp_s0->unk_04, var_a3, 0x1E, 0x1E, 0x82, 0xFF);
+                BattlePrep_DrawBorderedRect(window_layout->x, y, window_layout->width, height, 0x1E, 0x1E, 0x82, 0xFF); // #1e1e82
             }
         } else {
-            if (temp_s0->unk_0C == 0) {
-                Ui_DrawBorderedPanel(temp_s0->x, temp_s0->y, temp_s0->unk_04, temp_s0->unk_06,
-                                     temp_s0->unk_0A);
+            if (window_layout->isKind8 == 0) {
+                Ui_DrawBorderedPanel(window_layout->x, window_layout->y, window_layout->width, window_layout->restingHeight,
+                                     window_layout->color);
             } else {
-                BattlePrep_DrawBorderedRect(temp_s0->x, temp_s0->y, temp_s0->unk_04, temp_s0->unk_06, 0x1E,
-                                            0x1E, 0x82, 0xFF);
+                BattlePrep_DrawBorderedRect(window_layout->x, window_layout->y, window_layout->width, window_layout->restingHeight, 0x1E,
+                                            0x1E, 0x82, 0xFF); // #1e82ff
             }
 
-            switch (arg0->unk_01) {
+            switch (text_window->kind) {
                 case 1:
-                    BattlePrep_DrawKeepBattlingPrompt(arg0, temp_s0);
+                    BattlePrep_DrawKeepBattlingPrompt(text_window, window_layout);
                     break;
 
                 case 2:
-                    BattlePrep_DrawKeepBattlingPrompt(arg0, temp_s0);
+                    BattlePrep_DrawKeepBattlingPrompt(text_window, window_layout);
                     break;
 
                 case 3:
-                    BattlePrep_DrawCupLossMenu(arg0, temp_s0);
+                    BattlePrep_DrawCupLossMenu(text_window, window_layout);
                     break;
 
                 case 4:
-                    BattlePrep_DrawCastleLossMenu(arg0, temp_s0);
+                    BattlePrep_DrawCastleLossMenu(text_window, window_layout);
                     break;
 
                 case 5:
-                    BattlePrep_DrawFreeBattleMenu(arg0, temp_s0);
+                    BattlePrep_DrawFreeBattleMenu(text_window, window_layout);
                     break;
 
                 case 6:
-                    BattlePrep_DrawMewtwoLossMenu(arg0, temp_s0);
+                    BattlePrep_DrawMewtwoLossMenu(text_window, window_layout);
                     break;
 
                 case 7:
-                    BattlePrep_DrawCupProgressHeader(arg0, temp_s0);
+                    BattlePrep_DrawCupProgressHeader(text_window, window_layout);
                     break;
 
                 case 8:
-                    BattlePrep_DrawCastleProgressHeader(arg0, temp_s0);
+                    BattlePrep_DrawCastleProgressHeader(text_window, window_layout);
                     break;
 
                 case 9:
-                    BattlePrep_DrawWinRecord(arg0, temp_s0);
+                    BattlePrep_DrawWinRecord(text_window, window_layout);
                     break;
 
                 case 10:
-                    BattlePrep_DrawOverwriteSavePrompt(arg0, temp_s0);
+                    BattlePrep_DrawOverwriteSavePrompt(text_window, window_layout);
                     break;
             }
         }
@@ -560,17 +574,18 @@ void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* arg0) {
  * Handles input for an open rule window: A plays the option's sound from the layout's unk_10
  * 3-bit table and starts closing; D-pad up/down moves the cursor, skipping disabled rows (unk_0E).
  */
-void BattlePrep_RunQuitMenu(BattlePrepTextWindow* arg0) {
-    BattlePrepTextWindowLayout* sp24;
-    s16 sp22;
-    s32 tmp;
+// better name: BattlePrep_RunQuitMenu
+void BattlePrep_RunQuitMenu(BattlePrepTextWindow* text_window) {
+    BattlePrepTextWindowLayout* window_layout;
+    s16 last_option_index;
+    s32 sound_effect_switch;
 
-    sp24 = &gBattlePrepRuleWindowLayouts[arg0->unk_01 - 1];
-    sp22 = sp24->unk_08 - 1;
+    window_layout = &gBattlePrepRuleWindowLayouts[text_window->kind - 1];
+    last_option_index = window_layout->optionCount - 1;
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        tmp = sp24->unk_10 >> (arg0->selected_option * 3);
-        switch (tmp & 0x7) {
+        sound_effect_switch = window_layout->unk_10 >> (text_window->selectedOption * 3);
+        switch (sound_effect_switch & 0x7) {
             case 1:
                 Audio_PlaySoundEffectById(SFX_MENU_BACK);
                 break;
@@ -595,63 +610,65 @@ void BattlePrep_RunQuitMenu(BattlePrepTextWindow* arg0) {
                 Audio_PlaySoundEffectById(33);
                 break;
         }
-        arg0->unk_00 = 2;
+        text_window->state = 2;
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
         do {
-            arg0->selected_option--;
-            if (arg0->selected_option < 0) {
-                arg0->selected_option = sp22;
+            text_window->selectedOption--;
+            if (text_window->selectedOption < 0) {
+                text_window->selectedOption = last_option_index;
             }
-        } while (!(sp24->unk_0E & (0x1 << arg0->selected_option)));
+        } while (!(window_layout->disabledRows & (0x1 << text_window->selectedOption)));
     } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
         do {
-            arg0->selected_option++;
-            if (sp22 < arg0->selected_option) {
-                arg0->selected_option = 0;
+            text_window->selectedOption++;
+            if (last_option_index < text_window->selectedOption) {
+                text_window->selectedOption = 0;
             }
-        } while (!(sp24->unk_0E & (0x1 << arg0->selected_option)));
+        } while (!(window_layout->disabledRows & (0x1 << text_window->selectedOption)));
     }
 }
 
 /**
  * State 1: increments the open step each frame until 4, then enters the input state 3.
  */
-void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* arg0) {
-    arg0->unk_02++;
-    if (arg0->unk_02 >= 5) {
-        arg0->unk_02 = 4;
-        arg0->unk_00 = 3;
+// better name: BattlePrep_TextWindowExpanding
+void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* text_window) {
+    text_window->openingProgress++;
+    if (text_window->openingProgress >= 5) {
+        text_window->openingProgress = 4;
+        text_window->state = 3;
     }
 }
 
 /**
  * State 2: decrements the open step each frame until 0, then enters the closed state 4.
  */
-void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* arg0) {
-    arg0->unk_02--;
-    if (arg0->unk_02 < 0) {
-        arg0->unk_02 = 0;
-        arg0->unk_00 = 4;
+// better name: BattlePrep_TextWindowCollapsing
+void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* text_window) {
+    text_window->openingProgress--;
+    if (text_window->openingProgress < 0) {
+        text_window->openingProgress = 0;
+        text_window->state = 4;
     }
 }
 
 /**
  * Per-frame dispatcher for the rule window state machine (1 expanding, 2 collapsing, 3 input).
  */
-void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* arg0) {
-    switch (arg0->unk_00) {
+void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* text_window) {
+    switch (text_window->state) {
         case 1:
-            BattlePrep_RuleWindowExpanding(arg0);
+            BattlePrep_RuleWindowExpanding(text_window);
             break;
 
         case 2:
-            BattlePrep_RuleWindowCollapsing(arg0);
+            BattlePrep_RuleWindowCollapsing(text_window);
             break;
 
         case 3:
-            BattlePrep_RunQuitMenu(arg0);
+            BattlePrep_RunQuitMenu(text_window);
             break;
     }
 }
@@ -660,56 +677,56 @@ void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* arg0) {
  * Opens rule window kind arg1 with SFX_PANEL_OPEN. Disables rows by session state (no continues
  * left, sessionFlags 0x2, or a win count of 99 in kind 5), then moves the cursor to the first enabled row.
  */
-void BattlePrep_InitRuleWindow(BattlePrepTextWindow* arg0, s16 arg1) {
-    BattlePrepTextWindowLayout* ptr = &gBattlePrepRuleWindowLayouts[arg1 - 1];
+void BattlePrep_InitRuleWindow(BattlePrepTextWindow* text_window, s16 layout_index) {
+    BattlePrepTextWindowLayout* window_layout = &gBattlePrepRuleWindowLayouts[layout_index - 1];
 
-    arg0->unk_01 = arg1;
-    arg0->unk_02 = 0;
-    arg0->selected_option = 0;
-    arg0->unk_00 = 1;
+    text_window->kind = layout_index;
+    text_window->openingProgress = 0;
+    text_window->selectedOption = 0;
+    text_window->state = 1;
 
-    ptr->unk_0E = -1;
+    window_layout->disabledRows = -1;
 
     Audio_PlaySoundEffectById(SFX_PANEL_OPEN);
 
-    if (arg1 - 1 == 2) {
+    if (layout_index - 1 == 2) {
         if (gSessionContext.continueCount == 0) {
-            ptr->unk_0E &= ~0x3;
+            window_layout->disabledRows &= ~0x3;
         }
         if (gSessionContext.sessionFlags & 0x2) {
-            ptr->unk_0E &= ~0x4;
+            window_layout->disabledRows &= ~0x4;
         }
-    } else if (arg1 - 1 == 3) {
+    } else if (layout_index - 1 == 3) {
         if (gSessionContext.sessionFlags & 0x2) {
-            ptr->unk_0E &= ~0x1;
+            window_layout->disabledRows &= ~0x1;
         }
-    } else if ((arg1 - 1 == 4) &&
+    } else if ((layout_index - 1 == 4) &&
                ((gSessionContext.battleSides[0].winCount >= 99) || (gSessionContext.battleSides[1].winCount >= 99))) {
-        ptr->unk_0E &= ~0x1;
+        window_layout->disabledRows &= ~0x1;
     }
 
-    while (!(ptr->unk_0E & (0x1 << arg0->selected_option))) {
-        arg0->selected_option++;
+    while (!(window_layout->disabledRows & (0x1 << text_window->selectedOption))) {
+        text_window->selectedOption++;
     }
 }
 
 /**
  * Immediately hides the rule window by clearing its state, kind and open step.
  */
-void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* arg0) {
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_02 = 0;
+void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* text_window) {
+    text_window->state = 0;
+    text_window->kind = 0;
+    text_window->openingProgress = 0;
 }
 
 /**
  * Returns the chosen row once the window has finished closing (state 4) and resets it to idle;
  * returns -1 otherwise.
  */
-s32 BattlePrep_PollRuleWindow(BattlePrepTextWindow* arg0) {
-    if (arg0->unk_00 == 4) {
-        arg0->unk_00 = 0;
-        return arg0->selected_option;
+s32 BattlePrep_PollRuleWindow(BattlePrepTextWindow* text_window) {
+    if (text_window->state == 4) {
+        text_window->state = 0;
+        return text_window->selectedOption;
     }
     return -1;
 }

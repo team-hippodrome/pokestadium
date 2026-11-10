@@ -112,6 +112,8 @@ The format used in Stadium is commonly called "bring 6, pick 3." To distinguish 
 
 As AI is now a term to refer to a technology, use the term "COM" to refer to the non-player trainers since that is the label in Free Battle. Battle AI procedures may still be called `BattleAi` as a function domain.
 
+The "save battle data" feature is called *suspend* data, following modern terminology.
+
 ##### Valid vs Legal vs Eligible Pokemon
 
 A Pokemon is *valid* if it has valid summary data (move and species index within bounds, nickname uses valid characters for version, data structure matches). Invalid pokemon cannot even be read by the game
