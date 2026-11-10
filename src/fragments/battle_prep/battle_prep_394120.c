@@ -152,10 +152,10 @@ void BattlePrep_MarkNewRoundRecord(void) {
 }
 
 /**
- * Returns string arg0 from the battle_prep text table (table 0x1B).
+ * Returns string file_number from the battle_prep text table (table 0x1B).
  */
-char* BattlePrep_GetString(s32 arg0) {
-    return Text_GetString(NULL, 0, sBattlePrepText, arg0);
+char* BattlePrep_GetString(s32 file_number) {
+    return Text_GetString(NULL, 0, sBattlePrepText, file_number);
 }
 
 /**

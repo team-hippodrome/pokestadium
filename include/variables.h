@@ -722,7 +722,7 @@ extern u8 D_2023240[];
 extern u8 D_2022E40[];
 extern u8 D_3016F00[];
 extern u8 D_3027690[];
-extern u8 D_10031D0[];
+extern u8 gMenuCursor[];
 extern u8 D_3025200[];
 extern u8 D_3025950[];
 extern u8 D_30260A0[];

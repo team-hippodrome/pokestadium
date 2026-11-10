@@ -35,9 +35,9 @@ typedef struct BattlePrepRuleWindow {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
+    /* 0x04 */ s16 selected_option;
     /* 0x06 */ char unk06[0x2];
-} BattlePrepRuleWindow; // size >= 0x8
+} BattlePrepTextWindow; // size >= 0x8
 
 typedef struct unk_D_84B259A8 {
     /* 0x00 */ u8 unk_00;
@@ -147,8 +147,8 @@ typedef struct unk_D_84B26640 {
     /* 0x00 */ unk_D_84B26640_010 unk_00;
     /* 0x00 */ char unk0C[0x4];
     /* 0x00 */ unk_D_84B26640_010 unk_10;
-    /* 0x00 */ BattlePrepRuleWindow unk_1C;
-    /* 0x00 */ BattlePrepRuleWindow unk_28;
+    /* 0x00 */ BattlePrepTextWindow unk_1C;
+    /* 0x00 */ BattlePrepTextWindow unk_28;
 } unk_D_84B26640; // size = 0x30
 
 typedef struct unk_func_84B067B4 {
@@ -160,16 +160,16 @@ typedef struct unk_func_84B067B4 {
 } unk_func_84B067B4; // size = 0x230
 
 typedef struct BattlePrepRuleWindowLayout {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
+    /* 0x00 */ s16 x;
+    /* 0x02 */ s16 y;
     /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
+    /* 0x06 */ s16 unk_06; // ruleset?
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s16 unk_10;
-} BattlePrepRuleWindowLayout; // size = 0x12
+} BattlePrepTextWindowLayout; // size = 0x12
 
 extern unk_D_8006FF00 D_84B17620[];
 extern unk_D_8006FF00 D_84B186C0[];
@@ -364,26 +364,26 @@ void BattlePrep_UpdateResultLabel(unk_D_84B26640_010* arg0);
 void BattlePrep_StartResultLabelGrow(unk_D_84B26640_010* arg0, DisplayObject* arg1);
 void BattlePrep_StartResultLabelShrink(unk_D_84B26640_010* arg0);
 void BattlePrep_InitResultLabel(unk_D_84B26640_010* arg0, u8 arg1);
-void BattlePrep_DrawCursorArrow(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2);
-void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4, s8* arg5);
-void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* arg0, s16 arg1, s16 arg2);
+void BattlePrep_DrawRuleOption(BattlePrepTextWindow* arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4, s8* arg5);
+void BattlePrep_DrawKeepBattlingPrompt(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawCupLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
 void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2);
 void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0);
-void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
-void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0);
-void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* arg0);
-void BattlePrep_RuleWindowExpanding(BattlePrepRuleWindow* arg0);
-void BattlePrep_RuleWindowCollapsing(BattlePrepRuleWindow* arg0);
-void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* arg0);
-void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1);
-void BattlePrep_CloseRuleWindow(BattlePrepRuleWindow* arg0);
-s32 BattlePrep_PollRuleWindow(BattlePrepRuleWindow* arg0);
+void BattlePrep_DrawWinRecord(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* arg0);
+void BattlePrep_RunQuitMenu(BattlePrepTextWindow* arg0);
+void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* arg0);
+void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* arg0);
+void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* arg0);
+void BattlePrep_InitRuleWindow(BattlePrepTextWindow* arg0, s16 arg1);
+void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* arg0);
+s32 BattlePrep_PollRuleWindow(BattlePrepTextWindow* arg0);
 
 #endif // _FRAGMENT63_H_
