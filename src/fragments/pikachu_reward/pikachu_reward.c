@@ -607,10 +607,11 @@ s32 PikachuReward_ResolveMoveSlot(void) {
     return temp_v0;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/pikachu_reward/pikachu_reward/PikachuReward_ShowSaveStatusScreen.s")
-#else
 void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
+#if defined(VERSION_US_REV2)
+    s32 x;
+
+#endif
     PikachuReward_RenderFrame(0);
     PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
 
@@ -628,26 +629,44 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
     if (arg0 == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
+#if defined(VERSION_US_REV2)
+        x = (0xA8 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x12))) / 2;
+        Font_Printf(x + 0x4C, 0x70, Text_GetString(NULL, 0, sPikachuSurfText, 0x12));
+#else
         Font_Printf(0x5C, 0x70, Text_GetString(NULL, 0, sPikachuSurfText, 0x12));
+#endif
         Font_EndTexturedTextRendering();
     } else {
         Font_SetLineHeight(0x10);
+#if defined(VERSION_US_REV2)
+        Font_Printf(0x40, 0x8C, Text_GetString(NULL, 0, sPikachuSurfText, 0x13));
+#else
         Font_Printf(0x40, 0x84, Text_GetString(NULL, 0, sPikachuSurfText, 0x13));
+#endif
         Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
 
         if (arg0 == 2) {
             Font_SetActive(4, 0);
+#if defined(VERSION_US_REV2)
+            x = (0xE0 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x14))) / 2;
+            Font_Printf(x + 0x30, 0x64, Text_GetString(NULL, 0, sPikachuSurfText, 0x14));
+#else
             Font_Printf(0x4C, 0x64, Text_GetString(NULL, 0, sPikachuSurfText, 0x14));
+#endif
         } else if (arg0 == 3) {
             Font_SetLineHeight(0x10);
+#if defined(VERSION_US_REV2)
+            x = (0xE0 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x15))) / 2;
+            Font_Printf(x + 0x30, 0x5C, Text_GetString(NULL, 0, sPikachuSurfText, 0x15));
+#else
             Font_Printf(0x40, 0x5C, Text_GetString(NULL, 0, sPikachuSurfText, 0x15));
+#endif
         }
     }
 
     Font_EndTexturedTextRendering();
     BgStage_AdvanceFrame();
 }
-#endif
 
 void PikachuReward_SaveToCartridge(void) {
     s32 var_s0;
