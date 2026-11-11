@@ -1329,19 +1329,17 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* session_context) {
     }
 }
 
-#if defined(VERSION_US_REV2)
-// asm-processor requires this import on one physical line.
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_RunOrderSelectScreen.s")
-// clang-format on
-#else
 /* Loads selection resources, runs the screen through its fades, and commits the orders. */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     StageContext* stage_context;
 
     main_pool_push_state('MSEL');
 
+#if defined(VERSION_US_REV2)
+    Gfx_InitDisplayListBuffers(0x18000, 0);
+#else
     Gfx_InitDisplayListBuffers(0x10000, 0);
+#endif
     stage_context = StageContext_Allocate(1, 1, 2, 0, 2, 1);
     Text_InitStringTables();
     Font_Init(60, 0);
@@ -1370,4 +1368,3 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     main_pool_pop_state('MSEL');
     return 0;
 }
-#endif
