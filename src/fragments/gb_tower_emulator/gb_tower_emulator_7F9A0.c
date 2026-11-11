@@ -1113,18 +1113,24 @@ s32 GbPak_TransferBankedRam(unk_D_8122B2C0* emu, s32 is_write) {
  * ROM size code 5 (1 MB), RAM size code 3 (32 KB), destination code != 0.
  * Returns 4 = Yellow, 3 = Blue, 2 = Green, 1 = Red, 0 = unsupported.
  */
-#if defined(VERSION_US_REV2)
-// asm-processor requires this import on one physical line.
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbPak_DetectSupportedCartridgeVariant.s")
-// clang-format on
-#else
 s32 GbPak_DetectSupportedCartridgeVariant(GbCartridgeHeaderId* header) {
     u8* title;
     s32 i;
 
+#if defined(VERSION_US_REV2)
+    // Any title starting with "POKEMON Y" is accepted as Yellow without the header checks.
+    // FAKE: &sRamSizeTable[0x44] is the address of sYellowTitle, which follows the table.
+    // Spelling it through the table keeps uopt from sharing one register with the loop's
+    // title pointer.
+    if (bcmp(&sRamSizeTable[0x44], header->gameTitle, 9) == 0) {
+        return 4;
+    }
+    // i is set before title here; the order decides which one fills the branch delay slot.
+    for (i = 4, title = &sYellowTitle; i > 0; i--) {
+#else
     title = &sYellowTitle;
     for (i = 4; i > 0; i--) {
+#endif
         if ((bcmp(title, header->gameTitle, 0x10) == 0) && (header->licenseeCode == 0x3031) && (header->sgbFlag == 3) &&
             (header->romSizeCode == 5) && (header->ramSizeCode == 3) && (header->destinationCode != 0)) {
             return i;
@@ -1133,7 +1139,6 @@ s32 GbPak_DetectSupportedCartridgeVariant(GbCartridgeHeaderId* header) {
     }
     return i;
 }
-#endif
 
 /**
  * Transfer Pak service thread. Waits for the emulator state on
@@ -1142,9 +1147,6 @@ s32 GbPak_DetectSupportedCartridgeVariant(GbCartridgeHeaderId* header) {
  * list with per-half checksums, 7 status check, 8 re-probe. Tracks pakState
  * (2 = ready, 8-11 = error states shown by the pause menu).
  */
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbPak_ServiceThread.s")
-#else
 void GbPak_ServiceThread(s32 arg0) {
     u16* entry;
     s32 retries;
@@ -1288,6 +1290,13 @@ void GbPak_ServiceThread(s32 arg0) {
                                 entry += 3;
                             }
                         } while (*entry);
+#if defined(VERSION_US_REV2)
+                        // Powers the cartridge off once the fast-boot banks are read.
+                        emu->status &= ~1;
+                        if (osGbpakPower((OSPfs*)&emu->pfs, 0) != 0) {
+                            goto disconnect;
+                        }
+#endif
                         break;
                     case 8:
                         emu->probeValid = 0;
@@ -1374,7 +1383,6 @@ void GbPak_ServiceThread(s32 arg0) {
         emu->pakBusy = 0;
     }
 }
-#endif
 
 /**
  * Draws a list of text commands into a 320-wide RGBA5551 image. Each command is
@@ -2123,9 +2131,16 @@ void GbAudio_SetMenuSoundMode(s32);
  * service thread on the active port, loads the UI graphics and border images,
  * initializes audio, draws the loading screen and identifies the cartridge.
  */
+// Size of the emulator heap from main_pool_alloc, and of the cartridge ROM image carved
+// from it. Rev 2 grows the ROM image by 0x8000 and the heap with it.
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_InitSession.s")
+#define GB_EMU_HEAP_SIZE 0x206AE8
+#define GB_EMU_ROM_IMAGE_SIZE 0x108000
 #else
+#define GB_EMU_HEAP_SIZE 0x1FEAE8
+#define GB_EMU_ROM_IMAGE_SIZE 0x100000
+#endif
+
 void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, OSMesgQueue* si_event_queue, u16 (*party_icons)[6][0x640]) {
     unk_D_8122B2C0* emu;
     s32 pad[2];
@@ -2133,7 +2148,7 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
 
     sFramebuffer0 = GfxImage_Allocate(0, 2, 320, 288, 1);
     sFramebuffer1 = GfxImage_Allocate(0, 2, 320, 288, 1);
-    sGbEmuHeapStart = main_pool_alloc(0x1FEAE8, 0);
+    sGbEmuHeapStart = main_pool_alloc(GB_EMU_HEAP_SIZE, 0);
     if (sGbEmuHeapStart == NULL) {
         sGbEmuPhase = 1;
         sGbEmuExitCode = 4;
@@ -2188,7 +2203,7 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
             emu->rspTaskDone = 0x400;
             if (i == 0) {
                 emu->romImage = sGbEmuHeapCursor;
-                sGbEmuHeapCursor += 0x100000;
+                sGbEmuHeapCursor += GB_EMU_ROM_IMAGE_SIZE;
             } else {
                 emu->romImage = sGbEmu->romImage;
             }
@@ -2263,7 +2278,7 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
             break;
     }
 
-    while ((sGbEmuHeapCursor - (u8*)sGbEmuHeapStart) != 0x1FEAE8) {}
+    while ((sGbEmuHeapCursor - (u8*)sGbEmuHeapStart) != GB_EMU_HEAP_SIZE) {}
 
     osWritebackDCacheAll();
 
@@ -2299,16 +2314,24 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
     osViSwapBuffer((&sFramebuffer0)[sFramebufferIndex]->img_p);
     sFramebufferIndex ^= 1;
 }
-#endif
 
 /**
  * Fast boot: decompresses the ROM banks of a recognized cartridge stored in the
- * N64 ROM at 0x7C0000 + unk_5D70[3], applying the XOR delta images that follow
- * each bank, and marks them loaded in romBankStatus.
+ * N64 ROM at GB_EMU_STORED_BANKS_ROM + unk_5D70[3], applying the XOR delta images
+ * that follow each bank, and marks them loaded in romBankStatus.
  */
+// Rev 2 inflates into the 0x8000 bytes it adds past the 1 MB ROM image instead of
+// into the top of the image itself.
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_LoadStoredRomBanks.s")
+#define GB_EMU_STORED_BANKS_ROM 0x7BD000
+#define GB_EMU_INFLATE_OFFSET 0x100000
+#define GB_EMU_DELTA_OFFSET 0x104000
 #else
+#define GB_EMU_STORED_BANKS_ROM 0x7C0000
+#define GB_EMU_INFLATE_OFFSET 0xEC000
+#define GB_EMU_DELTA_OFFSET 0xF0000
+#endif
+
 void GbEmu_LoadStoredRomBanks(unk_D_8122B2C0* emu) {
     u16* entry;
     u32 rom_offset;
@@ -2321,19 +2344,22 @@ void GbEmu_LoadStoredRomBanks(unk_D_8122B2C0* emu) {
 
     if (emu->unk_5D70[2] != NULL) {
         entry = (u16*)emu->unk_5D70[2];
-        rom_offset = emu->unk_5D70[3] + 0x7C0000;
+        rom_offset = emu->unk_5D70[3] + GB_EMU_STORED_BANKS_ROM;
         do {
             bank_index = *entry & 0xFF;
             delta_count = *entry / 0x100;
-            Dma_WriteChunks((u32)((u8*)emu->romImage + 0xEC000), rom_offset, entry[1] + rom_offset, 0);
+#if defined(VERSION_US_REV2)
+            *(u32*)((u8*)emu->romImage + GB_EMU_INFLATE_OFFSET) = 0x12345678;
+#endif
+            Dma_WriteChunks((u32)((u8*)emu->romImage + GB_EMU_INFLATE_OFFSET), rom_offset, entry[1] + rom_offset, 0);
             rom_offset += entry[1];
             entry += 2;
-            Yay0_Decompress((u8*)emu->romImage + 0xEC000, (u8*)emu->romImage + (bank_index << 14));
+            Yay0_Decompress((u8*)emu->romImage + GB_EMU_INFLATE_OFFSET, (u8*)emu->romImage + (bank_index << 14));
             for (delta_index = 0; delta_index < delta_count; delta_index++) {
                 if ((delta_index + 1) >= emu->unk_5DC6) {
-                    Dma_WriteChunks((u32)((u8*)emu->romImage + 0xF0000), rom_offset, entry[0] + rom_offset, 0);
-                    Yay0_Decompress((u8*)emu->romImage + 0xF0000, (u8*)emu->romImage + 0xEC000);
-                    delta = (u8*)emu->romImage + 0xEC000;
+                    Dma_WriteChunks((u32)((u8*)emu->romImage + GB_EMU_DELTA_OFFSET), rom_offset, entry[0] + rom_offset, 0);
+                    Yay0_Decompress((u8*)emu->romImage + GB_EMU_DELTA_OFFSET, (u8*)emu->romImage + GB_EMU_INFLATE_OFFSET);
+                    delta = (u8*)emu->romImage + GB_EMU_INFLATE_OFFSET;
                     bank = (u8*)emu->romImage + (bank_index << 14);
                     for (i = 0; i != 0x1000; i++) {
                         bank[i] = delta[i] ^ bank[i];
@@ -2346,7 +2372,6 @@ void GbEmu_LoadStoredRomBanks(unk_D_8122B2C0* emu) {
         } while (*entry);
     }
 }
-#endif
 
 /**
  * Converts sButtonBindings into the N64 button masks used for the Game Boy
@@ -2745,9 +2770,6 @@ update_menu:
  * Draws the pause menu, help texts, quit prompt, config screen or error message
  * for the current sPauseMenuState into the framebuffer.
  */
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_DrawPauseMenu.s")
-#else
 void GbEmu_DrawPauseMenu(s32 framebuffer) {
     s32 pad;
     s32 j;
@@ -2881,6 +2903,18 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
         case 13:
             base = fb + 0x3C3E;
             y = 0x4A;
+#if defined(VERSION_US_REV2)
+            if ((sGbTowerUnlockTier == 1) || (sGbTowerUnlockTier == 2)) {
+                GbEmu_BlitWithPixelOp(base + 0x784, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
+            }
+            if (sGbTowerUnlockTier == 1) {
+                GbEmu_DrawTextCommands(base, sDoubleSpeedHelpText);
+            } else if (sGbTowerUnlockTier == 2) {
+                GbEmu_DrawTextCommands(base, sSpeedCycleHelpText);
+            } else {
+                y = 0x32;
+            }
+#else
             if (sGbTowerUnlockTier == 1) {
                 GbEmu_BlitWithPixelOp(base + 0x784, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
                 GbEmu_DrawTextCommands(base, sDoubleSpeedHelpText);
@@ -2890,6 +2924,7 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             } else {
                 y = 0x32;
             }
+#endif
             for (j = 1; j < 0x3F; j++) {
                 base[(y + j) * 320 + 1] = base[(y + j) * 320 + 2] = base[(y + j) * 320 + 0x9D] =
                     base[(y + j) * 320 + 0x9E] = 0xFFFF;
@@ -3047,7 +3082,6 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             base[(row + 17) * 320 + x + i] = 0xE71C;
     }
 }
-#endif
 
 // Revision 1 lowers the PAL vertical scale and also applies it when a transfer starts.
 #if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
@@ -3062,13 +3096,12 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
  * syncs dirty RAM pages back to the cartridge, and submits the RSP render task
  * (DMG or CGB microcode chosen by dmgMode). Returns -1 when the session ends.
  */
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0/GbEmu_UpdateFrame.s")
-#else
 s32 GbEmu_UpdateFrame(s32 emu_index) {
     unk_D_8122B2C0* emu = (&sGbEmu)[emu_index];
     s32 i;
+#if !defined(VERSION_US_REV2)
     s32 pressed;
+#endif
 
     switch (sGbEmuPhase) {
         case 1:
@@ -3228,10 +3261,17 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
 
         case 4:
             if ((emu->pakBusy == 0) && (emu->pakConnected != 0)) {
+#if defined(VERSION_US_REV2)
+                // Has the service thread power the cartridge off, and waits for it.
+                emu->pakRequest = 4;
+                osSendMesg(&gGbPakServiceQueue, emu, OS_MESG_BLOCK);
+                while (emu->pakBusy != 0) {}
+#else
                 emu->ramBankStatus[3] = 0xFF;
                 emu->ramBankStatus[2] = 0xFF;
                 emu->ramBankStatus[1] = 0xFF;
                 emu->ramBankStatus[0] = 0xFF;
+#endif
                 emu->pakIdleCountdown = 1;
                 GbEmu_ClearFramebuffers();
                 if (osTvType == OS_TV_PAL) {
@@ -3423,16 +3463,28 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
     }
 
     if ((sPauseMenuState == 0) && (emu->pakIdleCountdown == 0)) {
+#if defined(VERSION_US_REV2)
+        // Rev 2 reads emu->buttonsPressed directly; US 1.0 caches it in pressed.
+        if ((emu->buttonsPressed & 0x2000) && (sBorderFade == 0x40) && (sSgbBorderReady != 0) &&
+            (sGbTowerUnlockTier != 0)) {
+#else
         pressed = emu->buttonsPressed;
         if ((pressed & 0x2000) && (sBorderFade == 0x40) && (sSgbBorderReady != 0) && (sGbTowerUnlockTier != 0)) {
+#endif
             sNextBorderIndex = sBorderIndex + 1;
             if (sLastBorderIndex < sNextBorderIndex) {
                 sNextBorderIndex = 0;
             }
             sBorderFade = -0x40;
+#if !defined(VERSION_US_REV2)
             pressed = emu->buttonsPressed;
+#endif
         }
+#if defined(VERSION_US_REV2)
+        if (emu->buttonsPressed & 1) {
+#else
         if (pressed & 1) {
+#endif
             i = emu->speedMultiplier;
             switch (i) {
                 case 1:
@@ -3553,7 +3605,6 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
     }
     return 0;
 }
-#endif
 
 /**
  * Emulator thread entry: copies the session parameters (unlock tier, button
