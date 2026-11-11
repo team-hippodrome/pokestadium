@@ -16,7 +16,7 @@ void miniRankingActorsInit(void) {
     for (i = 0; i < 3; i++, ptr++) {
         ModelRenderer_AttachDisplayObject(&ptr->unk_000);
         ptr->unk_168 = Model_LoadByArchiveIndex(0xAB);
-        Model_InitDisplayObject(&ptr->unk_000, 0, ptr->unk_23C, ptr->unk_168->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&ptr->unk_000, 0, ptr->unk_23C, ptr->unk_168->nodes[0]);
         ModelAnim_SetAnimation(&ptr->unk_000, 0);
 #if defined(VERSION_US_REV2)
         ptr->unk_000.effectSlot = 0xFF;

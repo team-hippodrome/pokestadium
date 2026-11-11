@@ -6,13 +6,13 @@
 
 typedef struct unk_D_83402E4C {
     /* 0x00 */ s16 unk_00;
-    /* 0x00 */ s16 unk_02;
-    /* 0x00 */ s16 unk_04;
-    /* 0x00 */ s16 unk_06;
-    /* 0x00 */ s8 unk_08;
-    /* 0x00 */ s8 unk_09;
-    /* 0x00 */ s16 unk_0A;
-    /* 0x00 */ s16* unk_0C;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s8 unk_08;
+    /* 0x09 */ s8 unk_09;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ s16* unk_0C;
 } unk_D_83402E4C; // size = 0x10
 
 typedef struct unk_D_83407B18_008 {

@@ -2485,7 +2485,7 @@ void SandshrewGame_LoadAssets(void) {
     for (i = 0; i < 4; i++) {
         miniSandshrews[i].unk_23C = 0xA1;
         miniSandshrews[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniSandshrews[i].unk_000, 0, miniSandshrews[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniSandshrews[i].unk_000, 0, miniSandshrews[i].unk_23C, temp_s1->nodes[0]);
         ModelAnim_SetAnimation(&miniSandshrews[i].unk_000, 0);
     }
 
@@ -2495,7 +2495,7 @@ void SandshrewGame_LoadAssets(void) {
         miniSandshrewHoles[i].unk_23C = 0x9D;
         miniSandshrewHoles[i].unk_168 = temp_s1;
         Model_InitDisplayObject(&miniSandshrewHoles[i].unk_000, 0, miniSandshrewHoles[i].unk_23C,
-                                temp_s1->unk_08->unk_00[0]);
+                                temp_s1->nodes[0]);
         ModelAnim_SetAnimation(&miniSandshrewHoles[i].unk_000, 0);
     }
 
@@ -2505,7 +2505,7 @@ void SandshrewGame_LoadAssets(void) {
         miniSandshrewGeisers[i].unk_23C = 0xA2;
         miniSandshrewGeisers[i].unk_168 = temp_s1;
         Model_InitDisplayObject(&miniSandshrewGeisers[i].unk_000, 0, miniSandshrewGeisers[i].unk_23C,
-                                temp_s1->unk_08->unk_00[0]);
+                                temp_s1->nodes[0]);
         ModelAnim_SetAnimation(&miniSandshrewGeisers[i].unk_000, 0);
     }
 }

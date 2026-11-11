@@ -2659,6 +2659,7 @@
   - [0x52ABA0, bin, title_ui]
   - [0x52F6D0, bin] # unused. Not loaded UI graphics. Could be leftovers from Stadium 0 (JP)?
   - [0x533B20, bin, battle_portraits]
+  # Archive of FRAGMENTs: each entry function selects geo layouts/material data by index.
   - [0x56E7D0, bin, stadium_models]
   - [0x5C7A70, bin]
   - [0x5C7AD0, bin, pokedex_area_model]

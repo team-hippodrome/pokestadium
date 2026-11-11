@@ -143,7 +143,7 @@ typedef struct unk_D_800AE4E8_004_3_34E0_010 {
 
 typedef struct unk_D_800AE4E8_004_3_34E0 {
     /* 0x0000 */ DeckRecordHeader unk_00;
-    /* 0x0000 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
+    /* 0x0010 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
     /* 0x0012 */ char unk12[0xCE];
 } unk_D_800AE4E8_004_3_34E0; // size = 0xE0
 

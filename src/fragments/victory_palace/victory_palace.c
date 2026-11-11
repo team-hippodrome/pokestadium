@@ -1779,7 +1779,7 @@ s32 VictoryPalace_SpeciesObtained(s32 arg0) {
 s32 VictoryPalace_UpdateLeftPillarGlow(s32 arg0, unk_D_86002F34_alt18* arg1) {
     u8* ptr;
     s16 idx = 5;
-    s16 sp30; // purposely the wrong type to fix the stack, should be f32
+    s16 sp30; // FAKE: Vec3f_CalculateDistanceAngles writes f32; s16 preserves the matching stack layout.
     s16 sp2E;
     s16 sp2C;
 
@@ -2121,7 +2121,7 @@ void VictoryPalace_InitCarouselModel(s16 arg0) {
     }
 
     temp_s0->unk_008.effectSlot = 0xFF;
-    Model_InitDisplayObject(&temp_s0->unk_008, 0, temp_s0->unk_000, temp_s0->unk_004->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(&temp_s0->unk_008, 0, temp_s0->unk_000, temp_s0->unk_004->nodes[0]);
 
     if (temp_s0->unk_000 == 0x90) {
         ModelAnim_SetAnimation(&temp_s0->unk_008, 0xB);
@@ -2178,7 +2178,7 @@ void VictoryPalace_LoadCurrentCarouselIcon(s16 arg0) {
 
     if (VictoryPalace_SpeciesObtained(temp_s1) != 0) {
         VictoryPalace_LoadSpeciesRecord(&sp2C, temp_s1);
-        Model_ComputeSizeVariantFromRecord(&sp54, &sp2C, temp_s1);
+        Model_ComputeNicknameColorVariantFromRecord(&sp54, &sp2C, temp_s1);
     } else {
         sp54.raw = 0;
     }
@@ -2592,7 +2592,7 @@ void HallOfFame_SpawnPokeIcon(s32 arg0, f32 arg1) {
         DisplayObject* temp_s0 = &D_82607B60[arg0];
 
         temp_s0->effectSlot = arg0;
-        Model_InitDisplayObject(temp_s0, 0, 0xB6, D_82608538->unk_08->unk_00[0]);
+        Model_InitDisplayObject(temp_s0, 0, 0xB6, D_82608538->nodes[0]);
         temp_s0->node.renderFlags &= ~0x40;
         temp_s0->rotation.x = 0;
         temp_s0->rotation.y = 0;
@@ -2652,7 +2652,7 @@ void HallOfFame_InitGallery(void) {
 
     ptr = &D_82608268;
     ModelRenderer_AttachDisplayObject(&D_82608268);
-    Model_InitDisplayObject(&D_82608268, 0, 0xB7, temp_s0->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_82608268, 0, 0xB7, temp_s0->nodes[0]);
 
     ptr->node.renderFlags &= ~0x40;
     ptr->position.x = 0.0f;
@@ -2669,7 +2669,7 @@ void HallOfFame_InitGallery(void) {
     temp_s0 = Model_LoadByArchiveIndex(0xB7);
     ptr = &D_826083D0;
     ModelRenderer_AttachDisplayObject(&D_826083D0);
-    Model_InitDisplayObject(&D_826083D0, 0, 0xB7, temp_s0->unk_08->unk_00[1]);
+    Model_InitDisplayObject(&D_826083D0, 0, 0xB7, temp_s0->nodes[1]);
 
     ptr->node.renderFlags &= ~0x40;
     ptr->position.x = 0.0f;

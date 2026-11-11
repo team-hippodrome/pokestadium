@@ -855,7 +855,7 @@ void DrowzeeGame_LoadAssets(void) {
     D_87B000E4 = Model_LoadByArchiveIndex(0xC7);
     D_864052D0 = &D_86404070;
     ModelRenderer_AttachDisplayObject(D_864052D0);
-    Model_InitDisplayObject(D_864052D0, 0, 0xC7, D_87B000E4->unk_08->unk_00[0]);
+    Model_InitDisplayObject(D_864052D0, 0, 0xC7, D_87B000E4->nodes[0]);
     ModelAnim_SetAnimation(D_864052D0, 0);
     ModelAnim_SetFrame(D_864052D0, 0);
     D_87B000E4 = Model_LoadByArchiveIndex(0xC4);
@@ -865,7 +865,7 @@ void DrowzeeGame_LoadAssets(void) {
         D_864052D0 = &D_864052C8->unk_028;
 
         ModelRenderer_AttachDisplayObject(D_864052D0);
-        Model_InitDisplayObject(D_864052D0, 0, 0xC4, D_87B000E4->unk_08->unk_00[0]);
+        Model_InitDisplayObject(D_864052D0, 0, 0xC4, D_87B000E4->nodes[0]);
         D_864052C8->unk_004 = 0;
         ModelAnim_SetAnimation(D_864052D0, D_864052C8->unk_004);
         ModelAnim_SetFrame(D_864052D0, MiniGame_RandomRange(D_864052D0->transformAnim.data->endFrame));
@@ -903,7 +903,7 @@ void DrowzeeGame_LoadAssets(void) {
     D_864052CC = &D_86405158;
     D_864052D0 = &D_864052CC->unk_004;
     ModelRenderer_AttachDisplayObject(D_864052D0);
-    Model_InitDisplayObject(D_864052D0, 0, 0xC3, D_87B000E4->unk_08->unk_00[0]);
+    Model_InitDisplayObject(D_864052D0, 0, 0xC3, D_87B000E4->nodes[0]);
 
     D_864052CC->unk_001 = D_864052CC->unk_000 = 0;
 
@@ -924,7 +924,7 @@ void DrowzeeGame_LoadAssets(void) {
         D_864052D0 = &D_864041D8[i];
 
         ModelRenderer_AttachDisplayObject(D_864052D0);
-        Model_InitDisplayObject(D_864052D0, 0, 0xD2, D_87B000E4->unk_08->unk_00[0]);
+        Model_InitDisplayObject(D_864052D0, 0, 0xD2, D_87B000E4->nodes[0]);
         ModelAnim_SetAnimation(D_864052D0, 0);
         ModelAnim_SetFrame(D_864052D0, D_864052D0->transformAnim.data->endFrame);
 
@@ -944,7 +944,7 @@ void DrowzeeGame_LoadAssets(void) {
     Widget_PauseMenuInit();
 }
 
-void DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
+s32 DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('MINI');
@@ -965,5 +965,5 @@ void DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }

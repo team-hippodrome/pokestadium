@@ -69,8 +69,8 @@ s32 Gallery_RentalViewerLoadDeckEntries(unk_D_838067F0* arg0, s32 arg1) {
 void Gallery_RentalViewerMarkMatchingPikachu(unk_D_838067F0* arg0, BattleMon* arg1) {
     typedef struct unk_func_83802660_sp28 {
         /* 0x00 */ GbSavePlayerIdentity unk_00;
-        /* 0x00 */ u16 unk_12;
-        /* 0x00 */ char unk_14[11];
+        /* 0x10 */ u16 unk_12;
+        /* 0x12 */ char unk_14[11];
     } unk_func_83802660_sp28; // size = 0x12
 
     unk_func_83802660_sp28 sp28;

@@ -78,6 +78,6 @@ void RattataGame_PlayOutroSequence(s32 arg0);
 void RattataGame_WaitForContinue(void);
 void RattataGame_LoadAssets(void);
 void RattataGame_InitPlayerSlots(void);
-void RattataGame_Main(s32 arg0, UNUSED s32 arg1);
+s32 RattataGame_Main(s32 arg0, UNUSED s32 arg1);
 
 #endif // _FRAGMENT8_H_

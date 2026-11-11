@@ -18,7 +18,7 @@ const char D_8122B08C[0x14] = "Address Error %x\n";
 // timer fields below count output samples (200 = 1/240 s, 400 = 1/120 s, 800 = 1/60 s).
 typedef struct GbApuChannelState {
     /* 0x00 */ u8 enabled; // channel on, as reported in NR52 bits 0-3
-    /* 0x02 */ char unk02[0x02];
+    /* 0x01 */ char unk02[0x02];
     /* 0x04 */ s32 retriggerTimer; // wave only: 320 on trigger, fades the old note before restarting
     /* 0x08 */ union {
         u16 index; // integer part: waveform step (0..31) or noise table position

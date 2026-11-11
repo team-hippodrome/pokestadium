@@ -1849,7 +1849,7 @@ void MetapodGame_LoadAssets(void) {
         miniMetapods[i].halfHeight = playerVariations[randN][2];
 
         Model_InitDisplayObject(&miniMetapods[i].unk_000, 0, miniMetapods[i].unk_23C,
-                                miniMetapods[i].unk_168->unk_08->unk_00[0]);
+                                miniMetapods[i].unk_168->nodes[0]);
         ModelAnim_SetAnimation(&miniMetapods[i].unk_000, 0);
 
         if (miniMetapods) {}
@@ -1861,7 +1861,7 @@ void MetapodGame_LoadAssets(void) {
         miniMetapodRocks[i].unk_168 = temp_s1_2;
 
         Model_InitDisplayObject(&miniMetapodRocks[i].unk_000, 0, miniMetapodRocks[i].unk_23C,
-                                temp_s1_2->unk_08->unk_00[0]);
+                                temp_s1_2->nodes[0]);
         ModelAnim_SetAnimation(&miniMetapodRocks[i].unk_000, 0);
 
         miniMetapodRocks[i].unk_000.node.flags &= ~1;

@@ -130,7 +130,7 @@ void MewtwoIntro_InitScene(void) {
     PokeIcon_OpenModelArchives();
 
     D_86B106B0 = Model_LoadByArchiveIndex(0xD6);
-    Model_InitDisplayObject(&D_86B106B8, 0, 0xD6, D_86B106B0->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86B106B8, 0, 0xD6, D_86B106B0->nodes[0]);
     ModelAnim_SetAnimation(&D_86B106B8, 1);
     Vec3f_SetComponentsDuplicate(&D_86B106B8.position, 0.0f, 0.0f, 0.0f);
     D_86B1082C = 0;

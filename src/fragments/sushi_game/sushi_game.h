@@ -61,7 +61,7 @@ typedef struct unk_D_86807558 {
     /* 0x000 */ s16 unk_000;
     /* 0x002 */ u16 unk_002;
     /* 0x004 */ s16 unk_004;
-    /* 0x004 */ s16 unk_006;
+    /* 0x006 */ s16 unk_006;
     /* 0x008 */ s32 unk_008;
     /* 0x00C */ s16 unk_00C;
     /* 0x010 */ unk_D_868084D8* unk_010;
@@ -111,12 +111,7 @@ typedef struct unk_D_86808498 {
     /* 0x2C */ Vec3f unk_2C;
 } unk_D_86808498; // size >= 0x38
 
-typedef struct unk_D_86808808_018 {
-    /* 0x000 */ DisplayNodeHeader node;
-    /* 0x018 */ char unk018[0xC];
-    /* 0x024 */ Vec3f unk_024;
-    /* 0x030 */ Vec3f unk_030;
-} unk_D_86808808_018; // size >= 0x3C
+typedef DisplayObject unk_D_86808808_018;
 
 typedef struct unk_D_86808808 {
     /* 0x000 */ s16 unk_000;
@@ -126,14 +121,13 @@ typedef struct unk_D_86808808 {
     /* 0x008 */ s32 unk_008;
     /* 0x00C */ Vec3f unk_00C;
     /* 0x018 */ unk_D_86808808_018 unk_018;
-    /* 0x054 */ char unk054[0x12C];
 } unk_D_86808808; // size = 0x180
 
 typedef struct unk_D_86807180 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ u8* unk_04;
     /* 0x08 */ u8* unk_08;
-    /* 0x10 */ char* unk_0C;
+    /* 0x0C */ char* unk_0C;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
     /* 0x14 */ s32 unk_14;
@@ -162,7 +156,7 @@ s32 SushiGame_IsRoundTimeUp(void);
 s32 func_86801884(void);
 void SushiGame_MainLoop(void);
 void SushiGame_LoadAssets(void);
-void SushiGame_Main(s32 arg0, UNUSED s32 arg1);
+s32 SushiGame_Main(s32 arg0, UNUSED s32 arg1);
 void SushiGame_NameTagGeoCallback(s32 arg0, UNUSED s32 arg1);
 
 void SushiGame_BroadcastPlayerPhase(u16, s32);
