@@ -131,21 +131,23 @@ void GbTower_PowerOffAllPaks(void) {
  * Returns 1 if the cartridge header is a supported Pokemon Red/Green/Blue/Yellow
  * cartridge for this region.
  */
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/gb_tower/GbPak_IsPokemonCartridge.s")
-#else
 s32 GbPak_IsPokemonCartridge(OSGbpakId* header) {
-    // make sure its 0 terminated. dont want those dirty hackers abusing a Strcmp exploit
+#if defined(VERSION_US_REV2)
+    char titleCopy[16];
+#endif
+
     header->game_title[15] = '\0';
 
+#if defined(VERSION_US_REV2)
+    HAL_Strcpy(titleCopy, (char*)header->game_title);
+    titleCopy[9] = '\0';
+#endif
+
 #if defined(VERSION_JP)
-    // Accept only Japanese cartridges (header country code 0).
     if (header->country_code == 0) {
 #else
-    // is the cartridge non-Japanese?
     if (header->country_code == 1) {
 #endif
-        // Which supported POKeMON version is this?
         if (HAL_Strcmp((char*)header->game_title, "POKEMON RED") == 0) {
             return 1;
         }
@@ -155,14 +157,18 @@ s32 GbPak_IsPokemonCartridge(OSGbpakId* header) {
         if (HAL_Strcmp((char*)header->game_title, "POKEMON BLUE") == 0) {
             return 1;
         }
+#if defined(VERSION_US_REV2)
+        if (HAL_Strcmp(titleCopy, "POKEMON Y") == 0) {
+            return 1;
+        }
+#else
         if (HAL_Strcmp((char*)header->game_title, "POKEMON YELLOW") == 0) {
             return 1;
         }
+#endif
     }
-    // This is not a supported cartridge.
     return 0;
 }
-#endif
 
 /**
  * Initializes every plugged-in Transfer Pak and checks its cartridge. Returns
