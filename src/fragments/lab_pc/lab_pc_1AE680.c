@@ -57,7 +57,7 @@ typedef struct unk_func_8820634C_arg2_unk0 {
 
 typedef struct unk_func_8820634C_arg2 {
     /* 0x00 */ unk_func_8820634C_arg2_unk0* unk_00;
-    /* 0x00 */ char pad04[0x4];
+    /* 0x04 */ char pad04[0x4];
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 unk_0C;
 } unk_func_8820634C_arg2; // size = 0x54
@@ -1898,12 +1898,12 @@ void LabPC_SwapScreen_SetMenuState(unk_func_8820BE14_02C* arg0, s32 arg1) {
     ((func8850BF60)Memmap_GetFragmentVaddr(WidgetTree_SetVerticalMenuState))(arg0->unk_74, arg1);
 }
 
-void LabPC_ReleaseSwapWidgets(unk_func_8820B12C_02C* arg0) {
-    LabPC_TabWidget_ToggleFlip(arg0->unk_4C[0]);
-    LabPC_TabWidget_ToggleFlip(arg0->unk_54[0]);
-    LabPC_TabWidget_ToggleFlip(arg0->unk_54[1]);
-    LabPC_TabWidget_ToggleFlip(arg0->unk_4C[1]);
-    LabPC_TabWidget_ToggleFlip(arg0->unk_5C[1]);
+void LabPC_ReleaseSwapWidgets(unk_func_8820BE14_02C* arg0) {
+    LabPC_TabWidget_ToggleFlip(arg0->unk_44[2]);
+    LabPC_TabWidget_ToggleFlip(arg0->unk_44[4]);
+    LabPC_TabWidget_ToggleFlip(arg0->unk_44[5]);
+    LabPC_TabWidget_ToggleFlip(arg0->unk_44[3]);
+    LabPC_TabWidget_ToggleFlip(arg0->unk_44[7]);
 }
 
 void LabPC_InitSwapController(unk_func_8820B12C* arg0, unk_func_8820BE14_02C* arg1) {

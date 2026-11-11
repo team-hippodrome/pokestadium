@@ -9,13 +9,13 @@ typedef struct unk_func_8820BE14_02C_038_02C_02C {
 
 typedef struct unk_func_8820BE14_02C_038_02C {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x00 */ unk_func_8820BE14_02C_038_02C_02C* unk_2C;
-    /* 0x00 */ char unk30[0xE];
-    /* 0x00 */ s16 unk_3E;
-    /* 0x00 */ char unk40[0xA];
-    /* 0x00 */ s16 unk_4A;
-    /* 0x00 */ char unk4C[0xC];
-    /* 0x00 */ s32 unk_58;
+    /* 0x2C */ unk_func_8820BE14_02C_038_02C_02C* unk_2C;
+    /* 0x30 */ char unk30[0xE];
+    /* 0x3E */ s16 unk_3E;
+    /* 0x40 */ char unk40[0xA];
+    /* 0x4A */ s16 unk_4A;
+    /* 0x4C */ char unk4C[0xC];
+    /* 0x58 */ s32 unk_58;
 } unk_func_8820BE14_02C_038_02C; // size >= 0x5C
 
 void LabPC_InitTabWidget(unk_func_882149A0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6,

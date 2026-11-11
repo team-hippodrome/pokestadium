@@ -33,6 +33,6 @@ s32 Gallery_AlbumUpdate(void);
 void Gallery_AlbumReadInput(void);
 void Gallery_AlbumLoop(void);
 s32 Gallery_AlbumGetResult(unk_D_83407B38* arg0);
-void Gallery_AlbumMain(s32 arg0, s32 arg1);
+s32 Gallery_AlbumMain(s32 arg0, s32 arg1);
 
 #endif // _FRAGMENT44_H_

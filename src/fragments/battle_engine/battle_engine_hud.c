@@ -258,7 +258,7 @@ void BattleHud_Noop(void) {
 void BattleHud_DrawLevelNumber(s32 x, s32 y, s32 level) {
     UNUSED s32 pad[2]; // might be a fake? string_buffer should be 4 bytes
     s8* level_string;
-    s8 string_buffer[2];
+    s8 string_buffer[2]; //!bug: Levels 10..100 need 3..4 bytes including the terminator.
     u8** level_digits;
 
     level_string = &string_buffer;
@@ -295,7 +295,7 @@ void BattleHud_DrawHpFractionText(s32 x, s32 y, s32 current_hp, s32 max_hp) {
     s32 i;
 
     hp_digits = Memmap_GetSegmentVaddr(gHudGlyphTable);
-    sprintf(string_buffer, "%3d/%3d", current_hp, max_hp);
+    sprintf(string_buffer, "%3d/%3d", current_hp, max_hp); //!bug: Eight bytes including NUL, but string_buffer has seven.
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -906,7 +906,7 @@ s32 BattleHud_DrawMovePpTextLTR(s32 x, s32 y, s32 current_pp, s32 max_pp) {
     u8* digit;
 
     pp_digits = Memmap_GetSegmentVaddr(gHudGlyphTable);
-    sprintf(string_buffer, "%3d/%3d", current_pp & 0x3F, max_pp);
+    sprintf(string_buffer, "%3d/%3d", current_pp & 0x3F, max_pp); //!bug: The terminator overruns the seven-byte buffer.
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -950,7 +950,7 @@ s32 BattleHud_DrawMovePpTextRTL(s32 x, s32 y, s32 current_pp, s32 max_pp) {
     u8* digit;
 
     pp_digits = Memmap_GetSegmentVaddr(gHudGlyphTable);
-    sprintf(string_buffer, "%3d/%3d", current_pp & 0x3F, max_pp);
+    sprintf(string_buffer, "%3d/%3d", current_pp & 0x3F, max_pp); //!bug: The terminator overruns the seven-byte buffer.
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 

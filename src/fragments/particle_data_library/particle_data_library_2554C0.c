@@ -74,7 +74,7 @@ void DisplayList_InitAnimatedModelTexture(s32 arg0, DisplayListState* state) {
     DisplayListAddresses* addresses;
     u8 temp_v1;
 
-    temp_v1 = ModelRenderer_GetActiveMode();
+    temp_v1 = ModelRenderer_GetActiveMode(); //!bug: Installation can read a NULL D_8006F09C before the event check.
     if (arg0 == 2) {
         addresses = state->addresses;
         gfx = Gfx_AllocDisplayList(0x140);

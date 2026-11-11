@@ -209,7 +209,7 @@ typedef struct GbSaveParty {
 
 typedef struct GbSaveBoxEntry {
     /* 0x000 */ u8 unk_000;
-    /* 0x000 */ u8 unk_001[1];
+    /* 0x001 */ u8 unk_001[1];
     /* 0x002 */ char unk002[0x12];
 } GbSaveBoxEntry; // size = 0x14
 
@@ -267,7 +267,7 @@ typedef struct GbSaveMainData {
 
 typedef struct GbSaveBoxPair {
     /* 0x000 */ GbSaveBoxEntry unk_000;
-    /* 0x000 */ GbSaveBoxEntry unk_014;
+    /* 0x014 */ GbSaveBoxEntry unk_014;
     /* 0x028 */ char unk028[0x43A];
 } GbSaveBoxPair; // size = 0x462
 

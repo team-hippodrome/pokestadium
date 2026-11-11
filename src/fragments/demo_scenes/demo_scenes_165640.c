@@ -284,7 +284,7 @@ void Intro_LoadShowcaseModel(void) {
     PokeIcon_OpenModelArchives();
 
     D_86B0FA78->unk_000 = Model_LoadForPokemon(&D_86B10690->pokemonPicked[D_86B0FA78->unk_17C]);
-    Model_InitDisplayObject(&D_86B0FA78->unk_004, 0, D_86B0FA78->unk_174, D_86B0FA78->unk_000->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86B0FA78->unk_004, 0, D_86B0FA78->unk_174, D_86B0FA78->unk_000->nodes[0]);
     ModelAnim_SetAnimation(&D_86B0FA78->unk_004, 0);
     D_86B0FA78->unk_004.effectSlot = 0;
     Intro_LoadPokemonTextures();
@@ -324,7 +324,7 @@ void Intro_LoadStageModel(void) {
     ModelRenderer_AttachDisplayObject(&D_86B0FA78->unk_004);
     PokeIcon_OpenModelArchives();
     D_86B0FA78->unk_000 = Model_LoadByArchiveIndex(D_86B0FA78->unk_174);
-    Model_InitDisplayObject(&D_86B0FA78->unk_004, 0, D_86B0FA78->unk_174, D_86B0FA78->unk_000->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86B0FA78->unk_004, 0, D_86B0FA78->unk_174, D_86B0FA78->unk_000->nodes[0]);
     ModelAnim_SetAnimation(&D_86B0FA78->unk_004, 0);
     Vec3f_SetComponentsDuplicate(&D_86B0FA78->unk_004.position, 0.0f, 300.0f, 0.0f);
 }

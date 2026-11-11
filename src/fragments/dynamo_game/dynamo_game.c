@@ -757,9 +757,9 @@ void DynamoGame_LoadAssets(void) {
                 ModelRenderer_AttachDisplayObject(D_8650AB2C);
 
                 if (i == 0) {
-                    Model_InitDisplayObject(D_8650AB2C, 0, 0xC5, D_87B000E4->unk_08->unk_00[0]);
+                    Model_InitDisplayObject(D_8650AB2C, 0, 0xC5, D_87B000E4->nodes[0]);
                 } else {
-                    Model_InitDisplayObject(D_8650AB2C, 0, 0xC6, D_87B000E4->unk_08->unk_00[0]);
+                    Model_InitDisplayObject(D_8650AB2C, 0, 0xC6, D_87B000E4->nodes[0]);
                 }
 
                 D_8650AB28->unk_008 = 0;
@@ -807,7 +807,7 @@ void DynamoGame_LoadAssets(void) {
             D_8650AB2C = D_86502CA0[j];
 
             ModelRenderer_AttachDisplayObject(D_8650AB2C);
-            Model_InitDisplayObject(D_8650AB2C, 0, sp5C[j], D_87B000E4->unk_08->unk_00[0]);
+            Model_InitDisplayObject(D_8650AB2C, 0, sp5C[j], D_87B000E4->nodes[0]);
             ModelAnim_SetAnimation(D_8650AB2C, 0);
             ModelAnim_SetFrame(D_8650AB2C, D_8650AB2C->transformAnim.data->endFrame);
         }
@@ -822,7 +822,7 @@ void DynamoGame_LoadAssets(void) {
     Widget_DrawAnimIcon16B(0, 0, NULL);
 }
 
-void DynamoGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
+s32 DynamoGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('MINI');
@@ -845,7 +845,7 @@ void DynamoGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }
 
 static s32 pad_D_86502E98 = 0;

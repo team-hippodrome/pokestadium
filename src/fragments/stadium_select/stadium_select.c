@@ -198,9 +198,9 @@ static MenuRectAnim sMenuRectAnimations[] = {
         8192,
         0,
     },
+    { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 },
+    { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 },
 };
-static s16 sMenuAnimFlag0[] = { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 };
-static s16 sMenuAnimFlag1[] = { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 };
 static u8 sMenuOptionRanges[][2] = {
     {
         0x32,
@@ -598,11 +598,11 @@ void StadiumSelect_InitSparkleFlags(void) {
     }
 
     if (D_84103CF0.clearedModes & 0x10) {
-        sMenuAnimFlag0[0] = 1;
+        sMenuRectAnimations[10].unk_00 = 1;
     }
 
     if (D_84103CF0.clearedModes & 0x20) {
-        sMenuAnimFlag1[0] = 1;
+        sMenuRectAnimations[11].unk_00 = 1;
     }
 }
 

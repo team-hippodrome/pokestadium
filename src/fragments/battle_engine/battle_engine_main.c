@@ -664,7 +664,7 @@ void Battle_SelectComRoster(void) {
 void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {
     TeamRoster* first_trainer = side->tagTeamMember[0];
 
-    side->unk_18 = model->unk_08->unk_00[0];
+    side->unk_18 = model->nodes[0];
     side->uniqueStatusFlags |= 0xA0;
     side->unk_1C = 0;
     side->displayModel = first_trainer->pokemonPicked[0].species.id;

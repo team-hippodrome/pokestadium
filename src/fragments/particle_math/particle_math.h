@@ -15,15 +15,15 @@ struct BattleAnimEffectSlot;
 
 typedef void (*ParticleUpdateCallback)(struct Particle*);
 typedef void (*ParticleRenderCallback)(struct Particle*, CameraNode*);
-typedef void (*ParticleSetupCallback)(struct Particle*, s32, struct ParticleDescriptorChild*);
-typedef void (*ParticleDrawCallback)(struct Particle*, s32, struct ParticleDescriptorChild*);
+typedef void (*ParticleSetupCallback)(struct Particle*, intptr_t, struct ParticleDescriptorChild*);
+typedef void (*ParticleDrawCallback)(struct Particle*, CameraNode*, struct ParticleDescriptorChild*);
 
 typedef struct ParticleSetupArgumentPointer {
-    /* 0x00 */ s32 arg;
+    /* 0x00 */ intptr_t arg;
 } ParticleSetupArgumentPointer;
 
 typedef union ParticleSetupArgument {
-    s32 arg;
+    intptr_t arg;
     ParticleSetupArgumentPointer* s;
 } ParticleSetupArgument;
 
@@ -191,10 +191,13 @@ typedef struct arg1_func_81407874_014_000_01C {
     /* 0x02 */ u16 unk_02;
 } arg1_func_81407874_014_000_01C; // size >= 0x04
 
+struct ParticleTextureFormat;
+struct ParticleTileScroll;
 typedef struct ParticleMaterialState {
-    /* 0x00 */ struct ParticleMaterialState* unk_00;
-    /* 0x04 */ s32 unk_04; // texture generation: 0 off, 1 generated, 2 generated + linear
-    /* 0x08 */ char unk08[0x8];
+    /* 0x00 */ u8* unk_00; // Static image, or use the frame-indexed sequence at 0x0C.
+    /* 0x04 */ struct ParticleTextureFormat* unk_04;
+    /* 0x08 */ struct ParticleTileScroll* unk_08;
+    /* 0x0C */ ParticleValueSequence* unk_0C;
     /* 0x10 */ ParticleCombineMux* unk_10;    // optional two-cycle combiner mux
     /* 0x14 */ ParticleValueSequence* unk_14; // optional primitive color/LOD sequence
     /* 0x18 */ ParticleValueSequence* unk_18; // optional environment color sequence
@@ -222,22 +225,16 @@ typedef struct ParticleTextureFormat {
     /* 0x12 */ s16 shiftT;
 } ParticleTextureFormat; // size >= 0x14
 
-/* The loaders interpret the first member as image data; legacy pointer types are retained. */
-typedef struct ParticleTexture {
-    /* 0x00 */ ParticleMaterialState* unk_00; // static image pointer through the legacy type
-    /* 0x04 */ ParticleTextureFormat* unk_04; // texture upload format and addressing
-    /* 0x08 */ ParticleTileScroll* unk_08;    // optional tile scrolling
-    /* 0x0C */ ParticleValueSequence* unk_0C; // optional divided-clock image sequence
-} ParticleTexture;                            // size = 0x10
+typedef ParticleMaterialState ParticleTexture;
 
 typedef struct ParticleMaterial {
-    /* 0x00 */ ParticleMaterialState* unk_00; // also passed to the primary texture reader via the legacy layout
+    /* 0x00 */ ParticleMaterialState* unk_00; // Primary 0x20-byte material record.
     /* 0x04 */ ParticleTexture* unk_04;       // optional secondary texture
 } ParticleMaterial;                           // size >= 0x8
 
 typedef struct arg1_func_81407874 {
     /* 0x00 */ char unk00[0x14];
-    /* 0x00 */ ParticleMaterial* unk_14;
+    /* 0x14 */ ParticleMaterial* unk_14;
 } arg1_func_81407874; // size >= 0x18
 
 typedef struct ParticleCameraState {

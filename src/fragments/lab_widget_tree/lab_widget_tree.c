@@ -1684,7 +1684,7 @@ void WidgetTree_InitScrollableGrid(unk_func_8821421C_038_034* arg0, s32 arg1, s3
     arg0->unk_6C = 8;
 }
 
-void WidgetTree_BindScrollableGridData(unk_func_8820BE14_02C_038* arg0, unk_func_88200FA0_030_038* arg1) {
+void WidgetTree_BindScrollableGridData(unk_func_8821421C_038_034* arg0, unk_func_88200FA0_030_038* arg1) {
     arg0->unk_00.unk_2C = arg1;
     arg0->unk_00.unk_30 = 0;
     arg0->unk_00.unk_38 = 0;
@@ -1695,7 +1695,7 @@ void WidgetTree_BindScrollableGridData(unk_func_8820BE14_02C_038* arg0, unk_func
     WidgetTree_ClearEntryFlags(&arg0->unk_00);
 }
 
-void WidgetTree_BindScrollableGridPage(unk_func_8830867C_02C_034* arg0, unk_func_88200FA0_030_038* arg1,
+void WidgetTree_BindScrollableGridPage(unk_func_8821421C_038_034* arg0, unk_func_88200FA0_030_038* arg1,
                                        MemoryPool* arg2) {
     WidgetTree_AllocateEntryFlags(arg0, arg1->unk_04, arg2);
     WidgetTree_BindScrollableGridData(arg0, arg1);
@@ -1718,13 +1718,13 @@ void WidgetTree_BindScrollableGridStridedPage(unk_func_8821421C_038_034* arg0, u
     WidgetTree_BindScrollableGridStridedData(arg0, arg1);
 }
 
-void WidgetTree_ClampScrollableGridTop(unk_func_8820BE14_02C_038* arg0) {
+void WidgetTree_ClampScrollableGridTop(unk_func_8821421C_038_034* arg0) {
     if (arg0->unk_5C < arg0->unk_58) {
         arg0->unk_58 = arg0->unk_5C;
     }
 }
 
-void WidgetTree_ClampScrollableGridBottom(unk_func_8820BE14_02C_038* arg0) {
+void WidgetTree_ClampScrollableGridBottom(unk_func_8821421C_038_034* arg0) {
     s32 temp_v0 = (arg0->unk_5C - (arg0->unk_00.unk_3E * arg0->unk_00.unk_4A)) + 1;
 
     if (arg0->unk_58 < temp_v0) {
@@ -1987,7 +1987,7 @@ s32 WidgetTree_HandleScrollableGridInput(unk_func_8821421C_038_034* arg0, Contro
     return var_t2;
 }
 
-void WidgetTree_SetScrollableGridIndex(unk_func_8820BE14_02C_038* arg0, s32 arg1) {
+void WidgetTree_SetScrollableGridIndex(unk_func_8821421C_038_034* arg0, s32 arg1) {
     s32 temp_v1;
     s32 var_a3;
 
@@ -2017,7 +2017,7 @@ void WidgetTree_SetScrollableGridIndex(unk_func_8820BE14_02C_038* arg0, s32 arg1
     }
 }
 
-void WidgetTree_SetScrollableGridIndexPreserveScroll(unk_func_8820BE14_02C_038* arg0, s32 arg1) {
+void WidgetTree_SetScrollableGridIndexPreserveScroll(unk_func_8821421C_038_034* arg0, s32 arg1) {
     s32 temp_a2;
     s32 temp_v0;
     s32 var_a1;
@@ -2042,7 +2042,7 @@ void WidgetTree_SetScrollableGridIndexPreserveScroll(unk_func_8820BE14_02C_038* 
     }
 }
 
-void WidgetTree_SetPagedGridSelectionWithOffset(unk_func_8830867C_02C_034* arg0, s32 arg1, s32 arg2) {
+void WidgetTree_SetPagedGridSelectionWithOffset(unk_func_8821421C_038_034* arg0, s32 arg1, s32 arg2) {
     s32 temp_a2;
     s32 temp_a2_2;
     s32 temp_lo;
@@ -2076,11 +2076,11 @@ void WidgetTree_SetPagedGridSelectionWithOffset(unk_func_8830867C_02C_034* arg0,
     }
 }
 
-void WidgetTree_SetScrollableGridEntryText(unk_func_8820BE14_02C_038* arg0, unk_func_88205880_00D0* arg1) {
+void WidgetTree_SetScrollableGridEntryText(unk_func_8821421C_038_034* arg0, unk_func_88205880_00D0* arg1) {
     PointerList_Insert(arg0->unk_00.unk_2C, arg1, arg0->unk_00.unk_38);
 }
 
-void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038* arg0) {
+void WidgetTree_RemoveScrollableGridEntry(unk_func_8821421C_038_034* arg0) {
     s32 var_a1;
 
     PointerList_Remove(arg0->unk_00.unk_2C, arg0->unk_00.unk_38);
@@ -2093,7 +2093,7 @@ void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038* arg0) {
 }
 
 void WidgetTree_InitScrollableGridScrollbar(unk_func_88507D4C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
-                                            unk_func_8820BE14_02C_038* arg5) {
+                                            unk_func_8821421C_038_034* arg5) {
     WidgetTree_InitWidget(&arg0->unk_00, sizeof(unk_func_88507D4C));
     arg0->unk_00.unk_18 = WidgetTree_DrawScrollableGridScrollbar;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -3161,8 +3161,8 @@ void WidgetTree_SetChildSelectionProxyState(unk_func_8830867C_02C_048_000* arg0,
     WidgetTree_UpdateChildSelectionProxyItems(arg0);
 }
 
-void WidgetTree_AppendChildSelectionProxyItem(unk_func_8830867C_02C_048_000* arg0, WidgetNode* arg1) {
-    WidgetTree_AppendChild(&arg0->unk_00.unk_00, &arg1->unk_00);
+void WidgetTree_AppendChildSelectionProxyItem(unk_func_8830867C_02C_048_000* arg0, WidgetLinkHeader* arg1) {
+    WidgetTree_AppendChild(&arg0->unk_00.unk_00, arg1);
     arg0->unk_20++;
 }
 

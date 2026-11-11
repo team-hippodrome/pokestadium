@@ -44,10 +44,10 @@ typedef struct JpegContext {
     /* 0x24 */ void* imageData;
     /* 0x28 */ u32 mode; // 0 if Y V0 is 1 and 2 if Y V0 is 2
     /* 0x30 */ OSScTask scTask;
-    /* 0x98 */ OSMesgQueue mq;
-    /* 0xB0 */ OSMesg msg;
-    /* 0xB4 */ JpegWork* workBuf;
-} JpegContext; // size = 0xB8
+    /* 0x88 */ OSMesgQueue mq;
+    /* 0xA0 */ OSMesg msg;
+    /* 0xA4 */ JpegWork* workBuf;
+} JpegContext; // size = 0xA8 with _FINALROM (the offset comments above); 0xB8 with scheduler timing fields.
 
 typedef struct JpegDecoderState {
     /* 0x00 */ u32 byteIdx;

@@ -21,18 +21,7 @@ typedef struct unk_D_8250A288 {
     /* 0x08 */ s16 unk_08;
 } unk_D_8250A288; // size >= 0xA
 
-typedef struct unk_D_82508B30_03C {
-    /* 0x00 */ char unk00[0x1];
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ char unk02[0x12];
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ char unk18[0x6];
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ s16 unk_22;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ Vec3f unk_30;
-} unk_D_82508B30_03C; // size >= 0x3C
+typedef DisplayObject unk_D_82508B30_03C;
 
 typedef struct unk_D_8250A228 {
     /* 0x00 */ s16 unk_00;
@@ -40,7 +29,7 @@ typedef struct unk_D_8250A228 {
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ u16 unk_06;
     /* 0x08 */ s16 unk_08;
-    /* 0x08 */ s16 unk_0A;
+    /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E[4];
     /* 0x16 */ char unk16[0x16];
@@ -49,13 +38,13 @@ typedef struct unk_D_8250A228 {
     /* 0x34 */ struct unk_D_8250A228* unk_34;
     /* 0x38 */ DepthBuffer* unk_38;
     /* 0x3C */ unk_D_82508B30_03C unk_3C;
-} unk_D_8250A228; // size >= 0x78
+} unk_D_8250A228; // size = 0x1A4
 
 typedef struct unk_D_82508B30 {
     /* 0x000 */ s16 unk_000;
     /* 0x002 */ u16 unk_002;
     /* 0x004 */ s16 unk_004;
-    /* 0x004 */ u16 unk_006;
+    /* 0x006 */ u16 unk_006;
     /* 0x008 */ s16 unk_008;
     /* 0x00A */ s16 unk_00A;
     /* 0x00C */ s16 unk_00C;
@@ -65,10 +54,9 @@ typedef struct unk_D_82508B30 {
     /* 0x020 */ Vec3f unk_020;
     /* 0x02C */ unk_D_8250A228* unk_02C;
     /* 0x030 */ unk_D_8250A228* unk_030;
-    /* 0x034 */ s32 unk_034;
-    /* 0x034 */ s32 unk_038;
+    /* 0x034 */ unk_D_8250A228* unk_034;
+    /* 0x038 */ DepthBuffer* unk_038;
     /* 0x03C */ unk_D_82508B30_03C unk_03C;
-    /* 0x078 */ char unk078[0x12C];
 } unk_D_82508B30; // size = 0x1A4
 
 typedef struct unk_D_8250A308 {
@@ -87,7 +75,7 @@ typedef struct unk_D_8250A480 {
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
-    /* 0x0A */ s16 unk_0C;
+    /* 0x0C */ s16 unk_0C;
     /* 0x10 */ f32 unk_10;
     /* 0x14 */ char** unk_14;
 } unk_D_8250A480; // size = 0x18

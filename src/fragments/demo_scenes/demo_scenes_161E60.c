@@ -54,7 +54,7 @@ typedef struct unk_D_86B0EBD8 {
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ char unk10[0x8];
     /* 0x18 */ s32 unk_18;
-    /* 0x30 */ GfxTileParams unk_1C;
+    /* 0x1C */ GfxTileParams unk_1C;
 } unk_D_86B0EBD8; // size = 0x4C
 
 typedef struct unk_D_86B0EBDC {
@@ -910,14 +910,14 @@ void Completion_LoadModels(void) {
     D_86B0EBDC->unk_000 = Model_LoadByArchiveIndex(0xD3);
     D_86B0EBDC->unk_008.effectSlot = 0xFF;
 
-    Model_InitDisplayObject(&D_86B0EBDC->unk_008, 0, 0xD3, D_86B0EBDC->unk_000->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86B0EBDC->unk_008, 0, 0xD3, D_86B0EBDC->unk_000->nodes[0]);
     ModelAnim_SetAnimation(&D_86B0EBDC->unk_008, 0);
     ModelRenderer_AttachDisplayObject(&D_86B0EBDC->unk_170);
     PokeIcon_OpenModelArchives();
 
     D_86B0EBDC->unk_004 = Model_LoadByArchiveIndex(D_86B0EBDC->unk_2EC);
     D_86B0EBDC->unk_170.effectSlot = 0;
-    Model_InitDisplayObject(&D_86B0EBDC->unk_170, 0, D_86B0EBDC->unk_2EC, D_86B0EBDC->unk_004->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86B0EBDC->unk_170, 0, D_86B0EBDC->unk_2EC, D_86B0EBDC->unk_004->nodes[0]);
     ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, 0);
     D_86B0EBDC->unk_170.node.renderFlags &= ~0x40;
 

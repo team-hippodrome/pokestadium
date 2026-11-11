@@ -1753,7 +1753,7 @@ s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
 }
 
 s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
-    s32 var_v0;
+    s32 var_v0; //!bug: Verification reads a whole box bank into the smaller D_800ACA78 main-data buffer.
 #if defined(VERSION_JP)
     GbSaveBoxBank* temp_s2 = &sGbSavePorts[arg0].unk_4C->unk_0000[arg1];
 #else

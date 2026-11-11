@@ -83,11 +83,11 @@ void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) 
     arg0->unk_24->position.z = tmp3;
 
     arg0->unk_24->rotation = D_8006F05C;
-    Model_ComputeSizeVariant(&sp2C, arg1);
+    Model_ComputeNicknameColorVariant(&sp2C, arg1);
     PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1->species.id, sp2C);
     PokeIcon_WaitFrameLoad(arg0->unk_1C);
     ModelRenderer_ClearDisplayObject(arg0->unk_24);
-    Model_InitDisplayObject(arg0->unk_24, 0, arg1->species.id, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_24, 0, arg1->species.id, arg0->unk_1C->loadedModel->nodes[0]);
     ModelAnim_SetAnimation(arg0->unk_24, 1);
     arg0->unk_24->node.renderFlags &= ~0x40;
     arg0->unk_24->node.renderFlags |= 0x80;
@@ -115,7 +115,7 @@ void PokeIcon_SetPreviewSpecies(unk_func_8001B1FC* arg0, s32 arg1, u16 arg2) {
     PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1, sp34);
     PokeIcon_WaitFrameLoad(arg0->unk_1C);
     ModelRenderer_ClearDisplayObject(arg0->unk_24);
-    Model_InitDisplayObject(arg0->unk_24, 0, arg1, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_24, 0, arg1, arg0->unk_1C->loadedModel->nodes[0]);
     ModelAnim_SetAnimation(arg0->unk_24, 1);
     arg0->unk_24->node.renderFlags &= ~0x40;
     arg0->unk_24->node.renderFlags |= 0x80;
