@@ -6,12 +6,6 @@
 
 static MiniActor* D_87906120;
 
-#if defined(VERSION_US_REV2)
-// asm-processor requires this import on one physical line.
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/minigame_actor_framework/minigame_actor_framework_11BF90/miniRankingActorsInit.s")
-// clang-format on
-#else
 void miniRankingActorsInit(void) {
     s32 i;
     MiniActor* ptr;
@@ -24,11 +18,13 @@ void miniRankingActorsInit(void) {
         ptr->unk_168 = Model_LoadByArchiveIndex(0xAB);
         Model_InitDisplayObject(&ptr->unk_000, 0, ptr->unk_23C, ptr->unk_168->unk_08->unk_00[0]);
         ModelAnim_SetAnimation(&ptr->unk_000, 0);
+#if defined(VERSION_US_REV2)
+        ptr->unk_000.effectSlot = 0xFF;
+#endif
         ptr->unk_000.node.flags &= ~1;
         miniActorAllToZero(ptr);
     }
 }
-#endif
 
 void miniRankingActorSpawn(MiniActor* arg0) {
     if (arg0->mainState == 1) {
