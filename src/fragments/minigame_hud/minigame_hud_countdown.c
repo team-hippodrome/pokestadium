@@ -105,9 +105,6 @@ void Widget_CountdownInit(void) {
     MainPool_FinalizeAllocation(sp1C);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/minigame_hud/minigame_hud_countdown/Widget_CountdownUpdate.s")
-#else
 void Widget_CountdownUpdate(void) {
     s32 i;
     Gfx* temp_v0;
@@ -165,9 +162,16 @@ void Widget_CountdownUpdate(void) {
         gSPTexture(&temp_v0[1], 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
         gDPPipeSync(&temp_v0[2]);
         gDPSetCombineMode(&temp_v0[3], G_CC_DECALRGBA, G_CC_PASS2);
+#if defined(VERSION_US_REV2)
+        gDPSetTextureFilter(&temp_v0[4], G_TF_BILERP);
+        gSPVertex(&temp_v0[5], D_878063E0, 16, 0);
+
+        temp_v0 += 6;
+#else
         gSPVertex(&temp_v0[4], D_878063E0, 16, 0);
 
         temp_v0 += 5;
+#endif
         img = temp_s1;
 
         for (i = 0; i < 4; i++, img += 0x400) {
@@ -181,7 +185,6 @@ void Widget_CountdownUpdate(void) {
         gSPEndDisplayList(temp_v0++);
     }
 }
-#endif
 
 void Widget_CountdownStart(s16 arg0) {
     D_8780FAC6 = arg0;

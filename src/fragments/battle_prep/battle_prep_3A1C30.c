@@ -257,9 +257,6 @@ void BattlePrep_DrawCupRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRuleWin
     Font_EndTexturedTextRendering();
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawCastleRuleSummary.s")
-#else
 void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     s32 sp12C;
     char sp2C[0x100];
@@ -275,7 +272,12 @@ void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRule
 
     if (gSessionContext.modeSelection < 9) {
         if (gSessionContext.modeSelection == 8) {
+#if defined(VERSION_US_REV2)
+            Text_SetNumberToken(1, gSessionContext.roundOrDemoId);
+            BattlePrep_FormatString(sp2C, 0x100, 0x40);
+#else
             sprintf(sp2C, "%s %d", BattlePrep_GetString(0x1B), gSessionContext.roundOrDemoId);
+#endif
             sp12C = Font_MeasureTextExtent(4, 0, sp2C);
             Font_Printf((arg1->unk_00 - (sp12C / 2)) + 0x64, arg1->unk_02 + 0x26, sp2C);
         } else if (gSessionContext.roundOrDemoId < 4) {
@@ -292,7 +294,6 @@ void BattlePrep_DrawCastleRuleSummary(BattlePrepRuleWindow* arg0, BattlePrepRule
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void BattlePrep_DrawRankBadge(s16 arg0, s16 arg1, BattleSessionTeams* arg2) {
     static u8* D_84B17608[] = { D_3025950, D_30260A0, D_30267F0, D_3026F40 };
@@ -364,11 +365,11 @@ void BattlePrep_DrawTeamPreview(BattlePrepRuleWindow* arg0, BattlePrepRuleWindow
     Font_EndTexturedTextRendering();
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawStreakGiveUpPrompt.s")
-#else
 void BattlePrep_DrawStreakGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1) {
     SessionContinueData sp50;
+#if defined(VERSION_US_REV2)
+    char sp50_buf[0x80];
+#endif
     UNUSED s32 pad;
     s32 sp48;
     s32 temp_v0;
@@ -395,7 +396,13 @@ void BattlePrep_DrawStreakGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRul
                 Font_Printf(arg1->unk_00 + 0x1E, arg1->unk_02 + 0x35, BattlePrep_GetString(0x3E));
             }
         } else {
+#if defined(VERSION_US_REV2)
+            Text_SetNumberToken(1, sp50.unk_02);
+            BattlePrep_FormatString(sp50_buf, 0x80, 0x40);
+            Font_Printf(arg1->unk_00 + 0x1E, arg1->unk_02 + 0x35, sp50_buf);
+#else
             Font_Printf(arg1->unk_00 + 0x1E, arg1->unk_02 + 0x35, "%s %d", BattlePrep_GetString(0x1B), sp50.unk_02);
+#endif
         }
     } else if ((sp50.unk_00 == 3) || (sp50.unk_00 == 6)) {
         Font_Printf(arg1->unk_00 + 0x1E, arg1->unk_02 + 0x17, BattlePrep_GetString(sp50.unk_00 - 1));
@@ -432,7 +439,6 @@ void BattlePrep_DrawStreakGiveUpPrompt(BattlePrepRuleWindow* arg0, BattlePrepRul
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
-#endif
 
 void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0) {
     BattlePrepRuleWindowLayout* temp_s0;

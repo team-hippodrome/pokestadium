@@ -695,9 +695,6 @@ void PokeIcon_DrawPreview(unk_func_8001B1FC* arg0) {
     GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, arg0->unk_08, arg0->unk_0A);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/poke_icon/PokeIcon_RenderPreview.s")
-#else
 u8* PokeIcon_RenderPreview(unk_func_8001B1FC* arg0) {
     PokeIcon_UpdatePreview(arg0);
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_28);
@@ -727,4 +724,3 @@ u8* PokeIcon_RenderPreview(unk_func_8001B1FC* arg0) {
     }
     return arg0->unk_28->img_p;
 }
-#endif
