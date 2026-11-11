@@ -24,8 +24,8 @@
 
 typedef struct unk_D_86806E20 {
     /* 0x00 */ u8* texture;
-    /* 0x02 */ s16 width;
-    /* 0x04 */ s16 height;
+    /* 0x04 */ s16 width;
+    /* 0x06 */ s16 height;
 } unk_D_86806E20; // size = 0x8
 
 static u32 D_86806CD0[] = {
@@ -696,7 +696,7 @@ void SushiGame_LoadAssets(void) {
     SushiGame_BroadcastPlayerPhase(0xF, 2);
 }
 
-void SushiGame_Main(s32 arg0, UNUSED s32 arg1) {
+s32 SushiGame_Main(s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     if (arg0 == 1) {
@@ -727,5 +727,5 @@ void SushiGame_Main(s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }

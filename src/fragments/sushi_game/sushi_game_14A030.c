@@ -192,7 +192,7 @@ void SushiGame_InitConveyorCup(unk_D_86808808* arg0, s32 arg1) {
     SushiGame_GetConveyorSlotPosition(arg0->unk_000, &arg0->unk_00C);
     ModelRenderer_AttachDisplayObject(&sp1C->node);
 
-    sp1C->unk_030.x = sp1C->unk_030.y = sp1C->unk_030.z = 2.0f;
+    sp1C->scale.x = sp1C->scale.y = sp1C->scale.z = 2.0f;
 }
 
 void SushiGame_SetPlateSpawnPosition(unk_D_868084D8* arg0) {
@@ -348,7 +348,7 @@ void SushiGame_UpdateConveyorCup(unk_D_86808808* arg0) {
         }
     }
 
-    arg0->unk_018.unk_024 = arg0->unk_00C;
+    arg0->unk_018.position = arg0->unk_00C;
 }
 
 void SushiGame_UpdatePlate(unk_D_868084D8* arg0) {

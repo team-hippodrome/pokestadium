@@ -370,8 +370,8 @@ typedef struct PresetTrainer {
     /* 0x004 */ char unk04[0x8];
     /* 0x00C */ char unk_0C[0x4];
     /* 0x010 */ char unk10[0x24];
-    /* 0x034 */ u16 unk_34;
-    /* 0x036 */ u16 unk_36;
+    /* 0x034 */ u16 unk_34; // Big-endian archive flags; high byte selects the trainer class.
+    /* 0x036 */ u16 unk_36; // Number of BattleMon records following this header.
     /* 0x038 */ BattleMon unk_38[1];
 } PresetTrainer; // size >= 0x8C
 

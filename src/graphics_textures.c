@@ -503,8 +503,8 @@ s16 Font_DrawChar(s16 x, s16 y, s16 char_index) {
                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     }
 
-    if ((u32)character->texture + sp88 != gFontContext->unk_4C) {
-        gFontContext->unk_4C = (u32)character->texture + sp88;
+    if (character->texture + sp88 != gFontContext->unk_4C) {
+        gFontContext->unk_4C = character->texture + sp88;
 
         gDPLoadTextureBlock(gDisplayListHead++, (u32)character->texture + sp88, G_IM_FMT_IA, G_IM_SIZ_8b, character->width,
                             character->height, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,

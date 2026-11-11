@@ -16,7 +16,7 @@ void LabUI_HideSavingStatusWidget(unk_func_889000C4_044*);
 
 typedef struct unk_D_88901178 {
     /* 0x00 */ u16 unk_00;
-    /* 0x00 */ s32 unk_04;
+    /* 0x04 */ s32 unk_04;
 } unk_D_88901178; // size = 0x8
 
 static Color_RGBA8 D_88901170[] = { { 0xF0, 0xF0, 0xF0, 0xFF }, { 0xF0, 0xF0, 0xF0, 0x4D } };

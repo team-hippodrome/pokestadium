@@ -133,7 +133,8 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
     return var_v1;
 }
 
-arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
+/* Derive the material color variant from a non-default nickname, OT id, and OT name. */
+arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
     UNUSED s32 pad;
     char sp38[0xB];
     arg1_func_80010CA8 sp34;
@@ -150,18 +151,18 @@ arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon
     if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
         var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
 
-        if (1) {}
+        if (1) {} // karodo
 
         var_v1 = arg1->nickname;
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
-            var_a0 += 0;
+            var_a0 += 0; // FAKE: preserves the matching checksum loop.
         }
 
         var_v1 = arg1->unk_3B;
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
-            var_a0 += 0;
+            var_a0 += 0; // FAKE: preserves the matching checksum loop.
         }
 
         sp34.unk_00 = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
@@ -171,7 +172,7 @@ arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon
     return arg0;
 }
 
-void Model_ComputeSizeVariantFromRecord(arg1_func_80010CA8* arg0, unk_func_8001C014* arg1, u16 arg2) {
+void Model_ComputeNicknameColorVariantFromRecord(arg1_func_80010CA8* arg0, unk_func_8001C014* arg1, u16 arg2) {
     BattleMon stack;
 
     stack.species.id = arg2;
@@ -179,21 +180,21 @@ void Model_ComputeSizeVariantFromRecord(arg1_func_80010CA8* arg0, unk_func_8001C
 
     _bcopy(arg1->unk_04, stack.nickname, 0x10);
     _bcopy(arg1->unk_14, stack.unk_3B, 0x10);
-    Model_ComputeSizeVariant(arg0, &stack);
+    Model_ComputeNicknameColorVariant(arg0, &stack);
 }
 
 void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
     arg1_func_80010CA8 sp2C;
     s16 sp2A;
-    TeamRoster* temp_a1;
+    BattleMon* temp_a1;
 
     sp2A = arg0->displayModel;
     sp2C.raw = 0;
     if (!(arg0->uniqueStatusFlags & 0x40) && (arg0->uniqueStatusFlags & 0x80)) {
         temp_a1 = arg0->unk_04;
-        if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->isHuman)) {
-            Model_ComputeSizeVariant(&sp2C, (BattleMon*)arg0->unk_04);
-            if ((sp2A == 0x19) && (arg0->unk_04->pokemonPicked[0].nickname[6] & 0x80)) {
+        if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->species.id)) {
+            Model_ComputeNicknameColorVariant(&sp2C, (BattleMon*)arg0->unk_04);
+            if ((sp2A == 0x19) && (arg0->unk_04->unk_52 & 0x80)) {
                 sp2A = 0x99;
             }
         }
@@ -212,39 +213,39 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
     }
 }
 
-void PokeIcon_PollFrameLoadForObject(unk_func_8001C248* arg0) {
-    if (PokeIcon_PollFrameLoad(arg0->node.callback)) {
-        arg0->node.callbackArg = arg0->node.callback->loadedModel;
-        arg0->node.type &= ~0xE0;
-        arg0->node.type |= 0x10;
+void PokeIcon_PollFrameLoadForObject(BattleSessionTeams* arg0) {
+    if (PokeIcon_PollFrameLoad(arg0->unk_10)) {
+        arg0->loadedModel = arg0->unk_10->loadedModel;
+        arg0->uniqueStatusFlags &= ~0xE0;
+        arg0->uniqueStatusFlags |= 0x10;
     }
 }
 
-void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
-    if (arg0->node.type & 0x40 && PokeIcon_WaitFrameLoad(arg0->node.callback) != 0) {
-        arg0->node.callbackArg = arg0->node.callback->loadedModel;
-        arg0->node.type &= ~0xE0;
-        arg0->node.type |= 0x10;
+void PokeIcon_WaitFrameLoadForObject(BattleSessionTeams* arg0) {
+    if (arg0->uniqueStatusFlags & 0x40 && PokeIcon_WaitFrameLoad(arg0->unk_10) != 0) {
+        arg0->loadedModel = arg0->unk_10->loadedModel;
+        arg0->uniqueStatusFlags &= ~0xE0;
+        arg0->uniqueStatusFlags |= 0x10;
     }
 }
 
-void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
-    if (!(arg0->unk_01D & 0x40) && (arg0->unk_01D & 0x80)) {
-        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->unk_020, arg0->unk_024);
-        arg0->unk_01D |= 0x40;
-        arg0->unk_01D &= ~0x10;
-        if (arg0->unk_01D & 0x20) {
-            PokeIcon_WaitBackgroundLoad(arg0->node.callback);
-            arg0->unk_024 = arg0->node.callback->loadedBackground;
-            arg0->unk_01D &= ~0xE0;
+void PokeIcon_RequestBackgroundForObject(BattleSessionTeams* arg0) {
+    if (!(arg0->assetIsBusy & 0x40) && (arg0->assetIsBusy & 0x80)) {
+        PokeIcon_RequestBackgroundLoad(arg0->unk_10, arg0->unk_20, arg0->unk_24);
+        arg0->assetIsBusy |= 0x40;
+        arg0->assetIsBusy &= ~0x10;
+        if (arg0->assetIsBusy & 0x20) {
+            PokeIcon_WaitBackgroundLoad(arg0->unk_10);
+            arg0->unk_24 = arg0->unk_10->loadedBackground;
+            arg0->assetIsBusy &= ~0xE0;
         }
     }
 }
 
-void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
-    if (PokeIcon_PollBackgroundLoad(arg0->node.callback) != 0) {
-        arg0->unk_024 = arg0->node.callback->loadedBackground;
-        arg0->unk_01D &= ~0xE0;
-        arg0->unk_01D |= 0x10;
+void PokeIcon_PollBackgroundForObject(BattleSessionTeams* arg0) {
+    if (PokeIcon_PollBackgroundLoad(arg0->unk_10) != 0) {
+        arg0->unk_24 = arg0->unk_10->loadedBackground;
+        arg0->assetIsBusy &= ~0xE0;
+        arg0->assetIsBusy |= 0x10;
     }
 }

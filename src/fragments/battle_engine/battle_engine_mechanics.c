@@ -20,19 +20,19 @@ typedef struct unk_D_843C4DA0 {
     /* 0x06 */ char unk06[0x3];
     /* 0x09 */ u8 unk_09;
     /* 0x0A */ char unk0A[0xA];
-    /* 0x13 */ u8 unk_13;
-    /* 0x14 */ char unk14[0x1];
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ char unk16[0x1];
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ char unk18[0xB];
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ u16 unk_26;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ char unk2E[0x1E];
+    /* 0x14 */ u8 unk_13;
+    /* 0x15 */ char unk14[0x1];
+    /* 0x16 */ u8 unk_15;
+    /* 0x17 */ char unk16[0x1];
+    /* 0x18 */ u8 unk_17;
+    /* 0x19 */ char unk18[0xB];
+    /* 0x24 */ u8 unk_22;
+    /* 0x26 */ u16 unk_24;
+    /* 0x28 */ u16 unk_26;
+    /* 0x2A */ u16 unk_28;
+    /* 0x2C */ u16 unk_2A;
+    /* 0x2E */ u16 unk_2C;
+    /* 0x30 */ char unk2E[0x1E];
 } unk_D_843C4DA0; // size = 0x4C
 
 static u16 D_843C4DA0;
