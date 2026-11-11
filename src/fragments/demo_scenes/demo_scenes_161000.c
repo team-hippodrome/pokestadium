@@ -1,6 +1,11 @@
 #include "demo_scenes.h"
 #include "src/matrix.h"
 
+/**
+ * Returns 1 if the display object is inside a triangle on the xz plane in front of the camera.
+ * The triangle's apex sits arg5 units behind the eye; its sides spread arg2 to the left and arg3
+ * to the right of the viewing direction and reach arg4 units forward.
+ */
 u16 Diorama_IsModelInCameraCone(CameraNode* camera, DisplayObject* arg1, s16 arg2, s16 arg3, f32 arg4, f32 arg5) {
     UNUSED s32 pad[6];
     f32 sp6C;
@@ -47,50 +52,70 @@ u16 Diorama_IsModelInCameraCone(CameraNode* camera, DisplayObject* arg1, s16 arg
     return sp34;
 }
 
-void DioramaCamKeyframe_SetAngles(unk_D_86B0E5D4_04* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    arg0->unk_0C = arg1;
-    arg0->unk_0E = arg2;
-    arg0->unk_20 = arg3;
-    arg0->unk_22 = arg4;
+/**
+ * Sets the start and end rotationX/Y of the camera target path around the focus point.
+ */
+void DioramaCamKeyframe_SetAngles(DioramaSequence* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+    arg0->startRotationX = arg1;
+    arg0->startRotationY = arg2;
+    arg0->endRotationX = arg3;
+    arg0->endRotationY = arg4;
 }
 
-void DioramaCamKeyframe_SetDistance(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2) {
-    arg0->unk_18 = arg1;
-    arg0->unk_2C = arg2;
+/**
+ * Sets the start and end distance of the camera target from the focus point.
+ */
+void DioramaCamKeyframe_SetDistance(DioramaSequence* arg0, f32 arg1, f32 arg2) {
+    arg0->startDistance = arg1;
+    arg0->endDistance = arg2;
 }
 
-void DioramaCamKeyframe_SetAtAngles(unk_D_86B0E5D4_04* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    arg0->unk_12 = arg1;
-    arg0->unk_14 = arg2;
+/**
+ * Sets the eye rotationX/Y around the camera target, plus two unused angles.
+ */
+void DioramaCamKeyframe_SetAtAngles(DioramaSequence* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+    arg0->eyeRotationX = arg1;
+    arg0->eyeRotationY = arg2;
     arg0->unk_26 = arg3;
     arg0->unk_28 = arg4;
 }
 
-void DioramaCamKeyframe_SetAtDistance(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2) {
-    arg0->unk_1C = arg1;
-    arg0->unk_30 = arg2;
+/**
+ * Sets the eye distance from the camera target and the remaining distance at which the group
+ * ends.
+ */
+void DioramaCamKeyframe_SetAtDistance(DioramaSequence* arg0, f32 arg1, f32 arg2) {
+    arg0->eyeDistance = arg1;
+    arg0->advanceDistance = arg2;
 }
 
-void DioramaCamKeyframe_SetTransitionSpeed(unk_D_86B0E5D4_04* arg0, f32 arg1, f32 arg2) {
-    arg0->unk_34 = arg1;
+/**
+ * Sets how far the camera target moves per frame, plus one unused value.
+ */
+void DioramaCamKeyframe_SetTransitionSpeed(DioramaSequence* arg0, f32 arg1, f32 arg2) {
+    arg0->travelSpeed = arg1;
     arg0->unk_38 = arg2;
 }
 
-void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1) {
-    unk_D_86B0E5D4_04* ptr = &arg1->unk_04;
-    CameraNode* ptr2 = arg1->unk_00;
+/**
+ * Copies a DioramaAnimData keyframe into the sequence state and resets the distance traveled.
+ * A vertical field of view of 255 keeps the current value and eases it toward 30.
+ */
+void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, DioramaScene* arg1) {
+    DioramaSequence* ptr = &arg1->sequence;
+    CameraNode* ptr2 = arg1->camera;
     f32 sp34;
     f32 sp30;
     f32 sp2C;
     f32 sp28;
 
     ptr->unk_74 = 0.0f;
-    ptr->unk_68 = 0;
+    ptr->travelDistance = 0;
 
     if (arg0->verticalFieldOfView != 255.0f) {
-        ptr2->perspective.verticalFieldOfView = ptr->unk_3C = arg0->verticalFieldOfView;
+        ptr2->perspective.verticalFieldOfView = ptr->verticalFieldOfView = arg0->verticalFieldOfView;
     } else {
-        ptr->unk_3C = arg0->verticalFieldOfView;
+        ptr->verticalFieldOfView = arg0->verticalFieldOfView;
     }
 
     sp34 = arg0->startingDistance;
@@ -106,16 +131,24 @@ void Diorama_LoadCameraKeyframe(DioramaAnimData* arg0, unk_D_86B0E5D4* arg1) {
     DioramaCamKeyframe_SetTransitionSpeed(ptr, arg0->targetZ, arg0->speed);
 }
 
-void Diorama_SetCameraToKeyframeStart(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) {
-    CameraNode* sp2C = arg1->unk_00;
+/**
+ * Places the camera target at the keyframe start position and the eye relative to the target.
+ */
+void Diorama_SetCameraToKeyframeStart(DioramaSequence* arg0, DioramaScene* arg1) {
+    CameraNode* sp2C = arg1->camera;
 
-    Camera_ComputeEyeFromAngles(&arg0->unk_00, &sp2C->view.targetPosition, arg0->unk_18, arg0->unk_0C, arg0->unk_0E);
-    Camera_ComputeEyeFromAngles(&sp2C->view.targetPosition, &sp2C->view.eyePosition, arg0->unk_1C, arg0->unk_12,
-                                arg0->unk_14);
+    Camera_ComputeEyeFromAngles(&arg0->focus, &sp2C->view.targetPosition, arg0->startDistance, arg0->startRotationX, arg0->startRotationY);
+    Camera_ComputeEyeFromAngles(&sp2C->view.targetPosition, &sp2C->view.eyePosition, arg0->eyeDistance, arg0->eyeRotationX,
+                                arg0->eyeRotationY);
 }
 
-s32 Diorama_UpdateCameraKeyframe(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) {
-    CameraNode* temp_s2 = arg1->unk_00;
+/**
+ * Moves the camera target from the keyframe start position toward its end position by
+ * travelSpeed per frame and keeps the eye at a fixed offset from the target. Returns 1 when the
+ * target is within 5 units of the end.
+ */
+s32 Diorama_UpdateCameraKeyframe(DioramaSequence* arg0, DioramaScene* arg1) {
+    CameraNode* temp_s2 = arg1->camera;
     Vec3f sp58;
     Vec3f sp4C;
     UNUSED s32 pad[3];
@@ -123,24 +156,24 @@ s32 Diorama_UpdateCameraKeyframe(unk_D_86B0E5D4_04* arg0, unk_D_86B0E5D4* arg1) 
     s16 sp3A;
     s16 sp38;
 
-    if (arg0->unk_3C != 255.0f) {
-        temp_s2->perspective.verticalFieldOfView = arg0->unk_3C;
+    if (arg0->verticalFieldOfView != 255.0f) {
+        temp_s2->perspective.verticalFieldOfView = arg0->verticalFieldOfView;
     } else {
         Math_EaseTowardF(&temp_s2->perspective.verticalFieldOfView, 30.0f, 0.06f);
     }
 
-    Camera_ComputeEyeFromAngles(&arg0->unk_00, &sp58, arg0->unk_18, arg0->unk_0C, arg0->unk_0E);
-    Camera_ComputeEyeFromAngles(&arg0->unk_00, &sp4C, arg0->unk_2C, arg0->unk_20, arg0->unk_22);
+    Camera_ComputeEyeFromAngles(&arg0->focus, &sp58, arg0->startDistance, arg0->startRotationX, arg0->startRotationY);
+    Camera_ComputeEyeFromAngles(&arg0->focus, &sp4C, arg0->endDistance, arg0->endRotationX, arg0->endRotationY);
     Vec3f_CalculateDistanceAngles(&sp58, &sp4C, &sp3C, &sp3A, &sp38);
 
-    arg1->unk_04.unk_68 = Math_StepToF(arg1->unk_04.unk_68, sp3C, arg0->unk_34, arg0->unk_34);
+    arg1->sequence.travelDistance = Math_StepToF(arg1->sequence.travelDistance, sp3C, arg0->travelSpeed, arg0->travelSpeed);
 
-    Camera_ComputeEyeFromAngles(&sp58, &temp_s2->view.targetPosition, arg1->unk_04.unk_68, sp3A, sp38);
-    Camera_ComputeEyeFromAngles(&temp_s2->view.targetPosition, &temp_s2->view.eyePosition, arg0->unk_1C, arg0->unk_12,
-                                arg0->unk_14);
+    Camera_ComputeEyeFromAngles(&sp58, &temp_s2->view.targetPosition, arg1->sequence.travelDistance, sp3A, sp38);
+    Camera_ComputeEyeFromAngles(&temp_s2->view.targetPosition, &temp_s2->view.eyePosition, arg0->eyeDistance, arg0->eyeRotationX,
+                                arg0->eyeRotationY);
 
-    arg1->unk_04.unk_6C = sp3C - arg1->unk_04.unk_68;
-    if (arg1->unk_04.unk_6C <= 5.0f) {
+    arg1->sequence.remainingDistance = sp3C - arg1->sequence.travelDistance;
+    if (arg1->sequence.remainingDistance <= 5.0f) {
         return 1;
     }
 

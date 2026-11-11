@@ -16,19 +16,19 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
-typedef struct unk_D_86B10BD0 {
-    /* 0x00 */ s32 unk_00;
+typedef struct FirstClearBonusScene {
+    /* 0x00 */ s32 step;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
-} unk_D_86B10BD0; // size >= 0xC
+} FirstClearBonusScene; // size >= 0xC
 
-typedef struct unk_D_86B10BE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-} unk_D_86B10BE0; // size >= 0x14
+typedef struct FirstClearBonusDialog {
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 revealIndex;
+    /* 0x08 */ s32 holdTimer;
+    /* 0x0C */ s32 width;
+    /* 0x10 */ s32 height;
+} FirstClearBonusDialog; // size >= 0x14
 
 #if !defined(VERSION_JP)
 static u32 sFirstClearBonusTextData[] = {
@@ -43,11 +43,15 @@ static u32 sFirstClearBonusTextData[] = {
 // EUC-JP dialog lines. The Japanese FirstClearBonus_UpdateDialogSequence formats them directly;
 // the other builds read entries 0x91..0x94 of string table 0x1E instead and leave these unused.
 // Mode 0x16 (Doduo Game Boy):
+// "Congratulations! You got Doduo's Game Boy!"
 static char sFirstClearBonusTextData[] = "おめでとう！ ドードーの\nゲームボーイをゲットだ！";
-static char D_86B0E2E4[] = "GBビルのゲームボーイが\n  スピードアップ！";
+// "The GB Building's Game Boys sped up!"
+static char sDoduoSpeedUpText[] = "GBビルのゲームボーイが\n  スピードアップ！";
 // Other modes (Dodrio Game Boy):
-static char D_86B0E310[] = "すごいぞ！ ドードリオの\nゲームボーイをゲットだ！";
-static char D_86B0E344[] = "GBビルのゲームボーイが\nさらにスピードアップだ！";
+// "Amazing! You got Dodrio's Game Boy!"
+static char sDodrioGameBoyText[] = "すごいぞ！ ドードリオの\nゲームボーイをゲットだ！";
+// "The GB Building's Game Boys sped up even more!"
+static char sDodrioSpeedUpText[] = "GBビルのゲームボーイが\nさらにスピードアップだ！";
 #endif
 
 static u32 sFirstClearBonusGeoLayout[] = {
@@ -59,44 +63,57 @@ static u32 sFirstClearBonusGeoLayout[] = {
 #if !defined(VERSION_JP)
 static char** sBattleMessagesTable;
 #endif
-static unk_D_86002F30* D_86B10844;
-static GraphNode* D_86B10848;
-static DisplayObject D_86B10850;
-static CameraNode* D_86B109B8;
-static BinArchive* D_86B109BC;
-static u8* D_86B109C0;
-static s8 D_86B109C8[0x100];
-static s8 D_86B10AC8[0x100];
-static s16 D_86B10BC8;
-static s16 D_86B10BCA;
-static s16 D_86B10BCC;
-static unk_D_86B10BD0 D_86B10BD0;
-static unk_D_86B10BE0 D_86B10BE0;
+static unk_D_86002F30* sGameBoyModelData;
+static GraphNode* sGameBoySceneRoot;
+static DisplayObject sGameBoyDisplayObject;
+static CameraNode* sGameBoyCamera;
+static BinArchive* sGameBoyBackgroundArchive;
+static u8* sGameBoyBackgroundTiles;
+static s8 sDialogSourceText[0x100];
+static s8 sDialogVisibleText[0x100];
+static s16 sCameraRotationX;
+static s16 sCameraRotationY;
+static s16 sCameraDistance;
+static FirstClearBonusScene sSceneState;
+static FirstClearBonusDialog sDialog;
 
+/**
+ * Places the camera 120 units from its look-at with clip range 50..6400.
+ */
 void FirstClearBonus_InitCamera(void) {
-    D_86B109B8 = D_86B10848->children;
+    sGameBoyCamera = sGameBoySceneRoot->children;
 
-    D_86B10BC8 = 0;
-    D_86B10BCA = 0;
-    D_86B10BCC = 0x78;
+    sCameraRotationX = 0;
+    sCameraRotationY = 0;
+    sCameraDistance = 0x78;
 
-    Camera_ComputeEyeFromAngles(&D_86B109B8->view.targetPosition, &D_86B109B8->view.eyePosition, D_86B10BCC, D_86B10BC8,
-                                D_86B10BCA);
+    Camera_ComputeEyeFromAngles(&sGameBoyCamera->view.targetPosition, &sGameBoyCamera->view.eyePosition, sCameraDistance, sCameraRotationX,
+                                sCameraRotationY);
 
-    D_86B109B8->perspective.nearPlane = 50.0f;
-    D_86B109B8->perspective.farPlane = 6400.0f;
+    sGameBoyCamera->perspective.nearPlane = 50.0f;
+    sGameBoyCamera->perspective.farPlane = 6400.0f;
 }
 
+/**
+ * Resets the scene state machine and sets the dialog box to its collapsed height (10).
+ */
 void FirstClearBonus_InitState(void) {
-    D_86B10BD0.unk_00 = 0;
-    D_86B10BD0.unk_04 = 0;
-    D_86B10BD0.unk_08 = 0;
-    D_86B10BE0.unk_10 = 0xA;
+    sSceneState.step = 0;
+    sSceneState.unk_04 = 0;
+    sSceneState.unk_08 = 0;
+    sDialog.height = 0xA;
 }
 
+/**
+ * Empty function with no callers in this file.
+ */
 void FirstClearBonus_EmptyFunc(void) {
 }
 
+/**
+ * Draws a rounded translucent box (x, y, w, h, rgba): four corner textures up to 8 pixels in radius plus
+ * filled rectangles for the edges and center.
+ */
 void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
     s16 sp48;
     s16 sp44;
@@ -159,103 +176,129 @@ void FirstClearBonus_DrawDialogFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void FirstClearBonus_ShowDialogBox(void) {
-    D_86B10BE0.unk_00 = 0xFF;
+/**
+ * Sets the dialog state to 0xFF, in which the box collapses and stays hidden.
+ */
+void FirstClearBonus_CloseDialog(void) {
+    sDialog.state = 0xFF;
 }
 
-void FirstClearBonus_HideDialogBox(void) {
-    D_86B10BE0.unk_00 = 0;
+/**
+ * Sets the dialog state to 0, which loads the first message and opens the box.
+ */
+void FirstClearBonus_StartDialog(void) {
+    sDialog.state = 0;
 }
 
 #if defined(VERSION_JP)
 // Reveals one character of the dialog text per call: a leading newline or space is copied first,
 // then one byte if it is 0x21..0x3F, otherwise two bytes (an EUC-JP character).
+/**
+ * Typewriter effect: copies the next part of sDialogSourceText into sDialogVisibleText each frame.
+ * Returns 1 when the terminator is reached.
+ */
 s32 FirstClearBonus_RevealNextChar(void) {
-    if (D_86B109C8[D_86B10BE0.unk_04] == 0) {
+    if (sDialogSourceText[sDialog.revealIndex] == 0) {
         return 1;
     }
 
-    if ((D_86B109C8[D_86B10BE0.unk_04] == '\n') || (D_86B109C8[D_86B10BE0.unk_04] == ' ')) {
-        D_86B10AC8[D_86B10BE0.unk_04] = D_86B109C8[D_86B10BE0.unk_04];
-        D_86B10BE0.unk_04++;
+    if ((sDialogSourceText[sDialog.revealIndex] == '\n') || (sDialogSourceText[sDialog.revealIndex] == ' ')) {
+        sDialogVisibleText[sDialog.revealIndex] = sDialogSourceText[sDialog.revealIndex];
+        sDialog.revealIndex++;
     }
 
-    if ((D_86B109C8[D_86B10BE0.unk_04] > 0x20) && (D_86B109C8[D_86B10BE0.unk_04] < 0x40)) {
-        D_86B10AC8[D_86B10BE0.unk_04] = D_86B109C8[D_86B10BE0.unk_04];
-        D_86B10BE0.unk_04++;
+    if ((sDialogSourceText[sDialog.revealIndex] > 0x20) && (sDialogSourceText[sDialog.revealIndex] < 0x40)) {
+        sDialogVisibleText[sDialog.revealIndex] = sDialogSourceText[sDialog.revealIndex];
+        sDialog.revealIndex++;
     } else {
-        D_86B10AC8[D_86B10BE0.unk_04] = D_86B109C8[D_86B10BE0.unk_04];
-        D_86B10AC8[D_86B10BE0.unk_04 + 1] = D_86B109C8[D_86B10BE0.unk_04 + 1];
-        D_86B10BE0.unk_04 += 2;
+        sDialogVisibleText[sDialog.revealIndex] = sDialogSourceText[sDialog.revealIndex];
+        sDialogVisibleText[sDialog.revealIndex + 1] = sDialogSourceText[sDialog.revealIndex + 1];
+        sDialog.revealIndex += 2;
     }
     return 0;
 }
 #else
+/**
+ * Typewriter effect: copies the next part of sDialogSourceText into sDialogVisibleText each frame.
+ * Returns 1 when the terminator is reached.
+ */
 s32 FirstClearBonus_RevealNextChar(void) {
-    if (D_86B109C8[D_86B10BE0.unk_04] == 0) {
+    if (sDialogSourceText[sDialog.revealIndex] == 0) {
         return 1;
     }
 
-    D_86B10AC8[D_86B10BE0.unk_04++] = D_86B109C8[D_86B10BE0.unk_04];
+    sDialogVisibleText[sDialog.revealIndex++] = sDialogSourceText[sDialog.revealIndex];
 
-    if (D_86B109C8[D_86B10BE0.unk_04] == 0) {
+    if (sDialogSourceText[sDialog.revealIndex] == 0) {
         return 1;
     }
 
-    D_86B10AC8[D_86B10BE0.unk_04++] = D_86B109C8[D_86B10BE0.unk_04];
+    sDialogVisibleText[sDialog.revealIndex++] = sDialogSourceText[sDialog.revealIndex];
     return 0;
 }
 #endif
 
+/**
+ * Draws the dialog box 200 pixels wide (current width), centered vertically on y = 190.
+ */
 void FirstClearBonus_DrawDialogBox(void) {
-    FirstClearBonus_DrawDialogFrame(0x3C, 0xBE - (D_86B10BE0.unk_10 / 2), D_86B10BE0.unk_0C, D_86B10BE0.unk_10, 0x50,
+    // #5050F0 at alpha 0x80
+    FirstClearBonus_DrawDialogFrame(0x3C, 0xBE - (sDialog.height / 2), sDialog.width, sDialog.height, 0x50,
                                     0x50, 0xF0, 0x80);
 }
 
+/**
+ * Prints the revealed dialog text with font 2 at (86, 175).
+ */
 void FirstClearBonus_DrawDialogText(void) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x56, 0xAF, "%s", D_86B10AC8);
+    Font_Printf(0x56, 0xAF, "%s", sDialogVisibleText);
     Font_EndTexturedTextRendering();
 }
 
+/**
+ * Dialog state machine: loads the "got the Game Boy" message (Doduo for mode 22, Dodrio otherwise), opens
+ * the box, reveals it, holds 60 frames, then reveals the "GB Building Game Boys speed up" message, holds
+ * 65 frames and collapses the box.
+ */
 void FirstClearBonus_UpdateDialogSequence(void) {
     s32 i;
 
-    switch (D_86B10BE0.unk_00) {
+    switch (sDialog.state) {
         case 0x0:
 #if defined(VERSION_JP)
             if (gSessionContext.mode == 0x16) {
-                sprintf(D_86B109C8, sFirstClearBonusTextData);
+                sprintf(sDialogSourceText, sFirstClearBonusTextData);
             } else {
-                sprintf(D_86B109C8, D_86B0E310);
+                sprintf(sDialogSourceText, sDodrioGameBoyText);
             }
 #else
             if (gSessionContext.mode == 0x16) {
-                sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x91));
+                sprintf(sDialogSourceText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x91));
             } else {
-                sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x93));
+                sprintf(sDialogSourceText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x93));
             }
 #endif
 
-            D_86B10BE0.unk_04 = 0;
-            D_86B10BE0.unk_08 = 0;
-            D_86B10BE0.unk_0C = 0xC8;
-            D_86B10BE0.unk_10 = 0xA;
+            sDialog.revealIndex = 0;
+            sDialog.holdTimer = 0;
+            sDialog.width = 0xC8;
+            sDialog.height = 0xA;
 
             // clang-format off
-            for (i = 0; i < 255; i++) { D_86B10AC8[i] = 0; }
+            for (i = 0; i < 255; i++) { sDialogVisibleText[i] = 0; }
             // clang-format on
 
             FirstClearBonus_DrawDialogBox();
-            D_86B10BE0.unk_00++;
+            sDialog.state++;
             break;
 
         case 0x1:
-            D_86B10BE0.unk_10 = Math_StepToS32(D_86B10BE0.unk_10, 0x28, 8, 8);
-            if (D_86B10BE0.unk_10 == 0x28) {
-                D_86B10BE0.unk_00++;
+            sDialog.height = Math_StepToS32(sDialog.height, 0x28, 8, 8);
+            if (sDialog.height == 0x28) {
+                sDialog.state++;
             }
             FirstClearBonus_DrawDialogBox();
             break;
@@ -263,7 +306,7 @@ void FirstClearBonus_UpdateDialogSequence(void) {
         case 0x2:
             FirstClearBonus_DrawDialogBox();
             if (FirstClearBonus_RevealNextChar() != 0) {
-                D_86B10BE0.unk_00++;
+                sDialog.state++;
             }
             FirstClearBonus_DrawDialogText();
             break;
@@ -272,36 +315,36 @@ void FirstClearBonus_UpdateDialogSequence(void) {
             FirstClearBonus_DrawDialogBox();
             FirstClearBonus_DrawDialogText();
 
-            if (D_86B10BE0.unk_08++ == 0x3C) {
+            if (sDialog.holdTimer++ == 0x3C) {
 #if defined(VERSION_JP)
                 if (gSessionContext.mode == 0x16) {
-                    sprintf(D_86B109C8, D_86B0E2E4);
+                    sprintf(sDialogSourceText, sDoduoSpeedUpText);
                 } else {
-                    sprintf(D_86B109C8, D_86B0E344);
+                    sprintf(sDialogSourceText, sDodrioSpeedUpText);
                 }
 #else
                 if (gSessionContext.mode == 0x16) {
-                    sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x92));
+                    sprintf(sDialogSourceText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x92));
                 } else {
-                    sprintf(D_86B109C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x94));
+                    sprintf(sDialogSourceText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x94));
                 }
 #endif
 
-                D_86B10BE0.unk_04 = 0;
-                D_86B10BE0.unk_08 = 0;
+                sDialog.revealIndex = 0;
+                sDialog.holdTimer = 0;
 
                 // clang-format off
-                for (i = 0; i < 255; i++) { D_86B10AC8[i] = 0; }
+                for (i = 0; i < 255; i++) { sDialogVisibleText[i] = 0; }
                 // clang-format on
 
-                D_86B10BE0.unk_00++;
+                sDialog.state++;
             }
             break;
 
         case 0x4:
             FirstClearBonus_DrawDialogBox();
             if (FirstClearBonus_RevealNextChar() != 0) {
-                D_86B10BE0.unk_00++;
+                sDialog.state++;
             }
             FirstClearBonus_DrawDialogText();
             break;
@@ -310,29 +353,38 @@ void FirstClearBonus_UpdateDialogSequence(void) {
             FirstClearBonus_DrawDialogBox();
             FirstClearBonus_DrawDialogText();
 
-            if (D_86B10BE0.unk_08++ == 0x41) {
-                D_86B10BE0.unk_00 = 0xFF;
+            if (sDialog.holdTimer++ == 0x41) {
+                sDialog.state = 0xFF;
             }
             break;
 
         case 0xFF:
-            D_86B10BE0.unk_10 = Math_StepToS32(D_86B10BE0.unk_10, 0, 8, 8);
-            if (D_86B10BE0.unk_10 >= 0xB) {
+            sDialog.height = Math_StepToS32(sDialog.height, 0, 8, 8);
+            if (sDialog.height >= 0xB) {
                 FirstClearBonus_DrawDialogBox();
             }
             break;
     }
 }
 
+/**
+ * Polls the controllers once per frame and resets input repeat state.
+ */
 void FirstClearBonus_ReadControllerInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/**
+ * Empty function with no callers in this file.
+ */
 void FirstClearBonus_NoopStub2(void) {
 }
 
+/**
+ * Draws a 320x240 RGBA16 backdrop as 20 x 15 tiles of 16x16 pixels (0x200 bytes each).
+ */
 void FirstClearBonus_DrawBackgroundTiles(u8* arg0) {
     s32 i;
     s32 j;
@@ -357,52 +409,60 @@ void FirstClearBonus_DrawBackgroundTiles(u8* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws the backdrop, clears depth, renders the Game Boy model and updates/draws the dialog.
+ */
 void FirstClearBonus_RenderFrame(void) {
     BgStage_DrawFrame();
-    FirstClearBonus_DrawBackgroundTiles(D_86B109C0);
+    FirstClearBonus_DrawBackgroundTiles(sGameBoyBackgroundTiles);
     GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
     GeoRender_AdvanceFrameCounter();
-    Geo_RenderRootNode(D_86B10848);
+    Geo_RenderRootNode(sGameBoySceneRoot);
     FirstClearBonus_UpdateDialogSequence();
     BgStage_AdvanceFrame();
 }
 
+/**
+ * Scene state machine: shows the model, starts music 0x38 at animation frame 10, and at frame 114 clears
+ * render flag 0x20 and starts the dialog with music 0x13; when the dialog closes, sets 0x20 again and
+ * waits for the animation to finish. Returns 1 when done.
+ */
 s32 FirstClearBonus_UpdateScene(void) {
     s32 sp24 = 0;
 
-    switch (D_86B10BD0.unk_00) {
+    switch (sSceneState.step) {
         case 0:
-            D_86B10850.node.renderFlags |= 0x20;
-            D_86B10850.node.flags |= 1;
-            D_86B10BD0.unk_00++;
+            sGameBoyDisplayObject.node.renderFlags |= 0x20;
+            sGameBoyDisplayObject.node.flags |= 1;
+            sSceneState.step++;
             break;
 
         case 1:
-            if ((D_86B10850.transformAnim.frameFixed >> 0x10) == 0xA) {
+            if ((sGameBoyDisplayObject.transformAnim.frameFixed >> 0x10) == 0xA) {
                 Audio_StartMusicTrack(0x38);
             }
 
-            if ((D_86B10850.transformAnim.frameFixed >> 0x10) == 0x72) {
-                D_86B10BD0.unk_08 = 0;
-                D_86B10850.node.renderFlags &= 0xFFDF;
-                FirstClearBonus_HideDialogBox();
+            if ((sGameBoyDisplayObject.transformAnim.frameFixed >> 0x10) == 0x72) {
+                sSceneState.unk_08 = 0;
+                sGameBoyDisplayObject.node.renderFlags &= 0xFFDF;
+                FirstClearBonus_StartDialog();
                 Audio_StartMusicTrack(0x13);
-                D_86B10BD0.unk_00++;
+                sSceneState.step++;
             }
             break;
 
         case 2:
-            if (D_86B10BE0.unk_00 == 0xFF) {
-                D_86B10BD0.unk_08 = 0;
-                D_86B10850.node.renderFlags |= 0x20;
-                FirstClearBonus_ShowDialogBox();
-                D_86B10BD0.unk_00++;
+            if (sDialog.state == 0xFF) {
+                sSceneState.unk_08 = 0;
+                sGameBoyDisplayObject.node.renderFlags |= 0x20;
+                FirstClearBonus_CloseDialog();
+                sSceneState.step++;
             }
             break;
 
         case 3:
-            if (ModelAnim_IsAnimationDone(&D_86B10850) != 0) {
-                D_86B10BD0.unk_00++;
+            if (ModelAnim_IsAnimationDone(&sGameBoyDisplayObject) != 0) {
+                sSceneState.step++;
             }
             break;
 
@@ -414,6 +474,9 @@ s32 FirstClearBonus_UpdateScene(void) {
     return sp24;
 }
 
+/**
+ * Fades in over 10 frames, runs the scene until it finishes, then fades to white over 8 frames.
+ */
 void FirstClearBonus_RunLoop(void) {
     s32 i;
     s32 var_s2 = 1;
@@ -445,35 +508,44 @@ void FirstClearBonus_RunLoop(void) {
     StageLoader_RunFrames(2);
 }
 
+/**
+ * Builds the scene and loads the Game Boy model: archive entry 0xD5 for mode 22 (Doduo) or 0xD4 for
+ * mode 23 (Dodrio), hidden until FirstClearBonus_UpdateScene starts.
+ */
 void FirstClearBonus_InitScene(void) {
     MemoryBlock* temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
 
-    D_86B10848 = process_geo_layout(temp_v0, &sFirstClearBonusGeoLayout);
+    sGameBoySceneRoot = process_geo_layout(temp_v0, &sFirstClearBonusGeoLayout);
     MainPool_FinalizeAllocation(temp_v0);
 
     ModelRenderer_InitDisplayRoots();
     FirstClearBonus_InitCamera();
     FirstClearBonus_InitState();
-    FirstClearBonus_ShowDialogBox();
-    ModelRenderer_AttachDisplayObject(&D_86B10850);
+    FirstClearBonus_CloseDialog();
+    ModelRenderer_AttachDisplayObject(&sGameBoyDisplayObject);
     PokeIcon_OpenModelArchives();
 
     if (gSessionContext.mode == 0x16) {
-        D_86B10844 = Model_LoadByArchiveIndex(0xD5);
-        Model_InitDisplayObject(&D_86B10850, 0, 0xD5, D_86B10844->unk_08->unk_00[0]);
+        sGameBoyModelData = Model_LoadByArchiveIndex(0xD5);
+        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD5, sGameBoyModelData->unk_08->unk_00[0]);
     } else {
-        D_86B10844 = Model_LoadByArchiveIndex(0xD4);
-        Model_InitDisplayObject(&D_86B10850, 0, 0xD4, D_86B10844->unk_08->unk_00[0]);
+        sGameBoyModelData = Model_LoadByArchiveIndex(0xD4);
+        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD4, sGameBoyModelData->unk_08->unk_00[0]);
     }
 
-    ModelAnim_SetAnimation(&D_86B10850, 0);
+    ModelAnim_SetAnimation(&sGameBoyDisplayObject, 0);
 
-    D_86B10850.node.renderFlags &= ~0x20;
-    D_86B10850.node.flags &= ~1;
+    sGameBoyDisplayObject.node.renderFlags &= ~0x20;
+    sGameBoyDisplayObject.node.flags &= ~1;
 
-    Vec3f_SetComponentsDuplicate(&D_86B10850.position, 0.0f, 11.0f, -105.0f);
+    Vec3f_SetComponentsDuplicate(&sGameBoyDisplayObject.position, 0.0f, 11.0f, -105.0f);
 }
 
+/**
+ * Entry point for demo-scene modes 22 and 23, run after a clear that speeds up the GB Tower
+ * (transitionFlags & 8 / & 0x10) //@src/game_state.c. Backgrounds archive file 0x12 or 0x13 is the GB
+ * Building backdrop.
+ */
 s32 Stage_ShowFirstClearBonusScene(void) {
     StageContext* sp24;
 
@@ -493,11 +565,11 @@ s32 Stage_ShowFirstClearBonusScene(void) {
 #endif
 
     if (gSessionContext.mode == 0x16) {
-        D_86B109BC = ASSET_LOAD2(backgrounds, 1, 1);
-        D_86B109C0 = BinArchive_GetFile(D_86B109BC, 0x12);
+        sGameBoyBackgroundArchive = ASSET_LOAD2(backgrounds, 1, 1);
+        sGameBoyBackgroundTiles = BinArchive_GetFile(sGameBoyBackgroundArchive, 0x12);
     } else {
-        D_86B109BC = ASSET_LOAD2(backgrounds, 1, 1);
-        D_86B109C0 = BinArchive_GetFile(D_86B109BC, 0x13);
+        sGameBoyBackgroundArchive = ASSET_LOAD2(backgrounds, 1, 1);
+        sGameBoyBackgroundTiles = BinArchive_GetFile(sGameBoyBackgroundArchive, 0x13);
     }
 
     FirstClearBonus_InitScene();

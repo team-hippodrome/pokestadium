@@ -35,62 +35,64 @@ extern u8 D_300C2D0[];
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
 
-typedef struct unk_D_86B0DBCC {
-    /* 0x00 */ f32 unk_00;
+typedef struct GiftModelPlacement {
+    /* 0x00 */ f32 scaleThousandths;
     /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-} unk_D_86B0DBCC; // size = 0x10
+    /* 0x08 */ f32 offsetY;
+    /* 0x0C */ f32 offsetZ;
+} GiftModelPlacement; // size = 0x10
 
-typedef struct unk_D_86B0DB98 {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ s16 unk_04;
-} unk_D_86B0DB98; // size = 0x8
+typedef struct TextureAnimFrame {
+    /* 0x00 */ u8* texture;
+    /* 0x04 */ s16 duration;
+} TextureAnimFrame; // size = 0x8
 
-typedef struct unk_D_86B0EBD8 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
+typedef struct CompletionBanner {
+    /* 0x00 */ s32 pokemonX;
+    /* 0x04 */ s32 pokemonY;
+    /* 0x08 */ s32 presentX;
+    /* 0x0C */ s32 presentY;
     /* 0x10 */ char unk10[0x8];
-    /* 0x18 */ s32 unk_18;
-    /* 0x30 */ GfxTileParams unk_1C;
-} unk_D_86B0EBD8; // size = 0x4C
+    /* 0x18 */ s32 colorStep;
+    /* 0x1C */ GfxTileParams colors;
+} CompletionBanner; // size = 0x4C
 
-typedef struct unk_D_86B0EBDC {
-    /* 0x000 */ unk_D_86002F30* unk_000;
-    /* 0x004 */ unk_D_86002F30* unk_004;
-    /* 0x008 */ DisplayObject unk_008;
-    /* 0x170 */ DisplayObject unk_170;
-    /* 0x2D8 */ s32 unk_2D8;
-    /* 0x2DC */ s32 unk_2DC;
+typedef struct CompletionScene {
+    /* 0x000 */ unk_D_86002F30* anchorModel;
+    /* 0x004 */ unk_D_86002F30* giftModel;
+    /* 0x008 */ DisplayObject anchorObject;
+    /* 0x170 */ DisplayObject giftObject;
+    /* 0x2D8 */ s32 oakIsHolding;
+    /* 0x2DC */ s32 sceneStep;
     /* 0x2E0 */ char unk2E0[0x4];
-    /* 0x2E4 */ s32 unk_2E4;
-    /* 0x2E8 */ s32 unk_2E8;
-    /* 0x2EC */ s32 unk_2EC;
-    /* 0x2F0 */ s32 unk_2F0;
-    /* 0x2F4 */ f32 unk_2F4;
+    /* 0x2E4 */ s32 stepTimer;
+    /* 0x2E8 */ s32 oakHeldSpecies;
+    /* 0x2EC */ s32 giftSpecies;
+    /* 0x2F0 */ s32 acceptGift;
+    /* 0x2F4 */ f32 giftScale;
     /* 0x2F8 */ char unk2F8[0x4];
-    /* 0x2FC */ f32 unk_2FC;
-    /* 0x300 */ f32 unk_300;
-    /* 0x304 */ s32 unk_304;
-    /* 0x308 */ s32 unk_308;
-} unk_D_86B0EBDC; // size = 0x30C
+    /* 0x2FC */ f32 giftOffsetY;
+    /* 0x300 */ f32 giftOffsetZ;
+    /* 0x304 */ s32 idleCueTimer;
+    /* 0x308 */ s32 idleCueActive;
+} CompletionScene; // size = 0x30C
 
-typedef struct unk_D_86B0EBE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
+typedef struct CompletionDialog {
+    /* 0x00 */ s32 state;
+    /* 0x04 */ s32 charIndex;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ s32 height;
     /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s16 unk_1C;
-} unk_D_86B0EBE0; // size = 0x20
+    /* 0x14 */ s16 centerY;
+    /* 0x16 */ s16 left;
+    /* 0x18 */ s16 awaitingA;
+    /* 0x1A */ s16 promptFrameTimer;
+    /* 0x1C */ s16 promptFrame;
+} CompletionDialog; // size = 0x20
 
-u32 sTransitionGradientTex[] = {
+// 4x128 RGBA16 sky gradient for the flying group, light blue at the top to blue at the bottom.
+// #CEFFFF to #527BFF
+u32 sDioramaSkyGradientTex[] = {
     0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xCFFFCFFF, 0xC7FFC7FF,
     0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF,
     0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF, 0xC7FFC7FF,
@@ -121,6 +123,7 @@ u32 sTransitionGradientTex[] = {
     0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF,
     0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF,
 };
+// Camera keyframes for groups 0-3 of the boot diorama.
 DioramaAnimData sDioramaAnimData[] = {
     {
         0,
@@ -218,6 +221,8 @@ DioramaAnimData sDioramaAnimData[] = {
         255.0f,
     },
 };
+// Camera focus and light settings for groups 0-4. Group 3 (water) has a blue light tint
+// (#9B9BFF) that rotates 1820 (0x71C) per frame.
 DioramaPresetData sDioramaPresetData[] = {
     {
         { 0.0f, 60.0f, 0.0f },
@@ -275,26 +280,31 @@ DioramaPresetData sDioramaPresetData[] = {
         0,
     },
 };
-static DioramaObjectDef sDioramaObjDef0[] = {
+// Group 0: Blastoise, Rhydon, Kangaskhan, Machoke. Model 152 (0x98) ends each list.
+static DioramaObjectDef sDioramaObjDefGroundGroupA[] = {
     { { 240.0f, 0.0f, 0.0f }, 9, 2, 0, 0 },    { { 160.0f, 0.0f, 0.0f }, 112, 2, 0, 0 },
     { { 80.0f, 0.0f, 0.0f }, 115, 2, 0, 0 },   { { 10.0f, 0.0f, 10.0f }, 67, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
-static DioramaObjectDef sDioramaObjDef1[] = {
+// Group 1: Nidoking, Sandslash, Scyther, Kabutops.
+static DioramaObjectDef sDioramaObjDefGroundGroupB[] = {
     { { -10.0f, 0.0f, 10.0f }, 34, 2, 0, 0 },     { { -60.0f, 0.0f, 20.0f }, 28, 2, 0, 0 },
     { { -120.0f, 10.0f, -30.0f }, 123, 2, 0, 0 }, { { -180.0f, 0.0f, 0.0f }, 141, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
+// Group 2, over the clouds: Pidgeot, Fearow, Aerodactyl, Charizard.
 static DioramaObjectDef sDioramaObjDefFlyingGroup[] = {
     { { 0.0f, -100.0f, -750.0f }, 18, 2, 0, 0 },  { { -35.0f, 40.0f, -350.0f }, 22, 2, 0, 0 },
     { { 78.0f, -50.0f, -150.0f }, 142, 2, 0, 0 }, { { -18.0f, -30.0f, 450.0f }, 6, 2, 10, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
+// Group 3, over the water: Seaking, Dewgong, Goldeen, Tentacruel.
 static DioramaObjectDef sDioramaObjDefWaterGroup[] = {
     { { 0.0f, 30.0f, -900.0f }, 119, 2, 0, 0 },   { { 15.0f, 10.0f, -250.0f }, 87, 2, 0, 0 },
     { { -38.0f, 20.0f, -550.0f }, 118, 2, 0, 0 }, { { 18.0f, 30.0f, 150.0f }, 73, 2, 0, 0 },
     { { -140.0f, 0.0f, 0.0f }, 152, 2, 0, 0 },
 };
+// Group 4, the finale: a single model 0xD7 played with its event track.
 static DioramaObjectDef sDioramaObjDefFinaleGroup[] = {
     {
         { 0.0f, 0.0f, 0.0f },
@@ -322,11 +332,12 @@ static DioramaObjectDef sDioramaObjDefFinaleGroup[] = {
 static s32 pad_D_86B0C4BC[3] = { 0, 0, 0 };
 
 DioramaObjectDef* sDioramaObjectDefs[] = {
-    sDioramaObjDef0,          sDioramaObjDef1,           sDioramaObjDefFlyingGroup,
+    sDioramaObjDefGroundGroupA,          sDioramaObjDefGroundGroupB,           sDioramaObjDefFlyingGroup,
     sDioramaObjDefWaterGroup, sDioramaObjDefFinaleGroup, NULL,
 };
 
-static u32 sDioramaLandTileData[] = {
+// 32x32 IA16 cloud texture for the layer under the flying group.
+static u32 sDioramaCloudTexture[] = {
     0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF,
     0xE6FFEEFF, 0xF8FEFFFB, 0xFFD3FB4D, 0xF309E701, 0xD405C12D, 0xBAA1C5E9, 0xD7F9E2FF, 0xE4FFE4FF, 0xE4FFE4FF,
     0xE5FFE5FF, 0xE5FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE4FFE4FF, 0xE5FFE6FF, 0xEAFFF2FF, 0xFCFFFFFC,
@@ -386,11 +397,11 @@ static u32 sDioramaLandTileData[] = {
     0xE4FFE4FF, 0xE5FFECFF, 0xF6FEFDFB, 0xFFDCFC6C, 0xF11DE50A, 0xD611C849, 0xC2A3C5DD, 0xCDF7D9FE,
 };
 
-static unk_D_86002F34_018 sDioramaLandGfxTileParams = {
-    0x03, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaLandTileData,
+static unk_D_86002F34_018 sDioramaCloudTextureInfo = {
+    0x03, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaCloudTexture,
 };
 
-static Gfx sDioramaLandGfxSetupDL[] = {
+static Gfx sDioramaCloudTextureSetupDL[] = {
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD,
                 G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -401,7 +412,7 @@ static Gfx sDioramaLandGfxSetupDL[] = {
     gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 0x007C, 0x007C),
     gsSPEndDisplayList(),
 };
-static Vtx sDioramaLandTileVerts[] = {
+static Vtx sDioramaCloudVertices[] = {
     VTX(-3000, -9000, 0, 1024, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-3000, -3000, 0, 1024, -1024, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-9000, -3000, 0, 0, -1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -419,14 +430,14 @@ static Vtx sDioramaLandTileVerts[] = {
     VTX(3000, -9000, 0, 2048, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(9000, -9000, 0, 3072, -2048, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx sDioramaLandTileDrawDL[] = {
+static Gfx sDioramaCloudDrawDL[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0,
                        COMBINED, 0, PRIMITIVE, 0),
     gsDPSetEnvColor(255, 255, 255, 125),
     gsDPSetFogColor(191, 248, 255, 255),
     gsSPFogPosition(995, 1000),
-    gsSPVertex(sDioramaLandTileVerts, 16, 0),
+    gsSPVertex(sDioramaCloudVertices, 16, 0),
     gsSPSetGeometryMode(G_CULL_BACK | G_FOG),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(1, 4, 5, 0, 1, 5, 2, 0),
@@ -455,17 +466,17 @@ static u8 sDioramaTileMisc1[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFC, 0x00, 0x01, 0x00, 0x00,
 };
 static u8* sDioramaTileAttrTable0[] = {
-    sDioramaLandTileData, sDioramaTileAttr0, sDioramaTileMisc0, NULL, NULL, NULL, NULL, NULL,
+    sDioramaCloudTexture, sDioramaTileAttr0, sDioramaTileMisc0, NULL, NULL, NULL, NULL, NULL,
 };
 static u8* sDioramaTileAttrTable1[] = {
-    sDioramaLandTileData, sDioramaTileAttr1, sDioramaTileMisc1, NULL, NULL, NULL, NULL, NULL,
+    sDioramaCloudTexture, sDioramaTileAttr1, sDioramaTileMisc1, NULL, NULL, NULL, NULL, NULL,
 };
-static unk_D_86002F34_000_014 sDioramaTileAttrSet = {
+static unk_D_86002F34_000_014 sDioramaCloudTileAttrSet = {
     sDioramaTileAttrTable0,
     sDioramaTileAttrTable1,
 };
 
-static u32 sDioramaLandTileLayout[] = {
+static u32 sDioramaCloudMeshLayout[] = {
     0x09000000,
     0x05000000,
     0x09000000,
@@ -475,28 +486,28 @@ static u32 sDioramaLandTileLayout[] = {
     0x13000005,
     0x03E303E8,
     0x2309FFFF,
-    (u32)sDioramaLandGfxSetupDL,
+    (u32)sDioramaCloudTextureSetupDL,
     0x0000FFFF,
     0xFFFFFFFF,
     0x22050000,
     0x00000000,
     0x08000000,
     0x810001D0,
-    (u32)&sDioramaTileAttrSet,
+    (u32)&sDioramaCloudTileAttrSet,
     0x22050000,
-    (u32)sDioramaLandTileDrawDL,
+    (u32)sDioramaCloudDrawDL,
     0x06000000,
     0x06000000,
     0x06000000,
     0x04000000,
 };
 
-u32 sDioramaLandStageLayout[] = {
+u32 sDioramaCloudLayerLayout[] = {
     0x17000001,
     0x00000010,
-    &sDioramaLandGfxTileParams,
+    &sDioramaCloudTextureInfo,
     0x00000000,
-    sDioramaLandTileVerts,
+    sDioramaCloudVertices,
     0x05000000,
     0x1C000000,
     0x00008000,
@@ -504,14 +515,15 @@ u32 sDioramaLandStageLayout[] = {
     0x00008000,
     0x05000000,
     0x03000000,
-    sDioramaLandTileLayout,
+    sDioramaCloudMeshLayout,
     0x06000000,
     0x06000000,
     0x01000000,
     0x00000000,
 };
 
-static u32 sDioramaSeaTileData[] = {
+// 32x32 RGBA16 water surface texture for the water group.
+static u32 sDioramaWaterTexture[] = {
     0x322B3AB3, 0x63B77C77, 0x5B73322F, 0x21ED21ED, 0x21EB21AB, 0x21A919A9, 0x19A921A9, 0x19A51963, 0x29E93A71,
     0x42F16BF1, 0x84735B2B, 0x3A2729E5, 0x2161215F, 0x21A52A2D, 0x29E7191B, 0x191B29E1, 0x32335B79, 0x747963B7,
     0x2A2F116D, 0x19AD21AD, 0x21AB1167, 0x112508E3, 0x09231123, 0x08DF08DD, 0x196729ED, 0x3A29636B, 0x63AD4269,
@@ -570,10 +582,10 @@ static u32 sDioramaSeaTileData[] = {
     0x10D71919, 0x29E129ED, 0x32334AF5, 0x6BF763B3, 0x42AF29ED, 0x21AD21AB, 0x196721A7, 0x19A921A9, 0x21E929EB,
     0x29EB3A71, 0x4B357439, 0x6BF7532F, 0x532B4AA9, 0x3A273229, 0x326F3AB3, 0x2A2B195D, 0x1919299D,
 };
-static unk_D_86002F34_018 sDioramaSeaGfxTileParams = {
-    0x00, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaSeaTileData,
+static unk_D_86002F34_018 sDioramaWaterTextureInfo = {
+    0x00, unk_D_86002F34_018_GFX_TYPE_2, 32, 32, 0x0400, sDioramaWaterTexture,
 };
-static Gfx sDioramaSeaGfxSetupDL[] = {
+static Gfx sDioramaWaterTextureSetupDL[] = {
     gsDPSetTile(G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0x0000, G_TX_LOADTILE, 0, G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD,
                 G_TX_MIRROR | G_TX_WRAP, 5, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -584,7 +596,7 @@ static Gfx sDioramaSeaGfxSetupDL[] = {
     gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 0x007C, 0x007C),
     gsSPEndDisplayList(),
 };
-static Vtx sDioramaSeaTileVerts[] = {
+static Vtx sDioramaWaterVertices[] = {
     VTX(-18000, 0, 9000, 0, 4710, 0xFF, 0xFF, 0xFF, 0xFF),    VTX(-18000, 0, 3000, 0, 3482, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-6000, 0, 3000, 2458, 3482, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(-6000, 0, 9000, 2458, 4710, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-18000, 0, -3000, 0, 2253, 0xFF, 0xFF, 0xFF, 0xFF),   VTX(-6000, 0, -3000, 2458, 2253, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -594,14 +606,14 @@ static Vtx sDioramaSeaTileVerts[] = {
     VTX(18000, 0, 3000, 7373, 3482, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(6000, 0, 3000, 4915, 3482, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(18000, 0, 9000, 7373, 4710, 0xFF, 0xFF, 0xFF, 0xFF),  VTX(6000, 0, 9000, 4915, 4710, 0xFF, 0xFF, 0xFF, 0xFF),
 };
-static Gfx sDioramaSeaTileDrawDL[] = {
+static Gfx sDioramaWaterDrawDL[] = {
     gsSPClearGeometryMode(G_LIGHTING),
     gsDPSetCombineLERP(TEXEL1, TEXEL0, ENV_ALPHA, TEXEL0, TEXEL1, TEXEL0, ENVIRONMENT, TEXEL0, COMBINED, 0, SHADE, 0,
                        COMBINED, 0, PRIMITIVE, 0),
     gsDPSetEnvColor(255, 255, 255, 115),
     gsDPSetFogColor(0, 0, 0, 255),
     gsSPFogPosition(987, 1000),
-    gsSPVertex(sDioramaSeaTileVerts, 16, 0),
+    gsSPVertex(sDioramaWaterVertices, 16, 0),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(1, 4, 5, 0, 1, 5, 2, 0),
@@ -630,16 +642,16 @@ static u8 sDioramaTileMisc3[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x00,
 };
 static u8* sDioramaTileAttrTable2[] = {
-    sDioramaSeaTileData, sDioramaTileAttr2, sDioramaTileMisc2, NULL, NULL, NULL, NULL, NULL,
+    sDioramaWaterTexture, sDioramaTileAttr2, sDioramaTileMisc2, NULL, NULL, NULL, NULL, NULL,
 };
 static u8* sDioramaTileAttrTable3[] = {
-    sDioramaSeaTileData, sDioramaTileAttr3, sDioramaTileMisc3, NULL, NULL, NULL, NULL, NULL,
+    sDioramaWaterTexture, sDioramaTileAttr3, sDioramaTileMisc3, NULL, NULL, NULL, NULL, NULL,
 };
-static unk_D_86002F34_000_014 sDioramaSeaTileAttrSet = {
+static unk_D_86002F34_000_014 sDioramaWaterTileAttrSet = {
     sDioramaTileAttrTable2,
     sDioramaTileAttrTable3,
 };
-static u32 sDioramaSeaTileLayout[] = {
+static u32 sDioramaWaterMeshLayout[] = {
     0x09000000,
     0x05000000,
     0x09000000,
@@ -649,27 +661,27 @@ static u32 sDioramaSeaTileLayout[] = {
     0x13000005,
     0x03E303E8,
     0x2306FFFF,
-    sDioramaSeaGfxSetupDL,
+    sDioramaWaterTextureSetupDL,
     0x0000FFFF,
     0xFFFFFFFF,
     0x22010000,
     0x00000000,
     0x08000000,
     0x810001D0,
-    &sDioramaSeaTileAttrSet,
+    &sDioramaWaterTileAttrSet,
     0x22010000,
-    sDioramaSeaTileDrawDL,
+    sDioramaWaterDrawDL,
     0x06000000,
     0x06000000,
     0x06000000,
     0x04000000,
 };
-u32 sDioramaSeaStageLayout[] = {
+u32 sDioramaWaterLayerLayout[] = {
     0x17000001,
     0x00000010,
-    &sDioramaSeaGfxTileParams,
+    &sDioramaWaterTextureInfo,
     0x00000000,
-    sDioramaSeaTileVerts,
+    sDioramaWaterVertices,
     0x05000000,
     0x1C000000,
     0x00008000,
@@ -677,13 +689,14 @@ u32 sDioramaSeaStageLayout[] = {
     0x00008000,
     0x05000000,
     0x03000000,
-    sDioramaSeaTileLayout,
+    sDioramaWaterMeshLayout,
     0x06000000,
     0x06000000,
     0x01000000,
     0x00000000,
 };
-static GfxTileParams sDioramaTileParams[] = {
+// Banner gradient colors: start, middle and end colors, each with the per-frame step used to reach it.
+static GfxTileParams sCompletionBannerColors[] = {
     { {
           0x00FF,
           0x00FF,
@@ -770,26 +783,31 @@ static GfxTileParams sDioramaTileParams[] = {
       } },
 };
 
-static u32 sCompletionMsgId_Intro = 0x95;
-static u32 sCompletionMsgId_Confirm = 0x97;
-static u32 sCompletionMsgId_Success = 0x98;
-static u32 sCompletionMsgId_IntroWithExisting = 0x95;
-static u32 sCompletionMsgId_ConfirmWithExisting = 0x99;
-static u32 sCompletionMsgId_SuccessWithExisting = 0x9A;
-static u32 sCompletionMsgId_Failure = 0x9B;
-static u32 sCompletionMsgId_Timeout = 0x9C;
-static u32 sCompletionMsgId_Complete = 0x98;
-static u32 sCompletionMsgId_Extra = 0x9D;
+// Message IDs in string table 0x1E used by the present dialog.
+static u32 sGiftMsgYouWon = 0x95;
+static u32 sGiftMsgReceived = 0x97;
+static u32 sGiftMsgGoToLab = 0x98;
+static u32 sGiftMsgYouWonOakHolding = 0x95;
+static u32 sGiftMsgOakAlreadyHolding = 0x99;
+static u32 sGiftMsgOakHoldsOnlyOne = 0x9A;
+static u32 sGiftMsgReleasePrompt = 0x9B;
+static u32 sGiftMsgReleasedAndGot = 0x9C;
+static u32 sGiftMsgGoToLabAfterSwap = 0x98;
+static u32 sGiftMsgGaveUp = 0x9D;
 
-static unk_D_86B0DB98 sDioramaCursorIconAnimTable[] = {
+// Frames (texture, duration) of the animated A-button icon.
+static TextureAnimFrame sCompletionAButtonFrames[] = {
     { D_300BAD0, 14 }, { D_300BED0, 2 }, { D_300C2D0, 6 }, { D_300BED0, 2 }, { NULL, 0 },
 };
 
-static u8 sDioramaRandomTable[] = {
+// Present species: Bulbasaur, Charmander, Squirtle, Hitmonlee, Hitmonchan, Eevee, Omanyte,
+// Kabuto (random after Gym Leader Castle), and Psyduck (after the Hall of Fame).
+static u8 sCompletionGiftSpecies[] = {
     0x01, 0x04, 0x07, 0x6A, 0x6B, 0x85, 0x8A, 0x8C, 0x36,
 };
 
-static unk_D_86B0DBCC sDioramaObjPresetTable[] = {
+// Scale (in thousandths) and offset of each present species on model 0xD3.
+static GiftModelPlacement sCompletionGiftPlacement[] = {
     { 1270.0f, 0.0f, 27.0f, 0.0f },
     { 1783.0f, 0.0f, 27.0f, 0.0f },
     { 2120.0f, 0.0f, 25.799999237060547f, 0.0f },
@@ -821,22 +839,31 @@ static u32 sCompletionGeoLayout[] = {
     0x01000000,
 };
 
-static GraphNode* D_86B0EBC0;
-static CameraNode* D_86B0EBC4;
-static s16 D_86B0EBC8;
-static s16 D_86B0EBCA;
-static f32 D_86B0EBCC;
+static GraphNode* sCompletionRootNode;
+static CameraNode* sCompletionCamera;
+static s16 sCompletionCameraRotationX;
+static s16 sCompletionCameraRotationY;
+static f32 sCompletionCameraDistance;
 static char** sBattleMessagesTable;
 static char** sPokemonNameTable;
-static unk_D_86B0EBD8* D_86B0EBD8;
-static unk_D_86B0EBDC* D_86B0EBDC;
-static unk_D_86B0EBE0* D_86B0EBE0;
-static u8 D_86B0EBE8[0xA60];
-static u8 D_86B0F648[0x180];
-static s8 D_86B0F7C8[0x100];
-static s8 D_86B0F8C8[0x100];
-static s32 D_86B0F9C8;
+static CompletionBanner* sCompletionBanner;
+static CompletionScene* sCompletionScene;
+static CompletionDialog* sCompletionDialog;
+// The gift species' PokemonBattleCues, loaded as one 0xBC0-byte block into these two arrays.
+// sGiftBattleCues[0xA51] is the idle event track; sGiftBattleCuesTail[0] is the animation
+// played when the Pokémon is received.
+static u8 sGiftBattleCues[0xA60];
+static u8 sGiftBattleCuesTail[0x180];
+// Full text of the current message, and the part revealed so far.
+static s8 sCompletionDialogText[0x100];
+static s8 sCompletionDialogRevealed[0x100];
+// Index into sCompletionGiftSpecies and sCompletionGiftPlacement.
+static s32 sGiftIndex;
 
+/**
+ * Geo callback that points the first light 0x2000 away from the camera direction so the
+ * lighting follows the camera.
+ */
 s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     unk_D_86002F34_alt18* ptr = (unk_D_86002F34_alt18*)arg1;
     f32 sp28;
@@ -852,6 +879,9 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback that points the second light relative to the camera direction.
+ */
 s32 Completion_LightAngleCallbackB(s32 arg0, GraphNode* arg1) {
     unk_D_86002F34_alt18* ptr = (unk_D_86002F34_alt18*)arg1;
     f32 sp28;
@@ -867,20 +897,25 @@ s32 Completion_LightAngleCallbackB(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
-void Completion_SelectBonusPokemon(void) {
+/**
+ * Chooses the Pokémon given as the present. After the Hall of Fame (mode 0x1A) it is always
+ * Psyduck (index 8); otherwise one of the eight entries 0-7 of sCompletionGiftSpecies is picked
+ * at random. Also reads whether PROF. OAK already holds a Pokémon for the player.
+ */
+void Completion_SelectGiftPokemon(void) {
     s32 temp_s0 = osGetCount() & 0xFF;
     s32 var_v0;
 
-    D_86B0EBDC->unk_2F0 = 0;
+    sCompletionScene->acceptGift = 0;
     Save_EnsureBankLoaded(2);
     var_v0 = Save_GetSelectedPokemonId() & 0xFF;
 
-    D_86B0EBDC->unk_2E8 = var_v0;
+    sCompletionScene->oakHeldSpecies = var_v0;
 
     if (var_v0 == 0) {
-        D_86B0EBDC->unk_2D8 = 0;
+        sCompletionScene->oakIsHolding = 0;
     } else {
-        D_86B0EBDC->unk_2D8 = 1;
+        sCompletionScene->oakIsHolding = 1;
     }
 
     while (temp_s0-- > 0) {
@@ -888,157 +923,186 @@ void Completion_SelectBonusPokemon(void) {
     }
 
     if (gSessionContext.mode == 0x1A) {
-        D_86B0F9C8 = 8;
-        D_86B0EBDC->unk_2EC = sDioramaRandomTable[D_86B0F9C8];
+        sGiftIndex = 8;
+        sCompletionScene->giftSpecies = sCompletionGiftSpecies[sGiftIndex];
     } else {
-        D_86B0F9C8 = MathUtil_Random_ZeroOne() * 8.0f;
-        if (D_86B0F9C8 >= 8) {
-            D_86B0F9C8 = 1;
+        sGiftIndex = MathUtil_Random_ZeroOne() * 8.0f;
+        if (sGiftIndex >= 8) {
+            sGiftIndex = 1;
         }
-        D_86B0EBDC->unk_2EC = sDioramaRandomTable[D_86B0F9C8];
+        sCompletionScene->giftSpecies = sCompletionGiftSpecies[sGiftIndex];
     }
 }
 
+/**
+ * Loads the anchor model 0xD3 (probably the present box) and the gift Pokémon's model, scales and offsets the gift
+ * for its species, and loads the gift species' battle cues (for its idle event track and the
+ * animation played when it is received). Also sets up the podium actors.
+ */
 void Completion_LoadModels(void) {
     u8* temp_a1;
 
     main_pool_push_state('MONS');
 
-    ModelRenderer_AttachDisplayObject(&D_86B0EBDC->unk_008);
+    ModelRenderer_AttachDisplayObject(&sCompletionScene->anchorObject);
     PokeIcon_OpenModelArchives();
 
-    D_86B0EBDC->unk_000 = Model_LoadByArchiveIndex(0xD3);
-    D_86B0EBDC->unk_008.effectSlot = 0xFF;
+    sCompletionScene->anchorModel = Model_LoadByArchiveIndex(0xD3);
+    sCompletionScene->anchorObject.effectSlot = 0xFF;
 
-    Model_InitDisplayObject(&D_86B0EBDC->unk_008, 0, 0xD3, D_86B0EBDC->unk_000->unk_08->unk_00[0]);
-    ModelAnim_SetAnimation(&D_86B0EBDC->unk_008, 0);
-    ModelRenderer_AttachDisplayObject(&D_86B0EBDC->unk_170);
+    Model_InitDisplayObject(&sCompletionScene->anchorObject, 0, 0xD3, sCompletionScene->anchorModel->unk_08->unk_00[0]);
+    ModelAnim_SetAnimation(&sCompletionScene->anchorObject, 0);
+    ModelRenderer_AttachDisplayObject(&sCompletionScene->giftObject);
     PokeIcon_OpenModelArchives();
 
-    D_86B0EBDC->unk_004 = Model_LoadByArchiveIndex(D_86B0EBDC->unk_2EC);
-    D_86B0EBDC->unk_170.effectSlot = 0;
-    Model_InitDisplayObject(&D_86B0EBDC->unk_170, 0, D_86B0EBDC->unk_2EC, D_86B0EBDC->unk_004->unk_08->unk_00[0]);
-    ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, 0);
-    D_86B0EBDC->unk_170.node.renderFlags &= ~0x40;
+    sCompletionScene->giftModel = Model_LoadByArchiveIndex(sCompletionScene->giftSpecies);
+    sCompletionScene->giftObject.effectSlot = 0;
+    Model_InitDisplayObject(&sCompletionScene->giftObject, 0, sCompletionScene->giftSpecies, sCompletionScene->giftModel->unk_08->unk_00[0]);
+    ModelAnim_SetAnimation(&sCompletionScene->giftObject, 0);
+    sCompletionScene->giftObject.node.renderFlags &= ~0x40;
 
-    D_86B0EBDC->unk_170.scale.x = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
-    D_86B0EBDC->unk_170.scale.y = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
-    D_86B0EBDC->unk_170.scale.z = D_86B0EBDC->unk_2F4 = sDioramaObjPresetTable[D_86B0F9C8].unk_00 / 1000.0f;
+    sCompletionScene->giftObject.scale.x = sCompletionScene->giftScale = sCompletionGiftPlacement[sGiftIndex].scaleThousandths / 1000.0f;
+    sCompletionScene->giftObject.scale.y = sCompletionScene->giftScale = sCompletionGiftPlacement[sGiftIndex].scaleThousandths / 1000.0f;
+    sCompletionScene->giftObject.scale.z = sCompletionScene->giftScale = sCompletionGiftPlacement[sGiftIndex].scaleThousandths / 1000.0f;
 
-    D_86B0EBDC->unk_2FC = sDioramaObjPresetTable[D_86B0F9C8].unk_08;
-    D_86B0EBDC->unk_300 = sDioramaObjPresetTable[D_86B0F9C8].unk_0C;
-    D_86B0EBDC->unk_170.position.y = -100.0f;
-    D_86B0EBDC->unk_008.node.renderFlags &= ~0x20;
-    D_86B0EBDC->unk_170.node.flags &= ~1;
+    sCompletionScene->giftOffsetY = sCompletionGiftPlacement[sGiftIndex].offsetY;
+    sCompletionScene->giftOffsetZ = sCompletionGiftPlacement[sGiftIndex].offsetZ;
+    sCompletionScene->giftObject.position.y = -100.0f;
+    sCompletionScene->anchorObject.node.renderFlags &= ~0x20;
+    sCompletionScene->giftObject.node.flags &= ~1;
 
-    temp_a1 = _70D3A0_ROM_START + (D_80075BD0[D_86B0EBDC->unk_2EC - 1] & 0xFFFFFF);
-    Dma_WriteChunks(D_86B0EBE8, temp_a1, temp_a1 + 0xBC0, 0);
-    D_86B0EBDC->unk_308 = 0;
+    temp_a1 = _70D3A0_ROM_START + (D_80075BD0[sCompletionScene->giftSpecies - 1] & 0xFFFFFF);
+    Dma_WriteChunks(sGiftBattleCues, temp_a1, temp_a1 + 0xBC0, 0);
+    sCompletionScene->idleCueActive = 0;
     miniRankingActorsInit();
 }
 
+/**
+ * Starts the scene at step 0.
+ */
 void Completion_ResetSceneStep(void) {
-    D_86B0EBDC->unk_2DC = 0;
+    sCompletionScene->sceneStep = 0;
 }
 
+/**
+ * Sets the dialog to its idle state (0xB) with no A prompt.
+ */
 void Completion_ResetDialogToIdle(void) {
-    D_86B0EBE0->unk_00 = 0xB;
-    D_86B0EBE0->unk_18 = 0;
+    sCompletionDialog->state = 0xB;
+    sCompletionDialog->awaitingA = 0;
 }
 
-void Completion_PositionBonusModel(void) {
+/**
+ * Places the gift Pokémon on anchor point 1 of model 0xD3, plus the species offset.
+ */
+void Completion_PositionGiftModel(void) {
     Vec3f sp1C;
 
-    if (GeoRender_FindAnchorPosition(&D_86B0EBDC->unk_008, 1, &sp1C) != NULL) {
-        D_86B0EBDC->unk_170.position.x = sp1C.x;
-        D_86B0EBDC->unk_170.position.y = D_86B0EBDC->unk_2FC + sp1C.y;
-        D_86B0EBDC->unk_170.position.z = D_86B0EBDC->unk_300 + sp1C.z;
+    if (GeoRender_FindAnchorPosition(&sCompletionScene->anchorObject, 1, &sp1C) != NULL) {
+        sCompletionScene->giftObject.position.x = sp1C.x;
+        sCompletionScene->giftObject.position.y = sCompletionScene->giftOffsetY + sp1C.y;
+        sCompletionScene->giftObject.position.z = sCompletionScene->giftOffsetZ + sp1C.z;
     }
 }
 
-void Completion_InitDialogBoxParams(void) {
-    D_86B0EBD8->unk_1C.unk_00.unk_00 = sDioramaTileParams[0].unk_00.unk_00;
-    D_86B0EBD8->unk_1C.unk_00.unk_02 = sDioramaTileParams[0].unk_00.unk_02;
-    D_86B0EBD8->unk_1C.unk_00.unk_04 = sDioramaTileParams[0].unk_00.unk_04;
-    D_86B0EBD8->unk_1C.unk_00.unk_06 = sDioramaTileParams[0].unk_00.unk_06;
-    D_86B0EBD8->unk_1C.unk_00.unk_08 = sDioramaTileParams[0].unk_00.unk_08;
-    D_86B0EBD8->unk_1C.unk_00.unk_0A = sDioramaTileParams[0].unk_00.unk_0A;
-    D_86B0EBD8->unk_1C.unk_00.unk_0C = sDioramaTileParams[0].unk_00.unk_0C;
-    D_86B0EBD8->unk_1C.unk_00.unk_0E = sDioramaTileParams[0].unk_00.unk_0E;
-    D_86B0EBD8->unk_1C.unk_00.unk_10 = sDioramaTileParams[0].unk_00.unk_10;
-    D_86B0EBD8->unk_1C.unk_00.unk_12 = sDioramaTileParams[0].unk_00.unk_12;
-    D_86B0EBD8->unk_1C.unk_00.unk_14 = sDioramaTileParams[0].unk_00.unk_14;
-    D_86B0EBD8->unk_1C.unk_00.unk_16 = sDioramaTileParams[0].unk_00.unk_16;
+/**
+ * Sets the banner's starting colors and its off-screen starting positions.
+ */
+void Completion_InitPresentBanner(void) {
+    sCompletionBanner->colors.unk_00.unk_00 = sCompletionBannerColors[0].unk_00.unk_00;
+    sCompletionBanner->colors.unk_00.unk_02 = sCompletionBannerColors[0].unk_00.unk_02;
+    sCompletionBanner->colors.unk_00.unk_04 = sCompletionBannerColors[0].unk_00.unk_04;
+    sCompletionBanner->colors.unk_00.unk_06 = sCompletionBannerColors[0].unk_00.unk_06;
+    sCompletionBanner->colors.unk_00.unk_08 = sCompletionBannerColors[0].unk_00.unk_08;
+    sCompletionBanner->colors.unk_00.unk_0A = sCompletionBannerColors[0].unk_00.unk_0A;
+    sCompletionBanner->colors.unk_00.unk_0C = sCompletionBannerColors[0].unk_00.unk_0C;
+    sCompletionBanner->colors.unk_00.unk_0E = sCompletionBannerColors[0].unk_00.unk_0E;
+    sCompletionBanner->colors.unk_00.unk_10 = sCompletionBannerColors[0].unk_00.unk_10;
+    sCompletionBanner->colors.unk_00.unk_12 = sCompletionBannerColors[0].unk_00.unk_12;
+    sCompletionBanner->colors.unk_00.unk_14 = sCompletionBannerColors[0].unk_00.unk_14;
+    sCompletionBanner->colors.unk_00.unk_16 = sCompletionBannerColors[0].unk_00.unk_16;
 
-    D_86B0EBD8->unk_00 = 0x50;
-    D_86B0EBD8->unk_04 = -0x32;
-    D_86B0EBD8->unk_08 = 0x40;
-    D_86B0EBD8->unk_0C = 0xF2;
-    D_86B0EBD8->unk_18 = 0;
+    sCompletionBanner->pokemonX = 0x50;
+    sCompletionBanner->pokemonY = -0x32;
+    sCompletionBanner->presentX = 0x40;
+    sCompletionBanner->presentY = 0xF2;
+    sCompletionBanner->colorStep = 0;
 }
 
+/**
+ * Sets up the scene camera.
+ */
 void Completion_InitCamera(void) {
-    D_86B0EBC4 = D_86B0EBC0->children;
-    D_86B0EBC8 = 0;
-    D_86B0EBCA = 0;
-    D_86B0EBCC = 120.0f;
+    sCompletionCamera = sCompletionRootNode->children;
+    sCompletionCameraRotationX = 0;
+    sCompletionCameraRotationY = 0;
+    sCompletionCameraDistance = 120.0f;
 
-    Vec3f_SetComponentsDuplicate(&D_86B0EBC4->view.targetPosition, 0.0f, 132.5f, -225.0f);
-    Camera_ComputeEyeFromAngles(&D_86B0EBC4->view.targetPosition, &D_86B0EBC4->view.eyePosition, D_86B0EBCC, D_86B0EBC8,
-                                D_86B0EBCA);
+    Vec3f_SetComponentsDuplicate(&sCompletionCamera->view.targetPosition, 0.0f, 132.5f, -225.0f);
+    Camera_ComputeEyeFromAngles(&sCompletionCamera->view.targetPosition, &sCompletionCamera->view.eyePosition, sCompletionCameraDistance, sCompletionCameraRotationX,
+                                sCompletionCameraRotationY);
 
-    D_86B0EBC4->perspective.nearPlane = 10.0f;
-    D_86B0EBC4->perspective.farPlane = 6400.0f;
-    D_86B0EBC4->perspective.verticalFieldOfView = 41.5f;
+    sCompletionCamera->perspective.nearPlane = 10.0f;
+    sCompletionCamera->perspective.farPlane = 6400.0f;
+    sCompletionCamera->perspective.verticalFieldOfView = 41.5f;
 }
 
-s32 Completion_WrapDialogText(void) {
-    if (D_86B0F7C8[D_86B0EBE0->unk_04] == 0) {
+/**
+ * Copies the next character of sCompletionDialogText into the revealed text (two bytes for
+ * a two-byte character). Returns 1 when the whole text is shown; on the last character it also
+ * turns on the A prompt.
+ */
+s32 Completion_RevealNextDialogChar(void) {
+    if (sCompletionDialogText[sCompletionDialog->charIndex] == 0) {
         return 1;
     }
 
-    if ((D_86B0F7C8[D_86B0EBE0->unk_04] == 0xA) || (D_86B0F7C8[D_86B0EBE0->unk_04] == 0x20)) {
-        D_86B0F8C8[D_86B0EBE0->unk_04] = D_86B0F7C8[D_86B0EBE0->unk_04];
-        D_86B0EBE0->unk_04++;
+    if ((sCompletionDialogText[sCompletionDialog->charIndex] == 0xA) || (sCompletionDialogText[sCompletionDialog->charIndex] == 0x20)) {
+        sCompletionDialogRevealed[sCompletionDialog->charIndex] = sCompletionDialogText[sCompletionDialog->charIndex];
+        sCompletionDialog->charIndex++;
     }
 
-    if ((D_86B0F7C8[D_86B0EBE0->unk_04] >= 0x21) && (D_86B0F7C8[D_86B0EBE0->unk_04] < 0x40)) {
-        D_86B0F8C8[D_86B0EBE0->unk_04] = D_86B0F7C8[D_86B0EBE0->unk_04];
-        D_86B0EBE0->unk_04++;
+    if ((sCompletionDialogText[sCompletionDialog->charIndex] >= 0x21) && (sCompletionDialogText[sCompletionDialog->charIndex] < 0x40)) {
+        sCompletionDialogRevealed[sCompletionDialog->charIndex] = sCompletionDialogText[sCompletionDialog->charIndex];
+        sCompletionDialog->charIndex++;
     } else {
-        if ((D_86B0F7C8[D_86B0EBE0->unk_04] == 0xA) || (D_86B0F7C8[D_86B0EBE0->unk_04] == 0x20)) {
-            D_86B0F8C8[D_86B0EBE0->unk_04] = D_86B0F7C8[D_86B0EBE0->unk_04];
-            D_86B0EBE0->unk_04++;
+        if ((sCompletionDialogText[sCompletionDialog->charIndex] == 0xA) || (sCompletionDialogText[sCompletionDialog->charIndex] == 0x20)) {
+            sCompletionDialogRevealed[sCompletionDialog->charIndex] = sCompletionDialogText[sCompletionDialog->charIndex];
+            sCompletionDialog->charIndex++;
         }
-        D_86B0F8C8[D_86B0EBE0->unk_04] = D_86B0F7C8[D_86B0EBE0->unk_04];
-        D_86B0F8C8[D_86B0EBE0->unk_04 + 1] = D_86B0F7C8[D_86B0EBE0->unk_04 + 1];
-        D_86B0EBE0->unk_04++;
+        sCompletionDialogRevealed[sCompletionDialog->charIndex] = sCompletionDialogText[sCompletionDialog->charIndex];
+        sCompletionDialogRevealed[sCompletionDialog->charIndex + 1] = sCompletionDialogText[sCompletionDialog->charIndex + 1];
+        sCompletionDialog->charIndex++;
     }
 
-    D_86B0EBE0->unk_18 = 0;
-    if (D_86B0F7C8[D_86B0EBE0->unk_04] == 0) {
-        D_86B0EBE0->unk_18 = 1;
-        D_86B0EBE0->unk_1C = 0;
-        D_86B0EBE0->unk_1A = sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_04;
+    sCompletionDialog->awaitingA = 0;
+    if (sCompletionDialogText[sCompletionDialog->charIndex] == 0) {
+        sCompletionDialog->awaitingA = 1;
+        sCompletionDialog->promptFrame = 0;
+        sCompletionDialog->promptFrameTimer = sCompletionAButtonFrames[sCompletionDialog->promptFrame].duration;
     }
 
     return 0;
 }
 
-void Completion_DrawSpeciesRewardText(s16 arg0, s16 arg1) {
+/**
+ * Draws the "Receive <Pokémon>?" prompt with YES and NO and the pointing-hand cursor next to
+ * the selected answer.
+ */
+void Completion_DrawReceivePrompt(s16 arg0, s16 arg1) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, 0xA5);
-    Font_Printf((arg0 - (Font_MeasureTextExtent(2, 0, D_86B0F7C8) / 2)) + 0x5A, arg1 + 5, D_86B0F7C8);
+    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+    Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, 0xA5);
+    Font_Printf((arg0 - (Font_MeasureTextExtent(2, 0, sCompletionDialogText) / 2)) + 0x5A, arg1 + 5, sCompletionDialogText);
     Font_Printf(arg0 + 0x28, arg1 + 0x19, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA2));
     Font_Printf(arg0 + 0x69, arg1 + 0x19, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA3));
     Font_EndTexturedTextRendering();
 
     gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
 
-    if (D_86B0EBDC->unk_2F0 == 1) {
+    if (sCompletionScene->acceptGift == 1) {
         Gfx_DrawTextureRgba16Ia8(arg0 + 0x14, arg1 + 0x19, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);
     } else {
         Gfx_DrawTextureRgba16Ia8(arg0 + 0x55, arg1 + 0x19, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);
@@ -1047,332 +1111,358 @@ void Completion_DrawSpeciesRewardText(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void Completion_DrawWrappedDialogText(s16 arg0, s16 arg1) {
+/**
+ * Draws the part of the dialog text revealed so far.
+ */
+void Completion_DrawRevealedDialogText(s16 arg0, s16 arg1) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(arg0 + 0x10, arg1 + 5, "%s", D_86B0F8C8);
+    Font_Printf(arg0 + 0x10, arg1 + 5, "%s", sCompletionDialogRevealed);
     Font_EndTexturedTextRendering();
 }
 
+/**
+ * Clears the revealed dialog text so the next message starts from its first character.
+ */
 void Completion_ResetDialogText(void) {
     s32 i;
 
-    D_86B0EBE0->unk_10 = 0;
-    D_86B0EBE0->unk_04 = 0;
+    sCompletionDialog->unk_10 = 0;
+    sCompletionDialog->charIndex = 0;
 
     // clang-format off
-    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
     // clang-format on
 }
 
+/**
+ * Draws the dialog box frame and its border.
+ */
 void Completion_DrawDialogBox(void) {
-    FirstClearBonus_DrawDialogFrame(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2),
-                                    D_86B0EBE0->unk_08, D_86B0EBE0->unk_0C, 0x14, 0x14, 0xB4, 0x80);
-    UI_DrawAlphaQuad(D_86B0EBE0->unk_16 - 2, (D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2)) - 2,
-                     D_86B0EBE0->unk_08 + 4, D_86B0EBE0->unk_0C + 4, 0);
+    FirstClearBonus_DrawDialogFrame(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2),
+                                    sCompletionDialog->width, sCompletionDialog->height, 0x14, 0x14, 0xB4, 0x80);
+    UI_DrawAlphaQuad(sCompletionDialog->left - 2, (sCompletionDialog->centerY - (sCompletionDialog->height / 2)) - 2,
+                     sCompletionDialog->width + 4, sCompletionDialog->height + 4, 0);
 }
 
-void Completion_UpdateGiftDialogFirstTime(void) {
+/**
+ * Runs the present dialog when PROF. OAK is not holding a Pokémon: "You just won <Pokémon>"
+ * (or the AMNESIA PSYDUCK message after the Hall of Fame), "Received <Pokémon>!", then the
+ * reminder to visit PROF. OAK's LAB. The gift is accepted automatically.
+ */
+void Completion_UpdateGiftDialog(void) {
     s32 i;
     s32 temp_v0;
 
-    switch (D_86B0EBE0->unk_00) {
+    switch (sCompletionDialog->state) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
+                sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
-                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Intro);
+                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+                Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgYouWon);
             }
 
-            D_86B0EBE0->unk_04 = 0;
-            D_86B0EBE0->unk_08 = 0xB4;
-            D_86B0EBE0->unk_0C = 0xA;
-            D_86B0EBE0->unk_16 = 0x46;
-            D_86B0EBE0->unk_14 = 0xC8;
+            sCompletionDialog->charIndex = 0;
+            sCompletionDialog->width = 0xB4;
+            sCompletionDialog->height = 0xA;
+            sCompletionDialog->left = 0x46;
+            sCompletionDialog->centerY = 0xC8;
 
             // clang-format off
-            for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+            for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
             // clang-format on
 
             Completion_DrawDialogBox();
-            D_86B0EBE0->unk_00++;
+            sCompletionDialog->state++;
             break;
 
         case 1:
-            temp_v0 = Math_StepToS32(D_86B0EBE0->unk_0C, 0x37, 0xA, 0xA);
-            D_86B0EBE0->unk_0C = temp_v0;
+            temp_v0 = Math_StepToS32(sCompletionDialog->height, 0x37, 0xA, 0xA);
+            sCompletionDialog->height = temp_v0;
             if (temp_v0 == 0x37) {
-                D_86B0EBE0->unk_00++;
+                sCompletionDialog->state++;
             }
             Completion_DrawDialogBox();
-            D_86B0EBE0->unk_10 = 0;
+            sCompletionDialog->unk_10 = 0;
             break;
 
         case 2:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Confirm);
-                    D_86B0EBE0->unk_00++;
+                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+                    Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReceived);
+                    sCompletionDialog->state++;
                 }
             }
             break;
 
         case 3:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if ((Completion_WrapDialogText() != 0) && (D_86B0EBE0->unk_18 == 0)) {
-                D_86B0EBDC->unk_2F0 = 1;
-                D_86B0EBE0->unk_10 = 0;
-                D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if ((Completion_RevealNextDialogChar() != 0) && (sCompletionDialog->awaitingA == 0)) {
+                sCompletionScene->acceptGift = 1;
+                sCompletionDialog->unk_10 = 0;
+                sCompletionDialog->charIndex = 0;
 
                 // clang-format off
-                for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                 // clang-format on
 
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_Success));
-                Cry_Play(D_86B0EBDC->unk_2EC, 2);
-                ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
-                D_86B0EBE0->unk_00++;
+                sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgGoToLab));
+                Cry_Play(sCompletionScene->giftSpecies, 2);
+                ModelAnim_SetAnimation(&sCompletionScene->giftObject, *sGiftBattleCuesTail);
+                sCompletionDialog->state++;
             }
             break;
 
         case 4:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if ((Completion_WrapDialogText() != 0) && (D_86B0EBE0->unk_18 == 0)) {
-                D_86B0EBE0->unk_00 = 0xC;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if ((Completion_RevealNextDialogChar() != 0) && (sCompletionDialog->awaitingA == 0)) {
+                sCompletionDialog->state = 0xC;
             }
             break;
 
         case 12:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
             break;
     }
 }
 
-void Completion_UpdateGiftDialogWithExisting(void) {
+/**
+ * Runs the present dialog when PROF. OAK already holds a Pokémon: explains that he can only hold
+ * one and asks whether to release the held Pokémon for the new one (state 0xD shows the YES/NO
+ * prompt, handled by Completion_HandleAcceptDeclineInput).
+ */
+void Completion_UpdateGiftDialogOakHolding(void) {
     s32 i;
     s32 temp_v0;
 
-    switch (D_86B0EBE0->unk_00) {
+    switch (sCompletionDialog->state) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
-                sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
+                sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
-                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-                Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_IntroWithExisting);
+                Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+                Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgYouWonOakHolding);
             }
-            D_86B0EBE0->unk_04 = 0;
-            D_86B0EBE0->unk_08 = 0xB4;
-            D_86B0EBE0->unk_0C = 0xA;
-            D_86B0EBE0->unk_16 = 0x46;
-            D_86B0EBE0->unk_14 = 0xC8;
+            sCompletionDialog->charIndex = 0;
+            sCompletionDialog->width = 0xB4;
+            sCompletionDialog->height = 0xA;
+            sCompletionDialog->left = 0x46;
+            sCompletionDialog->centerY = 0xC8;
 
             // clang-format off
-            for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+            for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
             // clang-format on
 
             Completion_DrawDialogBox();
-            D_86B0EBE0->unk_00++;
+            sCompletionDialog->state++;
             break;
 
         case 1:
-            temp_v0 = Math_StepToS32(D_86B0EBE0->unk_0C, 0x37, 0xA, 0xA);
-            D_86B0EBE0->unk_0C = temp_v0;
+            temp_v0 = Math_StepToS32(sCompletionDialog->height, 0x37, 0xA, 0xA);
+            sCompletionDialog->height = temp_v0;
             if (temp_v0 == 0x37) {
-                D_86B0EBE0->unk_00++;
+                sCompletionDialog->state++;
             }
             Completion_DrawDialogBox();
-            D_86B0EBE0->unk_10 = 0;
+            sCompletionDialog->unk_10 = 0;
             break;
 
         case 2:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_ConfirmWithExisting));
-                    D_86B0EBE0->unk_00++;
+                    sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgOakAlreadyHolding));
+                    sCompletionDialog->state++;
                 }
             }
             break;
 
         case 3:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_SuccessWithExisting));
-                    D_86B0EBE0->unk_00++;
+                    sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgOakHoldsOnlyOne));
+                    sCompletionDialog->state++;
                 }
             }
             break;
 
         case 4:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2E8 - 1));
-                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-                    Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Failure);
-                    D_86B0EBE0->unk_00++;
+                    Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->oakHeldSpecies - 1));
+                    Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+                    Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReleasePrompt);
+                    sCompletionDialog->state++;
                 }
             }
             break;
 
         case 5:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    D_86B0EBE0->unk_00 = 0xD;
+                    sCompletionDialog->state = 0xD;
                 }
             }
             break;
 
         case 6:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if (Completion_WrapDialogText() != 0) {
-                if (D_86B0EBE0->unk_18 == 0) {
-                    D_86B0EBE0->unk_10 = 0;
-                    D_86B0EBE0->unk_04 = 0;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if (Completion_RevealNextDialogChar() != 0) {
+                if (sCompletionDialog->awaitingA == 0) {
+                    sCompletionDialog->unk_10 = 0;
+                    sCompletionDialog->charIndex = 0;
 
                     // clang-format off
-                    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+                    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
-                    sprintf(D_86B0F7C8, Text_GetString(NULL, 0, sBattleMessagesTable, sCompletionMsgId_Complete));
-                    D_86B0EBE0->unk_00++;
+                    sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgGoToLabAfterSwap));
+                    sCompletionDialog->state++;
                 }
             }
             break;
 
         case 7:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
-            if ((Completion_WrapDialogText() != 0) && (D_86B0EBE0->unk_18 == 0)) {
-                D_86B0EBE0->unk_00 = 0xC;
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
+            if ((Completion_RevealNextDialogChar() != 0) && (sCompletionDialog->awaitingA == 0)) {
+                sCompletionDialog->state = 0xC;
             }
             break;
 
         case 13:
-            D_86B0EBE0->unk_18 = 0;
+            sCompletionDialog->awaitingA = 0;
             Completion_DrawDialogBox();
-            Completion_DrawSpeciesRewardText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
+            Completion_DrawReceivePrompt(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
             break;
 
         case 12:
             Completion_DrawDialogBox();
-            Completion_DrawWrappedDialogText(D_86B0EBE0->unk_16, D_86B0EBE0->unk_14 - (D_86B0EBE0->unk_0C / 2));
+            Completion_DrawRevealedDialogText(sCompletionDialog->left, sCompletionDialog->centerY - (sCompletionDialog->height / 2));
             break;
     }
 }
 
-void Completion_DrawLogoBanner(void) {
-    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0, 0, 0x50,
-                              0x30, 0x4F, 0, &D_86B0EBD8->unk_1C, 0);
-    UI_DrawSplitGradientPanel(D_30074E0, D_86B0EBD8->unk_00 + 0x50, D_86B0EBD8->unk_04, 0x50, 0x30, 0xA0, 0x30, 0x50, 0,
-                              0xA0, 0x30, 0x9F, 0x50, &D_86B0EBD8->unk_1C, 0);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0, 0, 0x40,
-                              0x30, 0x3F, 0, &D_86B0EBD8->unk_1C, 1);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x40, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x40, 0,
-                              0x80, 0x30, 0x7F, 0x40, &D_86B0EBD8->unk_1C, 1);
-    UI_DrawSplitGradientPanel(D_30092E0, D_86B0EBD8->unk_08 + 0x80, D_86B0EBD8->unk_0C, 0x40, 0x30, 0xC0, 0x30, 0x80, 0,
-                              0xC0, 0x30, 0xBF, 0x80, &D_86B0EBD8->unk_1C, 1);
+/**
+ * Draws the "POKéMON" and "PRESENT" banner textures with their gradient colors.
+ */
+void Completion_DrawPresentBanner(void) {
+    UI_DrawSplitGradientPanel(D_30074E0, sCompletionBanner->pokemonX, sCompletionBanner->pokemonY, 0x50, 0x30, 0xA0, 0x30, 0, 0, 0x50,
+                              0x30, 0x4F, 0, &sCompletionBanner->colors, 0);
+    UI_DrawSplitGradientPanel(D_30074E0, sCompletionBanner->pokemonX + 0x50, sCompletionBanner->pokemonY, 0x50, 0x30, 0xA0, 0x30, 0x50, 0,
+                              0xA0, 0x30, 0x9F, 0x50, &sCompletionBanner->colors, 0);
+    UI_DrawSplitGradientPanel(D_30092E0, sCompletionBanner->presentX, sCompletionBanner->presentY, 0x40, 0x30, 0xC0, 0x30, 0, 0, 0x40,
+                              0x30, 0x3F, 0, &sCompletionBanner->colors, 1);
+    UI_DrawSplitGradientPanel(D_30092E0, sCompletionBanner->presentX + 0x40, sCompletionBanner->presentY, 0x40, 0x30, 0xC0, 0x30, 0x40, 0,
+                              0x80, 0x30, 0x7F, 0x40, &sCompletionBanner->colors, 1);
+    UI_DrawSplitGradientPanel(D_30092E0, sCompletionBanner->presentX + 0x80, sCompletionBanner->presentY, 0x40, 0x30, 0xC0, 0x30, 0x80, 0,
+                              0xC0, 0x30, 0xBF, 0x80, &sCompletionBanner->colors, 1);
 }
 
-s32 Completion_AnimateLogoBannerColor(void) {
-    D_86B0EBD8->unk_1C.unk_00.unk_00 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_00, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_00);
-    D_86B0EBD8->unk_1C.unk_00.unk_02 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_02, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_02);
-    D_86B0EBD8->unk_1C.unk_00.unk_04 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_04, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_04);
-    D_86B0EBD8->unk_1C.unk_00.unk_06 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_06, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_06);
-    D_86B0EBD8->unk_1C.unk_00.unk_08 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_08, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_08);
-    D_86B0EBD8->unk_1C.unk_00.unk_0A =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0A, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0A);
-    D_86B0EBD8->unk_1C.unk_00.unk_0C =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0C, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0C);
-    D_86B0EBD8->unk_1C.unk_00.unk_0E =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_0E, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_0E);
-    D_86B0EBD8->unk_1C.unk_00.unk_10 =
-        Math_StepToS32(D_86B0EBD8->unk_1C.unk_00.unk_10, sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10,
-                       sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_18.unk_10);
+/**
+ * Steps the banner colors toward the next entry of sCompletionBannerColors. Returns 1 after
+ * the second color change finishes.
+ */
+s32 Completion_AnimatePresentBannerColor(void) {
+    sCompletionBanner->colors.unk_00.unk_00 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_00, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_00,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_00,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_00);
+    sCompletionBanner->colors.unk_00.unk_02 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_02, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_02,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_02,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_02);
+    sCompletionBanner->colors.unk_00.unk_04 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_04, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_04,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_04,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_04);
+    sCompletionBanner->colors.unk_00.unk_06 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_06, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_06,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_06,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_06);
+    sCompletionBanner->colors.unk_00.unk_08 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_08, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_08,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_08,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_08);
+    sCompletionBanner->colors.unk_00.unk_0A =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_0A, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0A,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0A,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0A);
+    sCompletionBanner->colors.unk_00.unk_0C =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_0C, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0C,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0C,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0C);
+    sCompletionBanner->colors.unk_00.unk_0E =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_0E, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0E,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0E,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_0E);
+    sCompletionBanner->colors.unk_00.unk_10 =
+        Math_StepToS32(sCompletionBanner->colors.unk_00.unk_10, sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_10,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_10,
+                       sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_18.unk_10);
 
-    if ((D_86B0EBD8->unk_1C.unk_00.unk_00 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_00) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_02 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_02) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_04 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_04) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_06 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_06) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_08 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_08) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0A == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0A) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0C == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0C) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_0E == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_0E) &&
-        (D_86B0EBD8->unk_1C.unk_00.unk_10 == sDioramaTileParams[D_86B0EBD8->unk_18 + 1].unk_00.unk_10)) {
-        D_86B0EBD8->unk_18++;
-        if (D_86B0EBD8->unk_18 == 2) {
+    if ((sCompletionBanner->colors.unk_00.unk_00 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_00) &&
+        (sCompletionBanner->colors.unk_00.unk_02 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_02) &&
+        (sCompletionBanner->colors.unk_00.unk_04 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_04) &&
+        (sCompletionBanner->colors.unk_00.unk_06 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_06) &&
+        (sCompletionBanner->colors.unk_00.unk_08 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_08) &&
+        (sCompletionBanner->colors.unk_00.unk_0A == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0A) &&
+        (sCompletionBanner->colors.unk_00.unk_0C == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0C) &&
+        (sCompletionBanner->colors.unk_00.unk_0E == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_0E) &&
+        (sCompletionBanner->colors.unk_00.unk_10 == sCompletionBannerColors[sCompletionBanner->colorStep + 1].unk_00.unk_10)) {
+        sCompletionBanner->colorStep++;
+        if (sCompletionBanner->colorStep == 2) {
             return 1;
         }
     }
@@ -1380,49 +1470,63 @@ s32 Completion_AnimateLogoBannerColor(void) {
     return 0;
 }
 
-Gfx* Completion_DrawBlinkingCursorIcon(void) {
-    if (D_86B0EBE0->unk_18 == 1) {
-        if (!D_86B0EBE0->unk_1A--) {
-            D_86B0EBE0->unk_1C++;
-            if (sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00 == 0) {
-                D_86B0EBE0->unk_1C = 0;
+/**
+ * While the dialog waits for A, draws the animated A-button icon in the corner of the box.
+ */
+Gfx* Completion_DrawAButtonPrompt(void) {
+    if (sCompletionDialog->awaitingA == 1) {
+        if (!sCompletionDialog->promptFrameTimer--) {
+            sCompletionDialog->promptFrame++;
+            if (sCompletionAButtonFrames[sCompletionDialog->promptFrame].texture == 0) {
+                sCompletionDialog->promptFrame = 0;
             }
-            D_86B0EBE0->unk_1A = sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_04;
+            sCompletionDialog->promptFrameTimer = sCompletionAButtonFrames[sCompletionDialog->promptFrame].duration;
         }
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba32(D_86B0EBE0->unk_16 + 0x9E, D_86B0EBE0->unk_14 + 9, 0x10, 0x10,
-                              sDioramaCursorIconAnimTable[D_86B0EBE0->unk_1C].unk_00, 0x10, 0);
+        Gfx_DrawTextureRgba32(sCompletionDialog->left + 0x9E, sCompletionDialog->centerY + 9, 0x10, 0x10,
+                              sCompletionAButtonFrames[sCompletionDialog->promptFrame].texture, 0x10, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
 
-s32 Completion_SlideLogoBannerIn(void) {
-    if (D_86B0EBD8->unk_04 == 0) {
+/**
+ * Slides the "POKéMON" banner down and the "PRESENT" banner up into place. Returns 1 when both
+ * are in place.
+ */
+s32 Completion_SlidePresentBannerIn(void) {
+    if (sCompletionBanner->pokemonY == 0) {
         Audio_StartMusicTrack(0x3A);
     }
 
-    D_86B0EBD8->unk_04 = Math_StepToS32(D_86B0EBD8->unk_04, 0x3E, 0x19, 0x19);
-    D_86B0EBD8->unk_0C = Math_StepToS32(D_86B0EBD8->unk_0C, 0x82, 0x19, 0x19);
+    sCompletionBanner->pokemonY = Math_StepToS32(sCompletionBanner->pokemonY, 0x3E, 0x19, 0x19);
+    sCompletionBanner->presentY = Math_StepToS32(sCompletionBanner->presentY, 0x82, 0x19, 0x19);
 
-    if ((D_86B0EBD8->unk_04 == 0x3E) && (D_86B0EBD8->unk_0C == 0x82)) {
+    if ((sCompletionBanner->pokemonY == 0x3E) && (sCompletionBanner->presentY == 0x82)) {
         return 1;
     }
     return 0;
 }
 
-s32 Completion_SlideLogoBannerOut(void) {
-    D_86B0EBD8->unk_04 = Math_StepToS32(D_86B0EBD8->unk_04, -0x32, 0x19, 0x19);
-    D_86B0EBD8->unk_0C = Math_StepToS32(D_86B0EBD8->unk_0C, 0x122, 0x19, 0x19);
+/**
+ * Slides both banner parts off screen. Returns 1 when both are gone.
+ */
+s32 Completion_SlidePresentBannerOut(void) {
+    sCompletionBanner->pokemonY = Math_StepToS32(sCompletionBanner->pokemonY, -0x32, 0x19, 0x19);
+    sCompletionBanner->presentY = Math_StepToS32(sCompletionBanner->presentY, 0x122, 0x19, 0x19);
 
-    if ((D_86B0EBD8->unk_04 == -0x32) && (D_86B0EBD8->unk_0C == 0x122)) {
+    if ((sCompletionBanner->pokemonY == -0x32) && (sCompletionBanner->presentY == 0x122)) {
         return 1;
     }
     return 0;
 }
 
+/**
+ * Moves the camera back to the front of model 0xD3. Once the eye passes z = 85, sets render
+ * flag 0x20 on model 0xD3 and shows the gift Pokémon on its anchor point. Returns 1 when the camera arrives.
+ */
 s32 Completion_MoveCameraToFront(void) {
     Vec3f tmp;
 
@@ -1430,205 +1534,239 @@ s32 Completion_MoveCameraToFront(void) {
     tmp.y = 30.0f;
     tmp.z = 100.0f;
 
-    D_86B0EBC4->view.targetPosition.y =
-        Math_StepToF(D_86B0EBC4->view.targetPosition.y, 45.0f, tmp.x / 65.0f, tmp.x / 65.0f);
-    D_86B0EBC4->view.eyePosition.y = Math_StepToF(D_86B0EBC4->view.eyePosition.y, 50.0f, tmp.y / 65.0f, tmp.y / 65.0f);
-    D_86B0EBC4->view.eyePosition.z = Math_StepToF(D_86B0EBC4->view.eyePosition.z, 190.0f, tmp.z / 60.0f, tmp.z / 60.0f);
+    sCompletionCamera->view.targetPosition.y =
+        Math_StepToF(sCompletionCamera->view.targetPosition.y, 45.0f, tmp.x / 65.0f, tmp.x / 65.0f);
+    sCompletionCamera->view.eyePosition.y = Math_StepToF(sCompletionCamera->view.eyePosition.y, 50.0f, tmp.y / 65.0f, tmp.y / 65.0f);
+    sCompletionCamera->view.eyePosition.z = Math_StepToF(sCompletionCamera->view.eyePosition.z, 190.0f, tmp.z / 60.0f, tmp.z / 60.0f);
 
-    if (D_86B0EBC4->view.eyePosition.z >= 85.0f) {
-        D_86B0EBDC->unk_008.node.renderFlags |= 0x20;
-        D_86B0EBDC->unk_170.node.flags |= 1;
-        Completion_PositionBonusModel();
+    if (sCompletionCamera->view.eyePosition.z >= 85.0f) {
+        sCompletionScene->anchorObject.node.renderFlags |= 0x20;
+        sCompletionScene->giftObject.node.flags |= 1;
+        Completion_PositionGiftModel();
     }
 
-    if (D_86B0EBC4->view.eyePosition.z >= 190.0f) {
+    if (sCompletionCamera->view.eyePosition.z >= 190.0f) {
         return 1;
     }
     return 0;
 }
 
+/**
+ * Starts the present dialog from state 0.
+ */
 void Completion_StartGiftDialog(void) {
-    D_86B0EBE0->unk_00 = 0;
+    sCompletionDialog->state = 0;
 }
 
+/**
+ * Puts the dialog back in its idle state and clears the revealed text.
+ */
 void Completion_AbortDialogToIdle(void) {
     s32 i;
 
-    D_86B0EBE0->unk_00 = 0xB;
+    sCompletionDialog->state = 0xB;
 
     // clang-format off
-    for (i = 0; i < 255; i++) { D_86B0F8C8[i] = 0; }
+    for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
     // clang-format on
 }
 
+/**
+ * Handles the YES/NO prompt: left/right selects, A confirms. YES releases the held Pokémon and
+ * plays the gift's cry and receive animation; NO shows "Gave up on <Pokémon>" and plays the
+ * animation of model 0xD3 backward.
+ */
 void Completion_HandleAcceptDeclineInput(void) {
-    if (D_86B0EBE0->unk_00 == 0xD) {
+    if (sCompletionDialog->state == 0xD) {
         if (gPlayer1Controller->buttonPressed & 0x200) {
-            D_86B0EBDC->unk_2F0 = 1;
+            sCompletionScene->acceptGift = 1;
         }
 
         if (gPlayer1Controller->buttonPressed & 0x100) {
-            D_86B0EBDC->unk_2F0 = 0;
+            sCompletionScene->acceptGift = 0;
         }
 
         if ((gPlayer1Controller->buttonPressed & 0x200) || (gPlayer1Controller->buttonPressed & 0x100)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
         }
 
-        if ((gPlayer1Controller->buttonPressed & 0x8000) && (D_86B0EBDC->unk_2F0 == 1)) {
+        if ((gPlayer1Controller->buttonPressed & 0x8000) && (sCompletionScene->acceptGift == 1)) {
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
-            D_86B0EBE0->unk_00 = 6;
+            sCompletionDialog->state = 6;
             Completion_ResetDialogText();
-            Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2E8 - 1));
-            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Timeout);
-            ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, *D_86B0F648);
-            Cry_Play(D_86B0EBDC->unk_2EC, 2);
+            Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->oakHeldSpecies - 1));
+            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+            Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReleasedAndGot);
+            ModelAnim_SetAnimation(&sCompletionScene->giftObject, *sGiftBattleCuesTail);
+            Cry_Play(sCompletionScene->giftSpecies, 2);
         }
 
-        if ((gPlayer1Controller->buttonPressed & 0x8000) && (D_86B0EBDC->unk_2F0 == 0)) {
+        if ((gPlayer1Controller->buttonPressed & 0x8000) && (sCompletionScene->acceptGift == 0)) {
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
-            D_86B0EBE0->unk_00 = 7;
+            sCompletionDialog->state = 7;
             Completion_ResetDialogText();
-            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, D_86B0EBDC->unk_2EC - 1));
-            Text_GetString(D_86B0F7C8, 0xFF, sBattleMessagesTable, sCompletionMsgId_Extra);
-            ModelAnim_SetSpeed(&D_86B0EBDC->unk_008, -1);
+            Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
+            Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgGaveUp);
+            ModelAnim_SetSpeed(&sCompletionScene->anchorObject, -1);
         }
     }
 }
 
+/**
+ * Clears the A prompt when A is pressed so the next message can start.
+ */
 void Completion_HandleContinuePrompt(void) {
-    if ((D_86B0EBE0->unk_18 == 1) && (gPlayer1Controller->buttonPressed & 0x8000)) {
-        D_86B0EBE0->unk_18 = 0;
+    if ((sCompletionDialog->awaitingA == 1) && (gPlayer1Controller->buttonPressed & 0x8000)) {
+        sCompletionDialog->awaitingA = 0;
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     }
 }
 
-void Completion_UpdateCryEventTrack(void) {
-    D_86B0EBDC->unk_304++;
-    if (((D_86B0EBDC->unk_304 % 60) == 0) && (D_86B0EBDC->unk_308 == 0) && (D_86B0EBE8[2641] != 0xFF)) {
-        ModelAnim_ClearEventTrack(&D_86B0EBDC->unk_170);
-        ModelAnim_SetEventTrack(&D_86B0EBDC->unk_170, D_86B0EBE8[2641]);
-        D_86B0EBDC->unk_308 = 1;
-    } else if ((D_86B0EBDC->unk_308 == 1) && (ModelAnim_IsEventTrackNearEnd(&D_86B0EBDC->unk_170) == 1)) {
-        D_86B0EBDC->unk_308 = 0;
-        ModelAnim_SetEventFrame(&D_86B0EBDC->unk_170, 0);
-        ModelAnim_SetEventTrack(&D_86B0EBDC->unk_170, -1);
+/**
+ * Every 60 frames, plays the gift Pokémon's idle event track from its battle cues, then stops it
+ * when it reaches the end.
+ */
+void Completion_UpdateIdleCueTrack(void) {
+    sCompletionScene->idleCueTimer++;
+    if (((sCompletionScene->idleCueTimer % 60) == 0) && (sCompletionScene->idleCueActive == 0) && (sGiftBattleCues[2641] != 0xFF)) {
+        ModelAnim_ClearEventTrack(&sCompletionScene->giftObject);
+        ModelAnim_SetEventTrack(&sCompletionScene->giftObject, sGiftBattleCues[2641]);
+        sCompletionScene->idleCueActive = 1;
+    } else if ((sCompletionScene->idleCueActive == 1) && (ModelAnim_IsEventTrackNearEnd(&sCompletionScene->giftObject) == 1)) {
+        sCompletionScene->idleCueActive = 0;
+        ModelAnim_SetEventFrame(&sCompletionScene->giftObject, 0);
+        ModelAnim_SetEventTrack(&sCompletionScene->giftObject, -1);
     }
 }
 
-void Completion_LoopBonusModelIdleAnim(void) {
-    if (ModelAnim_IsAnimationDone(&D_86B0EBDC->unk_170) == 1) {
-        ModelAnim_SetFrame(&D_86B0EBDC->unk_170, 0);
-        ModelAnim_SetAnimation(&D_86B0EBDC->unk_170, 0);
+/**
+ * Returns the gift Pokémon to animation 0 when its current animation ends.
+ */
+void Completion_LoopGiftIdleAnimation(void) {
+    if (ModelAnim_IsAnimationDone(&sCompletionScene->giftObject) == 1) {
+        ModelAnim_SetFrame(&sCompletionScene->giftObject, 0);
+        ModelAnim_SetAnimation(&sCompletionScene->giftObject, 0);
     }
 }
 
-void Completion_ClampAnimTimer(void) {
-    if (((s32)D_86B0EBDC->unk_008.transformAnim.speedFixed >> 0x10) == -1) {
-        if ((D_86B0EBDC->unk_008.transformAnim.frameFixed >> 0x10) > 0) {
-            D_86B0EBDC->unk_008.transformAnim.frameFixed += 0xFFFF0000;
+/**
+ * While the animation of model 0xD3 plays backward, moves it back one frame until it reaches frame 0.
+ */
+void Completion_StepAnchorRewind(void) {
+    if (((s32)sCompletionScene->anchorObject.transformAnim.speedFixed >> 0x10) == -1) {
+        if ((sCompletionScene->anchorObject.transformAnim.frameFixed >> 0x10) > 0) {
+            sCompletionScene->anchorObject.transformAnim.frameFixed += 0xFFFF0000;
         }
     }
 }
 
+/**
+ * Reads the controllers for this frame.
+ */
 void Completion_ReadControllerInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/**
+ * Updates the present scene for one frame and returns 1 when it should end.
+ *
+ * Steps: 0 slide the banner in (music 0x3A), 1 change its colors, 2 hold 20 frames, 3 slide it
+ * out, 4 show the three podium actors, 5 move the camera to model 0xD3, 6 wait for its animation,
+ * 7 start the dialog (music 0x13), 8 run the dialog until it ends, 9 short wait.
+ */
 s32 Completion_UpdateSceneSteps(void) {
-    if (D_86B0EBDC->unk_2DC >= 7) {
+    if (sCompletionScene->sceneStep >= 7) {
         Completion_HandleContinuePrompt();
-        Completion_UpdateCryEventTrack();
-        Completion_LoopBonusModelIdleAnim();
+        Completion_UpdateIdleCueTrack();
+        Completion_LoopGiftIdleAnimation();
     }
 
-    switch (D_86B0EBDC->unk_2DC) {
+    switch (sCompletionScene->sceneStep) {
         case 0:
-            if (Completion_SlideLogoBannerIn() != 0) {
-                D_86B0EBDC->unk_2DC++;
+            if (Completion_SlidePresentBannerIn() != 0) {
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 1:
-            if (Completion_AnimateLogoBannerColor() != 0) {
-                D_86B0EBDC->unk_2E4 = 0;
-                D_86B0EBDC->unk_2DC++;
+            if (Completion_AnimatePresentBannerColor() != 0) {
+                sCompletionScene->stepTimer = 0;
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 2:
-            if (D_86B0EBDC->unk_2E4++ == 0x14) {
-                D_86B0EBDC->unk_2E4 = 0;
-                D_86B0EBDC->unk_2DC++;
+            if (sCompletionScene->stepTimer++ == 0x14) {
+                sCompletionScene->stepTimer = 0;
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 3:
-            if (Completion_SlideLogoBannerOut() != 0) {
-                D_86B0EBDC->unk_2DC++;
+            if (Completion_SlidePresentBannerOut() != 0) {
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 4:
-            if (D_86B0EBDC->unk_2E4++ >= 0x1E) {
-                Vec3f_SetComponentsDuplicate(&D_86B0EBC4->view.targetPosition, 0.0f, 90.0f, 0.0f);
-                Vec3f_SetComponentsDuplicate(&D_86B0EBC4->view.eyePosition, 0.0f, 80.0f, 90.0f);
+            if (sCompletionScene->stepTimer++ >= 0x1E) {
+                Vec3f_SetComponentsDuplicate(&sCompletionCamera->view.targetPosition, 0.0f, 90.0f, 0.0f);
+                Vec3f_SetComponentsDuplicate(&sCompletionCamera->view.eyePosition, 0.0f, 80.0f, 90.0f);
 
-                if (D_86B0EBDC->unk_2E4 == 0x1F) {
+                if (sCompletionScene->stepTimer == 0x1F) {
                     miniRankingActorSetup1st(0.2f, 0.0f, 125.0f, -235.0f, 0x7D2, 0, 0);
                 }
 
-                if (D_86B0EBDC->unk_2E4 == 0x3C) {
+                if (sCompletionScene->stepTimer == 0x3C) {
                     miniRankingActorSetup2nd(0.2f, 100.0f, 125.0f, -235.0f, 0x7D2, -0xE38, 0);
                 }
 
-                if (D_86B0EBDC->unk_2E4 == 0x5A) {
+                if (sCompletionScene->stepTimer == 0x5A) {
                     miniRankingActorSetup3rd(0.2f, -100.0f, 125.0f, -235.0f, 0x7D2, 0xE38, 0);
                 }
             }
 
-            if (D_86B0EBDC->unk_2E4 == 0x78) {
-                D_86B0EBDC->unk_2E4 = 0;
-                D_86B0EBDC->unk_2DC++;
+            if (sCompletionScene->stepTimer == 0x78) {
+                sCompletionScene->stepTimer = 0;
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 5:
             if (Completion_MoveCameraToFront() != 0) {
-                D_86B0EBDC->unk_2DC++;
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 6:
-            Completion_PositionBonusModel();
-            if (ModelAnim_IsAnimationDone(&D_86B0EBDC->unk_008) != 0) {
-                D_86B0EBDC->unk_2E4 = 0;
-                D_86B0EBDC->unk_2DC++;
+            Completion_PositionGiftModel();
+            if (ModelAnim_IsAnimationDone(&sCompletionScene->anchorObject) != 0) {
+                sCompletionScene->stepTimer = 0;
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 7:
             Completion_StartGiftDialog();
             Audio_StartMusicTrack(0x13);
-            D_86B0EBDC->unk_2DC++;
+            sCompletionScene->sceneStep++;
             break;
 
         case 8:
-            Completion_ClampAnimTimer();
-            Completion_PositionBonusModel();
+            Completion_StepAnchorRewind();
+            Completion_PositionGiftModel();
             Completion_HandleAcceptDeclineInput();
-            if (D_86B0EBE0->unk_00 == 0xC) {
-                D_86B0EBDC->unk_2DC++;
+            if (sCompletionDialog->state == 0xC) {
+                sCompletionScene->sceneStep++;
             }
             break;
 
         case 9:
-            Completion_ClampAnimTimer();
-            Completion_PositionBonusModel();
-            if (D_86B0EBDC->unk_2E4++ == 2) {
+            Completion_StepAnchorRewind();
+            Completion_PositionGiftModel();
+            if (sCompletionScene->stepTimer++ == 2) {
                 return 1;
             }
             break;
@@ -1637,25 +1775,34 @@ s32 Completion_UpdateSceneSteps(void) {
     return 0;
 }
 
+/**
+ * Updates and draws the dialog for the current case, then draws the banner and A prompt.
+ */
 void Completion_DrawDialog(void) {
-    if (D_86B0EBDC->unk_2D8 == 1) {
-        Completion_UpdateGiftDialogWithExisting();
+    if (sCompletionScene->oakIsHolding == 1) {
+        Completion_UpdateGiftDialogOakHolding();
     } else {
-        Completion_UpdateGiftDialogFirstTime();
+        Completion_UpdateGiftDialog();
     }
-    Completion_DrawLogoBanner();
-    Completion_DrawBlinkingCursorIcon();
+    Completion_DrawPresentBanner();
+    Completion_DrawAButtonPrompt();
 }
 
+/**
+ * Draws one frame of the present scene.
+ */
 void Completion_RenderFrame(UNUSED s32 arg0) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
     GeoRender_AdvanceFrameCounter();
-    Geo_RenderRootNode(D_86B0EBC0);
+    Geo_RenderRootNode(sCompletionRootNode);
     Completion_DrawDialog();
     BgStage_AdvanceFrame();
 }
 
+/**
+ * Fades the scene in over 16 frames.
+ */
 void Completion_FadeIn(void) {
     s32 i;
 
@@ -1667,6 +1814,9 @@ void Completion_FadeIn(void) {
     }
 }
 
+/**
+ * Main loop of the present scene.
+ */
 void Completion_RunLoop(void) {
     s32 var_s0 = 1;
 
@@ -1682,54 +1832,68 @@ void Completion_RunLoop(void) {
     }
 }
 
+/**
+ * Fades out over 10 frames, then, if the gift was accepted, saves it as the Pokémon PROF. OAK
+ * holds. The high bit stores gSessionContext.inRound2 (always 1 for the Hall of Fame Psyduck,
+ * which also sets options field 0x1F).
+ */
 void Completion_FadeOutAndSave(void) {
     s32 i;
 
     StageFade_StartFromTransparent(0xA);
     for (i = 0; i < 10; i++) {
         Completion_ReadControllerInput();
-        Completion_ClampAnimTimer();
-        Completion_PositionBonusModel();
+        Completion_StepAnchorRewind();
+        Completion_PositionGiftModel();
         Completion_RenderFrame(2);
     }
 
-    if (D_86B0EBDC->unk_2F0 == 1) {
+    if (sCompletionScene->acceptGift == 1) {
         if (gSessionContext.mode == 0x1A) {
-            Save_SetSelectedPokemonId(D_86B0EBDC->unk_2EC, 1);
+            Save_SetSelectedPokemonId(sCompletionScene->giftSpecies, 1);
             Save_SetOptionsField1F(1);
         } else {
-            Save_SetSelectedPokemonId(D_86B0EBDC->unk_2EC, gSessionContext.inRound2);
+            Save_SetSelectedPokemonId(sCompletionScene->giftSpecies, gSessionContext.inRound2);
         }
         Save_CommitTypedRecord(0x14, 0);
         Save_FlushBank(2);
     }
 }
 
+/**
+ * Builds the scene graph and allocates and sets up the present scene state.
+ */
 void Completion_InitScene(void) {
     MemoryBlock* sp1C;
 
     sp1C = MainPool_AllocState(main_pool_get_available(), 0);
-    D_86B0EBC0 = process_geo_layout(sp1C, &sCompletionGeoLayout);
+    sCompletionRootNode = process_geo_layout(sp1C, &sCompletionGeoLayout);
     MainPool_FinalizeAllocation(sp1C);
     ModelRenderer_InitDisplayRoots();
 
-    D_86B0EBE0 = main_pool_alloc(0x20, 0);
-    bzero(D_86B0EBE0, 0x20);
+    sCompletionDialog = main_pool_alloc(0x20, 0);
+    bzero(sCompletionDialog, 0x20);
 
-    D_86B0EBDC = main_pool_alloc(0x30C, 0);
-    bzero(D_86B0EBDC, 0x30C);
+    sCompletionScene = main_pool_alloc(0x30C, 0);
+    bzero(sCompletionScene, 0x30C);
 
-    D_86B0EBD8 = main_pool_alloc(0x4C, 0);
-    bzero(D_86B0EBD8, 0x4C);
+    sCompletionBanner = main_pool_alloc(0x4C, 0);
+    bzero(sCompletionBanner, 0x4C);
 
-    Completion_SelectBonusPokemon();
+    Completion_SelectGiftPokemon();
     Completion_LoadModels();
     Completion_InitCamera();
     Completion_ResetSceneStep();
     Completion_ResetDialogToIdle();
-    Completion_InitDialogBoxParams();
+    Completion_InitPresentBanner();
 }
 
+/**
+ * Shows the Pokémon present scene after clearing Gym Leader Castle (mode 21) or the Hall of Fame
+ * (mode 26): the "POKéMON PRESENT" banner, model 0xD3 (probably a present box) revealing the
+ * gift Pokémon, and the
+ * dialog that sends it to PROF. OAK's LAB.
+ */
 s32 Stage_ShowCompletionScene(void) {
     StageContext* sp24;
 
