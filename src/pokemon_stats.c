@@ -1554,12 +1554,7 @@ s32 GbSave_VerifyWriteback(u8* arg0, s32 arg1) {
     return 1;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/pokemon_stats/GbCart_IdentifyGame.s")
-#else
 s8 GbCart_IdentifyGame(s32 arg0) {
-    // Only part of the rom header,
-    // osGbpakReadId reads from 0x100 but this reads from 0x120
     typedef struct RomHeader {
         /* 0x00 */ char nintendo_chr[0x14];
         /* 0x14 */ char game_title[16];
@@ -1574,13 +1569,12 @@ s8 GbCart_IdentifyGame(s32 arg0) {
         /* 0x2D */ u8 isum;
         /* 0x2E */ u16 sum;
         /* 0x30 */ char unk30[0x30];
-    } RomHeader; // size = 0x60
+    } RomHeader; /* size = 0x60 */
 
     RomHeader sp28;
     s8 var_s0 = POKEMON_ROM_NONE;
 
 #if defined(VERSION_JP)
-    // Japanese build: accepts only Japanese cartridges (country code 0).
     if ((GbPak_ReadRom(arg0, &sp28, 0x120, sizeof(RomHeader)) == 0) && (sp28.country_code == 0)) {
 #else
     if ((GbPak_ReadRom(arg0, &sp28, 0x120, sizeof(RomHeader)) == 0) && (sp28.country_code == 1)) {
@@ -1595,15 +1589,22 @@ s8 GbCart_IdentifyGame(s32 arg0) {
                 var_s0 = POKEMON_ROM_GREEN;
             } else if (HAL_Strcmp(&sp28.game_title[8], "BLUE") == 0) {
                 var_s0 = POKEMON_ROM_BLUE;
+#if defined(VERSION_US_REV2)
+            } else {
+                sp28.game_title[9] = '\x0';
+                if (HAL_Strcmp(&sp28.game_title[8], "Y") == 0) {
+                    var_s0 = POKEMON_ROM_YELLOW;
+                }
+#else
             } else if (HAL_Strcmp(&sp28.game_title[8], "YELLOW") == 0) {
                 var_s0 = POKEMON_ROM_YELLOW;
+#endif
             }
         }
     }
 
     return var_s0;
 }
-#endif
 
 s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
     UNUSED s32 pad;
