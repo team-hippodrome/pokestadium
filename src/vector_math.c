@@ -76,9 +76,6 @@ void Vec3f_CrossProductArrays(const f32* a, const f32* b, f32* out) {
     out[2] = (ax * by) - (ay * bx);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/vector_math/Vec3f_NormalizeSafe.s")
-#else
 void Vec3f_NormalizeSafe(Vec3f* vec) {
     f32 x;
     f32 y;
@@ -96,12 +93,16 @@ void Vec3f_NormalizeSafe(Vec3f* vec) {
         y = y / len;
         z = z / len;
     }
+#if defined(VERSION_US_REV2)
+    else {
+        rmonPrintf(D_8007C510);
+    }
+#endif
 
     vec->x = x;
     vec->y = y;
     vec->z = z;
 }
-#endif
 
 void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6) {
     f32 sp10C;

@@ -4042,12 +4042,6 @@ void BattleAI_SelectRandomFallbackOrder(BattleAiTeamState* arg0, u8* arg1, s32 a
     } while (BattleAI_MeetsHpBudgetConstraint(arg0, arg1, arg0->unk_06, arg2) == 0);
 }
 
-#if defined(VERSION_US_REV2)
-// asm-processor requires this import on one physical line.
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_com_decision_logic/BattleAI_SelectRandomUsableCandidate.s")
-// clang-format on
-#else
 s32 BattleAI_SelectRandomUsableCandidate(BattleAiTeamState* arg0) {
     s32 var_v1;
 
@@ -4057,14 +4051,19 @@ s32 BattleAI_SelectRandomUsableCandidate(BattleAiTeamState* arg0) {
 
     do {
         var_v1 = BattleAI_RandomBelowInclusive(arg0->unk_06 - 1);
+#if defined(VERSION_US_REV2)
+        if (arg0->unk_00 == 2 && (arg0->unk_04[0] - 1) < var_v1) {
+            var_v1 = BattleAI_RandomBelowInclusive(arg0->unk_04[1] - 1) + arg0->unk_01[0];
+        }
+#else
         if (arg0->unk_04[0] < var_v1) {
             var_v1 += arg0->unk_01[0];
         }
+#endif
     } while (arg0->unk_14[var_v1].unk_12.displayHp <= 0 || var_v1 == arg0->unk_10);
 
     return var_v1;
 }
-#endif
 
 s32 BattleAI_SelectRandomUsableMoveSlot(BattleMonRuntime* arg0) {
     u8 i;
