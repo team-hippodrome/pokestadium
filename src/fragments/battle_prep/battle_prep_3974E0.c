@@ -3,6 +3,9 @@
 #include "src/gfx_buffer.h"
 #include "src/math_util.h"
 
+/**
+ * Returns a random coordinate in [-2000, 2000).
+ */
 s16 BattlePrep_RandomStarOffset(void) {
     f32 temp_fv0 = MathUtil_Random_ZeroOne();
 
@@ -14,6 +17,9 @@ s16 BattlePrep_RandomStarOffset(void) {
     return temp_fv0;
 }
 
+/**
+ * Draws 400 16x16 textured quads (texture D_3024A00, vertex color 0xFFFF96FF) at each star position.
+ */
 void BattlePrep_DrawStarfield(unk_D_84B19910* arg0) {
     Vtx* temp_v0_12;
     s32 i;
@@ -48,6 +54,10 @@ void BattlePrep_DrawStarfield(unk_D_84B19910* arg0) {
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
 
+/**
+ * Moves every star 100 units forward in z; stars past z = 0 respawn at a random x/y outside radius 160
+ * with z in [-5500, -5000].
+ */
 void BattlePrep_UpdateStarfield(unk_D_84B19910* arg0) {
     s32 temp_s0;
     s32 temp_v0;
@@ -68,6 +78,9 @@ void BattlePrep_UpdateStarfield(unk_D_84B19910* arg0) {
     }
 }
 
+/**
+ * Places 400 stars at random x/y outside radius 160 with z in [-5100, -100] and sets the init flag.
+ */
 void BattlePrep_InitStarfield(unk_D_84B19910* arg0) {
     s32 temp_s0;
     s32 temp_v0;

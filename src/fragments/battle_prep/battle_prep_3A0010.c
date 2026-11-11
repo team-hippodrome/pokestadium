@@ -41,12 +41,12 @@ static Gfx D_84B16BA0[] = {
 };
 static u32 D_84B16CC8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16AA0,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawStarIcon,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawWinOrLoseLabel,
     D_84B16BA0, 0x06000000, 0x01000000,
 };
 static u32 D_84B16CFC[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16AA0,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawTrailIcon,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawTieLabel,
     D_84B16BA0, 0x06000000, 0x01000000,
 };
 static Vtx D_84B16D30[] = {
@@ -67,7 +67,7 @@ static Gfx D_84B16D70[] = {
 };
 static u32 D_84B16DD8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16D30,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawSparkParticle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawSparkParticle,
     D_84B16D70, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16E10[] = {
@@ -88,7 +88,7 @@ static Gfx D_84B16E50[] = {
 };
 static u32 D_84B16EB8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16E10,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepStarBurst_DrawRainbowParticle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawRainbowParticle,
     D_84B16E50, 0x06000000, 0x01000000,
 };
 static Color_RGBA8 D_84B16EEC[] = { {
@@ -122,7 +122,10 @@ static Color_RGBA8 D_84B16EEC[] = { {
                                         0x80,
                                     } };
 
-s32 BattlePrepStarBurst_DrawStarIcon(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds the WIN (D_3018800) or LOSE (D_301C800) texture for a result banner.
+ */
+s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25AC0* temp_a0;
     u8* var_a0;
 
@@ -143,7 +146,10 @@ s32 BattlePrepStarBurst_DrawStarIcon(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrepStarBurst_DrawTrailIcon(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Binds the DRAW texture (D_3020800) for a result banner.
+ */
+s32 BattlePrepResultBanner_DrawTieLabel(s32 arg0, unk_func_80011B94* arg1) {
     UNUSED s32 pad;
 
     if (arg0 == 5) {
@@ -156,7 +162,11 @@ s32 BattlePrepStarBurst_DrawTrailIcon(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrepStarBurst_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Draw callback for a spark particle: binds its current texture frame (unk_0C) to segment 0x0F
+ * and sets env color from the particle's RGB.
+ */
+s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25AC0_000* temp_a0;
 
     if (arg0 == 5) {
@@ -172,7 +182,11 @@ s32 BattlePrepStarBurst_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-void BattlePrepStarBurst_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4) {
+/**
+ * Starts a spark particle on an ellipse (radius 52x26) around (arg2, arg3) at angle arg4, at
+ * scale 2.0.
+ */
+void BattlePrepResultBanner_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4) {
     arg0->unk_04 = 0;
     arg0->unk_06 = arg4;
     arg0->unk_08.r = 0x50;
@@ -185,7 +199,11 @@ void BattlePrepStarBurst_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34*
     arg0->unk_00->position.z = -289.0f;
 }
 
-void BattlePrepStarBurst_UpdateSparkSlot(unk_D_84B25AC0_000* arg0) {
+/**
+ * Animates a spark for 16 frames: steps through the 8-frame D_2023240 texture table, fades blue,
+ * and moves outward 2 units per frame along its angle; then resets the object.
+ */
+void BattlePrepResultBanner_UpdateSparkSlot(unk_D_84B25AC0_000* arg0) {
     s16 temp_v0;
     DisplayObject* temp_v1;
     DisplayObject* temp_v1_2;
@@ -202,7 +220,10 @@ void BattlePrepStarBurst_UpdateSparkSlot(unk_D_84B25AC0_000* arg0) {
     }
 }
 
-s32 BattlePrepStarBurst_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Draw callback for a rainbow particle: sets env color RGBA from the particle's color.
+ */
+s32 BattlePrepResultBanner_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25AC0_0A0* temp_v1;
 
     if (arg0 == 5) {
@@ -217,7 +238,7 @@ s32 BattlePrepStarBurst_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
+void BattlePrepResultBanner_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
                                              s16 arg4) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 0;
@@ -229,7 +250,10 @@ void BattlePrepStarBurst_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_860
     arg0->unk_00->position.z = -289.0f;
 }
 
-void BattlePrepStarBurst_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1) {
+/**
+ * Spawns a mode-1 trail copy of particle arg1 (same color, model, position, scale) into arg0.
+ */
+void BattlePrepResultBanner_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 1;
     arg0->unk_0A = arg1->unk_0A;
@@ -239,7 +263,10 @@ void BattlePrepStarBurst_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0
     arg0->unk_00->scale = arg1->unk_00->scale;
 }
 
-void BattlePrepStarBurst_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1, s16 arg2) {
+/**
+ * Spawns a mode-2 white flash copy of particle arg1 at half scale, heading at arg1's angle + arg2.
+ */
+void BattlePrepResultBanner_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1, s16 arg2) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 2;
     arg0->unk_08 = arg1->unk_08 + arg2;
@@ -251,7 +278,11 @@ void BattlePrepStarBurst_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0
     Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, 0.5f, 0.5f, 0.5f);
 }
 
-void BattlePrepStarBurst_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, Vec3f* arg2) {
+/**
+ * Spawns a mode-3 scatter particle at a random offset (±25 x, ±20 y) from arg2, pale yellow with
+ * random blue, at scale 0.6.
+ */
+void BattlePrepResultBanner_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, Vec3f* arg2) {
     arg0->unk_06 = 0;
     arg0->unk_04 = 3;
     Color_SetRGBA(&arg0->unk_0A, 0xFF, 0xFF, 0xC8, 0xFF);
@@ -264,7 +295,11 @@ void BattlePrepStarBurst_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86
     arg0->unk_00->position.z = arg2->z;
 }
 
-void BattlePrepStarBurst_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0) {
+/**
+ * Mode 0: for 16 frames moves outward, grows, and lerps color through the D_84B16EEC gradient,
+ * leaving a trail copy every 4 frames; then spawns three flash copies and frees itself.
+ */
+void BattlePrepResultBanner_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0) {
     f32 temp_fv0;
     Color_RGBA8* color1;
     Color_RGBA8* color2;
@@ -284,19 +319,22 @@ void BattlePrepStarBurst_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0) {
         arg0->unk_00->position.y += (3.0f * SINS(arg0->unk_08)) - (arg0->unk_06 * 0.0625f);
         Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, temp_fv0, temp_fv0, temp_fv0);
         if (!(arg0->unk_06 & 3)) {
-            BattlePrepStarBurst_SpawnTrailCopy(&arg0[arg0->unk_06 / 4 + 1], arg0);
+            BattlePrepResultBanner_SpawnTrailCopy(&arg0[arg0->unk_06 / 4 + 1], arg0);
         }
         arg0->unk_06++;
     } else if (arg0->unk_06 == 0x10) {
-        BattlePrepStarBurst_SpawnFlashCopy(&arg0[5], &arg0[0], -0x6500);
-        BattlePrepStarBurst_SpawnFlashCopy(&arg0[6], &arg0[0], 0);
-        BattlePrepStarBurst_SpawnFlashCopy(&arg0[7], &arg0[0], 0x6500);
+        BattlePrepResultBanner_SpawnFlashCopy(&arg0[5], &arg0[0], -0x6500);
+        BattlePrepResultBanner_SpawnFlashCopy(&arg0[6], &arg0[0], 0);
+        BattlePrepResultBanner_SpawnFlashCopy(&arg0[7], &arg0[0], 0x6500);
         BattlePrep_ResetDisplayObject(arg0->unk_00);
         arg0->unk_06 = -1;
     }
 }
 
-void BattlePrepStarBurst_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
+/**
+ * Mode 1: holds a trail copy for 8 frames, shrinks it by 0.8x per frame until frame 16, then frees it.
+ */
+void BattlePrepResultBanner_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
     arg0->unk_06++;
     if ((arg0->unk_06 >= 8) && (arg0->unk_06 < 0x10)) {
         Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x * 0.8f, arg0->unk_00->scale.x * 0.8f,
@@ -307,7 +345,11 @@ void BattlePrepStarBurst_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
+/**
+ * Mode 2: moves a flash copy outward with decreasing speed and shrinks it by 0.9x per frame for
+ * 16 frames, then frees it.
+ */
+void BattlePrepResultBanner_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
     f32 temp_fv0;
     f32 temp_fv1;
 
@@ -324,7 +366,11 @@ void BattlePrepStarBurst_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
+/**
+ * Mode 3: for 20 frames shrinks a scatter particle, lowers alpha by 5 and drops it 2 units per
+ * frame, then frees it.
+ */
+void BattlePrepResultBanner_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
     if (arg0->unk_06 < 0x14) {
         Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x - 0.025f,
                                      arg0->unk_00->scale.x - 0.025f, arg0->unk_00->scale.x - 0.025f);
@@ -337,27 +383,34 @@ void BattlePrepStarBurst_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateRainbowParticle(unk_D_84B25AC0_0A0* arg0) {
+/**
+ * Dispatches a rainbow particle update by its mode (unk_04: 0 gradient, 1 trail, 2 flash, 3 scatter).
+ */
+void BattlePrepResultBanner_UpdateRainbowParticle(unk_D_84B25AC0_0A0* arg0) {
     switch (arg0->unk_04) {
         case 0:
-            BattlePrepStarBurst_UpdateRainbowGradientStep(arg0);
+            BattlePrepResultBanner_UpdateRainbowGradientStep(arg0);
             break;
 
         case 1:
-            BattlePrepStarBurst_UpdateTrailFadeStep(arg0);
+            BattlePrepResultBanner_UpdateTrailFadeStep(arg0);
             break;
 
         case 2:
-            BattlePrepStarBurst_UpdateFlashFadeStep(arg0);
+            BattlePrepResultBanner_UpdateFlashFadeStep(arg0);
             break;
 
         case 3:
-            BattlePrepStarBurst_UpdateScatterFallStep(arg0);
+            BattlePrepResultBanner_UpdateScatterFallStep(arg0);
             break;
     }
 }
 
-void BattlePrepStarBurst_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 1: updates the rainbow particles (unk_5A2 != 0) or spark particles for 36 frames,
+ * then returns to idle state 0.
+ */
+void BattlePrepResultBanner_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
     s32 i;
     s32 j;
 
@@ -367,14 +420,14 @@ void BattlePrepStarBurst_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
             for (i = 0; i < 10; i++) {
                 for (j = 0; j < 8; j++) {
                     if (arg0->unk_0A0[i][j].unk_06 >= 0) {
-                        BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[i][j]);
+                        BattlePrepResultBanner_UpdateRainbowParticle(&arg0->unk_0A0[i][j]);
                     }
                 }
             }
         } else {
             for (i = 0; i < 10; i++) {
                 if (arg0->unk_000[i].unk_04 >= 0) {
-                    BattlePrepStarBurst_UpdateSparkSlot(&arg0->unk_000[i]);
+                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
                 }
             }
         }
@@ -384,7 +437,11 @@ void BattlePrepStarBurst_UpdateBurstEffect(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 2: shows the banner and swings it along a quarter arc toward the camera (side by
+ * unk_5A3); at frame 16 spawns 10 rainbow or spark particles around it and enters state 1.
+ */
+void BattlePrepResultBanner_UpdateFlightArc(unk_D_84B25AC0* arg0) {
     s16 i;
     s16 var_s2;
 
@@ -406,16 +463,16 @@ void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
             if (arg0->unk_5A2 != 0) {
                 var_s2 = 0x2000;
                 for (i = 0; i < 5; i++, var_s2 += 0x3000) {
-                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
+                    BattlePrepResultBanner_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
                                                             arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[i]);
+                    BattlePrepResultBanner_UpdateRainbowParticle(&arg0->unk_0A0[i]);
                 }
 
                 var_s2 = 0x6000;
                 for (i = 5; i < 10; i++, var_s2 -= 0x3000) {
-                    BattlePrepStarBurst_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
+                    BattlePrepResultBanner_InitRainbowParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
                                                             arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[i]);
+                    BattlePrepResultBanner_UpdateRainbowParticle(&arg0->unk_0A0[i]);
                 }
 
                 arg0->unk_5A1 = 0;
@@ -423,16 +480,16 @@ void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
             } else {
                 var_s2 = 0x3000;
                 for (i = 0; i < 5; i++, var_s2 += 0x2800) {
-                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
+                    BattlePrepResultBanner_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
                                                       arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepStarBurst_UpdateSparkSlot(&arg0->unk_000[i]);
+                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
                 }
 
                 var_s2 = 0x5000;
                 for (i = 5; i < 10; i++, var_s2 -= 0x2800) {
-                    BattlePrepStarBurst_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
+                    BattlePrepResultBanner_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
                                                       arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepStarBurst_UpdateSparkSlot(&arg0->unk_000[i]);
+                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
                 }
 
                 arg0->unk_5A1 = 0;
@@ -442,7 +499,11 @@ void BattlePrepStarBurst_UpdateFlightArc(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 3: after 4 frames throws the banner up-left with gravity and spin while emitting
+ * scatter particles; frees the banner at frame 34 and returns to state 0.
+ */
+void BattlePrepResultBanner_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
     s32 i;
     s32 j;
 
@@ -455,9 +516,9 @@ void BattlePrepStarBurst_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
 
         if (arg0->unk_5A1 < 0xE) {
             for (i = 0; i < 4; i++) {
-                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][0 + i], arg0->unk_5B8,
+                BattlePrepResultBanner_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][0 + i], arg0->unk_5B8,
                                                          &arg0->unk_5A8->position);
-                BattlePrepStarBurst_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][4 + i], arg0->unk_5B8,
+                BattlePrepResultBanner_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][4 + i], arg0->unk_5B8,
                                                          &arg0->unk_5A8->position);
             }
         }
@@ -465,7 +526,7 @@ void BattlePrepStarBurst_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
         for (j = 0; j < 10; j++) {
             for (i = 0; i < 8; i++) {
                 if (arg0->unk_0A0[j][i].unk_06 >= 0) {
-                    BattlePrepStarBurst_UpdateRainbowParticle(&arg0->unk_0A0[j][i]);
+                    BattlePrepResultBanner_UpdateRainbowParticle(&arg0->unk_0A0[j][i]);
                 }
             }
         }
@@ -477,7 +538,11 @@ void BattlePrepStarBurst_UpdateRainbowAftermath(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateSparkAftermath(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 4: after 4 frames moves the banner under gravity (sliding left and spinning when
+ * unk_5A2 != 0); frees it at frame 32 and returns to state 0.
+ */
+void BattlePrepResultBanner_UpdateSparkAftermath(unk_D_84B25AC0* arg0) {
     arg0->unk_5A1++;
     if (arg0->unk_5A1 >= 4) {
         arg0->unk_5A8->position.y += arg0->unk_5A4;
@@ -496,7 +561,11 @@ void BattlePrepStarBurst_UpdateSparkAftermath(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateExitSlide(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 5 (unk_5A2 == -1 variant): slides the banner right 40 units per frame for the
+ * first 7 frames when unk_5A3 is set, then idles until frame 44 and returns to state 0.
+ */
+void BattlePrepResultBanner_UpdateExitSlide(unk_D_84B25AC0* arg0) {
     if ((arg0->unk_5A1 < 0x14) && (arg0->unk_5A3 != 0) && (arg0->unk_5A1 < 7)) {
         arg0->unk_5A8->position.x += 40.0f;
     }
@@ -508,7 +577,11 @@ void BattlePrepStarBurst_UpdateExitSlide(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_UpdateFirstClearExit(unk_D_84B25AC0* arg0) {
+/**
+ * Banner state 7 (unk_5A2 == -1 exit): slides the banner right 40 units per frame when unk_5A3 is
+ * set, returning to state 0 after 11 frames.
+ */
+void BattlePrepResultBanner_UpdateFirstClearExit(unk_D_84B25AC0* arg0) {
     s32 tmp;
 
     if (arg0->unk_5A3 != 0) {
@@ -527,35 +600,42 @@ void BattlePrepStarBurst_UpdateFirstClearExit(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_Update(unk_D_84B25AC0* arg0) {
+/**
+ * Per-frame dispatcher for the result banner state machine (states 1-5 and 7).
+ */
+void BattlePrepResultBanner_Update(unk_D_84B25AC0* arg0) {
     switch (arg0->unk_5A0) {
         case 1:
-            BattlePrepStarBurst_UpdateBurstEffect(arg0);
+            BattlePrepResultBanner_UpdateBurstEffect(arg0);
             break;
 
         case 2:
-            BattlePrepStarBurst_UpdateFlightArc(arg0);
+            BattlePrepResultBanner_UpdateFlightArc(arg0);
             break;
 
         case 3:
-            BattlePrepStarBurst_UpdateRainbowAftermath(arg0);
+            BattlePrepResultBanner_UpdateRainbowAftermath(arg0);
             break;
 
         case 4:
-            BattlePrepStarBurst_UpdateSparkAftermath(arg0);
+            BattlePrepResultBanner_UpdateSparkAftermath(arg0);
             break;
 
         case 5:
-            BattlePrepStarBurst_UpdateExitSlide(arg0);
+            BattlePrepResultBanner_UpdateExitSlide(arg0);
             break;
 
         case 7:
-            BattlePrepStarBurst_UpdateFirstClearExit(arg0);
+            BattlePrepResultBanner_UpdateFirstClearExit(arg0);
             break;
     }
 }
 
-void BattlePrepStarBurst_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, DisplayObject* arg2) {
+/**
+ * Builds the banner object from arg1 and assigns particle objects from arg2. Variant -1 starts
+ * the state 5 slide in from the left; otherwise positions the banner by side and starts state 2.
+ */
+void BattlePrepResultBanner_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, DisplayObject* arg2) {
     s32 i;
     s32 j;
 
@@ -603,7 +683,11 @@ void BattlePrepStarBurst_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, Displ
     }
 }
 
-void BattlePrepStarBurst_StartExit(unk_D_84B25AC0* arg0) {
+/**
+ * Picks the banner exit: state 7 for variant -1, state 3 (rainbow throw) for unk_5A3 with
+ * unk_5A2 set, otherwise state 4 with an initial vertical speed in unk_5A4.
+ */
+void BattlePrepResultBanner_StartExit(unk_D_84B25AC0* arg0) {
     arg0->unk_5A1 = 0;
     if (arg0->unk_5A2 == -1) {
         arg0->unk_5A0 = 7;
@@ -625,7 +709,11 @@ void BattlePrepStarBurst_StartExit(unk_D_84B25AC0* arg0) {
     }
 }
 
-void BattlePrepStarBurst_Init(unk_D_84B25AC0* arg0, s8 arg1, s8 arg2) {
+/**
+ * Resets the banner, stores side (arg1) and variant (arg2), and builds the banner geo layout
+ * (D_84B16CFC for variant -1, else D_84B16CC8) plus the spark and rainbow particle layouts.
+ */
+void BattlePrepResultBanner_Init(unk_D_84B25AC0* arg0, s8 arg1, s8 arg2) {
     GraphNode* var_v0;
     MemoryBlock* temp_v0;
 

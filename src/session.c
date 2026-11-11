@@ -22,7 +22,7 @@ void Team_ClearTrainerSlot(BattleSessionTeams* arg0) {
     arg0->tagTeamMember[1] = 0;
     arg0->assetIsBusy = 0;
     arg0->unk_20 = 0;
-    arg0->unk_1E = 0;
+    arg0->winCount = 0;
 }
 
 void Session_SetMode(s32 arg0, s32 arg1, s32 arg2) {
@@ -531,11 +531,11 @@ void Session_SaveContinueData(void) {
     SessionContinueData sp20;
     ExtendedRosterInfo* sp1C = gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo;
 
-    sp20.unk_00 = gSessionContext.mode;
-    sp20.unk_01 = gSessionContext.modeSelection;
-    sp20.unk_02 = gSessionContext.roundOrDemoId;
-    sp20.unk_04 = gSessionContext.continueCount;
-    sp20.unk_03 = gSessionContext.inRound2;
+    sp20.sessionMode = gSessionContext.mode;
+    sp20.cupOrGymIndex = gSessionContext.modeSelection;
+    sp20.trainerIndex = gSessionContext.roundOrDemoId;
+    sp20.continueCount = gSessionContext.continueCount;
+    sp20.inRound2 = gSessionContext.inRound2;
 
     sp20.unk_0D = gSessionContext.gbStarterChoice;
     sp20.unk_0E = gSessionContext.battleSides[0].tagTeamMember[0]->unk_018;
@@ -556,12 +556,12 @@ s32 Session_LoadContinueData(void) {
 
     temp_v0 = Session_LoadContinueRecord(&sp250, sp58);
     if (temp_v0 != -1) {
-        Session_SetMode(sp250.unk_00, sp250.unk_00, sp250.unk_01);
+        Session_SetMode(sp250.sessionMode, sp250.sessionMode, sp250.cupOrGymIndex);
 
         _bcopy(sp250.unk_05, gSessionContext.opponentHistory[0], 8);
-        gSessionContext.roundOrDemoId = sp250.unk_02;
-        gSessionContext.continueCount = sp250.unk_04;
-        gSessionContext.inRound2 = sp250.unk_03;
+        gSessionContext.roundOrDemoId = sp250.trainerIndex;
+        gSessionContext.continueCount = sp250.continueCount;
+        gSessionContext.inRound2 = sp250.inRound2;
         gSessionContext.gbStarterChoice = sp250.unk_0D;
         tmp = sp250.unk_0E;
 

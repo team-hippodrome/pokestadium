@@ -112,10 +112,16 @@ static u32 D_84B17528[] = {
     0x05000000, 0x22050000, D_84B173A8, 0x06000000, 0x01000000,
 };
 
-void BattlePrep_TrophyModelIdle(unk_D_84B26640_010* arg0) {
+/**
+ * Holds a result label (PERFECT or EXTRA CONTINUE) at full size.
+ */
+void BattlePrep_ResultLabelIdle(unk_D_84B26640_010* arg0) {
 }
 
-void BattlePrep_TrophyModelGrow(unk_D_84B26640_010* arg0) {
+/**
+ * Grows a result label into view.
+ */
+void BattlePrep_ResultLabelGrow(unk_D_84B26640_010* arg0) {
     arg0->unk_01++;
     if (arg0->unk_01 == 8) {
         arg0->unk_00 = 0;
@@ -124,7 +130,10 @@ void BattlePrep_TrophyModelGrow(unk_D_84B26640_010* arg0) {
                                  arg0->unk_01 * 0.125f);
 }
 
-void BattlePrep_TrophyModelShrink(unk_D_84B26640_010* arg0) {
+/**
+ * Shrinks a result label out of view.
+ */
+void BattlePrep_ResultLabelShrink(unk_D_84B26640_010* arg0) {
     arg0->unk_01--;
     if (arg0->unk_01 == 0) {
         arg0->unk_00 = 0;
@@ -135,23 +144,29 @@ void BattlePrep_TrophyModelShrink(unk_D_84B26640_010* arg0) {
     }
 }
 
-void BattlePrep_UpdateTrophyModel(unk_D_84B26640_010* arg0) {
+/**
+ * Runs the result label state machine.
+ */
+void BattlePrep_UpdateResultLabel(unk_D_84B26640_010* arg0) {
     switch ((s8)arg0->unk_00) {
         case 1:
-            BattlePrep_TrophyModelIdle(arg0);
+            BattlePrep_ResultLabelIdle(arg0);
             break;
 
         case 2:
-            BattlePrep_TrophyModelGrow(arg0);
+            BattlePrep_ResultLabelGrow(arg0);
             break;
 
         case 3:
-            BattlePrep_TrophyModelShrink(arg0);
+            BattlePrep_ResultLabelShrink(arg0);
             break;
     }
 }
 
-void BattlePrep_StartTrophyModelGrow(unk_D_84B26640_010* arg0, DisplayObject* arg1) {
+/**
+ * Starts growing a result label.
+ */
+void BattlePrep_StartResultLabelGrow(unk_D_84B26640_010* arg0, DisplayObject* arg1) {
     arg0->unk_04 = arg1;
     arg0->unk_01 = 0;
     arg0->unk_00 = 2;
@@ -165,12 +180,18 @@ void BattlePrep_StartTrophyModelGrow(unk_D_84B26640_010* arg0, DisplayObject* ar
     Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, 0.1f, 0.1f, 0.1f);
 }
 
-void BattlePrep_StartTrophyModelShrink(unk_D_84B26640_010* arg0) {
+/**
+ * Starts shrinking a result label.
+ */
+void BattlePrep_StartResultLabelShrink(unk_D_84B26640_010* arg0) {
     arg0->unk_01 = 8;
     arg0->unk_00 = 3;
 }
 
-void BattlePrep_InitTrophyModel(unk_D_84B26640_010* arg0, u8 arg1) {
+/**
+ * Initializes a result label; arg1 0 = PERFECT, 1 = EXTRA CONTINUE.
+ */
+void BattlePrep_InitResultLabel(unk_D_84B26640_010* arg0, u8 arg1) {
     MemoryBlock* sp2C;
 
     arg0->unk_00 = 0;

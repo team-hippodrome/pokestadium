@@ -21,7 +21,7 @@ s32 BattlePrep_StarfieldGeoCallback(s32, unk_D_86002F34_alt8*);
 
 unk_D_84B19910 D_84B19910[400];
 s32 pad_D_84B1A590[2];
-unk_D_84B1A598 D_84B1A598;
+unk_D_84B1A598 sBattlePrepState;
 unk_D_84B259A8 D_84B259A8;
 unk_D_84B259E8 D_84B259E8;
 unk_D_84B25A28 D_84B25A28;
@@ -54,6 +54,10 @@ static u32 D_84B0FB20[] = {
     0x06000000,  0x06000000,  0x06000000, 0x01000000,
 };
 
+/**
+ * Records each Pokémon on the player's roster with VictoryPalace_SaveSpeciesRecord (Hall of Fame),
+ * then commits save record 0x13. For modes 3/6 only when modeSelection is 3, for mode 7 only when 9.
+ */
 void BattlePrep_SaveVictoryPalaceRecords(void) {
     s16 temp_s0;
     ExtendedRosterInfo* temp_v0;
@@ -78,6 +82,10 @@ void BattlePrep_SaveVictoryPalaceRecords(void) {
     Save_CommitTypedRecord(0x13, 0);
 }
 
+/**
+ * On the first clear of mode 3 or 6 at modeSelection 3 (clearedModes bit 0x8 / 0x40 not yet set),
+ * raises GameOptions.gbTowerUnlockTier (max 2) and sets transitionFlags 0x8 (tier 1) or 0x10 (tier 2).
+ */
 void BattlePrep_MarkFirstClearBonus(void) {
     GameOptions sp20;
     s32 sp1C = 0;
@@ -103,6 +111,10 @@ void BattlePrep_MarkFirstClearBonus(void) {
     }
 }
 
+/**
+ * Sets clearedModes bit (1 << mode) when the final selection of mode 3/6/7 is cleared; when all of
+ * bits 0xF8 are set, unlocks Mewtwo and sets SESSION_FLAG_REVEAL_MEWTWO. Saves mode settings.
+ */
 void BattlePrep_MarkCupCleared(void) {
     if (((gSessionContext.mode != 3) || (gSessionContext.modeSelection >= 3)) &&
         ((gSessionContext.mode != 6) || (gSessionContext.modeSelection >= 3)) &&
@@ -116,6 +128,10 @@ void BattlePrep_MarkCupCleared(void) {
     }
 }
 
+/**
+ * Raises castleClears / nintendoCupClears / primeCupClears to modeSelection + 1 when the current
+ * selection exceeds the saved count, setting transitionFlags 0x400. Saves mode settings.
+ */
 void BattlePrep_MarkNewRoundRecord(void) {
     if (gSessionContext.mode == 7) {
         if ((gSessionContext.modeSelection >= D_84B26670.castleClears) && (gSessionContext.modeSelection < 8)) {
@@ -135,14 +151,23 @@ void BattlePrep_MarkNewRoundRecord(void) {
     Save_SetModeSettings(&D_84B26670, gSessionContext.inRound2);
 }
 
-char* BattlePrep_GetString(s32 arg0) {
-    return Text_GetString(NULL, 0, sBattlePrepText, arg0);
+/**
+ * Returns string file_number from the battle_prep text table (table 0x1B).
+ */
+char* BattlePrep_GetString(s32 file_number) {
+    return Text_GetString(NULL, 0, sBattlePrepText, file_number);
 }
 
+/**
+ * Formats string arg2 from the battle_prep text table into buffer arg0 of size arg1.
+ */
 char* BattlePrep_FormatString(char* arg0, s32 arg1, u32 arg2) {
     return Text_GetString(arg0, arg1, sBattlePrepText, arg2);
 }
 
+/**
+ * Geo layout callback: on draw (arg0 == 5) draws the starfield from the node's callbackArg.
+ */
 s32 BattlePrep_StarfieldGeoCallback(s32 arg0, unk_D_86002F34_alt8* arg1) {
     if (arg0 == 5) {
         BattlePrep_DrawStarfield(arg1->node.callbackArg);
@@ -150,6 +175,9 @@ s32 BattlePrep_StarfieldGeoCallback(s32 arg0, unk_D_86002F34_alt8* arg1) {
     }
 }
 
+/**
+ * Clears a display object and resets its position to 0, scale to 1 and rotation to 0.
+ */
 void BattlePrep_ResetDisplayObject(DisplayObject* arg0) {
     ModelRenderer_ClearDisplayObject(arg0);
     Vec3f_SetComponentsDuplicate(&arg0->position, 0.0f, 0.0f, 0.0f);
@@ -157,14 +185,20 @@ void BattlePrep_ResetDisplayObject(DisplayObject* arg0) {
     Vec3s_SetComponents(&arg0->rotation, 0, 0, 0);
 }
 
+/**
+ * Resets all 128 display objects in sBattlePrepState.
+ */
 void BattlePrep_ResetAllDisplayObjects(void) {
     s32 i;
 
     for (i = 0; i < 128; i++) {
-        BattlePrep_ResetDisplayObject(&D_84B1A598.unk_0008[i]);
+        BattlePrep_ResetDisplayObject(&sBattlePrepState.unk_0008[i]);
     }
 }
 
+/**
+ * Prints arg2 in font 2 horizontally centered on x = 32 at row arg1 (arg0 unused).
+ */
 void BattlePrep_DrawCenteredText(s16 arg0, s16 arg1, char* arg2) {
     s32 sp1C = Font_MeasureTextExtent(2, 0, arg2);
 
@@ -175,6 +209,10 @@ void BattlePrep_DrawCenteredText(s16 arg0, s16 arg1, char* arg2) {
     Font_EndTexturedTextRendering();
 }
 
+/**
+ * Draws a rounded rectangle at (arg0, arg1) of size arg2 x arg3 tinted RGBA (arg4..arg7): four
+ * corner textures up to 8 px each, with fills for the edges and center.
+ */
 void BattlePrep_DrawBorderedRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
     s16 temp_a2;
     s16 temp_s0_32;
@@ -235,6 +273,11 @@ void BattlePrep_DrawBorderedRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Renders side arg1's 64x96 nameplate image into buffer arg0 from frame arg3 and portrait arg2:
+ * controller-port labels (or the COM label) in 2-player modes 0/9, otherwise a port label plus
+ * the trainer name, or only the opponent name for side 1.
+ */
 void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8* arg3) {
     BattleSessionTeams* temp_v1 = &gSessionContext.battleSides[arg1];
 
@@ -281,6 +324,10 @@ void BattlePrep_DrawTrainerStatusIcon(DepthBuffer* arg0, s16 arg1, u8* arg2, u8*
     }
 }
 
+/**
+ * Frame arg0 (< 16) of the burst: moves display objects 0-15 apart vertically and horizontally
+ * while spinning them.
+ */
 void BattlePrep_AnimateBallBurstEffect(s16 arg0) {
     static s16 D_84B0FC0C[] = {
         0x0300, 0x0150, 0xFEB0, 0xFD00, 0xFD00, 0xFEB0, 0x0150, 0x0300,
@@ -293,84 +340,97 @@ void BattlePrep_AnimateBallBurstEffect(s16 arg0) {
 
     if (arg0 < 0x10) {
         for (i = 0; i < 4; i++) {
-            D_84B1A598.unk_0008[i + 0].position.y += 2.0f * arg0 * 0.5f;
-            D_84B1A598.unk_0008[i + 0].rotation.x += 0x300;
-            D_84B1A598.unk_0008[i + 8].position.y += 2.0f * arg0 * 0.5f;
-            D_84B1A598.unk_0008[i + 8].rotation.x += 0x300;
-            D_84B1A598.unk_0008[i + 4].rotation.x -= 0x300;
+            sBattlePrepState.unk_0008[i + 0].position.y += 2.0f * arg0 * 0.5f;
+            sBattlePrepState.unk_0008[i + 0].rotation.x += 0x300;
+            sBattlePrepState.unk_0008[i + 8].position.y += 2.0f * arg0 * 0.5f;
+            sBattlePrepState.unk_0008[i + 8].rotation.x += 0x300;
+            sBattlePrepState.unk_0008[i + 4].rotation.x -= 0x300;
             // clang-format off
-            D_84B1A598.unk_0008[i + 4].position.y -= 2.0f * arg0 * 0.5f; D_84B1A598.unk_0008[i + 12].rotation.x -= 0x300;
+            sBattlePrepState.unk_0008[i + 4].position.y -= 2.0f * arg0 * 0.5f; sBattlePrepState.unk_0008[i + 12].rotation.x -= 0x300;
             // clang-format on
-            D_84B1A598.unk_0008[i + 12].position.y -= 2.0f * arg0 * 0.5f;
+            sBattlePrepState.unk_0008[i + 12].position.y -= 2.0f * arg0 * 0.5f;
         }
 
         for (i = 0; i < 8; i++) {
-            D_84B1A598.unk_0008[i + 0].rotation.z += D_84B0FC0C[i];
-            D_84B1A598.unk_0008[i + 8].rotation.z += D_84B0FC0C[i];
+            sBattlePrepState.unk_0008[i + 0].rotation.z += D_84B0FC0C[i];
+            sBattlePrepState.unk_0008[i + 8].rotation.z += D_84B0FC0C[i];
 
-            D_84B1A598.unk_0008[i + 0].position.x += arg0 * D_84B0FC1C[i] * 0.5f;
-            D_84B1A598.unk_0008[i + 8].position.x += arg0 * D_84B0FC1C[i] * 0.5f;
+            sBattlePrepState.unk_0008[i + 0].position.x += arg0 * D_84B0FC1C[i] * 0.5f;
+            sBattlePrepState.unk_0008[i + 8].position.x += arg0 * D_84B0FC1C[i] * 0.5f;
         }
     }
 }
 
+/**
+ * Frame arg0 (< 16): fades lodFraction of display objects 0-15 and 28-31 from 0xF0 toward 0.
+ */
 void BattlePrep_FadeInBallBurstObjects(s16 arg0) {
     s32 i;
 
     if (arg0 < 0x10) {
         for (i = 0; i < 16; i++) {
-            D_84B1A598.unk_0008[i].lodFraction = (-arg0 * 0x10) + 0xF0;
+            sBattlePrepState.unk_0008[i].lodFraction = (-arg0 * 0x10) + 0xF0;
         }
 
         for (i = 28; i < 32; i++) {
-            D_84B1A598.unk_0008[i].lodFraction = (-arg0 * 0x10) + 0xF0;
+            sBattlePrepState.unk_0008[i].lodFraction = (-arg0 * 0x10) + 0xF0;
         }
     }
 }
 
+/**
+ * Draws one frame: background stage, geo root (starfield and display objects) and both rule windows.
+ */
 void BattlePrep_RenderFrame(void) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Geo_RenderRootNode(D_84B1A598.unk_0004);
+    Geo_RenderRootNode(sBattlePrepState.unk_0004);
     BattlePrep_DrawRuleWindow(&D_84B26640.unk_1C);
     BattlePrep_DrawRuleWindow(&D_84B26640.unk_28);
     BgStage_AdvanceFrame();
 }
 
-void BattlePrep_UpdateSingleBattleIntroFrame(void) {
+/**
+ * Advances one frame of the phase 0 versus intro.
+ */
+void BattlePrep_UpdateVersusIntroFrame(void) {
     Controller_PollInputs();
     BattlePrep_UpdateStarfield(D_84B19910);
     BattlePrepRoster_Update(&D_84B25A28);
     BattlePrep_RenderFrame();
 }
 
-s32 BattlePrep_ShowSingleBattleIntro(void) {
+/**
+ * Phase 0: pre-battle VS roster for one-off battles (Free Battle, Event, Battle Now, Mewtwo).
+ * Plays music 0x31.
+ */
+s32 BattlePrep_ShowVersusIntro(void) {
     s32 i;
     s32 var_s1 = 0;
 
     Team_LoadOpponentPreset();
-    BattlePrepRoster_Init(&D_84B25A28, D_84B1A598.unk_0004->children);
-    BattlePrepRoster_Load(&D_84B25A28, D_84B1A598.unk_B40C);
+    BattlePrepRoster_Init(&D_84B25A28, sBattlePrepState.unk_0004->children);
+    BattlePrepRoster_Load(&D_84B25A28, sBattlePrepState.unk_B40C);
     Audio_PlayMusicIfChanged(0x31);
 
     for (i = 0; i < 16; i++) {
-        BattlePrep_UpdateSingleBattleIntroFrame();
+        BattlePrep_UpdateVersusIntroFrame();
     }
 
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, D_84B1A598.unk_0008) == 0) {
-        BattlePrep_UpdateSingleBattleIntroFrame();
+    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, sBattlePrepState.unk_0008) == 0) {
+        BattlePrep_UpdateVersusIntroFrame();
         var_s1++;
     }
 
     while (var_s1 < 0x1E) {
-        BattlePrep_UpdateSingleBattleIntroFrame();
+        BattlePrep_UpdateVersusIntroFrame();
         var_s1++;
     }
 
     for (i = 0; i < 90; i++) {
-        BattlePrep_UpdateSingleBattleIntroFrame();
+        BattlePrep_UpdateVersusIntroFrame();
     }
 
     Audio_StopMusic(0x20);
@@ -378,7 +438,7 @@ s32 BattlePrep_ShowSingleBattleIntro(void) {
     StageFade_StartFromTransparent(0x10);
 
     for (i = 0; i < 18; i++) {
-        BattlePrep_UpdateSingleBattleIntroFrame();
+        BattlePrep_UpdateVersusIntroFrame();
     }
 
     if (gSessionContext.sessionFlags & 1) {
@@ -390,21 +450,31 @@ s32 BattlePrep_ShowSingleBattleIntro(void) {
     return 4;
 }
 
+/**
+ * Advances one frame of the phase 1 round intro (starfield, banner carousel, opponent ladder, roster).
+ */
 void BattlePrep_UpdateRoundIntroFrame(void) {
     Controller_PollInputs();
     BattlePrep_UpdateStarfield(D_84B19910);
     BattlePrep_UpdateCarouselState(&D_84B259A8);
-    BattlePrep_UpdateBadgeCarousel(&D_84B259E8);
+    BattlePrep_UpdateOpponentLadder(&D_84B259E8);
     BattlePrepRoster_Update(&D_84B25A28);
     BattlePrep_RenderFrame();
 }
 
+/**
+ * Initializes the banner, opponent ladder and roster for the phase 1 round intro.
+ */
 void BattlePrep_InitRoundIntroScene(void) {
     BattlePrep_InitBannerScene(&D_84B259A8);
-    BattlePrep_InitBadgeCarouselScene(&D_84B259E8, D_84B1A598.unk_B408, D_84B1A598.unk_B40C);
-    BattlePrepRoster_Init(&D_84B25A28, D_84B1A598.unk_0004->children);
+    BattlePrep_InitOpponentLadderScene(&D_84B259E8, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
+    BattlePrepRoster_Init(&D_84B25A28, sBattlePrepState.unk_0004->children);
 }
 
+/**
+ * Phase 1: cup or Gym Leader Castle round intro. Shows the battle_headers banner (cup or gym name,
+ * BATTLE N / SEMI-FINAL / FINAL BATTLE label), the opponent ladder, then the roster. Plays music 0x33.
+ */
 s32 BattlePrep_ShowRoundIntro(void) {
     s32 i;
     s32 var_s1;
@@ -417,7 +487,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
 
     Team_LoadOpponentPreset();
     BattlePrep_InitRoundIntroScene();
-    BattlePrepRoster_Load(&D_84B25A28, D_84B1A598.unk_B40C);
+    BattlePrepRoster_Load(&D_84B25A28, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 16; i++) {
         BattlePrep_UpdateRoundIntroFrame();
@@ -429,8 +499,8 @@ s32 BattlePrep_ShowRoundIntro(void) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    BattlePrep_InitCarouselEntry(&D_84B259A8, &D_84B1A598.unk_0008[0x10]);
-    BattlePrep_InitBadgeCarousel(&D_84B259E8, D_84B1A598.unk_0008, 0);
+    BattlePrep_InitCarouselEntry(&D_84B259A8, &sBattlePrepState.unk_0008[0x10]);
+    BattlePrep_InitOpponentLadder(&D_84B259E8, sBattlePrepState.unk_0008, 0);
     Audio_PlayMusicIfChanged(0x33);
 
     for (i = 0; i < var_s1; i++) {
@@ -444,7 +514,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, D_84B1A598.unk_0008) == 0) {
+    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, sBattlePrepState.unk_0008) == 0) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
@@ -469,6 +539,10 @@ s32 BattlePrep_ShowRoundIntro(void) {
     return 4;
 }
 
+/**
+ * In round 2 mode 6 at modeSelection 3 (session flag 0x2 clear), if every roster Pokémon passes the
+ * unk_52 limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
+ */
 void BattlePrep_CheckPikachuNeedsSurf(void) {
     s32 i;
     s32 j;
@@ -507,52 +581,62 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
     }
 }
 
-void BattlePrep_UpdateRoundIntroScene(void) {
+/**
+ * Advances one frame of the result scene objects and rule windows, then renders.
+ */
+void BattlePrep_UpdateResultScene(void) {
     Controller_PollInputs();
     BattlePrep_UpdateStarfield(D_84B19910);
     BattlePrepTeamIcons_Update(&D_84B25A58);
-    BattlePrep_UpdateBadgeCarousel(&D_84B259E8);
+    BattlePrep_UpdateOpponentLadder(&D_84B259E8);
     BattlePrepBadgeAward_Update(&D_84B25A90);
-    BattlePrepStarBurst_Update(&D_84B25AC0);
-    BattlePrepStarBurst_Update(&D_84B26080);
-    BattlePrep_UpdateTrophyModel(&D_84B26640.unk_00);
-    BattlePrep_UpdateTrophyModel(&D_84B26640.unk_10);
+    BattlePrepResultBanner_Update(&D_84B25AC0);
+    BattlePrepResultBanner_Update(&D_84B26080);
+    BattlePrep_UpdateResultLabel(&D_84B26640.unk_00);
+    BattlePrep_UpdateResultLabel(&D_84B26640.unk_10);
     BattlePrep_UpdateRuleWindow(&D_84B26640.unk_1C);
     BattlePrep_UpdateRuleWindow(&D_84B26640.unk_28);
     BattlePrep_RenderFrame();
 }
 
-void BattlePrep_InitRoundIntroSubScenes(void) {
+/**
+ * Initializes the result banner, team icons, badge grid and result labels for phase 2.
+ */
+void BattlePrep_InitResultScene(void) {
     s32 tmp;
 
     BattlePrepTeamIcons_Init(&D_84B25A58);
-    BattlePrep_InitBadgeCarouselScene(&D_84B259E8, D_84B1A598.unk_B408, D_84B1A598.unk_B40C);
+    BattlePrep_InitOpponentLadderScene(&D_84B259E8, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
     BattlePrepBadgeAward_Init(&D_84B25A90);
 
-    if (D_84B1A598.unk_0003 != 0) {
-        BattlePrepStarBurst_Init(&D_84B25AC0, 1, -1);
-        BattlePrepStarBurst_Init(&D_84B26080, 0, -1);
+    if (sBattlePrepState.isDraw != 0) {
+        BattlePrepResultBanner_Init(&D_84B25AC0, 1, -1);
+        BattlePrepResultBanner_Init(&D_84B26080, 0, -1);
     } else {
-        BattlePrepStarBurst_Init(&D_84B25AC0, 1, D_84B1A598.unk_0001);
-        tmp = D_84B1A598.unk_0001 == 0;
-        BattlePrepStarBurst_Init(&D_84B26080, 0, tmp);
+        BattlePrepResultBanner_Init(&D_84B25AC0, 1, sBattlePrepState.playerWon);
+        tmp = sBattlePrepState.playerWon == 0;
+        BattlePrepResultBanner_Init(&D_84B26080, 0, tmp);
     }
 
-    BattlePrep_InitTrophyModel(&D_84B26640.unk_00, 0);
-    BattlePrep_InitTrophyModel(&D_84B26640.unk_10, 1);
+    BattlePrep_InitResultLabel(&D_84B26640.unk_00, 0);
+    BattlePrep_InitResultLabel(&D_84B26640.unk_10, 1);
 }
 
-void BattlePrep_RunNormalRoundIntro(void) {
+/**
+ * Reveals both teams and the WIN/LOSE/DRAW banners after a battle. Plays music 0x32, or 0x45
+ * when the player loses to a COM roster.
+ */
+void BattlePrep_RunResultReveal(void) {
     s32 i;
 
-    BattlePrepTeamIcons_Load(&D_84B25A58, D_84B1A598.unk_B40C);
+    BattlePrepTeamIcons_Load(&D_84B25A58, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 8; i++) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[0]->isHuman & 2) {
-        if (gSessionContext.battleSides[0].unk_1C == 1) {
+        if (gSessionContext.battleSides[0].wonBattle == 1) {
             Audio_PlayMusicIfChanged(0x32);
         } else {
             Audio_PlayMusicIfChanged(0x45);
@@ -563,93 +647,106 @@ void BattlePrep_RunNormalRoundIntro(void) {
 
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, D_84B1A598.unk_0008) == 0) {
-        BattlePrep_UpdateRoundIntroScene();
+    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, sBattlePrepState.unk_0008) == 0) {
+        BattlePrep_UpdateResultScene();
     }
 
     while (D_84B25A58.unk_00 != 0) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
-    BattlePrepStarBurst_Launch(&D_84B25AC0, &D_84B1A598.unk_0008[0x1C], &D_84B1A598.unk_0008[0x20]);
-    BattlePrepStarBurst_Launch(&D_84B26080, &D_84B1A598.unk_0008[0x1E], &D_84B1A598.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&D_84B25AC0, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&D_84B26080, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
 
     while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 }
 
-void BattlePrep_RunFinalRoundIntro(void) {
+/**
+ * Result reveal for a perfect cup win: also grows the PERFECT label (D_3028870) and, before the
+ * final, the EXTRA CONTINUE label (D_30281B0).
+ */
+void BattlePrep_RunPerfectReveal(void) {
     s32 i;
 
-    BattlePrepTeamIcons_Load(&D_84B25A58, D_84B1A598.unk_B40C);
+    BattlePrepTeamIcons_Load(&D_84B25A58, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 8; i++) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
     Audio_PlayMusicIfChanged(0x32);
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, D_84B1A598.unk_0008) == 0) {
-        BattlePrep_UpdateRoundIntroScene();
+    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, sBattlePrepState.unk_0008) == 0) {
+        BattlePrep_UpdateResultScene();
     }
 
     for (i = 0; i < 50; i++) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
-    BattlePrep_StartTrophyModelGrow(&D_84B26640.unk_00, &D_84B1A598.unk_0008[0x1A]);
+    BattlePrep_StartResultLabelGrow(&D_84B26640.unk_00, &sBattlePrepState.unk_0008[0x1A]);
     Audio_PlayCategory11SoundCommand(0x01100013, 0, 0);
 
     while (D_84B25A58.unk_00 != 0) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
-    BattlePrep_StartTrophyModelShrink(&D_84B26640.unk_00);
-    BattlePrepStarBurst_Launch(&D_84B25AC0, &D_84B1A598.unk_0008[0x1C], &D_84B1A598.unk_0008[0x20]);
-    BattlePrepStarBurst_Launch(&D_84B26080, &D_84B1A598.unk_0008[0x1E], &D_84B1A598.unk_0008[0x20]);
+    BattlePrep_StartResultLabelShrink(&D_84B26640.unk_00);
+    BattlePrepResultBanner_Launch(&D_84B25AC0, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&D_84B26080, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
 
     if (gSessionContext.roundOrDemoId < 8) {
         for (i = 0; i < 16; i++) {
-            BattlePrep_UpdateRoundIntroScene();
+            BattlePrep_UpdateResultScene();
         }
-        BattlePrep_StartTrophyModelGrow(&D_84B26640.unk_10, &D_84B1A598.unk_0008[0x1B]);
+        BattlePrep_StartResultLabelGrow(&D_84B26640.unk_10, &sBattlePrepState.unk_0008[0x1B]);
         Audio_PlaySoundEffectById(SFX_TROPHY_APPEAR);
     }
 
     while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 }
 
-void BattlePrep_RunBadgeCarouselIntro(void) {
+/**
+ * Shows the opponent ladder after a cup or castle battle and, on a win, stamps the defeated
+ * opponent's portrait. Stamps follow the round index (roundOrDemoId), not the opponents actually
+ * fought: skipping rounds leaves stamped placeholder portraits in the skipped slots.
+ */
+void BattlePrep_RunOpponentLadderResult(void) {
     s32 i;
     s32 tmp;
 
-    BattlePrepStarBurst_StartExit(&D_84B26080);
-    tmp = D_84B1A598.unk_0001 == 0;
-    BattlePrep_InitBadgeCarousel(&D_84B259E8, D_84B1A598.unk_0008, tmp + 1);
+    BattlePrepResultBanner_StartExit(&D_84B26080);
+    tmp = sBattlePrepState.playerWon == 0;
+    BattlePrep_InitOpponentLadder(&D_84B259E8, sBattlePrepState.unk_0008, tmp + 1);
 
     while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
     for (i = 0; i < 16; i++) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 }
 
+/**
+ * Waits for both result banners to finish, resets display objects 16+, plays sound 0x01100017,
+ * runs 16 burst frames, then resets objects 0-15 and runs 16 idle starfield frames.
+ */
 void BattlePrep_RunBallBurstTransition(void) {
     s32 i;
     s32 j;
 
     while ((D_84B25AC0.unk_5A0 != 0) || (D_84B26080.unk_5A0 != 0)) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     }
 
-    for (i = 16; i < ARRAY_COUNT(D_84B1A598.unk_0008); i++) {
-        BattlePrep_ResetDisplayObject(&D_84B1A598.unk_0008[i]);
+    for (i = 16; i < ARRAY_COUNT(sBattlePrepState.unk_0008); i++) {
+        BattlePrep_ResetDisplayObject(&sBattlePrepState.unk_0008[i]);
     }
 
     Audio_PlayCategory11SoundCommand(0x01100017, 0, 0);
@@ -662,7 +759,7 @@ void BattlePrep_RunBallBurstTransition(void) {
     }
 
     for (i = 0; i < 16; i++) {
-        BattlePrep_ResetDisplayObject(&D_84B1A598.unk_0008[i]);
+        BattlePrep_ResetDisplayObject(&sBattlePrepState.unk_0008[i]);
     }
 
     for (j = 0; j < 16; j++) {
@@ -672,6 +769,9 @@ void BattlePrep_RunBallBurstTransition(void) {
     }
 }
 
+/**
+ * Stops music and runs 16 frames fading out display objects via BattlePrep_FadeInBallBurstObjects.
+ */
 void BattlePrep_FadeInBallBurstTransition(void) {
     s32 i;
 
@@ -685,6 +785,9 @@ void BattlePrep_FadeInBallBurstTransition(void) {
     }
 }
 
+/**
+ * Stops music, starts a 16-frame fade from transparent, and runs 34 starfield frames to finish it.
+ */
 void BattlePrep_FadeToTransparentEnding(void) {
     s32 i;
 
@@ -705,7 +808,11 @@ void BattlePrep_FadeToTransparentEnding(void) {
     }
 }
 
-s32 BattlePrep_HandleRoundContinue(void) {
+/**
+ * "Keep battling?" Continue / Save and Quit prompt after a cup or castle win. Save and Quit
+ * advances roundOrDemoId and writes continue data (after the overwrite prompt if a save exists).
+ */
+s32 BattlePrep_PromptKeepBattling(void) {
     s32 var_s2;
     s32 var_v0_2;
 
@@ -717,7 +824,7 @@ s32 BattlePrep_HandleRoundContinue(void) {
 
     var_s2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
     while (var_s2 == -1) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
         var_s2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
     }
 
@@ -727,7 +834,7 @@ s32 BattlePrep_HandleRoundContinue(void) {
 
             var_v0_2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
             while (var_v0_2 == -1) {
-                BattlePrep_UpdateRoundIntroScene();
+                BattlePrep_UpdateResultScene();
                 var_v0_2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
             }
 
@@ -744,7 +851,13 @@ s32 BattlePrep_HandleRoundContinue(void) {
     return var_s2;
 }
 
-s32 BattlePrep_ConsumeContinueToken(void) {
+/**
+ * Cup loss menu Save option: confirms overwriting existing continue data, then spends a
+ * continue and writes the continue data. Returns 0 if the player declines the overwrite.
+ * Only BattlePrep_ShowCupResult calls this. Its Continue option spends a continue
+ * directly, without saving. Continues are only spent after a cup loss.
+ */
+s32 BattlePrep_SpendContinueAndSave(void) {
     s32 sp24 = 1;
     s32 var_v0;
 
@@ -753,7 +866,7 @@ s32 BattlePrep_ConsumeContinueToken(void) {
 
         var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
         while (var_v0 == -1) {
-            BattlePrep_UpdateRoundIntroScene();
+            BattlePrep_UpdateResultScene();
             var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
         }
 
@@ -770,25 +883,33 @@ s32 BattlePrep_ConsumeContinueToken(void) {
     return sp24;
 }
 
-s32 BattlePrep_ConfirmDefaultRules(void) {
+/**
+ * Free Battle (mode 0) result: adds wins to winCount, shows the win record and the
+ * Try once more / Change team combination / Quit menu. Try once more (0x21) returns to
+ * entry Pokemon selection; Change team combination (0x81) returns to the Free Battle rules
+ * screen, where the controller ports assigned to each team can be changed; Quit (0x1)
+ * returns to the area select. Once the winner's winCount reaches 99, Try once more is disabled
+ * and the cursor starts on Change team combination.
+ */
+s32 BattlePrep_ShowFreeBattleResult(void) {
     s32 var_v0;
 
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
-        gSessionContext.battleSides[0].unk_1E += 1;
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
+        gSessionContext.battleSides[0].winCount += 1;
     }
 
-    if (gSessionContext.battleSides[1].unk_1C == 1) {
-        gSessionContext.battleSides[1].unk_1E += 1;
+    if (gSessionContext.battleSides[1].wonBattle == 1) {
+        gSessionContext.battleSides[1].winCount += 1;
     }
 
-    BattlePrep_RunNormalRoundIntro();
+    BattlePrep_RunResultReveal();
     Audio_PlayCategory11SoundCommand(0x0110000F, 0, 0);
     BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 9);
     BattlePrep_InitRuleWindow(&D_84B26640.unk_28, 5);
 
     var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
     while (var_v0 == -1) {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
         var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
     }
 
@@ -806,8 +927,8 @@ s32 BattlePrep_ConfirmDefaultRules(void) {
             break;
     }
 
-    BattlePrepStarBurst_StartExit(&D_84B26080);
-    BattlePrepStarBurst_StartExit(&D_84B25AC0);
+    BattlePrepResultBanner_StartExit(&D_84B26080);
+    BattlePrepResultBanner_StartExit(&D_84B25AC0);
     Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
     BattlePrep_RunBallBurstTransition();
     BattlePrep_FadeToTransparentEnding();
@@ -815,15 +936,18 @@ s32 BattlePrep_ConfirmDefaultRules(void) {
     return 4;
 }
 
-s32 BattlePrep_ConfirmSimpleRules(void) {
-    BattlePrep_RunNormalRoundIntro();
+/**
+ * Battle Now and Event (modes 9 and 10) result: shows the WIN/LOSE banner and waits for A.
+ */
+s32 BattlePrep_ShowSimpleResult(void) {
+    BattlePrep_RunResultReveal();
 
     do {
-        BattlePrep_UpdateRoundIntroScene();
+        BattlePrep_UpdateResultScene();
     } while (!(BTN_IS_PRESSED(gPlayer1Controller, BTN_A)));
 
-    BattlePrepStarBurst_StartExit(&D_84B26080);
-    BattlePrepStarBurst_StartExit(&D_84B25AC0);
+    BattlePrepResultBanner_StartExit(&D_84B26080);
+    BattlePrepResultBanner_StartExit(&D_84B25AC0);
     Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
     BattlePrep_RunBallBurstTransition();
     BattlePrep_FadeToTransparentEnding();
@@ -831,37 +955,44 @@ s32 BattlePrep_ConfirmSimpleRules(void) {
     return 4;
 }
 
-s32 BattlePrep_ConfirmCupRules(void) {
+/**
+ * Stadium cup (modes 1-6) result. On a win: ladder mark, badge grid, then Keep battling?
+ * (or cup clear after the final, roundOrDemoId 8). On a loss: progress header plus the
+ * Continue / Save / Re-enter / From the start / Quit menu. A cup final win hands off to the
+ * cup clear ceremony (mode 17); observed transitionFlags 0x403 (Poke Ball) and 0x40B (Master
+ * Ball, which also raises the GB Tower unlock tier).
+ */
+s32 BattlePrep_ShowCupResult(void) {
     UNUSED s32 pad[2];
     s32 sp2C = 4;
     s32 i;
     s32 var_s2;
     s32 var_v0;
 
-    if (D_84B1A598.unk_0002 != 0) {
-        BattlePrep_RunFinalRoundIntro();
+    if (sBattlePrepState.perfectWin != 0) {
+        BattlePrep_RunPerfectReveal();
     } else {
-        BattlePrep_RunNormalRoundIntro();
+        BattlePrep_RunResultReveal();
     }
 
-    BattlePrep_RunBadgeCarouselIntro();
+    BattlePrep_RunOpponentLadderResult();
 
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
-        gSessionContext.continueCount += D_84B1A598.unk_0002;
-        if ((D_84B1A598.unk_0002 != 0) && (gSessionContext.roundOrDemoId < 8)) {
-            BattlePrep_StartTrophyModelShrink(&D_84B26640.unk_10);
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
+        gSessionContext.continueCount += sBattlePrepState.perfectWin;
+        if ((sBattlePrepState.perfectWin != 0) && (gSessionContext.roundOrDemoId < 8)) {
+            BattlePrep_StartResultLabelShrink(&D_84B26640.unk_10);
         }
 
-        BattlePrepStarBurst_StartExit(&D_84B25AC0);
-        BattlePrepBadgeAward_InitDisplayObjects(&D_84B25A90, D_84B1A598.unk_0008);
+        BattlePrepResultBanner_StartExit(&D_84B25AC0);
+        BattlePrepBadgeAward_InitDisplayObjects(&D_84B25A90, sBattlePrepState.unk_0008);
 
         while (D_84B25A90.unk_00 != 3) {
-            BattlePrep_UpdateRoundIntroScene();
+            BattlePrep_UpdateResultScene();
         }
 
         if (gSessionContext.roundOrDemoId == 8) {
             for (i = 0; i < 120; i++) {
-                BattlePrep_UpdateRoundIntroScene();
+                BattlePrep_UpdateResultScene();
                 if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
                     break;
                 }
@@ -877,7 +1008,7 @@ s32 BattlePrep_ConfirmCupRules(void) {
             BattlePrep_FadeToTransparentEnding();
             BattlePrep_CheckPikachuNeedsSurf();
             gSessionContext.transitionFlags |= 3;
-        } else if (BattlePrep_HandleRoundContinue() == 1) {
+        } else if (BattlePrep_PromptKeepBattling() == 1) {
             BattlePrep_RunBallBurstTransition();
             BattlePrep_FadeToTransparentEnding();
             gSessionContext.transitionFlags |= 0x41;
@@ -895,7 +1026,7 @@ s32 BattlePrep_ConfirmCupRules(void) {
 
             var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
             while (var_v0 == -1) {
-                BattlePrep_UpdateRoundIntroScene();
+                BattlePrep_UpdateResultScene();
                 var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
             }
 
@@ -907,7 +1038,7 @@ s32 BattlePrep_ConfirmCupRules(void) {
                     break;
 
                 case 1:
-                    if (BattlePrep_ConsumeContinueToken() != 0) {
+                    if (BattlePrep_SpendContinueAndSave() != 0) {
                         var_s2 = 0;
                         gSessionContext.transitionFlags |= 0x41;
                     }
@@ -931,7 +1062,7 @@ s32 BattlePrep_ConfirmCupRules(void) {
         }
 
         if (sp2C == 4) {
-            BattlePrepStarBurst_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&D_84B25AC0);
             BattlePrep_RunBallBurstTransition();
             BattlePrep_FadeToTransparentEnding();
         } else {
@@ -943,16 +1074,21 @@ s32 BattlePrep_ConfirmCupRules(void) {
     return sp2C;
 }
 
-s32 BattlePrep_ConfirmCastleRules(void) {
+/**
+ * Gym Leader Castle (mode 7) result. A win shows Keep battling? or, after a gym leader or the
+ * rival, returns phase 3. A loss shows Re-enter / Re-start at this GYM / Quit. Observed
+ * transitionFlags: 0x501 after the Elite Four clear and 0x201 after the rival clear.
+ */
+s32 BattlePrep_ShowCastleResult(void) {
     s32 sp28;
     s32 i;
     s32 sp24 = 4;
     s32 var_v0;
 
-    BattlePrep_RunNormalRoundIntro();
-    BattlePrep_RunBadgeCarouselIntro();
+    BattlePrep_RunResultReveal();
+    BattlePrep_RunOpponentLadderResult();
 
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
         if ((gSessionContext.roundOrDemoId == 4) || (gSessionContext.modeSelection == 9)) {
             BattlePrep_MarkCupCleared();
             BattlePrep_MarkNewRoundRecord();
@@ -961,13 +1097,13 @@ s32 BattlePrep_ConfirmCastleRules(void) {
             Save_FlushBank(2);
 
             for (i = 0; i < 60; i++) {
-                BattlePrep_UpdateRoundIntroScene();
+                BattlePrep_UpdateResultScene();
                 if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
                     break;
                 }
             }
 
-            BattlePrepStarBurst_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&D_84B25AC0);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             Audio_StopMusic(0x10);
@@ -983,14 +1119,14 @@ s32 BattlePrep_ConfirmCastleRules(void) {
                 gSessionContext.transitionFlags |= 0x100;
             }
             sp24 = 3;
-        } else if (BattlePrep_HandleRoundContinue() == 1) {
-            BattlePrepStarBurst_StartExit(&D_84B25AC0);
+        } else if (BattlePrep_PromptKeepBattling() == 1) {
+            BattlePrepResultBanner_StartExit(&D_84B25AC0);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             BattlePrep_FadeToTransparentEnding();
             gSessionContext.transitionFlags |= 0x41;
         } else {
-            BattlePrepStarBurst_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&D_84B25AC0);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             Audio_StopMusic(0x50);
@@ -1003,7 +1139,7 @@ s32 BattlePrep_ConfirmCastleRules(void) {
 
         var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
         while (var_v0 == -1) {
-            BattlePrep_UpdateRoundIntroScene();
+            BattlePrep_UpdateResultScene();
             var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
         }
 
@@ -1021,7 +1157,7 @@ s32 BattlePrep_ConfirmCastleRules(void) {
                 break;
         }
 
-        BattlePrepStarBurst_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&D_84B25AC0);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
 
@@ -1032,12 +1168,15 @@ s32 BattlePrep_ConfirmCastleRules(void) {
     return sp24;
 }
 
-s32 BattlePrep_ConfirmMewtwoRules(void) {
+/**
+ * Mewtwo (mode 8) result. A loss offers Battle again / Quit; a win sets transitionFlags 0x5 (0x4 plus 0x1).
+ */
+s32 BattlePrep_ShowMewtwoResult(void) {
     s32 var_v0;
     u16 sp2A;
 
-    BattlePrep_RunNormalRoundIntro();
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
+    BattlePrep_RunResultReveal();
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
         s32 tmp1 = !!(D_84B26670.clearedModes & 0x100);
 
         if ((gSessionContext.inRound2 == 0) & !tmp1) {
@@ -1049,8 +1188,8 @@ s32 BattlePrep_ConfirmMewtwoRules(void) {
         BattlePrep_MarkCupCleared();
         Save_CommitTypedRecord(0x14, 0);
         Save_FlushBank(2);
-        BattlePrepStarBurst_StartExit(&D_84B26080);
-        BattlePrepStarBurst_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&D_84B26080);
+        BattlePrepResultBanner_StartExit(&D_84B25AC0);
         Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
@@ -1060,7 +1199,7 @@ s32 BattlePrep_ConfirmMewtwoRules(void) {
 
         var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
         while (var_v0 == -1) {
-            BattlePrep_UpdateRoundIntroScene();
+            BattlePrep_UpdateResultScene();
             var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
         }
 
@@ -1074,8 +1213,8 @@ s32 BattlePrep_ConfirmMewtwoRules(void) {
                 break;
         }
 
-        BattlePrepStarBurst_StartExit(&D_84B26080);
-        BattlePrepStarBurst_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&D_84B26080);
+        BattlePrepResultBanner_StartExit(&D_84B25AC0);
         Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
@@ -1083,12 +1222,16 @@ s32 BattlePrep_ConfirmMewtwoRules(void) {
     return 4;
 }
 
-u8 BattlePrep_CheckTeamChosen(void) {
+/**
+ * Returns 1 when a cup mode (1-6) battle was won with all three picked Pokemon at nonzero HP.
+ * The result grants an extra continue and shows the PERFECT label.
+ */
+u8 BattlePrep_IsPerfectCupWin(void) {
     s32 i;
     u8 var_v1 = 0;
 
     if ((gSessionContext.mode > 0) && (gSessionContext.mode < 7)) {
-        if (gSessionContext.battleSides[0].unk_1C == 1) {
+        if (gSessionContext.battleSides[0].wonBattle == 1) {
             var_v1 = 1;
             for (i = 0; i < 3; i++) {
                 if (gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].hp == 0) {
@@ -1101,60 +1244,68 @@ u8 BattlePrep_CheckTeamChosen(void) {
     return var_v1;
 }
 
-s32 BattlePrep_DispatchRuleConfirm(void) {
+/**
+ * Phase 2: post-battle result screen. Records draw/win state, then dispatches on
+ * gSessionContext.mode to the per-mode result handler and returns the next phase.
+ */
+s32 BattlePrep_ShowBattleResult(void) {
     s32 var_v0;
 
-    D_84B1A598.unk_0002 = BattlePrep_CheckTeamChosen();
-    BattlePrep_InitRoundIntroSubScenes();
+    sBattlePrepState.perfectWin = BattlePrep_IsPerfectCupWin();
+    BattlePrep_InitResultScene();
 
     switch (gSessionContext.mode) {
         case 0:
-            var_v0 = BattlePrep_ConfirmDefaultRules();
+            var_v0 = BattlePrep_ShowFreeBattleResult();
             break;
 
         case 1:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 2:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 3:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 4:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 5:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 6:
-            var_v0 = BattlePrep_ConfirmCupRules();
+            var_v0 = BattlePrep_ShowCupResult();
             break;
 
         case 7:
-            var_v0 = BattlePrep_ConfirmCastleRules();
+            var_v0 = BattlePrep_ShowCastleResult();
             break;
 
         case 8:
-            var_v0 = BattlePrep_ConfirmMewtwoRules();
+            var_v0 = BattlePrep_ShowMewtwoResult();
             break;
 
         case 9:
-            var_v0 = BattlePrep_ConfirmSimpleRules();
+            var_v0 = BattlePrep_ShowSimpleResult();
             break;
 
         case 10:
-            var_v0 = BattlePrep_ConfirmSimpleRules();
+            var_v0 = BattlePrep_ShowSimpleResult();
             break;
     }
     return var_v0;
 }
 
+/**
+ * Phase 3: castle gym-clear outro, reached when BattlePrep_ShowCastleResult returns 3.
+ * Plays music 0x3F.
+ */
 s32 BattlePrep_ShowCastleClearOutro(void) {
     s32 i;
     s32 var_s1;
@@ -1166,7 +1317,7 @@ s32 BattlePrep_ShowCastleClearOutro(void) {
     }
 
     BattlePrep_InitBannerScene(&D_84B259A8);
-    BattlePrep_InitCarouselExit(&D_84B259A8, &D_84B1A598.unk_0008[0x10]);
+    BattlePrep_InitCarouselExit(&D_84B259A8, &sBattlePrepState.unk_0008[0x10]);
     Audio_PlayMusicIfChanged(0x3F);
 
     for (i = 0; i < var_s1; i++) {
@@ -1189,32 +1340,36 @@ s32 BattlePrep_ShowCastleClearOutro(void) {
     return 4;
 }
 
+/**
+ * Computes playerWon / isDraw from battleSides[].wonBattle, attaches the 128 display objects, builds
+ * the geo layout D_84B0FB20 (near 10, far 6000), initializes the starfield and closes both rule windows.
+ */
 void BattlePrep_InitScene(void) {
     MemoryBlock* temp_v0;
     CameraNode* ptr;
     DisplayObject* ptr2;
     s32 i;
 
-    D_84B1A598.unk_0001 = 0;
-    D_84B1A598.unk_0003 = 0;
-    if (gSessionContext.battleSides[0].unk_1C == gSessionContext.battleSides[1].unk_1C) {
-        D_84B1A598.unk_0003 = 1;
-    } else if (gSessionContext.battleSides[0].unk_1C == 1) {
-        D_84B1A598.unk_0001 = 1;
+    sBattlePrepState.playerWon = 0;
+    sBattlePrepState.isDraw = 0;
+    if (gSessionContext.battleSides[0].wonBattle == gSessionContext.battleSides[1].wonBattle) {
+        sBattlePrepState.isDraw = 1;
+    } else if (gSessionContext.battleSides[0].wonBattle == 1) {
+        sBattlePrepState.playerWon = 1;
     }
 
     ModelRenderer_InitDisplayRoots();
 
-    for (i = 0, ptr2 = &D_84B1A598.unk_0008[0]; i < 128; ptr2++, i++) {
+    for (i = 0, ptr2 = &sBattlePrepState.unk_0008[0]; i < 128; ptr2++, i++) {
         ModelRenderer_AttachDisplayObject(ptr2);
-        D_84B1A598.unk_0008[i].effectSlot = i;
+        sBattlePrepState.unk_0008[i].effectSlot = i;
     }
 
     temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
-    D_84B1A598.unk_0004 = process_geo_layout(temp_v0, &D_84B0FB20);
+    sBattlePrepState.unk_0004 = process_geo_layout(temp_v0, &D_84B0FB20);
     MainPool_FinalizeAllocation(temp_v0);
 
-    ptr = D_84B1A598.unk_0004->children;
+    ptr = sBattlePrepState.unk_0004->children;
     ptr->perspective.nearPlane = 10.0f;
     ptr->perspective.farPlane = 6000.0f;
 
@@ -1223,7 +1378,14 @@ void BattlePrep_InitScene(void) {
     BattlePrep_CloseRuleWindow(&D_84B26640.unk_28);
 }
 
-s32 BattlePrep_RunRulesScreen(s32 arg0, UNUSED s32 arg1) {
+/**
+ * Fragment entry. arg0 selects the phase: 0 = versus intro, 1 = cup or castle round intro,
+ * 2 = post-battle result, 3 = castle gym-clear outro. Loops while a phase returns another phase
+ * (a cup Continue returns 1 to show the next round intro). Called from the mode states in
+ * src/game_state.c around BATTLE_ENGINE.
+ */
+//@src/game_state.c
+s32 BattlePrep_Main(s32 arg0, UNUSED s32 arg1) {
     StageContext* sp2C;
 
     main_pool_push_state('EYEC');
@@ -1241,8 +1403,8 @@ s32 BattlePrep_RunRulesScreen(s32 arg0, UNUSED s32 arg1) {
     sBattlePrepText = Text_GetStringTable(0x1B);
     PokeIcon_OpenModelArchive();
 
-    D_84B1A598.unk_B408 = BinArchive_Open(TRAINER_DATA_ROM_START, NULL, 1, 1);
-    D_84B1A598.unk_B40C = ASSET_LOAD2(battle_portraits, 1, 1);
+    sBattlePrepState.unk_B408 = BinArchive_Open(TRAINER_DATA_ROM_START, NULL, 1, 1);
+    sBattlePrepState.unk_B40C = ASSET_LOAD2(battle_portraits, 1, 1);
 
     StageContext_Activate(sp2C);
     BattlePrep_InitScene();
@@ -1252,7 +1414,7 @@ s32 BattlePrep_RunRulesScreen(s32 arg0, UNUSED s32 arg1) {
 
         switch (arg0) {
             case 0:
-                arg0 = BattlePrep_ShowSingleBattleIntro();
+                arg0 = BattlePrep_ShowVersusIntro();
                 break;
 
             case 1:
@@ -1260,7 +1422,7 @@ s32 BattlePrep_RunRulesScreen(s32 arg0, UNUSED s32 arg1) {
                 break;
 
             case 2:
-                arg0 = BattlePrep_DispatchRuleConfirm();
+                arg0 = BattlePrep_ShowBattleResult();
                 break;
 
             case 3:

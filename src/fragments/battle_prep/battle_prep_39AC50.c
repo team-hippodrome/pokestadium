@@ -79,6 +79,11 @@ static Gfx D_84B12420[] = {
     gsSPEndDisplayList(),
 };
 
+/**
+ * Geo callback (draw phase 5) for the single-format roster icon nodes. Binds segment 0x0F to the
+ * PokeIcon image chosen from the node's callbackArg and slot offset, and segment 0x0E to D_300C000 (top row)
+ * or D_300D800 (bottom row).
+ */
 s32 BattlePrepRoster_DrawIconVariantA(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A28* temp_a3;
     u8* sp30;
@@ -105,6 +110,10 @@ s32 BattlePrepRoster_DrawIconVariantA(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5) for the double/tag-team roster icon nodes. Same as
+ * BattlePrepRoster_DrawIconVariantA but with a 2-per-member index layout and D_300F000 / D_300FC00 frames.
+ */
 s32 BattlePrepRoster_DrawIconVariantB(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A28* temp_a3;
     u8* sp30;
@@ -132,6 +141,10 @@ s32 BattlePrepRoster_DrawIconVariantB(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5): binds segment 0x0F to trainer status icon image unk_24 for the first
+ * roster node or unk_28 otherwise, then draws the node's display list and reapplies material state.
+ */
 s32 BattlePrepRoster_DrawTrainerBadge(s32 arg0, unk_func_80011B94* arg1) {
     unk_D_84B25A28* temp_v1;
     u8* var_a3;
@@ -153,6 +166,10 @@ s32 BattlePrepRoster_DrawTrainerBadge(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Geo callback (draw phase 5): emits D_84B12420 and scrolls its 32x32 texture tile horizontally by
+ * decrementing a static S offset each frame, wrapping from 0 back to 0x80.
+ */
 s32 BattlePrepRoster_ScrollBackgroundTexture(s32 arg0, unk_func_80011B94* arg1) {
     static s32 D_84B12490 = 0x80;
 
@@ -846,6 +863,10 @@ static u32 D_84B14B50[] = {
     0x01000000,
 };
 
+/**
+ * Rotates roster nodes 0-4 and 5-9 in opposite directions about X each frame (sound 0x01100006 at frame 0).
+ * Returns 1 after 20 frames (16 on PAL), else 0. Called by BattlePrepRoster_UpdateAssembleStep.
+ */
 s32 BattlePrepRoster_ConvergeIconsStep(unk_D_84B25A28* arg0, s16 arg1) {
     s16 i;
     s16 sp24;
@@ -878,11 +899,18 @@ s32 BattlePrepRoster_ConvergeIconsStep(unk_D_84B25A28* arg0, s16 arg1) {
     return 1;
 }
 
+/**
+ * Sets the camera target Y to a decaying sine of arg1 and recomputes the eye position at distance 289.
+ */
 void BattlePrepRoster_UpdateCameraSwoop(unk_D_84B25A28* arg0, s16 arg1) {
     arg0->unk_08->view.targetPosition.y = SINS(arg1 << 0xE) * SQ((0x10 - arg1) / 12.0f);
     Camera_ComputeEyeFromAngles(&arg0->unk_08->view.targetPosition, &arg0->unk_08->view.eyePosition, 289.0f, 0, 0);
 }
 
+/**
+ * NTSC: moves node 10 away along Z for 20 frames, then runs BattlePrepRoster_UpdateCameraSwoop for 16
+ * frames; plays sounds 0x01100007 and 0x01100008. Returns 1 when finished.
+ */
 s32 BattlePrepRoster_ZoomStepNTSC(unk_D_84B25A28* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x01100007, 0, 0);
@@ -904,6 +932,9 @@ s32 BattlePrepRoster_ZoomStepNTSC(unk_D_84B25A28* arg0, s16 arg1) {
     return 1;
 }
 
+/**
+ * PAL timing of BattlePrepRoster_ZoomStepNTSC (16 + 16 frames, larger Z step). Returns 1 when finished.
+ */
 s32 BattlePrepRoster_ZoomStepPAL(unk_D_84B25A28* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x01100007, 0, 0);
@@ -926,6 +957,10 @@ s32 BattlePrepRoster_ZoomStepPAL(unk_D_84B25A28* arg0, s16 arg1) {
     return 1;
 }
 
+/**
+ * State 3 tick: runs BattlePrepRoster_ConvergeIconsStep, then the TV-specific zoom step after 16 frames
+ * (13 on PAL); returns to state 0 once both report done. Advances the frame counter unk_01.
+ */
 void BattlePrepRoster_UpdateAssembleStep(unk_D_84B25A28* arg0) {
     s32 sp24 = 1;
 
@@ -953,6 +988,10 @@ void BattlePrepRoster_UpdateAssembleStep(unk_D_84B25A28* arg0) {
     arg0->unk_01++;
 }
 
+/**
+ * State 1 tick: processes one PokeIcon slot per frame; after at least 30 frames and all slots idle,
+ * resets the counter and sets state 2 (ready for BattlePrepRoster_InitDisplayObjects).
+ */
 void BattlePrepRoster_UpdateLoadingStep(unk_D_84B25A28* arg0) {
     PokeIcon_ProcessNextSlot(arg0->unk_20, 0);
 
@@ -963,6 +1002,9 @@ void BattlePrepRoster_UpdateLoadingStep(unk_D_84B25A28* arg0) {
     }
 }
 
+/**
+ * Per-frame dispatcher for the roster: state 1 loading, state 3 assemble animation.
+ */
 void BattlePrepRoster_Update(unk_D_84B25A28* arg0) {
     switch (arg0->unk_00) {
         case 1:
@@ -975,6 +1017,10 @@ void BattlePrepRoster_Update(unk_D_84B25A28* arg0) {
     }
 }
 
+/**
+ * Allocates the icon depth buffer (0x80x0x60) and queues species icons for every pickable roster entry:
+ * side 0 into slots 0-5, side 1 into slots 6+.
+ */
 void BattlePrepRoster_LoadDexIdsSingle(unk_D_84B25A28* arg0) {
     s32 i;
     s32 count;
@@ -996,6 +1042,10 @@ void BattlePrepRoster_LoadDexIdsSingle(unk_D_84B25A28* arg0) {
     }
 }
 
+/**
+ * Tag-team variant of BattlePrepRoster_LoadDexIdsSingle (0x60x0x40 buffer): queues side 0 member 0/1
+ * into slots 0/6 and side 1 member 0/1 into slots 12/18, skipping absent members.
+ */
 void BattlePrepRoster_LoadDexIdsDouble(unk_D_84B25A28* arg0) {
     s32 i;
     s32 count;
@@ -1032,6 +1082,10 @@ void BattlePrepRoster_LoadDexIdsDouble(unk_D_84B25A28* arg0) {
     }
 }
 
+/**
+ * Loads icon model archives and the particle library, queues roster species icons for the current
+ * format, renders both trainers' status icons into unk_24/unk_28, and sets state 1 (loading).
+ */
 void BattlePrepRoster_Load(unk_D_84B25A28* arg0, BinArchive* arg1) {
     u8* sp24 = BinArchive_GetFile(arg1, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
     u8* sp20 = BinArchive_GetFile(arg1, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
@@ -1050,6 +1104,9 @@ void BattlePrepRoster_Load(unk_D_84B25A28* arg0, BinArchive* arg1) {
     arg0->unk_00 = 1;
 }
 
+/**
+ * Places roster nodes 0-9 on a 4-wide grid (y = +96 / -96, z = -289) and hides nodes 1 and 8.
+ */
 void BattlePrepRoster_PositionIconsSingle(unk_D_84B25A28* arg0) {
     Vec3f_SetComponentsDuplicate(&arg0->unk_04[0].position, -96.0f, 96.0f, -289.0f);
     Vec3f_SetComponentsDuplicate(&arg0->unk_04[2].position, -32.0f, 96.0f, -289.0f);
@@ -1064,6 +1121,9 @@ void BattlePrepRoster_PositionIconsSingle(unk_D_84B25A28* arg0) {
     arg0->unk_04[8].node.flags &= ~1;
 }
 
+/**
+ * Places all 10 roster nodes on 5-wide rows (y = +96 / -96, z = -289) for the tag-team layout.
+ */
 void BattlePrepRoster_PositionIconsDouble(unk_D_84B25A28* arg0) {
     Vec3f_SetComponentsDuplicate(&arg0->unk_04[0].position, -96.0f, 96.0f, -289.0f);
     Vec3f_SetComponentsDuplicate(&arg0->unk_04[1].position, -40.0f, 96.0f, -289.0f);
@@ -1077,6 +1137,11 @@ void BattlePrepRoster_PositionIconsDouble(unk_D_84B25A28* arg0) {
     Vec3f_SetComponentsDuplicate(&arg0->unk_04[9].position, 96.0f, -96.0f, -289.0f);
 }
 
+/**
+ * Once loading reaches state 2, binds the 11 display objects to their geo layouts, sets the initial X
+ * rotations for BattlePrepRoster_ConvergeIconsStep, positions the grid, and enters state 3.
+ * Returns 1 while in state 3.
+ */
 s32 BattlePrepRoster_InitDisplayObjects(unk_D_84B25A28* arg0, DisplayObject* arg1) {
     s32 i;
     s16 var_a1;
@@ -1126,6 +1191,10 @@ s32 BattlePrepRoster_InitDisplayObjects(unk_D_84B25A28* arg0, DisplayObject* arg
     return arg0->unk_00 == 3;
 }
 
+/**
+ * Initializes roster state: allocates two 0x40x0x60 trainer icon images, selects the tag-team layout
+ * (unk_02 = 1) for rule category 0 with a 2-member side, creates the PokeIcon render list, and builds geo layouts.
+ */
 void BattlePrepRoster_Init(unk_D_84B25A28* arg0, CameraNode* arg1) {
     MemoryBlock* temp_s1;
 
