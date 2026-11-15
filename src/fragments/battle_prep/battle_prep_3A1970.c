@@ -115,13 +115,13 @@ static u32 D_84B17528[] = {
 /**
  * Holds a result label (PERFECT or EXTRA CONTINUE) at full size.
  */
-void BattlePrep_ResultLabelIdle(unk_D_84B26640_010* arg0) {
+void BattlePrep_ResultLabelIdle(ResultLabel* arg0) {
 }
 
 /**
  * Grows a result label into view.
  */
-void BattlePrep_ResultLabelGrow(unk_D_84B26640_010* arg0) {
+void BattlePrep_ResultLabelGrow(ResultLabel* arg0) {
     arg0->unk_01++;
     if (arg0->unk_01 == 8) {
         arg0->unk_00 = 0;
@@ -133,7 +133,7 @@ void BattlePrep_ResultLabelGrow(unk_D_84B26640_010* arg0) {
 /**
  * Shrinks a result label out of view.
  */
-void BattlePrep_ResultLabelShrink(unk_D_84B26640_010* arg0) {
+void BattlePrep_ResultLabelShrink(ResultLabel* arg0) {
     arg0->unk_01--;
     if (arg0->unk_01 == 0) {
         arg0->unk_00 = 0;
@@ -147,7 +147,7 @@ void BattlePrep_ResultLabelShrink(unk_D_84B26640_010* arg0) {
 /**
  * Runs the result label state machine.
  */
-void BattlePrep_UpdateResultLabel(unk_D_84B26640_010* arg0) {
+void BattlePrep_UpdateResultLabel(ResultLabel* arg0) {
     switch ((s8)arg0->unk_00) {
         case 1:
             BattlePrep_ResultLabelIdle(arg0);
@@ -166,7 +166,7 @@ void BattlePrep_UpdateResultLabel(unk_D_84B26640_010* arg0) {
 /**
  * Starts growing a result label.
  */
-void BattlePrep_StartResultLabelGrow(unk_D_84B26640_010* arg0, DisplayObject* arg1) {
+void BattlePrep_StartResultLabelGrow(ResultLabel* arg0, DisplayObject* arg1) {
     arg0->unk_04 = arg1;
     arg0->unk_01 = 0;
     arg0->unk_00 = 2;
@@ -183,7 +183,7 @@ void BattlePrep_StartResultLabelGrow(unk_D_84B26640_010* arg0, DisplayObject* ar
 /**
  * Starts shrinking a result label.
  */
-void BattlePrep_StartResultLabelShrink(unk_D_84B26640_010* arg0) {
+void BattlePrep_StartResultLabelShrink(ResultLabel* arg0) {
     arg0->unk_01 = 8;
     arg0->unk_00 = 3;
 }
@@ -191,7 +191,7 @@ void BattlePrep_StartResultLabelShrink(unk_D_84B26640_010* arg0) {
 /**
  * Initializes a result label; arg1 0 = PERFECT, 1 = EXTRA CONTINUE.
  */
-void BattlePrep_InitResultLabel(unk_D_84B26640_010* arg0, u8 arg1) {
+void BattlePrep_InitResultLabel(ResultLabel* arg0, u8 arg1) {
     MemoryBlock* sp2C;
 
     arg0->unk_00 = 0;

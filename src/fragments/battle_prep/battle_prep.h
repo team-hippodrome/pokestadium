@@ -6,21 +6,13 @@
 #include "src/poke_icon.h"
 #include "src/geo_layout.h"
 
-typedef struct unk_D_84B19910_002 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-} unk_D_84B19910_002;
+// One point of the background starfield behind the versus and round intros.
+typedef struct StarfieldStar {
+    /* 0x00 */ s16 unk_00; // star 0: initialized flag (written as s8); others: random 20-30, never read
+    /* 0x02 */ Vec3s position;
+} StarfieldStar; // size = 0x8
 
-typedef struct unk_D_84B19910 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ unk_D_84B19910_002 unk_02;
-    ///* 0x02 */ s16 unk_02;
-    ///* 0x04 */ s16 unk_04;
-    ///* 0x06 */ s16 unk_06;
-} unk_D_84B19910; // size = 0x8
-
-typedef struct unk_D_84B1A598 {
+typedef struct BattlePrepState {
     /* 0x0000 */ char unk0000[0x1];
     /* 0x0001 */ u8 playerWon; // battleSides[0].wonBattle set and the sides differ
     /* 0x0002 */ u8 perfectWin; // BattlePrep_IsPerfectCupWin result
@@ -29,7 +21,7 @@ typedef struct unk_D_84B1A598 {
     /* 0x0008 */ DisplayObject unk_0008[128];
     /* 0xB408 */ BinArchive* unk_B408;
     /* 0xB40C */ BinArchive* unk_B40C;
-} unk_D_84B1A598; // size >= 0xB410
+} BattlePrepState; // size >= 0xB410
 
 typedef struct BattlePrepRuleWindow {
     /* 0x00 */ u8 state;
@@ -37,9 +29,9 @@ typedef struct BattlePrepRuleWindow {
     /* 0x02 */ s16 openingProgress;
     /* 0x04 */ s16 selectedOption;
     /* 0x06 */ char unk06[0x2];
-} BattlePrepTextWindow; // size >= 0x8
+} BattlePrepRuleWindow; // size >= 0x8
 
-typedef struct unk_D_84B259A8 {
+typedef struct BattlePrepBanner {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ s16 unk_02[5];
@@ -56,9 +48,9 @@ typedef struct unk_D_84B259A8 {
     /* 0x34 */ unk_D_86002F34* unk_34;
     /* 0x38 */ unk_D_86002F34* unk_38;
     /* 0x3C */ char unk3C[0x4];
-} unk_D_84B259A8; // size >= 0x40
+} BattlePrepBanner; // size >= 0x40
 
-typedef struct unk_D_84B259E8 {
+typedef struct OpponentLadder {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
@@ -68,9 +60,9 @@ typedef struct unk_D_84B259E8 {
     /* 0x10 */ u8* unk_10[4];
     /* 0x20 */ char unk20[0x10];
     /* 0x30 */ DepthBuffer* unk_30[4];
-} unk_D_84B259E8; // size >= 0x40
+} OpponentLadder; // size >= 0x40
 
-typedef struct unk_D_84B25A58 {
+typedef struct BattlePrepTeamIcons {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
@@ -85,9 +77,9 @@ typedef struct unk_D_84B25A58 {
     /* 0x24 */ DepthBuffer* unk_24;
     /* 0x28 */ DepthBuffer* unk_28;
     /* 0x2C */ u8 unk_2C[12];
-} unk_D_84B25A58; // size = 0x38
+} BattlePrepTeamIcons; // size = 0x38
 
-typedef struct unk_D_84B25A90 {
+typedef struct BattlePrepBadgeAward {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x04 */ DisplayObject* unk_04;
@@ -101,27 +93,27 @@ typedef struct unk_D_84B25A90 {
     /* 0x24 */ u8** unk_24;
     /* 0x28 */ s8 unk_28[4];
     /* 0x2C */ char unk2C[0x4];
-} unk_D_84B25A90; // size = 0x30
+} BattlePrepBadgeAward; // size = 0x30
 
-typedef struct unk_D_84B25AC0_000 {
+typedef struct ResultBannerSpark {
     /* 0x00 */ DisplayObject* unk_00;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ Color_RGB8 unk_08;
     /* 0x0C */ u8* unk_0C;
-} unk_D_84B25AC0_000; // size = 0x10
+} ResultBannerSpark; // size = 0x10
 
-typedef struct unk_D_84B25AC0_0A0 {
+typedef struct ResultBannerStar {
     /* 0x00 */ DisplayObject* unk_00;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ Color_RGBA8 unk_0A;
-} unk_D_84B25AC0_0A0; // size = 0x10
+} ResultBannerStar; // size = 0x10
 
-typedef struct unk_D_84B25AC0 {
-    /* 0x000 */ unk_D_84B25AC0_000 unk_000[10];
-    /* 0x0A0 */ unk_D_84B25AC0_0A0 unk_0A0[10][8];
+typedef struct ResultBanner {
+    /* 0x000 */ ResultBannerSpark unk_000[10];
+    /* 0x0A0 */ ResultBannerStar unk_0A0[10][8];
     /* 0x5A0 */ u8 unk_5A0;
     /* 0x5A1 */ s8 unk_5A1;
     /* 0x5A2 */ s8 unk_5A2;
@@ -133,7 +125,7 @@ typedef struct unk_D_84B25AC0 {
     /* 0x5B4 */ unk_D_86002F34* unk_5B4;
     /* 0x5B8 */ unk_D_86002F34* unk_5B8;
     /* 0x5BC */ char unk5BC[0x4];
-} unk_D_84B25AC0; // size = 0x5C0
+} ResultBanner; // size = 0x5C0
 
 typedef struct unk_D_84B26640_010_010 {
     /* 0x00 */ u8 unk_00;
@@ -141,23 +133,15 @@ typedef struct unk_D_84B26640_010_010 {
     /* 0x02 */ s8 unk_02;
     /* 0x04 */ DisplayObject* unk_04;
     /* 0x08 */ unk_D_86002F34* unk_08;
-} unk_D_84B26640_010; // size = 0xC
+} ResultLabel; // size = 0xC
 
-typedef struct unk_D_84B26640 {
-    /* 0x00 */ unk_D_84B26640_010 unk_00;
+typedef struct BattlePrepResultUi {
+    /* 0x00 */ ResultLabel unk_00;
     /* 0x0C */ char unk0C[0x4];
-    /* 0x10 */ unk_D_84B26640_010 unk_10;
-    /* 0x1C */ BattlePrepTextWindow unk_1C;
-    /* 0x24 */ BattlePrepTextWindow unk_28;
-} unk_D_84B26640; // size = 0x2C
-
-typedef struct unk_func_84B067B4 {
-    /* 0x000 */ char unk00[0x10];
-    /* 0x010 */ char unk_010[4];
-    /* 0x014 */ char unk14[0x24];
-    /* 0x038 */ u16 unk_038;
-    /* 0x03A */ char unk03A[0x1F6];
-} unk_func_84B067B4; // size = 0x230
+    /* 0x10 */ ResultLabel unk_10;
+    /* 0x1C */ BattlePrepRuleWindow unk_1C;
+    /* 0x24 */ BattlePrepRuleWindow unk_28;
+} BattlePrepResultUi; // size = 0x2C
 
 typedef struct BattlePrepRuleWindowLayout {
     /* 0x00 */ s16 x;
@@ -169,7 +153,7 @@ typedef struct BattlePrepRuleWindowLayout {
     /* 0x0C */ s16 isKind8;
     /* 0x0E */ s16 disabledRows;
     /* 0x10 */ s16 unk_10;
-} BattlePrepTextWindowLayout; // size = 0x12
+} BattlePrepRuleWindowLayout; // size = 0x12
 
 extern unk_D_8006FF00 D_84B17620[];
 extern unk_D_8006FF00 D_84B186C0[];
@@ -216,174 +200,174 @@ void BattlePrep_InitScene(void);
 s32 BattlePrep_Main(s32 arg0, UNUSED s32 arg1);
 
 s16 BattlePrep_RandomStarOffset(void);
-void BattlePrep_DrawStarfield(unk_D_84B19910* arg0);
-void BattlePrep_UpdateStarfield(unk_D_84B19910* arg0);
-void BattlePrep_InitStarfield(unk_D_84B19910* arg0);
+void BattlePrep_DrawStarfield(StarfieldStar* arg0);
+void BattlePrep_UpdateStarfield(StarfieldStar* arg0);
+void BattlePrep_InitStarfield(StarfieldStar* arg0);
 
 s32 BattlePrep_BindCarouselSegment0(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_BindCarouselSegment1(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_BindCarouselSegment3(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_BindCarouselSegment2(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_CarouselDepthCallback(s32 arg0, unk_D_86002F34_alt5* arg1);
-void BattlePrep_CarouselStepFirstItem(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_CarouselStepNTSC(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_CarouselStepPAL(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_CarouselStepFinalNTSC(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_CarouselStepFinalPAL(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_UpdateCarousel(unk_D_84B259A8* arg0);
-void BattlePrep_CarouselExitAnimation(unk_D_84B259A8* arg0);
-void BattlePrep_CarouselEntryAnimation(unk_D_84B259A8* arg0);
-void BattlePrep_UpdateCarouselState(unk_D_84B259A8* arg0);
-void BattlePrep_InitCarouselBanner(unk_D_84B259A8* arg0, s16 arg1, s16 arg2);
-void BattlePrep_InitCarouselGymBadgeSlot(unk_D_84B259A8* arg0, s16 arg1, s16 arg2, s16 arg3);
-void BattlePrep_InitCarouselLeftIcon(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_InitCarouselRightIcon(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_InitCarouselCupIcon(unk_D_84B259A8* arg0, s16 arg1);
-void BattlePrep_InitCarouselEntry(unk_D_84B259A8* arg0, DisplayObject* arg1);
-void BattlePrep_StartCarouselExit(unk_D_84B259A8* arg0);
-void BattlePrep_InitCarouselExit(unk_D_84B259A8* arg0, DisplayObject* arg1);
-void BattlePrep_LoadBannerAssets(unk_D_84B259A8* arg0);
-void BattlePrep_AdjustBannerTextureOffset(unk_D_84B259A8* arg0);
-void BattlePrep_LoadBannerGeoLayouts(unk_D_84B259A8* arg0);
+void BattlePrep_CarouselStepFirstItem(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_CarouselStepNTSC(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_CarouselStepPAL(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_CarouselStepFinalNTSC(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_CarouselStepFinalPAL(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_UpdateCarousel(BattlePrepBanner* arg0);
+void BattlePrep_CarouselExitAnimation(BattlePrepBanner* arg0);
+void BattlePrep_CarouselEntryAnimation(BattlePrepBanner* arg0);
+void BattlePrep_UpdateCarouselState(BattlePrepBanner* arg0);
+void BattlePrep_InitCarouselBanner(BattlePrepBanner* arg0, s16 arg1, s16 arg2);
+void BattlePrep_InitCarouselGymBadgeSlot(BattlePrepBanner* arg0, s16 arg1, s16 arg2, s16 arg3);
+void BattlePrep_InitCarouselLeftIcon(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_InitCarouselRightIcon(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_InitCarouselCupIcon(BattlePrepBanner* arg0, s16 arg1);
+void BattlePrep_InitCarouselEntry(BattlePrepBanner* arg0, DisplayObject* arg1);
+void BattlePrep_StartCarouselExit(BattlePrepBanner* arg0);
+void BattlePrep_InitCarouselExit(BattlePrepBanner* arg0, DisplayObject* arg1);
+void BattlePrep_LoadBannerAssets(BattlePrepBanner* arg0);
+void BattlePrep_AdjustBannerTextureOffset(BattlePrepBanner* arg0);
+void BattlePrep_LoadBannerGeoLayouts(BattlePrepBanner* arg0);
 void BattlePrep_SetVertexGradientColors(unk_D_86002F34* arg0, Color_RGBA8* arg1, Color_RGBA8* arg2);
-void BattlePrep_ApplyBannerColors(unk_D_84B259A8* arg0);
-void BattlePrep_InitBannerScene(unk_D_84B259A8* arg0);
+void BattlePrep_ApplyBannerColors(BattlePrepBanner* arg0);
+void BattlePrep_InitBannerScene(BattlePrepBanner* arg0);
 s32 BattlePrep_OpponentLadderPortraitCallback(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_OpponentLadderHighlightCallback(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_OpponentLadderTextureCallback(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrep_OpponentLadderHighlightCallback2(s32 arg0, unk_func_80011B94* arg1);
 void BattlePrep_StampDefeatedMark(s32 arg0);
-void BattlePrep_ResetLadderSlots(unk_D_84B259E8* arg0);
-void BattlePrep_LadderSlideInLeft(unk_D_84B259E8* arg0);
-void BattlePrep_LadderSlideInRight(unk_D_84B259E8* arg0);
-void BattlePrep_LadderRevealSpin(unk_D_84B259E8* arg0);
-void BattlePrep_LadderHideSpin(unk_D_84B259E8* arg0);
-void BattlePrep_UpdateOpponentLadder(unk_D_84B259E8* arg0);
-void BattlePrep_InitOpponentLadder(unk_D_84B259E8* arg0, DisplayObject* arg1, s16 arg2);
-void BattlePrep_RenderLadderBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2);
+void BattlePrep_ResetLadderSlots(OpponentLadder* arg0);
+void BattlePrep_LadderSlideInLeft(OpponentLadder* arg0);
+void BattlePrep_LadderSlideInRight(OpponentLadder* arg0);
+void BattlePrep_LadderRevealSpin(OpponentLadder* arg0);
+void BattlePrep_LadderHideSpin(OpponentLadder* arg0);
+void BattlePrep_UpdateOpponentLadder(OpponentLadder* arg0);
+void BattlePrep_InitOpponentLadder(OpponentLadder* arg0, DisplayObject* arg1, s16 arg2);
+void BattlePrep_RenderLadderBackground(OpponentLadder* arg0, s16 arg1, char* arg2);
 s32 BattlePrep_Align64PoolBlock(s32* arg0);
-void BattlePrep_LoadLadderTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2);
-void BattlePrep_InitOpponentLadderScene(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2);
+void BattlePrep_LoadLadderTextures(OpponentLadder* arg0, BinArchive* arg1, BinArchive* arg2);
+void BattlePrep_InitOpponentLadderScene(OpponentLadder* arg0, BinArchive* arg1, BinArchive* arg2);
 
 s32 BattlePrepRoster_DrawIconVariantA(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepRoster_DrawIconVariantB(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepRoster_DrawTrainerBadge(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepRoster_ScrollBackgroundTexture(s32 arg0, unk_func_80011B94* arg1);
-s32 BattlePrepRoster_ConvergeIconsStep(unk_D_84B25A28* arg0, s16 arg1);
-void BattlePrepRoster_UpdateCameraSwoop(unk_D_84B25A28* arg0, s16 arg1);
-s32 BattlePrepRoster_ZoomStepNTSC(unk_D_84B25A28* arg0, s16 arg1);
-s32 BattlePrepRoster_ZoomStepPAL(unk_D_84B25A28* arg0, s16 arg1);
-void BattlePrepRoster_UpdateAssembleStep(unk_D_84B25A28* arg0);
-void BattlePrepRoster_UpdateLoadingStep(unk_D_84B25A28* arg0);
-void BattlePrepRoster_Update(unk_D_84B25A28* arg0);
-void BattlePrepRoster_LoadDexIdsSingle(unk_D_84B25A28* arg0);
-void BattlePrepRoster_LoadDexIdsDouble(unk_D_84B25A28* arg0);
-void BattlePrepRoster_Load(unk_D_84B25A28* arg0, BinArchive* arg1);
-void BattlePrepRoster_PositionIconsSingle(unk_D_84B25A28* arg0);
-void BattlePrepRoster_PositionIconsDouble(unk_D_84B25A28* arg0);
-s32 BattlePrepRoster_InitDisplayObjects(unk_D_84B25A28* arg0, DisplayObject* arg1);
-void BattlePrepRoster_Init(unk_D_84B25A28* arg0, CameraNode* arg1);
+s32 BattlePrepRoster_ConvergeIconsStep(BattlePrepRoster* arg0, s16 arg1);
+void BattlePrepRoster_UpdateCameraSwoop(BattlePrepRoster* arg0, s16 arg1);
+s32 BattlePrepRoster_ZoomStepNTSC(BattlePrepRoster* arg0, s16 arg1);
+s32 BattlePrepRoster_ZoomStepPAL(BattlePrepRoster* arg0, s16 arg1);
+void BattlePrepRoster_UpdateAssembleStep(BattlePrepRoster* arg0);
+void BattlePrepRoster_UpdateLoadingStep(BattlePrepRoster* arg0);
+void BattlePrepRoster_Update(BattlePrepRoster* arg0);
+void BattlePrepRoster_LoadDexIdsSingle(BattlePrepRoster* arg0);
+void BattlePrepRoster_LoadDexIdsDouble(BattlePrepRoster* arg0);
+void BattlePrepRoster_Load(BattlePrepRoster* arg0, BinArchive* arg1);
+void BattlePrepRoster_PositionIconsSingle(BattlePrepRoster* arg0);
+void BattlePrepRoster_PositionIconsDouble(BattlePrepRoster* arg0);
+s32 BattlePrepRoster_InitDisplayObjects(BattlePrepRoster* arg0, DisplayObject* arg1);
+void BattlePrepRoster_Init(BattlePrepRoster* arg0, CameraNode* arg1);
 
 s32 BattlePrepTeamIcons_DrawActiveTeamBadge(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepTeamIcons_DrawIconSingle(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepTeamIcons_DrawIconDouble(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepTeamIcons_DrawBadgeIconSingle(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepTeamIcons_DrawBadgeIconDouble(s32 arg0, unk_func_80011B94* arg1);
-void BattlePrepTeamIcons_DrawHpBarsSingle(unk_D_84B25A58* arg0, s32 arg1);
-void BattlePrepTeamIcons_DrawHpBarsDouble(unk_D_84B25A58* arg0, s32 arg1);
-void BattlePrepTeamIcons_MarkFaintedSingle(unk_D_84B25A58* arg0, s32 arg1);
-void BattlePrepTeamIcons_MarkFaintedDouble(unk_D_84B25A58* arg0, s32 arg1);
-void BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_RevealStepSingle(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_RevealStepDouble(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_HpDrainStepSingleNTSC(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_HpDrainStepSinglePAL(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_HpDrainStepDoublePAL(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_FinalRevealDouble(unk_D_84B25A58* arg0, s16 arg1);
-void BattlePrepTeamIcons_UpdateStep(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_UpdateLoadingStep(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_Update(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_Load(unk_D_84B25A58* arg0, BinArchive* arg1);
-s32 BattlePrepTeamIcons_InitDisplayObjects(unk_D_84B25A58* arg0, DisplayObject* arg1);
-void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0);
-void BattlePrepTeamIcons_Init(unk_D_84B25A58* arg0);
+void BattlePrepTeamIcons_DrawHpBarsSingle(BattlePrepTeamIcons* arg0, s32 arg1);
+void BattlePrepTeamIcons_DrawHpBarsDouble(BattlePrepTeamIcons* arg0, s32 arg1);
+void BattlePrepTeamIcons_MarkFaintedSingle(BattlePrepTeamIcons* arg0, s32 arg1);
+void BattlePrepTeamIcons_MarkFaintedDouble(BattlePrepTeamIcons* arg0, s32 arg1);
+void BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_RevealStepSingle(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_RevealStepDouble(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_HpDrainStepSingleNTSC(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_HpDrainStepSinglePAL(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_HpDrainStepDoublePAL(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_FinalRevealSingle(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_FinalRevealDouble(BattlePrepTeamIcons* arg0, s16 arg1);
+void BattlePrepTeamIcons_UpdateStep(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_UpdateLoadingStep(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_Update(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_LoadDexIdsSingle(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_LoadDexIdsDouble(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_Load(BattlePrepTeamIcons* arg0, BinArchive* arg1);
+s32 BattlePrepTeamIcons_InitDisplayObjects(BattlePrepTeamIcons* arg0, DisplayObject* arg1);
+void BattlePrepTeamIcons_LoadIconTexturesSingle(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_LoadIconTexturesDouble(BattlePrepTeamIcons* arg0);
+void BattlePrepTeamIcons_Init(BattlePrepTeamIcons* arg0);
 
 s32 BattlePrepBadgeAward_DrawPlate(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepBadgeAward_DrawMedal(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepBadgeAward_DrawSparkle(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepBadgeAward_DrawGlowFade(s32 arg0, unk_func_80011B94* arg1);
-void func_84B0B054(void);
-void BattlePrepBadgeAward_SlideInStep(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_SpawnSparkleParticle(unk_D_84B25A90* arg0, DisplayObject* arg1, s16 arg2);
-void BattlePrepBadgeAward_UpdateSparkleStep(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_ScatterStep(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_Update(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_InitDisplayObjects(unk_D_84B25A90* arg0, DisplayObject* arg1);
-void BattlePrepBadgeAward_StartScatter(unk_D_84B25A90* arg0);
-void BattlePrepBadgeAward_Init(unk_D_84B25A90* arg0);
+void BattlePrepBadgeAward_UnusedStub(void);
+void BattlePrepBadgeAward_SlideInStep(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_RevealStep(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_SpawnSparkleParticle(BattlePrepBadgeAward* arg0, DisplayObject* arg1, s16 arg2);
+void BattlePrepBadgeAward_UpdateSparkleStep(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_ScatterStep(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_Update(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_InitDisplayObjects(BattlePrepBadgeAward* arg0, DisplayObject* arg1);
+void BattlePrepBadgeAward_StartScatter(BattlePrepBadgeAward* arg0);
+void BattlePrepBadgeAward_Init(BattlePrepBadgeAward* arg0);
 
 s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepResultBanner_DrawTieLabel(s32 arg0, unk_func_80011B94* arg1);
 s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1);
-void BattlePrepResultBanner_InitSparkSlot(unk_D_84B25AC0_000* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4);
-void BattlePrepResultBanner_UpdateSparkSlot(unk_D_84B25AC0_000* arg0);
-s32 BattlePrepResultBanner_DrawRainbowParticle(s32 arg0, unk_func_80011B94* arg1);
-void BattlePrepResultBanner_InitRainbowParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
+void BattlePrepResultBanner_InitSparkSlot(ResultBannerSpark* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4);
+void BattlePrepResultBanner_UpdateSparkSlot(ResultBannerSpark* arg0);
+s32 BattlePrepResultBanner_DrawStarParticle(s32 arg0, unk_func_80011B94* arg1);
+void BattlePrepResultBanner_InitStarParticle(ResultBannerStar* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
                                              s16 arg4);
-void BattlePrepResultBanner_SpawnTrailCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1);
-void BattlePrepResultBanner_SpawnFlashCopy(unk_D_84B25AC0_0A0* arg0, unk_D_84B25AC0_0A0* arg1, s16 arg2);
-void BattlePrepResultBanner_SpawnScatterParticle(unk_D_84B25AC0_0A0* arg0, unk_D_86002F34* arg1, Vec3f* arg2);
-void BattlePrepResultBanner_UpdateRainbowGradientStep(unk_D_84B25AC0_0A0* arg0);
-void BattlePrepResultBanner_UpdateTrailFadeStep(unk_D_84B25AC0_0A0* arg0);
-void BattlePrepResultBanner_UpdateFlashFadeStep(unk_D_84B25AC0_0A0* arg0);
-void BattlePrepResultBanner_UpdateScatterFallStep(unk_D_84B25AC0_0A0* arg0);
-void BattlePrepResultBanner_UpdateRainbowParticle(unk_D_84B25AC0_0A0* arg0);
-void BattlePrepResultBanner_UpdateBurstEffect(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_UpdateFlightArc(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_UpdateRainbowAftermath(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_UpdateSparkAftermath(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_UpdateExitSlide(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_UpdateFirstClearExit(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_Update(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_Launch(unk_D_84B25AC0* arg0, DisplayObject* arg1, DisplayObject* arg2);
-void BattlePrepResultBanner_StartExit(unk_D_84B25AC0* arg0);
-void BattlePrepResultBanner_Init(unk_D_84B25AC0* arg0, s8 arg1, s8 arg2);
-void BattlePrep_ResultLabelIdle(unk_D_84B26640_010* arg0);
-void BattlePrep_ResultLabelGrow(unk_D_84B26640_010* arg0);
-void BattlePrep_ResultLabelShrink(unk_D_84B26640_010* arg0);
-void BattlePrep_UpdateResultLabel(unk_D_84B26640_010* arg0);
-void BattlePrep_StartResultLabelGrow(unk_D_84B26640_010* arg0, DisplayObject* arg1);
-void BattlePrep_StartResultLabelShrink(unk_D_84B26640_010* arg0);
-void BattlePrep_InitResultLabel(unk_D_84B26640_010* arg0, u8 arg1);
-void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* arg0, s16 arg1, s16 arg2);
-void BattlePrep_DrawRuleOption(BattlePrepTextWindow* arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4, s8* arg5);
-void BattlePrep_DrawKeepBattlingPrompt(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawCupLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
+void BattlePrepResultBanner_SpawnTrailCopy(ResultBannerStar* arg0, ResultBannerStar* arg1);
+void BattlePrepResultBanner_SpawnFlashCopy(ResultBannerStar* arg0, ResultBannerStar* arg1, s16 arg2);
+void BattlePrepResultBanner_SpawnScatterParticle(ResultBannerStar* arg0, unk_D_86002F34* arg1, Vec3f* arg2);
+void BattlePrepResultBanner_UpdateStarGradientStep(ResultBannerStar* arg0);
+void BattlePrepResultBanner_UpdateTrailFadeStep(ResultBannerStar* arg0);
+void BattlePrepResultBanner_UpdateFlashFadeStep(ResultBannerStar* arg0);
+void BattlePrepResultBanner_UpdateScatterFallStep(ResultBannerStar* arg0);
+void BattlePrepResultBanner_UpdateStarParticle(ResultBannerStar* arg0);
+void BattlePrepResultBanner_UpdateBurstEffect(ResultBanner* arg0);
+void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* arg0);
+void BattlePrepResultBanner_UpdateStarAftermath(ResultBanner* arg0);
+void BattlePrepResultBanner_UpdateSparkAftermath(ResultBanner* arg0);
+void BattlePrepResultBanner_UpdateExitSlide(ResultBanner* arg0);
+void BattlePrepResultBanner_UpdateFirstClearExit(ResultBanner* arg0);
+void BattlePrepResultBanner_Update(ResultBanner* arg0);
+void BattlePrepResultBanner_Launch(ResultBanner* arg0, DisplayObject* arg1, DisplayObject* arg2);
+void BattlePrepResultBanner_StartExit(ResultBanner* arg0);
+void BattlePrepResultBanner_Init(ResultBanner* arg0, s8 arg1, s8 arg2);
+void BattlePrep_ResultLabelIdle(ResultLabel* arg0);
+void BattlePrep_ResultLabelGrow(ResultLabel* arg0);
+void BattlePrep_ResultLabelShrink(ResultLabel* arg0);
+void BattlePrep_UpdateResultLabel(ResultLabel* arg0);
+void BattlePrep_StartResultLabelGrow(ResultLabel* arg0, DisplayObject* arg1);
+void BattlePrep_StartResultLabelShrink(ResultLabel* arg0);
+void BattlePrep_InitResultLabel(ResultLabel* arg0, u8 arg1);
+void BattlePrep_DrawCursorArrow(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2);
+void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4, s8* arg5);
+void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
 void BattlePrep_DrawPlayerTag(s16 arg0, s16 arg1, BattleSessionTeams* arg2);
 void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0);
-void BattlePrep_DrawWinRecord(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* arg0, BattlePrepTextWindowLayout* arg1);
-void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* arg0);
-void BattlePrep_RunQuitMenu(BattlePrepTextWindow* arg0);
-void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* arg0);
-void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* arg0);
-void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* arg0);
-void BattlePrep_InitRuleWindow(BattlePrepTextWindow* arg0, s16 arg1);
-void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* arg0);
-s32 BattlePrep_PollRuleWindow(BattlePrepTextWindow* arg0);
+void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* arg0, BattlePrepRuleWindowLayout* arg1);
+void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* arg0);
+void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* arg0);
+void BattlePrep_RuleWindowExpanding(BattlePrepRuleWindow* arg0);
+void BattlePrep_RuleWindowCollapsing(BattlePrepRuleWindow* arg0);
+void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* arg0);
+void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* arg0, s16 arg1);
+void BattlePrep_CloseRuleWindow(BattlePrepRuleWindow* arg0);
+s32 BattlePrep_PollRuleWindow(BattlePrepRuleWindow* arg0);
 
 #endif // _FRAGMENT63_H_

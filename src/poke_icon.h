@@ -57,7 +57,7 @@ typedef struct unk_func_8001A024 {
     /* 0x18 */ unk_D_8006FF00* unk_18;
 } unk_func_8001A024; // size = 0x1C
 
-typedef struct unk_D_84B25A28 {
+typedef struct BattlePrepRoster {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
@@ -72,7 +72,7 @@ typedef struct unk_D_84B25A28 {
     /* 0x24 */ DepthBuffer* unk_24;
     /* 0x28 */ DepthBuffer* unk_28;
     /* 0x2C */ char unk2C[0x4];
-} unk_D_84B25A28; // size = 0x30
+} BattlePrepRoster; // size = 0x30
 
 unk_func_8001A024* PokeIcon_CreateRenderList(ModelLoadContext*, s16, s16, s16);
 void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);

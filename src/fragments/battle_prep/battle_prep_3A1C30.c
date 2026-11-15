@@ -11,7 +11,7 @@
 #include "src/memmap.h"
 #include "src/memory.h"
 
-static BattlePrepTextWindowLayout gBattlePrepRuleWindowLayouts[] = {
+static BattlePrepRuleWindowLayout gBattlePrepRuleWindowLayouts[] = {
     {
         78,
         84,
@@ -128,7 +128,7 @@ static BattlePrepTextWindowLayout gBattlePrepRuleWindowLayouts[] = {
  * Draws the rule window's selection arrow beside the selected row, bobbing
  * horizontally on a 12-frame cycle.
  */
-void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* text_window, s16 x, s16 y) {
+void BattlePrep_DrawCursorArrow(BattlePrepRuleWindow* text_window, s16 x, s16 y) {
     static s16 sCursorPosition = 0;
 
     if (sCursorPosition < 6) {
@@ -154,7 +154,7 @@ void BattlePrep_DrawCursorArrow(BattlePrepTextWindow* text_window, s16 x, s16 y)
 /**
  * Prints dialogue option for continue windows
  */
-void BattlePrep_DrawRuleOption(BattlePrepTextWindow* text_window, s16 x, s16 y, s16 option_index, s32 is_selectable, s8* text) {
+void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* text_window, s16 x, s16 y, s16 option_index, s32 is_selectable, s8* text) {
     if (is_selectable == 0) {
         Gfx_SetEnvColor(0x64, 0x64, 0x64, 0xFF); // #646464
     } else if (option_index == text_window->selectedOption) {
@@ -169,7 +169,7 @@ void BattlePrep_DrawRuleOption(BattlePrepTextWindow* text_window, s16 x, s16 y, 
  * Texts window kinds 1 and 2: "Keep battling?" Continue / Save and Quit. Kind 1 (cups) also
  * shows "Continue = N".
  */
-void BattlePrep_DrawKeepBattlingPrompt(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 12, window_layout->y + 24);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
@@ -190,7 +190,7 @@ void BattlePrep_DrawKeepBattlingPrompt(BattlePrepTextWindow* text_window, Battle
 /**
  * Rule window kind 3: cup loss menu (Continue / Save / Re-enter / From the start / Quit).
  */
-void BattlePrep_DrawCupLossMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 has_continues;
     s32 on_first_trainer;
 
@@ -217,7 +217,7 @@ void BattlePrep_DrawCupLossMenu(BattlePrepTextWindow* text_window, BattlePrepTex
 /**
  * Rule window kind 4: castle loss menu (Re-enter / Re-start at this GYM / Quit).
  */
-void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     // FAKE: triple Negation
     // TODO: find out what sets this to true, it's not:
     // - being passed the first trainer
@@ -238,7 +238,7 @@ void BattlePrep_DrawCastleLossMenu(BattlePrepTextWindow* text_window, BattlePrep
 /**
  * Rule window kind 5: Free Battle menu (Try once more / Change team combination / Quit).
  */
-void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 one_player_has_99_wins = gSessionContext.battleSides[0].winCount < 99 && gSessionContext.battleSides[1].winCount < 99;
 
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
@@ -253,7 +253,7 @@ void BattlePrep_DrawFreeBattleMenu(BattlePrepTextWindow* text_window, BattlePrep
 /**
  * Rule window kind 6: Mewtwo loss menu (Battle again / Quit).
  */
-void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
@@ -266,7 +266,7 @@ void BattlePrep_DrawMewtwoLossMenu(BattlePrepTextWindow* text_window, BattlePrep
  * Rule window kind 7: cup name, ball class and BATTLE N label.
  * Displays upon loading a suspending run from the pre-area select menu
  */
-void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     char* string;
 
     Font_BeginTranslucentTextRendering();
@@ -296,7 +296,7 @@ void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* text_window, BattleP
  * Rule window kind 8: gym name with BATTLE, TRAINER N / GYM LEADER / ELITE FOUR N.
  * Displays upon loading a suspending run from the pre-area select menu
  */
-void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 text_length;
     char buffer[256];
 
@@ -392,7 +392,7 @@ void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0) {
 /**
  * Rule window kind 9: Free Battle "Record" with each side's win(s) count.
  */
-void BattlePrep_DrawWinRecord(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 20, 168, 0x20, 0, 0, 0, 0xFF);
     BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 68, 168, 0x20, 0, 0, 0, 0xFF);
     BattlePrep_DrawPlayerTag(window_layout->x + 8, window_layout->y + 20, gSessionContext.battleSides);
@@ -421,7 +421,7 @@ void BattlePrep_DrawWinRecord(BattlePrepTextWindow* text_window, BattlePrepTextW
  */
 
 // better name: BattlePrep_DrawOverwriteSuspendDataPrompt
-void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     SessionContinueData suspend_record;
 #if defined(VERSION_US_REV2)
     char buffer[128];
@@ -502,8 +502,8 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, Battl
  * Draws the active text window: grows the panel vertically while opening, then draws
  * the full panel and the contents for window kind unk_01 (1-10).
  */
-void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* text_window) {
-    BattlePrepTextWindowLayout* window_layout;
+void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* text_window) {
+    BattlePrepRuleWindowLayout* window_layout;
     s16 y;
     s16 height;
 
@@ -581,8 +581,8 @@ void BattlePrep_DrawRuleWindow(BattlePrepTextWindow* text_window) {
  * 3-bit table and starts closing; D-pad up/down moves the cursor, skipping disabled rows (unk_0E).
  */
 // better name: BattlePrep_RunQuitMenu
-void BattlePrep_RunQuitMenu(BattlePrepTextWindow* text_window) {
-    BattlePrepTextWindowLayout* window_layout;
+void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* text_window) {
+    BattlePrepRuleWindowLayout* window_layout;
     s16 last_option_index;
     s32 sound_effect_switch;
 
@@ -640,7 +640,7 @@ void BattlePrep_RunQuitMenu(BattlePrepTextWindow* text_window) {
  * State 1: increments the open step each frame until 4, then enters the input state 3.
  */
 // better name: BattlePrep_TextWindowExpanding
-void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* text_window) {
+void BattlePrep_RuleWindowExpanding(BattlePrepRuleWindow* text_window) {
     text_window->openingProgress++;
     if (text_window->openingProgress >= 5) {
         text_window->openingProgress = 4;
@@ -652,7 +652,7 @@ void BattlePrep_RuleWindowExpanding(BattlePrepTextWindow* text_window) {
  * State 2: decrements the open step each frame until 0, then enters the closed state 4.
  */
 // better name: BattlePrep_TextWindowCollapsing
-void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* text_window) {
+void BattlePrep_RuleWindowCollapsing(BattlePrepRuleWindow* text_window) {
     text_window->openingProgress--;
     if (text_window->openingProgress < 0) {
         text_window->openingProgress = 0;
@@ -663,7 +663,7 @@ void BattlePrep_RuleWindowCollapsing(BattlePrepTextWindow* text_window) {
 /**
  * Per-frame dispatcher for the rule window state machine (1 expanding, 2 collapsing, 3 input).
  */
-void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* text_window) {
+void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* text_window) {
     switch (text_window->state) {
         case 1:
             BattlePrep_RuleWindowExpanding(text_window);
@@ -683,8 +683,8 @@ void BattlePrep_UpdateRuleWindow(BattlePrepTextWindow* text_window) {
  * Opens rule window kind arg1 with SFX_PANEL_OPEN. Disables rows by session state (no continues
  * left, sessionFlags 0x2, or a win count of 99 in kind 5), then moves the cursor to the first enabled row.
  */
-void BattlePrep_InitRuleWindow(BattlePrepTextWindow* text_window, s16 layout_index) {
-    BattlePrepTextWindowLayout* window_layout = &gBattlePrepRuleWindowLayouts[layout_index - 1];
+void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* text_window, s16 layout_index) {
+    BattlePrepRuleWindowLayout* window_layout = &gBattlePrepRuleWindowLayouts[layout_index - 1];
 
     text_window->kind = layout_index;
     text_window->openingProgress = 0;
@@ -719,7 +719,7 @@ void BattlePrep_InitRuleWindow(BattlePrepTextWindow* text_window, s16 layout_ind
 /**
  * Immediately hides the rule window by clearing its state, kind and open step.
  */
-void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* text_window) {
+void BattlePrep_CloseRuleWindow(BattlePrepRuleWindow* text_window) {
     text_window->state = 0;
     text_window->kind = 0;
     text_window->openingProgress = 0;
@@ -729,7 +729,7 @@ void BattlePrep_CloseRuleWindow(BattlePrepTextWindow* text_window) {
  * Returns the chosen row once the window has finished closing (state 4) and resets it to idle;
  * returns -1 otherwise.
  */
-s32 BattlePrep_PollRuleWindow(BattlePrepTextWindow* text_window) {
+s32 BattlePrep_PollRuleWindow(BattlePrepRuleWindow* text_window) {
     if (text_window->state == 4) {
         text_window->state = 0;
         return text_window->selectedOption;

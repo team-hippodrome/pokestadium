@@ -19,17 +19,17 @@
 
 s32 BattlePrep_StarfieldGeoCallback(s32, unk_D_86002F34_alt8*);
 
-unk_D_84B19910 D_84B19910[400];
+StarfieldStar sStarfield[400];
 s32 pad_D_84B1A590[2];
-unk_D_84B1A598 sBattlePrepState;
-unk_D_84B259A8 D_84B259A8;
-unk_D_84B259E8 D_84B259E8;
-unk_D_84B25A28 D_84B25A28;
-unk_D_84B25A58 D_84B25A58;
-unk_D_84B25A90 D_84B25A90;
-unk_D_84B25AC0 D_84B25AC0;
-unk_D_84B25AC0 D_84B26080;
-unk_D_84B26640 D_84B26640;
+BattlePrepState sBattlePrepState;
+BattlePrepBanner sBanner;
+OpponentLadder sOpponentLadder;
+BattlePrepRoster sRoster;
+BattlePrepTeamIcons sTeamIcons;
+BattlePrepBadgeAward sBadgeAward;
+ResultBanner sResultBanner;
+ResultBanner sResultBanner2;
+BattlePrepResultUi sResultUi;
 ModeSettings D_84B26670;
 char** sBattlePrepText;
 
@@ -44,7 +44,7 @@ static u32 D_84B0FB20[] = {
     0x00000000,  0xFEDF0000,  0x00000121, 0x05000000,  0x0D000000,
     0x05000000,  0x0F000000,  0x05000000, 0x20050000,  0x00000000,
     0x00000000,  0x00000000,  0x00000000, 0x08000000,  BattlePrep_StarfieldGeoCallback,
-    D_84B19910,  0x06000000,  0x0F000002, 0x05000000,  0x0A000000,
+    sStarfield,  0x06000000,  0x0F000002, 0x05000000,  0x0A000000,
     &D_800AC840, 0x06000000,  0x06000000, 0x0D000001,  0x05000000,
     0x0F000002,  0x05000000,  0x0A000000, &D_800AC840, 0x06000000,
     0x06000000,  0x0D000002,  0x05000000, 0x0F000000,  0x05000000,
@@ -385,8 +385,8 @@ void BattlePrep_RenderFrame(void) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
     Geo_RenderRootNode(sBattlePrepState.unk_0004);
-    BattlePrep_DrawRuleWindow(&D_84B26640.unk_1C);
-    BattlePrep_DrawRuleWindow(&D_84B26640.unk_28);
+    BattlePrep_DrawRuleWindow(&sResultUi.unk_1C);
+    BattlePrep_DrawRuleWindow(&sResultUi.unk_28);
     BgStage_AdvanceFrame();
 }
 
@@ -395,8 +395,8 @@ void BattlePrep_RenderFrame(void) {
  */
 void BattlePrep_UpdateVersusIntroFrame(void) {
     Controller_PollInputs();
-    BattlePrep_UpdateStarfield(D_84B19910);
-    BattlePrepRoster_Update(&D_84B25A28);
+    BattlePrep_UpdateStarfield(sStarfield);
+    BattlePrepRoster_Update(&sRoster);
     BattlePrep_RenderFrame();
 }
 
@@ -409,8 +409,8 @@ s32 BattlePrep_ShowVersusIntro(void) {
     s32 var_s1 = 0;
 
     Team_LoadOpponentPreset();
-    BattlePrepRoster_Init(&D_84B25A28, sBattlePrepState.unk_0004->children);
-    BattlePrepRoster_Load(&D_84B25A28, sBattlePrepState.unk_B40C);
+    BattlePrepRoster_Init(&sRoster, sBattlePrepState.unk_0004->children);
+    BattlePrepRoster_Load(&sRoster, sBattlePrepState.unk_B40C);
     Audio_PlayMusicIfChanged(0x31);
 
     for (i = 0; i < 16; i++) {
@@ -419,7 +419,7 @@ s32 BattlePrep_ShowVersusIntro(void) {
 
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, sBattlePrepState.unk_0008) == 0) {
+    while (BattlePrepRoster_InitDisplayObjects(&sRoster, sBattlePrepState.unk_0008) == 0) {
         BattlePrep_UpdateVersusIntroFrame();
         var_s1++;
     }
@@ -455,10 +455,10 @@ s32 BattlePrep_ShowVersusIntro(void) {
  */
 void BattlePrep_UpdateRoundIntroFrame(void) {
     Controller_PollInputs();
-    BattlePrep_UpdateStarfield(D_84B19910);
-    BattlePrep_UpdateCarouselState(&D_84B259A8);
-    BattlePrep_UpdateOpponentLadder(&D_84B259E8);
-    BattlePrepRoster_Update(&D_84B25A28);
+    BattlePrep_UpdateStarfield(sStarfield);
+    BattlePrep_UpdateCarouselState(&sBanner);
+    BattlePrep_UpdateOpponentLadder(&sOpponentLadder);
+    BattlePrepRoster_Update(&sRoster);
     BattlePrep_RenderFrame();
 }
 
@@ -466,9 +466,9 @@ void BattlePrep_UpdateRoundIntroFrame(void) {
  * Initializes the banner, opponent ladder and roster for the phase 1 round intro.
  */
 void BattlePrep_InitRoundIntroScene(void) {
-    BattlePrep_InitBannerScene(&D_84B259A8);
-    BattlePrep_InitOpponentLadderScene(&D_84B259E8, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
-    BattlePrepRoster_Init(&D_84B25A28, sBattlePrepState.unk_0004->children);
+    BattlePrep_InitBannerScene(&sBanner);
+    BattlePrep_InitOpponentLadderScene(&sOpponentLadder, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
+    BattlePrepRoster_Init(&sRoster, sBattlePrepState.unk_0004->children);
 }
 
 /**
@@ -487,7 +487,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
 
     Team_LoadOpponentPreset();
     BattlePrep_InitRoundIntroScene();
-    BattlePrepRoster_Load(&D_84B25A28, sBattlePrepState.unk_B40C);
+    BattlePrepRoster_Load(&sRoster, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 16; i++) {
         BattlePrep_UpdateRoundIntroFrame();
@@ -499,22 +499,22 @@ s32 BattlePrep_ShowRoundIntro(void) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    BattlePrep_InitCarouselEntry(&D_84B259A8, &sBattlePrepState.unk_0008[0x10]);
-    BattlePrep_InitOpponentLadder(&D_84B259E8, sBattlePrepState.unk_0008, 0);
+    BattlePrep_InitCarouselEntry(&sBanner, &sBattlePrepState.unk_0008[0x10]);
+    BattlePrep_InitOpponentLadder(&sOpponentLadder, sBattlePrepState.unk_0008, 0);
     Audio_PlayMusicIfChanged(0x33);
 
     for (i = 0; i < var_s1; i++) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    BattlePrep_StartCarouselExit(&D_84B259A8);
-    D_84B259E8.unk_00 = 2;
+    BattlePrep_StartCarouselExit(&sBanner);
+    sOpponentLadder.unk_00 = 2;
 
     for (i = 0; i < 16; i++) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    while (BattlePrepRoster_InitDisplayObjects(&D_84B25A28, sBattlePrepState.unk_0008) == 0) {
+    while (BattlePrepRoster_InitDisplayObjects(&sRoster, sBattlePrepState.unk_0008) == 0) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
@@ -586,16 +586,16 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
  */
 void BattlePrep_UpdateResultScene(void) {
     Controller_PollInputs();
-    BattlePrep_UpdateStarfield(D_84B19910);
-    BattlePrepTeamIcons_Update(&D_84B25A58);
-    BattlePrep_UpdateOpponentLadder(&D_84B259E8);
-    BattlePrepBadgeAward_Update(&D_84B25A90);
-    BattlePrepResultBanner_Update(&D_84B25AC0);
-    BattlePrepResultBanner_Update(&D_84B26080);
-    BattlePrep_UpdateResultLabel(&D_84B26640.unk_00);
-    BattlePrep_UpdateResultLabel(&D_84B26640.unk_10);
-    BattlePrep_UpdateRuleWindow(&D_84B26640.unk_1C);
-    BattlePrep_UpdateRuleWindow(&D_84B26640.unk_28);
+    BattlePrep_UpdateStarfield(sStarfield);
+    BattlePrepTeamIcons_Update(&sTeamIcons);
+    BattlePrep_UpdateOpponentLadder(&sOpponentLadder);
+    BattlePrepBadgeAward_Update(&sBadgeAward);
+    BattlePrepResultBanner_Update(&sResultBanner);
+    BattlePrepResultBanner_Update(&sResultBanner2);
+    BattlePrep_UpdateResultLabel(&sResultUi.unk_00);
+    BattlePrep_UpdateResultLabel(&sResultUi.unk_10);
+    BattlePrep_UpdateRuleWindow(&sResultUi.unk_1C);
+    BattlePrep_UpdateRuleWindow(&sResultUi.unk_28);
     BattlePrep_RenderFrame();
 }
 
@@ -605,21 +605,21 @@ void BattlePrep_UpdateResultScene(void) {
 void BattlePrep_InitResultScene(void) {
     s32 tmp;
 
-    BattlePrepTeamIcons_Init(&D_84B25A58);
-    BattlePrep_InitOpponentLadderScene(&D_84B259E8, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
-    BattlePrepBadgeAward_Init(&D_84B25A90);
+    BattlePrepTeamIcons_Init(&sTeamIcons);
+    BattlePrep_InitOpponentLadderScene(&sOpponentLadder, sBattlePrepState.unk_B408, sBattlePrepState.unk_B40C);
+    BattlePrepBadgeAward_Init(&sBadgeAward);
 
     if (sBattlePrepState.isDraw != 0) {
-        BattlePrepResultBanner_Init(&D_84B25AC0, 1, -1);
-        BattlePrepResultBanner_Init(&D_84B26080, 0, -1);
+        BattlePrepResultBanner_Init(&sResultBanner, 1, -1);
+        BattlePrepResultBanner_Init(&sResultBanner2, 0, -1);
     } else {
-        BattlePrepResultBanner_Init(&D_84B25AC0, 1, sBattlePrepState.playerWon);
+        BattlePrepResultBanner_Init(&sResultBanner, 1, sBattlePrepState.playerWon);
         tmp = sBattlePrepState.playerWon == 0;
-        BattlePrepResultBanner_Init(&D_84B26080, 0, tmp);
+        BattlePrepResultBanner_Init(&sResultBanner2, 0, tmp);
     }
 
-    BattlePrep_InitResultLabel(&D_84B26640.unk_00, 0);
-    BattlePrep_InitResultLabel(&D_84B26640.unk_10, 1);
+    BattlePrep_InitResultLabel(&sResultUi.unk_00, 0);
+    BattlePrep_InitResultLabel(&sResultUi.unk_10, 1);
 }
 
 /**
@@ -629,7 +629,7 @@ void BattlePrep_InitResultScene(void) {
 void BattlePrep_RunResultReveal(void) {
     s32 i;
 
-    BattlePrepTeamIcons_Load(&D_84B25A58, sBattlePrepState.unk_B40C);
+    BattlePrepTeamIcons_Load(&sTeamIcons, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 8; i++) {
         BattlePrep_UpdateResultScene();
@@ -647,18 +647,18 @@ void BattlePrep_RunResultReveal(void) {
 
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, sBattlePrepState.unk_0008) == 0) {
+    while (BattlePrepTeamIcons_InitDisplayObjects(&sTeamIcons, sBattlePrepState.unk_0008) == 0) {
         BattlePrep_UpdateResultScene();
     }
 
-    while (D_84B25A58.unk_00 != 0) {
+    while (sTeamIcons.unk_00 != 0) {
         BattlePrep_UpdateResultScene();
     }
 
-    BattlePrepResultBanner_Launch(&D_84B25AC0, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
-    BattlePrepResultBanner_Launch(&D_84B26080, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&sResultBanner, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&sResultBanner2, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
 
-    while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
+    while ((sOpponentLadder.unk_00 != 0) || (sResultBanner2.unk_5A0 != 0)) {
         BattlePrep_UpdateResultScene();
     }
 }
@@ -670,7 +670,7 @@ void BattlePrep_RunResultReveal(void) {
 void BattlePrep_RunPerfectReveal(void) {
     s32 i;
 
-    BattlePrepTeamIcons_Load(&D_84B25A58, sBattlePrepState.unk_B40C);
+    BattlePrepTeamIcons_Load(&sTeamIcons, sBattlePrepState.unk_B40C);
 
     for (i = 0; i < 8; i++) {
         BattlePrep_UpdateResultScene();
@@ -679,7 +679,7 @@ void BattlePrep_RunPerfectReveal(void) {
     Audio_PlayMusicIfChanged(0x32);
     StageFade_StartFromOpaque(8);
 
-    while (BattlePrepTeamIcons_InitDisplayObjects(&D_84B25A58, sBattlePrepState.unk_0008) == 0) {
+    while (BattlePrepTeamIcons_InitDisplayObjects(&sTeamIcons, sBattlePrepState.unk_0008) == 0) {
         BattlePrep_UpdateResultScene();
     }
 
@@ -687,26 +687,26 @@ void BattlePrep_RunPerfectReveal(void) {
         BattlePrep_UpdateResultScene();
     }
 
-    BattlePrep_StartResultLabelGrow(&D_84B26640.unk_00, &sBattlePrepState.unk_0008[0x1A]);
+    BattlePrep_StartResultLabelGrow(&sResultUi.unk_00, &sBattlePrepState.unk_0008[0x1A]);
     Audio_PlayCategory11SoundCommand(0x01100013, 0, 0);
 
-    while (D_84B25A58.unk_00 != 0) {
+    while (sTeamIcons.unk_00 != 0) {
         BattlePrep_UpdateResultScene();
     }
 
-    BattlePrep_StartResultLabelShrink(&D_84B26640.unk_00);
-    BattlePrepResultBanner_Launch(&D_84B25AC0, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
-    BattlePrepResultBanner_Launch(&D_84B26080, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrep_StartResultLabelShrink(&sResultUi.unk_00);
+    BattlePrepResultBanner_Launch(&sResultBanner, &sBattlePrepState.unk_0008[0x1C], &sBattlePrepState.unk_0008[0x20]);
+    BattlePrepResultBanner_Launch(&sResultBanner2, &sBattlePrepState.unk_0008[0x1E], &sBattlePrepState.unk_0008[0x20]);
 
     if (gSessionContext.roundOrDemoId < 8) {
         for (i = 0; i < 16; i++) {
             BattlePrep_UpdateResultScene();
         }
-        BattlePrep_StartResultLabelGrow(&D_84B26640.unk_10, &sBattlePrepState.unk_0008[0x1B]);
+        BattlePrep_StartResultLabelGrow(&sResultUi.unk_10, &sBattlePrepState.unk_0008[0x1B]);
         Audio_PlaySoundEffectById(SFX_TROPHY_APPEAR);
     }
 
-    while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
+    while ((sOpponentLadder.unk_00 != 0) || (sResultBanner2.unk_5A0 != 0)) {
         BattlePrep_UpdateResultScene();
     }
 }
@@ -720,11 +720,11 @@ void BattlePrep_RunOpponentLadderResult(void) {
     s32 i;
     s32 tmp;
 
-    BattlePrepResultBanner_StartExit(&D_84B26080);
+    BattlePrepResultBanner_StartExit(&sResultBanner2);
     tmp = sBattlePrepState.playerWon == 0;
-    BattlePrep_InitOpponentLadder(&D_84B259E8, sBattlePrepState.unk_0008, tmp + 1);
+    BattlePrep_InitOpponentLadder(&sOpponentLadder, sBattlePrepState.unk_0008, tmp + 1);
 
-    while ((D_84B259E8.unk_00 != 0) || (D_84B26080.unk_5A0 != 0)) {
+    while ((sOpponentLadder.unk_00 != 0) || (sResultBanner2.unk_5A0 != 0)) {
         BattlePrep_UpdateResultScene();
     }
 
@@ -741,7 +741,7 @@ void BattlePrep_RunBallBurstTransition(void) {
     s32 i;
     s32 j;
 
-    while ((D_84B25AC0.unk_5A0 != 0) || (D_84B26080.unk_5A0 != 0)) {
+    while ((sResultBanner.unk_5A0 != 0) || (sResultBanner2.unk_5A0 != 0)) {
         BattlePrep_UpdateResultScene();
     }
 
@@ -754,7 +754,7 @@ void BattlePrep_RunBallBurstTransition(void) {
     for (j = 0; j < 16; j++) {
         Controller_PollInputs();
         BattlePrep_AnimateBallBurstEffect(j);
-        BattlePrep_UpdateStarfield(D_84B19910);
+        BattlePrep_UpdateStarfield(sStarfield);
         BattlePrep_RenderFrame();
     }
 
@@ -764,7 +764,7 @@ void BattlePrep_RunBallBurstTransition(void) {
 
     for (j = 0; j < 16; j++) {
         Controller_PollInputs();
-        BattlePrep_UpdateStarfield(D_84B19910);
+        BattlePrep_UpdateStarfield(sStarfield);
         BattlePrep_RenderFrame();
     }
 }
@@ -780,7 +780,7 @@ void BattlePrep_FadeInBallBurstTransition(void) {
     for (i = 0; i < 16; i++) {
         Controller_PollInputs();
         BattlePrep_FadeInBallBurstObjects(i);
-        BattlePrep_UpdateStarfield(D_84B19910);
+        BattlePrep_UpdateStarfield(sStarfield);
         BattlePrep_RenderFrame();
     }
 }
@@ -797,13 +797,13 @@ void BattlePrep_FadeToTransparentEnding(void) {
 
     for (i = 0; i < 18; i++) {
         Controller_PollInputs();
-        BattlePrep_UpdateStarfield(D_84B19910);
+        BattlePrep_UpdateStarfield(sStarfield);
         BattlePrep_RenderFrame();
     }
 
     for (i = 0; i < 16; i++) {
         Controller_PollInputs();
-        BattlePrep_UpdateStarfield(D_84B19910);
+        BattlePrep_UpdateStarfield(sStarfield);
         BattlePrep_RenderFrame();
     }
 }
@@ -817,25 +817,25 @@ s32 BattlePrep_PromptKeepBattling(void) {
     s32 var_v0_2;
 
     if (gSessionContext.mode == 7) {
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 2);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 2);
     } else {
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 1);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 1);
     }
 
-    var_s2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+    var_s2 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
     while (var_s2 == -1) {
         BattlePrep_UpdateResultScene();
-        var_s2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+        var_s2 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
     }
 
     if (var_s2 == 1) {
         if (Save_ContinueRecordExists() != 0) {
-            BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 0xA);
+            BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 0xA);
 
-            var_v0_2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+            var_v0_2 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
             while (var_v0_2 == -1) {
                 BattlePrep_UpdateResultScene();
-                var_v0_2 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+                var_v0_2 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
             }
 
             if (var_v0_2 == 1) {
@@ -862,12 +862,12 @@ s32 BattlePrep_SpendContinueAndSave(void) {
     s32 var_v0;
 
     if (Save_ContinueRecordExists() != 0) {
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 0xA);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 0xA);
 
-        var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+        var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
         while (var_v0 == -1) {
             BattlePrep_UpdateResultScene();
-            var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_1C);
+            var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_1C);
         }
 
         if (var_v0 == 1) {
@@ -904,13 +904,13 @@ s32 BattlePrep_ShowFreeBattleResult(void) {
 
     BattlePrep_RunResultReveal();
     Audio_PlayCategory11SoundCommand(0x0110000F, 0, 0);
-    BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 9);
-    BattlePrep_InitRuleWindow(&D_84B26640.unk_28, 5);
+    BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 9);
+    BattlePrep_InitRuleWindow(&sResultUi.unk_28, 5);
 
-    var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+    var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
     while (var_v0 == -1) {
         BattlePrep_UpdateResultScene();
-        var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+        var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
     }
 
     switch (var_v0) {
@@ -927,8 +927,8 @@ s32 BattlePrep_ShowFreeBattleResult(void) {
             break;
     }
 
-    BattlePrepResultBanner_StartExit(&D_84B26080);
-    BattlePrepResultBanner_StartExit(&D_84B25AC0);
+    BattlePrepResultBanner_StartExit(&sResultBanner2);
+    BattlePrepResultBanner_StartExit(&sResultBanner);
     Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
     BattlePrep_RunBallBurstTransition();
     BattlePrep_FadeToTransparentEnding();
@@ -946,8 +946,8 @@ s32 BattlePrep_ShowSimpleResult(void) {
         BattlePrep_UpdateResultScene();
     } while (!(BTN_IS_PRESSED(gPlayer1Controller, BTN_A)));
 
-    BattlePrepResultBanner_StartExit(&D_84B26080);
-    BattlePrepResultBanner_StartExit(&D_84B25AC0);
+    BattlePrepResultBanner_StartExit(&sResultBanner2);
+    BattlePrepResultBanner_StartExit(&sResultBanner);
     Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
     BattlePrep_RunBallBurstTransition();
     BattlePrep_FadeToTransparentEnding();
@@ -980,13 +980,13 @@ s32 BattlePrep_ShowCupResult(void) {
     if (gSessionContext.battleSides[0].wonBattle == 1) {
         gSessionContext.continueCount += sBattlePrepState.perfectWin;
         if ((sBattlePrepState.perfectWin != 0) && (gSessionContext.roundOrDemoId < 8)) {
-            BattlePrep_StartResultLabelShrink(&D_84B26640.unk_10);
+            BattlePrep_StartResultLabelShrink(&sResultUi.unk_10);
         }
 
-        BattlePrepResultBanner_StartExit(&D_84B25AC0);
-        BattlePrepBadgeAward_InitDisplayObjects(&D_84B25A90, sBattlePrepState.unk_0008);
+        BattlePrepResultBanner_StartExit(&sResultBanner);
+        BattlePrepBadgeAward_InitDisplayObjects(&sBadgeAward, sBattlePrepState.unk_0008);
 
-        while (D_84B25A90.unk_00 != 3) {
+        while (sBadgeAward.unk_00 != 3) {
             BattlePrep_UpdateResultScene();
         }
 
@@ -1021,13 +1021,13 @@ s32 BattlePrep_ShowCupResult(void) {
     } else {
         var_s2 = 1;
         while (var_s2 != 0) {
-            BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 7);
-            BattlePrep_InitRuleWindow(&D_84B26640.unk_28, 3);
+            BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 7);
+            BattlePrep_InitRuleWindow(&sResultUi.unk_28, 3);
 
-            var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+            var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
             while (var_v0 == -1) {
                 BattlePrep_UpdateResultScene();
-                var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+                var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
             }
 
             switch (var_v0) {
@@ -1062,7 +1062,7 @@ s32 BattlePrep_ShowCupResult(void) {
         }
 
         if (sp2C == 4) {
-            BattlePrepResultBanner_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&sResultBanner);
             BattlePrep_RunBallBurstTransition();
             BattlePrep_FadeToTransparentEnding();
         } else {
@@ -1103,7 +1103,7 @@ s32 BattlePrep_ShowCastleResult(void) {
                 }
             }
 
-            BattlePrepResultBanner_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&sResultBanner);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             Audio_StopMusic(0x10);
@@ -1120,13 +1120,13 @@ s32 BattlePrep_ShowCastleResult(void) {
             }
             sp24 = 3;
         } else if (BattlePrep_PromptKeepBattling() == 1) {
-            BattlePrepResultBanner_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&sResultBanner);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             BattlePrep_FadeToTransparentEnding();
             gSessionContext.transitionFlags |= 0x41;
         } else {
-            BattlePrepResultBanner_StartExit(&D_84B25AC0);
+            BattlePrepResultBanner_StartExit(&sResultBanner);
             Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
             BattlePrep_RunBallBurstTransition();
             Audio_StopMusic(0x50);
@@ -1134,13 +1134,13 @@ s32 BattlePrep_ShowCastleResult(void) {
             sp24 = 1;
         }
     } else {
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_1C, 8);
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_28, 4);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_1C, 8);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_28, 4);
 
-        var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+        var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
         while (var_v0 == -1) {
             BattlePrep_UpdateResultScene();
-            var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+            var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
         }
 
         switch (var_v0) {
@@ -1157,7 +1157,7 @@ s32 BattlePrep_ShowCastleResult(void) {
                 break;
         }
 
-        BattlePrepResultBanner_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&sResultBanner);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
 
@@ -1188,19 +1188,19 @@ s32 BattlePrep_ShowMewtwoResult(void) {
         BattlePrep_MarkCupCleared();
         Save_CommitTypedRecord(0x14, 0);
         Save_FlushBank(2);
-        BattlePrepResultBanner_StartExit(&D_84B26080);
-        BattlePrepResultBanner_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&sResultBanner2);
+        BattlePrepResultBanner_StartExit(&sResultBanner);
         Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
         gSessionContext.transitionFlags |= 5;
     } else {
-        BattlePrep_InitRuleWindow(&D_84B26640.unk_28, 6);
+        BattlePrep_InitRuleWindow(&sResultUi.unk_28, 6);
 
-        var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+        var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
         while (var_v0 == -1) {
             BattlePrep_UpdateResultScene();
-            var_v0 = BattlePrep_PollRuleWindow(&D_84B26640.unk_28);
+            var_v0 = BattlePrep_PollRuleWindow(&sResultUi.unk_28);
         }
 
         switch (var_v0) {
@@ -1213,8 +1213,8 @@ s32 BattlePrep_ShowMewtwoResult(void) {
                 break;
         }
 
-        BattlePrepResultBanner_StartExit(&D_84B26080);
-        BattlePrepResultBanner_StartExit(&D_84B25AC0);
+        BattlePrepResultBanner_StartExit(&sResultBanner2);
+        BattlePrepResultBanner_StartExit(&sResultBanner);
         Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
         BattlePrep_RunBallBurstTransition();
         BattlePrep_FadeToTransparentEnding();
@@ -1316,14 +1316,14 @@ s32 BattlePrep_ShowCastleClearOutro(void) {
         var_s1 = 0x4B;
     }
 
-    BattlePrep_InitBannerScene(&D_84B259A8);
-    BattlePrep_InitCarouselExit(&D_84B259A8, &sBattlePrepState.unk_0008[0x10]);
+    BattlePrep_InitBannerScene(&sBanner);
+    BattlePrep_InitCarouselExit(&sBanner, &sBattlePrepState.unk_0008[0x10]);
     Audio_PlayMusicIfChanged(0x3F);
 
     for (i = 0; i < var_s1; i++) {
         Controller_PollInputs();
-        BattlePrep_UpdateStarfield(D_84B19910);
-        BattlePrep_UpdateCarouselState(&D_84B259A8);
+        BattlePrep_UpdateStarfield(sStarfield);
+        BattlePrep_UpdateCarouselState(&sBanner);
         BattlePrep_RenderFrame();
     }
 
@@ -1332,8 +1332,8 @@ s32 BattlePrep_ShowCastleClearOutro(void) {
 
     for (i = 0; i < 18; i++) {
         Controller_PollInputs();
-        BattlePrep_UpdateStarfield(D_84B19910);
-        BattlePrep_UpdateCarouselState(&D_84B259A8);
+        BattlePrep_UpdateStarfield(sStarfield);
+        BattlePrep_UpdateCarouselState(&sBanner);
         BattlePrep_RenderFrame();
     }
 
@@ -1373,9 +1373,9 @@ void BattlePrep_InitScene(void) {
     ptr->perspective.nearPlane = 10.0f;
     ptr->perspective.farPlane = 6000.0f;
 
-    BattlePrep_InitStarfield(&D_84B19910);
-    BattlePrep_CloseRuleWindow(&D_84B26640.unk_1C);
-    BattlePrep_CloseRuleWindow(&D_84B26640.unk_28);
+    BattlePrep_InitStarfield(&sStarfield);
+    BattlePrep_CloseRuleWindow(&sResultUi.unk_1C);
+    BattlePrep_CloseRuleWindow(&sResultUi.unk_28);
 }
 
 /**

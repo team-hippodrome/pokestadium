@@ -142,11 +142,11 @@ static u32 D_84B16A38[] = {
  * Binds the badge plate texture (badge_ui D_2018000 table: BOULDER ... EARTH) for a badge slot.
  */
 s32 BattlePrepBadgeAward_DrawPlate(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_v0;
+    BattlePrepBadgeAward* temp_v0;
     s32 tmp;
 
     if (arg0 == 5) {
-        temp_v0 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
+        temp_v0 = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
         tmp = (D_8006F09C->effectSlot - temp_v0->unk_04->effectSlot) % 8;
 
         gDPPipeSync(gDisplayListHead++);
@@ -163,11 +163,11 @@ s32 BattlePrepBadgeAward_DrawPlate(s32 arg0, unk_func_80011B94* arg1) {
  * Binds the badge medal texture (badge_ui D_2021620 table) for a badge slot.
  */
 s32 BattlePrepBadgeAward_DrawMedal(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_v0;
+    BattlePrepBadgeAward* temp_v0;
     s32 tmp;
 
     if (arg0 == 5) {
-        temp_v0 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
+        temp_v0 = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
         tmp = (D_8006F09C->effectSlot - temp_v0->unk_04->effectSlot) % 8;
 
         gDPPipeSync(gDisplayListHead++);
@@ -185,11 +185,11 @@ s32 BattlePrepBadgeAward_DrawMedal(s32 arg0, unk_func_80011B94* arg1) {
  * segment 0x0F, then advances the frame and disables the slot (-1) after 8 frames.
  */
 s32 BattlePrepBadgeAward_DrawSparkle(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_a3;
+    BattlePrepBadgeAward* temp_a3;
     s32 tmp;
 
     if (arg0 == 5) {
-        temp_a3 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
+        temp_a3 = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
         tmp = (D_8006F09C->effectSlot - temp_a3->unk_04->effectSlot) - 0x10;
 
         if (temp_a3->unk_28[tmp] >= 0) {
@@ -238,14 +238,14 @@ s32 BattlePrepBadgeAward_DrawGlowFade(s32 arg0, unk_func_80011B94* arg1) {
 /**
  * Empty stub with no body; purpose unknown.
  */
-void func_84B0B054(void) {
+void BattlePrepBadgeAward_UnusedStub(void) {
 }
 
 /**
  * State 1: plays sound 0x0110000D on the first frame and spins the two plate rows in opposite
  * directions by 0x800 for 15 frames, then rebuilds the 8 plates facing front and enters state 2.
  */
-void BattlePrepBadgeAward_SlideInStep(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_SlideInStep(BattlePrepBadgeAward* arg0) {
     s32 i;
 
     if (arg0->unk_01 == 0) {
@@ -286,7 +286,7 @@ void BattlePrepBadgeAward_SlideInStep(unk_D_84B25A90* arg0) {
  * (5 frames PAL, 6 NTSC), then the current round's medal with a larger glow (sound 0x0110000F);
  * clears the glow objects after a delay and enters state 3.
  */
-void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_RevealStep(BattlePrepBadgeAward* arg0) {
     s16 i;
     s16 var_s3;
     s16 var_a0;
@@ -362,7 +362,7 @@ void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0) {
  * Places a sparkle object at a random point 15-35 units around medal arg2, if that round has
  * been reached (arg2 < roundOrDemoId). Used by BattlePrepBadgeAward_UpdateSparkleStep.
  */
-void BattlePrepBadgeAward_SpawnSparkleParticle(unk_D_84B25A90* arg0, DisplayObject* arg1, s16 arg2) {
+void BattlePrepBadgeAward_SpawnSparkleParticle(BattlePrepBadgeAward* arg0, DisplayObject* arg1, s16 arg2) {
     u16 sp26;
     f32 temp_fv0;
 
@@ -386,7 +386,7 @@ void BattlePrepBadgeAward_SpawnSparkleParticle(unk_D_84B25A90* arg0, DisplayObje
  * State 3 (looping): spawns two sparkles per frame on revealed medals and pulses every
  * sparkle's scale through the 12-entry D_84B163B0 table.
  */
-void BattlePrepBadgeAward_UpdateSparkleStep(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_UpdateSparkleStep(BattlePrepBadgeAward* arg0) {
     s32 i;
     s32 temp_s0 = arg0->unk_01 % 4;
 
@@ -409,7 +409,7 @@ void BattlePrepBadgeAward_UpdateSparkleStep(unk_D_84B25A90* arg0) {
  * State 4: for 15 frames, flips and pushes the top row up and the bottom row down while
  * spreading plates sideways and spinning them, then returns to idle state 0.
  */
-void BattlePrepBadgeAward_ScatterStep(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_ScatterStep(BattlePrepBadgeAward* arg0) {
     static s16 D_84B16A64[] = { 0x300, 0x150, -0x150, -0x300, -0x300, -0x150, 0x150, 0x300 };
     static f32 D_84B16A74[] = { -3.0f, -2.0f, 2.0f, 3.0f, -3.0f, -2.0f, 2.0f, 3.0f };
 
@@ -446,7 +446,7 @@ void BattlePrepBadgeAward_ScatterStep(unk_D_84B25A90* arg0) {
  * Per-frame dispatcher for the badge award state machine (states 1-4: slide in, reveal, sparkle,
  * scatter).
  */
-void BattlePrepBadgeAward_Update(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_Update(BattlePrepBadgeAward* arg0) {
     switch (arg0->unk_00) {
         case 1:
             BattlePrepBadgeAward_SlideInStep(arg0);
@@ -470,7 +470,7 @@ void BattlePrepBadgeAward_Update(unk_D_84B25A90* arg0) {
  * Assigns the display object array and lays out the 8 badge plates in a 4x2 grid (back-facing,
  * rotation.y = -0x8000), then starts state 1. Called by BattlePrep_ShowCupResult after a cup win.
  */
-void BattlePrepBadgeAward_InitDisplayObjects(unk_D_84B25A90* arg0, DisplayObject* arg1) {
+void BattlePrepBadgeAward_InitDisplayObjects(BattlePrepBadgeAward* arg0, DisplayObject* arg1) {
     s32 i;
 
     arg0->unk_04 = arg1;
@@ -496,7 +496,7 @@ void BattlePrepBadgeAward_InitDisplayObjects(unk_D_84B25A90* arg0, DisplayObject
 /**
  * Clears the medal/sparkle objects (slots 16-40) and starts the state 4 scatter exit.
  */
-void BattlePrepBadgeAward_StartScatter(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_StartScatter(BattlePrepBadgeAward* arg0) {
     s32 i;
 
     for (i = 16; i < 41; i++) {
@@ -514,7 +514,7 @@ void BattlePrepBadgeAward_StartScatter(unk_D_84B25A90* arg0) {
  * shown when BattlePrep_ShowCupResult calls BattlePrepBadgeAward_InitDisplayObjects after
  * a cup win.
  */
-void BattlePrepBadgeAward_Init(unk_D_84B25A90* arg0) {
+void BattlePrepBadgeAward_Init(BattlePrepBadgeAward* arg0) {
     MemoryBlock* temp_v0;
 
     arg0->unk_00 = 0;

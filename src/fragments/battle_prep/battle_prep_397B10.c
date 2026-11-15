@@ -660,10 +660,10 @@ static u32 D_84B11BD0[] = {
  * then draws the node's display list.
  */
 s32 BattlePrep_BindCarouselSegment0(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_0C & 0x1FFFFFFF);
@@ -679,10 +679,10 @@ s32 BattlePrep_BindCarouselSegment0(s32 arg0, unk_func_80011B94* arg1) {
  * then draws the node's display list.
  */
 s32 BattlePrep_BindCarouselSegment1(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[0] & 0x1FFFFFFF);
@@ -698,10 +698,10 @@ s32 BattlePrep_BindCarouselSegment1(s32 arg0, unk_func_80011B94* arg1) {
  * then draws the node's display list.
  */
 s32 BattlePrep_BindCarouselSegment3(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[2] & 0x1FFFFFFF);
@@ -718,10 +718,10 @@ s32 BattlePrep_BindCarouselSegment3(s32 arg0, unk_func_80011B94* arg1) {
  * then draws the node's display list.
  */
 s32 BattlePrep_BindCarouselSegment2(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[1] & 0x1FFFFFFF);
@@ -737,10 +737,10 @@ s32 BattlePrep_BindCarouselSegment2(s32 arg0, unk_func_80011B94* arg1) {
  * object's slot offset (minus 9) from the first carousel object.
  */
 s32 BattlePrep_CarouselDepthCallback(s32 arg0, unk_D_86002F34_alt5* arg1) {
-    unk_D_84B259A8* temp_a0;
+    BattlePrepBanner* temp_a0;
 
     if (arg0 == 2) {
-        temp_a0 = (unk_D_84B259A8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
         arg1->unk_24.z = temp_a0->unk_02[(D_8006F09C->effectSlot - temp_a0->unk_20->effectSlot) - 9];
     }
@@ -750,7 +750,7 @@ s32 BattlePrep_CarouselDepthCallback(s32 arg0, unk_D_86002F34_alt5* arg1) {
 /**
  * Slides object 0 in from x = -288 by 32 per frame for 10 frames; plays sound 0x01100001 on frame 0.
  */
-void BattlePrep_CarouselStepFirstItem(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_CarouselStepFirstItem(BattlePrepBanner* arg0, s16 arg1) {
     if (arg1 == 0) {
         Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
     }
@@ -764,7 +764,7 @@ void BattlePrep_CarouselStepFirstItem(unk_D_84B259A8* arg0, s16 arg1) {
  * NTSC timing: shifts object pairs 3-8 down into 1-6 (trailing copies), slides objects 7 and 8
  * in from the left by 20 per frame, then damps object 7 with a sine wobble. Sound 0x01100002 on frame 2.
  */
-void BattlePrep_CarouselStepNTSC(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_CarouselStepNTSC(BattlePrepBanner* arg0, s16 arg1) {
     s32 i;
 
     if (arg1 == 2) {
@@ -795,7 +795,7 @@ void BattlePrep_CarouselStepNTSC(unk_D_84B259A8* arg0, s16 arg1) {
 /**
  * PAL timing variant of BattlePrep_CarouselStepNTSC (24 units per frame, shorter frame windows).
  */
-void BattlePrep_CarouselStepPAL(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_CarouselStepPAL(BattlePrepBanner* arg0, s16 arg1) {
     s32 i;
 
     if (arg1 == 2) {
@@ -828,7 +828,7 @@ void BattlePrep_CarouselStepPAL(unk_D_84B259A8* arg0, s16 arg1) {
  * once unk_02[3] reaches 0xF000) while spinning, then applies a damped sine scale bounce.
  * Sounds 0x01100003 on frame 0 and 0x01100004 on frame 16.
  */
-void BattlePrep_CarouselStepFinalNTSC(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_CarouselStepFinalNTSC(BattlePrepBanner* arg0, s16 arg1) {
     UNUSED s32 pad;
     s32 i;
 
@@ -877,7 +877,7 @@ void BattlePrep_CarouselStepFinalNTSC(unk_D_84B259A8* arg0, s16 arg1) {
 /**
  * PAL timing variant of BattlePrep_CarouselStepFinalNTSC (scale over 13 frames, sound 0x01100004 on frame 13).
  */
-void BattlePrep_CarouselStepFinalPAL(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_CarouselStepFinalPAL(BattlePrepBanner* arg0, s16 arg1) {
     UNUSED s32 pad;
     s32 i;
 
@@ -928,7 +928,7 @@ void BattlePrep_CarouselStepFinalPAL(unk_D_84B259A8* arg0, s16 arg1) {
  * State 1 update: runs the staged intro steps by frame counter unk_01, picking PAL or NTSC timing
  * from osTvType; on frame 220 moves all 17 objects off-screen to x = -320.
  */
-void BattlePrep_UpdateCarousel(unk_D_84B259A8* arg0) {
+void BattlePrep_UpdateCarousel(BattlePrepBanner* arg0) {
     s32 i;
 
     if (osTvType == OS_TV_PAL) {
@@ -970,7 +970,7 @@ void BattlePrep_UpdateCarousel(unk_D_84B259A8* arg0) {
  * State 3 update: slides the lead objects right by 32 per frame with trailing copies; once object 0
  * passes x = 416 resets all 17 objects and sets state 0. Plays sound 0x01100005 on the first frame.
  */
-void BattlePrep_CarouselExitAnimation(unk_D_84B259A8* arg0) {
+void BattlePrep_CarouselExitAnimation(BattlePrepBanner* arg0) {
     s32 i;
 
     if (arg0->unk_01++ == 0) {
@@ -1005,7 +1005,7 @@ void BattlePrep_CarouselExitAnimation(unk_D_84B259A8* arg0) {
  * State 2 update: slides object 0 right and objects 7, 8, 12 left by 32 per frame for 10 frames with
  * trailing copies; sets state 0 on frame 32. Plays sounds 0x01100001 and 0x01100002 on frame 0.
  */
-void BattlePrep_CarouselEntryAnimation(unk_D_84B259A8* arg0) {
+void BattlePrep_CarouselEntryAnimation(BattlePrepBanner* arg0) {
     s32 i;
 
     if (arg0->unk_01 == 0) {
@@ -1038,7 +1038,7 @@ void BattlePrep_CarouselEntryAnimation(unk_D_84B259A8* arg0) {
 /**
  * Dispatches the per-frame carousel update by unk_00: 1 intro, 2 entry, 3 exit; 0 is idle.
  */
-void BattlePrep_UpdateCarouselState(unk_D_84B259A8* arg0) {
+void BattlePrep_UpdateCarouselState(BattlePrepBanner* arg0) {
     switch (arg0->unk_00) {
         case 1:
             BattlePrep_UpdateCarousel(arg0);
@@ -1057,7 +1057,7 @@ void BattlePrep_UpdateCarouselState(unk_D_84B259A8* arg0) {
 /**
  * Initializes object 0 with the unk_24 geo layout at (arg1, arg2, -289).
  */
-void BattlePrep_InitCarouselBanner(unk_D_84B259A8* arg0, s16 arg1, s16 arg2) {
+void BattlePrep_InitCarouselBanner(BattlePrepBanner* arg0, s16 arg1, s16 arg2) {
     Model_InitDisplayObject(arg0->unk_20, 0, 0, arg0->unk_24);
     Vec3f_SetComponentsDuplicate(&arg0->unk_20->position, arg1, arg2, -289.0f);
 }
@@ -1066,7 +1066,7 @@ void BattlePrep_InitCarouselBanner(unk_D_84B259A8* arg0, s16 arg1, s16 arg2) {
  * Initializes the object pair 2*arg1+1 / 2*arg1+2 with the unk_28 and unk_2C layouts at (arg2, arg3, -289).
  * Index 3 is the lead copy (alpha 0xFF); indices 0-2 are trailing copies with alpha 80 + 40*arg1.
  */
-void BattlePrep_InitCarouselGymBadgeSlot(unk_D_84B259A8* arg0, s16 arg1, s16 arg2, s16 arg3) {
+void BattlePrep_InitCarouselGymBadgeSlot(BattlePrepBanner* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s16 temp_s0;
     s16 sp2C;
 
@@ -1096,7 +1096,7 @@ void BattlePrep_InitCarouselGymBadgeSlot(unk_D_84B259A8* arg0, s16 arg1, s16 arg
  * Initializes object 9+arg1 with the unk_30 layout at (-320, 48, -289); index 3 is the opaque lead copy,
  * indices 0-2 trailing copies with alpha 80 + 40*arg1.
  */
-void BattlePrep_InitCarouselLeftIcon(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_InitCarouselLeftIcon(BattlePrepBanner* arg0, s16 arg1) {
     s16 temp_v1 = arg1 + 9;
     s16 var_a1;
 
@@ -1120,7 +1120,7 @@ void BattlePrep_InitCarouselLeftIcon(unk_D_84B259A8* arg0, s16 arg1) {
  * Initializes object 9+arg1 with the unk_38 layout at (320, 0, -289); index 3 is the opaque lead copy,
  * indices 0-2 trailing copies with alpha 80 + 40*arg1.
  */
-void BattlePrep_InitCarouselRightIcon(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_InitCarouselRightIcon(BattlePrepBanner* arg0, s16 arg1) {
     s16 temp_v1 = arg1 + 9;
     s16 var_a1;
 
@@ -1144,7 +1144,7 @@ void BattlePrep_InitCarouselRightIcon(unk_D_84B259A8* arg0, s16 arg1) {
  * Initializes object 13+arg1 with the unk_34 layout at (-320, 48, -289); index 3 is the opaque lead copy,
  * indices 0-2 trailing copies with alpha 80 + 40*arg1.
  */
-void BattlePrep_InitCarouselCupIcon(unk_D_84B259A8* arg0, s16 arg1) {
+void BattlePrep_InitCarouselCupIcon(BattlePrepBanner* arg0, s16 arg1) {
     s16 temp_v1 = arg1 + 0xD;
     s16 var_a1;
 
@@ -1168,7 +1168,7 @@ void BattlePrep_InitCarouselCupIcon(unk_D_84B259A8* arg0, s16 arg1) {
  * Sets up the 17-object intro carousel (state 1) at y = 48, adding objects 13-16 only in session
  * modes 3 and 6, and points each object's callbackArg at arg0.
  */
-void BattlePrep_InitCarouselEntry(unk_D_84B259A8* arg0, DisplayObject* arg1) {
+void BattlePrep_InitCarouselEntry(BattlePrepBanner* arg0, DisplayObject* arg1) {
     s32 i;
 
     arg0->unk_20 = arg1;
@@ -1192,7 +1192,7 @@ void BattlePrep_InitCarouselEntry(unk_D_84B259A8* arg0, DisplayObject* arg1) {
 /**
  * Resets the frame counter and switches the carousel to state 3 (exit slide).
  */
-void BattlePrep_StartCarouselExit(unk_D_84B259A8* arg0) {
+void BattlePrep_StartCarouselExit(BattlePrepBanner* arg0) {
     arg0->unk_01 = 0;
     arg0->unk_00 = 3;
 }
@@ -1201,7 +1201,7 @@ void BattlePrep_StartCarouselExit(unk_D_84B259A8* arg0) {
  * Sets up the 13-object carousel in state 2 with objects entering from x = 320 at y = 0,
  * and points each object's callbackArg at arg0.
  */
-void BattlePrep_InitCarouselExit(unk_D_84B259A8* arg0, DisplayObject* arg1) {
+void BattlePrep_InitCarouselExit(BattlePrepBanner* arg0, DisplayObject* arg1) {
     s32 i;
 
     arg0->unk_20 = arg1;
@@ -1223,7 +1223,7 @@ void BattlePrep_InitCarouselExit(unk_D_84B259A8* arg0, DisplayObject* arg1) {
  * Selects banner textures from battle_headers and the D_84B0FC* tables by session mode, mode selection
  * and round (mode 7 uses per-selection tables); sets unk_1C only for rounds below 7.
  */
-void BattlePrep_LoadBannerAssets(unk_D_84B259A8* arg0) {
+void BattlePrep_LoadBannerAssets(BattlePrepBanner* arg0) {
     BinArchive* temp_a0 = ASSET_LOAD2(battle_headers, 1, 1);
 
     if (gSessionContext.mode == 7) {
@@ -1276,7 +1276,7 @@ void BattlePrep_LoadBannerAssets(unk_D_84B259A8* arg0) {
  * Scans the unk_10 texture (200-byte rows, 28 rows) from the right edge for the first non-empty column
  * and shifts vertices 0, 1, 8, 9 of the unk_28 layout left by that blank width (plus 4).
  */
-void BattlePrep_AdjustBannerTextureOffset(unk_D_84B259A8* arg0) {
+void BattlePrep_AdjustBannerTextureOffset(BattlePrepBanner* arg0) {
     unk_D_86002F34* ptr;
     s32 var_v0;
     s32 var_v1;
@@ -1314,7 +1314,7 @@ void BattlePrep_AdjustBannerTextureOffset(unk_D_84B259A8* arg0) {
  * Builds the carousel geo layouts (unk_24-unk_38) in a main pool block, choosing variants by inRound2,
  * session mode and round; calls BattlePrep_AdjustBannerTextureOffset for the round 2 variant.
  */
-void BattlePrep_LoadBannerGeoLayouts(unk_D_84B259A8* arg0) {
+void BattlePrep_LoadBannerGeoLayouts(BattlePrepBanner* arg0) {
     MemoryBlock* temp_v0;
 
     temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
@@ -1383,7 +1383,7 @@ void BattlePrep_SetVertexGradientColors(unk_D_86002F34* arg0, Color_RGBA8* arg1,
  * Applies D_84B0FCBC/D_84B0FCFC gradient colors to the carousel layouts, indexed by session mode
  * (offset by mode selection in mode 7).
  */
-void BattlePrep_ApplyBannerColors(unk_D_84B259A8* arg0) {
+void BattlePrep_ApplyBannerColors(BattlePrepBanner* arg0) {
     UNUSED s32 pad[2];
     s16 var_v1;
 
@@ -1401,7 +1401,7 @@ void BattlePrep_ApplyBannerColors(unk_D_84B259A8* arg0) {
 /**
  * Resets carousel state, then loads banner textures, builds geo layouts, and applies colors.
  */
-void BattlePrep_InitBannerScene(unk_D_84B259A8* arg0) {
+void BattlePrep_InitBannerScene(BattlePrepBanner* arg0) {
     arg0->unk_00 = 0;
     arg0->unk_01 = 0;
     BattlePrep_LoadBannerAssets(arg0);
@@ -1413,12 +1413,12 @@ void BattlePrep_InitBannerScene(unk_D_84B259A8* arg0) {
  * Binds the portrait texture for an opponent ladder slot to segment 0x0F.
  */
 s32 BattlePrep_OpponentLadderPortraitCallback(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
     s32 tmp;
     s32 tmp2;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
         tmp = ((D_8006F09C->effectSlot - temp_a0->unk_08->effectSlot) % 8) - 4;
         tmp2 = (arg1->display_node_header.callbackArg * 4) + tmp;
 
@@ -1437,13 +1437,13 @@ s32 BattlePrep_OpponentLadderPortraitCallback(s32 arg0, unk_func_80011B94* arg1)
 s32 BattlePrep_OpponentLadderHighlightCallback(s32 arg0, unk_func_80011B94* arg1) {
     static s16 D_84B11C18 = 0;
 
-    unk_D_84B259E8* temp_v0;
+    OpponentLadder* temp_v0;
     s32 var_t1;
     s32 tmp;
     s32 tmp2;
 
     if (arg0 == 5) {
-        temp_v0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_v0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
         tmp = ((D_8006F09C->effectSlot - temp_v0->unk_08->effectSlot) % 8) - 4;
         tmp2 = tmp + arg1->display_node_header.callbackArg * 4;
 
@@ -1471,11 +1471,11 @@ s32 BattlePrep_OpponentLadderHighlightCallback(s32 arg0, unk_func_80011B94* arg1
  * Binds a rendered ladder image (unk_30) for the slot to segment 0x0F.
  */
 s32 BattlePrep_OpponentLadderTextureCallback(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+    OpponentLadder* temp_a0;
     s32 tmp;
 
     if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_a0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
         tmp = ((D_8006F09C->effectSlot - temp_a0->unk_08->effectSlot) % 8) - 4;
 
         gDPPipeSync(gDisplayListHead++);
@@ -1494,12 +1494,12 @@ s32 BattlePrep_OpponentLadderTextureCallback(s32 arg0, unk_func_80011B94* arg1) 
 s32 BattlePrep_OpponentLadderHighlightCallback2(s32 arg0, unk_func_80011B94* arg1) {
     static s16 D_84B11C1C = 0;
 
-    unk_D_84B259E8* temp_v0;
+    OpponentLadder* temp_v0;
     s32 var_t1;
     s32 tmp;
 
     if (arg0 == 5) {
-        temp_v0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+        temp_v0 = (OpponentLadder*)D_8006F09C->node.callbackArg;
         tmp = ((D_8006F09C->effectSlot - temp_v0->unk_08->effectSlot) % 8);
         tmp -= 4;
 
@@ -1544,7 +1544,7 @@ void BattlePrep_StampDefeatedMark(s32 arg0) {
 /**
  * Resets the four visible opponent ladder slots.
  */
-void BattlePrep_ResetLadderSlots(unk_D_84B259E8* arg0) {
+void BattlePrep_ResetLadderSlots(OpponentLadder* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1559,7 +1559,7 @@ void BattlePrep_ResetLadderSlots(unk_D_84B259E8* arg0) {
 /**
  * Slides the four opponent ladder slots in from the right toward the left.
  */
-void BattlePrep_LadderSlideInLeft(unk_D_84B259E8* arg0) {
+void BattlePrep_LadderSlideInLeft(OpponentLadder* arg0) {
     s32 i;
 
     arg0->unk_01++;
@@ -1577,7 +1577,7 @@ void BattlePrep_LadderSlideInLeft(unk_D_84B259E8* arg0) {
 /**
  * Slides the opponent ladder slots out toward the left, then hides them.
  */
-void BattlePrep_LadderSlideInRight(unk_D_84B259E8* arg0) {
+void BattlePrep_LadderSlideInRight(OpponentLadder* arg0) {
     s32 i;
     s32 var_v0;
 
@@ -1600,7 +1600,7 @@ void BattlePrep_LadderSlideInRight(unk_D_84B259E8* arg0) {
  * Spins the ladder slots, then stamps the defeated mark on the current opponent
  * (sound 0x01100014).
  */
-void BattlePrep_LadderRevealSpin(unk_D_84B259E8* arg0) {
+void BattlePrep_LadderRevealSpin(OpponentLadder* arg0) {
     s32 i;
     s32 var_a2;
 
@@ -1644,7 +1644,7 @@ void BattlePrep_LadderRevealSpin(unk_D_84B259E8* arg0) {
 /**
  * Spins the ladder slots closed.
  */
-void BattlePrep_LadderHideSpin(unk_D_84B259E8* arg0) {
+void BattlePrep_LadderHideSpin(OpponentLadder* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -1664,7 +1664,7 @@ void BattlePrep_LadderHideSpin(unk_D_84B259E8* arg0) {
 /**
  * Runs the opponent ladder state machine.
  */
-void BattlePrep_UpdateOpponentLadder(unk_D_84B259E8* arg0) {
+void BattlePrep_UpdateOpponentLadder(OpponentLadder* arg0) {
     switch (arg0->unk_00) {
         case 1:
             BattlePrep_LadderSlideInLeft(arg0);
@@ -1687,7 +1687,7 @@ void BattlePrep_UpdateOpponentLadder(unk_D_84B259E8* arg0) {
 /**
  * Initializes the opponent ladder display objects.
  */
-void BattlePrep_InitOpponentLadder(unk_D_84B259E8* arg0, DisplayObject* arg1, s16 arg2) {
+void BattlePrep_InitOpponentLadder(OpponentLadder* arg0, DisplayObject* arg1, s16 arg2) {
     s32 i;
     s16 var_s2;
 
@@ -1723,7 +1723,7 @@ void BattlePrep_InitOpponentLadder(unk_D_84B259E8* arg0, DisplayObject* arg1, s1
 /**
  * Renders the background and label of an opponent ladder image.
  */
-void BattlePrep_RenderLadderBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2) {
+void BattlePrep_RenderLadderBackground(OpponentLadder* arg0, s16 arg1, char* arg2) {
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_30[arg1]);
 
     gSPDisplayList(gDisplayListHead++, D_8006F4E0);
@@ -1781,11 +1781,11 @@ s32 BattlePrep_Align64PoolBlock(s32* arg0) {
 /**
  * Loads opponent portraits (8 for cups, 4 trainers for the castle) for the ladder.
  */
-void BattlePrep_LoadLadderTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+void BattlePrep_LoadLadderTextures(OpponentLadder* arg0, BinArchive* arg1, BinArchive* arg2) {
     s16 i;
     s16 sp44;
-    unk_func_84B067B4* temp_s5;
-    unk_func_84B067B4* ptr;
+    TrainerData* temp_s5;
+    TrainerData* ptr;
     s16 tmp;
 
     switch (gSessionContext.mode) {
@@ -1831,18 +1831,18 @@ void BattlePrep_LoadLadderTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinAr
         for (i = 0; i < 4; i++) {
             ptr = i + ((void)0, temp_s5);
 
-            tmp = (ptr->unk_038 >> 8) & 0xFF;
+            tmp = (ptr->gfx_file_index >> 8) & 0xFF;
             arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
             if (i < (gSessionContext.roundOrDemoId - 1)) {
                 BattlePrep_StampDefeatedMark(arg0->unk_10[i]);
             }
             arg0->unk_30[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
-            BattlePrep_RenderLadderBackground(arg0, i, ptr->unk_010);
+            BattlePrep_RenderLadderBackground(arg0, i, ptr->name2);
         }
     } else {
         for (i = 0; i < 8; i++) {
             if (i < gSessionContext.roundOrDemoId) {
-                tmp = (temp_s5[gSessionContext.opponentHistory[0][i]].unk_038 >> 8) & 0xFF;
+                tmp = (temp_s5[gSessionContext.opponentHistory[0][i]].gfx_file_index >> 8) & 0xFF;
 
                 arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
                 if (i < (gSessionContext.roundOrDemoId - 1)) {
@@ -1858,7 +1858,7 @@ void BattlePrep_LoadLadderTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinAr
 /**
  * Loads ladder textures and initializes the opponent ladder.
  */
-void BattlePrep_InitOpponentLadderScene(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+void BattlePrep_InitOpponentLadderScene(OpponentLadder* arg0, BinArchive* arg1, BinArchive* arg2) {
     s32 i;
     MemoryBlock* temp_v0;
 
