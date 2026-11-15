@@ -336,7 +336,7 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* text_window, Batt
 }
 
 /**
- * Draws the COM (D_3025200) or 1P-4P controller tag for a battle side.
+ * Draws the COM (gComIconSmall) or 1P-4P controller tag for a battle side.
  */
 void BattlePrep_DrawPlayerTag(s16 x, s16 y, BattleSessionTeams* session_teams) {
     static u8* sPortIcons[] = { D_3025950, D_30260A0, D_30267F0, D_3026F40 };
