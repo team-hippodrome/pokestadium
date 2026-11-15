@@ -74,7 +74,7 @@ void Team_ResetOpponentHistory(void) {
 }
 
 /* Allocate a trainer slot and initialize its controller, name, and player label.
- * The player label is drawn by BattlePrep_DrawTrainerStatusIcon.
+ * The player label is drawn by BattlePrep_RenderTrainerPortrait.
  * //@src/fragments/battle_prep/battle_prep_394120.c
  */
 TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* player_label) {

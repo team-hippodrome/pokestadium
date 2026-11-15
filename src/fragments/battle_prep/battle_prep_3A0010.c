@@ -67,7 +67,7 @@ static Gfx D_84B16D70[] = {
 };
 static u32 D_84B16DD8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16D30,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawSparkParticle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawSmokePuff,
     D_84B16D70, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16E10[] = {
@@ -123,23 +123,24 @@ static Color_RGBA8 D_84B16EEC[] = { {
                                     } };
 
 /**
- * Binds the WIN (D_3018800) or LOSE (D_301C800) texture for a result banner.
+ * Geo draw callback (phase 5) for a WIN or LOSE banner: binds D_3018800 ("WIN") when the
+ * banner's outcome is nonzero, else D_301C800 ("LOSE"), to segment 0x0F.
  */
-s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 arg0, unk_func_80011B94* arg1) {
-    ResultBanner* temp_a0;
-    u8* var_a0;
+s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 callback_phase, unk_func_80011B94* node) {
+    ResultBanner* result_banner;
+    u8* texture;
 
-    if (arg0 == 5) {
-        temp_a0 = (ResultBanner*)D_8006F09C->node.callbackArg;
-        if (temp_a0->unk_5A2 != 0) {
-            var_a0 = D_3018800;
+    if (callback_phase == 5) {
+        result_banner = (ResultBanner*)D_8006F09C->node.callbackArg;
+        if (result_banner->outcome != 0) {
+            texture = D_3018800;
         } else {
-            var_a0 = D_301C800;
+            texture = D_301C800;
         }
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)Memmap_GetSegmentVaddr(var_a0) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)Memmap_GetSegmentVaddr(texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
@@ -147,15 +148,15 @@ s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 arg0, unk_func_80011B94* arg1)
 }
 
 /**
- * Binds the DRAW texture (D_3020800) for a result banner.
+ * Geo draw callback (phase 5) for a DRAW banner: binds D_3020800 ("DRAW") to segment 0x0F.
  */
-s32 BattlePrepResultBanner_DrawTieLabel(s32 arg0, unk_func_80011B94* arg1) {
+s32 BattlePrepResultBanner_DrawTieLabel(s32 callback_phase, unk_func_80011B94* node) {
     UNUSED s32 pad;
 
-    if (arg0 == 5) {
+    if (callback_phase == 5) {
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F, (u32)Memmap_GetSegmentVaddr(D_3020800) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
@@ -163,19 +164,19 @@ s32 BattlePrepResultBanner_DrawTieLabel(s32 arg0, unk_func_80011B94* arg1) {
 }
 
 /**
- * Draw callback for a spark particle: binds its current texture frame (unk_0C) to segment 0x0F
- * and sets env color from the particle's RGB.
+ * Geo draw callback (phase 5) for a LOSE smoke puff: binds the puff's current smoke cloud frame
+ * to segment 0x0F and tints it with the puff's color.
  */
-s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) {
-    ResultBannerSpark* temp_a0;
+s32 BattlePrepResultBanner_DrawSmokePuff(s32 callback_phase, unk_func_80011B94* node) {
+    ResultBannerSmokePuff* smoke_puff;
 
-    if (arg0 == 5) {
-        temp_a0 = (ResultBannerSpark*)D_8006F09C->node.callbackArg;
+    if (callback_phase == 5) {
+        smoke_puff = (ResultBannerSmokePuff*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_0C & 0x1FFFFFFF);
-        gDPSetEnvColor(gDisplayListHead++, temp_a0->unk_08.r, temp_a0->unk_08.g, temp_a0->unk_08.b, 255);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)smoke_puff->texture & 0x1FFFFFFF);
+        gDPSetEnvColor(gDisplayListHead++, smoke_puff->color.r, smoke_puff->color.g, smoke_puff->color.b, 255);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
@@ -183,552 +184,573 @@ s32 BattlePrepResultBanner_DrawSparkParticle(s32 arg0, unk_func_80011B94* arg1) 
 }
 
 /**
- * Starts a spark particle on an ellipse (radius 52x26) around (arg2, arg3) at angle arg4, at
- * scale 2.0.
+ * Starts a LOSE smoke puff on a 52x26 ellipse around (center_x, center_y) at angle, at scale 2.0.
+ * Its tint starts as red 0x50, green 0x64; UpdateSmokePuff sets the blue each frame.
  */
-void BattlePrepResultBanner_InitSparkSlot(ResultBannerSpark* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3, s16 arg4) {
-    arg0->unk_04 = 0;
-    arg0->unk_06 = arg4;
-    arg0->unk_08.r = 0x50;
-    arg0->unk_08.g = 0x64;
-    Model_InitDisplayObject(arg0->unk_00, 0, 0, arg1);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, 2.0f, 2.0f, 2.0f);
-    arg0->unk_00->node.callbackArg = arg0;
-    arg0->unk_00->position.x = (COSS(arg4) * 52.0f) + arg2;
-    arg0->unk_00->position.y = (SINS(arg4) * 26.0f) + arg3;
-    arg0->unk_00->position.z = -289.0f;
+void BattlePrepResultBanner_InitSmokePuff(ResultBannerSmokePuff* smoke_puff, unk_D_86002F34* geo, s16 center_x, s16 center_y, s16 angle) {
+    smoke_puff->timer = 0;
+    smoke_puff->angle = angle;
+    smoke_puff->color.r = 0x50;
+    smoke_puff->color.g = 0x64;
+    Model_InitDisplayObject(smoke_puff->displayObject, 0, 0, geo);
+    Vec3f_SetComponentsDuplicate(&smoke_puff->displayObject->scale, 2.0f, 2.0f, 2.0f);
+    smoke_puff->displayObject->node.callbackArg = smoke_puff;
+    smoke_puff->displayObject->position.x = (COSS(angle) * 52.0f) + center_x;
+    smoke_puff->displayObject->position.y = (SINS(angle) * 26.0f) + center_y;
+    smoke_puff->displayObject->position.z = -289.0f;
 }
 
 /**
- * Animates a spark for 16 frames: steps through the 8-frame D_2023240 texture table, fades blue,
- * and moves outward 2 units per frame along its angle; then resets the object.
+ * Animates a LOSE smoke puff for 16 frames: plays the 8-frame smoke cloud animation D_2023240
+ * (two frames per image), lowers the blue tint from 0x82 so the puff darkens, and drifts it 2 units
+ * per frame along its angle. Then frees the object.
  */
-void BattlePrepResultBanner_UpdateSparkSlot(ResultBannerSpark* arg0) {
-    s16 temp_v0;
-    DisplayObject* temp_v1;
-    DisplayObject* temp_v1_2;
+void BattlePrepResultBanner_UpdateSmokePuff(ResultBannerSmokePuff* smoke_puff) {
+    s16 unused_frame;
+    DisplayObject* unused_object;
+    DisplayObject* unused_object_2;
 
-    if (arg0->unk_04 < 0x10) {
-        arg0->unk_0C = Memmap_GetSegmentVaddr(((s32*)Memmap_GetSegmentVaddr(D_2023240))[(arg0->unk_04 / 2)]);
-        arg0->unk_08.b = ((arg0->unk_04 * -0x5A) / 16) + 0x82;
-        arg0->unk_00->position.x += 2.0f * COSS(arg0->unk_06);
-        arg0->unk_00->position.y += 2.0f * SINS(arg0->unk_06);
-        arg0->unk_04++;
-    } else if (arg0->unk_04 == 0x10) {
-        BattlePrep_ResetDisplayObject(arg0->unk_00);
-        arg0->unk_04++;
+    if (smoke_puff->timer < 0x10) {
+        smoke_puff->texture = Memmap_GetSegmentVaddr(((s32*)Memmap_GetSegmentVaddr(D_2023240))[(smoke_puff->timer / 2)]);
+        smoke_puff->color.b = ((smoke_puff->timer * -0x5A) / 16) + 0x82;
+        smoke_puff->displayObject->position.x += 2.0f * COSS(smoke_puff->angle);
+        smoke_puff->displayObject->position.y += 2.0f * SINS(smoke_puff->angle);
+        smoke_puff->timer++;
+    } else if (smoke_puff->timer == 0x10) {
+        BattlePrep_ResetDisplayObject(smoke_puff->displayObject);
+        smoke_puff->timer++;
     }
 }
 
 /**
- * Draw callback for a star particle: sets env color RGBA from the particle's color.
+ * Geo draw callback (phase 5) for a WIN star (texture D_3024800): tints it with the star's
+ * RGBA color.
  */
-s32 BattlePrepResultBanner_DrawStarParticle(s32 arg0, unk_func_80011B94* arg1) {
-    ResultBannerStar* temp_v1;
+s32 BattlePrepResultBanner_DrawStarParticle(s32 callback_phase, unk_func_80011B94* node) {
+    ResultBannerStar* star;
 
-    if (arg0 == 5) {
-        temp_v1 = (ResultBannerStar*)D_8006F09C->node.callbackArg;
+    if (callback_phase == 5) {
+        star = (ResultBannerStar*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gDPSetEnvColor(gDisplayListHead++, temp_v1->unk_0A.r, temp_v1->unk_0A.g, temp_v1->unk_0A.b, temp_v1->unk_0A.a);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gDPSetEnvColor(gDisplayListHead++, star->color.r, star->color.g, star->color.b, star->color.a);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-void BattlePrepResultBanner_InitStarParticle(ResultBannerStar* arg0, unk_D_86002F34* arg1, s16 arg2, s16 arg3,
-                                             s16 arg4) {
-    arg0->unk_06 = 0;
-    arg0->unk_04 = 0;
-    arg0->unk_08 = arg4;
-    Model_InitDisplayObject(arg0->unk_00, 2, 0, arg1);
-    arg0->unk_00->node.callbackArg = arg0;
-    arg0->unk_00->position.x = (COSS(arg4) * 60.0f) + arg2;
-    arg0->unk_00->position.y = (SINS(arg4) * 30.0f) + arg3;
-    arg0->unk_00->position.z = -289.0f;
+/**
+ * Starts a mode 0 star on a 60x30 ellipse around (center_x, center_y), flying outward at angle.
+ * The star occupies stars[n][0]; its trail and flash copies go in stars[n][1-7].
+ */
+void BattlePrepResultBanner_InitStarParticle(ResultBannerStar* star, unk_D_86002F34* geo, s16 center_x, s16 center_y,
+                                             s16 angle) {
+    star->timer = 0;
+    star->mode = 0;
+    star->angle = angle;
+    Model_InitDisplayObject(star->displayObject, 2, 0, geo);
+    star->displayObject->node.callbackArg = star;
+    star->displayObject->position.x = (COSS(angle) * 60.0f) + center_x;
+    star->displayObject->position.y = (SINS(angle) * 30.0f) + center_y;
+    star->displayObject->position.z = -289.0f;
 }
 
 /**
- * Spawns a mode-1 trail copy of particle arg1 (same color, model, position, scale) into arg0.
+ * Spawns a mode 1 trail copy of star into trail (same color, model, position and scale).
  */
-void BattlePrepResultBanner_SpawnTrailCopy(ResultBannerStar* arg0, ResultBannerStar* arg1) {
-    arg0->unk_06 = 0;
-    arg0->unk_04 = 1;
-    arg0->unk_0A = arg1->unk_0A;
-    Model_InitDisplayObject(arg0->unk_00, 1, 0, &arg1->unk_00->node.children->node);
-    arg0->unk_00->node.callbackArg = arg0;
-    arg0->unk_00->position = arg1->unk_00->position;
-    arg0->unk_00->scale = arg1->unk_00->scale;
+void BattlePrepResultBanner_SpawnTrailCopy(ResultBannerStar* trail, ResultBannerStar* star) {
+    trail->timer = 0;
+    trail->mode = 1;
+    trail->color = star->color;
+    Model_InitDisplayObject(trail->displayObject, 1, 0, &star->displayObject->node.children->node);
+    trail->displayObject->node.callbackArg = trail;
+    trail->displayObject->position = star->displayObject->position;
+    trail->displayObject->scale = star->displayObject->scale;
 }
 
 /**
- * Spawns a mode-2 white flash copy of particle arg1 at half scale, heading at arg1's angle + arg2.
+ * Spawns a mode 2 white flash copy of star into flash at half scale, heading at star's angle plus
+ * angle_offset.
  */
-void BattlePrepResultBanner_SpawnFlashCopy(ResultBannerStar* arg0, ResultBannerStar* arg1, s16 arg2) {
-    arg0->unk_06 = 0;
-    arg0->unk_04 = 2;
-    arg0->unk_08 = arg1->unk_08 + arg2;
+void BattlePrepResultBanner_SpawnFlashCopy(ResultBannerStar* flash, ResultBannerStar* star, s16 angle_offset) {
+    flash->timer = 0;
+    flash->mode = 2;
+    flash->angle = star->angle + angle_offset;
 
-    Color_SetRGBA(&arg0->unk_0A, 0xFF, 0xFF, 0xFF, 0xFF);
-    Model_InitDisplayObject(arg0->unk_00, 1, 0, &arg1->unk_00->node.children->node);
-    arg0->unk_00->node.callbackArg = arg0;
-    arg0->unk_00->position = arg1->unk_00->position;
-    Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, 0.5f, 0.5f, 0.5f);
+    Color_SetRGBA(&flash->color, 0xFF, 0xFF, 0xFF, 0xFF);
+    Model_InitDisplayObject(flash->displayObject, 1, 0, &star->displayObject->node.children->node);
+    flash->displayObject->node.callbackArg = flash;
+    flash->displayObject->position = star->displayObject->position;
+    Vec3f_SetComponentsDuplicate(&flash->displayObject->scale, 0.5f, 0.5f, 0.5f);
 }
 
 /**
- * Spawns a mode-3 scatter particle at a random offset (±25 x, ±20 y) from arg2, pale yellow with
- * random blue, at scale 0.6.
+ * Spawns a mode 3 scatter star at a random offset (up to 25 x, 20 y) from origin, pale yellow with
+ * a random blue component, at scale 0.6.
  */
-void BattlePrepResultBanner_SpawnScatterParticle(ResultBannerStar* arg0, unk_D_86002F34* arg1, Vec3f* arg2) {
-    arg0->unk_06 = 0;
-    arg0->unk_04 = 3;
-    Color_SetRGBA(&arg0->unk_0A, 0xFF, 0xFF, 0xC8, 0xFF);
-    arg0->unk_0A.b = (MathUtil_Random16() % 200) + 0x32;
-    Model_InitDisplayObject(arg0->unk_00, 2, 0, arg1);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, 0.6f, 0.6f, 0.6f);
-    arg0->unk_00->node.callbackArg = arg0;
-    arg0->unk_00->position.x = ((MathUtil_Random_ZeroOne() - 0.5f) * 50.0f) + arg2->x;
-    arg0->unk_00->position.y = ((MathUtil_Random_ZeroOne() - 0.5f) * 40.0f) + arg2->y;
-    arg0->unk_00->position.z = arg2->z;
+void BattlePrepResultBanner_SpawnScatterParticle(ResultBannerStar* star, unk_D_86002F34* geo, Vec3f* origin) {
+    star->timer = 0;
+    star->mode = 3;
+    Color_SetRGBA(&star->color, 0xFF, 0xFF, 0xC8, 0xFF);
+    star->color.b = (MathUtil_Random16() % 200) + 0x32;
+    Model_InitDisplayObject(star->displayObject, 2, 0, geo);
+    Vec3f_SetComponentsDuplicate(&star->displayObject->scale, 0.6f, 0.6f, 0.6f);
+    star->displayObject->node.callbackArg = star;
+    star->displayObject->position.x = ((MathUtil_Random_ZeroOne() - 0.5f) * 50.0f) + origin->x;
+    star->displayObject->position.y = ((MathUtil_Random_ZeroOne() - 0.5f) * 40.0f) + origin->y;
+    star->displayObject->position.z = origin->z;
 }
 
 /**
- * Mode 0: for 16 frames moves outward, grows, and lerps color through the D_84B16EEC gradient,
- * leaving a trail copy every 4 frames; then spawns three flash copies and frees itself.
+ * Star mode 0: for 16 frames the star flies outward (sinking slightly), grows from scale 0.3 and
+ * ramps its color red, orange, yellow, white, then translucent white (D_84B16EEC). Every 4 frames
+ * it leaves a trail copy in the next of stars[n][1-4]. On frame 16 it bursts into three white
+ * flash copies (stars[n][5-7]) at its angle -0x6500, +0 and +0x6500, and frees itself.
  */
-void BattlePrepResultBanner_UpdateStarGradientStep(ResultBannerStar* arg0) {
-    f32 temp_fv0;
-    Color_RGBA8* color1;
-    Color_RGBA8* color2;
+void BattlePrepResultBanner_UpdateStarFlyOutStep(ResultBannerStar* star) {
+    f32 scale;
+    Color_RGBA8* ramp_start;
+    Color_RGBA8* ramp_end;
 
-    if (arg0->unk_06 < 0x10) {
-        temp_fv0 = ((arg0->unk_06 * 0.5f) / 12.0f) + 0.3f;
+    if (star->timer < 0x10) {
+        scale = ((star->timer * 0.5f) / 12.0f) + 0.3f;
 
-        color1 = &D_84B16EEC[arg0->unk_06 / 4];
-        color2 = &D_84B16EEC[arg0->unk_06 / 4 + 1];
+        ramp_start = &D_84B16EEC[star->timer / 4];
+        ramp_end = &D_84B16EEC[star->timer / 4 + 1];
 
-        arg0->unk_0A.r = (((color2->r - color1->r) * (arg0->unk_06 % 4)) / 4) + color1->r;
-        arg0->unk_0A.g = (((color2->g - color1->g) * (arg0->unk_06 % 4)) / 4) + color1->g;
-        arg0->unk_0A.b = (((color2->b - color1->b) * (arg0->unk_06 % 4)) / 4) + color1->b;
-        arg0->unk_0A.a = (((color2->a - color1->a) * (arg0->unk_06 % 4)) / 4) + color1->a;
+        star->color.r = (((ramp_end->r - ramp_start->r) * (star->timer % 4)) / 4) + ramp_start->r;
+        star->color.g = (((ramp_end->g - ramp_start->g) * (star->timer % 4)) / 4) + ramp_start->g;
+        star->color.b = (((ramp_end->b - ramp_start->b) * (star->timer % 4)) / 4) + ramp_start->b;
+        star->color.a = (((ramp_end->a - ramp_start->a) * (star->timer % 4)) / 4) + ramp_start->a;
 
-        arg0->unk_00->position.x += 3.0f * COSS(arg0->unk_08);
-        arg0->unk_00->position.y += (3.0f * SINS(arg0->unk_08)) - (arg0->unk_06 * 0.0625f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, temp_fv0, temp_fv0, temp_fv0);
-        if (!(arg0->unk_06 & 3)) {
-            BattlePrepResultBanner_SpawnTrailCopy(&arg0[arg0->unk_06 / 4 + 1], arg0);
+        star->displayObject->position.x += 3.0f * COSS(star->angle);
+        star->displayObject->position.y += (3.0f * SINS(star->angle)) - (star->timer * 0.0625f);
+        Vec3f_SetComponentsDuplicate(&star->displayObject->scale, scale, scale, scale);
+        if (!(star->timer & 3)) {
+            BattlePrepResultBanner_SpawnTrailCopy(&star[star->timer / 4 + 1], star);
         }
-        arg0->unk_06++;
-    } else if (arg0->unk_06 == 0x10) {
-        BattlePrepResultBanner_SpawnFlashCopy(&arg0[5], &arg0[0], -0x6500);
-        BattlePrepResultBanner_SpawnFlashCopy(&arg0[6], &arg0[0], 0);
-        BattlePrepResultBanner_SpawnFlashCopy(&arg0[7], &arg0[0], 0x6500);
-        BattlePrep_ResetDisplayObject(arg0->unk_00);
-        arg0->unk_06 = -1;
+        star->timer++;
+    } else if (star->timer == 0x10) {
+        BattlePrepResultBanner_SpawnFlashCopy(&star[5], &star[0], -0x6500);
+        BattlePrepResultBanner_SpawnFlashCopy(&star[6], &star[0], 0);
+        BattlePrepResultBanner_SpawnFlashCopy(&star[7], &star[0], 0x6500);
+        BattlePrep_ResetDisplayObject(star->displayObject);
+        star->timer = -1;
     }
 }
 
 /**
- * Mode 1: holds a trail copy for 8 frames, shrinks it by 0.8x per frame until frame 16, then frees it.
+ * Star mode 1: holds a trail copy for 8 frames, shrinks it by 0.8x per frame until frame 16, then
+ * frees it.
  */
-void BattlePrepResultBanner_UpdateTrailFadeStep(ResultBannerStar* arg0) {
-    arg0->unk_06++;
-    if ((arg0->unk_06 >= 8) && (arg0->unk_06 < 0x10)) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x * 0.8f, arg0->unk_00->scale.x * 0.8f,
-                                     arg0->unk_00->scale.x * 0.8f);
-    } else if (arg0->unk_06 == 0x10) {
-        BattlePrep_ResetDisplayObject(arg0->unk_00);
-        arg0->unk_06 = -1;
+void BattlePrepResultBanner_UpdateTrailFadeStep(ResultBannerStar* star) {
+    star->timer++;
+    if ((star->timer >= 8) && (star->timer < 0x10)) {
+        Vec3f_SetComponentsDuplicate(&star->displayObject->scale, star->displayObject->scale.x * 0.8f, star->displayObject->scale.x * 0.8f,
+                                     star->displayObject->scale.x * 0.8f);
+    } else if (star->timer == 0x10) {
+        BattlePrep_ResetDisplayObject(star->displayObject);
+        star->timer = -1;
     }
 }
 
 /**
- * Mode 2: moves a flash copy outward with decreasing speed and shrinks it by 0.9x per frame for
+ * Star mode 2: moves a flash copy outward at a slowing speed and shrinks it by 0.9x per frame for
  * 16 frames, then frees it.
  */
-void BattlePrepResultBanner_UpdateFlashFadeStep(ResultBannerStar* arg0) {
-    f32 temp_fv0;
-    f32 temp_fv1;
+void BattlePrepResultBanner_UpdateFlashFadeStep(ResultBannerStar* star) {
+    f32 scale;
+    f32 speed;
 
-    if (arg0->unk_06 < 0x10) {
-        temp_fv0 = arg0->unk_00->scale.x * 0.9f;
-        temp_fv1 = (20.0f - arg0->unk_06) / 5.0f;
-        arg0->unk_00->position.x += temp_fv1 * COSS(arg0->unk_08);
-        arg0->unk_00->position.y += temp_fv1 * SINS(arg0->unk_08);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, temp_fv0, temp_fv0, temp_fv0);
-        arg0->unk_06++;
-    } else if (arg0->unk_06 == 0x10) {
-        BattlePrep_ResetDisplayObject(arg0->unk_00);
-        arg0->unk_06 = -1;
+    if (star->timer < 0x10) {
+        scale = star->displayObject->scale.x * 0.9f;
+        speed = (20.0f - star->timer) / 5.0f;
+        star->displayObject->position.x += speed * COSS(star->angle);
+        star->displayObject->position.y += speed * SINS(star->angle);
+        Vec3f_SetComponentsDuplicate(&star->displayObject->scale, scale, scale, scale);
+        star->timer++;
+    } else if (star->timer == 0x10) {
+        BattlePrep_ResetDisplayObject(star->displayObject);
+        star->timer = -1;
     }
 }
 
 /**
- * Mode 3: for 20 frames shrinks a scatter particle, lowers alpha by 5 and drops it 2 units per
- * frame, then frees it.
+ * Star mode 3: for 20 frames a scatter star shrinks, fades (alpha -5 per frame) and falls 2 units
+ * per frame, then frees it.
  */
-void BattlePrepResultBanner_UpdateScatterFallStep(ResultBannerStar* arg0) {
-    if (arg0->unk_06 < 0x14) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_00->scale, arg0->unk_00->scale.x - 0.025f,
-                                     arg0->unk_00->scale.x - 0.025f, arg0->unk_00->scale.x - 0.025f);
-        arg0->unk_0A.a -= 5;
-        arg0->unk_00->position.y -= 2.0f;
-        arg0->unk_06++;
-    } else if (arg0->unk_06 == 0x14) {
-        BattlePrep_ResetDisplayObject(arg0->unk_00);
-        arg0->unk_06 = -1;
+void BattlePrepResultBanner_UpdateScatterFallStep(ResultBannerStar* star) {
+    if (star->timer < 0x14) {
+        Vec3f_SetComponentsDuplicate(&star->displayObject->scale, star->displayObject->scale.x - 0.025f,
+                                     star->displayObject->scale.x - 0.025f, star->displayObject->scale.x - 0.025f);
+        star->color.a -= 5;
+        star->displayObject->position.y -= 2.0f;
+        star->timer++;
+    } else if (star->timer == 0x14) {
+        BattlePrep_ResetDisplayObject(star->displayObject);
+        star->timer = -1;
     }
 }
 
 /**
- * Dispatches a star particle update by its mode (unk_04: 0 gradient, 1 trail, 2 flash, 3 scatter).
+ * Updates a star by its mode: 0 fly out, 1 trail, 2 flash, 3 scatter.
  */
-void BattlePrepResultBanner_UpdateStarParticle(ResultBannerStar* arg0) {
-    switch (arg0->unk_04) {
+void BattlePrepResultBanner_UpdateStarParticle(ResultBannerStar* star) {
+    switch (star->mode) {
         case 0:
-            BattlePrepResultBanner_UpdateStarGradientStep(arg0);
+            BattlePrepResultBanner_UpdateStarFlyOutStep(star);
             break;
 
         case 1:
-            BattlePrepResultBanner_UpdateTrailFadeStep(arg0);
+            BattlePrepResultBanner_UpdateTrailFadeStep(star);
             break;
 
         case 2:
-            BattlePrepResultBanner_UpdateFlashFadeStep(arg0);
+            BattlePrepResultBanner_UpdateFlashFadeStep(star);
             break;
 
         case 3:
-            BattlePrepResultBanner_UpdateScatterFallStep(arg0);
+            BattlePrepResultBanner_UpdateScatterFallStep(star);
             break;
     }
 }
 
 /**
- * Banner state 1: updates the star particles (unk_5A2 != 0) or spark particles for 36 frames,
- * then returns to idle state 0.
+ * Banner state 1: runs the burst thrown when the banner lands (stars for WIN, smoke puffs for
+ * LOSE) for 36 frames, then returns to idle state 0.
  */
-void BattlePrepResultBanner_UpdateBurstEffect(ResultBanner* arg0) {
+void BattlePrepResultBanner_UpdateParticleBurst(ResultBanner* result_banner) {
     s32 i;
     s32 j;
 
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 < 0x25) {
-        if (arg0->unk_5A2 != 0) {
+    result_banner->timer++;
+    if (result_banner->timer < 0x25) {
+        if (result_banner->outcome != 0) {
             for (i = 0; i < 10; i++) {
                 for (j = 0; j < 8; j++) {
-                    if (arg0->unk_0A0[i][j].unk_06 >= 0) {
-                        BattlePrepResultBanner_UpdateStarParticle(&arg0->unk_0A0[i][j]);
+                    if (result_banner->stars[i][j].timer >= 0) {
+                        BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[i][j]);
                     }
                 }
             }
         } else {
             for (i = 0; i < 10; i++) {
-                if (arg0->unk_000[i].unk_04 >= 0) {
-                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
+                if (result_banner->smokePuffs[i].timer >= 0) {
+                    BattlePrepResultBanner_UpdateSmokePuff(&result_banner->smokePuffs[i]);
                 }
             }
         }
     } else {
-        arg0->unk_5A1 = 0;
-        arg0->unk_5A0 = 0;
+        result_banner->timer = 0;
+        result_banner->state = 0;
     }
 }
 
 /**
- * Banner state 2: shows the banner and swings it along a quarter arc toward the camera (side by
- * unk_5A3); at frame 16 spawns 10 star or spark particles around it and enters state 1.
+ * Banner state 2: the WIN or LOSE banner swings in. It turns visible, moves 8 units per frame
+ * toward the camera and turns a quarter circle (rotationZ 0x400 per frame) on a 70.71-unit arc,
+ * around (82, -2) for the player's banner and (-82, -98) for the opponent's. On frame 16 a WIN
+ * banner throws 10 stars and a LOSE banner releases 10 smoke puffs around itself; then state 1.
  */
-void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* arg0) {
+void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* result_banner) {
     s16 i;
-    s16 var_s2;
+    s16 angle;
 
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 > 0) {
-        arg0->unk_5A8->node.flags |= 1;
-        arg0->unk_5A8->position.z -= 8.0f;
-        if (arg0->unk_5A3 != 0) {
-            arg0->unk_5A8->rotation.z += 0x400;
-            arg0->unk_5A8->position.x = (COSS(arg0->unk_5A8->rotation.z + 0x6000) * 70.71f) + 82.0f;
-            arg0->unk_5A8->position.y = (SINS(arg0->unk_5A8->rotation.z + 0x6000) * 70.71f) + -2.0f;
+    result_banner->timer++;
+    if (result_banner->timer > 0) {
+        result_banner->banner->node.flags |= 1;
+        result_banner->banner->position.z -= 8.0f;
+        if (result_banner->isPlayerSide != 0) {
+            result_banner->banner->rotation.z += 0x400;
+            result_banner->banner->position.x = (COSS(result_banner->banner->rotation.z + 0x6000) * 70.71f) + 82.0f;
+            result_banner->banner->position.y = (SINS(result_banner->banner->rotation.z + 0x6000) * 70.71f) + -2.0f;
         } else {
-            arg0->unk_5A8->rotation.z -= 0x400;
-            arg0->unk_5A8->position.x = (COSS(arg0->unk_5A8->rotation.z + 0x2000) * 70.71f) + -82.0f;
-            arg0->unk_5A8->position.y = (SINS(arg0->unk_5A8->rotation.z + 0x2000) * 70.71f) + -98.0f;
+            result_banner->banner->rotation.z -= 0x400;
+            result_banner->banner->position.x = (COSS(result_banner->banner->rotation.z + 0x2000) * 70.71f) + -82.0f;
+            result_banner->banner->position.y = (SINS(result_banner->banner->rotation.z + 0x2000) * 70.71f) + -98.0f;
         }
 
-        if (arg0->unk_5A1 == 0x10) {
-            if (arg0->unk_5A2 != 0) {
-                var_s2 = 0x2000;
-                for (i = 0; i < 5; i++, var_s2 += 0x3000) {
-                    BattlePrepResultBanner_InitStarParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
-                                                            arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepResultBanner_UpdateStarParticle(&arg0->unk_0A0[i]);
+        if (result_banner->timer == 0x10) {
+            if (result_banner->outcome != 0) {
+                angle = 0x2000;
+                for (i = 0; i < 5; i++, angle += 0x3000) {
+                    BattlePrepResultBanner_InitStarParticle(&result_banner->stars[i], result_banner->starGeo, result_banner->banner->position.x,
+                                                            result_banner->banner->position.y, angle);
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[i]);
                 }
 
-                var_s2 = 0x6000;
-                for (i = 5; i < 10; i++, var_s2 -= 0x3000) {
-                    BattlePrepResultBanner_InitStarParticle(&arg0->unk_0A0[i], arg0->unk_5B8, arg0->unk_5A8->position.x,
-                                                            arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepResultBanner_UpdateStarParticle(&arg0->unk_0A0[i]);
+                angle = 0x6000;
+                for (i = 5; i < 10; i++, angle -= 0x3000) {
+                    BattlePrepResultBanner_InitStarParticle(&result_banner->stars[i], result_banner->starGeo, result_banner->banner->position.x,
+                                                            result_banner->banner->position.y, angle);
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[i]);
                 }
 
-                arg0->unk_5A1 = 0;
-                arg0->unk_5A0 = 1;
+                result_banner->timer = 0;
+                result_banner->state = 1;
             } else {
-                var_s2 = 0x3000;
-                for (i = 0; i < 5; i++, var_s2 += 0x2800) {
-                    BattlePrepResultBanner_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
-                                                      arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
+                angle = 0x3000;
+                for (i = 0; i < 5; i++, angle += 0x2800) {
+                    BattlePrepResultBanner_InitSmokePuff(&result_banner->smokePuffs[i], result_banner->smokePuffGeo, result_banner->banner->position.x,
+                                                      result_banner->banner->position.y, angle);
+                    BattlePrepResultBanner_UpdateSmokePuff(&result_banner->smokePuffs[i]);
                 }
 
-                var_s2 = 0x5000;
-                for (i = 5; i < 10; i++, var_s2 -= 0x2800) {
-                    BattlePrepResultBanner_InitSparkSlot(&arg0->unk_000[i], arg0->unk_5B4, arg0->unk_5A8->position.x,
-                                                      arg0->unk_5A8->position.y, var_s2);
-                    BattlePrepResultBanner_UpdateSparkSlot(&arg0->unk_000[i]);
+                angle = 0x5000;
+                for (i = 5; i < 10; i++, angle -= 0x2800) {
+                    BattlePrepResultBanner_InitSmokePuff(&result_banner->smokePuffs[i], result_banner->smokePuffGeo, result_banner->banner->position.x,
+                                                      result_banner->banner->position.y, angle);
+                    BattlePrepResultBanner_UpdateSmokePuff(&result_banner->smokePuffs[i]);
                 }
 
-                arg0->unk_5A1 = 0;
-                arg0->unk_5A0 = 1;
+                result_banner->timer = 0;
+                result_banner->state = 1;
             }
         }
     }
 }
 
 /**
- * Banner state 3: after 4 frames throws the banner up-left with gravity and spin while emitting
- * scatter particles; frees the banner at frame 34 and returns to state 0.
+ * Banner state 3: the player's WIN banner is thrown off screen. After 4 frames it flies left 20
+ * units per frame on a gravity arc (velocityY from 10, -0.5 per frame) while spinning, and sheds
+ * 8 scatter stars per frame for 10 frames. It is freed on frame 34 and the banner returns to
+ * state 0.
  */
-void BattlePrepResultBanner_UpdateStarAftermath(ResultBanner* arg0) {
+void BattlePrepResultBanner_UpdateStarThrowExit(ResultBanner* result_banner) {
     s32 i;
     s32 j;
 
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 >= 4) {
-        arg0->unk_5A8->position.y += arg0->unk_5A4;
-        arg0->unk_5A4 -= 0.5f;
-        arg0->unk_5A8->position.x -= 20.0f;
-        arg0->unk_5A8->rotation.z += 0x400;
+    result_banner->timer++;
+    if (result_banner->timer >= 4) {
+        result_banner->banner->position.y += result_banner->velocityY;
+        result_banner->velocityY -= 0.5f;
+        result_banner->banner->position.x -= 20.0f;
+        result_banner->banner->rotation.z += 0x400;
 
-        if (arg0->unk_5A1 < 0xE) {
+        if (result_banner->timer < 0xE) {
             for (i = 0; i < 4; i++) {
-                BattlePrepResultBanner_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][0 + i], arg0->unk_5B8,
-                                                         &arg0->unk_5A8->position);
-                BattlePrepResultBanner_SpawnScatterParticle(&arg0->unk_0A0[arg0->unk_5A1 - 4][4 + i], arg0->unk_5B8,
-                                                         &arg0->unk_5A8->position);
+                BattlePrepResultBanner_SpawnScatterParticle(&result_banner->stars[result_banner->timer - 4][0 + i], result_banner->starGeo,
+                                                         &result_banner->banner->position);
+                BattlePrepResultBanner_SpawnScatterParticle(&result_banner->stars[result_banner->timer - 4][4 + i], result_banner->starGeo,
+                                                         &result_banner->banner->position);
             }
         }
 
         for (j = 0; j < 10; j++) {
             for (i = 0; i < 8; i++) {
-                if (arg0->unk_0A0[j][i].unk_06 >= 0) {
-                    BattlePrepResultBanner_UpdateStarParticle(&arg0->unk_0A0[j][i]);
+                if (result_banner->stars[j][i].timer >= 0) {
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[j][i]);
                 }
             }
         }
 
-        if (arg0->unk_5A1 == 0x22) {
-            BattlePrep_ResetDisplayObject(arg0->unk_5A8);
-            arg0->unk_5A0 = 0;
+        if (result_banner->timer == 0x22) {
+            BattlePrep_ResetDisplayObject(result_banner->banner);
+            result_banner->state = 0;
         }
     }
 }
 
 /**
- * Banner state 4: after 4 frames moves the banner under gravity (sliding left and spinning when
- * unk_5A2 != 0); frees it at frame 32 and returns to state 0.
+ * Banner state 4: the banner drops off screen. After 4 frames it moves by velocityY, which falls
+ * by 1 per frame. A WIN banner also slides left 10 units per frame while spinning; a LOSE banner
+ * spins the other way in place. It is freed on frame 32 and the banner returns to state 0.
  */
-void BattlePrepResultBanner_UpdateSparkAftermath(ResultBanner* arg0) {
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 >= 4) {
-        arg0->unk_5A8->position.y += arg0->unk_5A4;
-        arg0->unk_5A4 -= 1.0f;
-        if (arg0->unk_5A2 != 0) {
-            arg0->unk_5A8->position.x -= 10.0f;
-            arg0->unk_5A8->rotation.z += 0x400;
+void BattlePrepResultBanner_UpdateFallExit(ResultBanner* result_banner) {
+    result_banner->timer++;
+    if (result_banner->timer >= 4) {
+        result_banner->banner->position.y += result_banner->velocityY;
+        result_banner->velocityY -= 1.0f;
+        if (result_banner->outcome != 0) {
+            result_banner->banner->position.x -= 10.0f;
+            result_banner->banner->rotation.z += 0x400;
         } else {
-            arg0->unk_5A8->rotation.z -= 0x400;
+            result_banner->banner->rotation.z -= 0x400;
         }
 
-        if (arg0->unk_5A1 == 0x20) {
-            BattlePrep_ResetDisplayObject(arg0->unk_5A8);
-            arg0->unk_5A0 = 0;
+        if (result_banner->timer == 0x20) {
+            BattlePrep_ResetDisplayObject(result_banner->banner);
+            result_banner->state = 0;
         }
     }
 }
 
 /**
- * Banner state 5 (unk_5A2 == -1 variant): slides the banner right 40 units per frame for the
- * first 7 frames when unk_5A3 is set, then idles until frame 44 and returns to state 0.
+ * Banner state 5: the DRAW banner slides in. The player's banner moves right 40 units per frame
+ * for 7 frames, from x = -280 to the center; the opponent's banner stays off screen at x = -372.
+ * Returns to state 0 on frame 44.
  */
-void BattlePrepResultBanner_UpdateExitSlide(ResultBanner* arg0) {
-    if ((arg0->unk_5A1 < 0x14) && (arg0->unk_5A3 != 0) && (arg0->unk_5A1 < 7)) {
-        arg0->unk_5A8->position.x += 40.0f;
+void BattlePrepResultBanner_UpdateDrawSlideIn(ResultBanner* result_banner) {
+    if ((result_banner->timer < 0x14) && (result_banner->isPlayerSide != 0) && (result_banner->timer < 7)) {
+        result_banner->banner->position.x += 40.0f;
     }
 
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 == 0x2C) {
-        arg0->unk_5A1 = 0;
-        arg0->unk_5A0 = 0;
+    result_banner->timer++;
+    if (result_banner->timer == 0x2C) {
+        result_banner->timer = 0;
+        result_banner->state = 0;
     }
 }
 
 /**
- * Banner state 7 (unk_5A2 == -1 exit): slides the banner right 40 units per frame when unk_5A3 is
- * set, returning to state 0 after 11 frames.
+ * Banner state 7: the player's DRAW banner slides off to the right, 40 units per frame, and the
+ * banner returns to state 0 after 11 frames.
  */
-void BattlePrepResultBanner_UpdateFirstClearExit(ResultBanner* arg0) {
-    s32 tmp;
+void BattlePrepResultBanner_UpdateDrawExit(ResultBanner* result_banner) {
+    s32 unused_timer; // FAKE: written in both branches and never read
 
-    if (arg0->unk_5A3 != 0) {
-        if (arg0->unk_5A1 >= 0) {
-            arg0->unk_5A8->position.x += 40.0f;
+    if (result_banner->isPlayerSide != 0) {
+        if (result_banner->timer >= 0) {
+            result_banner->banner->position.x += 40.0f;
         }
-        tmp = arg0->unk_5A1;
+        unused_timer = result_banner->timer;
     } else {
-        tmp = arg0->unk_5A1;
+        unused_timer = result_banner->timer;
     }
 
-    arg0->unk_5A1++;
-    if (arg0->unk_5A1 == 0xB) {
-        arg0->unk_5A1 = 0;
-        arg0->unk_5A0 = 0;
+    result_banner->timer++;
+    if (result_banner->timer == 0xB) {
+        result_banner->timer = 0;
+        result_banner->state = 0;
     }
 }
 
 /**
- * Per-frame dispatcher for the result banner state machine (states 1-5 and 7).
+ * Per-frame update for a result banner: 1 particle burst, 2 flight arc, 3 star throw exit,
+ * 4 fall exit, 5 DRAW slide in, 7 DRAW exit.
  */
-void BattlePrepResultBanner_Update(ResultBanner* arg0) {
-    switch (arg0->unk_5A0) {
+void BattlePrepResultBanner_Update(ResultBanner* result_banner) {
+    switch (result_banner->state) {
         case 1:
-            BattlePrepResultBanner_UpdateBurstEffect(arg0);
+            BattlePrepResultBanner_UpdateParticleBurst(result_banner);
             break;
 
         case 2:
-            BattlePrepResultBanner_UpdateFlightArc(arg0);
+            BattlePrepResultBanner_UpdateFlightArc(result_banner);
             break;
 
         case 3:
-            BattlePrepResultBanner_UpdateStarAftermath(arg0);
+            BattlePrepResultBanner_UpdateStarThrowExit(result_banner);
             break;
 
         case 4:
-            BattlePrepResultBanner_UpdateSparkAftermath(arg0);
+            BattlePrepResultBanner_UpdateFallExit(result_banner);
             break;
 
         case 5:
-            BattlePrepResultBanner_UpdateExitSlide(arg0);
+            BattlePrepResultBanner_UpdateDrawSlideIn(result_banner);
             break;
 
         case 7:
-            BattlePrepResultBanner_UpdateFirstClearExit(arg0);
+            BattlePrepResultBanner_UpdateDrawExit(result_banner);
             break;
     }
 }
 
 /**
- * Builds the banner object from arg1 and assigns particle objects from arg2. Variant -1 starts
- * the state 5 slide in from the left; otherwise positions the banner by side and starts state 2.
+ * Shows the banner in banner_object and hands it the particle objects starting at particle_objects
+ * (10 smoke puffs, then 10x8 stars). A DRAW banner starts the state 5 slide in from x = -280 (player)
+ * or -372 (opponent). A WIN or LOSE banner starts hidden at (32, 48) for the player or (-32, -48) for
+ * the opponent and enters the state 2 flight arc; LOSE starts 6 frames later. Both banners of a
+ * result get the same particle objects; only a WIN uses stars and only a LOSE uses smoke puffs.
  */
-void BattlePrepResultBanner_Launch(ResultBanner* arg0, DisplayObject* arg1, DisplayObject* arg2) {
+void BattlePrepResultBanner_Launch(ResultBanner* result_banner, DisplayObject* banner_object, DisplayObject* particle_objects) {
     s32 i;
     s32 j;
 
-    arg0->unk_5A8 = arg1;
-    arg0->unk_5AC = arg2;
-    Model_InitDisplayObject(arg1, 1, 0, arg0->unk_5B0);
-    arg0->unk_5A8->node.callbackArg = arg0;
+    result_banner->banner = banner_object;
+    result_banner->particleObjects = particle_objects;
+    Model_InitDisplayObject(banner_object, 1, 0, result_banner->bannerGeo);
+    result_banner->banner->node.callbackArg = result_banner;
 
-    if (arg0->unk_5A2 == -1) {
-        arg0->unk_5A1 = 0;
-        arg0->unk_5A0 = 5;
-        if (arg0->unk_5A3 != 0) {
-            Vec3f_SetComponentsDuplicate(&arg0->unk_5A8->position, -280.0f, 0.0f, -289.0f);
+    if (result_banner->outcome == -1) {
+        result_banner->timer = 0;
+        result_banner->state = 5;
+        if (result_banner->isPlayerSide != 0) {
+            Vec3f_SetComponentsDuplicate(&result_banner->banner->position, -280.0f, 0.0f, -289.0f);
         } else {
-            Vec3f_SetComponentsDuplicate(&arg0->unk_5A8->position, -372.0f, 0.0f, -289.0f);
+            Vec3f_SetComponentsDuplicate(&result_banner->banner->position, -372.0f, 0.0f, -289.0f);
         }
         return;
     }
 
-    if (arg0->unk_5A2 != 0) {
-        arg0->unk_5A1 = 0;
+    if (result_banner->outcome != 0) {
+        result_banner->timer = 0;
     } else {
-        arg0->unk_5A1 = -6;
+        result_banner->timer = -6;
     }
 
-    arg0->unk_5A0 = 2;
-    arg0->unk_5A8->node.flags &= ~1;
-    if (arg0->unk_5A3 != 0) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_5A8->position, 32.0f, 48.0f, -161.0f);
-        arg0->unk_5A8->rotation.z = -0x4000;
+    result_banner->state = 2;
+    result_banner->banner->node.flags &= ~1;
+    if (result_banner->isPlayerSide != 0) {
+        Vec3f_SetComponentsDuplicate(&result_banner->banner->position, 32.0f, 48.0f, -161.0f);
+        result_banner->banner->rotation.z = -0x4000;
     } else {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_5A8->position, -32.0f, -48.0f, -161.0f);
-        arg0->unk_5A8->rotation.z = 0x4000;
+        Vec3f_SetComponentsDuplicate(&result_banner->banner->position, -32.0f, -48.0f, -161.0f);
+        result_banner->banner->rotation.z = 0x4000;
     }
 
     for (i = 0; i < 10; i++) {
-        arg0->unk_000[i].unk_00 = arg2++;
+        result_banner->smokePuffs[i].displayObject = particle_objects++;
     }
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 8; j++) {
-            arg0->unk_0A0[i][j].unk_00 = arg2++;
-            arg0->unk_0A0[i][j].unk_06 = -1;
+            result_banner->stars[i][j].displayObject = particle_objects++;
+            result_banner->stars[i][j].timer = -1;
         }
     }
 }
 
 /**
- * Picks the banner exit: state 7 for variant -1, state 3 (star throw) for unk_5A3 with
- * unk_5A2 set, otherwise state 4 with an initial vertical speed in unk_5A4.
+ * Starts the banner exit: state 7 for DRAW, the state 3 star throw for the player's WIN banner,
+ * otherwise the state 4 fall with initial velocityY 20 (opponent's WIN) or -10 (LOSE).
  */
-void BattlePrepResultBanner_StartExit(ResultBanner* arg0) {
-    arg0->unk_5A1 = 0;
-    if (arg0->unk_5A2 == -1) {
-        arg0->unk_5A0 = 7;
-    } else if (arg0->unk_5A3 != 0) {
-        if (arg0->unk_5A2 != 0) {
-            arg0->unk_5A4 = 10.0f;
-            arg0->unk_5A0 = 3;
+void BattlePrepResultBanner_StartExit(ResultBanner* result_banner) {
+    result_banner->timer = 0;
+    if (result_banner->outcome == -1) {
+        result_banner->state = 7;
+    } else if (result_banner->isPlayerSide != 0) {
+        if (result_banner->outcome != 0) {
+            result_banner->velocityY = 10.0f;
+            result_banner->state = 3;
         } else {
-            arg0->unk_5A4 = -10.0f;
-            arg0->unk_5A0 = 4;
+            result_banner->velocityY = -10.0f;
+            result_banner->state = 4;
         }
     } else {
-        if (arg0->unk_5A2 != 0) {
-            arg0->unk_5A4 = 20.0f;
+        if (result_banner->outcome != 0) {
+            result_banner->velocityY = 20.0f;
         } else {
-            arg0->unk_5A4 = -10.0f;
+            result_banner->velocityY = -10.0f;
         }
-        arg0->unk_5A0 = 4;
+        result_banner->state = 4;
     }
 }
 
 /**
- * Resets the banner, stores side (arg1) and variant (arg2), and builds the banner geo layout
- * (D_84B16CFC for variant -1, else D_84B16CC8) plus the spark and star particle layouts.
+ * Resets the banner and stores its side (is_player_side) and outcome (-1 DRAW, 0 LOSE, nonzero
+ * WIN). Builds the banner geo layout (D_84B16CFC with the DRAW texture, else D_84B16CC8 for WIN or
+ * LOSE) plus the smoke puff and star layouts. BattlePrep_InitResultScene calls it for both sides.
  */
-void BattlePrepResultBanner_Init(ResultBanner* arg0, s8 arg1, s8 arg2) {
-    GraphNode* var_v0;
-    MemoryBlock* temp_v0;
+void BattlePrepResultBanner_Init(ResultBanner* result_banner, s8 is_player_side, s8 outcome) {
+    GraphNode* unused_node;
+    MemoryBlock* memory_block;
 
-    arg0->unk_5A0 = 0;
-    arg0->unk_5A1 = 0;
-    arg0->unk_5A3 = arg1;
-    arg0->unk_5A2 = arg2;
+    result_banner->state = 0;
+    result_banner->timer = 0;
+    result_banner->isPlayerSide = is_player_side;
+    result_banner->outcome = outcome;
 
-    temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
-    if (arg2 == -1) {
-        arg0->unk_5B0 = process_geo_layout(temp_v0, D_84B16CFC);
+    memory_block = MainPool_AllocState(main_pool_get_available(), 0);
+    if (outcome == -1) {
+        result_banner->bannerGeo = process_geo_layout(memory_block, D_84B16CFC);
     } else {
-        arg0->unk_5B0 = process_geo_layout(temp_v0, D_84B16CC8);
+        result_banner->bannerGeo = process_geo_layout(memory_block, D_84B16CC8);
     }
-    arg0->unk_5B4 = process_geo_layout(temp_v0, D_84B16DD8);
-    arg0->unk_5B8 = process_geo_layout(temp_v0, D_84B16EB8);
-    MainPool_FinalizeAllocation(temp_v0);
+    result_banner->smokePuffGeo = process_geo_layout(memory_block, D_84B16DD8);
+    result_banner->starGeo = process_geo_layout(memory_block, D_84B16EB8);
+    MainPool_FinalizeAllocation(memory_block);
 }

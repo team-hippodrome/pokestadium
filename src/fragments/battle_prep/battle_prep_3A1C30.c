@@ -223,13 +223,13 @@ void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* text_window, BattlePrep
     // - being passed the first trainer
     // - being in the elite 4
     // - being in the champion
-    s32 sp2C = !!(gSessionContext.sessionFlags & 0x2);
+    s32 can_reenter = !!(gSessionContext.sessionFlags & 0x2);
 
-    sp2C = !sp2C;
+    can_reenter = !can_reenter;
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
-    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, sp2C, BattlePrep_GetString(47));
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, can_reenter, BattlePrep_GetString(47));
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, BattlePrep_GetString(50));
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
@@ -377,10 +377,10 @@ void BattlePrep_DrawPlayerTag(s16 x, s16 y, BattleSessionTeams* session_teams) {
 /**
  * Sets the text color for a side's win count; the side that won this battle pulses yellow.
  */
-void BattlePrep_SetWinCountColor(BattleSessionTeams* arg0) {
+void BattlePrep_SetWinCountColor(BattleSessionTeams* session_teams) {
     static s16 sWinCountHighlightPhase = 0;
 
-    if (arg0->wonBattle == 1) {
+    if (session_teams->wonBattle == 1) {
         Gfx_SetEnvColor(0xFF, (SINS((s32)(SINS(sWinCountHighlightPhase) * 16384.0f)) * 100.0f) + 155.0f, 0x37, 0xFF);
         // Lowest -> middle -> highest: #ff3737 #ffaa37 #ffff37
         sWinCountHighlightPhase += 0x400;
@@ -500,7 +500,7 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
 // Better name: BattlePrep_DrawTextWindow
 /**
  * Draws the active text window: grows the panel vertically while opening, then draws
- * the full panel and the contents for window kind unk_01 (1-10).
+ * the full panel and the contents for its window kind (1-10).
  */
 void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* text_window) {
     BattlePrepRuleWindowLayout* window_layout;
@@ -578,7 +578,8 @@ void BattlePrep_DrawRuleWindow(BattlePrepRuleWindow* text_window) {
 
 /**
  * Handles input for an open rule window: A plays the option's sound from the layout's unk_10
- * 3-bit table and starts closing; D-pad up/down moves the cursor, skipping disabled rows (unk_0E).
+ * 3-bit table and starts closing; D-pad up/down moves the cursor, skipping disabled rows
+ * (disabledRows).
  */
 // better name: BattlePrep_RunQuitMenu
 void BattlePrep_RunQuitMenu(BattlePrepRuleWindow* text_window) {
@@ -680,7 +681,7 @@ void BattlePrep_UpdateRuleWindow(BattlePrepRuleWindow* text_window) {
 }
 
 /**
- * Opens rule window kind arg1 with SFX_PANEL_OPEN. Disables rows by session state (no continues
+ * Opens rule window kind layout_index with SFX_PANEL_OPEN. Disables rows by session state (no continues
  * left, sessionFlags 0x2, or a win count of 99 in kind 5), then moves the cursor to the first enabled row.
  */
 void BattlePrep_InitRuleWindow(BattlePrepRuleWindow* text_window, s16 layout_index) {

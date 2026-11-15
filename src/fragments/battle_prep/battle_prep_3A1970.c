@@ -113,96 +113,100 @@ static u32 D_84B17528[] = {
 };
 
 /**
- * Holds a result label (PERFECT or EXTRA CONTINUE) at full size.
+ * Result label state 1: holds the label at its current size. Nothing in battle_prep sets state 1.
  */
-void BattlePrep_ResultLabelIdle(ResultLabel* arg0) {
+void BattlePrepResultLabel_HoldStep(ResultLabel* result_label) {
 }
 
 /**
- * Grows a result label into view.
+ * Result label state 2: grows the label 1/8 per frame; after 8 frames it is at full size and the
+ * label returns to idle state 0 (still shown).
  */
-void BattlePrep_ResultLabelGrow(ResultLabel* arg0) {
-    arg0->unk_01++;
-    if (arg0->unk_01 == 8) {
-        arg0->unk_00 = 0;
+void BattlePrepResultLabel_GrowStep(ResultLabel* result_label) {
+    result_label->scaleStep++;
+    if (result_label->scaleStep == 8) {
+        result_label->state = 0;
     }
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f,
-                                 arg0->unk_01 * 0.125f);
+    Vec3f_SetComponentsDuplicate(&result_label->displayObject->scale, result_label->scaleStep * 0.125f, result_label->scaleStep * 0.125f,
+                                 result_label->scaleStep * 0.125f);
 }
 
 /**
- * Shrinks a result label out of view.
+ * Result label state 3: shrinks the label 1/8 per frame; at zero it clears the object and returns
+ * to state 0.
  */
-void BattlePrep_ResultLabelShrink(ResultLabel* arg0) {
-    arg0->unk_01--;
-    if (arg0->unk_01 == 0) {
-        arg0->unk_00 = 0;
-        ModelRenderer_ClearDisplayObject(arg0->unk_04);
+void BattlePrepResultLabel_ShrinkStep(ResultLabel* result_label) {
+    result_label->scaleStep--;
+    if (result_label->scaleStep == 0) {
+        result_label->state = 0;
+        ModelRenderer_ClearDisplayObject(result_label->displayObject);
     } else {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, arg0->unk_01 * 0.125f, arg0->unk_01 * 0.125f,
-                                     arg0->unk_01 * 0.125f);
+        Vec3f_SetComponentsDuplicate(&result_label->displayObject->scale, result_label->scaleStep * 0.125f, result_label->scaleStep * 0.125f,
+                                     result_label->scaleStep * 0.125f);
     }
 }
 
 /**
- * Runs the result label state machine.
+ * Per-frame update for a result label: 1 hold, 2 grow, 3 shrink.
  */
-void BattlePrep_UpdateResultLabel(ResultLabel* arg0) {
-    switch ((s8)arg0->unk_00) {
+void BattlePrepResultLabel_Update(ResultLabel* result_label) {
+    switch ((s8)result_label->state) {
         case 1:
-            BattlePrep_ResultLabelIdle(arg0);
+            BattlePrepResultLabel_HoldStep(result_label);
             break;
 
         case 2:
-            BattlePrep_ResultLabelGrow(arg0);
+            BattlePrepResultLabel_GrowStep(result_label);
             break;
 
         case 3:
-            BattlePrep_ResultLabelShrink(arg0);
+            BattlePrepResultLabel_ShrinkStep(result_label);
             break;
     }
 }
 
 /**
- * Starts growing a result label.
+ * Pops a result label in: builds it in display_object at scale 0.1 and starts the state 2 grow.
+ * PERFECT is placed at (32, 26) and EXTRA CONTINUE at (-96, 80).
  */
-void BattlePrep_StartResultLabelGrow(ResultLabel* arg0, DisplayObject* arg1) {
-    arg0->unk_04 = arg1;
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 2;
-    Model_InitDisplayObject(arg1, 1, 0, arg0->unk_08);
-    arg0->unk_04->node.callbackArg = arg0;
-    if (arg0->unk_02 == 0) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04->position, 32.0f, 26.0f, -288.0f);
+void BattlePrepResultLabel_StartGrow(ResultLabel* result_label, DisplayObject* display_object) {
+    result_label->displayObject = display_object;
+    result_label->scaleStep = 0;
+    result_label->state = 2;
+    Model_InitDisplayObject(display_object, 1, 0, result_label->geo);
+    result_label->displayObject->node.callbackArg = result_label;
+    if (result_label->kind == 0) {
+        Vec3f_SetComponentsDuplicate(&result_label->displayObject->position, 32.0f, 26.0f, -288.0f);
     } else {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04->position, -96.0f, 80.0f, -288.0f);
+        Vec3f_SetComponentsDuplicate(&result_label->displayObject->position, -96.0f, 80.0f, -288.0f);
     }
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04->scale, 0.1f, 0.1f, 0.1f);
+    Vec3f_SetComponentsDuplicate(&result_label->displayObject->scale, 0.1f, 0.1f, 0.1f);
 }
 
 /**
- * Starts shrinking a result label.
+ * Starts shrinking a result label out of view (state 3, from full size).
  */
-void BattlePrep_StartResultLabelShrink(ResultLabel* arg0) {
-    arg0->unk_01 = 8;
-    arg0->unk_00 = 3;
+void BattlePrepResultLabel_StartShrink(ResultLabel* result_label) {
+    result_label->scaleStep = 8;
+    result_label->state = 3;
 }
 
 /**
- * Initializes a result label; arg1 0 = PERFECT, 1 = EXTRA CONTINUE.
+ * Resets a result label and builds its geo layout: kind 0 = PERFECT (D_3028870), kind 1 = EXTRA
+ * CONTINUE (D_30281B0, tinted yellow, with four small 16x12 pieces tinted teal).
  */
-void BattlePrep_InitResultLabel(ResultLabel* arg0, u8 arg1) {
-    MemoryBlock* sp2C;
+void BattlePrepResultLabel_Init(ResultLabel* result_label, u8 kind) {
+    MemoryBlock* memory_block;
 
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_02 = arg1;
+    result_label->state = 0;
+    result_label->scaleStep = 0;
+    result_label->kind = kind;
 
-    sp2C = MainPool_AllocState(main_pool_get_available(), 0);
-    if (arg1 == 0) {
-        arg0->unk_08 = process_geo_layout(sp2C, D_84B17240);
+    memory_block = MainPool_AllocState(main_pool_get_available(), 0);
+    if (kind == 0) {
+        result_label->geo = process_geo_layout(memory_block, D_84B17240);
     } else {
-        arg0->unk_08 = process_geo_layout(sp2C, D_84B17528);
+        result_label->geo = process_geo_layout(memory_block, D_84B17528);
     }
-    MainPool_FinalizeAllocation(sp2C);
+    MainPool_FinalizeAllocation(memory_block);
 }
