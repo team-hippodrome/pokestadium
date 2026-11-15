@@ -15,9 +15,9 @@ typedef struct unk_arg1_func_81003E00_04 {
 
 typedef struct unk_arg1_func_81003E00 {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ unk_arg1_func_81003E00_04* unk_04;
+    /* 0x04 */ unk_arg1_func_81003E00_04* unk_04; // GraphNode.prevSibling; byte 1 holds its render flags.
     /* 0x08 */ char unk08[0xC];
-    /* 0x14 */ unk_arg1_func_81003E00_14* unk_14;
+    /* 0x14 */ unk_arg1_func_81003E00_14* unk_14; // GraphNode.callbackArg: animation id and inclusive frame range.
 } unk_arg1_func_81003E00; // size = 0x18
 
 void DisplayList_SetFlagInRange(s32 arg0, unk_arg1_func_81003E00* arg1) {

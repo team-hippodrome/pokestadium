@@ -7,9 +7,9 @@
 #include "src/geo_layout.h"
 
 typedef struct unk_D_84B19910_002 {
-    /* 0x02 */ s16 unk_00;
-    /* 0x04 */ s16 unk_02;
-    /* 0x06 */ s16 unk_04;
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
 } unk_D_84B19910_002;
 
 typedef struct unk_D_84B19910 {
@@ -89,7 +89,7 @@ typedef struct unk_D_84B25A58 {
 
 typedef struct unk_D_84B25A90 {
     /* 0x00 */ u8 unk_00;
-    /* 0x00 */ u8 unk_01;
+    /* 0x01 */ u8 unk_01;
     /* 0x04 */ DisplayObject* unk_04;
     /* 0x08 */ unk_D_86002F34* unk_08;
     /* 0x0C */ unk_D_86002F34* unk_0C;
@@ -145,11 +145,11 @@ typedef struct unk_D_84B26640_010_010 {
 
 typedef struct unk_D_84B26640 {
     /* 0x00 */ unk_D_84B26640_010 unk_00;
-    /* 0x00 */ char unk0C[0x4];
-    /* 0x00 */ unk_D_84B26640_010 unk_10;
-    /* 0x00 */ BattlePrepTextWindow unk_1C;
-    /* 0x00 */ BattlePrepTextWindow unk_28;
-} unk_D_84B26640; // size = 0x30
+    /* 0x0C */ char unk0C[0x4];
+    /* 0x10 */ unk_D_84B26640_010 unk_10;
+    /* 0x1C */ BattlePrepTextWindow unk_1C;
+    /* 0x24 */ BattlePrepTextWindow unk_28;
+} unk_D_84B26640; // size = 0x2C
 
 typedef struct unk_func_84B067B4 {
     /* 0x000 */ char unk00[0x10];

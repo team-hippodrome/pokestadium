@@ -908,8 +908,8 @@ typedef struct unk_D_8006FF00 {
     /* 0x0C */ u8 cupEligibilityFlags;
     /* 0x0D */ u8 unk_0D;
     /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
+    /* 0x10 */ s16 unk_10; // Nickname color variant minimum; Model_ComputeNicknameColorVariant.
+    /* 0x12 */ s16 unk_12; // Nickname color variant maximum.
     /* 0x14 */ u32 unk_14;
     /* 0x18 */ u32 unk_18;
 } unk_D_8006FF00; // size = 0x1C
@@ -925,7 +925,7 @@ typedef struct FontSet {
 typedef struct FontContext {
     /* 0x00 */ FontSet unk_00[6];
     /* 0x48 */ void* unk_48;
-    /* 0x4C */ s32 unk_4C;
+    /* 0x4C */ u8* unk_4C; // Cached glyph source address; Font_DrawChar compares this.
     /* 0x50 */ u8 setIndex;
     /* 0x51 */ s8 letterSpacing; // Added to the glyph advance.
     /* 0x52 */ u8 lineHeight;

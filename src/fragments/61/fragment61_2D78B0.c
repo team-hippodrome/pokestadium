@@ -434,9 +434,6 @@ s16 TeamSelection_RunCategorySelection(void) {
     return TeamSelection_CheckCartRemoved(D_8423D3F8);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/61/fragment61_2D78B0/TeamSelection_DrawFrame.s")
-#else
 void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     Color_RGBA8 sp34;
     Color_RGBA8 sp30;
@@ -454,6 +451,10 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     }
 
     if (arg0 == 0) {
+#if defined(VERSION_US_REV2)
+        // Measures the category banner string; the width is never used.
+        UNUSED s32 width = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
+#endif
         Color_SetRGB(&sp34, 0x64, 0x64, 0xC8);
         Color_SetRGB(&sp30, 0x28, 0x28, 0x8C);
         TeamSelection_DrawGradientPanel(0x48, 0x28, 0x208, &sp34, &sp30);
@@ -482,7 +483,6 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     }
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void TeamSelection_RenderFrame(UNUSED s16 arg0, s16 arg1, s16 arg2) {
     s32 temp_s0 = D_84210D40 > 0;

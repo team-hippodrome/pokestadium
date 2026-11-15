@@ -367,7 +367,7 @@ void SushiGame_InitPlayerSlot(unk_D_86807558* arg0, s32 arg1, s32 arg2) {
 
     arg0->unk_24C.node.callbackArg = arg0->unk_000;
 
-    Model_InitDisplayObject(sp24, 0, 0xA0, D_86807550->unk_08->unk_00[0]);
+    Model_InitDisplayObject(sp24, 0, 0xA0, D_86807550->nodes[0]);
     ModelAnim_SetAnimation(sp24, arg0->unk_0C0);
 
     sp24->transformAnim.frameFixed = Rand_Range(0x1E) << 0x10;

@@ -285,7 +285,7 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
 }
 
 ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node_index) {
-    return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
+    return active_pokemon->sessionTeams->loadedModel->nodes[node_index];
 }
 
 s32 Battle_GetDisplayModelId(ActivePokemon* active_pokemon, UNUSED s32 unused) {

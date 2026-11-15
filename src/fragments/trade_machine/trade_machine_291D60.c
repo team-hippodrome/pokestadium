@@ -428,9 +428,6 @@ void Trade_DrawSaveSeqBoxThumbnail(s16 arg0, s16 arg1, s16 arg2) {
     Gfx_DrawTexturedRectClipped(arg1, arg2, 0x3C, 0x3C, 0, 0, 0x2AB, 0x2AB, 0);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/trade_machine/trade_machine_291D60/Trade_DrawSaveSeqBoxPanels.s")
-#else
 void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
     unk_D_82F20A40_00E* var_s0;
     s32 sp74[2];
@@ -484,9 +481,14 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
             temp_s3 = D_82F21120[i];
             var_s0 = &arg0->unk_14[i];
             Font_SetActive(4, 0);
+#if defined(VERSION_US_REV2)
+            Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "%s%03d",
+                        Text_GetString(NULL, 0, sTradePokemonDetailText, 0x16), temp_s3->unk_00);
+#else
             Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "No.");
             Font_SetActive(4, 0);
             Font_Printf(var_s0->unk_00 + 0x26, var_s0->unk_02 + 0x4A, "%03d", temp_s3->unk_00);
+#endif
             Font_SetActive(8, 0);
             Font_Printf(var_s0->unk_00 + 0x62, var_s0->unk_02 + 0x46, Trade_GetSpeciesName(temp_s3->unk_00));
             Font_SetActive(8, 0);
@@ -500,7 +502,6 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
 
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void Trade_DrawSaveSeqMenuPanel(unk_D_82F210E0* arg0) {
     s32 i;

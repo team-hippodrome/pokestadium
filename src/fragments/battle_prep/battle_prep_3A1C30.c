@@ -292,9 +292,6 @@ void BattlePrep_DrawCupProgressHeader(BattlePrepTextWindow* text_window, BattleP
     Font_EndTexturedTextRendering();
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawCastleProgressHeader.s")
-#else
 /**
  * Rule window kind 8: gym name with BATTLE, TRAINER N / GYM LEADER / ELITE FOUR N.
  * Displays upon loading a suspending run from the pre-area select menu
@@ -315,7 +312,12 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* text_window, Batt
     if (gSessionContext.modeSelection < SESSION_MODE_BATTLE_NOW) {
         // It is impossible to suspend the game on Vs Mewtwo so this never happens
         if (gSessionContext.modeSelection == SESSION_MODE_VS_MEWTWO) {
+#if defined(VERSION_US_REV2)
+            Text_SetNumberToken(1, gSessionContext.roundOrDemoId);
+            BattlePrep_FormatString(buffer, 256, 64);
+#else
             sprintf(buffer, "%s %d", BattlePrep_GetString(27), gSessionContext.roundOrDemoId);
+#endif
             text_length = Font_MeasureTextExtent(4, 0, buffer);
             Font_Printf((window_layout->x - (text_length / 2)) + 100, window_layout->y + 38, buffer);
         } else if (gSessionContext.roundOrDemoId < 4) {
@@ -332,7 +334,6 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepTextWindow* text_window, Batt
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
-#endif
 
 /**
  * Draws the COM (D_3025200) or 1P-4P controller tag for a battle side.
@@ -415,9 +416,6 @@ void BattlePrep_DrawWinRecord(BattlePrepTextWindow* text_window, BattlePrepTextW
     Font_EndTexturedTextRendering();
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_prep/battle_prep_3A1C30/BattlePrep_DrawOverwriteSavePrompt.s")
-#else
 /**
  * Rule window kind 10: over write suspended battle data prompt
  */
@@ -425,6 +423,9 @@ void BattlePrep_DrawWinRecord(BattlePrepTextWindow* text_window, BattlePrepTextW
 // better name: BattlePrep_DrawOverwriteSuspendDataPrompt
 void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, BattlePrepTextWindowLayout* window_layout) {
     SessionContinueData suspend_record;
+#if defined(VERSION_US_REV2)
+    char buffer[128];
+#endif
     UNUSED s32 pad;
     s32 warning_length;
     s32 icon_offset_x;
@@ -451,7 +452,13 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, Battl
                 Font_Printf(window_layout->x + 30, window_layout->y + 53, BattlePrep_GetString(62));
             }
         } else {
+#if defined(VERSION_US_REV2)
+            Text_SetNumberToken(1, suspend_record.trainerIndex);
+            BattlePrep_FormatString(buffer, 128, 64);
+            Font_Printf(window_layout->x + 30, window_layout->y + 53, buffer);
+#else
             Font_Printf(window_layout->x + 30, window_layout->y + 53, "%s %d", BattlePrep_GetString(27), suspend_record.trainerIndex);
+#endif
         }
     } else if ((suspend_record.sessionMode == SESSION_MODE_NINTENDO_CUP_99) || (suspend_record.sessionMode == SESSION_MODE_PRIME_CUP)) {
         Font_Printf(window_layout->x + 30, window_layout->y + 23, BattlePrep_GetString(suspend_record.sessionMode - 1));
@@ -489,7 +496,6 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepTextWindow* text_window, Battl
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
-#endif
 
 // Better name: BattlePrep_DrawTextWindow
 /**

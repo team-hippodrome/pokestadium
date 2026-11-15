@@ -151,9 +151,9 @@ typedef struct DioramaPresetData {
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ u16 unk_10;
-    /* 0x10 */ u16 unk_12;
+    /* 0x12 */ u16 unk_12;
     /* 0x14 */ u16 unk_14;
-    /* 0x14 */ u16 unk_16;
+    /* 0x16 */ u16 unk_16;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
 } DioramaPresetData; // size = 0x1C

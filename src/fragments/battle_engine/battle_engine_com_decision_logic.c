@@ -5420,7 +5420,7 @@ s32 func_843831A0(TeamRoster* arg0, TeamRoster* arg1, TeamRoster* ai_roster, s32
     if (ai_difficulty < 0xFF) {
         BattleAI_LoadConfiguration(ai_difficulty, &D_843C60F0);
     }
-    bzero(gBattleAI_ActivePokemon, sizeof(gBattleAI_ActivePokemon) + 2);
+    bzero(gBattleAI_ActivePokemon, sizeof(gBattleAI_ActivePokemon) + 2); //!bug: Clears two bytes beyond the array.
     gBattleAI_ActivePokemon->unk_000 = 1;
     BattleAI_SeedRandomState(0x35);
 

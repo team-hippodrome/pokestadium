@@ -5,6 +5,7 @@
 #include <PR/sched.h>
 
 typedef unsigned int uintptr_t;
+typedef int intptr_t;
 
 #include "macros.h"
 #include "versions.h"
@@ -29,21 +30,21 @@ typedef union arg1_func_80010CA8 {
 } arg1_func_80010CA8; // size = 0x4
 
 typedef struct ModelAnimationBank {
-    /* 0x00 */ char pad0[4];
+    /* 0x00 */ u16 modelId;
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 modelCount;
     /* 0x04 */ u8 transformCount;
     /* 0x05 */ u8 eventTrackCount;
-    /* 0x06 */ char pad6[6];
+    /* 0x06 */ char pad6[2];
+    /* 0x08 */ struct ModelNodeView** nodes;
     /* 0x0C */ s32* transformTracks;
     /* 0x10 */ s32* eventTracks;
-} ModelAnimationBank; // size >= 0x14
+    /* 0x14 */ struct ModelAnimationBank* (*entryPoint)(s32, s32);
+} ModelAnimationBank; // size = 0x18
 
 typedef ModelAnimationBank* (*ModelBankCallback)(s32, s32);
 
-typedef struct ModelLoadResult {
-    /* 0x00 */ u16 modelId;
-    /* 0x02 */ char unk02[0x6];
-    /* 0x08 */ struct ModelNodeView* modelRoot;
-} ModelLoadResult; // size >= 0xC
+typedef ModelAnimationBank ModelLoadResult;
 
 typedef struct ModelLoadContext {
     /* 0x00 */ u8 flags;
@@ -88,7 +89,7 @@ typedef struct DisplayNodeHeader {
     /* 0x08 */ struct DisplayNodeHeader* nextSibling;
     /* 0x0C */ ModelAssetNode* children;
     /* 0x10 */ ModelLoadContext* callback;
-    /* 0x14 */ s32 callbackArg;
+    /* 0x14 */ intptr_t callbackArg; // Callback data/display-list address, or an integer selector.
 } DisplayNodeHeader; // size = 0x18
 
 typedef struct TransformAnimData {
@@ -469,11 +470,7 @@ typedef struct unk_D_86002F34 {
     /* 0x28 */ func_unk_D_800ABE10 unk_28;
 } unk_D_86002F34; // size = 0x2C
 
-// Are unk_D_86002F30 and unk_D_800AC840 the same?
-typedef struct unk_D_86002F30 {
-    /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ ModelNodeView* unk_08;
-} unk_D_86002F30; // size = 0x18 ??
+typedef ModelAnimationBank unk_D_86002F30;
 
 typedef struct GbTowerSessionParams {
     /* 0x00 */ s16 buttonBindings;
@@ -545,7 +542,7 @@ typedef struct TrainerData {
     /* 0x000 */ char unk00[0x4];
     /* 0x004 */ char name1[12];
     /* 0x010 */ char name2[40];
-    /* 0x038 */ u16 gfx_file_index; // high byte battle_portraits, low byte ukn
+    /* 0x038 */ u16 gfx_file_index; // Big-endian ROM halfword; high byte indexes battle_portraits, low byte unknown.
     /* 0x03A */ char unk3A[0x1F6];
 } TrainerData; // size = 0x230
 
