@@ -4,8 +4,8 @@
 
 // this file handles the soft reset effect.
 typedef struct UnkStruct800A6D20 {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ char unk1B0[0x430];
+    /* 0x000 */ SchedClient client;
+    /* 0x1E0 */ char stack[0x400]; // SoftReset_CreateThread passes &gSoftResetLineNum as the stack top.
     /* 0x5E0 */ u32 gSoftResetLineNum;
     /* 0x5E4 */ s32 gSoftResetRed;
     /* 0x5E8 */ s32 gSoftResetGreen;
@@ -100,11 +100,11 @@ void func_8000559C(void) {
  */
 void SoftReset_Thread(void* unused) {
     __osSetFpcCsr(0x01000C01);
-    Sched_AddClient(&D_800A6D20);
+    Sched_AddClient(&D_800A6D20.client);
 
     // thread loop
     while (1) {
-        Sched_WaitClientQueue(&D_800A6D20.thread); // hangs here until gets a soft reset.
+        Sched_WaitClientQueue(&D_800A6D20.client); // hangs here until gets a soft reset.
         if (D_800A62E0.unk_A38 == 0) {
             continue;
         }
@@ -140,8 +140,9 @@ void SoftReset_Thread(void* unused) {
  * Create the soft reset effect thread.
  */
 void SoftReset_CreateThread(void) {
-    Sched_InitClientQueue(&D_800A6D20.thread, 2, 1);
+    Sched_InitClientQueue(&D_800A6D20.client, 2, 1);
     D_800A6D20.gSoftResetLineNum = 0;
-    osCreateThread(&D_800A6D20.thread, THREAD_ID_RESET, SoftReset_Thread, NULL, &gSoftResetLineNum, THREAD_PRI_RESET);
-    osStartThread(&D_800A6D20.thread);
+    osCreateThread(&D_800A6D20.client.thread, THREAD_ID_RESET, SoftReset_Thread, NULL, &gSoftResetLineNum,
+                   THREAD_PRI_RESET);
+    osStartThread(&D_800A6D20.client.thread);
 }
