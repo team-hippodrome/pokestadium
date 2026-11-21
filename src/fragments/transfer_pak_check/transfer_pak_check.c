@@ -1924,32 +1924,32 @@ void PakUi_DrawDataSummaryPanel(s16 arg0, s16 arg1, SessionContinueData* arg2, s
             PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 2, arg1, "ちゅうだんデータをけす");
             Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF);
 
-            if (arg2->unk_00 == 7) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->unk_00 - 1]);
-                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->unk_01 + 0x13]);
+            if (arg2->sessionMode == 7) {
+                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->sessionMode - 1]);
+                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->cupOrGymIndex + 0x13]);
 
-                if (arg2->unk_01 < 8) {
-                    if (arg2->unk_02 < 4) {
-                        Font_Printf(0xA9, temp_s0 + 0x69, "トレーナー%d", arg2->unk_02);
+                if (arg2->cupOrGymIndex < 8) {
+                    if (arg2->trainerIndex < 4) {
+                        Font_Printf(0xA9, temp_s0 + 0x69, "トレーナー%d", arg2->trainerIndex);
                     } else {
                         Font_Printf(0xA9, temp_s0 + 0x69, "ジムリーダー");
                     }
                 } else {
-                    Font_Printf(0xA9, temp_s0 + 0x69, "してんのう%d", arg2->unk_02);
+                    Font_Printf(0xA9, temp_s0 + 0x69, "してんのう%d", arg2->trainerIndex);
                 }
-            } else if ((arg2->unk_00 == 3) || (arg2->unk_00 == 6)) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->unk_00 - 1]);
-                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->unk_01 + 7]);
-                Font_Printf(0xA9, temp_s0 + 0x69, D_82D065D4_jp[arg2->unk_02 + 0xA]);
+            } else if ((arg2->sessionMode == 3) || (arg2->sessionMode == 6)) {
+                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->sessionMode - 1]);
+                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->cupOrGymIndex + 7]);
+                Font_Printf(0xA9, temp_s0 + 0x69, D_82D065D4_jp[arg2->trainerIndex + 0xA]);
             } else {
-                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->unk_00 - 1]);
-                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->unk_02 + 0xA]);
+                Font_Printf(0xA9, temp_s0 + 0x2D, D_82D065D4_jp[arg2->sessionMode - 1]);
+                Font_Printf(0xA9, temp_s0 + 0x4B, D_82D065D4_jp[arg2->trainerIndex + 0xA]);
             }
 
-            if (arg2->unk_00 != 7) {
+            if (arg2->sessionMode != 7) {
                 Font_SetActive(8, -2);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0x12D, temp_s0 + 0x85, "コンティニュー＝%d", arg2->unk_04);
+                Font_Printf(0x12D, temp_s0 + 0x85, "コンティニュー＝%d", arg2->continueCount);
             }
 
             Font_SetActive(8, -3);
@@ -1958,9 +1958,9 @@ void PakUi_DrawDataSummaryPanel(s16 arg0, s16 arg1, SessionContinueData* arg2, s
             Font_Printf(0xA1, temp_s0 + 0x13E, "えらぶと　なくなります。");
             Font_EndTexturedTextRendering();
 
-            if (arg2->unk_03 == 1) {
+            if (arg2->inRound2 == 1) {
                 // Two bytes per EUC-JP glyph, 22 pixels per glyph.
-                s32 temp_v0_3 = (strlen(D_82D065D4_jp[arg2->unk_00 - 1]) / 2) * 0x16;
+                s32 temp_v0_3 = (strlen(D_82D065D4_jp[arg2->sessionMode - 1]) / 2) * 0x16;
 
                 gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -1996,34 +1996,34 @@ void PakUi_DrawDataSummaryPanel(s16 arg0, s16 arg1, SessionContinueData* arg2, s
             PakUi_DrawMenuOptionText(0xC5, temp_s0 + 0xC7, 2, arg1, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2D));
             Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF);
 
-            if (arg2->unk_00 == 7) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_01 + 0x13));
+            if (arg2->sessionMode == 7) {
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->sessionMode - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->cupOrGymIndex + 0x13));
 
-                if (arg2->unk_01 < 8) {
-                    if (arg2->unk_02 < 4) {
-                        Text_SetNumberToken(1, arg2->unk_02);
+                if (arg2->cupOrGymIndex < 8) {
+                    if (arg2->trainerIndex < 4) {
+                        Text_SetNumberToken(1, arg2->trainerIndex);
                         Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), sGameFunctionalityText, 0x2E));
                     } else {
                         Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, sGameFunctionalityText, 0x2F));
                     }
                 } else {
-                    Text_SetNumberToken(1, arg2->unk_02);
+                    Text_SetNumberToken(1, arg2->trainerIndex);
                     Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(sp50, sizeof(sp50), sGameFunctionalityText, 0x30));
                 }
-            } else if ((arg2->unk_00 == 3) || (arg2->unk_00 == 6)) {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_01 + 7));
-                Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_02 + 0xA));
+            } else if ((arg2->sessionMode == 3) || (arg2->sessionMode == 6)) {
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->sessionMode - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->cupOrGymIndex + 7));
+                Font_Printf(0xA9, temp_s0 + 0x69, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->trainerIndex + 0xA));
             } else {
-                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
-                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_02 + 0xA));
+                Font_Printf(0xA9, temp_s0 + 0x2D, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->sessionMode - 1));
+                Font_Printf(0xA9, temp_s0 + 0x4B, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->trainerIndex + 0xA));
             }
 
-            if (arg2->unk_00 != 7) {
+            if (arg2->sessionMode != 7) {
                 Font_SetActive(8, 0);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Text_SetNumberToken(1, arg2->unk_04);
+                Text_SetNumberToken(1, arg2->continueCount);
                 Font_Printf(0x12D, temp_s0 + 0x85, Text_GetString(&sp50, 0x100, sGameFunctionalityText, 0x31));
             }
 
@@ -2033,8 +2033,8 @@ void PakUi_DrawDataSummaryPanel(s16 arg0, s16 arg1, SessionContinueData* arg2, s
             Font_Printf(0xA1, temp_s0 + 0x124, Text_GetString(NULL, 0, sGameFunctionalityText, 0x32));
             Font_EndTexturedTextRendering();
 
-            if (arg2->unk_03 == 1) {
-                s32 temp_v0_3 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->unk_00 - 1));
+            if (arg2->inRound2 == 1) {
+                s32 temp_v0_3 = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sGameFunctionalityText, arg2->sessionMode - 1));
 
                 gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 

@@ -125,9 +125,9 @@ typedef struct BattleSessionTeams {
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ ModelAnimationBank* loadedModel;
     /* 0x18 */ ModelNodeView* unk_18;
-    /* 0x1C */ u8 unk_1C;
+    /* 0x1C */ u8 wonBattle; // Set by BattleScene_UpdateFrame from the battle result
     /* 0x1D */ u8 assetIsBusy;
-    /* 0x1E */ u8 unk_1E;
+    /* 0x1E */ u8 winCount; // Free Battle win tally; BattlePrep_DrawWinRecord shows it beside "Record"
     /* 0x20 */ s16* unk_20; // Resource archive indices, terminated by -1; PokeIcon_LoadMultipleModels.
     /* 0x24 */ arg1_func_80019420* unk_24;
 } BattleSessionTeams; // size = 0x28

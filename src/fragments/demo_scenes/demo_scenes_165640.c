@@ -576,7 +576,7 @@ void Intro_TriggerTextPanelExit(void) {
 }
 
 void Intro_SelectPartyRoster(void) {
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
         D_86B10690 = gSessionContext.battleSides[0].tagTeamMember[0];
         D_86B10694 = &gSessionContext.battleSides[0];
     } else {

@@ -39,7 +39,7 @@ static Gfx D_84B14CE0[] = {
 };
 static u32 D_84B14DC8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14C20,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawActiveTeamBadge,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawTrainerCard,
     D_84B14CE0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B14E00[] = {
@@ -156,7 +156,7 @@ static Gfx D_84B15618[] = {
                        PRIM_LOD_FRAC, 0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPVertex(D_84B151C0, 4, 0),
-    gsDPSetEnvColor(255, 50, 20, 160),
+    gsDPSetEnvColor(255, 50, 20, 160), // #FF3214A0
     gsDPLoadTextureBlock_4b(D_3017F00, G_IM_FMT_I, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
@@ -164,7 +164,7 @@ static Gfx D_84B15618[] = {
 };
 static u32 D_84B15688[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14E00,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconSingle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconCardSingle,
     D_84B15200, 0x22050000, D_84B15618, 0x25000000, 0x06000000,
     0x01000000,
 };
@@ -214,7 +214,7 @@ static Gfx D_84B159B0[] = {
                        PRIM_LOD_FRAC, 0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPVertex(D_84B15808, 4, 0),
-    gsDPSetEnvColor(255, 50, 20, 160),
+    gsDPSetEnvColor(255, 50, 20, 160), // #FF3214A0
     gsDPLoadTextureBlock_4b(D_3017F00, G_IM_FMT_I, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
@@ -222,7 +222,7 @@ static Gfx D_84B159B0[] = {
 };
 static u32 D_84B15A20[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B156C8,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconDouble,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawFaintedFaceSingle,
     D_84B15848, 0x22050000, D_84B159B0, 0x25000000, 0x06000000,
     0x01000000,
 };
@@ -296,7 +296,7 @@ static Gfx D_84B15EE0[] = {
                        PRIM_LOD_FRAC, 0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPVertex(D_84B15C60, 4, 0),
-    gsDPSetEnvColor(255, 50, 20, 160),
+    gsDPSetEnvColor(255, 50, 20, 160), // #FF3214A0
     gsDPLoadTextureBlock_4b(D_3017F00, G_IM_FMT_I, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
@@ -305,14 +305,14 @@ static Gfx D_84B15EE0[] = {
 static u32 D_84B15F50[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00180000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconCardDouble,
     D_84B15CA0, 0x22050000, D_84B15EE0, 0x25000000, 0x06000000,
     0x06000000, 0x01000000,
 };
 static u32 D_84B15FA8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B15A60,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0xFFE80000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconSingle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawIconCardDouble,
     D_84B15CA0, 0x22050000, D_84B15EE0, 0x25000000, 0x06000000,
     0x06000000, 0x01000000,
 };
@@ -357,7 +357,7 @@ static Gfx D_84B16268[] = {
                        PRIM_LOD_FRAC, 0),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPVertex(D_84B16100, 4, 0),
-    gsDPSetEnvColor(255, 50, 20, 160),
+    gsDPSetEnvColor(255, 50, 20, 160), // #FF3214A0
     gsDPLoadTextureBlock_4b(D_3017F00, G_IM_FMT_I, 64, 64, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
                             G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
@@ -366,248 +366,291 @@ static Gfx D_84B16268[] = {
 static u32 D_84B162D8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00180000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawFaintedFaceDouble,
     D_84B16140, 0x22050000, D_84B16268, 0x25000000, 0x06000000,
     0x06000000, 0x01000000,
 };
 static u32 D_84B16330[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16000,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0xFFE80000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawBadgeIconDouble,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepTeamIcons_DrawFaintedFaceDouble,
     D_84B16140, 0x22050000, D_84B16268, 0x25000000, 0x06000000,
     0x06000000, 0x01000000, 0x00000000, 0x00000000,
 };
 
-s32 BattlePrepTeamIcons_DrawActiveTeamBadge(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A58* temp_v1;
-    u8* var_a3;
+/**
+ * Geo callback (draw phase 5) for a trainer card on the result screen. Binds segment 0x0F to side0CardImage for
+ * display object 0 (side 0, top-left) or side1CardImage otherwise, draws the display list in the node's
+ * callbackArg, and reapplies material state. The card images are composed by BattlePrep_DrawTrainerStatusIcon.
+ */
+s32 BattlePrepTeamIcons_DrawTrainerCard(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepTeamIcons* team_icons;
+    u8* card_image;
 
-    if (arg0 == 5) {
-        temp_v1 = (unk_D_84B25A58*)D_8006F09C->node.callbackArg;
-        if (temp_v1->unk_04->effectSlot == D_8006F09C->effectSlot) {
-            var_a3 = temp_v1->unk_24->img_p;
+    if (phase == 5) {
+        team_icons = (BattlePrepTeamIcons*)D_8006F09C->node.callbackArg;
+        if (team_icons->displayObjects->effectSlot == D_8006F09C->effectSlot) {
+            card_image = team_icons->side0CardImage->img_p;
         } else {
-            var_a3 = temp_v1->unk_28->img_p;
+            card_image = team_icons->side1CardImage->img_p;
         }
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)var_a3 & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)card_image & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrepTeamIcons_DrawIconSingle(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A58* temp_t1;
-    s32 temp_t2;
-    u8* var_a3;
+/**
+ * Geo callback (draw phase 5) for a card in the single layout (three per side). Binds segment 0x0F to the slot's
+ * PokeIcon image (icon plus HP bar) and segment 0x0E to the tall blue side 0 panel D_3006000 (display objects 1-3)
+ * or green side 1 panel D_3009000 (4-6), draws the card, then shows the next sibling, the red X (D_3017F00), only
+ * when isFaintMarked is set for the slot.
+ */
+s32 BattlePrepTeamIcons_DrawIconCardSingle(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepTeamIcons* team_icons;
+    s32 slot;
+    u8* panel_texture;
 
-    if (arg0 == 5) {
-        temp_t1 = (unk_D_84B25A58*)D_8006F09C->node.callbackArg;
-        temp_t2 = D_8006F09C->effectSlot - temp_t1->unk_04->effectSlot;
-        if (temp_t2 < 4) {
-            var_a3 = D_3006000;
+    if (phase == 5) {
+        team_icons = (BattlePrepTeamIcons*)D_8006F09C->node.callbackArg;
+        slot = D_8006F09C->effectSlot - team_icons->displayObjects->effectSlot;
+        if (slot < 4) {
+            panel_texture = D_3006000;
         } else {
-            var_a3 = D_3009000;
+            panel_texture = D_3009000;
         }
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(temp_t1->unk_1C, temp_t2 - 1) & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(var_a3) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(team_icons->iconRenderList, slot - 1) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
 
-        if (temp_t1->unk_2C[temp_t2 - 1] != 0) {
-            arg1->display_node_header.nextSibling->flags |= 1;
+        if (team_icons->isFaintMarked[slot - 1] != 0) {
+            display_node->display_node_header.nextSibling->flags |= 1;
         } else {
-            arg1->display_node_header.nextSibling->flags &= ~1;
+            display_node->display_node_header.nextSibling->flags &= ~1;
         }
     }
     return 0;
 }
 
-s32 BattlePrepTeamIcons_DrawIconDouble(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A58* temp_a3;
-    s32 temp_t0;
-    u8* var_a0;
+/**
+ * Geo callback (draw phase 5) for a fainted face in the single layout (display objects 9-14 during the flip, then
+ * 1-6). Binds segment 0x0F to the slot's 40x40 model texture in modelTextures and segment 0x0E to the D_3006000 /
+ * D_3009000 panel. The geo layout adds the "FAINTED" label (D_3016F00) and the red X.
+ */
+s32 BattlePrepTeamIcons_DrawFaintedFaceSingle(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepTeamIcons* team_icons;
+    s32 slot;
+    u8* panel_texture;
 
-    if (arg0 == 5) {
-        temp_a3 = (unk_D_84B25A58*)D_8006F09C->node.callbackArg;
-        temp_t0 = (D_8006F09C->effectSlot - temp_a3->unk_04->effectSlot) % 8;
-        if (temp_t0 < 4) {
-            var_a0 = D_3006000;
+    if (phase == 5) {
+        team_icons = (BattlePrepTeamIcons*)D_8006F09C->node.callbackArg;
+        slot = (D_8006F09C->effectSlot - team_icons->displayObjects->effectSlot) % 8;
+        if (slot < 4) {
+            panel_texture = D_3006000;
         } else {
-            var_a0 = D_3009000;
+            panel_texture = D_3009000;
         }
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a3->unk_20[temp_t0 - 1] & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(var_a0) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
-
-        GeoRender_ApplyMaterialState();
-    }
-    return 0;
-}
-
-s32 BattlePrepTeamIcons_DrawBadgeIconSingle(s32 arg0, unk_func_80011B94* arg1) {
-    u8* var_a3;
-    unk_D_84B25A58* temp_t1;
-    s32 temp_a1;
-
-    if (arg0 == 5) {
-        temp_t1 = (unk_D_84B25A58*)D_8006F09C->node.callbackArg;
-        temp_a1 = D_8006F09C->effectSlot - temp_t1->unk_04->effectSlot;
-
-        if (temp_a1 >= 0x10) {
-            temp_a1 = (temp_a1 - 0x10) % 12;
-        } else {
-            temp_a1 = D_84B14C10[temp_a1];
-        }
-
-        if (temp_a1 < 6) {
-            var_a3 = D_300C000;
-        } else {
-            var_a3 = D_300D800;
-        }
-
-        gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(temp_t1->unk_1C, temp_a1) & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(var_a3) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
-
-        GeoRender_ApplyMaterialState();
-
-        if (temp_t1->unk_2C[temp_a1] != 0) {
-            arg1->display_node_header.nextSibling->flags |= 1;
-        } else {
-            arg1->display_node_header.nextSibling->flags &= ~1;
-        }
-    }
-    return 0;
-}
-
-s32 BattlePrepTeamIcons_DrawBadgeIconDouble(s32 arg0, unk_func_80011B94* arg1) {
-    s32 temp_a3;
-    unk_D_84B25A58* temp_t1;
-    u8* var_a0;
-
-    if (arg0 == 5) {
-        temp_t1 = (unk_D_84B25A58*)D_8006F09C->node.callbackArg;
-        temp_a3 = D_8006F09C->effectSlot - temp_t1->unk_04->effectSlot;
-
-        if (temp_a3 >= 0x10) {
-            temp_a3 = (temp_a3 - 0x10) % 12;
-        } else {
-            temp_a3 = D_84B14C10[temp_a3];
-        }
-
-        if (temp_a3 < 6) {
-            var_a0 = D_300C000;
-        } else {
-            var_a0 = D_300D800;
-        }
-
-        gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_t1->unk_20[temp_a3] & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(var_a0) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)team_icons->modelTextures[slot - 1] & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-void BattlePrepTeamIcons_DrawHpBarsSingle(unk_D_84B25A58* arg0, s32 arg1) {
+/**
+ * Geo callback (draw phase 5) for a half-height card in the double layout (six per side). Maps the display object
+ * to a slot (objects 1-6 and 9-14 through D_84B14C10, flip objects 16-39 by (index - 16) % 12), binds that slot's
+ * PokeIcon image and the blue D_300C000 (slots 0-5, side 0) or green D_300D800 (slots 6-11, side 1) panel, draws,
+ * and shows the red X sibling only when isFaintMarked is set.
+ */
+s32 BattlePrepTeamIcons_DrawIconCardDouble(s32 phase, unk_func_80011B94* display_node) {
+    u8* panel_texture;
+    BattlePrepTeamIcons* team_icons;
+    s32 slot;
+
+    if (phase == 5) {
+        team_icons = (BattlePrepTeamIcons*)D_8006F09C->node.callbackArg;
+        slot = D_8006F09C->effectSlot - team_icons->displayObjects->effectSlot;
+
+        if (slot >= 0x10) {
+            slot = (slot - 0x10) % 12;
+        } else {
+            slot = D_84B14C10[slot];
+        }
+
+        if (slot < 6) {
+            panel_texture = D_300C000;
+        } else {
+            panel_texture = D_300D800;
+        }
+
+        gDPPipeSync(gDisplayListHead++);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(team_icons->iconRenderList, slot) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
+
+        GeoRender_ApplyMaterialState();
+
+        if (team_icons->isFaintMarked[slot] != 0) {
+            display_node->display_node_header.nextSibling->flags |= 1;
+        } else {
+            display_node->display_node_header.nextSibling->flags &= ~1;
+        }
+    }
+    return 0;
+}
+
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_DrawFaintedFaceSingle: uses the slot mapping of
+ * BattlePrepTeamIcons_DrawIconCardDouble and binds the slot's model texture and the D_300C000 / D_300D800 panel.
+ */
+s32 BattlePrepTeamIcons_DrawFaintedFaceDouble(s32 phase, unk_func_80011B94* display_node) {
+    s32 slot;
+    BattlePrepTeamIcons* team_icons;
+    u8* panel_texture;
+
+    if (phase == 5) {
+        team_icons = (BattlePrepTeamIcons*)D_8006F09C->node.callbackArg;
+        slot = D_8006F09C->effectSlot - team_icons->displayObjects->effectSlot;
+
+        if (slot >= 0x10) {
+            slot = (slot - 0x10) % 12;
+        } else {
+            slot = D_84B14C10[slot];
+        }
+
+        if (slot < 6) {
+            panel_texture = D_300C000;
+        } else {
+            panel_texture = D_300D800;
+        }
+
+        gDPPipeSync(gDisplayListHead++);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)team_icons->modelTextures[slot] & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
+
+        GeoRender_ApplyMaterialState();
+    }
+    return 0;
+}
+
+/**
+ * Redraws the HP bar into each picked Pokémon's icon image for both sides (side 0 slots 0-2, side 1 slots 3-5). The
+ * bar shows max(hp, maxHp * min_hp_percent / 100), so lowering min_hp_percent from 100 drains the bars from full
+ * down to each Pokémon's HP at the end of the battle.
+ */
+void BattlePrepTeamIcons_DrawHpBarsSingle(BattlePrepTeamIcons* team_icons, s32 min_hp_percent) {
     s32 i;
     s32 j;
     UNUSED s32 pad;
-    TeamRoster* temp_s5;
-    s32 temp_lo;
-    s32 var_s0;
+    TeamRoster* trainer;
+    s32 min_hp_scaled;
+    s32 hp_scaled;
 
     for (i = 0; i < 2; i++) {
-        temp_s5 = gSessionContext.battleSides[i].tagTeamMember[0];
+        trainer = gSessionContext.battleSides[i].tagTeamMember[0];
 
-        for (j = 0; j < temp_s5->numberOfPokemonBrought; j++) {
-            temp_lo = temp_s5->pokemonPicked[j].maxHp * arg1;
-            var_s0 = temp_s5->pokemonPicked[j].hp * 0x64;
-            if (var_s0 < temp_lo) {
-                var_s0 = temp_lo;
+        for (j = 0; j < trainer->numberOfPokemonBrought; j++) {
+            min_hp_scaled = trainer->pokemonPicked[j].maxHp * min_hp_percent;
+            hp_scaled = trainer->pokemonPicked[j].hp * 0x64;
+            if (hp_scaled < min_hp_scaled) {
+                hp_scaled = min_hp_scaled;
             }
-            GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_1C->unk_08[i * 3 + j].unk_0C);
-            BattleHud_DrawHpBarTexture(4, 0xB4, 0x78, var_s0, temp_s5->pokemonPicked[j].maxHp * 0x64);
+            GfxImage_SetRenderTarget(&gDisplayListHead, team_icons->iconRenderList->unk_08[i * 3 + j].unk_0C);
+            BattleHud_DrawHpBarTexture(4, 0xB4, 0x78, hp_scaled, trainer->pokemonPicked[j].maxHp * 0x64);
         }
     }
 }
 
-void BattlePrepTeamIcons_DrawHpBarsDouble(unk_D_84B25A58* arg0, s32 arg1) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_DrawHpBarsSingle: slot = side * 6 + member * 3 + k, skipping
+ * absent tag-team members.
+ */
+void BattlePrepTeamIcons_DrawHpBarsDouble(BattlePrepTeamIcons* team_icons, s32 min_hp_percent) {
     s32 i;
     s32 j;
-    s32 x;
-    s32 temp_lo;
-    s32 var_s0;
-    TeamRoster* temp_s5;
+    s32 k;
+    s32 min_hp_scaled;
+    s32 hp_scaled;
+    TeamRoster* trainer;
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
-            temp_s5 = gSessionContext.battleSides[i].tagTeamMember[j];
+            trainer = gSessionContext.battleSides[i].tagTeamMember[j];
 
-            if (temp_s5 != NULL) {
-                for (x = 0; x < temp_s5->numberOfPokemonBrought; x++) {
-                    temp_lo = temp_s5->pokemonPicked[x].maxHp * arg1;
-                    var_s0 = temp_s5->pokemonPicked[x].hp * 0x64;
-                    if (var_s0 < temp_lo) {
-                        var_s0 = temp_lo;
+            if (trainer != NULL) {
+                for (k = 0; k < trainer->numberOfPokemonBrought; k++) {
+                    min_hp_scaled = trainer->pokemonPicked[k].maxHp * min_hp_percent;
+                    hp_scaled = trainer->pokemonPicked[k].hp * 0x64;
+                    if (hp_scaled < min_hp_scaled) {
+                        hp_scaled = min_hp_scaled;
                     }
-                    GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_1C->unk_08[(i * 6) + (j * 3) + x].unk_0C);
-                    BattleHud_DrawHpBarTexture(4, 0x54, 0x78, var_s0, temp_s5->pokemonPicked[x].maxHp * 0x64);
+                    GfxImage_SetRenderTarget(&gDisplayListHead, team_icons->iconRenderList->unk_08[(i * 6) + (j * 3) + k].unk_0C);
+                    BattleHud_DrawHpBarTexture(4, 0x54, 0x78, hp_scaled, trainer->pokemonPicked[k].maxHp * 0x64);
                 }
             }
         }
     }
 }
 
-void BattlePrepTeamIcons_MarkFaintedSingle(unk_D_84B25A58* arg0, s32 arg1) {
+/**
+ * Sets isFaintMarked, which shows the red X, for each picked Pokémon whose BattleMon unk_25 equals faint_order, and
+ * plays sound 0x0110000B per mark with the slot + 1 as its argument. unk_25 behaves as the Pokémon's faint order (0
+ * = did not faint): BattlePrepTeamIcons_HpDrainStep* passes 1, 2, 3, ... in turn.
+ */
+void BattlePrepTeamIcons_MarkFaintedSingle(BattlePrepTeamIcons* team_icons, s32 faint_order) {
     UNUSED s32 pad;
-    TeamRoster* temp_s5;
-    s32 temp_v0;
+    TeamRoster* trainer;
+    s32 slot;
     s32 i;
     s32 j;
 
     for (i = 0; i < 2; i++) {
-        temp_s5 = gSessionContext.battleSides[i].tagTeamMember[0];
+        trainer = gSessionContext.battleSides[i].tagTeamMember[0];
 
-        for (j = 0; j < temp_s5->numberOfPokemonBrought; j++) {
-            if (arg1 == temp_s5->pokemonPicked[j].unk_25) {
-                temp_v0 = (i * 3) + j;
-                arg0->unk_2C[temp_v0] = 1;
-                Audio_PlayCategory11SoundCommand(0x0110000B, temp_v0 + 1, 0);
+        for (j = 0; j < trainer->numberOfPokemonBrought; j++) {
+            if (faint_order == trainer->pokemonPicked[j].unk_25) {
+                slot = (i * 3) + j;
+                team_icons->isFaintMarked[slot] = 1;
+                Audio_PlayCategory11SoundCommand(0x0110000B, slot + 1, 0);
             }
         }
     }
 }
 
-void BattlePrepTeamIcons_MarkFaintedDouble(unk_D_84B25A58* arg0, s32 arg1) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_MarkFaintedSingle (slot = side * 6 + member * 3 + k).
+ */
+void BattlePrepTeamIcons_MarkFaintedDouble(BattlePrepTeamIcons* team_icons, s32 faint_order) {
     s32 i;
     s32 j;
-    s32 x;
-    TeamRoster* temp_s5;
-    s32 temp_v0;
+    s32 k;
+    TeamRoster* trainer;
+    s32 slot;
 
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
-            temp_s5 = gSessionContext.battleSides[i].tagTeamMember[j];
+            trainer = gSessionContext.battleSides[i].tagTeamMember[j];
 
-            if (temp_s5 != NULL) {
-                for (x = 0; x < temp_s5->numberOfPokemonBrought; x++) {
-                    if (arg1 == temp_s5->pokemonPicked[x].unk_25) {
-                        temp_v0 = (i * 6) + (j * 3) + x;
-                        arg0->unk_2C[temp_v0] = 1;
-                        Audio_PlayCategory11SoundCommand(0x0110000B, temp_v0 + 1, 1);
+            if (trainer != NULL) {
+                for (k = 0; k < trainer->numberOfPokemonBrought; k++) {
+                    if (faint_order == trainer->pokemonPicked[k].unk_25) {
+                        slot = (i * 6) + (j * 3) + k;
+                        team_icons->isFaintMarked[slot] = 1;
+                        Audio_PlayCategory11SoundCommand(0x0110000B, slot + 1, 1);
                     }
                 }
             }
@@ -615,645 +658,741 @@ void BattlePrepTeamIcons_MarkFaintedDouble(unk_D_84B25A58* arg0, s32 arg1) {
     }
 }
 
-void BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(unk_D_84B25A58* arg0) {
+/**
+ * Single layout: binds cards 1-6 to iconGeo and lays them out three per row, 64 units apart at z = -289 (side 0 at
+ * y = +48 right of its trainer card, side 1 at y = -48 left of its card). They start turned 0x5800 (top) / -0x5800
+ * (bottom) about Y for BattlePrepTeamIcons_FlipInStepSingle.
+ */
+void BattlePrepTeamIcons_InitIconCardsSingle(BattlePrepTeamIcons* team_icons) {
     s32 i;
 
     for (i = 1; i < 7; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[i], 0, 0, arg0->unk_08);
-        arg0->unk_04[i].node.callbackArg = arg0;
+        Model_InitDisplayObject(&team_icons->displayObjects[i], 0, 0, team_icons->iconGeo);
+        team_icons->displayObjects[i].node.callbackArg = team_icons;
     }
 
     for (i = 1; i < 4; i++) {
-        arg0->unk_04[i].rotation.y = 0x5800;
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        team_icons->displayObjects[i].rotation.y = 0x5800;
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->unk_04[4 + i].rotation.y = -0x5800;
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[4 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        team_icons->displayObjects[4 + i].rotation.y = -0x5800;
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[4 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
     }
 }
 
-void BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(unk_D_84B25A58* arg0) {
+/**
+ * Single layout: binds fainted faces 9-14 to faintedGeo at the same positions as cards 1-6, turned -0x8000 about Y
+ * to face away, so BattlePrepTeamIcons_FlipFaintedStepSingle can turn them into view together with the cards.
+ */
+void BattlePrepTeamIcons_InitFaintedFacesSingle(BattlePrepTeamIcons* team_icons) {
     s32 i;
 
     for (i = 1; i < 7; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[8 + i], 0, 0, arg0->unk_10);
-        arg0->unk_04[8 + i].node.callbackArg = arg0;
-        arg0->unk_04[8 + i].rotation.y = -0x8000;
+        Model_InitDisplayObject(&team_icons->displayObjects[8 + i], 0, 0, team_icons->faintedGeo);
+        team_icons->displayObjects[8 + i].node.callbackArg = team_icons;
+        team_icons->displayObjects[8 + i].rotation.y = -0x8000;
     }
 
     for (i = 1; i < 4; i++) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[8 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
     }
 
     for (i = 0; i < 3; i++) {
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[12 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[12 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
     }
 }
 
-void BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(unk_D_84B25A58* arg0) {
+/**
+ * Double layout: binds flip objects 16-21 (side 0) and 22-27 (side 1), upper halves to iconGeo and lower halves (a
+ * tag team's second member) to lowerIconGeo, at the single layout's positions and starting Y turn.
+ */
+void BattlePrepTeamIcons_InitIconCardsDouble(BattlePrepTeamIcons* team_icons) {
     s32 i;
 
     for (i = 1; i < 4; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[15 + i], 0, 0, arg0->unk_08);
-        Model_InitDisplayObject(&arg0->unk_04[18 + i], 0, 0, arg0->unk_0C);
-        arg0->unk_04[15 + i].node.callbackArg = arg0;
-        arg0->unk_04[18 + i].node.callbackArg = arg0;
+        Model_InitDisplayObject(&team_icons->displayObjects[15 + i], 0, 0, team_icons->iconGeo);
+        Model_InitDisplayObject(&team_icons->displayObjects[18 + i], 0, 0, team_icons->lowerIconGeo);
+        team_icons->displayObjects[15 + i].node.callbackArg = team_icons;
+        team_icons->displayObjects[18 + i].node.callbackArg = team_icons;
 
-        arg0->unk_04[15 + i].rotation.y = 0x5800;
-        arg0->unk_04[18 + i].rotation.y = 0x5800;
+        team_icons->displayObjects[15 + i].rotation.y = 0x5800;
+        team_icons->displayObjects[18 + i].rotation.y = 0x5800;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[15 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[18 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[15 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[18 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
     }
 
     for (i = 0; i < 3; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[22 + i], 0, 0, arg0->unk_08);
-        Model_InitDisplayObject(&arg0->unk_04[25 + i], 0, 0, arg0->unk_0C);
-        arg0->unk_04[22 + i].node.callbackArg = arg0;
-        arg0->unk_04[25 + i].node.callbackArg = arg0;
+        Model_InitDisplayObject(&team_icons->displayObjects[22 + i], 0, 0, team_icons->iconGeo);
+        Model_InitDisplayObject(&team_icons->displayObjects[25 + i], 0, 0, team_icons->lowerIconGeo);
+        team_icons->displayObjects[22 + i].node.callbackArg = team_icons;
+        team_icons->displayObjects[25 + i].node.callbackArg = team_icons;
 
-        arg0->unk_04[22 + i].rotation.y = -0x5800;
-        arg0->unk_04[25 + i].rotation.y = -0x5800;
+        team_icons->displayObjects[22 + i].rotation.y = -0x5800;
+        team_icons->displayObjects[25 + i].rotation.y = -0x5800;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[22 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[25 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[22 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[25 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
     }
 }
 
-void BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(unk_D_84B25A58* arg0) {
+/**
+ * Double layout: binds fainted-face flip objects 28-33 (side 0) and 34-39 (side 1), upper halves to faintedGeo and
+ * lower halves to lowerFaintedGeo, at the card positions and turned -0x8000 about Y to face away.
+ */
+void BattlePrepTeamIcons_InitFaintedFacesDouble(BattlePrepTeamIcons* team_icons) {
     s32 i;
 
     for (i = 1; i < 4; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[27 + i], 0, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[30 + i], 0, 0, arg0->unk_14);
+        Model_InitDisplayObject(&team_icons->displayObjects[27 + i], 0, 0, team_icons->faintedGeo);
+        Model_InitDisplayObject(&team_icons->displayObjects[30 + i], 0, 0, team_icons->lowerFaintedGeo);
 
-        arg0->unk_04[27 + i].node.callbackArg = arg0;
-        arg0->unk_04[30 + i].node.callbackArg = arg0;
+        team_icons->displayObjects[27 + i].node.callbackArg = team_icons;
+        team_icons->displayObjects[30 + i].node.callbackArg = team_icons;
 
-        arg0->unk_04[27 + i].rotation.y = -0x8000;
-        arg0->unk_04[30 + i].rotation.y = -0x8000;
+        team_icons->displayObjects[27 + i].rotation.y = -0x8000;
+        team_icons->displayObjects[30 + i].rotation.y = -0x8000;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[27 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[30 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[27 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[30 + i].position, (i * 64.0f) - 96.0f, 48.0f, -289.0f);
     }
 
     for (i = 0; i < 3; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[34 + i], 0, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[37 + i], 0, 0, arg0->unk_14);
-        arg0->unk_04[34 + i].node.callbackArg = arg0;
-        arg0->unk_04[37 + i].node.callbackArg = arg0;
+        Model_InitDisplayObject(&team_icons->displayObjects[34 + i], 0, 0, team_icons->faintedGeo);
+        Model_InitDisplayObject(&team_icons->displayObjects[37 + i], 0, 0, team_icons->lowerFaintedGeo);
+        team_icons->displayObjects[34 + i].node.callbackArg = team_icons;
+        team_icons->displayObjects[37 + i].node.callbackArg = team_icons;
 
-        arg0->unk_04[34 + i].rotation.y = -0x8000;
-        arg0->unk_04[37 + i].rotation.y = -0x8000;
+        team_icons->displayObjects[34 + i].rotation.y = -0x8000;
+        team_icons->displayObjects[37 + i].rotation.y = -0x8000;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[34 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[37 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[34 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[37 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
     }
 }
 
-void BattlePrepTeamIcons_RevealStepSingle(unk_D_84B25A58* arg0, s16 arg1) {
+/**
+ * For frames 0-10, turns display objects 0-3 by -0x800 and 4-7 by +0x800 about Y, flipping the trainer cards and
+ * cards in from their 0x5800 start, and draws the HP bars full. Plays sound 0x01100009 on frame 0.
+ */
+void BattlePrepTeamIcons_FlipInStepSingle(BattlePrepTeamIcons* team_icons, s16 frame) {
     s16 i;
 
-    if (arg1 == 0) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100009, 0, 0);
     }
 
-    if (arg1 < 0xB) {
+    if (frame < 0xB) {
         for (i = 0; i < 4; i++) {
-            arg0->unk_04[i].rotation.y -= 0x800;
+            team_icons->displayObjects[i].rotation.y -= 0x800;
         }
 
         for (i = 4; i < 8; i++) {
-            arg0->unk_04[i].rotation.y += 0x800;
+            team_icons->displayObjects[i].rotation.y += 0x800;
         }
 
-        BattlePrepTeamIcons_DrawHpBarsSingle(arg0, 0x64);
+        BattlePrepTeamIcons_DrawHpBarsSingle(team_icons, 0x64);
     }
 }
 
-void BattlePrepTeamIcons_RevealStepDouble(unk_D_84B25A58* arg0, s16 arg1) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_FlipInStepSingle: flips trainer cards 0 and 7 and flip objects
+ * 16-27.
+ */
+void BattlePrepTeamIcons_FlipInStepDouble(BattlePrepTeamIcons* team_icons, s16 frame) {
     s16 i;
 
-    if (arg1 == 0) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100009, 0, 0);
     }
 
-    if (arg1 < 0xB) {
-        arg0->unk_04[0].rotation.y -= 0x800;
-        arg0->unk_04[7].rotation.y += 0x800;
+    if (frame < 0xB) {
+        team_icons->displayObjects[0].rotation.y -= 0x800;
+        team_icons->displayObjects[7].rotation.y += 0x800;
 
         for (i = 16; i < 22; i++) {
-            arg0->unk_04[i].rotation.y -= 0x800;
+            team_icons->displayObjects[i].rotation.y -= 0x800;
         }
 
         for (i = 22; i < 28; i++) {
-            arg0->unk_04[i].rotation.y += 0x800;
+            team_icons->displayObjects[i].rotation.y += 0x800;
         }
 
-        BattlePrepTeamIcons_DrawHpBarsDouble(arg0, 0x64);
+        BattlePrepTeamIcons_DrawHpBarsDouble(team_icons, 0x64);
     }
 }
 
-void BattlePrepTeamIcons_HpDrainStepSingleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * NTSC: frames 0-25 drain the HP bars from 100% by 4 points per frame (sound 0x0110000A on frame 0); frames 26-61
+ * then stamp the red X on the next faint order every 6 frames (faint orders 1-6).
+ */
+void BattlePrepTeamIcons_HpDrainStepSingleNTSC(BattlePrepTeamIcons* team_icons, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
     }
 
-    if (arg1 < 0x1A) {
-        BattlePrepTeamIcons_DrawHpBarsSingle(arg0, 0x64 - (arg1 * 4));
-    } else if (arg1 < 0x3E) {
-        if (((arg1 - 0x1A) % 6) == 0) {
-            BattlePrepTeamIcons_MarkFaintedSingle(arg0, ((arg1 - 0x1A) / 6) + 1);
+    if (frame < 0x1A) {
+        BattlePrepTeamIcons_DrawHpBarsSingle(team_icons, 0x64 - (frame * 4));
+    } else if (frame < 0x3E) {
+        if (((frame - 0x1A) % 6) == 0) {
+            BattlePrepTeamIcons_MarkFaintedSingle(team_icons, ((frame - 0x1A) / 6) + 1);
         }
     }
 }
 
-void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(unk_D_84B25A58* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_HpDrainStepSingleNTSC that stamps the next faint order every 3
+ * frames (faint orders 1-12).
+ */
+void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(BattlePrepTeamIcons* team_icons, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
     }
 
-    if (arg1 < 0x1A) {
-        BattlePrepTeamIcons_DrawHpBarsDouble(arg0, 0x64 - (arg1 * 4));
-    } else if (arg1 < 0x3E) {
-        if (((arg1 - 0x1A) % 3) == 0) {
-            BattlePrepTeamIcons_MarkFaintedDouble(arg0, ((arg1 - 0x1A) / 3) + 1);
+    if (frame < 0x1A) {
+        BattlePrepTeamIcons_DrawHpBarsDouble(team_icons, 0x64 - (frame * 4));
+    } else if (frame < 0x3E) {
+        if (((frame - 0x1A) % 3) == 0) {
+            BattlePrepTeamIcons_MarkFaintedDouble(team_icons, ((frame - 0x1A) / 3) + 1);
         }
     }
 }
 
-void BattlePrepTeamIcons_HpDrainStepSinglePAL(unk_D_84B25A58* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * PAL timing of BattlePrepTeamIcons_HpDrainStepSingleNTSC: frames 0-20 drain 5 points per frame, then frames 21-50
+ * stamp the next faint order every 5 frames.
+ */
+void BattlePrepTeamIcons_HpDrainStepSinglePAL(BattlePrepTeamIcons* team_icons, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
     }
 
-    if (arg1 < 0x15) {
-        BattlePrepTeamIcons_DrawHpBarsSingle(arg0, 0x64 - (arg1 * 5));
-    } else if (arg1 < 0x33) {
-        if (((arg1 - 0x15) % 5) == 0) {
-            BattlePrepTeamIcons_MarkFaintedSingle(arg0, ((arg1 - 0x15) / 5) + 1);
+    if (frame < 0x15) {
+        BattlePrepTeamIcons_DrawHpBarsSingle(team_icons, 0x64 - (frame * 5));
+    } else if (frame < 0x33) {
+        if (((frame - 0x15) % 5) == 0) {
+            BattlePrepTeamIcons_MarkFaintedSingle(team_icons, ((frame - 0x15) / 5) + 1);
         }
     }
 }
 
-void BattlePrepTeamIcons_HpDrainStepDoublePAL(unk_D_84B25A58* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * PAL timing of BattlePrepTeamIcons_HpDrainStepDoubleNTSC: frames 0-20 drain 5 points per frame, then frames 21-56
+ * stamp the next faint order every 3 frames.
+ */
+void BattlePrepTeamIcons_HpDrainStepDoublePAL(BattlePrepTeamIcons* team_icons, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000A, 0, 0);
     }
 
-    if (arg1 < 0x15) {
-        BattlePrepTeamIcons_DrawHpBarsDouble(arg0, 0x64 - (arg1 * 5));
-    } else if (arg1 < 0x39) {
-        if (((arg1 - 0x15) % 3) == 0) {
-            BattlePrepTeamIcons_MarkFaintedDouble(arg0, ((arg1 - 0x15) / 3) + 1);
+    if (frame < 0x15) {
+        BattlePrepTeamIcons_DrawHpBarsDouble(team_icons, 0x64 - (frame * 5));
+    } else if (frame < 0x39) {
+        if (((frame - 0x15) % 3) == 0) {
+            BattlePrepTeamIcons_MarkFaintedDouble(team_icons, ((frame - 0x15) / 3) + 1);
         }
     }
 }
 
-void BattlePrepTeamIcons_FinalRevealSingle(unk_D_84B25A58* arg0, s16 arg1) {
+/**
+ * Turns fainted Pokémon's cards over. Frame 0 sets up the fainted faces; frames 0-15 spin each fainted Pokémon's
+ * card and its fainted face by 0x800 per frame about Y (180 degrees in total), so the "FAINTED" face comes into
+ * view. On frame 16, clears the flip objects and rebinds cards 1-6 to faintedGeo (fainted) or iconGeo (did not
+ * faint, or empty slot) with no turn.
+ */
+void BattlePrepTeamIcons_FlipFaintedStepSingle(BattlePrepTeamIcons* team_icons, s16 frame) {
     s32 i;
-    BattleMon* temp_s5 = gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked;
-    BattleMon* temp_s6 = gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked;
+    BattleMon* side0_pokemon = gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked;
+    BattleMon* side1_pokemon = gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked;
 
-    if (arg1 == 0) {
-        BattlePrepTeamIcons_InitDisplayObjectsSingleHidden(arg0);
+    if (frame == 0) {
+        BattlePrepTeamIcons_InitFaintedFacesSingle(team_icons);
     }
 
-    if (arg1 < 0x10) {
+    if (frame < 0x10) {
         for (i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; i++) {
-            if (temp_s5[i].unk_25 != 0) {
-                arg0->unk_04[1 + i].rotation.y += 0x800;
-                arg0->unk_04[9 + i].rotation.y += 0x800;
+            if (side0_pokemon[i].unk_25 != 0) {
+                team_icons->displayObjects[1 + i].rotation.y += 0x800;
+                team_icons->displayObjects[9 + i].rotation.y += 0x800;
             }
         }
 
         for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; i++) {
-            if (temp_s6[i].unk_25 != 0) {
-                arg0->unk_04[4 + i].rotation.y -= 0x800;
-                arg0->unk_04[12 + i].rotation.y -= 0x800;
+            if (side1_pokemon[i].unk_25 != 0) {
+                team_icons->displayObjects[4 + i].rotation.y -= 0x800;
+                team_icons->displayObjects[12 + i].rotation.y -= 0x800;
             }
         }
     }
 
-    if (arg1 == 0x10) {
+    if (frame == 0x10) {
         for (i = 1; i < 7; i++) {
-            ModelRenderer_ClearDisplayObject(&arg0->unk_04[i]);
-            BattlePrep_ResetDisplayObject(&arg0->unk_04[8 + i]);
-            arg0->unk_04[i].rotation.y = 0;
+            ModelRenderer_ClearDisplayObject(&team_icons->displayObjects[i]);
+            BattlePrep_ResetDisplayObject(&team_icons->displayObjects[8 + i]);
+            team_icons->displayObjects[i].rotation.y = 0;
         }
 
         for (i = 0; i < 3; i++) {
             if ((i >= gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought) ||
-                (temp_s5[i].unk_25 == 0)) {
-                Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_08);
+                (side0_pokemon[i].unk_25 == 0)) {
+                Model_InitDisplayObject(&team_icons->displayObjects[1 + i], 0, 0, team_icons->iconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_10);
+                Model_InitDisplayObject(&team_icons->displayObjects[1 + i], 0, 0, team_icons->faintedGeo);
             }
         }
 
         for (i = 0; i < 3; i++) {
             if ((i >= gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought) ||
-                (temp_s6[i].unk_25 == 0)) {
-                Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_08);
+                (side1_pokemon[i].unk_25 == 0)) {
+                Model_InitDisplayObject(&team_icons->displayObjects[4 + i], 0, 0, team_icons->iconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_10);
+                Model_InitDisplayObject(&team_icons->displayObjects[4 + i], 0, 0, team_icons->faintedGeo);
             }
         }
     }
 }
 
-void BattlePrepTeamIcons_FinalRevealDouble(unk_D_84B25A58* arg0, s16 arg1) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_FlipFaintedStepSingle, spinning flip objects 16-39. On frame 16,
+ * builds the final cards from which flip objects turned: side 0 upper halves on display objects 1-3 and lower
+ * halves on 9-11 (y = +48), side 1 on 4-6 and 12-14 (y = -48). Then resets objects 16-39.
+ */
+void BattlePrepTeamIcons_FlipFaintedStepDouble(BattlePrepTeamIcons* team_icons, s16 frame) {
     s32 i;
-    BattleMon* temp_s0 = &gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[0];
-    BattleMon* var_a3 = NULL;
-    BattleMon* temp_t1 = &gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[0];
-    BattleMon* var_t0 = NULL;
+    BattleMon* side0_pokemon = &gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[0];
+    BattleMon* side0_partner_pokemon = NULL;
+    BattleMon* side1_pokemon = &gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[0];
+    BattleMon* side1_partner_pokemon = NULL;
 
     if (gSessionContext.battleSides[0].tagTeamSize == 2) {
-        var_a3 = &gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[0];
+        side0_partner_pokemon = &gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[0];
     }
 
     if (gSessionContext.battleSides[1].tagTeamSize == 2) {
-        var_t0 = &gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[0];
+        side1_partner_pokemon = &gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[0];
     }
 
-    if (arg1 == 0) {
-        BattlePrepTeamIcons_InitDisplayObjectsDoubleHidden(arg0);
+    if (frame == 0) {
+        BattlePrepTeamIcons_InitFaintedFacesDouble(team_icons);
     }
 
-    if (arg1 < 0x10) {
+    if (frame < 0x10) {
         for (i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; i++) {
-            if (temp_s0[i].unk_25 != 0) {
-                arg0->unk_04[16 + i].rotation.y += 0x800;
-                arg0->unk_04[28 + i].rotation.y += 0x800;
+            if (side0_pokemon[i].unk_25 != 0) {
+                team_icons->displayObjects[16 + i].rotation.y += 0x800;
+                team_icons->displayObjects[28 + i].rotation.y += 0x800;
             }
         }
 
         for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; i++) {
-            if (temp_t1[i].unk_25 != 0) {
-                arg0->unk_04[22 + i].rotation.y -= 0x800;
-                arg0->unk_04[34 + i].rotation.y -= 0x800;
+            if (side1_pokemon[i].unk_25 != 0) {
+                team_icons->displayObjects[22 + i].rotation.y -= 0x800;
+                team_icons->displayObjects[34 + i].rotation.y -= 0x800;
             }
         }
 
-        if (var_a3 != NULL) {
+        if (side0_partner_pokemon != NULL) {
             for (i = 0; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; i++) {
-                if (var_a3[i].unk_25 != 0) {
-                    arg0->unk_04[19 + i].rotation.y += 0x800;
-                    arg0->unk_04[31 + i].rotation.y += 0x800;
+                if (side0_partner_pokemon[i].unk_25 != 0) {
+                    team_icons->displayObjects[19 + i].rotation.y += 0x800;
+                    team_icons->displayObjects[31 + i].rotation.y += 0x800;
                 }
             }
         }
 
-        if (var_t0 != NULL) {
+        if (side1_partner_pokemon != NULL) {
             for (i = 0; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; i++) {
-                if (var_t0[i].unk_25 != 0) {
-                    arg0->unk_04[25 + i].rotation.y -= 0x800;
-                    arg0->unk_04[37 + i].rotation.y -= 0x800;
+                if (side1_partner_pokemon[i].unk_25 != 0) {
+                    team_icons->displayObjects[25 + i].rotation.y -= 0x800;
+                    team_icons->displayObjects[37 + i].rotation.y -= 0x800;
                 }
             }
         }
     }
 
-    if (arg1 == 0x10) {
+    if (frame == 0x10) {
         for (i = 0; i < 3; i++) {
-            if (arg0->unk_04[16 + i].rotation.y == 0) {
-                Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_08);
+            if (team_icons->displayObjects[16 + i].rotation.y == 0) {
+                Model_InitDisplayObject(&team_icons->displayObjects[1 + i], 0, 0, team_icons->iconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[1 + i], 0, 0, arg0->unk_10);
+                Model_InitDisplayObject(&team_icons->displayObjects[1 + i], 0, 0, team_icons->faintedGeo);
             }
-            arg0->unk_04[1 + i].node.callbackArg = arg0;
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[1 + i].position, (i * 64.0f) - 32.0f, 48.0f, -289.0f);
+            team_icons->displayObjects[1 + i].node.callbackArg = team_icons;
+            Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[1 + i].position, (i * 64.0f) - 32.0f, 48.0f, -289.0f);
         }
 
         for (i = 0; i < 3; i++) {
-            if (arg0->unk_04[19 + i].rotation.y == 0) {
-                Model_InitDisplayObject(&arg0->unk_04[9 + i], 0, 0, arg0->unk_0C);
+            if (team_icons->displayObjects[19 + i].rotation.y == 0) {
+                Model_InitDisplayObject(&team_icons->displayObjects[9 + i], 0, 0, team_icons->lowerIconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[9 + i], 0, 0, arg0->unk_14);
+                Model_InitDisplayObject(&team_icons->displayObjects[9 + i], 0, 0, team_icons->lowerFaintedGeo);
             }
-            arg0->unk_04[9 + i].node.callbackArg = arg0;
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[9 + i].position, (i * 64.0f) - 32.0f, 48.0f, -289.0f);
+            team_icons->displayObjects[9 + i].node.callbackArg = team_icons;
+            Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[9 + i].position, (i * 64.0f) - 32.0f, 48.0f, -289.0f);
         }
 
         for (i = 0; i < 3; i++) {
-            if (arg0->unk_04[22 + i].rotation.y == 0) {
-                Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_08);
+            if (team_icons->displayObjects[22 + i].rotation.y == 0) {
+                Model_InitDisplayObject(&team_icons->displayObjects[4 + i], 0, 0, team_icons->iconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[4 + i], 0, 0, arg0->unk_10);
+                Model_InitDisplayObject(&team_icons->displayObjects[4 + i], 0, 0, team_icons->faintedGeo);
             }
-            arg0->unk_04[4 + i].node.callbackArg = arg0;
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[4 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+            team_icons->displayObjects[4 + i].node.callbackArg = team_icons;
+            Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[4 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
         }
 
         for (i = 0; i < 3; i++) {
-            if (arg0->unk_04[25 + i].rotation.y == 0) {
-                Model_InitDisplayObject(&arg0->unk_04[12 + i], 0, 0, arg0->unk_0C);
+            if (team_icons->displayObjects[25 + i].rotation.y == 0) {
+                Model_InitDisplayObject(&team_icons->displayObjects[12 + i], 0, 0, team_icons->lowerIconGeo);
             } else {
-                Model_InitDisplayObject(&arg0->unk_04[12 + i], 0, 0, arg0->unk_14);
+                Model_InitDisplayObject(&team_icons->displayObjects[12 + i], 0, 0, team_icons->lowerFaintedGeo);
             }
-            arg0->unk_04[12 + i].node.callbackArg = arg0;
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[12 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
+            team_icons->displayObjects[12 + i].node.callbackArg = team_icons;
+            Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[12 + i].position, (i * 64.0f) - 96.0f, -48.0f, -289.0f);
         }
 
         for (i = 16; i < 40; i++) {
-            BattlePrep_ResetDisplayObject(&arg0->unk_04[i]);
+            BattlePrep_ResetDisplayObject(&team_icons->displayObjects[i]);
         }
     }
 }
 
-void BattlePrepTeamIcons_UpdateStep(unk_D_84B25A58* arg0) {
+/**
+ * State 3 tick of the result animation: cards flip in from frame 0, the HP bars drain and the faint marks appear
+ * from frame 12, and fainted cards turn over from frame 74 (62 on PAL). Returns to state 0 at frame 96 (80 on PAL).
+ */
+void BattlePrepTeamIcons_UpdateAnimationStep(BattlePrepTeamIcons* team_icons) {
     if (osTvType == OS_TV_PAL) {
-        if (arg0->unk_02 == 1) {
-            if (arg0->unk_01 >= 0) {
-                BattlePrepTeamIcons_RevealStepDouble(arg0, arg0->unk_01);
+        if (team_icons->isDoubleLayout == 1) {
+            if (team_icons->timer >= 0) {
+                BattlePrepTeamIcons_FlipInStepDouble(team_icons, team_icons->timer);
             }
 
-            if (arg0->unk_01 >= 0xC) {
-                BattlePrepTeamIcons_HpDrainStepDoublePAL(arg0, arg0->unk_01 - 0xC);
+            if (team_icons->timer >= 0xC) {
+                BattlePrepTeamIcons_HpDrainStepDoublePAL(team_icons, team_icons->timer - 0xC);
             }
 
-            if (arg0->unk_01 >= 0x3E) {
-                BattlePrepTeamIcons_FinalRevealDouble(arg0, arg0->unk_01 - 0x3E);
+            if (team_icons->timer >= 0x3E) {
+                BattlePrepTeamIcons_FlipFaintedStepDouble(team_icons, team_icons->timer - 0x3E);
             }
         } else {
-            if (arg0->unk_01 >= 0) {
-                BattlePrepTeamIcons_RevealStepSingle(arg0, arg0->unk_01);
+            if (team_icons->timer >= 0) {
+                BattlePrepTeamIcons_FlipInStepSingle(team_icons, team_icons->timer);
             }
 
-            if (arg0->unk_01 >= 0xC) {
-                BattlePrepTeamIcons_HpDrainStepSinglePAL(arg0, arg0->unk_01 - 0xC);
+            if (team_icons->timer >= 0xC) {
+                BattlePrepTeamIcons_HpDrainStepSinglePAL(team_icons, team_icons->timer - 0xC);
             }
 
-            if (arg0->unk_01 >= 0x3E) {
-                BattlePrepTeamIcons_FinalRevealSingle(arg0, arg0->unk_01 - 0x3E);
+            if (team_icons->timer >= 0x3E) {
+                BattlePrepTeamIcons_FlipFaintedStepSingle(team_icons, team_icons->timer - 0x3E);
             }
         }
 
-        arg0->unk_01++;
-        if (arg0->unk_01 == 0x50) {
-            arg0->unk_00 = 0;
+        team_icons->timer++;
+        if (team_icons->timer == 0x50) {
+            team_icons->state = 0;
         }
     } else {
-        if (arg0->unk_02 == 1) {
-            if (arg0->unk_01 >= 0) {
-                BattlePrepTeamIcons_RevealStepDouble(arg0, arg0->unk_01);
+        if (team_icons->isDoubleLayout == 1) {
+            if (team_icons->timer >= 0) {
+                BattlePrepTeamIcons_FlipInStepDouble(team_icons, team_icons->timer);
             }
 
-            if (arg0->unk_01 >= 0xC) {
-                BattlePrepTeamIcons_HpDrainStepDoubleNTSC(arg0, arg0->unk_01 - 0xC);
+            if (team_icons->timer >= 0xC) {
+                BattlePrepTeamIcons_HpDrainStepDoubleNTSC(team_icons, team_icons->timer - 0xC);
             }
 
-            if (arg0->unk_01 >= 0x4A) {
-                BattlePrepTeamIcons_FinalRevealDouble(arg0, arg0->unk_01 - 0x4A);
+            if (team_icons->timer >= 0x4A) {
+                BattlePrepTeamIcons_FlipFaintedStepDouble(team_icons, team_icons->timer - 0x4A);
             }
         } else {
-            if (arg0->unk_01 >= 0) {
-                BattlePrepTeamIcons_RevealStepSingle(arg0, arg0->unk_01);
+            if (team_icons->timer >= 0) {
+                BattlePrepTeamIcons_FlipInStepSingle(team_icons, team_icons->timer);
             }
 
-            if (arg0->unk_01 >= 0xC) {
-                BattlePrepTeamIcons_HpDrainStepSingleNTSC(arg0, arg0->unk_01 - 0xC);
+            if (team_icons->timer >= 0xC) {
+                BattlePrepTeamIcons_HpDrainStepSingleNTSC(team_icons, team_icons->timer - 0xC);
             }
 
-            if (arg0->unk_01 >= 0x4A) {
-                BattlePrepTeamIcons_FinalRevealSingle(arg0, arg0->unk_01 - 0x4A);
+            if (team_icons->timer >= 0x4A) {
+                BattlePrepTeamIcons_FlipFaintedStepSingle(team_icons, team_icons->timer - 0x4A);
             }
         }
 
-        arg0->unk_01++;
-        if (arg0->unk_01 == 0x60) {
-            arg0->unk_00 = 0;
+        team_icons->timer++;
+        if (team_icons->timer == 0x60) {
+            team_icons->state = 0;
         }
     }
 }
 
-void BattlePrepTeamIcons_UpdateLoadingStep(unk_D_84B25A58* arg0) {
-    PokeIcon_ProcessNextSlot(arg0->unk_1C, 0);
+/**
+ * State 1 tick: renders one PokeIcon slot per frame. Once at least 30 frames have passed and every slot is idle,
+ * resets timer and sets state 2, so BattlePrepTeamIcons_InitDisplayObjects can build the scene.
+ */
+void BattlePrepTeamIcons_UpdateLoadingStep(BattlePrepTeamIcons* team_icons) {
+    PokeIcon_ProcessNextSlot(team_icons->iconRenderList, 0);
 
-    arg0->unk_01++;
-    if ((arg0->unk_01 >= 0x1E) && (PokeIcon_AreSlotsIdle(arg0->unk_1C) != 0)) {
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 2;
+    team_icons->timer++;
+    if ((team_icons->timer >= 0x1E) && (PokeIcon_AreSlotsIdle(team_icons->iconRenderList) != 0)) {
+        team_icons->timer = 0;
+        team_icons->state = 2;
     }
 }
 
-void BattlePrepTeamIcons_Update(unk_D_84B25A58* arg0) {
-    switch (arg0->unk_00) {
+/**
+ * Per-frame update for the result team display: state 1 loads the icons, state 3 runs the result animation; states
+ * 0 and 2 do nothing.
+ */
+void BattlePrepTeamIcons_Update(BattlePrepTeamIcons* team_icons) {
+    switch (team_icons->state) {
         case 1:
-            BattlePrepTeamIcons_UpdateLoadingStep(arg0);
+            BattlePrepTeamIcons_UpdateLoadingStep(team_icons);
             break;
 
         case 3:
-            BattlePrepTeamIcons_UpdateStep(arg0);
+            BattlePrepTeamIcons_UpdateAnimationStep(team_icons);
             break;
     }
 }
 
-void BattlePrepTeamIcons_LoadDexIdsSingle(unk_D_84B25A58* arg0) {
+/**
+ * Attaches a 0x80x0xC0 depth buffer to the icon render list and queues a species icon for each picked Pokémon: side
+ * 0 into slots 0-2, side 1 into slots 3-5.
+ */
+void BattlePrepTeamIcons_QueueIconsSingle(BattlePrepTeamIcons* team_icons) {
     s32 i;
-    s32 count;
-    ModelLoadContext* temp_s0;
+    s32 slot;
+    ModelLoadContext* load_context;
 
-    temp_s0 = PokeIcon_AllocFramebuffers(5);
-    PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0xC0, 1));
+    load_context = PokeIcon_AllocFramebuffers(5);
+    PokeIcon_AttachDepthBuffer(team_icons->iconRenderList, load_context, GfxImage_Allocate(0, 2, 0x80, 0xC0, 1));
 
-    for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id,
+    for (slot = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
+        func_8001A324(team_icons->iconRenderList, slot, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id,
                       0);
     }
 
-    for (count = 3, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id,
+    for (slot = 3, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
+        func_8001A324(team_icons->iconRenderList, slot, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id,
                       0);
     }
 }
 
-void BattlePrepTeamIcons_LoadDexIdsDouble(unk_D_84B25A58* arg0) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_QueueIconsSingle with a 0x80x0x60 depth buffer: side 0's first
+ * and second members go into slots 0-2 and 3-5, side 1's into 6-8 and 9-11. Absent second members are skipped.
+ */
+void BattlePrepTeamIcons_QueueIconsDouble(BattlePrepTeamIcons* team_icons) {
     s32 i;
-    s32 count;
-    ModelLoadContext* temp_s0;
+    s32 slot;
+    ModelLoadContext* load_context;
 
-    temp_s0 = PokeIcon_AllocFramebuffers(5);
-    PokeIcon_AttachDepthBuffer(arg0->unk_1C, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
+    load_context = PokeIcon_AllocFramebuffers(5);
+    PokeIcon_AttachDepthBuffer(team_icons->iconRenderList, load_context, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
 
-    for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id,
+    for (slot = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
+        func_8001A324(team_icons->iconRenderList, slot, gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id,
                       0);
     }
 
-    for (count = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
-        func_8001A324(arg0->unk_1C, count, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id,
+    for (slot = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
+        func_8001A324(team_icons->iconRenderList, slot, gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id,
                       0);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
-        for (count = 3, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
-            func_8001A324(arg0->unk_1C, count,
+        for (slot = 3, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; slot++, i++) {
+            func_8001A324(team_icons->iconRenderList, slot,
                           gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].species.id, 0);
         }
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
-        for (count = 9, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
-            func_8001A324(arg0->unk_1C, count,
+        for (slot = 9, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; slot++, i++) {
+            func_8001A324(team_icons->iconRenderList, slot,
                           gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].species.id, 0);
         }
     }
 }
 
-void BattlePrepTeamIcons_Load(unk_D_84B25A58* arg0, BinArchive* arg1) {
-    u8* sp24 = BinArchive_GetFile(arg1, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
-    u8* sp20 = BinArchive_GetFile(arg1, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
+/**
+ * Opens the PokeIcon model archives, loads the particle data library fragment, queues the picked Pokémon's icons
+ * for the current layout, and draws both trainer cards (side 0 on D_3000000, side 1 on D_3003000, each with the
+ * trainer's portrait from portrait_archive). Sets state 1 (loading).
+ */
+void BattlePrepTeamIcons_Load(BattlePrepTeamIcons* team_icons, BinArchive* portrait_archive) {
+    u8* side0_portrait = BinArchive_GetFile(portrait_archive, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
+    u8* side1_portrait = BinArchive_GetFile(portrait_archive, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
 
     PokeIcon_OpenModelArchives();
 
     FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
 
-    if (arg0->unk_02 == 1) {
-        BattlePrepTeamIcons_LoadDexIdsDouble(arg0);
+    if (team_icons->isDoubleLayout == 1) {
+        BattlePrepTeamIcons_QueueIconsDouble(team_icons);
     } else {
-        BattlePrepTeamIcons_LoadDexIdsSingle(arg0);
+        BattlePrepTeamIcons_QueueIconsSingle(team_icons);
     }
 
-    BattlePrep_DrawTrainerStatusIcon(arg0->unk_24, 0, sp24, D_3000000);
-    BattlePrep_DrawTrainerStatusIcon(arg0->unk_28, 1, sp20, D_3003000);
-    arg0->unk_00 = 1;
+    BattlePrep_RenderTrainerPortrait(team_icons->side0CardImage, 0, side0_portrait, D_3000000);
+    BattlePrep_RenderTrainerPortrait(team_icons->side1CardImage, 1, side1_portrait, D_3003000);
+    team_icons->state = 1;
 }
 
-s32 BattlePrepTeamIcons_InitDisplayObjects(unk_D_84B25A58* arg0, DisplayObject* arg1) {
-    if (arg0->unk_00 == 2) {
-        arg0->unk_00 = 3;
-        arg0->unk_04 = arg1;
-        arg0->unk_01 = 0;
-        arg1->node.callbackArg = arg0;
+/**
+ * Once loading has reached state 2: stores the display objects, binds trainer cards 0 (top-left) and 7
+ * (bottom-right) to trainerCardGeo, turned 0x5800 / -0x5800 about Y for the flip-in, sets up the cards for the
+ * current layout, and enters state 3. Returns 1 once in state 3.
+ */
+s32 BattlePrepTeamIcons_InitDisplayObjects(BattlePrepTeamIcons* team_icons, DisplayObject* display_objects) {
+    if (team_icons->state == 2) {
+        team_icons->state = 3;
+        team_icons->displayObjects = display_objects;
+        team_icons->timer = 0;
+        display_objects->node.callbackArg = team_icons;
 
-        arg0->unk_04[7].node.callbackArg = arg0;
-        arg0->unk_04[0].rotation.y = 0x5800;
-        arg0->unk_04[7].rotation.y = -0x5800;
+        team_icons->displayObjects[7].node.callbackArg = team_icons;
+        team_icons->displayObjects[0].rotation.y = 0x5800;
+        team_icons->displayObjects[7].rotation.y = -0x5800;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[0].position, -96.0f, 48.0f, -289.0f);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[7].position, 96.0f, -48.0f, -289.0f);
-        Model_InitDisplayObject(&arg0->unk_04[0], 0, 0, arg0->unk_18);
-        Model_InitDisplayObject(&arg0->unk_04[7], 0, 0, arg0->unk_18);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[0].position, -96.0f, 48.0f, -289.0f);
+        Vec3f_SetComponentsDuplicate(&team_icons->displayObjects[7].position, 96.0f, -48.0f, -289.0f);
+        Model_InitDisplayObject(&team_icons->displayObjects[0], 0, 0, team_icons->trainerCardGeo);
+        Model_InitDisplayObject(&team_icons->displayObjects[7], 0, 0, team_icons->trainerCardGeo);
 
-        if (arg0->unk_02 == 1) {
-            BattlePrepTeamIcons_InitDisplayObjectsDoubleVisible(arg0);
+        if (team_icons->isDoubleLayout == 1) {
+            BattlePrepTeamIcons_InitIconCardsDouble(team_icons);
         } else {
-            BattlePrepTeamIcons_InitDisplayObjectsSingleVisible(arg0);
+            BattlePrepTeamIcons_InitIconCardsSingle(team_icons);
         }
     }
-    return arg0->unk_00 == 3;
+    return team_icons->state == 3;
 }
 
-void BattlePrepTeamIcons_LoadIconTexturesSingle(unk_D_84B25A58* arg0) {
+/**
+ * Loads each picked Pokémon's 40x40 model texture into modelTextures for the fainted faces: side 0 into slots 0-2,
+ * side 1 into slots 3-5.
+ */
+void BattlePrepTeamIcons_LoadModelTexturesSingle(BattlePrepTeamIcons* team_icons) {
     s32 i;
-    s32 count;
+    s32 slot;
 
-    for (i = 0, count = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
+    for (i = 0, slot = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
+            team_icons->modelTextures[slot], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
     }
 
-    for (i = 0, count = 3; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
+    for (i = 0, slot = 3; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
+            team_icons->modelTextures[slot], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
     }
 }
 
-void BattlePrepTeamIcons_LoadIconTexturesDouble(unk_D_84B25A58* arg0) {
+/**
+ * Double-layout counterpart of BattlePrepTeamIcons_LoadModelTexturesSingle: side 0's first and second members go
+ * into slots 0-2 and 3-5, side 1's into 6-8 and 9-11.
+ */
+void BattlePrepTeamIcons_LoadModelTexturesDouble(BattlePrepTeamIcons* team_icons) {
     s32 i;
-    s32 count;
+    s32 slot;
 
-    for (i = 0, count = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
+    for (i = 0, slot = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
+            &team_icons->modelTextures[slot], gSessionContext.battleSides[0].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
     }
 
-    for (i = 0, count = 6; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; count++, i++) {
+    for (i = 0, slot = 6; i < gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought; slot++, i++) {
         PokeIcon_LoadModelTextureForMon(
-            &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
+            &team_icons->modelTextures[slot], gSessionContext.battleSides[1].tagTeamMember[0]->pokemonPicked[i].species.id, NULL);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
-        for (i = 0, count = 3; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
+        for (i = 0, slot = 3; i < gSessionContext.battleSides[0].tagTeamMember[1]->numberOfPokemonBrought; slot++, i++) {
             PokeIcon_LoadModelTextureForMon(
-                &arg0->unk_20[count], gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].species.id,
+                &team_icons->modelTextures[slot], gSessionContext.battleSides[0].tagTeamMember[1]->pokemonPicked[i].species.id,
                 NULL);
         }
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
-        for (i = 0, count = 9; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; count++, i++) {
+        for (i = 0, slot = 9; i < gSessionContext.battleSides[1].tagTeamMember[1]->numberOfPokemonBrought; slot++, i++) {
             PokeIcon_LoadModelTextureForMon(
-                &arg0->unk_20[count], gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].species.id,
+                &team_icons->modelTextures[slot], gSessionContext.battleSides[1].tagTeamMember[1]->pokemonPicked[i].species.id,
                 NULL);
         }
     }
 }
 
-void BattlePrepTeamIcons_Init(unk_D_84B25A58* arg0) {
-    MemoryBlock* sp2C;
+/**
+ * Initializes the result team display: allocates the two 64x96 trainer card images; selects the double layout for
+ * rule category 8 when side 0 brought 4+ Pokémon, or for rule category 0 with a tag team or 4+ brought on either
+ * side (numberOfPokemonBrought); clears the faint marks; creates the PokeIcon render list (12 slots of 0x80x0x60,
+ * or 6 of 0x80x0xC0) and the model texture buffer; builds the geo layouts; and loads the model textures.
+ */
+void BattlePrepTeamIcons_Init(BattlePrepTeamIcons* team_icons) {
+    MemoryBlock* geo_pool;
     s32 i;
 
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_02 = 0;
-    arg0->unk_24 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
-    arg0->unk_28 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+    team_icons->state = 0;
+    team_icons->timer = 0;
+    team_icons->isDoubleLayout = 0;
+    team_icons->side0CardImage = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+    team_icons->side1CardImage = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
 
     if ((gSessionContext.ruleCategory == 8) &&
         (gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought >= 4)) {
-        arg0->unk_02 = 1;
+        team_icons->isDoubleLayout = 1;
     }
 
     if (gSessionContext.ruleCategory == 0) {
         if ((gSessionContext.battleSides[0].tagTeamSize == 2) || (gSessionContext.battleSides[1].tagTeamSize == 2)) {
-            arg0->unk_02 = 1;
+            team_icons->isDoubleLayout = 1;
         } else {
             if (gSessionContext.battleSides[0].tagTeamMember[0]->numberOfPokemonBrought >= 4) {
-                arg0->unk_02 = 1;
+                team_icons->isDoubleLayout = 1;
             }
 
             if (gSessionContext.battleSides[1].tagTeamMember[0]->numberOfPokemonBrought >= 4) {
-                arg0->unk_02 = 1;
+                team_icons->isDoubleLayout = 1;
             }
         }
     }
 
     for (i = 0; i < 12; i++) {
-        arg0->unk_2C[i] = 0;
+        team_icons->isFaintMarked[i] = 0;
     }
 
-    if (arg0->unk_02 == 1) {
-        arg0->unk_1C = PokeIcon_CreateRenderList(NULL, 0xC, 0x80, 0x60);
-        arg0->unk_20 = ALIGN64((u32)main_pool_alloc(0x9640, 0));
+    if (team_icons->isDoubleLayout == 1) {
+        team_icons->iconRenderList = PokeIcon_CreateRenderList(NULL, 0xC, 0x80, 0x60);
+        team_icons->modelTextures = ALIGN64((u32)main_pool_alloc(0x9640, 0));
     } else {
-        arg0->unk_1C = PokeIcon_CreateRenderList(NULL, 6, 0x80, 0xC0);
-        arg0->unk_20 = ALIGN64((u32)main_pool_alloc(0x4B40, 0));
+        team_icons->iconRenderList = PokeIcon_CreateRenderList(NULL, 6, 0x80, 0xC0);
+        team_icons->modelTextures = ALIGN64((u32)main_pool_alloc(0x4B40, 0));
     }
 
-    PokeIcon_SetNameTable(arg0->unk_1C, D_84B186C0);
+    PokeIcon_SetNameTable(team_icons->iconRenderList, sTeamIconsSpeciesIcons);
 
-    sp2C = MainPool_AllocState(main_pool_get_available(), 0);
-    if (arg0->unk_02 == 1) {
-        arg0->unk_08 = process_geo_layout(sp2C, D_84B15F50);
-        arg0->unk_0C = process_geo_layout(sp2C, D_84B15FA8);
-        arg0->unk_10 = process_geo_layout(sp2C, D_84B162D8);
-        arg0->unk_14 = process_geo_layout(sp2C, D_84B16330);
+    geo_pool = MainPool_AllocState(main_pool_get_available(), 0);
+    if (team_icons->isDoubleLayout == 1) {
+        team_icons->iconGeo = process_geo_layout(geo_pool, D_84B15F50);
+        team_icons->lowerIconGeo = process_geo_layout(geo_pool, D_84B15FA8);
+        team_icons->faintedGeo = process_geo_layout(geo_pool, D_84B162D8);
+        team_icons->lowerFaintedGeo = process_geo_layout(geo_pool, D_84B16330);
     } else {
-        arg0->unk_08 = process_geo_layout(sp2C, D_84B15688);
-        arg0->unk_10 = process_geo_layout(sp2C, D_84B15A20);
+        team_icons->iconGeo = process_geo_layout(geo_pool, D_84B15688);
+        team_icons->faintedGeo = process_geo_layout(geo_pool, D_84B15A20);
     }
 
-    arg0->unk_18 = process_geo_layout(sp2C, D_84B14DC8);
-    MainPool_FinalizeAllocation(sp2C);
+    team_icons->trainerCardGeo = process_geo_layout(geo_pool, D_84B14DC8);
+    MainPool_FinalizeAllocation(geo_pool);
 
-    if (arg0->unk_02 == 1) {
-        BattlePrepTeamIcons_LoadIconTexturesDouble(arg0);
+    if (team_icons->isDoubleLayout == 1) {
+        BattlePrepTeamIcons_LoadModelTexturesDouble(team_icons);
     } else {
-        BattlePrepTeamIcons_LoadIconTexturesSingle(arg0);
+        BattlePrepTeamIcons_LoadModelTexturesSingle(team_icons);
     }
 }
