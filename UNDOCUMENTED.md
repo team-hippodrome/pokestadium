@@ -7,9 +7,9 @@
 - Functions with a real name: **7,749 / 7,932 (97.7%)** (183 still `func_XXXXXXXX`)
 - Variables with a real name: **1,589 / 6,031 (26.3%)** (4,442 still `D_XXXXXXXX` / `jtbl_XXXXXXXX`)
 - Functions still using m2c `temp_*` / `var_*` locals: **1,642**
-- Functions with generic `arg0`, `arg1`, ... parameters: **3,644 / 7,486 (48.7%)**
-- Structs with generic fields (`unk_XX`, `pad`, `field_XX`): **793 / 1,032**
-- Struct fields with a real name: **2,051 / 6,666 (30.8%)**
+- Functions with generic `arg0`, `arg1`, ... parameters: **3,639 / 7,486 (48.6%)**
+- Structs with generic fields (`unk_XX`, `pad`, `field_XX`): **791 / 1,033**
+- Struct fields with a real name: **2,058 / 6,662 (30.9%)**
 - Raw `*(T *)(base + 0xNN)` offset accesses that bypass a struct field: **0**
 <!-- AUTO_UNDOCUMENTED:END -->
 
@@ -134,7 +134,6 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/gallery_camera/gallery_camera_14EC80.c` | 17 | 17 | 1 | 18 | 3 | 10 | 0 |
 | `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 | 21 | 0 | 3 | 3 | 21 | 0 |
 | `src/fragments/particle_data_library/particle_data_library_258080.c` | 15 | 15 | 1 | 15 | 4 | 13 | 0 |
-| `src/scheduler.c` | 24 | 24 | 1 | 1 | 7 | 15 | 0 |
 | `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 | 22 | 0 | 6 | 1 | 18 | 0 |
 | `src/model_animation.c` | 20 | 20 | 0 | 2 | 12 | 13 | 0 |
 | `src/fragments/particle_math/particle_math_264380.c` | 100 | 0 | 0 | 36 | 9 | 0 | 0 |
@@ -143,6 +142,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_electric_burst_effects.c` | 28 | 22 | 0 | 0 | 0 | 21 | 0 |
 | `src/fragments/battle_engine/battle_engine_lasso.c` | 14 | 10 | 0 | 12 | 11 | 10 | 0 |
 | `src/fragments/trade_machine/trade_machine_28D1A0.c` | 14 | 14 | 0 | 14 | 5 | 10 | 0 |
+| `src/scheduler.c` | 24 | 24 | 1 | 1 | 7 | 10 | 0 |
 | `src/audio_loop_point.c` | 6 | 6 | 0 | 31 | 1 | 4 | 0 |
 | `src/geo_layout.c` | 41 | 38 | 0 | 1 | 2 | 1 | 0 |
 | `src/session.c` | 19 | 18 | 0 | 2 | 8 | 14 | 0 |
@@ -392,7 +392,6 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `unk_D_86B0FA7C` | `src/fragments/demo_scenes/demo_scenes.h` | 21 | 21 |
 | `unk_func_8821421C_02C` | `src/fragments/lab_pc/lab_pc.h` | 21 | 21 |
 | `Particle` | `src/fragments/particle_math/particle_math.h` | 54 | 20 |
-| `UnkStruct80083CA0_2` | `src/scheduler.h` | 21 | 20 |
 | `unk_D_838067F0` | `src/fragments/gallery_rental_viewer/gallery_rental_viewer.h` | 20 | 20 |
 | `unk_D_843C3508` | `src/fragments/battle_engine/battle_engine.h` | 20 | 20 |
 | `unk_D_861054C0` | `src/fragments/clefairy_game/clefairy_game.c` | 20 | 20 |
@@ -406,3 +405,4 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `Strip400State` | `src/fragments/battle_engine/battle_engine_lasso.c` | 17 | 17 |
 | `WidgetGridMenu` | `src/fragments/lab_widget_tree/lab_widget_tree.h` | 17 | 17 |
 | `unk_D_86B0EBDC` | `src/fragments/demo_scenes/demo_scenes_161E60.c` | 17 | 17 |
+| `unk_func_8820B12C_02C_020` | `src/fragments/lab_pc/lab_pc.h` | 17 | 17 |
