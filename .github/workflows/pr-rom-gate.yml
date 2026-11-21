@@ -24,6 +24,13 @@ on:
 
 permissions:
   contents: read
+  packages: read
+
+env:
+  # Built and pushed by rebuild-baseline-image.yml. Both images are private:
+  # they contain retail ROMs.
+  POKESTADIUM_DECOMP_AGENT_IMAGE: ghcr.io/team-hippodrome/pokestadium-ci:latest
+  BASEROM_IMAGE: ghcr.io/team-hippodrome/pokestadium-baserom:all
 
 concurrency:
   # A `labeled` run gets its own group so that adding any label to a PR can
@@ -66,15 +73,25 @@ jobs:
     # This label is intentionally different from the private repository's
     # Stadium 1 label. Register it only on a dedicated, credential-free Mac
     # runner after the public baseline image has been built.
-    runs-on: [self-hosted, macOS, ARM64, pokestadium-decomp-public]
+    # GitHub-hosted: free and unlimited for public repositories, 4 vCPU /
+    # 16 GB, x86-64, so the amd64 image runs natively.
+    runs-on: ubuntu-latest
     timeout-minutes: 150
     steps:
-      - name: Mask self-hosted runner paths
+      - name: Pull the CI image and the retail dumps
         shell: bash
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "::add-mask::${HOME}"
-          echo "::add-mask::${GITHUB_WORKSPACE}"
-          echo "::add-mask::${RUNNER_TEMP}"
+          set -euo pipefail
+          echo "$TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker pull --quiet --platform linux/amd64 "$POKESTADIUM_DECOMP_AGENT_IMAGE"
+          docker pull --quiet --platform linux/amd64 "$BASEROM_IMAGE"
+          docker logout ghcr.io
+          cid="$(docker create --platform linux/amd64 "$BASEROM_IMAGE" /none)"
+          docker cp "$cid:/baseroms" "$RUNNER_TEMP/baseroms-extra"
+          docker rm -f "$cid" >/dev/null
+          docker image rm "$BASEROM_IMAGE" >/dev/null
 
       - name: Checkout the PR merge ref or selected branch
         uses: actions/checkout@v4
@@ -83,7 +100,6 @@ jobs:
           # The merge commit and its first parent, for the diffs below.
           fetch-depth: 2
           persist-credentials: false
-          set-safe-directory: false
 
       - name: Guard approved outside-contributor PRs
         # Only for the label path. The gate scripts run from the checked-out
@@ -162,15 +178,42 @@ jobs:
         env:
           GATE_REGIONS: ${{ steps.regions.outputs.regions }}
           GATE_REQUIRE_ALL_REGIONS: ${{ vars.GATE_REQUIRE_ALL_REGIONS || '0' }}
-          POKESTADIUM_BASEROM_DIR: ${{ vars.POKESTADIUM_BASEROM_DIR }}
-          POKESTADIUM_REGION_CACHE_DIR: ${{ vars.POKESTADIUM_REGION_CACHE_DIR }}
-        run: bash ci/gate-pr.sh "$GITHUB_WORKSPACE" "$RUNNER_TEMP/pokestadium-gate-out"
+          # No per-version baseline cache on hosted runners: every affected
+          # version other than US is extracted and built cold.
+          POKESTADIUM_BASEROM_DIR: ${{ runner.temp }}/baseroms-extra
+        # The container runs as root with every capability dropped, so it
+        # cannot write into a runner-owned directory; make /out writable.
+        run: |
+          mkdir -p "$RUNNER_TEMP/pokestadium-gate-out"
+          chmod 0777 "$RUNNER_TEMP/pokestadium-gate-out"
+          bash ci/gate-pr.sh "$GITHUB_WORKSPACE" "$RUNNER_TEMP/pokestadium-gate-out"
+
+      # The container that wrote /out holds retail ROMs and ran PR code, and
+      # artifacts of this public repo are downloadable. Upload only the two
+      # known reports, size-capped: COVERAGE.md, and a trimmed gate.log
+      # (pr-integration.yml reads it to explain failures). Lines are cut to
+      # 300 characters and the log to its last 2000 lines (~600 KB at most).
+      - name: Stage only the size-capped reports
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/pokestadium-gate-out"
+          upload="$RUNNER_TEMP/pokestadium-gate-upload"
+          mkdir -p "$upload"
+          if [ -f "$out/COVERAGE.md" ] && [ "$(stat -c %s "$out/COVERAGE.md")" -le 65536 ]; then
+            cp "$out/COVERAGE.md" "$upload/COVERAGE.md"
+          fi
+          if [ -f "$out/gate.log" ]; then
+            { grep -Ev '(Binning object|Assembling):' "$out/gate.log" || true; } \
+              | cut -c1-300 | tail -n 2000 > "$upload/gate.log"
+          fi
 
       - name: Upload gate and proposed coverage
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: public-pr-rom-gate-${{ github.event.pull_request.number || inputs.pr_number || github.run_id }}
-          path: ${{ runner.temp }}/pokestadium-gate-out/
+          path: ${{ runner.temp }}/pokestadium-gate-upload/
           if-no-files-found: warn
           retention-days: 14
