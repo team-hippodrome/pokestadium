@@ -161,11 +161,13 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$INPUT_REGIONS" = "all" ]; then
-            regions="$(python3 ci/affected_versions.py <<< "Makefile" | tr '\n' ' ')"
+            regions="$(python3 ci/affected_versions.py --all | tr '\n' ' ')"
           elif [ -n "$INPUT_REGIONS" ]; then
             regions="$INPUT_REGIONS"
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            regions="$(git diff --name-only HEAD^1 HEAD | python3 ci/affected_versions.py | tr '\n' ' ')"
+            # Compares, per version, the code each version compiles before
+            # and after; see ci/affected_versions.py.
+            regions="$(python3 ci/affected_versions.py --base HEAD^1 --head HEAD | tr '\n' ' ')"
           else
             regions="us"
           fi
