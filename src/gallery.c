@@ -878,12 +878,12 @@ void Gallery_InitializePhotoModel(unk_func_80031270* arg0) {
     if (sp30.species.id == 0x99) {
         sp30.species.id = 0x19;
     }
-    Model_ComputeSizeVariant(&sp90, &sp30);
+    Model_ComputeNicknameColorVariant(&sp90, &sp30);
     sp30.species.id = sp94;
     PokeIcon_RequestFrameLoad(arg0->unk_10, sp30.species.id, sp90);
     PokeIcon_WaitFrameLoad(arg0->unk_10);
     ModelRenderer_ClearDisplayObject(arg0->unk_20);
-    Model_InitDisplayObject(arg0->unk_20, 0, sp30.species.id, arg0->unk_10->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_20, 0, sp30.species.id, arg0->unk_10->loadedModel->nodes[0]);
     sp28 = Util_ConvertAddrToVirtAddr(&Particle31_UnpackSlotData);
     sp28(arg0->unk_20, Util_ConvertAddrToVirtAddr(&temp_s1->unk_00.unk_09[1]));
     ModelAnim_SetAnimation(arg0->unk_20, temp_s1->unk_00.unk_05);

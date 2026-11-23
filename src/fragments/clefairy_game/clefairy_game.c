@@ -429,7 +429,7 @@ void ClefairyGame_GeneratePattern(void) {
     for (i = 0; i < 6; i++, ptr++) {
         ptr->unk_000 = temp_v0_2->unk_00[i];
         ptr->unk_002 = 0;
-        ptr->unk_16C = D_8610548C->unk_08->unk_00[ptr->unk_000];
+        ptr->unk_16C = D_8610548C->nodes[ptr->unk_000];
     }
 
     var_v0 = ClefairyGame_ChoosePatternEntry(var_s2, var_a3);
@@ -440,7 +440,7 @@ void ClefairyGame_GeneratePattern(void) {
     for (i = 0; i < 6; i++) {
         ptr->unk_000 = var_v0->unk_00[i];
         ptr->unk_002 = 0;
-        ptr->unk_16C = D_8610548C->unk_08->unk_00[ptr->unk_000];
+        ptr->unk_16C = D_8610548C->nodes[ptr->unk_000];
         ptr++;
     }
 }
@@ -1775,7 +1775,7 @@ void ClefairyGame_LoadAssets(void) {
         D_86105BC8 = &D_86105BC4->unk_008;
 
         ModelRenderer_AttachDisplayObject(D_86105BC8);
-        Model_InitDisplayObject(D_86105BC8, 0, 0xB1, D_86105480->unk_08->unk_00[0]);
+        Model_InitDisplayObject(D_86105BC8, 0, 0xB1, D_86105480->nodes[0]);
 
         D_86105BC8->position.x = (i - 1.5f) * 40.0f;
         D_86105BC8->position.y = 0.0f;
@@ -1796,7 +1796,7 @@ void ClefairyGame_LoadAssets(void) {
     D_86105480 = Model_LoadByArchiveIndex(0xB2);
     D_86105BC8 = &D_86105BD0;
     ModelRenderer_AttachDisplayObject(D_86105BC8);
-    Model_InitDisplayObject(D_86105BC8, 0, 0xB2, D_86105480->unk_08->unk_00[0]);
+    Model_InitDisplayObject(D_86105BC8, 0, 0xB2, D_86105480->nodes[0]);
     D_86105BC8->position.x = 0.0f;
     D_86105BC8->position.y = 10.0f;
     D_86105BC8->position.z = -145.0f;
@@ -1808,7 +1808,7 @@ void ClefairyGame_LoadAssets(void) {
     D_86105480 = Model_LoadByArchiveIndex(0xB3);
     D_86105BC8 = &D_86105D38;
     ModelRenderer_AttachDisplayObject(D_86105BC8);
-    Model_InitDisplayObject(D_86105BC8, 0, 0xB3, D_86105480->unk_08->unk_00[0]);
+    Model_InitDisplayObject(D_86105BC8, 0, 0xB3, D_86105480->nodes[0]);
     D_8610548C = Model_LoadByArchiveIndex(0xB4);
 
     for (i = 0; i < 12; i++) {
@@ -1822,7 +1822,7 @@ void ClefairyGame_LoadAssets(void) {
     for (i = 0; i < 4; i++) {
         D_86105BC8 = &D_86105EA0[i].unk_004;
         ModelRenderer_AttachDisplayObject(D_86105BC8);
-        Model_InitDisplayObject(D_86105BC8, 0, 0xB5, D_86105480->unk_08->unk_00[0]);
+        Model_InitDisplayObject(D_86105BC8, 0, 0xB5, D_86105480->nodes[0]);
         D_86105BC8->position.x = (i - 1.5f) * 40.0f;
         D_86105BC8->position.y = 0.0f;
         D_86105BC8->position.z = 0.0f;
@@ -1892,7 +1892,7 @@ s32 ClefairyGame_DetermineWinner(void) {
     return var_s4;
 }
 
-void ClefairyGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
+s32 ClefairyGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('MINI');
@@ -1934,5 +1934,5 @@ void ClefairyGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }

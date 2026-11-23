@@ -61,6 +61,7 @@
     - [0x18460, c, geo_layout] # dp model animations
     - [0x19820, c, display_object_textures] # alternative pkm textures
     - [0x1AB50, c, poke_icon] # vs screen code
+    - [0x1BD20, c, poke_icon_preview]
     - [0x1C700, c, model_renderer] #
     - [0x1CF10, c, graphics_textures] # dp list code
     - [0x20310, c, input] # some cache cleaner
@@ -277,6 +278,7 @@
     - [0x6FD40, .data, geo_render]
     - [0x6FF70, .data, geo_layout]
     - [0x70010, .data, poke_icon]
+    - [0x700A0, .data, poke_icon_preview]
     - [0x70130, .data, ui_graphics]
     - [0x704A0, .data, status_icons]
     - [0x71C60, .data, gb_data]
@@ -342,7 +344,7 @@
     - [0x7C0A0, .rodata, gb_tower]
     - [0x7C0E0, .rodata, leo]
     - [0x7C260, .rodata, matrix]
-    - [0x7C270, .rodata, poke_icon]
+    - [0x7C270, .rodata, poke_icon_preview]
     - [0x7C2A0, .rodata, status_icons]
     - [0x7CD80, .rodata, gb_data]
     - [0x7CDF0, .rodata, pokemon_stats]
@@ -416,7 +418,7 @@
     - {vram: 0x800ABDD0, type: .bss, name: model_animation_events}
     - {vram: 0x800ABE00, type: .bss, name: geo_layout}
     - {vram: 0x800ABEE0, type: .bss, name: display_object_textures}
-    - {vram: 0x800AC900, type: .bss, name: poke_icon}
+    - {vram: 0x800AC900, type: .bss, name: poke_icon_preview}
     - {vram: 0x800AC910, type: .bss, name: model_renderer}
     - {vram: 0x800AC940, type: .bss, name: graphics_textures}
     - {vram: 0x800AC950, type: .bss, name: input}

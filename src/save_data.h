@@ -22,11 +22,11 @@ typedef struct ModeSettings {
 } ModeSettings;                      // size = 0x8
 
 typedef struct SessionContinueData {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
+    /* 0x00 */ u8 sessionMode;
+    /* 0x01 */ u8 cupOrGymIndex;
+    /* 0x02 */ u8 trainerIndex;
+    /* 0x03 */ u8 inRound2;
+    /* 0x04 */ u8 continueCount;
     /* 0x05 */ u8 unk_05[2][4];
     /* 0x0D */ u8 unk_0D;
     /* 0x0E */ u16 unk_0E;
@@ -143,7 +143,7 @@ typedef struct unk_D_800AE4E8_004_3_34E0_010 {
 
 typedef struct unk_D_800AE4E8_004_3_34E0 {
     /* 0x0000 */ DeckRecordHeader unk_00;
-    /* 0x0000 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
+    /* 0x0010 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
     /* 0x0012 */ char unk12[0xCE];
 } unk_D_800AE4E8_004_3_34E0; // size = 0xE0
 

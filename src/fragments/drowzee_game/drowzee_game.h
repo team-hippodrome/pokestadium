@@ -60,7 +60,7 @@ void DrowzeeGame_ShowResultText(void);
 void DrowzeeGame_InitCamera(void);
 void DrowzeeGame_InitPlayerOverlays(void);
 void DrowzeeGame_LoadAssets(void);
-void DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1);
+s32 DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1);
 
 s8 DrowzeeGame_ComputeAITimingBias(u8 arg0, s32 arg1);
 

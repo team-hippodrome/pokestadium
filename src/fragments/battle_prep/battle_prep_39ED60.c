@@ -39,7 +39,7 @@ static Gfx D_84B164A0[] = {
 };
 static u32 D_84B16588[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B163E0,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIcon,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawPlate,
     D_84B164A0, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B165C0[] = {
@@ -64,7 +64,7 @@ static Gfx D_84B16640[] = {
 static u32 D_84B166E8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B165C0,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00050000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawBadgeIconAlt,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawMedal,
     D_84B16640, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16738[] = {
@@ -85,7 +85,7 @@ static Gfx D_84B16778[] = {
 };
 static u32 D_84B167E0[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16738,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawSparkle,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawSmokePuff,
     D_84B16778, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16818[] = {
@@ -111,7 +111,7 @@ static Gfx D_84B16898[] = {
 };
 static u32 D_84B16948[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16818,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawGlowFade,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBadgeAward_DrawShockwave,
     D_84B16898, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B16980[] = {
@@ -138,82 +138,100 @@ static u32 D_84B16A38[] = {
     0x22050000, D_84B169C0, 0x25000000, 0x06000000, 0x01000000,
 };
 
-s32 BattlePrepBadgeAward_DrawBadgeIcon(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_v0;
-    s32 tmp;
+/**
+ * Geo draw callback (phase 5) for a badge plate: binds the plate texture for the object's slot
+ * ((effectSlot - first slot) % 8, badge_ui D_2018000 table: BOULDER ... EARTH) to segment 0x0F.
+ */
+s32 BattlePrepBadgeAward_DrawPlate(s32 callback_phase, unk_func_80011B94* node) {
+    BattlePrepBadgeAward* badge_award;
+    s32 plate_index;
 
-    if (arg0 == 5) {
-        temp_v0 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
-        tmp = (D_8006F09C->effectSlot - temp_v0->unk_04->effectSlot) % 8;
+    if (callback_phase == 5) {
+        badge_award = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
+        plate_index = (D_8006F09C->effectSlot - badge_award->displayObjects->effectSlot) % 8;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F,
-                   (u32)Memmap_GetSegmentVaddr(*(s32*)(temp_v0->unk_1C + tmp * 4)) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+                   (u32)Memmap_GetSegmentVaddr(*(s32*)(badge_award->plateTextures + plate_index * 4)) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrepBadgeAward_DrawBadgeIconAlt(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_v0;
-    s32 tmp;
+/**
+ * Geo draw callback (phase 5) for a badge medal: binds the medal texture for the object's slot
+ * ((effectSlot - first slot) % 8, badge_ui D_2021620 table) to segment 0x0F.
+ */
+s32 BattlePrepBadgeAward_DrawMedal(s32 callback_phase, unk_func_80011B94* node) {
+    BattlePrepBadgeAward* badge_award;
+    s32 medal_index;
 
-    if (arg0 == 5) {
-        temp_v0 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
-        tmp = (D_8006F09C->effectSlot - temp_v0->unk_04->effectSlot) % 8;
+    if (callback_phase == 5) {
+        badge_award = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
+        medal_index = (D_8006F09C->effectSlot - badge_award->displayObjects->effectSlot) % 8;
 
         gDPPipeSync(gDisplayListHead++);
         gSPSegment(gDisplayListHead++, 0x0F,
-                   (u32)Memmap_GetSegmentVaddr(*(s32*)(temp_v0->unk_20 + tmp * 4)) & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+                   (u32)Memmap_GetSegmentVaddr(*(s32*)(badge_award->medalTextures + medal_index * 4)) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrepBadgeAward_DrawSparkle(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A90* temp_a3;
-    s32 tmp;
+/**
+ * Geo draw callback (phase 5) for the smoke puff that pops when a medal appears: binds the puff's
+ * current frame of the 8-frame smoke cloud animation (badge_ui D_2023240) to segment 0x0F and
+ * advances one frame per draw. After the eighth frame the puff stops drawing (frame -1).
+ */
+s32 BattlePrepBadgeAward_DrawSmokePuff(s32 callback_phase, unk_func_80011B94* node) {
+    BattlePrepBadgeAward* badge_award;
+    s32 puff_index;
 
-    if (arg0 == 5) {
-        temp_a3 = (unk_D_84B25A90*)D_8006F09C->node.callbackArg;
-        tmp = (D_8006F09C->effectSlot - temp_a3->unk_04->effectSlot) - 0x10;
+    if (callback_phase == 5) {
+        badge_award = (BattlePrepBadgeAward*)D_8006F09C->node.callbackArg;
+        puff_index = (D_8006F09C->effectSlot - badge_award->displayObjects->effectSlot) - 0x10;
 
-        if (temp_a3->unk_28[tmp] >= 0) {
+        if (badge_award->smokePuffFrames[puff_index] >= 0) {
             gDPPipeSync(gDisplayListHead++);
             gSPSegment(gDisplayListHead++, 0x0F,
-                       (u32)Memmap_GetSegmentVaddr(temp_a3->unk_24[temp_a3->unk_28[tmp]]) & 0x1FFFFFFF);
-            gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+                       (u32)Memmap_GetSegmentVaddr(badge_award->smokePuffTextures[badge_award->smokePuffFrames[puff_index]]) & 0x1FFFFFFF);
+            gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
             GeoRender_ApplyMaterialState();
 
-            temp_a3->unk_28[tmp]++;
-            if (temp_a3->unk_28[tmp] == 8) {
-                temp_a3->unk_28[tmp] = -1;
+            badge_award->smokePuffFrames[puff_index]++;
+            if (badge_award->smokePuffFrames[puff_index] == 8) {
+                badge_award->smokePuffFrames[puff_index] = -1;
             }
         }
     }
     return 0;
 }
 
-s32 BattlePrepBadgeAward_DrawGlowFade(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Geo draw callback (phase 5) for the ring (texture D_2022640/D_2022A40) that bursts out of the
+ * newest medal: each draw grows its scale by 0.5 and fades its blue tint toward transparent. It
+ * stops drawing once the scale passes 4.0.
+ */
+s32 BattlePrepBadgeAward_DrawShockwave(s32 callback_phase, unk_func_80011B94* node) {
     UNUSED s32 pad[2];
-    s16 sp1E;
-    f32 temp_fv0;
+    s16 alpha;
+    f32 scale;
 
-    if (arg0 == 5) {
-        temp_fv0 = D_8006F09C->scale.x;
-        sp1E = (4.5f - temp_fv0) * 255.0f * 0.25f;
-        if (temp_fv0 <= 4.0f) {
-            temp_fv0 += 0.5f;
-            Vec3f_SetComponentsDuplicate(&D_8006F09C->scale, temp_fv0, temp_fv0, temp_fv0);
+    if (callback_phase == 5) {
+        scale = D_8006F09C->scale.x;
+        alpha = (4.5f - scale) * 255.0f * 0.25f;
+        if (scale <= 4.0f) {
+            scale += 0.5f;
+            Vec3f_SetComponentsDuplicate(&D_8006F09C->scale, scale, scale, scale);
 
             gDPPipeSync(gDisplayListHead++);
-            gDPSetEnvColor(gDisplayListHead++, 0, 0, 255, sp1E);
-            gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+            gDPSetEnvColor(gDisplayListHead++, 0, 0, 255, alpha);
+            gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
 
             GeoRender_ApplyMaterialState();
         }
@@ -221,259 +239,313 @@ s32 BattlePrepBadgeAward_DrawGlowFade(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
+/**
+ * Empty function with no callers in battle_prep.
+ */
 void func_84B0B054(void) {
 }
 
-void BattlePrepBadgeAward_SlideInStep(unk_D_84B25A90* arg0) {
+/**
+ * Badge award state 1: the eight badge plates flip face-up. Plays sound 0x0110000D on the first
+ * frame, then turns slots 0-7 and 8-15 about rotationY by 0x800 per frame for 15 frames, the top
+ * row one way and the bottom row the other. On frame 16 it rebuilds the plates face-up in slots
+ * 0-7 (rotationY 0; their positions are not set here), frees the turning plates in slots 8-15,
+ * clears the smoke puff frames and enters state 2.
+ */
+void BattlePrepBadgeAward_FlipInStep(BattlePrepBadgeAward* badge_award) {
     s32 i;
 
-    if (arg0->unk_01 == 0) {
+    if (badge_award->timer == 0) {
         Audio_PlayCategory11SoundCommand(0x0110000D, 0, 0);
     }
 
-    arg0->unk_01++;
-    if (arg0->unk_01 < 0x10) {
+    badge_award->timer++;
+    if (badge_award->timer < 0x10) {
         for (i = 0; i < 4; i++) {
-            arg0->unk_04[0 + i].rotation.y -= 0x800;
-            arg0->unk_04[8 + i].rotation.y -= 0x800;
+            badge_award->displayObjects[0 + i].rotation.y -= 0x800;
+            badge_award->displayObjects[8 + i].rotation.y -= 0x800;
         }
 
         for (i = 4; i < 8; i++) {
-            arg0->unk_04[0 + i].rotation.y += 0x800;
-            arg0->unk_04[8 + i].rotation.y += 0x800;
+            badge_award->displayObjects[0 + i].rotation.y += 0x800;
+            badge_award->displayObjects[8 + i].rotation.y += 0x800;
         }
     } else {
         for (i = 0; i < 8; i++) {
-            ModelRenderer_ClearDisplayObject(&arg0->unk_04[i]);
-            BattlePrep_ResetDisplayObject(&arg0->unk_04[8 + i]);
-            Model_InitDisplayObject(&arg0->unk_04[i], 0, 0, arg0->unk_08);
-            arg0->unk_04[i].rotation.y = 0;
-            arg0->unk_04[i].node.callbackArg = arg0;
+            ModelRenderer_ClearDisplayObject(&badge_award->displayObjects[i]);
+            BattlePrep_ResetDisplayObject(&badge_award->displayObjects[8 + i]);
+            Model_InitDisplayObject(&badge_award->displayObjects[i], 0, 0, badge_award->plateGeo);
+            badge_award->displayObjects[i].rotation.y = 0;
+            badge_award->displayObjects[i].node.callbackArg = badge_award;
         }
 
         for (i = 0; i < 8; i++) {
-            arg0->unk_28[i] = -1;
+            badge_award->smokePuffFrames[i] = -1;
         }
 
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 2;
+        badge_award->timer = 0;
+        badge_award->state = 2;
     }
 }
 
-void BattlePrepBadgeAward_RevealStep(unk_D_84B25A90* arg0) {
+/**
+ * Badge award state 2: medals appear on the plates of the cup rounds already won.
+ * Every reveal_interval frames (5 PAL, 6 NTSC) the next earlier round's medal appears in slot
+ * 8+n with sound 0x0110000E (parameter n + 1) and a small smoke puff (slot 16+n, scale 2.5).
+ * The medal for the round just won (roundOrDemoId - 1) follows newest_medal_delay frames later
+ * (17 PAL, 20 NTSC) with sound 0x0110000F, a large smoke puff (scale 6.0) and the shockwave ring
+ * (slot 24). At cleanup_delay (34 PAL, 40 NTSC) it frees slots 16-24 and enters the state 3
+ * twinkle loop.
+ */
+void BattlePrepBadgeAward_RevealStep(BattlePrepBadgeAward* badge_award) {
     s16 i;
-    s16 var_s3;
-    s16 var_a0;
-    s16 var_a1;
-    s16 var_a2;
+    s16 medal_index;
+    s16 reveal_interval;
+    s16 newest_medal_delay;
+    s16 cleanup_delay;
 
     if (osTvType == OS_TV_PAL) {
-        var_a0 = 5;
-        var_a1 = 0x11;
-        var_a2 = 0x22;
+        reveal_interval = 5;
+        newest_medal_delay = 0x11;
+        cleanup_delay = 0x22;
     } else {
-        var_a0 = 6;
-        var_a1 = 0x14;
-        var_a2 = 0x28;
+        reveal_interval = 6;
+        newest_medal_delay = 0x14;
+        cleanup_delay = 0x28;
     }
 
-    var_s3 = arg0->unk_01 / var_a0;
-    arg0->unk_01++;
-    if (gSessionContext.roundOrDemoId - 1 < var_s3) {
-        var_s3 = gSessionContext.roundOrDemoId - 1;
+    medal_index = badge_award->timer / reveal_interval;
+    badge_award->timer++;
+    if (gSessionContext.roundOrDemoId - 1 < medal_index) {
+        medal_index = gSessionContext.roundOrDemoId - 1;
     }
 
-    if (var_s3 < gSessionContext.roundOrDemoId - 1) {
-        if ((arg0->unk_01 % var_a0) == 0) {
-            Audio_PlayCategory11SoundCommand(0x0110000E, var_s3 + 1, 0);
-            Model_InitDisplayObject(&arg0->unk_04[8 + var_s3], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3],
+    if (medal_index < gSessionContext.roundOrDemoId - 1) {
+        if ((badge_award->timer % reveal_interval) == 0) {
+            Audio_PlayCategory11SoundCommand(0x0110000E, medal_index + 1, 0);
+            Model_InitDisplayObject(&badge_award->displayObjects[8 + medal_index], 1, 0, badge_award->medalGeo);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[8 + medal_index].position, D_84B16390[medal_index], D_84B163A0[medal_index],
                                          -289.0f);
-            arg0->unk_04[8 + var_s3].node.callbackArg = arg0;
-            Model_InitDisplayObject(&arg0->unk_04[16 + var_s3], 0, 0, arg0->unk_10);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3],
-                                         D_84B163A0[var_s3] + 5, -289.0f);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].scale, 2.5f, 2.5f, 2.5f);
-            arg0->unk_04[16 + var_s3].node.callbackArg = arg0;
-            arg0->unk_28[var_s3] = 0;
+            badge_award->displayObjects[8 + medal_index].node.callbackArg = badge_award;
+            Model_InitDisplayObject(&badge_award->displayObjects[16 + medal_index], 0, 0, badge_award->smokePuffGeo);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[16 + medal_index].position, D_84B16390[medal_index],
+                                         D_84B163A0[medal_index] + 5, -289.0f);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[16 + medal_index].scale, 2.5f, 2.5f, 2.5f);
+            badge_award->displayObjects[16 + medal_index].node.callbackArg = badge_award;
+            badge_award->smokePuffFrames[medal_index] = 0;
         }
-    } else if (var_s3 == gSessionContext.roundOrDemoId - 1) {
-        if (var_a1 == (arg0->unk_01 - (var_s3 * var_a0))) {
+    } else if (medal_index == gSessionContext.roundOrDemoId - 1) {
+        if (newest_medal_delay == (badge_award->timer - (medal_index * reveal_interval))) {
             Audio_PlayCategory11SoundCommand(0x0110000F, 0, 0);
-            Model_InitDisplayObject(&arg0->unk_04[8 + var_s3], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[8 + var_s3].position, D_84B16390[var_s3], D_84B163A0[var_s3],
+            Model_InitDisplayObject(&badge_award->displayObjects[8 + medal_index], 1, 0, badge_award->medalGeo);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[8 + medal_index].position, D_84B16390[medal_index], D_84B163A0[medal_index],
                                          -289.0f);
-            arg0->unk_04[8 + var_s3].node.callbackArg = arg0;
-            Model_InitDisplayObject(&arg0->unk_04[16 + var_s3], 0, 0, arg0->unk_10);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].position, D_84B16390[var_s3],
-                                         D_84B163A0[var_s3] + 5, -289.0f);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[16 + var_s3].scale, 6.0f, 6.0f, 6.0f);
-            arg0->unk_04[16 + var_s3].node.callbackArg = arg0;
-            arg0->unk_28[var_s3] = 0;
-            Model_InitDisplayObject(&arg0->unk_04[24], 0, 0, arg0->unk_14);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[24].position, D_84B16390[var_s3], D_84B163A0[var_s3] + 5,
+            badge_award->displayObjects[8 + medal_index].node.callbackArg = badge_award;
+            Model_InitDisplayObject(&badge_award->displayObjects[16 + medal_index], 0, 0, badge_award->smokePuffGeo);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[16 + medal_index].position, D_84B16390[medal_index],
+                                         D_84B163A0[medal_index] + 5, -289.0f);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[16 + medal_index].scale, 6.0f, 6.0f, 6.0f);
+            badge_award->displayObjects[16 + medal_index].node.callbackArg = badge_award;
+            badge_award->smokePuffFrames[medal_index] = 0;
+            Model_InitDisplayObject(&badge_award->displayObjects[24], 0, 0, badge_award->shockwaveGeo);
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[24].position, D_84B16390[medal_index], D_84B163A0[medal_index] + 5,
                                          -289.0f);
-            arg0->unk_04[24].node.callbackArg = arg0;
+            badge_award->displayObjects[24].node.callbackArg = badge_award;
 
             for (i = 0; i < gSessionContext.roundOrDemoId - 1; i++) {
-                arg0->unk_04[8 + i].rootId = 0;
+                badge_award->displayObjects[8 + i].rootId = 0;
             }
         } else {
-            if (var_a2 == (arg0->unk_01 - (var_s3 * var_a0))) {
+            if (cleanup_delay == (badge_award->timer - (medal_index * reveal_interval))) {
                 for (i = 16; i < 25; i++) {
-                    BattlePrep_ResetDisplayObject(&arg0->unk_04[i]);
+                    BattlePrep_ResetDisplayObject(&badge_award->displayObjects[i]);
                 }
 
-                arg0->unk_04[8 + var_s3].rootId = 0;
-                arg0->unk_01 = 0;
-                arg0->unk_00 = 3;
+                badge_award->displayObjects[8 + medal_index].rootId = 0;
+                badge_award->timer = 0;
+                badge_award->state = 3;
             }
         }
     }
 }
 
-void BattlePrepBadgeAward_SpawnSparkleParticle(unk_D_84B25A90* arg0, DisplayObject* arg1, s16 arg2) {
-    u16 sp26;
-    f32 temp_fv0;
+/**
+ * Moves a twinkle sprite (four-point star texture D_2022E40, tinted yellow) to a random point
+ * 15-35 units from the center of medal medal_index, building the object on first use, and
+ * restarts its pulse (callbackArg = 0). Medals of rounds not reached yet
+ * (medal_index >= roundOrDemoId) get no twinkle.
+ */
+void BattlePrepBadgeAward_SpawnTwinkle(BattlePrepBadgeAward* badge_award, DisplayObject* display_object, s16 medal_index) {
+    u16 angle;
+    f32 radius;
 
-    if (arg2 < gSessionContext.roundOrDemoId) {
-        if (arg1->node.children == NULL) {
-            Model_InitDisplayObject(arg1, 2, 0, arg0->unk_18);
+    if (medal_index < gSessionContext.roundOrDemoId) {
+        if (display_object->node.children == NULL) {
+            Model_InitDisplayObject(display_object, 2, 0, badge_award->twinkleGeo);
         }
 
-        sp26 = MathUtil_Random16();
-        temp_fv0 = (MathUtil_Random_ZeroOne() * 20.0f) + 15.0f;
+        angle = MathUtil_Random16();
+        radius = (MathUtil_Random_ZeroOne() * 20.0f) + 15.0f;
 
-        arg1->node.callbackArg = 0;
+        display_object->node.callbackArg = 0;
 
-        arg1->position.x = D_84B16390[arg2] + (COSS(sp26) * temp_fv0);
-        arg1->position.y = (D_84B163A0[arg2] + 5) + (SINS(sp26) * temp_fv0);
-        arg1->position.z = -289.0f;
+        display_object->position.x = D_84B16390[medal_index] + (COSS(angle) * radius);
+        display_object->position.y = (D_84B163A0[medal_index] + 5) + (SINS(angle) * radius);
+        display_object->position.z = -289.0f;
     }
 }
 
-void BattlePrepBadgeAward_UpdateSparkleStep(unk_D_84B25A90* arg0) {
+/**
+ * Badge award state 3, the looping idle: each frame places one twinkle on a top-row medal (0-3)
+ * and one on a bottom-row medal (7-4), and pulses every twinkle's scale through the 12-entry
+ * D_84B163B0 curve (0.1 up to 1.0 and back down). BattlePrep_ShowCupResult waits for this state.
+ */
+void BattlePrepBadgeAward_TwinkleStep(BattlePrepBadgeAward* badge_award) {
     s32 i;
-    s32 temp_s0 = arg0->unk_01 % 4;
+    s32 medal_index = badge_award->timer % 4;
 
-    BattlePrepBadgeAward_SpawnSparkleParticle(arg0, &arg0->unk_04[16 + arg0->unk_01], temp_s0);
-    BattlePrepBadgeAward_SpawnSparkleParticle(arg0, &arg0->unk_04[28 + arg0->unk_01], 7 - temp_s0);
+    BattlePrepBadgeAward_SpawnTwinkle(badge_award, &badge_award->displayObjects[16 + badge_award->timer], medal_index);
+    BattlePrepBadgeAward_SpawnTwinkle(badge_award, &badge_award->displayObjects[28 + badge_award->timer], 7 - medal_index);
 
     for (i = 16; i < 41; i++) {
-        if ((s32)arg0->unk_18 == (s32)arg0->unk_04[i].node.children) {
-            s32 idx = arg0->unk_04[i].node.callbackArg;
+        if ((s32)badge_award->twinkleGeo == (s32)badge_award->displayObjects[i].node.children) {
+            s32 scale_index = badge_award->displayObjects[i].node.callbackArg;
 
-            Vec3f_SetComponentsDuplicate(&arg0->unk_04[i].scale, D_84B163B0[idx], D_84B163B0[idx], D_84B163B0[idx]);
-            arg0->unk_04[i].node.callbackArg = (idx + 1) % 12;
+            Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[i].scale, D_84B163B0[scale_index], D_84B163B0[scale_index], D_84B163B0[scale_index]);
+            badge_award->displayObjects[i].node.callbackArg = (scale_index + 1) % 12;
         }
     }
 
-    arg0->unk_01 = (arg0->unk_01 + 1) % 12;
+    badge_award->timer = (badge_award->timer + 1) % 12;
 }
 
-void BattlePrepBadgeAward_ScatterStep(unk_D_84B25A90* arg0) {
+/**
+ * Badge award state 4: the plate grid flies apart. For 15 frames the top row tips about
+ * rotationX and rises while the bottom row tips the other way and falls; every plate also spins
+ * about rotationZ and drifts sideways a little faster each frame. Then it returns to idle state 0.
+ */
+void BattlePrepBadgeAward_ScatterStep(BattlePrepBadgeAward* badge_award) {
     static s16 D_84B16A64[] = { 0x300, 0x150, -0x150, -0x300, -0x300, -0x150, 0x150, 0x300 };
     static f32 D_84B16A74[] = { -3.0f, -2.0f, 2.0f, 3.0f, -3.0f, -2.0f, 2.0f, 3.0f };
 
     s32 i;
 
-    arg0->unk_01++;
-    if (arg0->unk_01 < 0x10) {
+    badge_award->timer++;
+    if (badge_award->timer < 0x10) {
         for (i = 0; i < 4; i++) {
-            arg0->unk_04[0 + i].rotation.x += 0x300;
-            arg0->unk_04[8 + i].rotation.x += 0x300;
-            arg0->unk_04[4 + i].rotation.x -= 0x300;
-            arg0->unk_04[12 + i].rotation.x -= 0x300;
+            badge_award->displayObjects[0 + i].rotation.x += 0x300;
+            badge_award->displayObjects[8 + i].rotation.x += 0x300;
+            badge_award->displayObjects[4 + i].rotation.x -= 0x300;
+            badge_award->displayObjects[12 + i].rotation.x -= 0x300;
 
-            arg0->unk_04[0 + i].position.y += 2.0f * arg0->unk_01 * 0.5f;
-            arg0->unk_04[8 + i].position.y += 2.0f * arg0->unk_01 * 0.5f;
-            arg0->unk_04[4 + i].position.y -= 2.0f * arg0->unk_01 * 0.5f;
-            arg0->unk_04[12 + i].position.y -= 2.0f * arg0->unk_01 * 0.5f;
+            badge_award->displayObjects[0 + i].position.y += 2.0f * badge_award->timer * 0.5f;
+            badge_award->displayObjects[8 + i].position.y += 2.0f * badge_award->timer * 0.5f;
+            badge_award->displayObjects[4 + i].position.y -= 2.0f * badge_award->timer * 0.5f;
+            badge_award->displayObjects[12 + i].position.y -= 2.0f * badge_award->timer * 0.5f;
         }
 
         for (i = 0; i < 8; i++) {
-            arg0->unk_04[0 + i].rotation.z += D_84B16A64[i];
-            arg0->unk_04[8 + i].rotation.z += D_84B16A64[i];
+            badge_award->displayObjects[0 + i].rotation.z += D_84B16A64[i];
+            badge_award->displayObjects[8 + i].rotation.z += D_84B16A64[i];
 
-            arg0->unk_04[0 + i].position.x += (arg0->unk_01 * D_84B16A74[i] * 0.5f);
-            arg0->unk_04[8 + i].position.x += (arg0->unk_01 * D_84B16A74[i] * 0.5f);
+            badge_award->displayObjects[0 + i].position.x += (badge_award->timer * D_84B16A74[i] * 0.5f);
+            badge_award->displayObjects[8 + i].position.x += (badge_award->timer * D_84B16A74[i] * 0.5f);
         }
     } else {
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 0;
+        badge_award->timer = 0;
+        badge_award->state = 0;
     }
 }
 
-void BattlePrepBadgeAward_Update(unk_D_84B25A90* arg0) {
-    switch (arg0->unk_00) {
+/**
+ * Per-frame update for the badge award: 1 flip in, 2 reveal medals, 3 twinkle loop,
+ * 4 scatter exit.
+ */
+void BattlePrepBadgeAward_Update(BattlePrepBadgeAward* badge_award) {
+    switch (badge_award->state) {
         case 1:
-            BattlePrepBadgeAward_SlideInStep(arg0);
+            BattlePrepBadgeAward_FlipInStep(badge_award);
             break;
 
         case 2:
-            BattlePrepBadgeAward_RevealStep(arg0);
+            BattlePrepBadgeAward_RevealStep(badge_award);
             break;
 
         case 3:
-            BattlePrepBadgeAward_UpdateSparkleStep(arg0);
+            BattlePrepBadgeAward_TwinkleStep(badge_award);
             break;
 
         case 4:
-            BattlePrepBadgeAward_ScatterStep(arg0);
+            BattlePrepBadgeAward_ScatterStep(badge_award);
             break;
     }
 }
 
-void BattlePrepBadgeAward_InitDisplayObjects(unk_D_84B25A90* arg0, DisplayObject* arg1) {
+/**
+ * Starts the badge plate grid after a cup win (called by BattlePrep_ShowCupResult). Takes the
+ * display object array, builds the eight plates face-down (rotationY -0x8000) in slots 8-15 as a
+ * 4x2 grid (x = -96, -32, 32, 96; y = 48 top row, -48 bottom row) and enters state 1.
+ */
+void BattlePrepBadgeAward_StartFlipIn(BattlePrepBadgeAward* badge_award, DisplayObject* display_objects) {
     s32 i;
 
-    arg0->unk_04 = arg1;
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 1;
+    badge_award->displayObjects = display_objects;
+    badge_award->timer = 0;
+    badge_award->state = 1;
 
     for (i = 0; i < 8; i++) {
-        Model_InitDisplayObject(&arg0->unk_04[8 + i], 0, 0, arg0->unk_08);
-        arg0->unk_04[8 + i].rotation.y = -0x8000;
-        arg0->unk_04[8 + i].node.callbackArg = arg0;
+        Model_InitDisplayObject(&badge_award->displayObjects[8 + i], 0, 0, badge_award->plateGeo);
+        badge_award->displayObjects[8 + i].rotation.y = -0x8000;
+        badge_award->displayObjects[8 + i].node.callbackArg = badge_award;
     }
 
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[8].position, -96.0f, 48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[9].position, -32.0f, 48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[10].position, 32.0f, 48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[11].position, 96.0f, 48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[12].position, -96.0f, -48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[13].position, -32.0f, -48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[14].position, 32.0f, -48.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[15].position, 96.0f, -48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[8].position, -96.0f, 48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[9].position, -32.0f, 48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[10].position, 32.0f, 48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[11].position, 96.0f, 48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[12].position, -96.0f, -48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[13].position, -32.0f, -48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[14].position, 32.0f, -48.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&badge_award->displayObjects[15].position, 96.0f, -48.0f, -289.0f);
 }
 
-void BattlePrepBadgeAward_StartScatter(unk_D_84B25A90* arg0) {
+/**
+ * Frees the smoke puff, shockwave and twinkle objects (slots 16-40) and starts the state 4
+ * scatter exit. No function in battle_prep calls this, so the scatter exit appears unused.
+ */
+void BattlePrepBadgeAward_StartScatter(BattlePrepBadgeAward* badge_award) {
     s32 i;
 
     for (i = 16; i < 41; i++) {
-        BattlePrep_ResetDisplayObject(&arg0->unk_04[i]);
+        BattlePrep_ResetDisplayObject(&badge_award->displayObjects[i]);
     }
 
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 4;
+    badge_award->timer = 0;
+    badge_award->state = 4;
 }
 
-void BattlePrepBadgeAward_Init(unk_D_84B25A90* arg0) {
-    MemoryBlock* temp_v0;
+/**
+ * Resets the badge award, looks up its three texture tables (plates, medals, smoke frames) and
+ * builds its five geo layouts (plate, medal, smoke puff, shockwave ring, twinkle).
+ * BattlePrep_InitResultScene calls this for every result screen. The plate grid is only shown
+ * when BattlePrep_ShowCupResult calls BattlePrepBadgeAward_StartFlipIn after a cup win.
+ */
+void BattlePrepBadgeAward_Init(BattlePrepBadgeAward* badge_award) {
+    MemoryBlock* memory_block;
 
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_20 = Memmap_GetSegmentVaddr(D_2021620);
-    arg0->unk_1C = Memmap_GetSegmentVaddr(D_2018000);
-    arg0->unk_24 = Memmap_GetSegmentVaddr(D_2023240);
+    badge_award->state = 0;
+    badge_award->timer = 0;
+    badge_award->medalTextures = Memmap_GetSegmentVaddr(D_2021620);
+    badge_award->plateTextures = Memmap_GetSegmentVaddr(D_2018000);
+    badge_award->smokePuffTextures = Memmap_GetSegmentVaddr(D_2023240);
 
-    temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
+    memory_block = MainPool_AllocState(main_pool_get_available(), 0);
 
-    arg0->unk_08 = process_geo_layout(temp_v0, D_84B16588);
-    arg0->unk_0C = process_geo_layout(temp_v0, D_84B166E8);
-    arg0->unk_10 = process_geo_layout(temp_v0, D_84B167E0);
-    arg0->unk_14 = process_geo_layout(temp_v0, D_84B16948);
-    arg0->unk_18 = process_geo_layout(temp_v0, D_84B16A38);
+    badge_award->plateGeo = process_geo_layout(memory_block, D_84B16588);
+    badge_award->medalGeo = process_geo_layout(memory_block, D_84B166E8);
+    badge_award->smokePuffGeo = process_geo_layout(memory_block, D_84B167E0);
+    badge_award->shockwaveGeo = process_geo_layout(memory_block, D_84B16948);
+    badge_award->twinkleGeo = process_geo_layout(memory_block, D_84B16A38);
 
-    MainPool_FinalizeAllocation(temp_v0);
+    MainPool_FinalizeAllocation(memory_block);
 }

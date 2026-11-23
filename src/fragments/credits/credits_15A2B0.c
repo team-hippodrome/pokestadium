@@ -1,7 +1,11 @@
 #include "credits.h"
 #include "src/matrix.h"
 
-unk_D_86A03170 D_86A03170[17][6] = {
+// Orbit camera shots 0-5, indexed [arena][shot] for stadium_models arenas 0-16. The arena
+// list follows the battle engine's arena indices (0 Free Battle, 1-3 Nintendo Cup rounds,
+// 4 Petit Cup, 5 Pika Cup, 6 Prime Cup, 7-16 Gym Leader Castle, 17 Mewtwo).
+//@src/fragments/battle_engine/battle_engine_main.c sBattleModeDispatch
+CreditsOrbitShot sOrbitShots[17][6] = {
     {
         {
             0xAB00,
@@ -1160,7 +1164,11 @@ unk_D_86A03170 D_86A03170[17][6] = {
     },
 };
 
-static unk_D_86A03170 D_86A03C98[2][3] = {
+// Six more orbit shots placed directly after sOrbitShots: sOrbitShots[17][shot] reads these,
+// so they act as arena 17's row. Credits_InitCameraOrbitBlend also indexes this table with
+// shots 6-8, which runs past the declared [2][3] bounds into sPivotOrbitShots (the element is
+// the same as sPivotOrbitShots[arena - 2][shot]).
+static CreditsOrbitShot sOrbitShotsArena17[2][3] = {
     {
         {
             256,
@@ -1232,7 +1240,9 @@ static unk_D_86A03170 D_86A03C98[2][3] = {
         },
     },
 };
-static unk_D_86A03170 D_86A03D40[18][3] = {
+// Pivot orbit shots 6-8, effectively indexed [arena][shot - 6]: the code writes this as
+// sPivotOrbitShots[arena - 2][shot]. Only targetHeight positions sOrbitPivot; x and z stay 0.
+static CreditsOrbitShot sPivotOrbitShots[18][3] = {
     {
         {
             0,
@@ -1865,7 +1875,9 @@ static unk_D_86A03170 D_86A03D40[18][3] = {
     },
 };
 
-static unk_D_86A04328 D_86A04328[18][6] = {
+// Keyframe camera shots 9-14, effectively indexed [arena][shot - 9]: the code writes this as
+// sKeyframeShots[arena - 1][shot - 3].
+static CreditsKeyframeShot sKeyframeShots[18][6] = {
     {
         {
             { 172.0f, 166.0f, 1901.0f },
@@ -3200,241 +3212,273 @@ static unk_D_86A04328 D_86A04328[18][6] = {
     },
 };
 
-static u16 D_86A06220;
-static u16 D_86A06222;
-static Vec3f D_86A06228;
+// Shared state of the current camera blend (orbit or keyframe).
+static u16 sCameraBlendFrame;
+static u16 sCameraBlendDuration;
+static Vec3f sEyeStep; // per-frame eye position change of a keyframe blend
 static f32 D_86A06234;
-static Vec3f D_86A06238;
-static f32 D_86A06244;
-Vec3f D_86A06248;
-static CameraNode* D_86A06254;
-static s16 D_86A06258;
-static s16* D_86A0625C;
+static Vec3f sTargetStep; // per-frame look-at change of a keyframe blend
+static f32 sFieldOfViewStep; // per-frame vertical field of view change
+Vec3f sOrbitPivot;
+static CameraNode* sBlendCamera;
+static s16 sRotationYStep; // per-frame rotationY change of an orbit blend
+static s16* sBlendRotationY; // rotationY variable stepped by Credits_StepCameraOrbitBlend
 
-void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 arg1, s8 arg2, u8 arg3) {
+/**
+ * Starts keyframe shot `shot` (9-14) of arena `arena_index` on `camera`: places the eye and
+ * look-at at the start keyframe (target 720 units along the start direction, angles given in
+ * degrees) and computes per-frame steps so both reach the end keyframe after `duration`
+ * frames. Field of view is stepped from fieldOfViewStart to fieldOfViewEnd.
+ */
+void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 duration, s8 arena_index, u8 shot) {
     f32 scale = 1.0f;
-    unk_D_86A04328* ptr = &D_86A04328[arg2 - 1][arg3 - 3];
-    Vec3f sp3C;
-    Vec3f sp30;
-    D_86A06254 = camera;
-    D_86A06220 = 0;
-    D_86A06222 = arg1;
+    CreditsKeyframeShot* ptr = &sKeyframeShots[arena_index - 1][shot - 3];
+    Vec3f target_start;
+    Vec3f target_end;
+    sBlendCamera = camera;
+    sCameraBlendFrame = 0;
+    sCameraBlendDuration = duration;
 
-    Camera_ComputeEyeFromAngles(&ptr->unk_00, &sp3C, 720.0f,
-                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_0C) << 0xF) / 180,
-                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_10) << 0xF) / 180);
-    Camera_ComputeEyeFromAngles(&ptr->unk_14, &sp30, 720.0f,
-                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_20) << 0xF) / 180,
-                                (((s32)D_86A04328[arg2 - 1][arg3 - 3].unk_24) << 0xF) / 180);
+    Camera_ComputeEyeFromAngles(&ptr->eyeStart, &target_start, 720.0f,
+                                (((s32)sKeyframeShots[arena_index - 1][shot - 3].rotationXStart) << 0xF) / 180,
+                                (((s32)sKeyframeShots[arena_index - 1][shot - 3].rotationYStart) << 0xF) / 180);
+    Camera_ComputeEyeFromAngles(&ptr->eyeEnd, &target_end, 720.0f,
+                                (((s32)sKeyframeShots[arena_index - 1][shot - 3].rotationXEnd) << 0xF) / 180,
+                                (((s32)sKeyframeShots[arena_index - 1][shot - 3].rotationYEnd) << 0xF) / 180);
 
-    D_86A06254->view.eyePosition = ptr->unk_00;
-    D_86A06254->view.targetPosition = sp3C;
+    sBlendCamera->view.eyePosition = ptr->eyeStart;
+    sBlendCamera->view.targetPosition = target_start;
 
-    D_86A06254->perspective.verticalFieldOfView = ptr->unk_28;
-    D_86A06254->perspective.nearPlane = ptr->unk_30;
-    D_86A06254->perspective.farPlane = ptr->unk_34;
+    sBlendCamera->perspective.verticalFieldOfView = ptr->fieldOfViewStart;
+    sBlendCamera->perspective.nearPlane = ptr->nearPlane;
+    sBlendCamera->perspective.farPlane = ptr->farPlane;
 
-    D_86A06228.x = ((ptr->unk_14.x - ptr->unk_00.x) * scale) / arg1;
-    D_86A06228.y = ((ptr->unk_14.y - ptr->unk_00.y) * scale) / arg1;
-    D_86A06228.z = ((ptr->unk_14.z - ptr->unk_00.z) * scale) / arg1;
+    sEyeStep.x = ((ptr->eyeEnd.x - ptr->eyeStart.x) * scale) / duration;
+    sEyeStep.y = ((ptr->eyeEnd.y - ptr->eyeStart.y) * scale) / duration;
+    sEyeStep.z = ((ptr->eyeEnd.z - ptr->eyeStart.z) * scale) / duration;
 
-    D_86A06238.x = ((sp30.x - sp3C.x) * scale) / arg1;
-    D_86A06238.y = ((sp30.y - sp3C.y) * scale) / arg1;
-    D_86A06238.z = ((sp30.z - sp3C.z) * scale) / arg1;
+    sTargetStep.x = ((target_end.x - target_start.x) * scale) / duration;
+    sTargetStep.y = ((target_end.y - target_start.y) * scale) / duration;
+    sTargetStep.z = ((target_end.z - target_start.z) * scale) / duration;
 
-    D_86A06244 = ((ptr->unk_2C - ptr->unk_28) * scale) / arg1;
+    sFieldOfViewStep = ((ptr->fieldOfViewEnd - ptr->fieldOfViewStart) * scale) / duration;
 }
 
+/**
+ * Advances the keyframe blend by sFrameDelta frames until its duration is reached.
+ */
 void Credits_StepCameraKeyframeBlend(void) {
-    if (D_86A06220 < D_86A06222) {
-        s8 tmp = D_86A06210;
+    if (sCameraBlendFrame < sCameraBlendDuration) {
+        s8 frame_delta = sFrameDelta;
 
-        D_86A06220 += tmp;
-        D_86A06254->view.eyePosition.x += D_86A06228.x * tmp;
-        D_86A06254->view.eyePosition.y += D_86A06228.y * tmp;
-        D_86A06254->view.eyePosition.z += D_86A06228.z * tmp;
-        D_86A06254->view.targetPosition.x += D_86A06238.x * tmp;
-        D_86A06254->view.targetPosition.y += D_86A06238.y * tmp;
-        D_86A06254->view.targetPosition.z += D_86A06238.z * tmp;
-        D_86A06254->perspective.verticalFieldOfView += D_86A06244 * tmp;
+        sCameraBlendFrame += frame_delta;
+        sBlendCamera->view.eyePosition.x += sEyeStep.x * frame_delta;
+        sBlendCamera->view.eyePosition.y += sEyeStep.y * frame_delta;
+        sBlendCamera->view.eyePosition.z += sEyeStep.z * frame_delta;
+        sBlendCamera->view.targetPosition.x += sTargetStep.x * frame_delta;
+        sBlendCamera->view.targetPosition.y += sTargetStep.y * frame_delta;
+        sBlendCamera->view.targetPosition.z += sTargetStep.z * frame_delta;
+        sBlendCamera->perspective.verticalFieldOfView += sFieldOfViewStep * frame_delta;
     }
 }
 
-void func_86A01CF0(s16* arg0, s16* arg1, s16* arg2, CameraNode* arg3, u16 arg4, s8 arg5, u8 arg6) {
-    D_86A0625C = arg1;
-    D_86A06254 = arg3;
-    D_86A06220 = 0;
-    D_86A06222 = arg4;
+/**
+ * Starts orbit shot `shot` of arena `arena_index`: writes the start rotationY, the fixed
+ * rotationX and distance, and the camera's field of view and clip planes, and computes the
+ * per-frame rotationY step that reaches rotationYEnd after `duration` frames going in
+ * rotationYDirection. Shots 0-5 orbit the point (0, targetHeight, 0); shots 6-8 set
+ * sOrbitPivot instead (see Credits_UpdateCamera).
+ */
+void Credits_InitCameraOrbitBlend(s16* rotation_x, s16* rotation_y, s16* distance, CameraNode* camera, u16 duration, s8 arena_index, u8 shot) {
+    sBlendRotationY = rotation_y;
+    sBlendCamera = camera;
+    sCameraBlendFrame = 0;
+    sCameraBlendDuration = duration;
 
-    if (arg6 < 6) {
-        *D_86A0625C = D_86A03170[arg5][arg6].unk_00;
-    } else if (arg6 < 9) {
-        *D_86A0625C = D_86A03C98[arg5][(s32)arg6].unk_00;
+    if (shot < 6) {
+        *sBlendRotationY = sOrbitShots[arena_index][shot].rotationYStart;
+    } else if (shot < 9) {
+        *sBlendRotationY = sOrbitShotsArena17[arena_index][(s32)shot].rotationYStart;
     }
 
-    if (arg6 < 6) {
-        unk_D_86A03170* temp_v1 = &D_86A03170[arg5][arg6];
+    if (shot < 6) {
+        CreditsOrbitShot* orbit = &sOrbitShots[arena_index][shot];
 
-        if (temp_v1->unk_04 == 1) {
-            if (temp_v1->unk_00 < temp_v1->unk_02) {
-                D_86A06258 = (temp_v1->unk_02 - temp_v1->unk_00) / arg4;
+        if (orbit->rotationYDirection == 1) {
+            if (orbit->rotationYStart < orbit->rotationYEnd) {
+                sRotationYStep = (orbit->rotationYEnd - orbit->rotationYStart) / duration;
             } else {
-                D_86A06258 = ((temp_v1->unk_02 - temp_v1->unk_00) + 0x10000) / arg4;
+                sRotationYStep = ((orbit->rotationYEnd - orbit->rotationYStart) + 0x10000) / duration;
             }
-        } else if (temp_v1->unk_00 < temp_v1->unk_02) {
-            D_86A06258 = (s32)((temp_v1->unk_02 - temp_v1->unk_00) + 0xFFFF0000) / arg4;
+        } else if (orbit->rotationYStart < orbit->rotationYEnd) {
+            sRotationYStep = (s32)((orbit->rotationYEnd - orbit->rotationYStart) + 0xFFFF0000) / duration;
         } else {
-            D_86A06258 = (temp_v1->unk_02 - temp_v1->unk_00) / arg4;
+            sRotationYStep = (orbit->rotationYEnd - orbit->rotationYStart) / duration;
         }
 
-        *arg0 = temp_v1->unk_06;
-        *arg2 = temp_v1->unk_08;
+        *rotation_x = orbit->rotationX;
+        *distance = orbit->distance;
 
-        D_86A06254->view.targetPosition.x = 0.0f;
-        D_86A06254->view.targetPosition.y = temp_v1->unk_10;
-        D_86A06254->view.targetPosition.z = 0.0f;
+        sBlendCamera->view.targetPosition.x = 0.0f;
+        sBlendCamera->view.targetPosition.y = orbit->targetHeight;
+        sBlendCamera->view.targetPosition.z = 0.0f;
 
-        D_86A06254->perspective.verticalFieldOfView = temp_v1->unk_0C;
-        D_86A06254->perspective.nearPlane = temp_v1->unk_14;
-        D_86A06254->perspective.farPlane = temp_v1->unk_18;
-    } else if (arg6 < 9) {
-        if (D_86A03D40[arg5 - 2][(s32)arg6].unk_04 == 1) {
-            if (D_86A03D40[arg5 - 2][(s32)arg6].unk_00 < D_86A03D40[arg5 - 2][(s32)arg6].unk_02) {
-                D_86A06258 = (D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) / arg4;
+        sBlendCamera->perspective.verticalFieldOfView = orbit->fieldOfView;
+        sBlendCamera->perspective.nearPlane = orbit->nearPlane;
+        sBlendCamera->perspective.farPlane = orbit->farPlane;
+    } else if (shot < 9) {
+        if (sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYDirection == 1) {
+            if (sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart < sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd) {
+                sRotationYStep = (sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd - sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart) / duration;
             } else {
-                D_86A06258 =
-                    ((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0x10000) /
-                    arg4;
+                sRotationYStep =
+                    ((sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd - sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart) + 0x10000) /
+                    duration;
             }
-        } else if (D_86A03D40[arg5 - 2][(s32)arg6].unk_00 < D_86A03D40[arg5 - 2][(s32)arg6].unk_02) {
-            D_86A06258 =
-                (s32)((D_86A03D40[arg5 - 2][(s32)arg6].unk_02 + D_86A03D40[arg5 - 2][(s32)arg6].unk_00) + 0xFFFF0000) /
-                arg4;
+        } else if (sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart < sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd) {
+            //!bug Adds rotationYStart where the shots 0-5 path subtracts it. No sPivotOrbitShots
+            // entry has rotationYDirection -1 with rotationYStart < rotationYEnd, so it is never hit.
+            sRotationYStep =
+                (s32)((sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd + sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart) + 0xFFFF0000) /
+                duration;
         } else {
-            D_86A06258 = (D_86A03D40[arg5 - 2][(s32)arg6].unk_02 - D_86A03D40[arg5 - 2][(s32)arg6].unk_00) / arg4;
+            sRotationYStep = (sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYEnd - sPivotOrbitShots[arena_index - 2][(s32)shot].rotationYStart) / duration;
         }
 
-        *arg0 = D_86A03D40[arg5 - 2][(s32)arg6].unk_06;
-        *arg2 = D_86A03D40[arg5 - 2][(s32)arg6].unk_08;
+        *rotation_x = sPivotOrbitShots[arena_index - 2][(s32)shot].rotationX;
+        *distance = sPivotOrbitShots[arena_index - 2][(s32)shot].distance;
 
-        D_86A06248.x = 0.0f;
-        D_86A06248.y = D_86A03D40[arg5 - 2][(s32)arg6].unk_10;
-        D_86A06248.z = 0.0f;
+        sOrbitPivot.x = 0.0f;
+        sOrbitPivot.y = sPivotOrbitShots[arena_index - 2][(s32)shot].targetHeight;
+        sOrbitPivot.z = 0.0f;
 
-        D_86A06254->perspective.verticalFieldOfView = D_86A03D40[arg5 - 2][(s32)arg6].unk_0C;
-        D_86A06254->perspective.nearPlane = D_86A03D40[arg5 - 2][(s32)arg6].unk_14;
-        D_86A06254->perspective.farPlane = D_86A03D40[arg5 - 2][(s32)arg6].unk_18;
+        sBlendCamera->perspective.verticalFieldOfView = sPivotOrbitShots[arena_index - 2][(s32)shot].fieldOfView;
+        sBlendCamera->perspective.nearPlane = sPivotOrbitShots[arena_index - 2][(s32)shot].nearPlane;
+        sBlendCamera->perspective.farPlane = sPivotOrbitShots[arena_index - 2][(s32)shot].farPlane;
     }
 }
 
-void Credits_StepCameraYawBlend(void) {
-    if (D_86A06220 < D_86A06222) {
-        D_86A06220 += D_86A06210;
-        *D_86A0625C += D_86A06258 * D_86A06210;
+/**
+ * Advances the orbit blend's rotationY by sFrameDelta steps until its duration is reached.
+ */
+void Credits_StepCameraOrbitBlend(void) {
+    if (sCameraBlendFrame < sCameraBlendDuration) {
+        sCameraBlendFrame += sFrameDelta;
+        *sBlendRotationY += sRotationYStep * sFrameDelta;
     }
 }
 
-void Credits_SelectNextScene(s8* arg0, u8* arg1) {
-    u8 var_a3;
+/**
+ * Chooses the arena and camera shot for the next backdrop pick. Each of the 10 picks draws at
+ * random from its group in sPickArenaGroups, limited to arenas still in sArenaPool, and an
+ * arena is removed from the pool once used. Groups: picks 0-1 Free Battle and Nintendo Cup
+ * arenas 0-2, pick 2 Petit/Pika/Prime Cup arenas 4-6 (forced to Prime Cup while
+ * sRoleTextColumn is 0), picks 3-7 Gym Leader Castle arenas, pick 8 a mix including Mewtwo's
+ * arena 17, and pick 9 arena 15. Picks 4 and 5 are the mid-segment swaps and keep the shot.
+ */
+void Credits_SelectNextScene(s8* arena_index, u8* shot) {
+    u8 candidate_count;
     u8 i;
     u8 j;
-    u8 sp38[] = {
+    u8 group_sizes[] = {
         // D_86A05AC8
         0x03, 0x03, 0x03, 0x08, 0x8, 0x08, 0x8, 0x06, 0x6, 0x01,
     };
-    s8 sp28[16];
+    s8 candidates[16];
 
-    static u8 D_86A05AD4 = 0;
-    static s8 D_86A05AD8[] = {
+    static u8 sPickIndex = 0; // number of picks made so far (0-9)
+    // Arenas not yet shown; entries are set to -1 once picked. Arenas 3 and 16 never appear.
+    static s8 sArenaPool[] = {
         0x00, 0x01, 0x02, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x11,
     };
-    static s8 D_86A05AE8[] = {
+    static s8 sPick0Arenas[] = {
         0x00,
         0x01,
         0x02,
     };
-    static s8 D_86A05AEC[] = {
+    static s8 sPick1Arenas[] = {
         0x00,
         0x01,
         0x02,
     };
-    static s8 D_86A05AF0[] = {
+    static s8 sPick2Arenas[] = {
         0x04,
         0x05,
         0x06,
     };
-    static s8 D_86A05AF4[] = {
+    static s8 sPick3Arenas[] = {
         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
     };
-    static s8 D_86A05AFC[] = {
+    static s8 sPick4Arenas[] = {
         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
     };
-    static s8 D_86A05B04[] = {
+    static s8 sPick5Arenas[] = {
         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
     };
-    static s8 D_86A05B0C[] = {
+    static s8 sPick6Arenas[] = {
         0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E,
     };
-    static s8 D_86A05B14[] = {
+    static s8 sPick7Arenas[] = {
         0x07, 0x09, 0x0A, 0x0B, 0x0C, 0x0E,
     };
-    static s8 D_86A05B1C[] = {
+    static s8 sPick8Arenas[] = {
         0x00, 0x02, 0x04, 0x05, 0x06, 0x11,
     };
-    static s8 D_86A05B24[] = {
+    static s8 sPick9Arenas[] = {
         0x0F,
     };
-    static s8* D_86A05B28[] = {
-        D_86A05AE8, D_86A05AEC, D_86A05AF0, D_86A05AF4, D_86A05AFC,
-        D_86A05B04, D_86A05B0C, D_86A05B14, D_86A05B1C, D_86A05B24,
+    // Allowed arenas for each pick; group_sizes holds their lengths.
+    static s8* sPickArenaGroups[] = {
+        sPick0Arenas, sPick1Arenas, sPick2Arenas, sPick3Arenas, sPick4Arenas,
+        sPick5Arenas, sPick6Arenas, sPick7Arenas, sPick8Arenas, sPick9Arenas,
     };
 
-    if ((D_86A06211 == 0) && (D_86A05AD4 == 2)) {
-        *arg0 = 6;
+    if ((sRoleTextColumn == 0) && (sPickIndex == 2)) {
+        *arena_index = 6;
     } else {
-        var_a3 = 0;
+        candidate_count = 0;
         for (i = 0; i < 16; i++) {
-            for (j = 0; j < sp38[D_86A05AD4]; j++) {
-                if (D_86A05B28[D_86A05AD4][j] == D_86A05AD8[i]) {
-                    sp28[var_a3++] = D_86A05AD8[i];
+            for (j = 0; j < group_sizes[sPickIndex]; j++) {
+                if (sPickArenaGroups[sPickIndex][j] == sArenaPool[i]) {
+                    candidates[candidate_count++] = sArenaPool[i];
                     break;
                 }
             }
         }
-        *arg0 = sp28[Credits_RandomRange(var_a3)];
+        *arena_index = candidates[Credits_RandomRange(candidate_count)];
     }
 
-    switch (D_86A05AD4) {
+    switch (sPickIndex) {
         case 0:
         case 6:
-            *arg1 = 9;
+            *shot = 9;
             break;
 
         case 1:
-            *arg1 = 0;
+            *shot = 0;
             break;
 
         case 2:
         case 9:
-            *arg1 = 0xA;
+            *shot = 0xA;
             break;
 
         case 7:
-            *arg1 = 0xB;
+            *shot = 0xB;
             break;
 
         case 3:
         case 8:
-            *arg1 = 1;
+            *shot = 1;
             break;
     }
 
     for (i = 0; i < 16; i++) {
-        if (*arg0 == D_86A05AD8[i]) {
-            D_86A05AD8[i] = -1;
+        if (*arena_index == sArenaPool[i]) {
+            sArenaPool[i] = -1;
             break;
         }
     }
 
-    D_86A05AD4++;
+    sPickIndex++;
 }

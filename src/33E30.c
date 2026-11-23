@@ -32,7 +32,7 @@ static Gfx D_80076330[] = {
     gsSPEndDisplayList(),
 };
 
-// Format strings for the debug matrix dumps that func_80033230 and func_80033264
+// Format strings for the debug matrix dumps that Debug_PrintMtx and Debug_PrintMtxF
 // once printed; the calls were optimized out, leaving the literals behind.
 const char D_8007C580[0x8] = "0x%08x ";
 const char D_8007C588[0x4] = "\n";
@@ -45,9 +45,40 @@ const char D_8007C5A8[0x4] = "";
 const char D_8007C5AC[0x4] = "";
 
 #if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/33E30/func_80033230.s")
+// Prints an Mtx as 8 rows of 2 hex words via rmonPrintf.
+void Debug_PrintMtx(s32 arg0) {
+    s32 i;
+    s32 j;
+    s32* ptr = (s32*)arg0;
+
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 2; j++) {
+            rmonPrintf(D_8007C580, *ptr);
+            ptr++;
+        }
+        rmonPrintf(D_8007C588);
+    }
+    rmonPrintf(D_8007C58C);
+}
+
+// Prints an MtxF as 4x4 floats via rmonPrintf.
+void Debug_PrintMtxF(s32 arg0) {
+    s32 i;
+    s32 j;
+    f32* ptr = (f32*)arg0;
+
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            rmonPrintf(D_8007C590, (f64)*ptr);
+            ptr++;
+        }
+        rmonPrintf(D_8007C59C);
+    }
+    rmonPrintf(D_8007C5A0);
+}
 #else
-void func_80033230(s32 arg0) {
+// Prints an Mtx as 8 rows of 2 hex words via rmonPrintf; calls optimized out.
+void Debug_PrintMtx(s32 arg0) {
     s32 i;
     s32 j;
 
@@ -55,13 +86,9 @@ void func_80033230(s32 arg0) {
         for (j = 0; j < 2; j++) {}
     }
 }
-#endif
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/33E30/func_80033264.s")
-#pragma GLOBAL_ASM("asm/us/nonmatchings/33E30/func_80033318_us_rev2.s")
-#else
-void func_80033264(s32 arg0) {
+// Prints an MtxF as 4x4 floats via rmonPrintf; calls optimized out.
+void Debug_PrintMtxF(s32 arg0) {
     s32 i;
     s32 j;
 

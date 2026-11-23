@@ -1341,15 +1341,15 @@ unk_D_8250A228* MiniGameSelect_CreateMenuWidget(s16 arg0, s16 arg1, GraphNode* a
     temp_v0->unk_02 = 0;
     temp_v0->unk_04 = arg1;
     ModelRenderer_AttachDisplayObject(temp_s1);
-    temp_s1->unk_1E = -0x4000;
+    temp_s1->rotation.x = -0x4000;
     Model_InitDisplayObject(temp_s1, 0, 0, arg2);
-    temp_s1->unk_01 &= ~1;
+    temp_s1->node.flags &= ~1;
 
     switch (temp_v0->unk_00) {
         case 1:
             temp_v0->unk_38 = NULL;
-            Vec3f_SetComponentsDuplicate(&temp_s1->unk_24, -150.0f, 240.0f - ((arg1 * 88.0f) + 196.0f), -579.0f);
-            temp_s1->unk_14 = arg1;
+            Vec3f_SetComponentsDuplicate(&temp_s1->position, -150.0f, 240.0f - ((arg1 * 88.0f) + 196.0f), -579.0f);
+            temp_s1->node.callbackArg = arg1;
             break;
 
         case 2:
@@ -1359,24 +1359,24 @@ unk_D_8250A228* MiniGameSelect_CreateMenuWidget(s16 arg0, s16 arg1, GraphNode* a
             } else {
                 temp_v0->unk_38 = NULL;
             }
-            Vec3f_SetComponentsDuplicate(&temp_s1->unk_24, -150.0f, 240.0f - ((arg1 * 98.0f) + 190.0f), -579.0f);
-            temp_s1->unk_14 = arg1;
+            Vec3f_SetComponentsDuplicate(&temp_s1->position, -150.0f, 240.0f - ((arg1 * 98.0f) + 190.0f), -579.0f);
+            temp_s1->node.callbackArg = arg1;
             break;
 
         case 3:
             temp_v0->unk_38 = GfxImage_Allocate(0, 2, 0x12C, 0x50, 1);
             temp_v0->unk_06 |= 1;
-            Vec3f_SetComponentsDuplicate(&temp_s1->unk_24, -150.0f, 0.0f, -579.0f);
+            Vec3f_SetComponentsDuplicate(&temp_s1->position, -150.0f, 0.0f, -579.0f);
             break;
 
         case 4:
             temp_v0->unk_38 = NULL;
             temp_v0->unk_0C = temp_v0->unk_04;
             temp_v0->unk_0A = temp_v0->unk_04;
-            Vec3f_SetComponentsDuplicate(&temp_s1->unk_24, (((arg1 % 3) * 96.0f) + 224.0f) - 320.0f,
+            Vec3f_SetComponentsDuplicate(&temp_s1->position, (((arg1 % 3) * 96.0f) + 224.0f) - 320.0f,
                                          240.0f - (((arg1 / 3) * 96.0f) + 156.0f), -579.0f);
-            temp_s1->unk_14 = arg1;
-            temp_s1->unk_30.x = temp_s1->unk_30.y = temp_s1->unk_30.z = 1.2f;
+            temp_s1->node.callbackArg = arg1;
+            temp_s1->scale.x = temp_s1->scale.y = temp_s1->scale.z = 1.2f;
             break;
     }
     return temp_v0;
@@ -1413,7 +1413,7 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
         case 1:
             arg0->unk_06 |= 1;
             arg0->unk_08 = 0xA;
-            arg0->unk_3C.unk_01 |= 1;
+            arg0->unk_3C.node.flags |= 1;
 
             arg0->unk_0E[0] = 0xFF;
             arg0->unk_0E[1] = 0xFF;
@@ -1461,7 +1461,7 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
             if (arg0->unk_34 != NULL) {
                 var_v0 = 1;
             }
-            arg0->unk_3C.unk_01 |= 1;
+            arg0->unk_3C.node.flags |= 1;
             break;
     }
 
@@ -1583,9 +1583,9 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 1:
                 var_s0->unk_008--;
-                temp_v0->unk_1E = (((0xA - var_s0->unk_008) << 0xE) / 10) - 0x4000;
+                temp_v0->rotation.x = (((0xA - var_s0->unk_008) << 0xE) / 10) - 0x4000;
                 if (var_s0->unk_008 <= 0) {
-                    temp_v0->unk_1E = 0;
+                    temp_v0->rotation.x = 0;
                     var_s0->unk_002 = 2;
                     var_s0->unk_008 = 0;
                 }
@@ -1599,12 +1599,12 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 3:
                 var_s0->unk_008--;
-                temp_v0->unk_1E = ((0xA - var_s0->unk_008) << 0xE) / 10;
+                temp_v0->rotation.x = ((0xA - var_s0->unk_008) << 0xE) / 10;
                 if (var_s0->unk_008 <= 0) {
                     var_s0->unk_002 = 4;
                     var_s0->unk_008 = 0;
-                    temp_v0->unk_1E = 0x4000;
-                    temp_v0->unk_01 &= ~1;
+                    temp_v0->rotation.x = 0x4000;
+                    temp_v0->node.flags &= ~1;
                     if (var_s0->unk_030 != NULL) {
                         func_82501B18(var_s0->unk_030, 1);
                     }
@@ -1642,32 +1642,32 @@ void MiniGameSelect_UpdateWidgets(void) {
                 }
 
                 var_s0->unk_01C += var_s0->unk_018;
-                temp_v0->unk_24.x += (var_s0->unk_020.x * var_s0->unk_01C);
-                temp_v0->unk_24.y += (var_s0->unk_020.y * var_s0->unk_01C);
-                temp_v0->unk_24.z += (var_s0->unk_020.z * var_s0->unk_01C);
+                temp_v0->position.x += (var_s0->unk_020.x * var_s0->unk_01C);
+                temp_v0->position.y += (var_s0->unk_020.y * var_s0->unk_01C);
+                temp_v0->position.z += (var_s0->unk_020.z * var_s0->unk_01C);
 
                 if ((var_s0->unk_004 & 0xFFFFFFFF) != 4) {
                     if (var_s0->unk_004 & 1) {
-                        temp_v0->unk_22 += 0x1400;
+                        temp_v0->rotation.z += 0x1400;
                     } else {
-                        temp_v0->unk_22 -= 0x1400;
+                        temp_v0->rotation.z -= 0x1400;
                     }
-                    temp_v0->unk_1E += 0x1000;
-                    temp_v0->unk_20 += 0x1000;
+                    temp_v0->rotation.x += 0x1000;
+                    temp_v0->rotation.y += 0x1000;
                 } else {
-                    temp_v0->unk_30.x += 0.05f;
-                    temp_v0->unk_30.y = temp_v0->unk_30.z = temp_v0->unk_30.x;
+                    temp_v0->scale.x += 0.05f;
+                    temp_v0->scale.y = temp_v0->scale.z = temp_v0->scale.x;
                 }
                 break;
 
             case 8:
                 var_s0->unk_008--;
-                temp_v0->unk_1E = ((0xA - var_s0->unk_008) * -0x4000) / 10;
+                temp_v0->rotation.x = ((0xA - var_s0->unk_008) * -0x4000) / 10;
                 if (var_s0->unk_008 <= 0) {
-                    temp_v0->unk_1E = -0x4000;
+                    temp_v0->rotation.x = -0x4000;
                     var_s0->unk_002 = 0;
                     var_s0->unk_008 = 0;
-                    temp_v0->unk_01 &= ~1;
+                    temp_v0->node.flags &= ~1;
                     if (var_s0->unk_02C != NULL) {
                         func_82501B18(var_s0->unk_02C, 7);
                     }
@@ -1676,11 +1676,11 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 7:
                 var_s0->unk_008--;
-                temp_v0->unk_1E = 0x4000 - (((0xA - var_s0->unk_008) << 0xE) / 10);
+                temp_v0->rotation.x = 0x4000 - (((0xA - var_s0->unk_008) << 0xE) / 10);
                 if (var_s0->unk_008 <= 0) {
                     var_s0->unk_002 = 2;
                     var_s0->unk_008 = 0;
-                    temp_v0->unk_1E = 0;
+                    temp_v0->rotation.x = 0;
                 }
 
                 break;

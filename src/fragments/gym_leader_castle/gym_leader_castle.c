@@ -401,11 +401,6 @@ void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 a
     }
 }
 
-#if defined(VERSION_US_REV2)
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/gym_leader_castle/gym_leader_castle/GymLeaderCastle_DrawEliteFourRoomInfoPanel.s")
-// clang-format on
-#else
 void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, u8 alpha2) {
     char* string;
 
@@ -423,8 +418,13 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
     gDPLoadTextureBlock(gDisplayListHead++, D_300C290, G_IM_FMT_IA, G_IM_SIZ_16b, 16, 76, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
+#if defined(VERSION_US_REV2)
+    Gfx_DrawTexturedRectClipped(314, 372, 16, 76, 0, 0, 0x400, 0x400, 0);
+    Gfx_DrawTexturedRectClipped(330, 372, 140, 76, 480, 0, 0, 0x400, 0);
+#else
     Gfx_DrawTexturedRectClipped(346, 372, 16, 76, 0, 0, 0x400, 0x400, 0);
     Gfx_DrawTexturedRectClipped(362, 372, 108, 76, 480, 0, 0, 0x400, 0);
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -442,11 +442,14 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
         string = " ";
     }
 
+#if defined(VERSION_US_REV2)
+    Font_Printf((156 - Font_MeasureTextExtent(16, 0, string)) / 2 + 314, 406, string);
+#else
     Font_Printf(408 - (Font_MeasureTextExtent(16, 0, string) / 2), 406, string);
+#endif
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void GymLeaderCastle_UpdateRoomInfoPanelFade(void) {
     u8 var_sp1F;

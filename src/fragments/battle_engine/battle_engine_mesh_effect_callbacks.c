@@ -119,12 +119,6 @@ f32 BattleAnim_EffectSecondaryOwnerModelScale(void) {
     return BattleAnim_GetSecondaryOwnerModelScale();
 }
 
-#if defined(VERSION_US_REV2)
-// asm-processor requires these imports on one physical line.
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcMoveAimingVectors.s")
-// clang-format on
-#else
 /*
     Moves: Aurora Beam (use), Bind (use), Constrict (use), Disable (use), Hyper Beam (use), Ice Beam (use), Pin
     Missile (use), Poison Sting (use), Psybeam (use), Solar Beam (use), Spike Cannon (use), String Shot (use),
@@ -153,7 +147,13 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
     sp20 = sp40.y - sp4C.y;
     sp1C = sp40.z - sp4C.z;
 
+#if defined(VERSION_US_REV2)
+    if (sp24 == 0.0f && sp20 == 0.0f && sp1C == 0.0f) {
+        rmonPrintf("calc_vector_ATtoDM() normal error!!!\n");
+    }
+#else
     if (sp24 == 0.0f || sp20 == 0.0f || sp1C == 0.0f) {}
+#endif
 
     Vec3f_NormalizeComponents(&sp24, &sp20, &sp1C);
 
@@ -164,13 +164,7 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
     *arg4 = sp20;
     *arg5 = sp1C;
 }
-#endif
 
-#if defined(VERSION_US_REV2)
-// clang-format off
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/battle_engine/battle_engine_mesh_effect_callbacks/BattleAnim_CalcSwiftAimVectors.s")
-// clang-format on
-#else
 /*
     Moves: Swift (use)
     TODO: Human contributor add screenshot
@@ -203,7 +197,13 @@ void BattleAnim_CalcSwiftAimVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, 
     sp20 = tmp - sp4C.y;
     sp1C = sp40.z - sp4C.z;
 
+#if defined(VERSION_US_REV2)
+    if (sp24 == 0.0f && sp20 == 0.0f && sp1C == 0.0f) {
+        rmonPrintf("calc_vector_ATtoDM2() normal error!!!\n");
+    }
+#else
     if (sp24 == 0.0f || sp20 == 0.0f || sp1C == 0.0f) {}
+#endif
 
     Vec3f_NormalizeComponents(&sp24, &sp20, &sp1C);
 
@@ -214,7 +214,6 @@ void BattleAnim_CalcSwiftAimVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, 
     *arg4 = sp20;
     *arg5 = sp1C;
 }
-#endif
 
 void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_84392588, 0.0f, 0.0f, 0.0f);

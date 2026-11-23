@@ -1345,7 +1345,7 @@ void Widget_PauseMenuResetWinStreak(void) {
 }
 
 /**
- * Same shape as func_86A01490 in credits_158A00.c: the wrap-around arm widens the counter to
+ * Same shape as Credits_UpdateFrameDelta in credits_158A00.c: the wrap-around arm widens the counter to
  * 64 bits before subtracting, which makes IDO stage the value through the low half of a
  * register pair (addiu t5, v0, 0) before the 32-bit subtract (subu t9, t5, v1).
  */

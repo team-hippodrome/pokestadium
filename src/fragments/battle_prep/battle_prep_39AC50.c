@@ -79,86 +79,109 @@ static Gfx D_84B12420[] = {
     gsSPEndDisplayList(),
 };
 
-s32 BattlePrepRoster_DrawIconVariantA(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A28* temp_a3;
-    u8* sp30;
-    s32 temp_v1;
-    s32 var_a1;
+/**
+ * Geo callback (draw phase 5) for a versus-screen icon column in the single layout. Each column has two child icon
+ * nodes (callbackArg 0 = upper row, 1 = lower row). Binds segment 0x0F to that Pokémon's PokeIcon image (side 0
+ * slots 0-5 from nodes 2-4, side 1 slots 6-11 from nodes 5-7) and segment 0x0E to the blue side 0 panel D_300C000
+ * or the green side 1 panel D_300D800.
+ */
+s32 BattlePrepRoster_DrawIconColumnSingle(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepRoster* roster;
+    u8* panel_texture;
+    s32 node_index;
+    s32 icon_index;
 
-    if (arg0 == 5) {
-        temp_a3 = (unk_D_84B25A28*)D_8006F09C->node.callbackArg;
+    if (phase == 5) {
+        roster = (BattlePrepRoster*)D_8006F09C->node.callbackArg;
 
-        temp_v1 = D_8006F09C->effectSlot - temp_a3->unk_04->effectSlot;
-        if (temp_v1 < 5) {
-            var_a1 = ((arg1->display_node_header.callbackArg * 3) + temp_v1) - 2;
-            sp30 = D_300C000;
+        node_index = D_8006F09C->effectSlot - roster->displayObjects->effectSlot;
+        if (node_index < 5) {
+            icon_index = ((display_node->display_node_header.callbackArg * 3) + node_index) - 2;
+            panel_texture = D_300C000;
         } else {
-            var_a1 = (arg1->display_node_header.callbackArg * 3) + temp_v1 + 1;
-            sp30 = D_300D800;
+            icon_index = (display_node->display_node_header.callbackArg * 3) + node_index + 1;
+            panel_texture = D_300D800;
         }
 
         gDPPipeSync(gDisplayListHead++);
 
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(temp_a3->unk_20, var_a1) & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(sp30) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(roster->iconRenderList, icon_index) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
     }
     return 0;
 }
 
-s32 BattlePrepRoster_DrawIconVariantB(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A28* temp_a3;
-    u8* sp30;
-    s32 temp_v1;
-    s32 var_a1;
+/**
+ * Geo callback (draw phase 5) for a versus-screen icon column in the tag-team layout. Each column has three child
+ * icon nodes (callbackArg 0-2 = rows); two columns hold one tag-team member's six icons. Slots: side 0 first member
+ * 0-5 (nodes 1-2), second member 6-11 (nodes 3-4); side 1 12-17 (nodes 5-6) and 18-23 (nodes 7-8). Binds the slot's
+ * PokeIcon image to segment 0x0F and the blue D_300F000 / green D_300FC00 panel to segment 0x0E.
+ */
+s32 BattlePrepRoster_DrawIconColumnDouble(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepRoster* roster;
+    u8* panel_texture;
+    s32 node_index;
+    s32 icon_index;
 
-    if (arg0 == 5) {
-        temp_a3 = (unk_D_84B25A28*)D_8006F09C->node.callbackArg;
+    if (phase == 5) {
+        roster = (BattlePrepRoster*)D_8006F09C->node.callbackArg;
 
-        temp_v1 = D_8006F09C->effectSlot - temp_a3->unk_04->effectSlot;
-        if (temp_v1 < 5) {
-            var_a1 = (arg1->display_node_header.callbackArg * 2) + (((temp_v1 - 1) / 2) * 6) + ((temp_v1 - 1) % 2);
-            sp30 = D_300F000;
+        node_index = D_8006F09C->effectSlot - roster->displayObjects->effectSlot;
+        if (node_index < 5) {
+            icon_index = (display_node->display_node_header.callbackArg * 2) + (((node_index - 1) / 2) * 6) + ((node_index - 1) % 2);
+            panel_texture = D_300F000;
         } else {
-            var_a1 =
-                (arg1->display_node_header.callbackArg * 2) + (((temp_v1 - 5) / 2) * 6) + ((temp_v1 - 5) % 2) + 0xC;
-            sp30 = D_300FC00;
+            icon_index =
+                (display_node->display_node_header.callbackArg * 2) + (((node_index - 5) / 2) * 6) + ((node_index - 5) % 2) + 0xC;
+            panel_texture = D_300FC00;
         }
 
         gDPPipeSync(gDisplayListHead++);
 
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(temp_a3->unk_20, var_a1) & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(sp30) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)PokeIcon_GetImage(roster->iconRenderList, icon_index) & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)Memmap_GetSegmentVaddr(panel_texture) & 0x1FFFFFFF);
     }
     return 0;
 }
 
-s32 BattlePrepRoster_DrawTrainerBadge(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B25A28* temp_v1;
-    u8* var_a3;
+/**
+ * Geo callback (draw phase 5) for a trainer card. Binds segment 0x0F to side0CardImage for display object 0 (side
+ * 0, top row) or side1CardImage otherwise, draws the display list in the node's callbackArg, and reapplies material
+ * state. The 64x96 card images are composed by BattlePrep_DrawTrainerStatusIcon: card background, trainer portrait,
+ * and the 1P/2P/COM tag or trainer name.
+ */
+s32 BattlePrepRoster_DrawTrainerCard(s32 phase, unk_func_80011B94* display_node) {
+    BattlePrepRoster* roster;
+    u8* card_image;
 
-    if (arg0 == 5) {
-        temp_v1 = (unk_D_84B25A28*)D_8006F09C->node.callbackArg;
-        if (temp_v1->unk_04->effectSlot == D_8006F09C->effectSlot) {
-            var_a3 = temp_v1->unk_24->img_p;
+    if (phase == 5) {
+        roster = (BattlePrepRoster*)D_8006F09C->node.callbackArg;
+        if (roster->displayObjects->effectSlot == D_8006F09C->effectSlot) {
+            card_image = roster->side0CardImage->img_p;
         } else {
-            var_a3 = temp_v1->unk_28->img_p;
+            card_image = roster->side1CardImage->img_p;
         }
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)var_a3 & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)card_image & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrepRoster_ScrollBackgroundTexture(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Geo callback (draw phase 5) for the 3D V/S logo material: emits D_84B12420, which reflection-maps (G_TEXTURE_GEN)
+ * the 32x32 orange-and-white texture D_84B11C20, then moves the tile's S offset back one texel per frame, wrapping
+ * from below 0 to 0x80, so the shine slides across the logo. Falls off the end without a return value.
+ */
+s32 BattlePrepRoster_ScrollVersusLogoShine(s32 phase, unk_func_80011B94* display_node) {
     static s32 D_84B12490 = 0x80;
 
-    s32 var_v0;
+    s32 unused;
 
-    if (arg0 == 5) {
+    if (phase == 5) {
         D_84B12490--;
         if (D_84B12490 < 0) {
             D_84B12490 = 0x80;
@@ -169,7 +192,7 @@ s32 BattlePrepRoster_ScrollBackgroundTexture(s32 arg0, unk_func_80011B94* arg1) 
     }
 }
 
-static Vtx D_84B12498[] = {
+static Vtx D_84B12498[362] = {
     VTX(-1, -38, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-31, 28, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-21, 35, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(0, -11, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(23, 36, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),  VTX(34, 31, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
@@ -186,8 +209,6 @@ static Vtx D_84B12498[] = {
     VTX(-19, 42, -19, 0, 0, 0x4D, 0x22, 0xAC, 0xFF), VTX(-19, 42, -19, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
     VTX(-21, 35, -25, 0, 0, 0xD1, 0x46, 0xAC, 0xFF), VTX(-31, 28, -25, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
     VTX(-37, 29, -19, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
-};
-static Vtx D_84B12688[] = {
     VTX(-37, 29, -19, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF), VTX(-31, 28, -25, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF),
     VTX(-1, -38, -25, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF), VTX(-4, -43, -19, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF),
     VTX(-4, -43, 19, 0, 0, 0xF7, 0x89, 0x00, 0xFF),  VTX(-4, -43, -19, 0, 0, 0xF7, 0x89, 0x00, 0xFF),
@@ -204,8 +225,6 @@ static Vtx D_84B12688[] = {
     VTX(-37, 29, -19, 0, 0, 0xBD, 0x63, 0x00, 0xFF), VTX(-37, 29, 19, 0, 0, 0xBD, 0x63, 0x00, 0xFF),
     VTX(-37, 29, 19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),  VTX(-37, 29, -19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),
     VTX(-4, -43, -19, 0, 0, 0x93, 0xCF, 0x00, 0xFF), VTX(-4, -43, 19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),
-};
-static Vtx D_84B12888[] = {
     VTX(-1, -38, 25, 0, 0, 0xF9, 0xAC, 0x54, 0xFF), VTX(-4, -43, 19, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),
     VTX(3, -43, 19, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),  VTX(0, -38, 25, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),
     VTX(0, -38, 25, 0, 0, 0x4C, 0xDB, 0x54, 0xFF),  VTX(3, -43, 19, 0, 0, 0x4C, 0xDB, 0x54, 0xFF),
@@ -222,13 +241,9 @@ static Vtx D_84B12888[] = {
     VTX(-4, -43, 19, 0, 0, 0xB3, 0xDD, 0x54, 0xFF), VTX(-1, -38, 25, 0, 0, 0xB3, 0xDD, 0x54, 0xFF),
     VTX(0, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(34, 31, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(23, 36, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, -11, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B12A88[] = {
     VTX(0, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, -11, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-21, 35, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF), VTX(-31, 28, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-1, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B12AD8[] = {
     VTX(0, 33, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(8, 36, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(12, 30, -25, 0, 0, 0x0D, 0xD5, 0x92, 0xFF),  VTX(12, 30, -25, 0, 0, 0x13, 0xC7, 0x99, 0xFF),
     VTX(8, 28, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(23, -12, -19, 0, 0, 0x51, 0x02, 0xA8, 0xFF),
@@ -245,8 +260,6 @@ static Vtx D_84B12AD8[] = {
     VTX(-1, 37, -19, 0, 0, 0xD9, 0x4A, 0xAB, 0xFF),  VTX(-9, 26, -25, 0, 0, 0xCA, 0x40, 0xAB, 0xFF),
     VTX(-12, 30, -19, 0, 0, 0xCA, 0x40, 0xAB, 0xFF), VTX(-16, 19, -25, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF),
     VTX(-20, 21, -19, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF), VTX(-18, 14, -25, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),
-};
-static Vtx D_84B12CD8[] = {
     VTX(-20, 21, -19, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF),  VTX(-18, 14, -25, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),
     VTX(-23, 14, -19, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),  VTX(-23, 14, -19, 0, 0, 0xB1, 0xE4, 0xAC, 0xFF),
     VTX(-18, 14, -25, 0, 0, 0xB1, 0xE4, 0xAC, 0xFF),  VTX(-16, 8, -25, 0, 0, 0xB8, 0xD6, 0xAB, 0xFF),
@@ -263,8 +276,6 @@ static Vtx D_84B12CD8[] = {
     VTX(-9, -38, -25, 0, 0, 0x25, 0xB4, 0xAC, 0xFF),  VTX(-2, -34, -25, 0, 0, 0x2C, 0xB9, 0xAB, 0xFF),
     VTX(0, -38, -19, 0, 0, 0x2C, 0xB9, 0xAB, 0xFF),   VTX(7, -26, -25, 0, 0, 0x39, 0xC3, 0xAB, 0xFF),
     VTX(11, -30, -19, 0, 0, 0x39, 0xC3, 0xAB, 0xFF),  VTX(15, -17, -25, 0, 0, 0x47, 0xD5, 0xAB, 0xFF),
-};
-static Vtx D_84B12ED8[] = {
     VTX(11, -30, -19, 0, 0, 0x39, 0xC3, 0xAB, 0xFF), VTX(15, -17, -25, 0, 0, 0x47, 0xD5, 0xAB, 0xFF),
     VTX(19, -20, -19, 0, 0, 0x47, 0xD5, 0xAB, 0xFF), VTX(17, -12, -25, 0, 0, 0x51, 0x02, 0xA8, 0xFF),
     VTX(23, -12, -19, 0, 0, 0x51, 0x02, 0xA8, 0xFF), VTX(23, -12, 19, 0, 0, 0x77, 0x03, 0x00, 0xFF),
@@ -281,8 +292,6 @@ static Vtx D_84B12ED8[] = {
     VTX(20, 27, -19, 0, 0, 0x63, 0x42, 0x00, 0xFF),  VTX(10, 42, -19, 0, 0, 0x63, 0x42, 0x00, 0xFF),
     VTX(10, 42, 19, 0, 0, 0x63, 0x42, 0x00, 0xFF),   VTX(10, 42, 19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),
     VTX(10, 42, -19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),  VTX(-1, 37, -19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),
-};
-static Vtx D_84B130D8[] = {
     VTX(10, 42, 19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),    VTX(-1, 37, -19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),
     VTX(-1, 37, 19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),    VTX(-12, 30, -19, 0, 0, 0xB3, 0x5B, 0x00, 0xFF),
     VTX(-12, 30, 19, 0, 0, 0xB3, 0x5B, 0x00, 0xFF),   VTX(-20, 21, -19, 0, 0, 0x9C, 0x40, 0x00, 0xFF),
@@ -299,8 +308,6 @@ static Vtx D_84B130D8[] = {
     VTX(-19, -27, -19, 0, 0, 0x90, 0xD6, 0x00, 0xFF), VTX(-12, -45, -19, 0, 0, 0x90, 0xD6, 0x00, 0xFF),
     VTX(-12, -45, 19, 0, 0, 0x90, 0xD6, 0x00, 0xFF),  VTX(-12, -45, 19, 0, 0, 0x35, 0x95, 0x00, 0xFF),
     VTX(-12, -45, -19, 0, 0, 0x35, 0x95, 0x00, 0xFF), VTX(0, -38, -19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),
-};
-static Vtx D_84B132D8[] = {
     VTX(-12, -45, 19, 0, 0, 0x35, 0x95, 0x00, 0xFF), VTX(0, -38, -19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),
     VTX(0, -38, 19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),   VTX(11, -30, -19, 0, 0, 0x51, 0xA9, 0x00, 0xFF),
     VTX(11, -30, 19, 0, 0, 0x51, 0xA9, 0x00, 0xFF),  VTX(19, -20, -19, 0, 0, 0x66, 0xC2, 0x00, 0xFF),
@@ -317,8 +324,6 @@ static Vtx D_84B132D8[] = {
     VTX(12, 30, 25, 0, 0, 0x0D, 0xD5, 0x6E, 0xFF),   VTX(12, 30, 25, 0, 0, 0x46, 0x2F, 0x54, 0xFF),
     VTX(20, 27, 19, 0, 0, 0x46, 0x2F, 0x54, 0xFF),   VTX(10, 42, 19, 0, 0, 0x15, 0x46, 0x5E, 0xFF),
     VTX(8, 36, 25, 0, 0, 0x15, 0x46, 0x5E, 0xFF),    VTX(-1, 37, 19, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),
-};
-static Vtx D_84B134D8[] = {
     VTX(8, 36, 25, 0, 0, 0x15, 0x46, 0x5E, 0xFF),    VTX(-1, 37, 19, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),
     VTX(0, 33, 25, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),    VTX(-12, 30, 19, 0, 0, 0xCA, 0x40, 0x55, 0xFF),
     VTX(-9, 26, 25, 0, 0, 0xCA, 0x40, 0x55, 0xFF),   VTX(-20, 21, 19, 0, 0, 0xBA, 0x2D, 0x55, 0xFF),
@@ -335,8 +340,6 @@ static Vtx D_84B134D8[] = {
     VTX(-9, -38, 25, 0, 0, 0xAE, 0xDE, 0x4F, 0xFF),  VTX(-9, -38, 25, 0, 0, 0x25, 0xB4, 0x54, 0xFF),
     VTX(-12, -45, 19, 0, 0, 0x25, 0xB4, 0x54, 0xFF), VTX(0, -38, 19, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),
     VTX(-2, -34, 25, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),  VTX(11, -30, 19, 0, 0, 0x39, 0xC3, 0x55, 0xFF),
-};
-static Vtx D_84B136D8[] = {
     VTX(-2, -34, 25, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),   VTX(11, -30, 19, 0, 0, 0x39, 0xC3, 0x55, 0xFF),
     VTX(7, -26, 25, 0, 0, 0x39, 0xC3, 0x55, 0xFF),    VTX(19, -20, 19, 0, 0, 0x47, 0xD5, 0x55, 0xFF),
     VTX(15, -17, 25, 0, 0, 0x47, 0xD5, 0x55, 0xFF),   VTX(23, -12, 19, 0, 0, 0x51, 0x02, 0x58, 0xFF),
@@ -353,8 +356,6 @@ static Vtx D_84B136D8[] = {
     VTX(0, 8, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),     VTX(7, 0, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(1, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(15, -6, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(17, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),  VTX(15, -17, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
-};
-static Vtx D_84B138D8[] = {
     VTX(-2, -21, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(1, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(15, -17, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(7, -26, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-8, -26, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-2, -34, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
@@ -371,8 +372,6 @@ static Vtx D_84B138D8[] = {
     VTX(-2, -5, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),   VTX(1, -12, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(17, -12, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(15, -17, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(7, -26, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),   VTX(-2, -21, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B13AD8[] = {
     VTX(7, 0, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(-2, -5, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-10, 1, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-16, 8, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-10, 1, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, 8, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
@@ -389,7 +388,7 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(19, 21, 22, 0, 23, 24, 25, 0),
     gsSP2Triangles(23, 25, 26, 0, 27, 28, 29, 0),
     gsSP1Triangle(27, 29, 30, 0),
-    gsSPVertex(D_84B12688, 32, 0),
+    gsSPVertex(&D_84B12498[31], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
     gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
@@ -398,7 +397,7 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(20, 21, 22, 0, 20, 22, 23, 0),
     gsSP2Triangles(24, 25, 26, 0, 24, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B12888, 32, 0),
+    gsSPVertex(&D_84B12498[63], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
     gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
@@ -407,13 +406,13 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(20, 21, 22, 0, 20, 22, 23, 0),
     gsSP2Triangles(24, 25, 26, 0, 24, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B12A88, 5, 0),
+    gsSPVertex(&D_84B12498[95], 5, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP1Triangle(0, 3, 4, 0),
     gsSPEndDisplayList(),
 };
 static Gfx D_84B13C40[] = {
-    gsSPVertex(D_84B12AD8, 32, 0),
+    gsSPVertex(&D_84B12498[100], 32, 0),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(0, 3, 4, 0, 5, 6, 7, 0),
@@ -429,7 +428,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(24, 25, 26, 0, 26, 25, 27, 0),
     gsSP2Triangles(26, 27, 28, 0, 28, 27, 29, 0),
     gsSP2Triangles(28, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B12CD8, 32, 0),
+    gsSPVertex(&D_84B12498[132], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
     gsSP2Triangles(3, 5, 6, 0, 6, 5, 7, 0),
     gsSP2Triangles(6, 7, 8, 0, 8, 7, 9, 0),
@@ -442,7 +441,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(21, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 28, 27, 29, 0),
     gsSP2Triangles(28, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B12ED8, 32, 0),
+    gsSPVertex(&D_84B12498[164], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 5, 6, 7, 0),
     gsSP2Triangles(5, 7, 8, 0, 8, 7, 9, 0),
@@ -454,7 +453,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(20, 21, 22, 0, 22, 21, 23, 0),
     gsSP2Triangles(22, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 29, 30, 31, 0),
-    gsSPVertex(D_84B130D8, 32, 0),
+    gsSPVertex(&D_84B12498[196], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -468,7 +467,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(20, 21, 22, 0, 22, 21, 23, 0),
     gsSP2Triangles(22, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 29, 30, 31, 0),
-    gsSPVertex(D_84B132D8, 32, 0),
+    gsSPVertex(&D_84B12498[228], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -482,7 +481,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(22, 23, 24, 0, 24, 23, 25, 0),
     gsSP2Triangles(24, 25, 26, 0, 27, 28, 29, 0),
     gsSP2Triangles(27, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B134D8, 32, 0),
+    gsSPVertex(&D_84B12498[260], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -497,7 +496,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(22, 23, 24, 0, 24, 23, 25, 0),
     gsSP2Triangles(24, 25, 26, 0, 27, 28, 29, 0),
     gsSP2Triangles(27, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B136D8, 32, 0),
+    gsSPVertex(&D_84B12498[292], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 7, 8, 9, 0),
@@ -509,7 +508,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(24, 23, 22, 0, 25, 24, 22, 0),
     gsSP2Triangles(25, 22, 26, 0, 25, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B138D8, 32, 0),
+    gsSPVertex(&D_84B12498[324], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 0, 3, 0, 4, 3, 5, 0),
     gsSP2Triangles(6, 7, 8, 0, 6, 8, 9, 0),
@@ -523,13 +522,13 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(29, 28, 27, 0, 30, 29, 27, 0),
     gsSP2Triangles(30, 27, 31, 0, 10, 30, 31, 0),
     gsSP2Triangles(10, 31, 6, 0, 21, 26, 20, 0),
-    gsSPVertex(D_84B13AD8, 6, 0),
+    gsSPVertex(&D_84B12498[356], 6, 0),
     gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
     gsSPEndDisplayList(),
 };
 static u32 D_84B13FC8[] = {
     0x17000000, 0x0000016A, 0x00000000, 0x00000000, D_84B12498,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_ScrollBackgroundTexture,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_ScrollVersusLogoShine,
     0x00000000, 0x1B000000, 0x00000000, 0x0000001B, 0x00040000,
     0x05000000, 0x22010000, D_84B13C40, 0x06000000, 0x1B000000,
     0x00000000, 0x0000FFD2, 0x00010000, 0x05000000, 0x22010000,
@@ -562,13 +561,13 @@ static Gfx D_84B14100[] = {
 static u32 D_84B141E8[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14040,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0xFFD00000,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_DrawTrainerBadge,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_DrawTrainerCard,
     D_84B14100, 0x06000000, 0x06000000, 0x01000000,
 };
 static u32 D_84B14234[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B14040,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00300000,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_DrawTrainerBadge,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepRoster_DrawTrainerCard,
     D_84B14100, 0x06000000, 0x06000000, 0x01000000,
 };
 static Vtx D_84B14280[] = {
@@ -644,7 +643,7 @@ static u32 D_84B146C0[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantA,
+    BattlePrepRoster_DrawIconColumnSingle,
     0x00000000,
     0x22050000,
     D_84B14480,
@@ -657,7 +656,7 @@ static u32 D_84B146C0[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantA,
+    BattlePrepRoster_DrawIconColumnSingle,
     0x00000001,
     0x22050000,
     D_84B14480,
@@ -681,7 +680,7 @@ static u32 D_84B1474C[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantA,
+    BattlePrepRoster_DrawIconColumnSingle,
     0x00000000,
     0x22050000,
     D_84B14480,
@@ -694,7 +693,7 @@ static u32 D_84B1474C[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantA,
+    BattlePrepRoster_DrawIconColumnSingle,
     0x00000001,
     0x22050000,
     D_84B14480,
@@ -760,7 +759,7 @@ static u32 D_84B14A90[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000000,
     0x22050000,
     D_84B14918,
@@ -773,7 +772,7 @@ static u32 D_84B14A90[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000001,
     0x22050000,
     D_84B14918,
@@ -786,7 +785,7 @@ static u32 D_84B14A90[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000002,
     0x22050000,
     D_84B14918,
@@ -810,7 +809,7 @@ static u32 D_84B14B50[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000000,
     0x22050000,
     D_84B14918,
@@ -823,7 +822,7 @@ static u32 D_84B14B50[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000001,
     0x22050000,
     D_84B14918,
@@ -836,7 +835,7 @@ static u32 D_84B14B50[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrepRoster_DrawIconVariantB,
+    BattlePrepRoster_DrawIconColumnDouble,
     0x00000002,
     0x22050000,
     D_84B14918,
@@ -846,30 +845,36 @@ static u32 D_84B14B50[] = {
     0x01000000,
 };
 
-s32 BattlePrepRoster_ConvergeIconsStep(unk_D_84B25A28* arg0, s16 arg1) {
+/**
+ * Flips the versus panels into place about X: each frame through frame `duration` (20 NTSC / 16 PAL), the top row
+ * (display objects 0-4, side 0) turns by -rotation_step and the bottom row (5-9, side 1) by +rotation_step, exactly
+ * undoing the start tilt of 0x5400 (0x53F0 PAL) set in BattlePrepRoster_InitDisplayObjects. Plays sound 0x01100006
+ * on frame 0. Returns 0 while flipping, 1 when done.
+ */
+s32 BattlePrepRoster_FlipInPanelsStep(BattlePrepRoster* roster, s16 frame) {
     s16 i;
-    s16 sp24;
-    s16 sp22;
+    s16 duration;
+    s16 rotation_step;
 
     if (osTvType == OS_TV_PAL) {
-        sp24 = 0x10;
-        sp22 = 0x4F0;
+        duration = 0x10;
+        rotation_step = 0x4F0;
     } else {
-        sp24 = 0x14;
-        sp22 = 0x400;
+        duration = 0x14;
+        rotation_step = 0x400;
     }
 
-    if (arg1 == 0) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100006, 0, 0);
     }
 
-    if (sp24 >= arg1) {
+    if (duration >= frame) {
         for (i = 0; i < 5; i++) {
-            arg0->unk_04[i].rotation.x -= sp22;
+            roster->displayObjects[i].rotation.x -= rotation_step;
         }
 
         for (i = 5; i < 10; i++) {
-            arg0->unk_04[i].rotation.x += sp22;
+            roster->displayObjects[i].rotation.x += rotation_step;
         }
 
         return 0;
@@ -878,287 +883,349 @@ s32 BattlePrepRoster_ConvergeIconsStep(unk_D_84B25A28* arg0, s16 arg1) {
     return 1;
 }
 
-void BattlePrepRoster_UpdateCameraSwoop(unk_D_84B25A28* arg0, s16 arg1) {
-    arg0->unk_08->view.targetPosition.y = SINS(arg1 << 0xE) * SQ((0x10 - arg1) / 12.0f);
-    Camera_ComputeEyeFromAngles(&arg0->unk_08->view.targetPosition, &arg0->unk_08->view.eyePosition, 289.0f, 0, 0);
+/**
+ * Bounces the camera after the V/S logo lands: sets the camera target Y to sin(frame * 90 degrees) * ((16 - frame)
+ * / 12)^2, a damped oscillation with a 4-frame period that dies out at frame 16, and recomputes the eye 289 units
+ * from the target.
+ */
+void BattlePrepRoster_ShakeCamera(BattlePrepRoster* roster, s16 frame) {
+    roster->camera->view.targetPosition.y = SINS(frame << 0xE) * SQ((0x10 - frame) / 12.0f);
+    Camera_ComputeEyeFromAngles(&roster->camera->view.targetPosition, &roster->camera->view.eyePosition, 289.0f, 0, 0);
 }
 
-s32 BattlePrepRoster_ZoomStepNTSC(unk_D_84B25A28* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * NTSC V/S logo animation. Frames 0-19 move the logo (display object 10) from z = -80 to z = -650, so it flies away
+ * from the camera into the screen; frames 20-35 shake the camera with BattlePrepRoster_ShakeCamera. Plays sound
+ * 0x01100007 on frame 0 and 0x01100008 on frame 21. Returns 0 while running, 1 when done.
+ */
+s32 BattlePrepRoster_VersusLogoStepNTSC(BattlePrepRoster* roster, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100007, 0, 0);
     }
 
-    if (arg1 == 0x15) {
+    if (frame == 0x15) {
         Audio_PlayCategory11SoundCommand(0x01100008, 0, 0);
     }
 
-    if (arg1 < 0x14) {
-        arg0->unk_04[10].position.z = -80.0f - (arg1 * 30.0f);
+    if (frame < 0x14) {
+        roster->displayObjects[10].position.z = -80.0f - (frame * 30.0f);
         return 0;
     }
 
-    if (arg1 < 0x24) {
-        BattlePrepRoster_UpdateCameraSwoop(arg0, arg1 - 0x13);
+    if (frame < 0x24) {
+        BattlePrepRoster_ShakeCamera(roster, frame - 0x13);
         return 0;
     }
     return 1;
 }
 
-s32 BattlePrepRoster_ZoomStepPAL(unk_D_84B25A28* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * PAL timing of BattlePrepRoster_VersusLogoStepNTSC: frames 0-15 move the logo from z = -80 to z = -650 (38 units
+ * per frame), frames 16-31 shake the camera. Plays sound 0x01100007 on frame 0 and 0x01100008 on frame 17. Returns
+ * 0 while running, 1 when done.
+ */
+s32 BattlePrepRoster_VersusLogoStepPAL(BattlePrepRoster* roster, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100007, 0, 0);
     }
 
-    if (arg1 == 0x11) {
+    if (frame == 0x11) {
         Audio_PlayCategory11SoundCommand(0x01100008, 0, 0);
     }
 
-    if (arg1 < 0x10) {
-        arg0->unk_04[10].position.z = -80.0f - (arg1 * 38.0f);
+    if (frame < 0x10) {
+        roster->displayObjects[10].position.z = -80.0f - (frame * 38.0f);
         return 0;
     }
 
-    if (arg1 < 0x20) {
-        BattlePrepRoster_UpdateCameraSwoop(arg0, arg1 - 0xF);
+    if (frame < 0x20) {
+        BattlePrepRoster_ShakeCamera(roster, frame - 0xF);
         return 0;
     }
 
     return 1;
 }
 
-void BattlePrepRoster_UpdateAssembleStep(unk_D_84B25A28* arg0) {
-    s32 sp24 = 1;
+/**
+ * State 3 tick of the versus intro: runs BattlePrepRoster_FlipInPanelsStep from frame 0 and the TV-specific V/S
+ * logo step from frame 16 (13 on PAL), so the two overlap. Returns to state 0 once both report done, and advances
+ * timer on every call.
+ */
+void BattlePrepRoster_UpdateAnimationStep(BattlePrepRoster* roster) {
+    s32 is_done = 1;
 
     if (osTvType == OS_TV_PAL) {
-        if (arg0->unk_01 >= 0) {
-            sp24 = BattlePrepRoster_ConvergeIconsStep(arg0, arg0->unk_01) & 1;
+        if (roster->timer >= 0) {
+            is_done = BattlePrepRoster_FlipInPanelsStep(roster, roster->timer) & 1;
         }
 
-        if (arg0->unk_01 >= 0xD) {
-            sp24 &= BattlePrepRoster_ZoomStepPAL(arg0, arg0->unk_01 - 0xD);
+        if (roster->timer >= 0xD) {
+            is_done &= BattlePrepRoster_VersusLogoStepPAL(roster, roster->timer - 0xD);
         }
     } else {
-        if (arg0->unk_01 >= 0) {
-            sp24 = BattlePrepRoster_ConvergeIconsStep(arg0, arg0->unk_01) & 1;
+        if (roster->timer >= 0) {
+            is_done = BattlePrepRoster_FlipInPanelsStep(roster, roster->timer) & 1;
         }
 
-        if (arg0->unk_01 >= 0x10) {
-            sp24 &= BattlePrepRoster_ZoomStepNTSC(arg0, arg0->unk_01 - 0x10);
+        if (roster->timer >= 0x10) {
+            is_done &= BattlePrepRoster_VersusLogoStepNTSC(roster, roster->timer - 0x10);
         }
     }
 
-    if (sp24 != 0) {
-        arg0->unk_00 = 0;
+    if (is_done != 0) {
+        roster->state = 0;
     }
-    arg0->unk_01++;
+    roster->timer++;
 }
 
-void BattlePrepRoster_UpdateLoadingStep(unk_D_84B25A28* arg0) {
-    PokeIcon_ProcessNextSlot(arg0->unk_20, 0);
+/**
+ * State 1 tick: renders one PokeIcon slot per frame. Once at least 30 frames have passed and every slot is idle,
+ * resets timer and sets state 2, so BattlePrepRoster_InitDisplayObjects can build the scene.
+ */
+void BattlePrepRoster_UpdateLoadingStep(BattlePrepRoster* roster) {
+    PokeIcon_ProcessNextSlot(roster->iconRenderList, 0);
 
-    arg0->unk_01++;
-    if ((arg0->unk_01 >= 0x1E) && (PokeIcon_AreSlotsIdle(arg0->unk_20) != 0)) {
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 2;
+    roster->timer++;
+    if ((roster->timer >= 0x1E) && (PokeIcon_AreSlotsIdle(roster->iconRenderList) != 0)) {
+        roster->timer = 0;
+        roster->state = 2;
     }
 }
 
-void BattlePrepRoster_Update(unk_D_84B25A28* arg0) {
-    switch (arg0->unk_00) {
+/**
+ * Per-frame update for the versus screen: state 1 loads the icons, state 3 runs the intro animation; states 0 and 2
+ * do nothing.
+ */
+void BattlePrepRoster_Update(BattlePrepRoster* roster) {
+    switch (roster->state) {
         case 1:
-            BattlePrepRoster_UpdateLoadingStep(arg0);
+            BattlePrepRoster_UpdateLoadingStep(roster);
             break;
 
         case 3:
-            BattlePrepRoster_UpdateAssembleStep(arg0);
+            BattlePrepRoster_UpdateAnimationStep(roster);
             break;
     }
 }
 
-void BattlePrepRoster_LoadDexIdsSingle(unk_D_84B25A28* arg0) {
+/**
+ * Attaches a 0x80x0x60 depth buffer to the icon render list and queues a species icon for each Pokémon in both
+ * trainers' rosters (rosterInfo->numberOfPokemonCanBePicked entries): side 0 into slots 0-5, side 1 into slots
+ * 6-11.
+ */
+void BattlePrepRoster_QueueIconsSingle(BattlePrepRoster* roster) {
     s32 i;
-    s32 count;
-    ModelLoadContext* temp_s0;
+    s32 slot;
+    ModelLoadContext* load_context;
 
-    temp_s0 = PokeIcon_AllocFramebuffers(5);
-    PokeIcon_AttachDepthBuffer(arg0->unk_20, temp_s0, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
+    load_context = PokeIcon_AllocFramebuffers(5);
+    PokeIcon_AttachDepthBuffer(roster->iconRenderList, load_context, GfxImage_Allocate(0, 2, 0x80, 0x60, 1));
 
-    for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
-         count++, i++) {
-        func_8001A324(arg0->unk_20, count,
+    for (slot = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+         slot++, i++) {
+        func_8001A324(roster->iconRenderList, slot,
                       gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
-    for (count = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
-         count++, i++) {
-        func_8001A324(arg0->unk_20, count,
+    for (slot = 6, i = 0; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+         slot++, i++) {
+        func_8001A324(roster->iconRenderList, slot,
                       gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 }
 
-void BattlePrepRoster_LoadDexIdsDouble(unk_D_84B25A28* arg0) {
+/**
+ * Tag-team counterpart of BattlePrepRoster_QueueIconsSingle with a 0x60x0x40 depth buffer: side 0's first and
+ * second members go into slots 0-5 and 6-11, side 1's into 12-17 and 18-23. Absent second members are skipped.
+ */
+void BattlePrepRoster_QueueIconsDouble(BattlePrepRoster* roster) {
     s32 i;
-    s32 count;
-    ModelLoadContext* tmp = PokeIcon_AllocFramebuffers(5);
+    s32 slot;
+    ModelLoadContext* load_context = PokeIcon_AllocFramebuffers(5);
 
-    PokeIcon_AttachDepthBuffer(arg0->unk_20, tmp, GfxImage_Allocate(0, 2, 0x60, 0x40, 1));
+    PokeIcon_AttachDepthBuffer(roster->iconRenderList, load_context, GfxImage_Allocate(0, 2, 0x60, 0x40, 1));
 
-    for (count = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
-         count++, i++) {
-        func_8001A324(arg0->unk_20, count,
+    for (slot = 0, i = 0; i < gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+         slot++, i++) {
+        func_8001A324(roster->iconRenderList, slot,
                       gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
     if (gSessionContext.battleSides[0].tagTeamMember[1] != NULL) {
-        for (i = 0, count = 6; i < gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked;
-             count++, i++) {
-            func_8001A324(arg0->unk_20, count,
+        for (i = 0, slot = 6; i < gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked;
+             slot++, i++) {
+            func_8001A324(roster->iconRenderList, slot,
                           gSessionContext.battleSides[0].tagTeamMember[1]->rosterInfo->battleMon[i].species.id, 0);
         }
     }
 
-    for (i = 0, count = 12; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
-         count++, i++) {
-        func_8001A324(arg0->unk_20, count,
+    for (i = 0, slot = 12; i < gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->numberOfPokemonCanBePicked;
+         slot++, i++) {
+        func_8001A324(roster->iconRenderList, slot,
                       gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->battleMon[i].species.id, 0);
     }
 
     if (gSessionContext.battleSides[1].tagTeamMember[1] != NULL) {
-        for (count = 18, i = 0;
-             i < gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked; count++, i++) {
-            func_8001A324(arg0->unk_20, count,
+        for (slot = 18, i = 0;
+             i < gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->numberOfPokemonCanBePicked; slot++, i++) {
+            func_8001A324(roster->iconRenderList, slot,
                           gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->battleMon[i].species.id, 0);
         }
     }
 }
 
-void BattlePrepRoster_Load(unk_D_84B25A28* arg0, BinArchive* arg1) {
-    u8* sp24 = BinArchive_GetFile(arg1, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
-    u8* sp20 = BinArchive_GetFile(arg1, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
+/**
+ * Opens the PokeIcon model archives, loads the particle data library fragment, queues the roster icons for the
+ * current layout, and draws both trainer cards (side 0 on the D_3000000 background, side 1 on D_3003000, each with
+ * the trainer's portrait from portrait_archive). Sets state 1 (loading).
+ */
+void BattlePrepRoster_Load(BattlePrepRoster* roster, BinArchive* portrait_archive) {
+    u8* side0_portrait = BinArchive_GetFile(portrait_archive, gSessionContext.battleSides[0].tagTeamMember[0]->rosterInfo->unk_003);
+    u8* side1_portrait = BinArchive_GetFile(portrait_archive, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
 
     PokeIcon_OpenModelArchives();
     FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
-    if (arg0->unk_02 == 1) {
-        BattlePrepRoster_LoadDexIdsDouble(arg0);
+    if (roster->isDoubleLayout == 1) {
+        BattlePrepRoster_QueueIconsDouble(roster);
     } else {
-        BattlePrepRoster_LoadDexIdsSingle(arg0);
+        BattlePrepRoster_QueueIconsSingle(roster);
     }
 
-    BattlePrep_DrawTrainerStatusIcon(arg0->unk_24, 0, sp24, D_3000000);
-    BattlePrep_DrawTrainerStatusIcon(arg0->unk_28, 1, sp20, D_3003000);
-    arg0->unk_00 = 1;
+    BattlePrep_RenderTrainerPortrait(roster->side0CardImage, 0, side0_portrait, D_3000000);
+    BattlePrep_RenderTrainerPortrait(roster->side1CardImage, 1, side1_portrait, D_3003000);
+    roster->state = 1;
 }
 
-void BattlePrepRoster_PositionIconsSingle(unk_D_84B25A28* arg0) {
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[0].position, -96.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[2].position, -32.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[3].position, 32.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[4].position, 96.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[5].position, -96.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[6].position, -32.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[7].position, 32.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[9].position, 96.0f, -96.0f, -289.0f);
+/**
+ * Single layout: places side 0's card (display object 0) and icon columns (2-4) along y = +96, and side 1's icon
+ * columns (5-7) and card (9) along y = -96, 64 units apart at z = -289. Hides the unused column nodes 1 and 8.
+ */
+void BattlePrepRoster_PositionPanelsSingle(BattlePrepRoster* roster) {
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[0].position, -96.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[2].position, -32.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[3].position, 32.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[4].position, 96.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[5].position, -96.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[6].position, -32.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[7].position, 32.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[9].position, 96.0f, -96.0f, -289.0f);
 
-    arg0->unk_04[1].node.flags &= ~1;
-    arg0->unk_04[8].node.flags &= ~1;
+    roster->displayObjects[1].node.flags &= ~1;
+    roster->displayObjects[8].node.flags &= ~1;
 }
 
-void BattlePrepRoster_PositionIconsDouble(unk_D_84B25A28* arg0) {
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[0].position, -96.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[1].position, -40.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[2].position, 8.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[3].position, 56.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[4].position, 104.0f, 96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[5].position, -104.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[6].position, -56.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[7].position, -8.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[8].position, 40.0f, -96.0f, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_04[9].position, 96.0f, -96.0f, -289.0f);
+/**
+ * Tag-team layout: places side 0's card (display object 0, x = -96) and four 48-unit icon columns (1-4) along y =
+ * +96, and side 1's columns (5-8) and card (9, x = 96) along y = -96, at z = -289.
+ */
+void BattlePrepRoster_PositionPanelsDouble(BattlePrepRoster* roster) {
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[0].position, -96.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[1].position, -40.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[2].position, 8.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[3].position, 56.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[4].position, 104.0f, 96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[5].position, -104.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[6].position, -56.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[7].position, -8.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[8].position, 40.0f, -96.0f, -289.0f);
+    Vec3f_SetComponentsDuplicate(&roster->displayObjects[9].position, 96.0f, -96.0f, -289.0f);
 }
 
-s32 BattlePrepRoster_InitDisplayObjects(unk_D_84B25A28* arg0, DisplayObject* arg1) {
+/**
+ * Once loading has reached state 2: stores the display objects and points their callbackArg at the roster, tilts
+ * the top row to start_rotation and the bottom row to -start_rotation about X for
+ * BattlePrepRoster_FlipInPanelsStep, binds objects 0-9 to the trainer card and icon column geo layouts and object
+ * 10 to the V/S logo (parked at z = 1000 until the logo step moves it), positions the panels, and enters state 3.
+ * Returns 1 once in state 3.
+ */
+s32 BattlePrepRoster_InitDisplayObjects(BattlePrepRoster* roster, DisplayObject* display_objects) {
     s32 i;
-    s16 var_a1;
+    s16 start_rotation;
 
-    if (arg0->unk_00 == 2) {
-        arg0->unk_00 = 3;
-        arg0->unk_04 = arg1;
-        arg0->unk_01 = 0;
+    if (roster->state == 2) {
+        roster->state = 3;
+        roster->displayObjects = display_objects;
+        roster->timer = 0;
         if (osTvType == OS_TV_PAL) {
-            var_a1 = 0x53F0;
+            start_rotation = 0x53F0;
         } else {
-            var_a1 = 0x5400;
+            start_rotation = 0x5400;
         }
 
         for (i = 0; i < 11; i++) {
-            arg0->unk_04[i].node.callbackArg = arg0;
+            roster->displayObjects[i].node.callbackArg = roster;
         }
 
         for (i = 0; i < 5; i++) {
-            arg0->unk_04[i].rotation.x = var_a1;
+            roster->displayObjects[i].rotation.x = start_rotation;
         }
 
         // clang-format off
-        for (i = 5; i < 10; i++) { arg0->unk_04[i].rotation.x = -var_a1; }
+        for (i = 5; i < 10; i++) { roster->displayObjects[i].rotation.x = -start_rotation; }
         // clang-format on
 
-        Model_InitDisplayObject(&arg0->unk_04[0], 1, 0, arg0->unk_14);
-        Model_InitDisplayObject(&arg0->unk_04[1], 1, 0, arg0->unk_0C);
-        Model_InitDisplayObject(&arg0->unk_04[2], 1, 0, arg0->unk_0C);
-        Model_InitDisplayObject(&arg0->unk_04[3], 1, 0, arg0->unk_0C);
-        Model_InitDisplayObject(&arg0->unk_04[4], 1, 0, arg0->unk_0C);
-        Model_InitDisplayObject(&arg0->unk_04[5], 1, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[6], 1, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[7], 1, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[8], 1, 0, arg0->unk_10);
-        Model_InitDisplayObject(&arg0->unk_04[9], 1, 0, arg0->unk_18);
-        Model_InitDisplayObject(&arg0->unk_04[10], 3, 0, arg0->unk_1C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_04[10].position, 0.0f, 0.0f, 1000.0f);
+        Model_InitDisplayObject(&roster->displayObjects[0], 1, 0, roster->side0CardGeo);
+        Model_InitDisplayObject(&roster->displayObjects[1], 1, 0, roster->side0IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[2], 1, 0, roster->side0IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[3], 1, 0, roster->side0IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[4], 1, 0, roster->side0IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[5], 1, 0, roster->side1IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[6], 1, 0, roster->side1IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[7], 1, 0, roster->side1IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[8], 1, 0, roster->side1IconGeo);
+        Model_InitDisplayObject(&roster->displayObjects[9], 1, 0, roster->side1CardGeo);
+        Model_InitDisplayObject(&roster->displayObjects[10], 3, 0, roster->versusLogoGeo);
+        Vec3f_SetComponentsDuplicate(&roster->displayObjects[10].position, 0.0f, 0.0f, 1000.0f);
 
-        if (arg0->unk_02 == 1) {
-            BattlePrepRoster_PositionIconsDouble(arg0);
+        if (roster->isDoubleLayout == 1) {
+            BattlePrepRoster_PositionPanelsDouble(roster);
         } else {
-            BattlePrepRoster_PositionIconsSingle(arg0);
+            BattlePrepRoster_PositionPanelsSingle(roster);
         }
     }
 
-    return arg0->unk_00 == 3;
+    return roster->state == 3;
 }
 
-void BattlePrepRoster_Init(unk_D_84B25A28* arg0, CameraNode* arg1) {
-    MemoryBlock* temp_s1;
+/**
+ * Initializes the versus screen: stores the camera, allocates the two 64x96 trainer card images, selects the
+ * tag-team layout when rule category 0 has a 2-member tag team on either side, creates the PokeIcon render list (24
+ * slots of 0x60x0x40, or 12 of 0x80x0x60), and builds the icon column, trainer card and V/S logo geo layouts.
+ */
+void BattlePrepRoster_Init(BattlePrepRoster* roster, CameraNode* camera) {
+    MemoryBlock* geo_pool;
 
-    arg0->unk_08 = arg1;
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_02 = 0;
-    arg0->unk_24 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
-    arg0->unk_28 = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+    roster->camera = camera;
+    roster->state = 0;
+    roster->timer = 0;
+    roster->isDoubleLayout = 0;
+    roster->side0CardImage = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+    roster->side1CardImage = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
 
     if ((gSessionContext.ruleCategory == 0) &&
         ((gSessionContext.battleSides[0].tagTeamSize == 2) || (gSessionContext.battleSides[1].tagTeamSize == 2))) {
-        arg0->unk_02 = 1;
+        roster->isDoubleLayout = 1;
     }
-    if (arg0->unk_02 == 1) {
-        arg0->unk_20 = PokeIcon_CreateRenderList(NULL, 0x18, 0x60, 0x40);
+    if (roster->isDoubleLayout == 1) {
+        roster->iconRenderList = PokeIcon_CreateRenderList(NULL, 0x18, 0x60, 0x40);
     } else {
-        arg0->unk_20 = PokeIcon_CreateRenderList(NULL, 0xC, 0x80, 0x60);
+        roster->iconRenderList = PokeIcon_CreateRenderList(NULL, 0xC, 0x80, 0x60);
     }
-    PokeIcon_SetNameTable(arg0->unk_20, D_84B17620);
+    PokeIcon_SetNameTable(roster->iconRenderList, sRosterSpeciesIcons);
 
-    temp_s1 = MainPool_AllocState(main_pool_get_available(), 0);
-    if (arg0->unk_02 == 1) {
-        arg0->unk_0C = process_geo_layout(temp_s1, D_84B14A90);
-        arg0->unk_10 = process_geo_layout(temp_s1, D_84B14B50);
+    geo_pool = MainPool_AllocState(main_pool_get_available(), 0);
+    if (roster->isDoubleLayout == 1) {
+        roster->side0IconGeo = process_geo_layout(geo_pool, D_84B14A90);
+        roster->side1IconGeo = process_geo_layout(geo_pool, D_84B14B50);
     } else {
-        arg0->unk_0C = process_geo_layout(temp_s1, D_84B146C0);
-        arg0->unk_10 = process_geo_layout(temp_s1, D_84B1474C);
+        roster->side0IconGeo = process_geo_layout(geo_pool, D_84B146C0);
+        roster->side1IconGeo = process_geo_layout(geo_pool, D_84B1474C);
     }
 
-    arg0->unk_14 = process_geo_layout(temp_s1, D_84B141E8);
-    arg0->unk_18 = process_geo_layout(temp_s1, D_84B14234);
-    arg0->unk_1C = process_geo_layout(temp_s1, D_84B13FC8);
+    roster->side0CardGeo = process_geo_layout(geo_pool, D_84B141E8);
+    roster->side1CardGeo = process_geo_layout(geo_pool, D_84B14234);
+    roster->versusLogoGeo = process_geo_layout(geo_pool, D_84B13FC8);
 
-    MainPool_FinalizeAllocation(temp_s1);
+    MainPool_FinalizeAllocation(geo_pool);
 }

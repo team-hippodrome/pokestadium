@@ -8,15 +8,6 @@
 #include <PR/leo.h>
 #include "src/memory.h"
 
-typedef struct ret_func_unk_D_800ABE10 {
-    /* 0x00 */ char unk00[0x3];
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ unk_D_86002F34** unk_08;
-    /* 0x0C */ char unk0C[0x8];
-    /* 0x14 */ func_unk_D_800ABE10 unk_14;
-} ret_func_unk_D_800ABE10;
-
 // .bss
 unk_D_800ABE10 D_800ABE10;
 
@@ -181,17 +172,17 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
     return var_s0;
 }
 
-s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2) {
+ModelAnimationBank* Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2) {
     s32 i;
     unk_D_86002F34* temp_v0_2;
-    ret_func_unk_D_800ABE10* temp_v0;
-    ret_func_unk_D_800ABE10* (*func)(s32, s32) = arg1;
+    ModelAnimationBank* temp_v0;
+    ModelAnimationBank* (*func)(s32, s32) = arg1;
 
     temp_v0 = func(0, 0);
-    temp_v0->unk_14 = arg1;
+    temp_v0->entryPoint = arg1;
 
-    for (i = 0; i < temp_v0->unk_03; i++) {
-        temp_v0_2 = process_geo_layout(arg0, temp_v0->unk_08[i]);
+    for (i = 0; i < temp_v0->modelCount; i++) {
+        temp_v0_2 = process_geo_layout(arg0, temp_v0->nodes[i]);
 
         if (temp_v0_2->node.type == 0xE) {
             temp_v0_2->unk_28 = arg1;
@@ -199,7 +190,7 @@ s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010
                 func_80018C40(temp_v0_2, arg2);
             }
         }
-        temp_v0->unk_08[i] = temp_v0_2;
+        temp_v0->nodes[i] = temp_v0_2;
     }
 
     return temp_v0;
@@ -236,7 +227,7 @@ void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
     Fragment* temp_v0;
     MainPoolState* temp_s3;
     s32 var_s2;
-    s32* temp_s6;
+    arg1_func_80019420** temp_s6;
     s16* var_s0;
 
     temp_s6 = arg0->unk_08;
@@ -325,24 +316,19 @@ ModelLoadContext* PokeIcon_AllocFramebuffers(u32 flags) {
     return temp_v0;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/display_object_textures/PokeIcon_OpenModelArchives.s")
-#else
 void PokeIcon_OpenModelArchives(void) {
+#if defined(VERSION_US_REV2)
+    D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x919000, 0, 1, 1);
+    D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8C7000, 0, 1, 1);
+#elif defined(VERSION_JP)
     D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x920000, NULL, 1, 1);
-    // The second archive's ROM offset moved between releases: 0x8CC000 in US 1.0, 0x8C8000 in
-    // the Japanese release (yamls/<version>/rom.yaml, the unnamed bin segment that keeps the US
-    // offset 8CC000 as its name). European releases place it elsewhere again (Spain: 0x8A8000)
-    // and still build this file from assembly, so they need their own value here before the file
-    // can be C for them.
-#if defined(VERSION_JP)
     D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8C8000, NULL, 1, 1);
 #else
+    D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x920000, NULL, 1, 1);
     D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8CC000, NULL, 1, 1);
 #endif
     D_800ABE10.unk_A04.unk_08 = main_pool_alloc(0x28000, 1);
 }
-#endif
 
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2) {
     s32 sp1C;
@@ -390,7 +376,7 @@ s32 PokeIcon_RequestFrameLoadWithVariant(ModelLoadContext* arg0, u16 arg1, arg1_
     return 0;
 }
 
-s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2) {
+s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s16* arg1, s32 arg2) {
     s32 sp1C = 0;
     sp18_func_800198E4* temp_v0;
 
@@ -506,17 +492,17 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     sp2C = BinArchive_GetFile(D_800ABE10.unk_A04.unk_00, arg0->species.id - 1);
     if (sp2C != NULL) {
         sp20 = MainPool_AllocState(main_pool_get_available(), 0);
-        Model_ComputeSizeVariant(&sp28, arg0);
+        Model_ComputeNicknameColorVariant(&sp28, arg0);
         sp24 = Fragment_ProcessGeoLayout(sp20, sp2C, sp28);
         MainPool_FinalizeAllocation(sp20);
     }
     return sp24;
 }
 
-s32 Model_LoadWithScale(s32 arg0, s32 arg1) {
+unk_D_86002F30* Model_LoadWithScale(s32 arg0, s32 arg1) {
     Fragment* sp2C;
     arg1_func_80010CA8 sp28;
-    s32 sp24 = 0;
+    unk_D_86002F30* sp24 = 0;
     MemoryBlock* sp20;
 
     sp2C = BinArchive_GetFile(D_800ABE10.unk_A04.unk_00, arg0 - 1);

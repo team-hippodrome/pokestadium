@@ -536,7 +536,7 @@ void JigglypuffGame_Init(void) {
         D_86301D48 = &D_86301D44->unk_004;
 
         ModelRenderer_AttachDisplayObject(D_86301D48);
-        Model_InitDisplayObject(D_86301D48, 0, 0x27, D_86301710->unk_08->unk_00[0]);
+        Model_InitDisplayObject(D_86301D48, 0, 0x27, D_86301710->nodes[0]);
 
         D_86301D48->position.x = (i - 1.5f) * 50.0f;
         D_86301D48->position.y = 0.0f;
@@ -559,7 +559,7 @@ void JigglypuffGame_Init(void) {
     D_86301D48 = &D_86301D58;
 
     ModelRenderer_AttachDisplayObject(D_86301D48);
-    Model_InitDisplayObject(D_86301D48, 0, 0x9A, D_86301710->unk_08->unk_00[0]);
+    Model_InitDisplayObject(D_86301D48, 0, 0x9A, D_86301710->nodes[0]);
 
     D_86301D48->position.x = 0.0f;
     D_86301D48->position.y = 0.0f;
@@ -577,7 +577,7 @@ void JigglypuffGame_Init(void) {
     JigglypuffGame_InitCamera();
 }
 
-void Minigame_JigglypuffDoodle(UNUSED s32 arg0, UNUSED s32 arg1) {
+s32 Minigame_JigglypuffDoodle(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('MINI');
@@ -609,7 +609,7 @@ void Minigame_JigglypuffDoodle(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }
 
 void func_863015EC(void) {

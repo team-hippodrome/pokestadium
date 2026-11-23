@@ -52,7 +52,7 @@ typedef struct ActorOriginPosition {
     /* 0x00 */ Vec3f pos;
     /* 0x0C */ char unk0C[0x6];
     /* 0x12 */ s16 unk_12;
-    /* 0x12 */ s16 unk_14;
+    /* 0x14 */ s16 unk_14;
 } ActorOriginPosition; // size = 0x18
 
 static MiniActor miniDigletts[9];
@@ -3479,7 +3479,7 @@ void EkansGame_LoadAssets(void) {
     for (i = 0; i < 4; i++) {
         miniEkanses[i].unk_23C = 0x9F;
         miniEkanses[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniEkanses[i].unk_000, 0, miniEkanses[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniEkanses[i].unk_000, 0, miniEkanses[i].unk_23C, temp_s1->nodes[0]);
         ModelAnim_SetAnimation(&miniEkanses[i].unk_000, 0);
     }
 
@@ -3487,7 +3487,7 @@ void EkansGame_LoadAssets(void) {
     for (i = 0; i < 9; i++) {
         miniDigletts[i].unk_23C = 0xA4;
         miniDigletts[i].unk_168 = temp_s1;
-        Model_InitDisplayObject(&miniDigletts[i].unk_000, 0, miniDigletts[i].unk_23C, temp_s1->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&miniDigletts[i].unk_000, 0, miniDigletts[i].unk_23C, temp_s1->nodes[0]);
         miniDigletts[i].unk_000.node.flags &= ~1;
     }
 
@@ -3496,7 +3496,7 @@ void EkansGame_LoadAssets(void) {
         miniDiglettHoles[i].unk_23C = 0xA3;
         miniDiglettHoles[i].unk_168 = temp_s1;
         Model_InitDisplayObject(&miniDiglettHoles[i].unk_000, 0, miniDiglettHoles[i].unk_23C,
-                                temp_s1->unk_08->unk_00[0]);
+                                temp_s1->nodes[0]);
     }
 }
 

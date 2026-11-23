@@ -273,7 +273,7 @@ typedef struct unk_D_800ABE00_cmd23 {
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ Gfx* unk_04;
-    /* 0x07 */ s16 unk_08;
+    /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ u8 r;
     /* 0x0D */ u8 g;

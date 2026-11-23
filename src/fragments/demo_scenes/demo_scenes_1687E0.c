@@ -8,7 +8,7 @@ static Gfx sGfxSetup_BrickWipe[] = {
     gsSPClearGeometryMode(G_ZBUFFER | G_CULL_BACK | G_LIGHTING),
     gsDPSetRenderMode(G_RM_XLU_SURF, G_RM_NOOP2),
     gsDPSetCombineMode(G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM),
-    gsDPSetPrimColor(0, 0, 5, 5, 5, 255),
+    gsDPSetPrimColor(0, 0, 5, 5, 5, 255), // #050505
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsDPSetTexturePersp(G_TP_NONE),
     gsSPEndDisplayList(),
@@ -22,7 +22,9 @@ static Gfx sGfxRestore_BrickWipe[] = {
     gsSPEndDisplayList(),
 };
 
-DioramaAnimData sIntroCameraKeyframes[] = {
+// Party camera keyframes indexed by partySlot 0..5 (ClearCeremony_SetupOrbitCamera). The trophy (slot 6)
+// uses a fixed camera, so entries 6..9 have no reader in this fragment.
+DioramaAnimData sClearCeremonyCameraKeyframes[] = {
     {
         0,
         0,
@@ -215,42 +217,54 @@ DioramaAnimData sIntroCameraKeyframes[] = {
     },
 };
 
-static s16 D_86B106A0;
-static s16 D_86B106A2;
-static s16 D_86B106A4;
+static s16 sWipeState; // 0 idle, 1 covered, 2 opening, 3 closing
+static s16 sWipeOffset; // 0 = fully covered, 0x140 = fully open
+static s16 sWipeSpeed;
 
-void WipeTransition_Start(s32 arg0, s32 arg1) {
-    D_86B106A0 = arg0;
-    D_86B106A4 = arg1;
+/**
+ * Starts the band wipe in state (0 idle, 1 covered, 2 opening, 3 closing) at speed units per frame.
+ * States 0 and 3 start fully open (offset 0x140); states 1 and 2 start fully covered (offset 0).
+ */
+void WipeTransition_Start(s32 state, s32 speed) {
+    sWipeState = state;
+    sWipeSpeed = speed;
 
-    if ((D_86B106A0 == 0) || ((D_86B106A0 != 1) && (D_86B106A0 != 2) && (D_86B106A0 == 3))) {
-        D_86B106A2 = 0x140;
+    // Equivalent to state 0 or 3.
+    if ((sWipeState == 0) || ((sWipeState != 1) && (sWipeState != 2) && (sWipeState == 3))) {
+        sWipeOffset = 0x140;
     } else {
-        D_86B106A2 = 0;
+        sWipeOffset = 0;
     }
 }
 
+/**
+ * Returns the band wipe state (0 idle, 1 covered, 2 opening, 3 closing).
+ */
 s32 WipeTransition_GetState(void) {
-    return D_86B106A0;
+    return sWipeState;
 }
 
+/**
+ * Advances the band wipe: opening (2) moves the offset up to 0x140 then goes idle; closing (3) moves it
+ * down to 0 then reports covered (1).
+ */
 void WipeTransition_Update(void) {
-    s16 tmp = D_86B106A2;
+    s16 tmp = sWipeOffset;
 
-    switch (D_86B106A0) {
+    switch (sWipeState) {
         case 2:
             if (tmp < 0x140) {
-                tmp += D_86B106A4;
+                tmp += sWipeSpeed;
             } else {
-                D_86B106A0 = 0;
+                sWipeState = 0;
             }
             break;
 
         case 3:
             if (tmp > 0) {
-                tmp -= D_86B106A4;
+                tmp -= sWipeSpeed;
             } else {
-                D_86B106A0 = 1;
+                sWipeState = 1;
             }
 
             if (tmp < 0) {
@@ -259,12 +273,17 @@ void WipeTransition_Update(void) {
             break;
     }
 
-    D_86B106A2 = tmp;
+    sWipeOffset = tmp;
 }
 
-Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
-    s32 idx1 = arg1 % 2;
-    s32 idx2 = (arg1 + 1) % 2;
+/**
+ * Emits the band wipe: five 48-pixel horizontal bands of the stretched cup_clear_ui segment-3 stripe
+ * texture, alternate bands sliding in from the left and right by the wipe offset. parity selects which
+ * bands come from which side.
+ */
+Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 parity) {
+    s32 idx1 = parity % 2;
+    s32 idx2 = (parity + 1) % 2;
     s32 i;
     s16 xl;
     s16 yl;
@@ -277,7 +296,7 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
     gDPPipeSync(gfx++);
 
     for (i = idx1; i < 5; i += 2) {
-        xl = (D_86B106A2 * 2) - 0x140;
+        xl = (sWipeOffset * 2) - 0x140;
         yl = (i * 0x30);
 
         gSPScisTextureRectangle(gfx++, xl << 2, yl << 2, (xl + 0x280) << 2, (yl + 24) << 2, 0, 0, 0, 1 << 6, 1 << 10);
@@ -286,7 +305,7 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
     }
 
     for (i = idx2; i < 5; i += 2) {
-        xl = -D_86B106A2 * 2;
+        xl = -sWipeOffset * 2;
         yl = (i * 0x30);
 
         gSPScisTextureRectangle(gfx++, xl << 2, yl << 2, (xl + 0x280) << 2, (yl + 24) << 2, 0, 0x500, 0, -(1 << 6),
@@ -300,11 +319,14 @@ Gfx* WipeTransition_BuildBrickDisplayList(Gfx* gfx, u32 arg1) {
     return gfx;
 }
 
+/**
+ * Appends the band wipe to the display list whenever it is not idle.
+ */
 void WipeTransition_Draw(void) {
     Gfx* var_a0 = gDisplayListHead;
 
-    if (D_86B106A0 != 0) {
-        if (D_86B106A0 == 2) {
+    if (sWipeState != 0) {
+        if (sWipeState == 2) {
             var_a0 = WipeTransition_BuildBrickDisplayList(var_a0, 0);
         } else {
             var_a0 = WipeTransition_BuildBrickDisplayList(var_a0, 1);
@@ -313,6 +335,10 @@ void WipeTransition_Draw(void) {
     gDisplayListHead = var_a0;
 }
 
+/**
+ * Draws a texture rectangle clipped to the current scissor box, advancing the s/t texture origin by the
+ * clipped amount so the visible part stays aligned.
+ */
 void UI_DrawClippedTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
     Rectangle sp30;
 
@@ -335,6 +361,9 @@ void UI_DrawClippedTextureRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4,
     }
 }
 
+/**
+ * Loads a width x height IA8 texture and draws it 1:1 at (x, y).
+ */
 void UI_DrawTiledTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, UNUSED s32 arg5) {
     gDPLoadTextureTile(gDisplayListHead++, arg4, G_IM_FMT_IA, G_IM_SIZ_8b, arg2, arg3, 0, 0, arg2 - 1, arg3 - 1, 0,
                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -343,6 +372,10 @@ void UI_DrawTiledTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, UNUSE
     UI_DrawClippedTextureRect(arg0, arg1, arg2, arg3, 0, 0, 0x400, 0x400);
 }
 
+/**
+ * Draws an IA8 texture whose intensity blends from the env color (dark texels) to the prim color (bright
+ * texels) of colors, with texel alpha; used for the ceremony captions.
+ */
 void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, SpriteColorParams* arg5) {
     gDPPipeSync(gDisplayListHead++);
 
@@ -360,6 +393,9 @@ void UI_DrawGradientTexture(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, Sp
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws an RGBA16 texture at (x, y) with the env-tint texture setup, e.g. the "R-2" badge.
+ */
 void UI_DrawTextureRgba16(u8* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 

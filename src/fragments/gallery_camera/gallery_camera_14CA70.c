@@ -452,7 +452,7 @@ ModelLoadResult* Gallery_LoadSurfingPikachuIcon(BattleMon* arg0) {
 
     arg0->species.id = 25;
     sp18 = PokeIcon_AllocFramebuffers(1);
-    Model_ComputeSizeVariant(&sp1C, arg0);
+    Model_ComputeNicknameColorVariant(&sp1C, arg0);
     PokeIcon_RequestFrameLoad(sp18, arg0->species.id = 153, sp1C);
     PokeIcon_WaitFrameLoad(sp18);
 
@@ -476,7 +476,7 @@ void Gallery_SetupPhotoModel(void) {
         D_8690A69C->unk_000 = Model_LoadForPokemon(&D_8690A6A0);
     }
 
-    Model_InitDisplayObject(&D_8690A69C->unk_004, 0, D_8690A69C->unk_16C, D_8690A69C->unk_000->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(&D_8690A69C->unk_004, 0, D_8690A69C->unk_16C, D_8690A69C->unk_000->nodes[0]);
     Gallery_LoadPhotoTextures();
     ModelAnim_SetAnimation(&D_8690A69C->unk_004, D_8690A718[D_8690A700].unk_00);
 

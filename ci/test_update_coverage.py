@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from update_coverage import active_pragmas  # noqa: E402
+from update_coverage import active_pragmas, floor_percent  # noqa: E402
 
 
 def pragma(name):
@@ -30,6 +30,15 @@ class ActivePragmas(unittest.TestCase):
     def test_nested_inactive_branch_hides_inner_pragmas(self):
         text = "#if defined(VERSION_JP)\n#if 1\n" + pragma("n") + "#endif\n#endif\n"
         self.assertEqual(active_pragmas(text), [])
+
+
+class FloorPercent(unittest.TestCase):
+    def test_rounds_down(self):
+        self.assertEqual(floor_percent(7436, 7437), "99.9%")
+        self.assertEqual(floor_percent(9999, 10000), "99.9%")
+        self.assertEqual(floor_percent(7437, 7437), "100.0%")
+        self.assertEqual(floor_percent(2, 3), "66.6%")
+        self.assertEqual(floor_percent(0, 0), "0.0%")
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ typedef struct unk_D_800A62E0 {
     /* 0x9B0 */ u8 stack[64];
     /* 0x9F0 */ OSMesgQueue queue;
     /* 0xA08 */ u64 time;
-    /* 0xA10 */ unk_D_800AA660* unk_A10;
+    /* 0xA10 */ SchedClient* unk_A10; // client list head
     /* 0xA14 */ UnkStruct80001380* unk_A14;
     /* 0xA18 */ UnkStruct80001380* unk_A18;
     /* 0xA1C */ UnkStruct80001380* unk_A1C;
@@ -45,13 +45,8 @@ typedef struct UnkArray4 {
 } UnkArray4; // size = 0x10
 
 typedef struct UnkStruct80083CA0_2 {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ OSMesg unk_1B0;
-    /* 0x1B4 */ char unk1B4[0xC];
-    /* 0x1C0 */ OSMesgQueue unk_1C0;
-    /* 0x1D8 */ s32 unk_1D8;
-    /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ u8 unk1E0[0x800];
+    /* 0x000 */ SchedClient client;
+    /* 0x1E0 */ u8 stack[0x800]; // DisplayWorker_Initialize passes &unk_9E0 as the stack top.
     /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
     /* 0x9E4 */ OSMesg unk_9E4;
     /* 0x9E8 */ OSMesg unk_9E8;
@@ -70,14 +65,14 @@ typedef struct UnkStruct80083CA0_2 {
 
 extern unk_D_800A62E0 D_800A62E0;
 
-void Sched_InitClientQueue(UnkStruct80083CA0_2*, s32, s32);
-s32 Sched_WaitClientQueue(UnkStruct80083CA0_2*);
-s32 Sched_TryReceiveClientQueue(UnkStruct80083CA0_2*);
+void Sched_InitClientQueue(SchedClient* client, s32 type, s32 msgCount);
+s32 Sched_WaitClientQueue(SchedClient* client);
+s32 Sched_TryReceiveClientQueue(SchedClient* client);
 void Sched_Init(void);
-void Sched_AddClient(unk_D_800AA660*);
+void Sched_AddClient(SchedClient* client);
 void Sched_ResetTaskState(UnkStruct80001380* arg0);
 void Sched_WaitForTaskMessage(UnkStruct80001380* arg0);
-void Sched_RemoveClient(unk_D_800AA660* arg0);
+void Sched_RemoveClient(SchedClient* client);
 void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1);
 
 #endif // _5580_H_

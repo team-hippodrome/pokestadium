@@ -11,11 +11,16 @@ name: Rebuild CI baseline image
 # rebuilding the whole image after every such merge buys nothing; only the
 # paths below actually change what "stale" costs the next PR gate.
 #
-# ci/build-baseline.sh does this incrementally against a persistent host
-# checkout (see that script's own comments) rather than compiling inside
-# Docker, so a routine yaml-touching merge rebuilds in a couple of minutes,
-# not the ~30 minutes a from-scratch in-Docker compile used to take.
+# This runs on a GitHub-hosted ubuntu runner and pushes the image to the
+# private ghcr.io/team-hippodrome/pokestadium-ci package, which
+# pr-rom-gate.yml pulls. There is no persistent checkout here, so
+# ci/Dockerfile.hosted builds from scratch inside the image (natively on
+# x86-64). The other versions have no prebuilt baselines on hosted runners;
+# the gate extracts and builds each affected one cold. ci/Dockerfile,
+# ci/build-baseline.sh and ci/build-region-baselines.sh remain for building
+# locally.
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -23,8 +28,8 @@ on:
       - "yamls/**"
       - "include/**"
       - "tools/**"
-      - "ci/Dockerfile"
-      - "ci/build-baseline.sh"
+      - "ci/Dockerfile.hosted"
+      - ".github/workflows/rebuild-baseline-image.yml"
       - "requirements.txt"
       - "Makefile"
 
@@ -34,50 +39,75 @@ concurrency:
 
 permissions:
   contents: read
+  packages: write
+
+env:
+  POKESTADIUM_DECOMP_AGENT_IMAGE: ghcr.io/team-hippodrome/pokestadium-ci:latest
+  # FROM scratch image holding /baseroms/<version>/baserom.z64 for every
+  # version in ci/regions.json. Pushed by hand; it must stay private, like
+  # the CI image built from it.
+  BASEROM_IMAGE: ghcr.io/team-hippodrome/pokestadium-baserom:all
 
 jobs:
   rebuild:
     name: Rebuild the baked CI image from current master
-    # Same self-hosted, credential-free runner the gate itself uses -- the
-    # baseline image and its persistent build checkout are both local-only
-    # (never pushed to a registry), so the rebuild has to happen where the
-    # gate will actually use it.
-    runs-on: [self-hosted, macOS, ARM64, pokestadium-decomp-public]
-    # Cold per-version baselines (nine versions built in the Linux container)
-    # take over an hour; later refreshes reuse the cache and are incremental.
-    timeout-minutes: 180
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
-      - name: Mask self-hosted runner paths
-        shell: bash
-        run: |
-          echo "::add-mask::${HOME}"
-          echo "::add-mask::${GITHUB_WORKSPACE}"
-          echo "::add-mask::${RUNNER_TEMP}"
-
-      - name: Checkout master
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-          set-safe-directory: false
 
-      - name: Rebuild the baseline image
+      - name: Log in to GHCR
         shell: bash
         env:
-          POKESTADIUM_BASEROM_DIR: ${{ vars.POKESTADIUM_BASEROM_DIR }}
-          POKESTADIUM_REGION_CACHE_DIR: ${{ vars.POKESTADIUM_REGION_CACHE_DIR }}
-        run: bash ci/build-baseline.sh
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Copy the US retail dump out of the private baserom image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull --quiet --platform linux/amd64 "$BASEROM_IMAGE"
+          cid="$(docker create --platform linux/amd64 "$BASEROM_IMAGE" /none)"
+          trap 'docker rm -f "$cid" >/dev/null' EXIT
+          docker cp "$cid:/baseroms/us/baserom.z64" baseroms/us/baserom.z64
+          echo "$(tr -d '\r' < baseroms/us/checksum.md5 | cut -d' ' -f1)  baseroms/us/baserom.z64" | md5sum -c -
+
+      - name: Build the baseline image
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker build \
+            --platform linux/amd64 \
+            --label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            --label "org.opencontainers.image.description=Private: contains the retail baserom. Never make this package public." \
+            --tag "$POKESTADIUM_DECOMP_AGENT_IMAGE" \
+            --file ci/Dockerfile.hosted \
+            .
+          rm -f baseroms/us/baserom.z64
 
       - name: Confirm the image's yamls/ now match this commit
         shell: bash
         run: |
           set -euo pipefail
-          image="${POKESTADIUM_DECOMP_AGENT_IMAGE:-pokestadium-decomp-agent:latest}"
           drift=$(docker run --rm --platform linux/amd64 \
             -v "$GITHUB_WORKSPACE/yamls:/current-yamls:ro" \
-            --entrypoint bash "$image" -c \
+            --entrypoint bash "$POKESTADIUM_DECOMP_AGENT_IMAGE" -c \
             'diff -qr /work/yamls /current-yamls 2>/dev/null | wc -l')
           if [ "$drift" -ne 0 ]; then
             echo "::error::Rebuilt image still has yaml drift against $GITHUB_SHA ($drift differing path(s)) -- the rebuild did not actually pick up this commit." >&2
             exit 1
           fi
           echo "gate-pr.sh's own sync_tree will see 0 yaml drift against $GITHUB_SHA until master moves again."
+
+      - name: Push the image
+        shell: bash
+        run: docker push --quiet "$POKESTADIUM_DECOMP_AGENT_IMAGE"
+
+      - name: Log out of GHCR
+        if: always()
+        shell: bash
+        run: docker logout ghcr.io

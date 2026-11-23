@@ -82,7 +82,7 @@ typedef struct ModelSegment {
     /* 0x14 */ u32 remapSegment;
     /* 0x18 */ u32 vertexSegment;
     /* 0x1C */ Gfx* displayList;
-} ModelSegment; // size = 20
+} ModelSegment; // size = 0x20
 
 typedef struct StadiumModel {
     /* 0x00 */ s16 unk_00;
@@ -90,8 +90,7 @@ typedef struct StadiumModel {
     /* 0x04 */ StadiumTransform transforms[5];
     /* 0x130 */ u32 modelSegment;
     /* 0x134 */ s8 pad134[0x4];
-    /* 0x138 */ u32 unkSegment;
-    /* 0x13C */ s8 pad13C[0x1C];
+    /* 0x138 */ ModelSegment unkSegment; // func_80033B2C copies the selected slot template here.
     /* 0x158 */ Vec3f position;
     /* 0x164 */ s8 pad164[0xC];
     /* 0x170 */ ModelVertex mvtx;

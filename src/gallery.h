@@ -115,7 +115,7 @@ typedef struct unk_func_80031270 {
 
 typedef struct unk_D_83407B38_0B0 {
     /* 0x00 */ s32 unk_00;
-    /* 0x00 */ s32 unk_08;
+    /* 0x04 */ s32 unk_08;
 } unk_D_83407B38_0B0; // size >= 0xC
 
 typedef struct unk_D_83407B38 {

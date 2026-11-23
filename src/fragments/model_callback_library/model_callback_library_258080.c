@@ -296,9 +296,6 @@ s32 Util_Strlen(s8* arg0) {
     return var_v1;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/model_callback_library/model_callback_library_258080/DisplayList_BuildDigitOrGlyphSegment.s")
-#else
 /**
  * Loads one 16x16 IA8 glyph from the font sheet. Glyphs 0-2 are the hundreds, tens and units of
  * D_800AF770[effectSlot % 5] + 1. Later glyphs spell that species' name (from gVictoryPokemonNames),
@@ -331,7 +328,12 @@ void DisplayList_BuildDigitOrGlyphSegment(Gfx* gfx) {
 #else
             sp34 = Text_GetString(0, 0, gVictoryPokemonNames, temp_t0);
 #endif
+#if defined(VERSION_US_REV2)
+            bzero(sNameBuffer, 0x1E);
+            sprintf(sNameBuffer, "%s", sp34);
+#else
             sprintf(sNameBuffer, "%s     ", sp34);
+#endif
             temp_v1 = sDigitGlyphIndex - 3;
 #if defined(VERSION_JP)
             // Japanese names are two-byte EUC-JP characters; masking the pair with 0x7F7F gives
@@ -366,7 +368,6 @@ void DisplayList_BuildDigitOrGlyphSegment(Gfx* gfx) {
     gSPEndDisplayList(gfx++);
     sDigitGlyphIndex++;
 }
-#endif
 
 /**
  * Geo callback (jump-table slot 0x1C8). Builds DisplayList_BuildDigitDisplayBackground.
