@@ -1133,7 +1133,7 @@ void MagikarpGame_InitActors(void) {
         D_86003B60 = &D_86003B5C->unk_004;
 
         ModelRenderer_AttachDisplayObject(&D_86003B60->unk_000);
-        Model_InitDisplayObject(&D_86003B60->unk_000, 0, 0xAD, D_86002F30->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&D_86003B60->unk_000, 0, 0xAD, D_86002F30->nodes[0]);
 
         D_86003B60->unk_000.position.x = (i - 1.5f) * D_86002A94;
 
@@ -1168,7 +1168,7 @@ void MagikarpGame_InitActors(void) {
         D_86003B60 = D_86003B64;
 
         ModelRenderer_AttachDisplayObject(&D_86003B60->unk_000);
-        Model_InitDisplayObject(&D_86003B60->unk_000, 0, 0xAE, D_86002F30->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&D_86003B60->unk_000, 0, 0xAE, D_86002F30->nodes[0]);
         D_86003B60->unk_000.position.x = (i - 1.5f) * D_86002A94;
         D_86003B60->unk_000.position.z = 0.0f;
         D_86003B60->unk_000.position.y = 200.0f;
@@ -1190,7 +1190,7 @@ void MagikarpGame_InitActors(void) {
     Widget_CountdownInit();
 }
 
-void MagikarpGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
+s32 MagikarpGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('MINI');
@@ -1230,5 +1230,5 @@ void MagikarpGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }

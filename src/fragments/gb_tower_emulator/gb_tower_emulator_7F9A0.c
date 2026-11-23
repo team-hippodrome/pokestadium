@@ -17,27 +17,9 @@ typedef struct unk_D_8122B2F8 {
     /* 0x000000 */ char unk000000[0x1FEAE8];
 } unk_D_8122B2F8; // size = 0x1FEAE8
 
-typedef struct GbEmuRenderTask {
-    /* 0x00 */ OSMesg mesg[1];
-    /* 0x04 */ OSMesgQueue queue;
-    /* 0x1C */ char unk1C[0x4];
-    /* 0x20 */ s32 taskType;
-    /* 0x24 */ s32 taskFlags;
-    /* 0x28 */ void* microcode;
-    /* 0x2C */ s32 microcodeSize;
-    /* 0x30 */ char unk30[0x8];
-    /* 0x38 */ s32 overlayImage;
-    /* 0x3C */ s32 unk_3C;
-    /* 0x40 */ void* unk_40;
-    /* 0x44 */ char unk44[0x4];
-    /* 0x48 */ void* framebuffer;
-    /* 0x4C */ void* unk_4C;
-    /* 0x50 */ u32 unk_50;
-    /* 0x54 */ s32 unk_54;
-    /* 0x58 */ void* borderImage;
-    /* 0x5C */ s32 unk_5C;
-    /* 0x60 */ char unk60[0x8];
-} GbEmuRenderTask; // size = 0x68
+// The GB renderer uses the scheduler envelope; its RSP microcode repurposes
+// OSTask image/cache fields rather than submitting a graphics display list.
+typedef UnkStruct80001380 GbEmuRenderTask;
 
 typedef struct GbCartridgeHeaderId {
     /* 0x00 */ u8 unk00[0x34];
@@ -2156,8 +2138,8 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
     }
     sGbEmuHeapCursor = (u8*)sGbEmuHeapStart;
 
-    osCreateMesgQueue(&sRenderTasks[0].queue, sRenderTasks[0].mesg, 1);
-    osCreateMesgQueue(&sRenderTasks[1].queue, sRenderTasks[1].mesg, 1);
+    osCreateMesgQueue(&sRenderTasks[0].queue, &sRenderTasks[0].mesg, 1);
+    osCreateMesgQueue(&sRenderTasks[1].queue, &sRenderTasks[1].mesg, 1);
     sRenderTaskPending = 0;
 
     switch (osTvType) {
@@ -2226,8 +2208,8 @@ void GbEmu_InitSession(s32 arg0, s32 port, OSId thread_id, s32 thread_priority, 
     D_8122C74C = 0;
 
     for (i = 0; i < 2; i++) {
-        sRenderTasks[i].taskType = 2;
-        sRenderTasks[i].taskFlags = 0;
+        sRenderTasks[i].task.t.type = 2;
+        sRenderTasks[i].task.t.flags = 0;
         GbEmu_DrawLoadingScreen((u16*)(&sFramebuffer0)[i]->img_p, party_icons, port, 0);
         D_8122C758[i] = D_8122C754;
     }
@@ -2460,7 +2442,7 @@ update_menu:
         return;
     }
 
-    sRenderTasks[sFramebufferIndex].unk_3C = 0;
+    sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0;
 
     switch (sPauseMenuState) {
         case 1:
@@ -2807,9 +2789,9 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             GbEmu_DrawTextCommands(base, sPakChangedText);
         transition:
             GbEmu_DrawAccessIcon((u16*)(sOverlayImages[sOverlayIndex] + 0x9C), 1, sAccessIconFrame);
-            sRenderTasks[sFramebufferIndex].unk_3C = 0x1010;
-            sRenderTasks[sFramebufferIndex].overlayImage = (s32)sOverlayImages[sOverlayIndex];
-            sRenderTasks[sFramebufferIndex].unk_5C &= 0xFFFF;
+            sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0x1010;
+            sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sOverlayImages[sOverlayIndex];
+            sRenderTasks[sFramebufferIndex].task.t.yield_data_size &= 0xFFFF;
             GbEmu_DrawTextCommands(base, sCleanConnectorText);
             return;
 
@@ -3120,8 +3102,8 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
             for (i = 0; i < 0x10; i++) {
                 emu->ramBankStatus[i] = 0xFF;
             }
-            sRenderTasks[sFramebufferIndex].unk_3C = 0x1010;
-            sRenderTasks[sFramebufferIndex].overlayImage = sStatusBarImage;
+            sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0x1010;
+            sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sStatusBarImage;
             /* fallthrough */
         case 0:
             if (emu->pakBusy == 0) {
@@ -3170,16 +3152,16 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
                         sAccessIconFrame = 0;
                     }
                     GbEmu_DrawAccessIcon((u16*)(sOverlayImages[sOverlayIndex] + 0x9C), emu->pakIdleCountdown, sAccessIconFrame);
-                    sRenderTasks[sFramebufferIndex].unk_3C = 0x1010;
-                    sRenderTasks[sFramebufferIndex].overlayImage = (s32)sOverlayImages[sOverlayIndex];
+                    sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0x1010;
+                    sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sOverlayImages[sOverlayIndex];
                 } else {
                     sOverlayIndex ^= 1;
                     if (!(D_8122C4E8 & (1 << sOverlayIndex))) {
                         D_8122C4E8 |= (1 << sOverlayIndex);
                         GbEmu_DrawAccessOverlay(sOverlayIndex, 1);
                     }
-                    sRenderTasks[sFramebufferIndex].unk_3C = 0x1010;
-                    sRenderTasks[sFramebufferIndex].overlayImage = sStatusBarImage;
+                    sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0x1010;
+                    sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sStatusBarImage;
                 }
             }
             break;
@@ -3386,11 +3368,11 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
                 if ((D_8122C4F9 >= 3) && (D_8122C4F9 < 0x20)) {
                     D_8122C4F9++;
                 }
-                sRenderTasks[sFramebufferIndex].unk_3C = (D_8122C4F9 / 2) | 0x1000;
-                sRenderTasks[sFramebufferIndex].overlayImage = (s32)sOverlayImages[sOverlayIndex];
+                sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = (D_8122C4F9 / 2) | 0x1000;
+                sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sOverlayImages[sOverlayIndex];
             } else {
-                sRenderTasks[sFramebufferIndex].unk_3C = 0x1010;
-                sRenderTasks[sFramebufferIndex].overlayImage = sStatusBarImage;
+                sRenderTasks[sFramebufferIndex].task.t.ucode_data_size = 0x1010;
+                sRenderTasks[sFramebufferIndex].task.t.ucode_data = (u64*)sStatusBarImage;
                 if ((emu->pakRequest == 0) && (emu->pakConnected != 0)) {
                     sGbEmuPhase = 0;
                 }
@@ -3571,19 +3553,20 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
     }
 
     if (emu->dmgMode != 0) {
-        sRenderTasks[sFramebufferIndex].microcode = sDmgRenderMicrocode;
-        sRenderTasks[sFramebufferIndex].microcodeSize = (u32)sDmgRenderMicrocodeData - (u32)sDmgRenderMicrocode;
+        sRenderTasks[sFramebufferIndex].task.t.ucode_boot = sDmgRenderMicrocode;
+        sRenderTasks[sFramebufferIndex].task.t.ucode_boot_size = (u32)sDmgRenderMicrocodeData - (u32)sDmgRenderMicrocode;
     } else {
-        sRenderTasks[sFramebufferIndex].microcode = sCgbRenderMicrocode;
-        sRenderTasks[sFramebufferIndex].microcodeSize = (u32)sCgbRenderMicrocodeData - (u32)sCgbRenderMicrocode;
+        sRenderTasks[sFramebufferIndex].task.t.ucode_boot = sCgbRenderMicrocode;
+        sRenderTasks[sFramebufferIndex].task.t.ucode_boot_size = (u32)sCgbRenderMicrocodeData - (u32)sCgbRenderMicrocode;
     }
-    sRenderTasks[sFramebufferIndex].unk_40 = emu->tileCache;
-    sRenderTasks[sFramebufferIndex].framebuffer = (&sFramebuffer0)[sFramebufferIndex]->img_p;
-    sRenderTasks[sFramebufferIndex].unk_4C = D_8122B2EC;
-    sRenderTasks[sFramebufferIndex].unk_50 = emu->unk_53A4;
-    sRenderTasks[sFramebufferIndex].unk_54 = (emu->unk_53FE << 24) | emu->unk_539C;
-    sRenderTasks[sFramebufferIndex].borderImage = sBorderImages[sBorderIndex];
-    sRenderTasks[sFramebufferIndex].unk_5C =
+    sRenderTasks[sFramebufferIndex].task.t.dram_stack = emu->tileCache;
+    sRenderTasks[sFramebufferIndex].task.t.output_buff = (&sFramebuffer0)[sFramebufferIndex]->img_p;
+    sRenderTasks[sFramebufferIndex].task.t.output_buff_size = D_8122B2EC;
+    // Custom GB microcode parameter; task submission below is skipped when it is zero.
+    sRenderTasks[sFramebufferIndex].task.t.data_ptr = (u64*)emu->unk_53A4;
+    sRenderTasks[sFramebufferIndex].task.t.data_size = (emu->unk_53FE << 24) | emu->unk_539C;
+    sRenderTasks[sFramebufferIndex].task.t.yield_data_ptr = sBorderImages[sBorderIndex];
+    sRenderTasks[sFramebufferIndex].task.t.yield_data_size =
         (emu->borderFadeLevel << 24) | (emu->gameScreenFadeLevel << 16) | (emu->unk_53EE << 6) | emu->unk_53F0;
 
     if (sRenderTaskPending != 0) {
@@ -3596,7 +3579,7 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
         osViSwapBuffer((&sFramebuffer0)[sFramebufferIndex ^ 1]->img_p);
         if (emu->unk_53A4 != 0) {
             emu->rspTaskDone = 0;
-            Sched_SubmitTask((UnkStruct80001380*)&sRenderTasks[sFramebufferIndex], 0);
+            Sched_SubmitTask(&sRenderTasks[sFramebufferIndex], 0);
         }
         sFramebufferIndex ^= 1;
         sRenderTaskPending = 1;

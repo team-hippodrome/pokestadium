@@ -1243,7 +1243,7 @@ s32 Gallery_SnapGetResult(void) {
     return sp1C;
 }
 
-void Gallery_SnapMain(s32 arg0, s32 arg1) {
+s32 Gallery_SnapMain(s32 arg0, s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('SNAP');
@@ -1271,5 +1271,5 @@ void Gallery_SnapMain(s32 arg0, s32 arg1) {
 
     main_pool_pop_state('SNAP');
 
-    Gallery_SnapGetResult();
+    return Gallery_SnapGetResult();
 }

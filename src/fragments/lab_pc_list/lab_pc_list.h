@@ -19,7 +19,7 @@ typedef struct unk_func_8830867C_02C_04C_018 {
 
 typedef struct unk_func_8830867C_02C_04C {
     /* 0x00 */ char unk00[0xC];
-    /* 0x00 */ WidgetGridMenuItem* unk_0C;
+    /* 0x0C */ WidgetDestructorCallback unk_0C;
     /* 0x10 */ WidgetGridMenuInputCallback unk_10;
     /* 0x14 */ WidgetGridMenuSetStateCallback unk_14;
     /* 0x18 */ unk_func_8830867C_02C_04C_018* unk_18;
@@ -187,7 +187,7 @@ typedef struct unk_func_8830867C_038 {
 
 typedef struct unk_func_8830867C_03C_030 {
     /* 0x00 */ unk_func_8850878C* unk_00;
-    /* 0x00 */ s32 unk_04;
+    /* 0x04 */ s32 unk_04;
 } unk_func_8830867C_03C_030; // size = 0x8
 
 typedef struct unk_func_8830867C_03C {

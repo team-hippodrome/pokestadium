@@ -83,9 +83,8 @@ unk_D_8380548C D_84210DA0[] = {
         -32768,
         1600,
     },
-};
-u8 D_84210DD8[] = {
-    1, 0, 0, 0xBE, 1, 0x70, 0, 0x4C, 0, 0, 0, 0, 6, 0x20, 1, 0, 1, 0xC2, 1, 0x70, 0, 0x64, 0x80, 0, 0x80, 0, 5, 0xE0,
+    { 1, 0, 190, 368, 76, 0, 0, 1568 },
+    { 1, 0, 450, 368, 100, -32768, -32768, 1504 },
 };
 u32 D_84210DF4[] = {
     0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000,
@@ -718,9 +717,9 @@ void TeamSelection_TrainerSlots_InitializeModels(void) {
     s16 i;
 
     if (D_8423E56A != 0) {
-        D_84210DD8[0] = 0;
+        D_84210DA0[4].unk_00 = 0;
     } else {
-        D_84210DD8[0] = 1;
+        D_84210DA0[4].unk_00 = 1;
     }
 
     for (i = 0; i < 6; i++) {
@@ -735,10 +734,10 @@ void TeamSelection_TrainerSlots_InitializeModels(void) {
         }
     }
 
-    if (D_84210DD8[0] != 0) {
+    if (D_84210DA0[4].unk_00 != 0) {
         D_8423E578 = Deck_FindFirstFreeTeamSlot();
         if (D_8423E578 == 0) {
-            D_84210DD8[0] = 0;
+            D_84210DA0[4].unk_00 = 0;
             D_8423D408[0][4].lodFraction = 0xA0;
             D_8423D408[1][4].lodFraction = 0x64;
         }

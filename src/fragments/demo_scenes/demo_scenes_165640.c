@@ -321,7 +321,7 @@ void ClearCeremony_LoadPartyModel(void) {
     PokeIcon_OpenModelArchives();
 
     sCeremonyModel->model = Model_LoadForPokemon(&sShowcaseRoster->pokemonPicked[sCeremonyModel->partySlot]);
-    Model_InitDisplayObject(&sCeremonyModel->displayObject, 0, sCeremonyModel->modelId, sCeremonyModel->model->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&sCeremonyModel->displayObject, 0, sCeremonyModel->modelId, sCeremonyModel->model->nodes[0]);
     ModelAnim_SetAnimation(&sCeremonyModel->displayObject, 0);
     sCeremonyModel->displayObject.effectSlot = 0;
     ClearCeremony_LoadSpeciesBattleData();
@@ -373,7 +373,7 @@ void ClearCeremony_LoadTrophyModel(void) {
     ModelRenderer_AttachDisplayObject(&sCeremonyModel->displayObject);
     PokeIcon_OpenModelArchives();
     sCeremonyModel->model = Model_LoadByArchiveIndex(sCeremonyModel->modelId);
-    Model_InitDisplayObject(&sCeremonyModel->displayObject, 0, sCeremonyModel->modelId, sCeremonyModel->model->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&sCeremonyModel->displayObject, 0, sCeremonyModel->modelId, sCeremonyModel->model->nodes[0]);
     ModelAnim_SetAnimation(&sCeremonyModel->displayObject, 0);
     Vec3f_SetComponentsDuplicate(&sCeremonyModel->displayObject.position, 0.0f, 300.0f, 0.0f);
 }
@@ -679,10 +679,10 @@ void ClearCeremony_HideTextPanels(void) {
 }
 
 /**
- * Chooses the battle side whose unk_1C is 1 and showcases its first tag-team member's picked Pokemon.
+ * Chooses the battle side whose wonBattle is 1 and showcases its first tag-team member's picked Pokemon.
  */
 void ClearCeremony_SelectPartyRoster(void) {
-    if (gSessionContext.battleSides[0].unk_1C == 1) {
+    if (gSessionContext.battleSides[0].wonBattle == 1) {
         sShowcaseRoster = gSessionContext.battleSides[0].tagTeamMember[0];
         sShowcaseSide = &gSessionContext.battleSides[0];
     } else {

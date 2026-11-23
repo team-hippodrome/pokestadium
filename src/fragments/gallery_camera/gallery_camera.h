@@ -45,18 +45,18 @@ typedef struct unk_D_8690B360 {
 
 typedef struct unk_D_8690B308 {
     /* 0x00 */ s16 unk_00[8];
-    /* 0x18 */ f32 unk_10;
-    /* 0x1C */ f32 unk_14;
-    /* 0x20 */ f32 unk_18;
-    /* 0x24 */ f32 unk_1C;
-    /* 0x28 */ f32 unk_20;
-    /* 0x2C */ f32 unk_24;
-    /* 0x30 */ f32 unk_28;
-    /* 0x34 */ f32 unk_2C;
-    /* 0x38 */ s16 unk_30;
-    /* 0x3A */ s16 unk_32;
-    /* 0x3C */ s16 unk_34;
-    /* 0x3E */ s16 unk_36;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ f32 unk_14;
+    /* 0x18 */ f32 unk_18;
+    /* 0x1C */ f32 unk_1C;
+    /* 0x20 */ f32 unk_20;
+    /* 0x24 */ f32 unk_24;
+    /* 0x28 */ f32 unk_28;
+    /* 0x2C */ f32 unk_2C;
+    /* 0x30 */ s16 unk_30;
+    /* 0x32 */ s16 unk_32;
+    /* 0x34 */ s16 unk_34;
+    /* 0x36 */ s16 unk_36;
 } unk_D_8690B308; // size >= 0x38
 
 typedef struct unk_D_8690B3C0 {

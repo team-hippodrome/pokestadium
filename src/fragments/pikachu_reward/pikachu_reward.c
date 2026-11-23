@@ -769,7 +769,7 @@ void PikachuReward_SetupScene(void) {
         ModelRenderer_AttachDisplayObject(&D_83202028[i]);
     }
 
-    Model_InitDisplayObject(&D_83202028[0], 0, 0, D_83202018->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_83202028[0], 0, 0, D_83202018->nodes[0]);
     Vec3f_SetComponentsDuplicate(&D_83202028[0].scale, 16.0f, 16.0f, 16.0f);
     ModelAnim_SetAnimation(&D_83202028[0], 0);
     D_83202028->node.renderFlags &= ~0x40;

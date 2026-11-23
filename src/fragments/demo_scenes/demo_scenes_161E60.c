@@ -950,14 +950,14 @@ void Completion_LoadModels(void) {
     sCompletionScene->anchorModel = Model_LoadByArchiveIndex(0xD3);
     sCompletionScene->anchorObject.effectSlot = 0xFF;
 
-    Model_InitDisplayObject(&sCompletionScene->anchorObject, 0, 0xD3, sCompletionScene->anchorModel->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&sCompletionScene->anchorObject, 0, 0xD3, sCompletionScene->anchorModel->nodes[0]);
     ModelAnim_SetAnimation(&sCompletionScene->anchorObject, 0);
     ModelRenderer_AttachDisplayObject(&sCompletionScene->giftObject);
     PokeIcon_OpenModelArchives();
 
     sCompletionScene->giftModel = Model_LoadByArchiveIndex(sCompletionScene->giftSpecies);
     sCompletionScene->giftObject.effectSlot = 0;
-    Model_InitDisplayObject(&sCompletionScene->giftObject, 0, sCompletionScene->giftSpecies, sCompletionScene->giftModel->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&sCompletionScene->giftObject, 0, sCompletionScene->giftSpecies, sCompletionScene->giftModel->nodes[0]);
     ModelAnim_SetAnimation(&sCompletionScene->giftObject, 0);
     sCompletionScene->giftObject.node.renderFlags &= ~0x40;
 

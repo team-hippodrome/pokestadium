@@ -258,7 +258,7 @@ void Diorama_InitModelSlot(DioramaModelSlot* arg0, DioramaObjectDef* arg1) {
 
     arg0->model = Model_LoadByArchiveIndex(arg1->modelId);
 
-    Model_InitDisplayObject(&arg0->displayObject, 0, arg1->modelId, arg0->model->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&arg0->displayObject, 0, arg1->modelId, arg0->model->nodes[0]);
     ModelAnim_SetAnimation(&arg0->displayObject, arg1->animationIndex);
 
     if (arg1->modelId == 6) {

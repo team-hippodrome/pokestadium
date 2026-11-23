@@ -204,7 +204,7 @@ void Minigame_Sample8Viewer_Init(void) {
     ModelRenderer_AttachDisplayObject(&D_86700940);
     PokeIcon_OpenModelArchives();
     D_86700930 = Model_LoadByArchiveIndex(0x19);
-    Model_InitDisplayObject(&D_86700940, 0, 0x19, D_86700930->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86700940, 0, 0x19, D_86700930->nodes[0]);
     ModelAnim_SetAnimation(&D_86700940, 0);
     Minigame_Sample8Viewer_InitCamera();
 }

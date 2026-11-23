@@ -1,0 +1,70 @@
+# Public Pokemon Stadium ROM-gate baseline, built on a GitHub-hosted ubuntu
+# runner (see .github/workflows/rebuild-baseline-image.yml).
+#
+# ci/Dockerfile stages its derived state (asm/, assets/, lib and build
+# objects) from an incremental build on the Mac runner. A GitHub-hosted
+# runner has no persistent checkout, so this file runs the same steps as
+# ci/build-baseline.sh inside the image instead: extract, build the US ROM,
+# and require the retail checksum. It runs natively on x86-64.
+#
+# Retail ROMs are never committed. The rebuild workflow copies the US dump
+# into the build context from the private
+# ghcr.io/team-hippodrome/pokestadium-baserom image, and the result is pushed
+# only to the private ghcr.io/team-hippodrome/pokestadium-ci package. Neither
+# package may be made public.
+
+FROM debian:bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    MIPS_BINUTILS_PREFIX=mips-linux-gnu- \
+    DETECTED_OS=linux \
+    PYTHON=/work/.venv/bin/python3
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        bash \
+        build-essential \
+        binutils-mips-linux-gnu \
+        ca-certificates \
+        gcc-multilib \
+        git \
+        make \
+        python3 \
+        python3-pip \
+        python3-venv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /work
+
+# As in ci/Dockerfile: record the shipped src/ and include/ as a git commit,
+# so tools inside the container can diff a PR against the baseline.
+COPY src ./src
+COPY include ./include
+COPY text ./text
+RUN git init -q \
+    && git add src include \
+    && git -c user.name="pokestadium-decomp-agent image" -c user.email="pokestadium-decomp-agent@localhost" \
+        commit -q -m "baseline: src and include as shipped in the image"
+
+COPY tools ./tools
+COPY linker_scripts ./linker_scripts
+COPY lib ./lib
+COPY yamls ./yamls
+COPY Makefile requirements.txt ./
+
+RUN make venv \
+    && make setup
+
+COPY baseroms ./baseroms
+
+# Same sequence as ci/build-baseline.sh.
+RUN make extract \
+    && make RUN_CC_CHECK=0 COMPARE=0 -j"$(nproc)" rom \
+    && tr -d '\r' < baseroms/us/checksum.md5 | md5sum -c -
+
+# As in ci/Dockerfile: swap the final ROM for the raw retail dump so the
+# gate can never mistake this baked seed for an already-verified build of
+# the PR's source.
+RUN cp baseroms/us/baserom.z64 build/pokestadium-us.z64 \
+    && md5sum build/pokestadium-us.z64 baseroms/us/baserom.z64

@@ -158,7 +158,7 @@ void func_8001A46C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
             ;
             arg0->unk_08[arg1].unk_02 = arg3 & ~1;
             arg0->unk_08[arg1].unk_08 = arg0->unk_18[arg2->species.id - 1].unk_02 / 100.0f;
-            Model_ComputeSizeVariant(&arg0->unk_08[arg1].unk_10, arg2);
+            Model_ComputeNicknameColorVariant(&arg0->unk_08[arg1].unk_10, arg2);
             if (arg0->unk_18[arg2->species.id - 1].name == NULL) {
                 arg0->unk_08[arg1].unk_04 = arg0->unk_18[arg2->species.id - 1].unk_08 - 0xE38;
                 ;
@@ -209,7 +209,7 @@ void PokeIcon_RenderSlot(unk_func_8001A024* arg0, s32 arg1) {
 
     sp34 = arg0->unk_0C->children;
     temp_s1 = &arg0->unk_08[arg1];
-    sp2C = arg0->unk_04->loadedModel->modelRoot->unk_00[0];
+    sp2C = arg0->unk_04->loadedModel->nodes[0];
 
     ModelRenderer_ClearDisplayObject(arg0->unk_10);
     ModelAnim_ClearTransformChannel(arg0->unk_10);
@@ -459,7 +459,7 @@ void PokeIcon_LoadModelTextureForMon(u16* arg0, s32 arg1, BattleMon* arg2) {
         return;
     }
 
-    Model_ComputeSizeVariant(&sp1C, arg2);
+    Model_ComputeNicknameColorVariant(&sp1C, arg2);
     PokeIcon_LoadModelTexture(arg0, arg2->species.id);
     PokeIcon_AdjustImageColors(arg0, 0x640, sp1C);
 }

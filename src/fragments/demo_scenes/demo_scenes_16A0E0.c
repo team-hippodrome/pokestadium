@@ -527,10 +527,10 @@ void FirstClearBonus_InitScene(void) {
 
     if (gSessionContext.mode == 0x16) {
         sGameBoyModelData = Model_LoadByArchiveIndex(0xD5);
-        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD5, sGameBoyModelData->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD5, sGameBoyModelData->nodes[0]);
     } else {
         sGameBoyModelData = Model_LoadByArchiveIndex(0xD4);
-        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD4, sGameBoyModelData->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&sGameBoyDisplayObject, 0, 0xD4, sGameBoyModelData->nodes[0]);
     }
 
     ModelAnim_SetAnimation(&sGameBoyDisplayObject, 0);

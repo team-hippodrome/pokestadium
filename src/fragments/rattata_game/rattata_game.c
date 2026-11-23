@@ -720,7 +720,7 @@ void RattataGame_UpdateHurdleMarkers(RattataRacer* arg0) {
                 case 0:
                     if ((unk_190 - (temp_fs1 - 30.0f)) < 5.0f) {
                         D_86208280->unk_002 = 1;
-                        Model_InitDisplayObject(temp_s1, 0, 0xB0, D_86203E34->unk_08->unk_00[arg0_unk000]);
+                        Model_InitDisplayObject(temp_s1, 0, 0xB0, D_86203E34->nodes[arg0_unk000]);
                     }
                     break;
 
@@ -1283,7 +1283,7 @@ void RattataGame_LoadAssets(void) {
     D_8620471A = 0;
     D_86203E30 = Model_LoadByArchiveIndex(0xB8);
     ModelRenderer_AttachDisplayObject(&D_86204598);
-    Model_InitDisplayObject(&D_86204598, 0, 0xB8, D_86203E30->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&D_86204598, 0, 0xB8, D_86203E30->nodes[0]);
     D_86204598.position.y = -26.0f;
     D_86203E30 = Model_LoadByArchiveIndex(0xAF);
 
@@ -1294,7 +1294,7 @@ void RattataGame_LoadAssets(void) {
 
         RattataGame_InitAIDifficulty(D_86204590);
         ModelRenderer_AttachDisplayObject(temp_s0);
-        Model_InitDisplayObject(temp_s0, 0, 0xAF, D_86203E30->unk_08->unk_00[0]);
+        Model_InitDisplayObject(temp_s0, 0, 0xAF, D_86203E30->nodes[0]);
         temp_s0->position.x = -(i - 1.5f) * 40.0f;
         temp_s0->position.y = 0.0f;
         temp_s0->scale.x = 1.0f;
@@ -1377,7 +1377,7 @@ void RattataGame_InitPlayerSlots(void) {
     }
 }
 
-void RattataGame_Main(s32 arg0, UNUSED s32 arg1) {
+s32 RattataGame_Main(s32 arg0, UNUSED s32 arg1) {
     StageContext* sp24;
 
     if (arg0 == 1) {
@@ -1428,5 +1428,5 @@ void RattataGame_Main(s32 arg0, UNUSED s32 arg1) {
 
     main_pool_pop_state('MINI');
 
-    Widget_PauseMenuGetResult();
+    return Widget_PauseMenuGetResult();
 }

@@ -111,11 +111,11 @@ void DisplayWorker_ProcessFrame(void) {
     }
 
     for (i = 1; i < D_80083CA0.unk_AAC.unk_00; i++) {
-        Sched_WaitClientQueue(&D_80083CA0);
+        Sched_WaitClientQueue(&D_80083CA0.client);
     }
 
-    while (D_80083CA0.unk_1C0.validCount > 0) {
-        Sched_TryReceiveClientQueue(&D_80083CA0);
+    while (D_80083CA0.client.queue.validCount > 0) {
+        Sched_TryReceiveClientQueue(&D_80083CA0.client);
     }
 
     if (D_80083CA0.unk_A9C.unk_0C != NULL) {
@@ -147,23 +147,23 @@ void DisplayWorker_ProcessFrame(void) {
     D_80083CA0.unk_AAC = D_80083CA0.unk_A9C;
     D_80083CA0.unk_A9C = D_80083CA0.unk_A8C;
     profiler_log_thread5_time(THREAD5_END);
-    Sched_WaitClientQueue(&D_80083CA0);
+    Sched_WaitClientQueue(&D_80083CA0.client);
 }
 
 void DisplayWorker_DrainEvents(void) {
-    Sched_WaitClientQueue(&D_80083CA0);
-    while (D_80083CA0.unk_1C0.validCount > 0) {
-        Sched_TryReceiveClientQueue(&D_80083CA0);
+    Sched_WaitClientQueue(&D_80083CA0.client);
+    while (D_80083CA0.client.queue.validCount > 0) {
+        Sched_TryReceiveClientQueue(&D_80083CA0.client);
     }
-    Sched_WaitClientQueue(&D_80083CA0);
+    Sched_WaitClientQueue(&D_80083CA0.client);
 }
 
 void DisplayWorker_ThreadMain(UNUSED void* arg) {
     __osSetFpcCsr(0x01000C01);
     Display_SetBufferConfig(&D_80083CA0.unk_AAC, 0, 1, 2, 0xFF, 0, 0, 0);
     Display_SetBufferConfig(&D_80083CA0.unk_A9C, 0, 1, 2, 0xFF, 0, 0, 0);
-    Sched_InitClientQueue(&D_80083CA0.thread, 0, 4);
-    Sched_AddClient(&D_80083CA0);
+    Sched_InitClientQueue(&D_80083CA0.client, 0, 4);
+    Sched_AddClient(&D_80083CA0.client);
     DisplayTask_Initialize(&D_80083CA0.unk_A20);
     while (1) {
         void* sp4C;
@@ -197,8 +197,8 @@ void DisplayWorker_Initialize(void) {
             break;
     }
 
-    osCreateThread(&D_80083CA0.thread, 5, DisplayWorker_ThreadMain, NULL, &D_80083CA0.unk_9E0, 0x28);
-    osStartThread(&D_80083CA0.thread);
+    osCreateThread(&D_80083CA0.client.thread, 5, DisplayWorker_ThreadMain, NULL, &D_80083CA0.unk_9E0, 0x28);
+    osStartThread(&D_80083CA0.client.thread);
     osCreateMesgQueue(&D_80083CA0.unk_9EC, &D_80083CA0.unk_9E4, 1);
     osCreateMesgQueue(&D_80083CA0.unk_A04, &D_80083CA0.unk_9E8, 1);
     D_80083CA0.unk_A88 = 0;

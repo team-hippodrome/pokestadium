@@ -157,7 +157,7 @@ void MewtwoIntro_InitScene(void) {
     PokeIcon_OpenModelArchives();
 
     sMewtwoModelData = Model_LoadByArchiveIndex(0xD6);
-    Model_InitDisplayObject(&sMewtwoDisplayObject, 0, 0xD6, sMewtwoModelData->unk_08->unk_00[0]);
+    Model_InitDisplayObject(&sMewtwoDisplayObject, 0, 0xD6, sMewtwoModelData->nodes[0]);
     ModelAnim_SetAnimation(&sMewtwoDisplayObject, 1);
     Vec3f_SetComponentsDuplicate(&sMewtwoDisplayObject.position, 0.0f, 0.0f, 0.0f);
     sMewtwoMaterialAlpha = 0;
