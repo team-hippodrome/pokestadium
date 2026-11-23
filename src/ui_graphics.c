@@ -30,7 +30,7 @@ extern u8 D_1002FD0[];
 extern u8 D_1003050[];
 extern u8 D_10030D0[];
 extern u8 D_1003150[];
-extern u8 D_10031D0[];
+extern u8 gMenuCursor[];
 extern u8 D_1003750[];
 extern u8 D_1003890[];
 extern u8 D_1003930[];
@@ -422,7 +422,7 @@ void Ui_DrawBorderedPanelNoFill(s32 x1, s32 y1, s32 width, s32 height) {
 void Ui_DrawTextureMarker(s32 x, s32 y) {
     if (StageContext_IsHighResolution() != 0) {
         gSPDisplayList(gDisplayListHead++, D_8006F4E0);
-        Gfx_DrawTextureRgba16(x, y, 0x20, 0x16, D_10031D0, 0x20, 0x200000);
+        Gfx_DrawTextureRgba16(x, y, 0x20, 0x16, gMenuCursor, 0x20, 0x200000);
     } else {
         gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
         Gfx_DrawTextureRgba16Ia8(x, y, 0xC, 0xA, D_1003750, D_1003890, 0x10, 0x100000);

@@ -9,38 +9,49 @@
 #include "src/memory.h"
 #include "src/util.h"
 
-s32 BattlePrep_BindCarouselSegment0(s32, unk_func_80011B94*);
-s32 BattlePrep_BindCarouselSegment1(s32, unk_func_80011B94*);
-s32 BattlePrep_BindCarouselSegment2(s32, unk_func_80011B94*);
-s32 BattlePrep_CarouselDepthCallback(s32, unk_D_86002F34_alt5*);
-s32 BattlePrep_BindCarouselSegment3(s32, unk_func_80011B94*);
+s32 BattlePrepBanner_DrawPlate(s32, unk_func_80011B94*);
+s32 BattlePrepBanner_DrawTitle(s32, unk_func_80011B94*);
+s32 BattlePrepBanner_DrawDivision(s32, unk_func_80011B94*);
+s32 BattlePrepBanner_ApplyRoundLabelSpin(s32, unk_D_86002F34_alt5*);
+s32 BattlePrepBanner_DrawRoundLabel(s32, unk_func_80011B94*);
 
-s32 BattlePrep_BadgeCarouselGeoCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselGlowCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselTextureCallback(s32, unk_func_80011B94*);
-s32 BattlePrep_BadgeCarouselGlowCallback2(s32, unk_func_80011B94*);
+s32 OpponentLadder_DrawCupSlot(s32, unk_func_80011B94*);
+s32 OpponentLadder_DrawCupHighlight(s32, unk_func_80011B94*);
+s32 OpponentLadder_DrawCastleSlot(s32, unk_func_80011B94*);
+s32 OpponentLadder_DrawCastleHighlight(s32, unk_func_80011B94*);
 
+// battle_headers file index of the banner plate for each cup (mode - 1).
 static u8 D_84B0FC40[] = {
     0x00, 0x00, 0x00, 0x01, 0x02, 0x03,
 };
+// battle_headers file index of the banner plate for each castle location (modeSelection).
 static u8 D_84B0FC48[] = {
     0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0C,
 };
+// Banner title textures (200x28 IA8) for each cup (mode - 1): "POKé CUP" x3, "PETIT CUP", "PIKA CUP",
+// "PRIME CUP".
 static u8* D_84B0FC54[] = {
     D_30339F0, D_3034FD0, D_30365B0, D_3037B90, D_3039170, D_303A750,
 };
+// Banner title textures (200x28 IA8) for each castle location (modeSelection): "PEWTER GYM BATTLE" ...
+// "VIRIDIAN GYM BATTLE", "ELITE FOUR BATTLE".
 static u8* D_84B0FC6C[] = {
     D_303BD30, D_303D310, D_303E8F0, D_303FED0, D_30414B0, D_3042A90, D_3044070, D_3045650, D_3046C30,
 };
+// Round digit textures (32x32 IA8) "1"-"6", indexed by roundOrDemoId. Entry 0 is "FINAL BATTLE"
+// (200x28 IA8), which the rival banner reads as its title through D_84B0FC6C[9].
 static u8* D_84B0FC90[] = {
     D_3048210, D_3029270, D_3029670, D_3029A70, D_3029E70, D_302A270, D_302A670,
 };
+// Division textures (152x20 IA8): "POKé BALL", "GREAT BALL", "ULTRA BALL", "MASTER BALL".
 static u8* D_84B0FCAC[] = {
     D_3030A70,
     D_3031650,
     D_3032230,
     D_3032E10,
 };
+// Banner gradient colors, indexed by mode - 1 (+ modeSelection in the castle). BattlePrepBanner_ApplyColors
+// pairs each entry with the same entry of D_84B0FCFC.
 static Color_RGBA8 D_84B0FCBC[] = {
     { 0x1E, 0x8C, 0x1E, 0xFF }, { 0x1E, 0x8C, 0x1E, 0xFF }, { 0x1E, 0x8C, 0x1E, 0xFF }, { 0x50, 0x50, 0xFF, 0xFF },
     { 0xB4, 0x8C, 0x1E, 0xFF }, { 0x96, 0x1E, 0x1E, 0xFF }, { 0x64, 0x64, 0x82, 0xFF }, { 0x50, 0x50, 0xFF, 0xFF },
@@ -134,7 +145,7 @@ static Gfx D_84B10040[] = {
 };
 static u32 D_84B10378[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B0FD40,
-    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment0,
+    0x05000000, 0x22010000, 0x00000000, 0x08000000, BattlePrepBanner_DrawPlate,
     D_84B10040, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B103B0[12] = {
@@ -193,7 +204,7 @@ static u32 D_84B10568[] = {
 static u32 D_84B105A8[] = {
     0x17000000, 0x0000000C, 0x00000000, 0x00000000, D_84B103B0,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00120000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment1,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawTitle,
     D_84B10498, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B105F8[] = {
@@ -260,7 +271,7 @@ static u32 D_84B10838[] = {
 static u32 D_84B10878[] = {
     0x17000000, 0x00000010, 0x00000000, 0x00000000, D_84B105F8,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00120000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment1,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawTitle,
     D_84B10718, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B108C8[] = {
@@ -299,7 +310,7 @@ static Gfx D_84B10948[] = {
 static u32 D_84B109F0[] = {
     0x17000000, 0x00000008, 0x00000000, 0x00000000, D_84B108C8,
     0x05000000, 0x1B000000, 0x00000000, 0x00000000, 0x00020000,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment2,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawDivision,
     D_84B10948, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B10A40[] = {
@@ -349,8 +360,8 @@ static Gfx D_84B10B00[] = {
 };
 static u32 D_84B10BE8[] = {
     0x17000000, 0x0000000C, 0x00000000, 0x00000000, D_84B10A40, 0x05000000,
-    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrep_CarouselDepthCallback,
-    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment3,
+    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrepBanner_ApplyRoundLabelSpin,
+    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawRoundLabel,
     D_84B10B00, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Vtx D_84B10C48[] = {
@@ -388,8 +399,8 @@ static Gfx D_84B10CC8[] = {
 };
 static u32 D_84B10D70[] = {
     0x17000000, 0x00000008, 0x00000000, 0x00000000, D_84B10C48, 0x05000000,
-    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrep_CarouselDepthCallback,
-    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment3,
+    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrepBanner_ApplyRoundLabelSpin,
+    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawRoundLabel,
     D_84B10CC8, 0x06000000, 0x06000000, 0x06000000, 0x01000000, 0x00000000,
 };
 static Gfx D_84B10DD0[] = {
@@ -463,8 +474,8 @@ static Gfx D_84B10F78[] = {
 };
 static u32 D_84B11060[] = {
     0x17000000, 0x0000000C, 0x00000000, 0x00000000, D_84B10EB8, 0x05000000,
-    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrep_CarouselDepthCallback,
-    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BindCarouselSegment3,
+    0x1B000000, 0x00000000, 0x00000000, 0xFFEE0000, 0x08000000, BattlePrepBanner_ApplyRoundLabelSpin,
+    0x00000000, 0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepBanner_DrawRoundLabel,
     D_84B10F78, 0x06000000, 0x06000000, 0x01000000, 0x00000000, 0x00000000,
 };
 static Vtx D_84B110C0[] = {
@@ -555,12 +566,12 @@ static u32 D_84B11640[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGeoCallback,
+    OpponentLadder_DrawCupSlot,
     0x00000000,
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGlowCallback,
+    OpponentLadder_DrawCupHighlight,
     0x00000000,
     0x06000000,
     0x1B000000,
@@ -571,12 +582,12 @@ static u32 D_84B11640[] = {
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGeoCallback,
+    OpponentLadder_DrawCupSlot,
     0x00000001,
     0x22050000,
     0x00000000,
     0x08000000,
-    BattlePrep_BadgeCarouselGlowCallback,
+    OpponentLadder_DrawCupHighlight,
     0x00000001,
     0x06000000,
     0x06000000,
@@ -650,672 +661,814 @@ static Gfx D_84B11A88[] = {
 };
 static u32 D_84B11BD0[] = {
     0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B116E0,
-    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BadgeCarouselTextureCallback,
-    D_84B119A0, 0x22050000, 0x00000000, 0x08000000, BattlePrep_BadgeCarouselGlowCallback2,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, OpponentLadder_DrawCastleSlot,
+    D_84B119A0, 0x22050000, 0x00000000, 0x08000000, OpponentLadder_DrawCastleHighlight,
     D_84B11A88, 0x06000000, 0x01000000,
 };
 
-s32 BattlePrep_BindCarouselSegment0(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+/**
+ * Geo draw callback (event 5) for banner object 0: binds the plaque background (plateTexture, a
+ * 256x96 RGBA16 image from battle_headers) to segment 0x0F, then draws the node's display list.
+ */
+s32 BattlePrepBanner_DrawPlate(s32 event, unk_func_80011B94* display_node) {
+    BattlePrepBanner* banner;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+    if (event == 5) {
+        banner = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_0C & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)banner->plateTexture & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrep_BindCarouselSegment1(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+/**
+ * Geo draw callback (event 5) for the banner title: binds titleTexture (the cup or gym name, e.g.
+ * "PEWTER GYM BATTLE") to segment 0x0F, then draws the node's display list. Used by both the plain
+ * title layout and the round 2 layout that adds the "R-2" icon.
+ */
+s32 BattlePrepBanner_DrawTitle(s32 event, unk_func_80011B94* display_node) {
+    BattlePrepBanner* banner;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+    if (event == 5) {
+        banner = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[0] & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)banner->titleTexture & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrep_BindCarouselSegment3(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+/**
+ * Geo draw callback (event 5) for the banner round label: binds roundLabelTexture ("BATTLE",
+ * "TRAINER", "LEADER", "SEMIFINAL", ...) to segment 0x0F and roundNumberTexture (the digit) to
+ * segment 0x0E, then draws the node's display list.
+ */
+s32 BattlePrepBanner_DrawRoundLabel(s32 event, unk_func_80011B94* display_node) {
+    BattlePrepBanner* banner;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+    if (event == 5) {
+        banner = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[2] & 0x1FFFFFFF);
-        gSPSegment(gDisplayListHead++, 0x0E, (u32)temp_a0->unk_10[3] & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)banner->roundLabelTexture & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0E, (u32)banner->roundNumberTexture & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrep_BindCarouselSegment2(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
+/**
+ * Geo draw callback (event 5) for the banner division line: binds divisionTexture ("POKé BALL",
+ * "GREAT BALL", ...) to segment 0x0F, then draws the node's display list.
+ */
+s32 BattlePrepBanner_DrawDivision(s32 event, unk_func_80011B94* display_node) {
+    BattlePrepBanner* banner;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
+    if (event == 5) {
+        banner = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[1] & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)banner->divisionTexture & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrep_CarouselDepthCallback(s32 arg0, unk_D_86002F34_alt5* arg1) {
-    unk_D_84B259A8* temp_a0;
+/**
+ * Geo callback (event 2) on the round label's rotate node: sets its rotationZ from
+ * roundLabelRotationZ[], indexed by which of the four round label copies (objects 9-12) is drawing.
+ * This is what makes "BATTLE 1" / "TRAINER 1" spin into place.
+ */
+s32 BattlePrepBanner_ApplyRoundLabelSpin(s32 event, unk_D_86002F34_alt5* rotate_node) {
+    BattlePrepBanner* banner;
 
-    if (arg0 == 2) {
-        temp_a0 = (unk_D_84B259A8*)D_8006F09C->node.callbackArg;
+    if (event == 2) {
+        banner = (BattlePrepBanner*)D_8006F09C->node.callbackArg;
 
-        arg1->unk_24.z = temp_a0->unk_02[(D_8006F09C->effectSlot - temp_a0->unk_20->effectSlot) - 9];
+        rotate_node->unk_24.z = banner->roundLabelRotationZ[(D_8006F09C->effectSlot - banner->displayObjects->effectSlot) - 9];
     }
     return 0;
 }
 
-void BattlePrep_CarouselStepFirstItem(unk_D_84B259A8* arg0, s16 arg1) {
-    if (arg1 == 0) {
+/**
+ * Round intro step 1: slides the plaque background (object 0) in from the left, 32 units per frame
+ * for 10 frames, from x = -288 to x = 0. Plays sound 0x01100001 on the first frame.
+ */
+void BattlePrepBanner_SlidePlateIn(BattlePrepBanner* banner, s16 frame) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
     }
 
-    if (arg1 < 0xA) {
-        arg0->unk_20->position.x = (arg1 << 5) - 0x120;
+    if (frame < 0xA) {
+        banner->displayObjects->position.x = (frame << 5) - 0x120;
     }
 }
 
-void BattlePrep_CarouselStepNTSC(unk_D_84B259A8* arg0, s16 arg1) {
+/**
+ * Round intro step 2 (NTSC timing): slides the title in from the left at 20 units per frame. The
+ * lead copy (objects 7 and 8) moves; the three trailing copies (objects 1-6, faded) take the lead's
+ * previous positions each frame, which draws a motion-blur trail. Object 7 holds only the title's
+ * top-row vertices, so once it arrives its damped sine sway shears the text left and right before it
+ * settles. Plays sound 0x01100002 on frame 2.
+ */
+void BattlePrepBanner_SlideTitleInNTSC(BattlePrepBanner* banner, s16 frame) {
     s32 i;
 
-    if (arg1 == 2) {
+    if (frame == 2) {
         Audio_PlayCategory11SoundCommand(0x01100002, 0, 0);
     }
 
     for (i = 1; i < 7; i += 2) {
-        arg0->unk_20[i].position = arg0->unk_20[2 + i].position;
-        arg0->unk_20[1 + i].position = arg0->unk_20[3 + i].position;
+        banner->displayObjects[i].position = banner->displayObjects[2 + i].position;
+        banner->displayObjects[1 + i].position = banner->displayObjects[3 + i].position;
 
-        arg0->unk_20[i].scale = arg0->unk_20[2 + i].scale;
-        arg0->unk_20[1 + i].scale = arg0->unk_20[3 + i].scale;
+        banner->displayObjects[i].scale = banner->displayObjects[2 + i].scale;
+        banner->displayObjects[1 + i].scale = banner->displayObjects[3 + i].scale;
     }
 
-    if (arg1 < 0x12) {
-        arg0->unk_20[7].position.x = (arg1 * 0x14) - 0x154;
+    if (frame < 0x12) {
+        banner->displayObjects[7].position.x = (frame * 0x14) - 0x154;
     }
 
-    if (arg1 < 0x10) {
-        arg0->unk_20[8].position.x = (arg1 * 0x14) - 0x12C;
+    if (frame < 0x10) {
+        banner->displayObjects[8].position.x = (frame * 0x14) - 0x12C;
     }
 
-    if ((arg1 >= 0x12) && (arg1 < 0x2B)) {
-        arg0->unk_20[7].position.x = SINS((arg1 * 0x1555) + 0xFFFE955B) * (s16)(0x54 - (arg1 * 2));
+    if ((frame >= 0x12) && (frame < 0x2B)) {
+        banner->displayObjects[7].position.x = SINS((frame * 0x1555) + 0xFFFE955B) * (s16)(0x54 - (frame * 2));
     }
 }
 
-void BattlePrep_CarouselStepPAL(unk_D_84B259A8* arg0, s16 arg1) {
+/**
+ * PAL timing variant of BattlePrepBanner_SlideTitleInNTSC: the title slides in at 24 units per
+ * frame with shorter frame windows.
+ */
+void BattlePrepBanner_SlideTitleInPAL(BattlePrepBanner* banner, s16 frame) {
     s32 i;
 
-    if (arg1 == 2) {
+    if (frame == 2) {
         Audio_PlayCategory11SoundCommand(0x01100002, 0, 0);
     }
 
     for (i = 1; i < 7; i += 2) {
-        arg0->unk_20[i].position = arg0->unk_20[2 + i].position;
-        arg0->unk_20[1 + i].position = arg0->unk_20[3 + i].position;
+        banner->displayObjects[i].position = banner->displayObjects[2 + i].position;
+        banner->displayObjects[1 + i].position = banner->displayObjects[3 + i].position;
 
-        arg0->unk_20[i].scale = arg0->unk_20[2 + i].scale;
-        arg0->unk_20[1 + i].scale = arg0->unk_20[3 + i].scale;
+        banner->displayObjects[i].scale = banner->displayObjects[2 + i].scale;
+        banner->displayObjects[1 + i].scale = banner->displayObjects[3 + i].scale;
     }
 
-    if (arg1 < 0xF) {
-        arg0->unk_20[7].position.x = (arg1 * 0x18) - 0x150;
+    if (frame < 0xF) {
+        banner->displayObjects[7].position.x = (frame * 0x18) - 0x150;
     }
 
-    if (arg1 < 0xD) {
-        arg0->unk_20[8].position.x = (arg1 * 0x18) - 0x120;
+    if (frame < 0xD) {
+        banner->displayObjects[8].position.x = (frame * 0x18) - 0x120;
     }
 
-    if ((arg1 >= 0xF) && (arg1 < 0x28)) {
-        arg0->unk_20[7].position.x = SINS((arg1 * 0x1555) + 0xFFFED55A) * (s16)(0x4E - (arg1 * 2));
+    if ((frame >= 0xF) && (frame < 0x28)) {
+        banner->displayObjects[7].position.x = SINS((frame * 0x1555) + 0xFFFED55A) * (s16)(0x4E - (frame * 2));
     }
 }
 
-void BattlePrep_CarouselStepFinalNTSC(unk_D_84B259A8* arg0, s16 arg1) {
+/**
+ * Round intro step 3 (NTSC timing): the round label (lead copy object 12) spins about Z while
+ * growing from 1/16 to full size, trailed by copies 9-11, and the division line (lead copy object 16,
+ * cups with divisions only) grows with it. On the last spin frame the title (objects 7 and 8) joins
+ * the growth, then the title, round label and division bounce with a damped sine scale. Plays sound
+ * 0x01100003 on frame 0 and 0x01100004 on frame 16.
+ */
+void BattlePrepBanner_SpinRoundLabelInNTSC(BattlePrepBanner* banner, s16 frame) {
     UNUSED s32 pad;
     s32 i;
 
-    if (arg1 == 0) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100003, 0, 0);
     }
 
-    if (arg1 == 0x10) {
+    if (frame == 0x10) {
         Audio_PlayCategory11SoundCommand(0x01100004, 0, 0);
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->unk_20[9 + i].position = arg0->unk_20[10 + i].position;
-        arg0->unk_20[9 + i].scale = arg0->unk_20[10 + i].scale;
+        banner->displayObjects[9 + i].position = banner->displayObjects[10 + i].position;
+        banner->displayObjects[9 + i].scale = banner->displayObjects[10 + i].scale;
 
-        arg0->unk_02[i] = arg0->unk_02[i + 1];
+        banner->roundLabelRotationZ[i] = banner->roundLabelRotationZ[i + 1];
 
-        arg0->unk_20[13 + i].position = arg0->unk_20[14 + i].position;
-        arg0->unk_20[13 + i].scale = arg0->unk_20[14 + i].scale;
+        banner->displayObjects[13 + i].position = banner->displayObjects[14 + i].position;
+        banner->displayObjects[13 + i].scale = banner->displayObjects[14 + i].scale;
     }
 
-    if (arg1 < 0x12) {
-        f32 sp28 = (arg1 + 1) * 0.0625f;
-        s32 sp24 = (arg1 << 0xC) - 0x1000;
+    if (frame < 0x12) {
+        f32 grow_scale = (frame + 1) * 0.0625f;
+        s32 spin_angle = (frame << 0xC) - 0x1000;
 
-        arg0->unk_02[3] = sp24;
-        arg0->unk_20[12].position.x = 0.0f;
-        arg0->unk_20[16].position.x = 0.0f;
+        banner->roundLabelRotationZ[3] = spin_angle;
+        banner->displayObjects[12].position.x = 0.0f;
+        banner->displayObjects[16].position.x = 0.0f;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[12].scale, sp28, sp28, sp28);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[16].scale, sp28, sp28, sp28);
-        if (sp24 >= 0xF000) {
-            Vec3f_SetComponentsDuplicate(&arg0->unk_20[7].scale, sp28, sp28, sp28);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_20[8].scale, sp28, sp28, sp28);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[12].scale, grow_scale, grow_scale, grow_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[16].scale, grow_scale, grow_scale, grow_scale);
+        if (spin_angle >= 0xF000) {
+            Vec3f_SetComponentsDuplicate(&banner->displayObjects[7].scale, grow_scale, grow_scale, grow_scale);
+            Vec3f_SetComponentsDuplicate(&banner->displayObjects[8].scale, grow_scale, grow_scale, grow_scale);
         }
-    } else if (arg1 < 0x1F) {
-        f32 sp2C = (SINS((arg1 << 0xD) + 0xFFFE0000) * ((0x12C - (arg1 * 0xA)) / 1000.0f)) + 1.0f;
+    } else if (frame < 0x1F) {
+        f32 bounce_scale = (SINS((frame << 0xD) + 0xFFFE0000) * ((0x12C - (frame * 0xA)) / 1000.0f)) + 1.0f;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[7].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[8].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[12].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[16].scale, sp2C, sp2C, sp2C);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[7].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[8].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[12].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[16].scale, bounce_scale, bounce_scale, bounce_scale);
     }
 }
 
-void BattlePrep_CarouselStepFinalPAL(unk_D_84B259A8* arg0, s16 arg1) {
+/**
+ * PAL timing variant of BattlePrepBanner_SpinRoundLabelInNTSC: the spin and growth take 13 frames
+ * and sound 0x01100004 plays on frame 13.
+ */
+void BattlePrepBanner_SpinRoundLabelInPAL(BattlePrepBanner* banner, s16 frame) {
     UNUSED s32 pad;
     s32 i;
 
-    if (arg1 == 0) {
+    if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100003, 0, 0);
     }
 
-    if (arg1 == 0xD) {
+    if (frame == 0xD) {
         Audio_PlayCategory11SoundCommand(0x01100004, 0, 0);
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->unk_20[9 + i].position = arg0->unk_20[10 + i].position;
-        arg0->unk_20[9 + i].scale = arg0->unk_20[10 + i].scale;
+        banner->displayObjects[9 + i].position = banner->displayObjects[10 + i].position;
+        banner->displayObjects[9 + i].scale = banner->displayObjects[10 + i].scale;
 
-        arg0->unk_02[i] = arg0->unk_02[i + 1];
+        banner->roundLabelRotationZ[i] = banner->roundLabelRotationZ[i + 1];
 
-        arg0->unk_20[13 + i].position = arg0->unk_20[14 + i].position;
-        arg0->unk_20[13 + i].scale = arg0->unk_20[14 + i].scale;
+        banner->displayObjects[13 + i].position = banner->displayObjects[14 + i].position;
+        banner->displayObjects[13 + i].scale = banner->displayObjects[14 + i].scale;
     }
 
-    if (arg1 < 0xF) {
-        f32 sp28 = (arg1 + 1) / 13.0f;
-        s32 sp24 = (arg1 * 0x1333) - 0xCCA;
+    if (frame < 0xF) {
+        f32 grow_scale = (frame + 1) / 13.0f;
+        s32 spin_angle = (frame * 0x1333) - 0xCCA;
 
-        arg0->unk_02[3] = sp24;
-        arg0->unk_20[12].position.x = 0.0f;
-        arg0->unk_20[16].position.x = 0.0f;
+        banner->roundLabelRotationZ[3] = spin_angle;
+        banner->displayObjects[12].position.x = 0.0f;
+        banner->displayObjects[16].position.x = 0.0f;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[12].scale, sp28, sp28, sp28);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[16].scale, sp28, sp28, sp28);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[12].scale, grow_scale, grow_scale, grow_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[16].scale, grow_scale, grow_scale, grow_scale);
 
-        if (sp24 >= 0xECCD) {
-            Vec3f_SetComponentsDuplicate(&arg0->unk_20[7].scale, sp28, sp28, sp28);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_20[8].scale, sp28, sp28, sp28);
+        if (spin_angle >= 0xECCD) {
+            Vec3f_SetComponentsDuplicate(&banner->displayObjects[7].scale, grow_scale, grow_scale, grow_scale);
+            Vec3f_SetComponentsDuplicate(&banner->displayObjects[8].scale, grow_scale, grow_scale, grow_scale);
         }
-    } else if (arg1 < 0x1C) {
-        f32 sp2C = (SINS((arg1 << 0xD) + 0xFFFE6000) * ((0x10E - (arg1 * 0xA)) / 1000.0f)) + 1.0f;
+    } else if (frame < 0x1C) {
+        f32 bounce_scale = (SINS((frame << 0xD) + 0xFFFE6000) * ((0x10E - (frame * 0xA)) / 1000.0f)) + 1.0f;
 
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[7].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[8].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[12].scale, sp2C, sp2C, sp2C);
-        Vec3f_SetComponentsDuplicate(&arg0->unk_20[16].scale, sp2C, sp2C, sp2C);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[7].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[8].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[12].scale, bounce_scale, bounce_scale, bounce_scale);
+        Vec3f_SetComponentsDuplicate(&banner->displayObjects[16].scale, bounce_scale, bounce_scale, bounce_scale);
     }
 }
 
-void BattlePrep_UpdateCarousel(unk_D_84B259A8* arg0) {
+/**
+ * State 1 update: plays the round intro animation, choosing NTSC or PAL timing from osTvType. The
+ * plate slides in first, the title from frame 2, and the round label spins in from frame 30 (27 on
+ * PAL). On frame 220 all 17 objects are parked off-screen at x = -320.
+ */
+void BattlePrepBanner_UpdateRoundIntro(BattlePrepBanner* banner) {
     s32 i;
 
     if (osTvType == OS_TV_PAL) {
-        if (arg0->unk_01 >= 0) {
-            BattlePrep_CarouselStepFirstItem(arg0, arg0->unk_01);
+        if (banner->timer >= 0) {
+            BattlePrepBanner_SlidePlateIn(banner, banner->timer);
         }
 
-        if (arg0->unk_01 >= 2) {
-            BattlePrep_CarouselStepPAL(arg0, arg0->unk_01 - 2);
+        if (banner->timer >= 2) {
+            BattlePrepBanner_SlideTitleInPAL(banner, banner->timer - 2);
         }
 
-        if (arg0->unk_01 >= 0x1B) {
-            BattlePrep_CarouselStepFinalPAL(arg0, arg0->unk_01 - 0x1B);
+        if (banner->timer >= 0x1B) {
+            BattlePrepBanner_SpinRoundLabelInPAL(banner, banner->timer - 0x1B);
         }
     } else {
-        if (arg0->unk_01 >= 0) {
-            BattlePrep_CarouselStepFirstItem(arg0, arg0->unk_01);
+        if (banner->timer >= 0) {
+            BattlePrepBanner_SlidePlateIn(banner, banner->timer);
         }
 
-        if (arg0->unk_01 >= 2) {
-            BattlePrep_CarouselStepNTSC(arg0, arg0->unk_01 - 2);
+        if (banner->timer >= 2) {
+            BattlePrepBanner_SlideTitleInNTSC(banner, banner->timer - 2);
         }
 
-        if (arg0->unk_01 >= 0x1E) {
-            BattlePrep_CarouselStepFinalNTSC(arg0, arg0->unk_01 - 0x1E);
+        if (banner->timer >= 0x1E) {
+            BattlePrepBanner_SpinRoundLabelInNTSC(banner, banner->timer - 0x1E);
         }
     }
 
-    if (arg0->unk_01 == 0xDC) {
+    if (banner->timer == 0xDC) {
         for (i = 0; i < 17; i++) {
-            arg0->unk_20[i].position.x = -320.0f;
+            banner->displayObjects[i].position.x = -320.0f;
         }
     }
 
-    arg0->unk_01++;
+    banner->timer++;
 }
 
-void BattlePrep_CarouselExitAnimation(unk_D_84B259A8* arg0) {
+/**
+ * State 3 update: slides the whole banner (plate, title, round label and division) off to the right
+ * at 32 units per frame with trailing copies. Once the plate passes x = 416 all 17 objects are reset
+ * and the banner goes idle. Plays sound 0x01100005 on the first frame.
+ */
+void BattlePrepBanner_UpdateSlideOut(BattlePrepBanner* banner) {
     s32 i;
 
-    if (arg0->unk_01++ == 0) {
+    if (banner->timer++ == 0) {
         Audio_PlayCategory11SoundCommand(0x01100005, 0, 0);
     }
 
     for (i = 0; i < 5; i += 2) {
-        arg0->unk_20[1 + i].position = arg0->unk_20[3 + i].position;
-        arg0->unk_20[2 + i].position = arg0->unk_20[4 + i].position;
+        banner->displayObjects[1 + i].position = banner->displayObjects[3 + i].position;
+        banner->displayObjects[2 + i].position = banner->displayObjects[4 + i].position;
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->unk_20[9 + i].position = arg0->unk_20[10 + i].position;
-        arg0->unk_20[13 + i].position = arg0->unk_20[14 + i].position;
+        banner->displayObjects[9 + i].position = banner->displayObjects[10 + i].position;
+        banner->displayObjects[13 + i].position = banner->displayObjects[14 + i].position;
     }
 
-    arg0->unk_20[0].position.x += 32.0f;
-    arg0->unk_20[7].position.x += 32.0f;
-    arg0->unk_20[8].position.x += 32.0f;
-    arg0->unk_20[12].position.x += 32.0f;
-    arg0->unk_20[16].position.x += 32.0f;
+    banner->displayObjects[0].position.x += 32.0f;
+    banner->displayObjects[7].position.x += 32.0f;
+    banner->displayObjects[8].position.x += 32.0f;
+    banner->displayObjects[12].position.x += 32.0f;
+    banner->displayObjects[16].position.x += 32.0f;
 
-    if (arg0->unk_20->position.x >= 416.0f) {
+    if (banner->displayObjects->position.x >= 416.0f) {
         for (i = 0; i < 17; i++) {
-            BattlePrep_ResetDisplayObject(&arg0->unk_20[i]);
+            BattlePrep_ResetDisplayObject(&banner->displayObjects[i]);
         }
-        arg0->unk_00 = 0;
+        banner->state = 0;
     }
 }
 
-void BattlePrep_CarouselEntryAnimation(unk_D_84B259A8* arg0) {
+/**
+ * State 2 update for the castle gym-clear plaque ("PEWTER GYM BATTLE / CLEAR"): for 10 frames the
+ * plate slides in from the left while the title and the CLEAR label slide in from the right, at 32
+ * units per frame with trailing copies. Goes idle on frame 32. Plays sounds 0x01100001 and
+ * 0x01100002 on the first frame.
+ */
+void BattlePrepBanner_UpdateClearSlideIn(BattlePrepBanner* banner) {
     s32 i;
 
-    if (arg0->unk_01 == 0) {
+    if (banner->timer == 0) {
         Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
         Audio_PlayCategory11SoundCommand(0x01100002, 0, 0);
     }
 
     for (i = 0; i < 5; i += 2) {
-        arg0->unk_20[1 + i].position = arg0->unk_20[3 + i].position;
-        arg0->unk_20[2 + i].position = arg0->unk_20[4 + i].position;
+        banner->displayObjects[1 + i].position = banner->displayObjects[3 + i].position;
+        banner->displayObjects[2 + i].position = banner->displayObjects[4 + i].position;
     }
 
     for (i = 0; i < 3; i++) {
-        arg0->unk_20[9 + i].position = arg0->unk_20[10 + i].position;
+        banner->displayObjects[9 + i].position = banner->displayObjects[10 + i].position;
     }
 
-    if (arg0->unk_01 < 0xA) {
-        arg0->unk_20[0].position.x += 32.0f;
-        arg0->unk_20[7].position.x -= 32.0f;
-        arg0->unk_20[8].position.x -= 32.0f;
-        arg0->unk_20[12].position.x -= 32.0f;
+    if (banner->timer < 0xA) {
+        banner->displayObjects[0].position.x += 32.0f;
+        banner->displayObjects[7].position.x -= 32.0f;
+        banner->displayObjects[8].position.x -= 32.0f;
+        banner->displayObjects[12].position.x -= 32.0f;
     }
 
-    if (arg0->unk_01 == 0x20) {
-        arg0->unk_00 = 0;
+    if (banner->timer == 0x20) {
+        banner->state = 0;
     }
-    arg0->unk_01++;
+    banner->timer++;
 }
 
-void BattlePrep_UpdateCarouselState(unk_D_84B259A8* arg0) {
-    switch (arg0->unk_00) {
+/**
+ * Runs the per-frame banner update for the current state: 1 round intro, 2 CLEAR plaque slide-in,
+ * 3 slide-out; 0 is idle.
+ */
+void BattlePrepBanner_Update(BattlePrepBanner* banner) {
+    switch (banner->state) {
         case 1:
-            BattlePrep_UpdateCarousel(arg0);
+            BattlePrepBanner_UpdateRoundIntro(banner);
             break;
 
         case 3:
-            BattlePrep_CarouselExitAnimation(arg0);
+            BattlePrepBanner_UpdateSlideOut(banner);
             break;
 
         case 2:
-            BattlePrep_CarouselEntryAnimation(arg0);
+            BattlePrepBanner_UpdateClearSlideIn(banner);
             break;
     }
 }
 
-void BattlePrep_InitCarouselBanner(unk_D_84B259A8* arg0, s16 arg1, s16 arg2) {
-    Model_InitDisplayObject(arg0->unk_20, 0, 0, arg0->unk_24);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20->position, arg1, arg2, -289.0f);
+/**
+ * Sets up object 0 as the plaque background (plateLayout) at (x, y, -289).
+ */
+void BattlePrepBanner_InitPlate(BattlePrepBanner* banner, s16 x, s16 y) {
+    Model_InitDisplayObject(banner->displayObjects, 0, 0, banner->plateLayout);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects->position, x, y, -289.0f);
 }
 
-void BattlePrep_InitCarouselGymBadgeSlot(unk_D_84B259A8* arg0, s16 arg1, s16 arg2, s16 arg3) {
-    s16 temp_s0;
-    s16 sp2C;
+/**
+ * Sets up one copy of the title at (x, y, -289) as the object pair 2 * copy + 1 (titleTopLayout)
+ * and 2 * copy + 2 (titleBottomLayout). Copy 3 is the opaque lead; copies 0-2 are the fading motion
+ * trail, with alpha 80 + 40 * copy.
+ */
+void BattlePrepBanner_InitTitleCopy(BattlePrepBanner* banner, s16 copy, s16 x, s16 y) {
+    s16 object_index;
+    s16 is_lead;
 
-    if (arg1 == 3) {
-        sp2C = 1;
+    if (copy == 3) {
+        is_lead = 1;
     } else {
-        sp2C = 0;
+        is_lead = 0;
     }
-    temp_s0 = (arg1 * 2) + 1;
-    if (sp2C) {}
+    object_index = (copy * 2) + 1;
+    if (is_lead) {}
 
-    Model_InitDisplayObject(&arg0->unk_20[temp_s0], sp2C, 0, arg0->unk_28);
-    Model_InitDisplayObject(&arg0->unk_20[temp_s0 + 1], sp2C, 0, arg0->unk_2C);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20[temp_s0].position, arg2, arg3, -289.0f);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20[temp_s0 + 1].position, arg2, arg3, -289.0f);
+    Model_InitDisplayObject(&banner->displayObjects[object_index], is_lead, 0, banner->titleTopLayout);
+    Model_InitDisplayObject(&banner->displayObjects[object_index + 1], is_lead, 0, banner->titleBottomLayout);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects[object_index].position, x, y, -289.0f);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects[object_index + 1].position, x, y, -289.0f);
 
-    if (arg1 == 3) {
-        arg0->unk_20[temp_s0].lodFraction = 0xFF;
-        arg0->unk_20[temp_s0 + 1].lodFraction = 0xFF;
+    if (copy == 3) {
+        banner->displayObjects[object_index].lodFraction = 0xFF;
+        banner->displayObjects[object_index + 1].lodFraction = 0xFF;
     } else {
-        arg0->unk_20[temp_s0].lodFraction = (arg1 * 0x28) + 0x50;
-        arg0->unk_20[temp_s0 + 1].lodFraction = (arg1 * 0x28) + 0x50;
-    }
-}
-
-void BattlePrep_InitCarouselLeftIcon(unk_D_84B259A8* arg0, s16 arg1) {
-    s16 temp_v1 = arg1 + 9;
-    s16 var_a1;
-
-    if (arg1 == 3) {
-        var_a1 = 1;
-    } else {
-        var_a1 = 0;
-    }
-
-    Model_InitDisplayObject(&arg0->unk_20[temp_v1], var_a1, 0, arg0->unk_30);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20[temp_v1].position, -320.0f, 48.0f, -289.0f);
-
-    if (arg1 == 3) {
-        arg0->unk_20[temp_v1].lodFraction = 0xFF;
-    } else {
-        arg0->unk_20[temp_v1].lodFraction = (arg1 * 0x28) + 0x50;
+        banner->displayObjects[object_index].lodFraction = (copy * 0x28) + 0x50;
+        banner->displayObjects[object_index + 1].lodFraction = (copy * 0x28) + 0x50;
     }
 }
 
-void BattlePrep_InitCarouselRightIcon(unk_D_84B259A8* arg0, s16 arg1) {
-    s16 temp_v1 = arg1 + 9;
-    s16 var_a1;
+/**
+ * Sets up round label copy `copy` as object 9 + copy (roundLabelLayout), off-screen at
+ * (-320, 48, -289). Copy 3 is the opaque lead; copies 0-2 are the trail, with alpha 80 + 40 * copy.
+ */
+void BattlePrepBanner_InitRoundLabelCopy(BattlePrepBanner* banner, s16 copy) {
+    s16 object_index = copy + 9;
+    s16 is_lead;
 
-    if (arg1 == 3) {
-        var_a1 = 1;
+    if (copy == 3) {
+        is_lead = 1;
     } else {
-        var_a1 = 0;
+        is_lead = 0;
     }
 
-    Model_InitDisplayObject(&arg0->unk_20[temp_v1], var_a1, 0, arg0->unk_38);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20[temp_v1].position, 320.0f, 0.0f, -289.0f);
+    Model_InitDisplayObject(&banner->displayObjects[object_index], is_lead, 0, banner->roundLabelLayout);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects[object_index].position, -320.0f, 48.0f, -289.0f);
 
-    if (arg1 == 3) {
-        arg0->unk_20[temp_v1].lodFraction = 0xFF;
+    if (copy == 3) {
+        banner->displayObjects[object_index].lodFraction = 0xFF;
     } else {
-        arg0->unk_20[temp_v1].lodFraction = (arg1 * 0x28) + 0x50;
-    }
-}
-
-void BattlePrep_InitCarouselCupIcon(unk_D_84B259A8* arg0, s16 arg1) {
-    s16 temp_v1 = arg1 + 0xD;
-    s16 var_a1;
-
-    if (arg1 == 3) {
-        var_a1 = 1;
-    } else {
-        var_a1 = 0;
-    }
-
-    Model_InitDisplayObject(&arg0->unk_20[temp_v1], var_a1, 0, arg0->unk_34);
-    Vec3f_SetComponentsDuplicate(&arg0->unk_20[temp_v1].position, -320.0f, 48.0f, -289.0f);
-
-    if (arg1 == 3) {
-        arg0->unk_20[temp_v1].lodFraction = 0xFF;
-    } else {
-        arg0->unk_20[temp_v1].lodFraction = (arg1 * 0x28) + 0x50;
+        banner->displayObjects[object_index].lodFraction = (copy * 0x28) + 0x50;
     }
 }
 
-void BattlePrep_InitCarouselEntry(unk_D_84B259A8* arg0, DisplayObject* arg1) {
+/**
+ * Sets up CLEAR label copy `copy` as object 9 + copy (clearLabelLayout), off-screen at
+ * (320, 0, -289). Copy 3 is the opaque lead; copies 0-2 are the trail, with alpha 80 + 40 * copy.
+ */
+void BattlePrepBanner_InitClearLabelCopy(BattlePrepBanner* banner, s16 copy) {
+    s16 object_index = copy + 9;
+    s16 is_lead;
+
+    if (copy == 3) {
+        is_lead = 1;
+    } else {
+        is_lead = 0;
+    }
+
+    Model_InitDisplayObject(&banner->displayObjects[object_index], is_lead, 0, banner->clearLabelLayout);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects[object_index].position, 320.0f, 0.0f, -289.0f);
+
+    if (copy == 3) {
+        banner->displayObjects[object_index].lodFraction = 0xFF;
+    } else {
+        banner->displayObjects[object_index].lodFraction = (copy * 0x28) + 0x50;
+    }
+}
+
+/**
+ * Sets up division line copy `copy` as object 13 + copy (divisionLayout), off-screen at
+ * (-320, 48, -289). Copy 3 is the opaque lead; copies 0-2 are the trail, with alpha 80 + 40 * copy.
+ */
+void BattlePrepBanner_InitDivisionCopy(BattlePrepBanner* banner, s16 copy) {
+    s16 object_index = copy + 0xD;
+    s16 is_lead;
+
+    if (copy == 3) {
+        is_lead = 1;
+    } else {
+        is_lead = 0;
+    }
+
+    Model_InitDisplayObject(&banner->displayObjects[object_index], is_lead, 0, banner->divisionLayout);
+    Vec3f_SetComponentsDuplicate(&banner->displayObjects[object_index].position, -320.0f, 48.0f, -289.0f);
+
+    if (copy == 3) {
+        banner->displayObjects[object_index].lodFraction = 0xFF;
+    } else {
+        banner->displayObjects[object_index].lodFraction = (copy * 0x28) + 0x50;
+    }
+}
+
+/**
+ * Starts the round intro banner (state 1) on 17 display objects starting at display_objects:
+ * plate (0), title copies (1-8), round label copies (9-12) and, only in modes 3 and 6 (the cups
+ * with Poké Ball to Master Ball divisions), division copies (13-16). Every object's callbackArg
+ * points at the banner so the geo callbacks can find its textures.
+ */
+void BattlePrepBanner_StartRoundIntro(BattlePrepBanner* banner, DisplayObject* display_objects) {
     s32 i;
 
-    arg0->unk_20 = arg1;
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 1;
-    BattlePrep_InitCarouselBanner(arg0, -0x140, 0x30);
+    banner->displayObjects = display_objects;
+    banner->timer = 0;
+    banner->state = 1;
+    BattlePrepBanner_InitPlate(banner, -0x140, 0x30);
 
     for (i = 0; i < 4; i++) {
-        BattlePrep_InitCarouselGymBadgeSlot(arg0, i, -0x140, 0x30);
-        BattlePrep_InitCarouselLeftIcon(arg0, i);
+        BattlePrepBanner_InitTitleCopy(banner, i, -0x140, 0x30);
+        BattlePrepBanner_InitRoundLabelCopy(banner, i);
         if ((gSessionContext.mode == 3) || (gSessionContext.mode == 6)) {
-            BattlePrep_InitCarouselCupIcon(arg0, i);
+            BattlePrepBanner_InitDivisionCopy(banner, i);
         }
     }
 
     for (i = 0; i < 17; i++) {
-        arg0->unk_20[i].node.callbackArg = arg0;
+        banner->displayObjects[i].node.callbackArg = banner;
     }
 }
 
-void BattlePrep_StartCarouselExit(unk_D_84B259A8* arg0) {
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 3;
+/**
+ * Resets the frame timer and switches the banner to state 3 (slide out to the right).
+ */
+void BattlePrepBanner_StartSlideOut(BattlePrepBanner* banner) {
+    banner->timer = 0;
+    banner->state = 3;
 }
 
-void BattlePrep_InitCarouselExit(unk_D_84B259A8* arg0, DisplayObject* arg1) {
+/**
+ * Starts the castle gym-clear plaque (state 2) on 13 display objects starting at display_objects:
+ * plate (0), title copies (1-8) and CLEAR label copies (9-12). Every object's callbackArg points at
+ * the banner so the geo callbacks can find its textures.
+ */
+void BattlePrepBanner_StartClearPlaque(BattlePrepBanner* banner, DisplayObject* display_objects) {
     s32 i;
 
-    arg0->unk_20 = arg1;
-    arg0->unk_01 = 0;
-    arg0->unk_00 = 2;
-    BattlePrep_InitCarouselBanner(arg0, -0x140, 0);
+    banner->displayObjects = display_objects;
+    banner->timer = 0;
+    banner->state = 2;
+    BattlePrepBanner_InitPlate(banner, -0x140, 0);
 
     for (i = 0; i < 4; i++) {
-        BattlePrep_InitCarouselGymBadgeSlot(arg0, i, 0x140, 0);
-        BattlePrep_InitCarouselRightIcon(arg0, i);
+        BattlePrepBanner_InitTitleCopy(banner, i, 0x140, 0);
+        BattlePrepBanner_InitClearLabelCopy(banner, i);
     }
 
     for (i = 0; i < 13; i++) {
-        arg0->unk_20[i].node.callbackArg = arg0;
+        banner->displayObjects[i].node.callbackArg = banner;
     }
 }
 
-void BattlePrep_LoadBannerAssets(unk_D_84B259A8* arg0) {
-    BinArchive* temp_a0 = ASSET_LOAD2(battle_headers, 1, 1);
+/**
+ * Picks the banner textures for the current mode, division or castle location, and round:
+ * - plateTexture: a battle_headers image (D_84B0FC40 / D_84B0FC48).
+ * - titleTexture: the cup name (D_84B0FC54) or castle title (D_84B0FC6C).
+ * - divisionTexture (cups): the division name (D_84B0FCAC).
+ * - roundLabelTexture: "BATTLE", "SEMIFINAL" (round 7) or "FINAL BATTLE" (round 8) for cups;
+ *   "TRAINER", "LEADER" (round 4), "ELITE FOUR" or "RIVAL" in the castle.
+ * - roundNumberTexture: the round digit, set only for rounds below 7.
+ */
+void BattlePrepBanner_LoadTextures(BattlePrepBanner* banner) {
+    BinArchive* headers_archive = ASSET_LOAD2(battle_headers, 1, 1);
 
     if (gSessionContext.mode == 7) {
-        arg0->unk_0C = BinArchive_GetFile(temp_a0, D_84B0FC48[gSessionContext.modeSelection]);
-        arg0->unk_10 = Util_ConvertAddrToVirtAddr(D_84B0FC6C[gSessionContext.modeSelection]);
+        banner->plateTexture = BinArchive_GetFile(headers_archive, D_84B0FC48[gSessionContext.modeSelection]);
+        // modeSelection 9 (rival) reads one past the end of D_84B0FC6C, into D_84B0FC90[0] ("FINAL BATTLE").
+        banner->titleTexture = Util_ConvertAddrToVirtAddr(D_84B0FC6C[gSessionContext.modeSelection]);
 
         switch (gSessionContext.modeSelection) {
             default:
                 if (gSessionContext.roundOrDemoId == 4) {
-                    arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_302CA70);
+                    banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_302CA70);
                 } else {
-                    arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_302BA70);
+                    banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_302BA70);
                 }
                 break;
 
             case 8:
-                arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_302DA70);
+                banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_302DA70);
                 break;
 
             case 9:
-                arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_302EA70);
+                banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_302EA70);
                 break;
         }
     } else {
-        arg0->unk_0C = BinArchive_GetFile(temp_a0, D_84B0FC40[gSessionContext.mode - 1]);
-        arg0->unk_10 = Util_ConvertAddrToVirtAddr(D_84B0FC54[gSessionContext.mode - 1]);
-        arg0->unk_14 = Util_ConvertAddrToVirtAddr(D_84B0FCAC[gSessionContext.modeSelection]);
+        banner->plateTexture = BinArchive_GetFile(headers_archive, D_84B0FC40[gSessionContext.mode - 1]);
+        banner->titleTexture = Util_ConvertAddrToVirtAddr(D_84B0FC54[gSessionContext.mode - 1]);
+        banner->divisionTexture = Util_ConvertAddrToVirtAddr(D_84B0FCAC[gSessionContext.modeSelection]);
 
         switch (gSessionContext.roundOrDemoId) {
             default:
-                arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_302AA70);
+                banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_302AA70);
                 break;
 
             case 7:
-                arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_30497F0);
+                banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_30497F0);
                 break;
 
             case 8:
-                arg0->unk_18 = Util_ConvertAddrToVirtAddr(D_3048210);
+                banner->roundLabelTexture = Util_ConvertAddrToVirtAddr(D_3048210);
                 break;
         }
     }
 
     if (gSessionContext.roundOrDemoId < 7) {
-        arg0->unk_1C = Util_ConvertAddrToVirtAddr(D_84B0FC90[gSessionContext.roundOrDemoId]);
+        banner->roundNumberTexture = Util_ConvertAddrToVirtAddr(D_84B0FC90[gSessionContext.roundOrDemoId]);
     }
 }
 
-void BattlePrep_AdjustBannerTextureOffset(unk_D_84B259A8* arg0) {
-    unk_D_86002F34* ptr;
-    s32 var_v0;
-    s32 var_v1;
-    u8* var_a0;
-    u8* var_a1;
-    Vtx* temp_a3;
+/**
+ * For the round 2 title layout: measures the empty columns on the right of the title texture
+ * (200-wide IA8, 28 rows), then moves the "R-2" icon quad (vertices 0, 1, 8 and 9 of
+ * titleTopLayout's vertex array) left by that width, minus 4, so the icon sits just after the
+ * title text.
+ */
+void BattlePrepBanner_FitRound2Icon(BattlePrepBanner* banner) {
+    unk_D_86002F34* title_layout;
+    s32 blank_width;
+    s32 searching;
+    u8* texel;
+    u8* column;
+    Vtx* vertices;
     s32 i;
 
-    var_v0 = -1;
-    var_v1 = 1;
-    var_a1 = (u8*)arg0->unk_10 + 0xC7;
-    ptr = arg0->unk_28;
-    temp_a3 = ptr->unk_20;
+    blank_width = -1;
+    searching = 1;
+    column = (u8*)banner->titleTexture + 0xC7;
+    title_layout = banner->titleTopLayout;
+    vertices = title_layout->unk_20;
 
-    while (var_v1 != 0) {
-        var_a0 = var_a1;
+    while (searching != 0) {
+        texel = column;
         for (i = 0; i < 28; i++) {
-            if (*var_a0 & 0xF) {
-                var_v1 = 0;
+            if (*texel & 0xF) {
+                searching = 0;
                 break;
             }
-            var_a0 += 0xC8;
+            texel += 0xC8;
         }
-        var_v0++;
-        var_a1--;
+        blank_width++;
+        column--;
     }
 
-    temp_a3[0].v.ob[0] = (temp_a3[0].v.ob[0] - var_v0) + 4;
-    temp_a3[1].v.ob[0] = (temp_a3[1].v.ob[0] - var_v0) + 4;
-    temp_a3[8].v.ob[0] = (temp_a3[8].v.ob[0] - var_v0) + 4;
-    temp_a3[9].v.ob[0] = (temp_a3[9].v.ob[0] - var_v0) + 4;
+    vertices[0].v.ob[0] = (vertices[0].v.ob[0] - blank_width) + 4;
+    vertices[1].v.ob[0] = (vertices[1].v.ob[0] - blank_width) + 4;
+    vertices[8].v.ob[0] = (vertices[8].v.ob[0] - blank_width) + 4;
+    vertices[9].v.ob[0] = (vertices[9].v.ob[0] - blank_width) + 4;
 }
 
-void BattlePrep_LoadBannerGeoLayouts(unk_D_84B259A8* arg0) {
-    MemoryBlock* temp_v0;
+/**
+ * Builds the banner geo layouts in one main pool block: the plate, the CLEAR label and the
+ * division line; the title (the round 2 variant adds the "R-2" icon, which is then fitted to the
+ * title); and the round label, choosing the variant with a digit, without a digit ("LEADER", "RIVAL")
+ * or the wide one ("SEMIFINAL", "FINAL BATTLE").
+ */
+void BattlePrepBanner_LoadGeoLayouts(BattlePrepBanner* banner) {
+    MemoryBlock* pool_block;
 
-    temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
-    arg0->unk_24 = process_geo_layout(temp_v0, D_84B10378);
-    arg0->unk_38 = process_geo_layout(temp_v0, D_84B10E78);
-    arg0->unk_34 = process_geo_layout(temp_v0, D_84B109F0);
+    pool_block = MainPool_AllocState(main_pool_get_available(), 0);
+    banner->plateLayout = process_geo_layout(pool_block, D_84B10378);
+    banner->clearLabelLayout = process_geo_layout(pool_block, D_84B10E78);
+    banner->divisionLayout = process_geo_layout(pool_block, D_84B109F0);
     if (gSessionContext.inRound2 == 0) {
-        arg0->unk_28 = process_geo_layout(temp_v0, D_84B10568);
-        arg0->unk_2C = process_geo_layout(temp_v0, D_84B105A8);
+        banner->titleTopLayout = process_geo_layout(pool_block, D_84B10568);
+        banner->titleBottomLayout = process_geo_layout(pool_block, D_84B105A8);
     } else {
-        arg0->unk_28 = process_geo_layout(temp_v0, D_84B10838);
-        arg0->unk_2C = process_geo_layout(temp_v0, D_84B10878);
-        BattlePrep_AdjustBannerTextureOffset(arg0);
+        banner->titleTopLayout = process_geo_layout(pool_block, D_84B10838);
+        banner->titleBottomLayout = process_geo_layout(pool_block, D_84B10878);
+        BattlePrepBanner_FitRound2Icon(banner);
     }
 
     if (gSessionContext.mode == 7) {
         switch (gSessionContext.modeSelection) {
             default:
                 if (gSessionContext.roundOrDemoId < 4) {
-                    arg0->unk_30 = process_geo_layout(temp_v0, D_84B11060);
+                    banner->roundLabelLayout = process_geo_layout(pool_block, D_84B11060);
                 } else {
-                    arg0->unk_30 = process_geo_layout(temp_v0, D_84B10D70);
+                    banner->roundLabelLayout = process_geo_layout(pool_block, D_84B10D70);
                 }
                 break;
 
             case 8:
-                arg0->unk_30 = process_geo_layout(temp_v0, D_84B11060);
+                banner->roundLabelLayout = process_geo_layout(pool_block, D_84B11060);
                 break;
 
             case 9:
-                arg0->unk_30 = process_geo_layout(temp_v0, D_84B10D70);
+                banner->roundLabelLayout = process_geo_layout(pool_block, D_84B10D70);
                 break;
         }
     } else if (gSessionContext.roundOrDemoId < 7) {
-        arg0->unk_30 = process_geo_layout(temp_v0, D_84B11060);
+        banner->roundLabelLayout = process_geo_layout(pool_block, D_84B11060);
     } else {
-        arg0->unk_30 = process_geo_layout(temp_v0, D_84B10BE8);
+        banner->roundLabelLayout = process_geo_layout(pool_block, D_84B10BE8);
     }
-    MainPool_FinalizeAllocation(temp_v0);
+    MainPool_FinalizeAllocation(pool_block);
 }
 
-void BattlePrep_SetVertexGradientColors(unk_D_86002F34* arg0, Color_RGBA8* arg1, Color_RGBA8* arg2) {
-    Vtx* var_v0 = arg0->unk_20;
-    s16 temp_v1 = arg0->unk_26 / 2;
+/**
+ * Gives a layout a vertical gradient: the first half of its vertices (the top row) get top_color
+ * and the second half (the bottom row) get bottom_color.
+ */
+void BattlePrepBanner_SetVertexGradient(unk_D_86002F34* layout, Color_RGBA8* top_color, Color_RGBA8* bottom_color) {
+    Vtx* vertex = layout->unk_20;
+    s16 half_count = layout->unk_26 / 2;
     s16 i;
 
-    for (i = 0; i < temp_v1; i++, var_v0++) {
-        var_v0->v.cn[0] = arg1->r;
-        var_v0->v.cn[1] = arg1->g;
-        var_v0->v.cn[2] = arg1->b;
-        var_v0->v.cn[3] = arg1->a;
+    for (i = 0; i < half_count; i++, vertex++) {
+        vertex->v.cn[0] = top_color->r;
+        vertex->v.cn[1] = top_color->g;
+        vertex->v.cn[2] = top_color->b;
+        vertex->v.cn[3] = top_color->a;
     }
 
-    for (i = 0; i < temp_v1; i++, var_v0++) {
-        var_v0->v.cn[0] = arg2->r;
-        var_v0->v.cn[1] = arg2->g;
-        var_v0->v.cn[2] = arg2->b;
-        var_v0->v.cn[3] = arg2->a;
+    for (i = 0; i < half_count; i++, vertex++) {
+        vertex->v.cn[0] = bottom_color->r;
+        vertex->v.cn[1] = bottom_color->g;
+        vertex->v.cn[2] = bottom_color->b;
+        vertex->v.cn[3] = bottom_color->a;
     }
 }
 
-void BattlePrep_ApplyBannerColors(unk_D_84B259A8* arg0) {
+/**
+ * Tints the title, division line, round label and CLEAR label with the gradient pair for the
+ * current cup (D_84B0FCBC / D_84B0FCFC indexed by mode - 1) or, in the castle, for the current
+ * location (offset by modeSelection).
+ */
+void BattlePrepBanner_ApplyColors(BattlePrepBanner* banner) {
     UNUSED s32 pad[2];
-    s16 var_v1;
+    s16 color_index;
 
-    var_v1 = gSessionContext.mode - 1;
+    color_index = gSessionContext.mode - 1;
     if (gSessionContext.mode == 7) {
-        var_v1 += gSessionContext.modeSelection;
+        color_index += gSessionContext.modeSelection;
     }
 
-    BattlePrep_SetVertexGradientColors(arg0->unk_28, &D_84B0FCBC[var_v1], &D_84B0FCFC[var_v1]);
-    BattlePrep_SetVertexGradientColors(arg0->unk_34, &D_84B0FCFC[var_v1], &D_84B0FCFC[var_v1]);
-    BattlePrep_SetVertexGradientColors(arg0->unk_30, &D_84B0FCFC[var_v1], &D_84B0FCBC[var_v1]);
-    BattlePrep_SetVertexGradientColors(arg0->unk_38, &D_84B0FCFC[var_v1], &D_84B0FCBC[var_v1]);
+    BattlePrepBanner_SetVertexGradient(banner->titleTopLayout, &D_84B0FCBC[color_index], &D_84B0FCFC[color_index]);
+    BattlePrepBanner_SetVertexGradient(banner->divisionLayout, &D_84B0FCFC[color_index], &D_84B0FCFC[color_index]);
+    BattlePrepBanner_SetVertexGradient(banner->roundLabelLayout, &D_84B0FCFC[color_index], &D_84B0FCBC[color_index]);
+    BattlePrepBanner_SetVertexGradient(banner->clearLabelLayout, &D_84B0FCFC[color_index], &D_84B0FCBC[color_index]);
 }
 
-void BattlePrep_InitBannerScene(unk_D_84B259A8* arg0) {
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    BattlePrep_LoadBannerAssets(arg0);
-    BattlePrep_LoadBannerGeoLayouts(arg0);
-    BattlePrep_ApplyBannerColors(arg0);
+/**
+ * Resets the banner to idle, then loads its textures, builds its geo layouts and applies its colors.
+ */
+void BattlePrepBanner_Init(BattlePrepBanner* banner) {
+    banner->state = 0;
+    banner->timer = 0;
+    BattlePrepBanner_LoadTextures(banner);
+    BattlePrepBanner_LoadGeoLayouts(banner);
+    BattlePrepBanner_ApplyColors(banner);
 }
 
-s32 BattlePrep_BadgeCarouselGeoCallback(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
-    s32 tmp;
-    s32 tmp2;
+/**
+ * Geo draw callback (event 5) for one cup ladder slot. Each ladder display object is a column with
+ * two slots; the node's callbackArg picks the row (0 top, 1 bottom), giving portrait index
+ * row * 4 + column. Binds that portrait to segment 0x0F and draws the olive slot frame with it.
+ */
+s32 OpponentLadder_DrawCupSlot(s32 event, unk_func_80011B94* display_node) {
+    OpponentLadder* ladder;
+    s32 column;
+    s32 slot;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
-        tmp = ((D_8006F09C->effectSlot - temp_a0->unk_08->effectSlot) % 8) - 4;
-        tmp2 = (arg1->display_node_header.callbackArg * 4) + tmp;
+    if (event == 5) {
+        ladder = (OpponentLadder*)D_8006F09C->node.callbackArg;
+        column = ((D_8006F09C->effectSlot - ladder->displayObjects->effectSlot) % 8) - 4;
+        slot = (display_node->display_node_header.callbackArg * 4) + column;
 
         gDPPipeSync(gDisplayListHead++);
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_10[tmp2] & 0x1FFFFFFF);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)ladder->portraits[slot] & 0x1FFFFFFF);
         gSPDisplayList(gDisplayListHead++, D_84B113C0);
 
         GeoRender_ApplyMaterialState();
@@ -1323,30 +1476,34 @@ s32 BattlePrep_BadgeCarouselGeoCallback(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselGlowCallback(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Geo draw callback (event 5): when highlightCurrent is set, draws a pulsing yellow and red frame
+ * (8x8 corner and edge pieces) around the cup ladder slot for the current round.
+ */
+s32 OpponentLadder_DrawCupHighlight(s32 event, unk_func_80011B94* display_node) {
     static s16 D_84B11C18 = 0;
 
-    unk_D_84B259E8* temp_v0;
-    s32 var_t1;
-    s32 tmp;
-    s32 tmp2;
+    OpponentLadder* ladder;
+    s32 alpha;
+    s32 column;
+    s32 slot;
 
-    if (arg0 == 5) {
-        temp_v0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
-        tmp = ((D_8006F09C->effectSlot - temp_v0->unk_08->effectSlot) % 8) - 4;
-        tmp2 = tmp + arg1->display_node_header.callbackArg * 4;
+    if (event == 5) {
+        ladder = (OpponentLadder*)D_8006F09C->node.callbackArg;
+        column = ((D_8006F09C->effectSlot - ladder->displayObjects->effectSlot) % 8) - 4;
+        slot = column + display_node->display_node_header.callbackArg * 4;
 
-        if ((temp_v0->unk_02 != 0) && ((tmp2 + 1) == gSessionContext.roundOrDemoId)) {
+        if ((ladder->highlightCurrent != 0) && ((slot + 1) == gSessionContext.roundOrDemoId)) {
             // clang-format off
-            if (D_84B11C18 >= 0) { var_t1 = (s32)(SINS((s32)(SINS(D_84B11C18) * 16384.0f)) * 127.0f) + 0x7F;
+            if (D_84B11C18 >= 0) { alpha = (s32)(SINS((s32)(SINS(D_84B11C18) * 16384.0f)) * 127.0f) + 0x7F;
             } else {
-                var_t1 = (s32)(SINS(D_84B11C18) * 127.0f) + 0x7F;
+                alpha = (s32)(SINS(D_84B11C18) * 127.0f) + 0x7F;
             }
             // clang-format on
 
             gDPPipeSync(gDisplayListHead++);
-            gDPSetPrimColor(gDisplayListHead++, 0, D_8006F09C->lodFraction, 200, 200, 30, var_t1);
-            gDPSetEnvColor(gDisplayListHead++, 200, 30, 30, var_t1);
+            gDPSetPrimColor(gDisplayListHead++, 0, D_8006F09C->lodFraction, 200, 200, 30, alpha); // #C8C81E
+            gDPSetEnvColor(gDisplayListHead++, 200, 30, 30, alpha); // #C81E1E
             gSPDisplayList(gDisplayListHead++, D_84B114F8);
 
             GeoRender_ApplyMaterialState();
@@ -1356,48 +1513,57 @@ s32 BattlePrep_BadgeCarouselGlowCallback(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselTextureCallback(s32 arg0, unk_func_80011B94* arg1) {
-    unk_D_84B259E8* temp_a0;
-    s32 tmp;
+/**
+ * Geo draw callback (event 5) for one Gym Leader Castle ladder slot: binds that slot's rendered
+ * card (trainer name and portrait, see OpponentLadder_RenderCastleCard) to segment 0x0F and draws
+ * it.
+ */
+s32 OpponentLadder_DrawCastleSlot(s32 event, unk_func_80011B94* display_node) {
+    OpponentLadder* ladder;
+    s32 slot;
 
-    if (arg0 == 5) {
-        temp_a0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
-        tmp = ((D_8006F09C->effectSlot - temp_a0->unk_08->effectSlot) % 8) - 4;
+    if (event == 5) {
+        ladder = (OpponentLadder*)D_8006F09C->node.callbackArg;
+        slot = ((D_8006F09C->effectSlot - ladder->displayObjects->effectSlot) % 8) - 4;
 
         gDPPipeSync(gDisplayListHead++);
 
-        gSPSegment(gDisplayListHead++, 0x0F, (u32)temp_a0->unk_30[tmp]->img_p & 0x1FFFFFFF);
-        gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)ladder->castleCards[slot]->img_p & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
         GeoRender_ApplyMaterialState();
     }
     return 0;
 }
 
-s32 BattlePrep_BadgeCarouselGlowCallback2(s32 arg0, unk_func_80011B94* arg1) {
+/**
+ * Geo draw callback (event 5): when highlightCurrent is set, draws the pulsing yellow and red frame
+ * around the Gym Leader Castle ladder slot for the current round.
+ */
+s32 OpponentLadder_DrawCastleHighlight(s32 event, unk_func_80011B94* display_node) {
     static s16 D_84B11C1C = 0;
 
-    unk_D_84B259E8* temp_v0;
-    s32 var_t1;
-    s32 tmp;
+    OpponentLadder* ladder;
+    s32 alpha;
+    s32 slot;
 
-    if (arg0 == 5) {
-        temp_v0 = (unk_D_84B259E8*)D_8006F09C->node.callbackArg;
-        tmp = ((D_8006F09C->effectSlot - temp_v0->unk_08->effectSlot) % 8);
-        tmp -= 4;
+    if (event == 5) {
+        ladder = (OpponentLadder*)D_8006F09C->node.callbackArg;
+        slot = ((D_8006F09C->effectSlot - ladder->displayObjects->effectSlot) % 8);
+        slot -= 4;
 
-        if ((temp_v0->unk_02 != 0) && ((tmp + 1) == gSessionContext.roundOrDemoId)) {
+        if ((ladder->highlightCurrent != 0) && ((slot + 1) == gSessionContext.roundOrDemoId)) {
             // clang-format off
-            if (D_84B11C1C >= 0) {                var_t1 = (s32)(SINS((s32)(SINS(D_84B11C1C) * 16384.0f)) * 127.0f)+ 0x7F;
+            if (D_84B11C1C >= 0) {                alpha = (s32)(SINS((s32)(SINS(D_84B11C1C) * 16384.0f)) * 127.0f)+ 0x7F;
             } else {
-                var_t1 = (s32)(SINS(D_84B11C1C) * 127.0f) + 0x7F;
+                alpha = (s32)(SINS(D_84B11C1C) * 127.0f) + 0x7F;
             }
             // clang-format on
             gDPPipeSync(gDisplayListHead++);
 
-            gDPSetPrimColor(gDisplayListHead++, 0, D_8006F09C->lodFraction, 200, 200, 30, var_t1);
-            gDPSetEnvColor(gDisplayListHead++, 200, 30, 30, var_t1);
-            gSPDisplayList(gDisplayListHead++, arg1->display_node_header.callbackArg);
+            gDPSetPrimColor(gDisplayListHead++, 0, D_8006F09C->lodFraction, 200, 200, 30, alpha); // #C8C81E
+            gDPSetEnvColor(gDisplayListHead++, 200, 30, 30, alpha); // #C81E1E
+            gSPDisplayList(gDisplayListHead++, display_node->display_node_header.callbackArg);
 
             GeoRender_ApplyMaterialState();
             D_84B11C1C += 0x800;
@@ -1406,180 +1572,223 @@ s32 BattlePrep_BadgeCarouselGlowCallback2(s32 arg0, unk_func_80011B94* arg1) {
     return 0;
 }
 
-void BattlePrep_RenderBadgeGlowTexture(s32 arg0) {
-    DepthBuffer sp40;
-    u32 sp3C = Util_ConvertAddrToVirtAddr(&D_3017F00);
+/**
+ * Draws the defeated mark into a 64x64 portrait texture: D_3017F00, a 64x64 I4 "X", tinted
+ * red-orange with alpha 160.
+ */
+void OpponentLadder_StampDefeatedMark(s32 portrait) {
+    DepthBuffer image;
+    u32 mark_texture = Util_ConvertAddrToVirtAddr(&D_3017F00);
 
-    GfxImage_Initialize(&sp40, 0, 2, 0x40, 0x40, arg0);
-    GfxImage_SetRenderTarget(&gDisplayListHead, &sp40);
+    GfxImage_Initialize(&image, 0, 2, 0x40, 0x40, portrait);
+    GfxImage_SetRenderTarget(&gDisplayListHead, &image);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 160);
+    gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 160); // #FF3214A0
 
-    Gfx_DrawTextureI4(0, 0, 0x40, 0x40, sp3C, 0x40, 0);
+    Gfx_DrawTextureI4(0, 0, 0x40, 0x40, mark_texture, 0x40, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-void BattlePrep_ResetBadgeSlideSlots(unk_D_84B259E8* arg0) {
+/**
+ * Ends a ladder flip: replaces the four flipping slot columns (objects 12-15) with upright front
+ * columns (objects 4-7) using the ladder layout.
+ */
+void OpponentLadder_FinishFlip(OpponentLadder* ladder) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        ModelRenderer_ClearDisplayObject(&arg0->unk_08[i + 4]);
-        BattlePrep_ResetDisplayObject(&arg0->unk_08[i + 12]);
-        Model_InitDisplayObject(&arg0->unk_08[i + 4], 1, 0, arg0->unk_0C);
-        arg0->unk_08[i + 4].rotation.x = 0;
-        arg0->unk_08[i + 4].node.callbackArg = arg0;
+        ModelRenderer_ClearDisplayObject(&ladder->displayObjects[i + 4]);
+        BattlePrep_ResetDisplayObject(&ladder->displayObjects[i + 12]);
+        Model_InitDisplayObject(&ladder->displayObjects[i + 4], 1, 0, ladder->slotLayout);
+        ladder->displayObjects[i + 4].rotation.x = 0;
+        ladder->displayObjects[i + 4].node.callbackArg = ladder;
     }
 }
 
-void BattlePrep_BadgeSlideInLeft(unk_D_84B259E8* arg0) {
+/**
+ * State 1 update: slides the four ladder columns in from the right at 32 units per frame for 10
+ * frames, ending at x = -96, -32, 32 and 96, then goes idle.
+ */
+void OpponentLadder_UpdateSlideIn(OpponentLadder* ladder) {
     s32 i;
 
-    arg0->unk_01++;
+    ladder->timer++;
 
     for (i = 0; i < 4; i++) {
-        arg0->unk_08[4 + i].position.x = (0xE0 + i * 0x40) - (arg0->unk_01 << 5);
+        ladder->displayObjects[4 + i].position.x = (0xE0 + i * 0x40) - (ladder->timer << 5);
     }
 
-    if (arg0->unk_01 == 0xA) {
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 0;
-    }
-}
-
-void BattlePrep_BadgeSlideInRight(unk_D_84B259E8* arg0) {
-    s32 i;
-    s32 var_v0;
-
-    arg0->unk_01++;
-
-    for (i = 0, var_v0 = -0x60; i < 4; i++, var_v0 += 0x40) {
-        arg0->unk_08[4 + i].position.x = (s16)var_v0 - (arg0->unk_01 << 5);
-    }
-
-    if (arg0->unk_01 == 0xA) {
-        for (i = 0; i < 4; i++) {
-            BattlePrep_ResetDisplayObject(&arg0->unk_08[4 + i]);
-        }
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 0;
+    if (ladder->timer == 0xA) {
+        ladder->timer = 0;
+        ladder->state = 0;
     }
 }
 
-void BattlePrep_BadgeRevealSpin(unk_D_84B259E8* arg0) {
+/**
+ * State 2 update: slides the four ladder columns off to the left at 32 units per frame for 10
+ * frames, then hides them and goes idle.
+ */
+void OpponentLadder_UpdateSlideOut(OpponentLadder* ladder) {
     s32 i;
-    s32 var_a2;
+    s32 start_x;
 
-    arg0->unk_01++;
-    if (arg0->unk_01 < 0x10) {
+    ladder->timer++;
+
+    for (i = 0, start_x = -0x60; i < 4; i++, start_x += 0x40) {
+        ladder->displayObjects[4 + i].position.x = (s16)start_x - (ladder->timer << 5);
+    }
+
+    if (ladder->timer == 0xA) {
         for (i = 0; i < 4; i++) {
-            arg0->unk_08[4 + i].rotation.x += 0x800;
-            arg0->unk_08[12 + i].rotation.x += 0x800;
+            BattlePrep_ResetDisplayObject(&ladder->displayObjects[4 + i]);
         }
-    } else if (arg0->unk_01 == 0x10) {
+        ladder->timer = 0;
+        ladder->state = 0;
+    }
+}
+
+/**
+ * State 3 update, after a win: the ladder flips over into view (half a turn about X over 16
+ * frames). On frame 16 it plays sound 0x0110000C and settles; on frame 32 it plays sound 0x01100014
+ * and stamps the defeated mark on the current round's opponent. In the castle the slot card is then
+ * redrawn so the mark shows. Stamps follow the round index (roundOrDemoId), not the opponent
+ * actually fought.
+ */
+void OpponentLadder_UpdateFlipInAndStamp(OpponentLadder* ladder) {
+    s32 i;
+    s32 slot_count;
+
+    ladder->timer++;
+    if (ladder->timer < 0x10) {
+        for (i = 0; i < 4; i++) {
+            ladder->displayObjects[4 + i].rotation.x += 0x800;
+            ladder->displayObjects[12 + i].rotation.x += 0x800;
+        }
+    } else if (ladder->timer == 0x10) {
         Audio_PlayCategory11SoundCommand(0x0110000C, 0, 0);
-        BattlePrep_ResetBadgeSlideSlots(arg0);
-    } else if (arg0->unk_01 == 0x20) {
+        OpponentLadder_FinishFlip(ladder);
+    } else if (ladder->timer == 0x20) {
         if (gSessionContext.mode == 7) {
-            var_a2 = 4;
+            slot_count = 4;
         } else {
-            var_a2 = 8;
+            slot_count = 8;
         }
 
-        Audio_PlayCategory11SoundCommand(0x01100014, gSessionContext.roundOrDemoId, var_a2);
-        BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[gSessionContext.roundOrDemoId - 1]);
+        Audio_PlayCategory11SoundCommand(0x01100014, gSessionContext.roundOrDemoId, slot_count);
+        OpponentLadder_StampDefeatedMark(ladder->portraits[gSessionContext.roundOrDemoId - 1]);
 
         if (gSessionContext.mode == 7) {
-            GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_30[gSessionContext.roundOrDemoId - 1]);
+            GfxImage_SetRenderTarget(&gDisplayListHead, ladder->castleCards[gSessionContext.roundOrDemoId - 1]);
 
             gSPDisplayList(gDisplayListHead++, D_8006F4E0);
 
-            Gfx_DrawTextureRgba16(4, 0x24, 0x38, 0x1C, &arg0->unk_10[gSessionContext.roundOrDemoId - 1][0x208], 0x40,
+            Gfx_DrawTextureRgba16(4, 0x24, 0x38, 0x1C, &ladder->portraits[gSessionContext.roundOrDemoId - 1][0x208], 0x40,
                                   0x200000);
-            Gfx_DrawTextureRgba16(4, 0x40, 0x38, 0x1C, &arg0->unk_10[gSessionContext.roundOrDemoId - 1][0x1008], 0x40,
+            Gfx_DrawTextureRgba16(4, 0x40, 0x38, 0x1C, &ladder->portraits[gSessionContext.roundOrDemoId - 1][0x1008], 0x40,
                                   0x200000);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
         }
 
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 0;
+        ladder->timer = 0;
+        ladder->state = 0;
     }
 }
 
-void BattlePrep_BadgeHideSpin(unk_D_84B259E8* arg0) {
+/**
+ * State 4 update, after a loss: the ladder flips over into view (half a turn about X over 16
+ * frames), then plays sound 0x0110000C and settles. No new mark is stamped.
+ */
+void OpponentLadder_UpdateFlipIn(OpponentLadder* ladder) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        arg0->unk_08[4 + i].rotation.x -= 0x800;
-        arg0->unk_08[12 + i].rotation.x -= 0x800;
+        ladder->displayObjects[4 + i].rotation.x -= 0x800;
+        ladder->displayObjects[12 + i].rotation.x -= 0x800;
     }
 
-    arg0->unk_01++;
-    if (arg0->unk_01 == 0x10) {
+    ladder->timer++;
+    if (ladder->timer == 0x10) {
         Audio_PlayCategory11SoundCommand(0x0110000C, 0, 0);
-        BattlePrep_ResetBadgeSlideSlots(arg0);
-        arg0->unk_01 = 0;
-        arg0->unk_00 = 0;
+        OpponentLadder_FinishFlip(ladder);
+        ladder->timer = 0;
+        ladder->state = 0;
     }
 }
 
-void BattlePrep_UpdateBadgeCarousel(unk_D_84B259E8* arg0) {
-    switch (arg0->unk_00) {
+/**
+ * Runs the per-frame ladder update for the current state: 1 slide in, 2 slide out, 3 flip in and
+ * stamp (win), 4 flip in (loss); 0 is idle.
+ */
+void OpponentLadder_Update(OpponentLadder* ladder) {
+    switch (ladder->state) {
         case 1:
-            BattlePrep_BadgeSlideInLeft(arg0);
+            OpponentLadder_UpdateSlideIn(ladder);
             break;
 
         case 2:
-            BattlePrep_BadgeSlideInRight(arg0);
+            OpponentLadder_UpdateSlideOut(ladder);
             break;
 
         case 3:
-            BattlePrep_BadgeRevealSpin(arg0);
+            OpponentLadder_UpdateFlipInAndStamp(ladder);
             break;
 
         case 4:
-            BattlePrep_BadgeHideSpin(arg0);
+            OpponentLadder_UpdateFlipIn(ladder);
             break;
     }
 }
 
-void BattlePrep_InitBadgeCarousel(unk_D_84B259E8* arg0, DisplayObject* arg1, s16 arg2) {
+/**
+ * Starts a ladder animation on the display objects starting at display_objects. animation 0 is
+ * the round intro: columns 4-7 wait off-screen right and slide in (state 1). Otherwise columns
+ * 12-15 are placed face-down at their final positions and flip in: animation 1 after a win stamps
+ * the defeated opponent and stops the highlight (state 3); animation 2 after a loss keeps it
+ * (state 4).
+ */
+void OpponentLadder_Start(OpponentLadder* ladder, DisplayObject* display_objects, s16 animation) {
     s32 i;
-    s16 var_s2;
+    s16 x;
 
-    arg0->unk_08 = arg1;
-    arg0->unk_01 = 0;
+    ladder->displayObjects = display_objects;
+    ladder->timer = 0;
 
-    if (arg2 == 0) {
+    if (animation == 0) {
         for (i = 4; i < 8; i++) {
-            Model_InitDisplayObject(&arg0->unk_08[i], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_08[i].position, 320.0f, -48.0f, -289.0f);
-            arg0->unk_08[i].node.callbackArg = (s32)arg0;
+            Model_InitDisplayObject(&ladder->displayObjects[i], 1, 0, ladder->slotLayout);
+            Vec3f_SetComponentsDuplicate(&ladder->displayObjects[i].position, 320.0f, -48.0f, -289.0f);
+            ladder->displayObjects[i].node.callbackArg = (s32)ladder;
         }
-        arg0->unk_00 = 1;
+        ladder->state = 1;
     } else {
-        for (i = 12, var_s2 = -0x60; i < 16; i++) {
-            Model_InitDisplayObject(&arg0->unk_08[i], 1, 0, arg0->unk_0C);
-            Vec3f_SetComponentsDuplicate(&arg0->unk_08[i].position, var_s2, -48.0f, -289.0f);
-            arg0->unk_08[i].rotation.x = -0x8000;
-            var_s2 += 0x40;
-            arg0->unk_08[i].node.callbackArg = arg0;
+        for (i = 12, x = -0x60; i < 16; i++) {
+            Model_InitDisplayObject(&ladder->displayObjects[i], 1, 0, ladder->slotLayout);
+            Vec3f_SetComponentsDuplicate(&ladder->displayObjects[i].position, x, -48.0f, -289.0f);
+            ladder->displayObjects[i].rotation.x = -0x8000;
+            x += 0x40;
+            ladder->displayObjects[i].node.callbackArg = ladder;
         }
 
-        if (arg2 == 1) {
-            arg0->unk_02 = 0;
-            arg0->unk_00 = 3;
+        if (animation == 1) {
+            ladder->highlightCurrent = 0;
+            ladder->state = 3;
         } else {
-            arg0->unk_02 = 1;
-            arg0->unk_00 = 4;
+            ladder->highlightCurrent = 1;
+            ladder->state = 4;
         }
     }
 }
 
-void BattlePrep_RenderBadgeBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2) {
-    GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_30[arg1]);
+/**
+ * Renders Gym Leader Castle ladder card `slot` (64x96): the olive card background, the trainer's
+ * portrait and the trainer's name centered at the top. For the rival (modeSelection 9) only slot 0
+ * gets a portrait and name.
+ */
+void OpponentLadder_RenderCastleCard(OpponentLadder* ladder, s16 slot, char* name) {
+    GfxImage_SetRenderTarget(&gDisplayListHead, ladder->castleCards[slot]);
 
     gSPDisplayList(gDisplayListHead++, D_8006F4E0);
 
@@ -1587,142 +1796,157 @@ void BattlePrep_RenderBadgeBackground(unk_D_84B259E8* arg0, s16 arg1, char* arg2
     Gfx_DrawTextureRgba16(0, 0x20, 0x40, 0x20, D_3013000, 0x40, 0x200000);
     Gfx_DrawTextureRgba16(0, 0x40, 0x40, 0x20, D_3014000, 0x40, 0x200000);
 
-    if ((gSessionContext.modeSelection < 9) || (arg1 == 0)) {
-        Gfx_DrawTextureRgba16(4, 0x24, 0x38, 0x1C, arg0->unk_10[arg1] + 0x208, 0x40, 0x200000);
-        Gfx_DrawTextureRgba16(4, 0x40, 0x38, 0x1C, arg0->unk_10[arg1] + 0x1008, 0x40, 0x200000);
+    if ((gSessionContext.modeSelection < 9) || (slot == 0)) {
+        Gfx_DrawTextureRgba16(4, 0x24, 0x38, 0x1C, ladder->portraits[slot] + 0x208, 0x40, 0x200000);
+        Gfx_DrawTextureRgba16(4, 0x40, 0x38, 0x1C, ladder->portraits[slot] + 0x1008, 0x40, 0x200000);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    if ((gSessionContext.modeSelection < 9) || (arg1 == 0)) {
-        s32 sp34 = Font_MeasureTextExtent(2, 0, arg2);
+    if ((gSessionContext.modeSelection < 9) || (slot == 0)) {
+        s32 name_width = Font_MeasureTextExtent(2, 0, name);
 
         Font_BeginTranslucentTextRendering();
         Font_SetLineHeight(0xC);
         Font_SetActive(2, 0);
-        Font_Printf(0x20 - (sp34 / 2), 6, arg2);
+        Font_Printf(0x20 - (name_width / 2), 6, name);
         Font_EndTexturedTextRendering();
     }
 }
 
-s32 BattlePrep_Align64PoolBlock(s32* arg0) {
-    u32 temp_v0;
-    s32 var_v1;
+/**
+ * Grows a main pool block and shifts its contents so the data starts on a 64-byte boundary;
+ * returns the aligned address. Used for portrait textures.
+ */
+s32 BattlePrep_Align64PoolBlock(s32* block) {
+    u32 size;
+    s32 aligned;
     s32 i;
-    u32 sp1C;
+    u32 shift;
 
-    var_v1 = (s32)arg0;
-    sp1C = 0x40 - ((u32)arg0 & 0x3F);
-    if (sp1C != 0x40) {
-        s32* sp24;
-        s32* sp20;
+    aligned = (s32)block;
+    shift = 0x40 - ((u32)block & 0x3F);
+    if (shift != 0x40) {
+        s32* src;
+        s32* dst;
 
-        temp_v0 = main_pool_get_block_dist(arg0);
-        sp24 = (u32)arg0 + temp_v0;
-        sp20 = (u32)arg0 + (temp_v0 + sp1C);
-        main_pool_realloc(arg0, (temp_v0 + sp1C));
-        for (; arg0 < sp24;) {
-            *--sp20 = *--sp24;
+        size = main_pool_get_block_dist(block);
+        src = (u32)block + size;
+        dst = (u32)block + (size + shift);
+        main_pool_realloc(block, (size + shift));
+        for (; block < src;) {
+            *--dst = *--src;
         }
-        var_v1 += sp1C;
+        aligned += shift;
     }
-    return var_v1;
+    return aligned;
 }
 
-void BattlePrep_LoadBadgeTextures(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+/**
+ * Loads the ladder portraits. The trainer list for the current mode and division or location
+ * (+31 in round 2) comes from trainer_archive; portraits come from portrait_archive. In the castle
+ * the four location trainers are loaded and each slot card is rendered. In the cups, opponents up to
+ * the current round get their portraits and later slots get the placeholder "?" portrait 0. Slots
+ * before the current round are re-stamped with the defeated mark.
+ */
+void OpponentLadder_LoadPortraits(OpponentLadder* ladder, BinArchive* trainer_archive, BinArchive* portrait_archive) {
     s16 i;
-    s16 sp44;
-    unk_func_84B067B4* temp_s5;
-    unk_func_84B067B4* ptr;
-    s16 tmp;
+    s16 roster_file;
+    TrainerData* trainers;
+    TrainerData* trainer;
+    s16 portrait_file;
 
     switch (gSessionContext.mode) {
         case 1:
-            sp44 = 6;
+            roster_file = 6;
             break;
 
         case 2:
-            sp44 = 7;
+            roster_file = 7;
             break;
 
         case 3:
-            sp44 = gSessionContext.modeSelection + 8;
+            roster_file = gSessionContext.modeSelection + 8;
             break;
 
         case 4:
-            sp44 = 0;
+            roster_file = 0;
             break;
 
         case 5:
-            sp44 = 1;
+            roster_file = 1;
             break;
 
         case 6:
-            sp44 = gSessionContext.modeSelection + 2;
+            roster_file = gSessionContext.modeSelection + 2;
             break;
 
         case 7:
-            sp44 = gSessionContext.modeSelection + 0xC;
+            roster_file = gSessionContext.modeSelection + 0xC;
             break;
 
         case 8:
-            sp44 = 0x16;
+            roster_file = 0x16;
             break;
     }
 
     if (gSessionContext.inRound2 != 0) {
-        sp44 += 0x1F;
+        roster_file += 0x1F;
     }
 
-    temp_s5 = BinArchive_GetFile(arg1, sp44);
+    trainers = BinArchive_GetFile(trainer_archive, roster_file);
     if (gSessionContext.mode == 7) {
         for (i = 0; i < 4; i++) {
-            ptr = i + ((void)0, temp_s5);
+            trainer = i + ((void)0, trainers);
 
-            tmp = (ptr->unk_038 >> 8) & 0xFF;
-            arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
+            portrait_file = (trainer->gfx_file_index >> 8) & 0xFF;
+            ladder->portraits[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(portrait_archive, portrait_file));
             if (i < (gSessionContext.roundOrDemoId - 1)) {
-                BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[i]);
+                OpponentLadder_StampDefeatedMark(ladder->portraits[i]);
             }
-            arg0->unk_30[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
-            BattlePrep_RenderBadgeBackground(arg0, i, ptr->unk_010);
+            ladder->castleCards[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+            OpponentLadder_RenderCastleCard(ladder, i, trainer->name2);
         }
     } else {
         for (i = 0; i < 8; i++) {
             if (i < gSessionContext.roundOrDemoId) {
-                tmp = (temp_s5[gSessionContext.opponentHistory[0][i]].unk_038 >> 8) & 0xFF;
+                portrait_file = (trainers[gSessionContext.opponentHistory[0][i]].gfx_file_index >> 8) & 0xFF;
 
-                arg0->unk_10[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(arg2, tmp));
+                ladder->portraits[i] = BattlePrep_Align64PoolBlock(BinArchive_GetFile(portrait_archive, portrait_file));
                 if (i < (gSessionContext.roundOrDemoId - 1)) {
-                    BattlePrep_RenderBadgeGlowTexture(arg0->unk_10[i]);
+                    OpponentLadder_StampDefeatedMark(ladder->portraits[i]);
                 }
             } else {
-                arg0->unk_10[i] = BinArchive_GetFile(arg2, 0);
+                ladder->portraits[i] = BinArchive_GetFile(portrait_archive, 0);
             }
         }
     }
 }
 
-void BattlePrep_InitBadgeCarouselScene(unk_D_84B259E8* arg0, BinArchive* arg1, BinArchive* arg2) {
+/**
+ * Resets the ladder to idle with the highlight on, allocates the four castle slot cards, builds
+ * the cup or castle ladder layout and loads the portraits.
+ */
+void OpponentLadder_Init(OpponentLadder* ladder, BinArchive* trainer_archive, BinArchive* portrait_archive) {
     s32 i;
-    MemoryBlock* temp_v0;
+    MemoryBlock* pool_block;
 
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
-    arg0->unk_02 = 1;
-    arg0->unk_04 = 0;
+    ladder->state = 0;
+    ladder->timer = 0;
+    ladder->highlightCurrent = 1;
+    ladder->unk_04 = 0;
 
     for (i = 0; i < 4; i++) {
-        arg0->unk_30[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
+        ladder->castleCards[i] = GfxImage_Allocate(0, 2, 0x40, 0x60, 0);
     }
 
-    temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
+    pool_block = MainPool_AllocState(main_pool_get_available(), 0);
     if (gSessionContext.mode == 7) {
-        arg0->unk_0C = process_geo_layout(temp_v0, D_84B11BD0);
+        ladder->slotLayout = process_geo_layout(pool_block, D_84B11BD0);
     } else {
-        arg0->unk_0C = process_geo_layout(temp_v0, D_84B11640);
+        ladder->slotLayout = process_geo_layout(pool_block, D_84B11640);
     }
 
-    MainPool_FinalizeAllocation(temp_v0);
-    BattlePrep_LoadBadgeTextures(arg0, arg1, arg2);
+    MainPool_FinalizeAllocation(pool_block);
+    OpponentLadder_LoadPortraits(ladder, trainer_archive, portrait_archive);
 }
