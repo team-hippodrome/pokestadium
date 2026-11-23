@@ -1,6 +1,8 @@
 #include "battle_prep.h"
 
-unk_D_8006FF00 D_84B17620[] = {
+// Per-species PokeIcon parameters for the pre-battle roster; BattlePrepRoster_Init passes it to
+// PokeIcon_SetNameTable.
+unk_D_8006FF00 sRosterSpeciesIcons[] = {
     {
         0x01,
         0x00,
@@ -2130,7 +2132,9 @@ unk_D_8006FF00 D_84B17620[] = {
         NULL,
     },
 };
-unk_D_8006FF00 D_84B186C0[] = {
+// Per-species PokeIcon parameters for the result screen's team icons; BattlePrepTeamIcons_Init passes it
+// to PokeIcon_SetNameTable.
+unk_D_8006FF00 sTeamIconsSpeciesIcons[] = {
     {
         0x01,
         0x00,

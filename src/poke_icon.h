@@ -57,22 +57,27 @@ typedef struct unk_func_8001A024 {
     /* 0x18 */ unk_D_8006FF00* unk_18;
 } unk_func_8001A024; // size = 0x1C
 
-typedef struct unk_D_84B25A28 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x04 */ DisplayObject* unk_04;
-    /* 0x08 */ CameraNode* unk_08;
-    /* 0x0C */ GraphNode* unk_0C;
-    /* 0x10 */ GraphNode* unk_10;
-    /* 0x14 */ GraphNode* unk_14;
-    /* 0x18 */ GraphNode* unk_18;
-    /* 0x1C */ GraphNode* unk_1C;
-    /* 0x20 */ unk_func_8001A024* unk_20;
-    /* 0x24 */ DepthBuffer* unk_24;
-    /* 0x28 */ DepthBuffer* unk_28;
+/**
+ * Pre-battle versus screen in battle_prep: each side's trainer card and icon columns flip in, then the
+ * 3D V/S logo flies into the screen and the camera shakes. Side 0 is the top row, side 1 the bottom row.
+ * Used only by src/fragments/battle_prep/.
+ */
+typedef struct BattlePrepRoster {
+    /* 0x00 */ u8 state; // 0 idle, 1 loading icons, 2 icons ready, 3 intro animation running.
+    /* 0x01 */ u8 timer; // Frame counter for the loading wait and the intro animation.
+    /* 0x02 */ u8 isDoubleLayout; // 1 when a side has a tag team: each side shows two members' icons.
+    /* 0x04 */ DisplayObject* displayObjects; // 0/9 trainer cards, 1-4/5-8 icon columns, 10 V/S logo.
+    /* 0x08 */ CameraNode* camera;
+    /* 0x0C */ GraphNode* side0IconGeo; // Icon columns on the blue D_300C000 / D_300F000 panels.
+    /* 0x10 */ GraphNode* side1IconGeo; // Icon columns on the green D_300D800 / D_300FC00 panels.
+    /* 0x14 */ GraphNode* side0CardGeo;
+    /* 0x18 */ GraphNode* side1CardGeo;
+    /* 0x1C */ GraphNode* versusLogoGeo; // 3D "V" and "S" meshes with the scrolling shine texture D_84B11C20.
+    /* 0x20 */ unk_func_8001A024* iconRenderList; // PokeIcon render list holding each brought Pokémon's icon image.
+    /* 0x24 */ DepthBuffer* side0CardImage; // 64x96 trainer card drawn by BattlePrep_DrawTrainerStatusIcon.
+    /* 0x28 */ DepthBuffer* side1CardImage;
     /* 0x2C */ char unk2C[0x4];
-} unk_D_84B25A28; // size = 0x30
+} BattlePrepRoster; // size = 0x30
 
 unk_func_8001A024* PokeIcon_CreateRenderList(ModelLoadContext*, s16, s16, s16);
 void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);
