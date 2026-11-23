@@ -62,7 +62,7 @@ Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1,
 Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3,
                                           s32 arg4);
 Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 arg2, u32 arg3, s32 arg4);
-s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2);
+ModelAnimationBank* Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2);
 void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1);
 void PokeIcon_LoadModelArchive(unk_func_80019600* arg0);
 void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0);
@@ -72,7 +72,7 @@ ModelLoadContext* PokeIcon_AllocFramebuffers(u32 arg0);
 void PokeIcon_OpenModelArchives(void);
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2);
 s32 PokeIcon_RequestFrameLoadWithVariant(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2, s16 arg3);
-s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2);
+s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s16* arg1, s32 arg2);
 s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1);
 s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0);
 s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0);
@@ -80,7 +80,7 @@ s32 PokeIcon_WaitFrameLoad(ModelLoadContext* arg0);
 s32 PokeIcon_WaitBackgroundLoad(ModelLoadContext* arg0);
 unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0);
 unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0);
-s32 Model_LoadWithScale(s32 arg0, s32 arg1);
+unk_D_86002F30* Model_LoadWithScale(s32 arg0, s32 arg1);
 arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0);
 Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4,
                                                s32 arg5);

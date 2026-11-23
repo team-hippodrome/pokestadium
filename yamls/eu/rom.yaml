@@ -61,6 +61,7 @@
     - [0x18460, c, geo_layout] # dp model animations
     - [0x19820, c, display_object_textures] # alternative pkm textures
     - [0x1AB50, c, poke_icon] # vs screen code
+    - [0x1BD20, c, poke_icon_preview]
     - [0x1C700, c, model_renderer] #
     - [0x1CF10, c, graphics_textures] # dp list code
     - [0x20310, c, input] # some cache cleaner
@@ -277,6 +278,7 @@
     - [0x6FD40, .data, geo_render]
     - [0x6FF70, .data, geo_layout]
     - [0x70010, .data, poke_icon]
+    - [0x700A0, .data, poke_icon_preview]
     - [0x70130, .data, ui_graphics]
     - [0x704A0, .data, status_icons]
     - [0x71C60, .data, gb_data]
@@ -342,7 +344,7 @@
     - [0x7C0A0, .rodata, gb_tower]
     - [0x7C0E0, .rodata, leo]
     - [0x7C260, .rodata, matrix]
-    - [0x7C270, .rodata, poke_icon]
+    - [0x7C270, .rodata, poke_icon_preview]
     - [0x7C2A0, .rodata, status_icons]
     - [0x7CD80, .rodata, gb_data]
     - [0x7CDF0, .rodata, pokemon_stats]
@@ -416,7 +418,7 @@
     - {vram: 0x800ABDD0, type: .bss, name: model_animation_events}
     - {vram: 0x800ABE00, type: .bss, name: geo_layout}
     - {vram: 0x800ABEE0, type: .bss, name: display_object_textures}
-    - {vram: 0x800AC900, type: .bss, name: poke_icon}
+    - {vram: 0x800AC900, type: .bss, name: poke_icon_preview}
     - {vram: 0x800AC910, type: .bss, name: model_renderer}
     - {vram: 0x800AC940, type: .bss, name: graphics_textures}
     - {vram: 0x800AC950, type: .bss, name: input}
@@ -526,17 +528,17 @@
     start: 0x108060
     vram: 0x87800000
     subsegments:
-    - [0x108060, textbin, fragments/widget_toolkit/widget_toolkit_header]
-    - [0x108080, c,       fragments/widget_toolkit/widget_toolkit]
-    - [0x10A3C0, asm, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10E390, .data,   fragments/widget_toolkit/widget_toolkit]
-    - [0x10E3F0, data, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x10E550, data, fragments/widget_toolkit/widget_toolkit_2]
-    - [0x117A30, rodata, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x117A40, rodata, fragments/widget_toolkit/widget_toolkit_2]
-    - {vram: 0x8780FA20, type:  .bss, name: fragments/widget_toolkit/widget_toolkit}
-    - {vram: 0x8780FAC0, type:  bss, name: fragments/widget_toolkit/widget_toolkit_1}
-    - {vram: 0x8780FC40, type:  bss, name: fragments/widget_toolkit/widget_toolkit_2}
+    - [0x108060, textbin, fragments/minigame_hud/minigame_hud_header]
+    - [0x108080, c,       fragments/minigame_hud/minigame_hud]
+    - [0x10A3C0, asm, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10E390, .data,   fragments/minigame_hud/minigame_hud]
+    - [0x10E3F0, data, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10E550, data, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x117A30, rodata, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x117A40, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+    - {vram: 0x8780FA20, type:  .bss, name: fragments/minigame_hud/minigame_hud}
+    - {vram: 0x8780FAC0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+    - {vram: 0x8780FC40, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
     type: code
     bss_size: 0x0
@@ -1093,10 +1095,10 @@
     start: 0x1EA980
     vram: 0x88500000
     subsegments:
-    - [0x1EA980, textbin,   fragments/widget_tree/widget_tree_header]
-    - [0x1EA9A0, c,         fragments/widget_tree/widget_tree]
-    - [0x1F7900, .data,     fragments/widget_tree/widget_tree]
-    - [0x1F7930, .rodata,   fragments/widget_tree/widget_tree]
+    - [0x1EA980, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
+    - [0x1EA9A0, c,         fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F7900, .data,     fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F7930, .rodata,   fragments/lab_widget_tree/lab_widget_tree]
   - name: fragment26_relocs
     type: code
     bss_size: 0x0
@@ -1254,10 +1256,10 @@
     start: 0x25A860
     vram: 0x81100000
     subsegments:
-    - [0x25A860, textbin,   fragments/fatal_error_screen/fatal_error_screen_header]
-    - [0x25A880, c,      fragments/fatal_error_screen/fatal_error_screen]
-    - [0x25B180, .data,   fragments/fatal_error_screen/fatal_error_screen]
-    - {vram: 0x81100930, type:  .bss, name: fragments/fatal_error_screen/fatal_error_screen}
+    - [0x25A860, textbin,   fragments/transfer_pak_error/transfer_pak_error_header]
+    - [0x25A880, c,      fragments/transfer_pak_error/transfer_pak_error]
+    - [0x25B180, .data,   fragments/transfer_pak_error/transfer_pak_error]
+    - {vram: 0x81100930, type:  .bss, name: fragments/transfer_pak_error/transfer_pak_error}
   - name: fragment32_relocs
     type: code
     bss_size: 0x0

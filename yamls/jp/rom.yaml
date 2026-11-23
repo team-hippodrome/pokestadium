@@ -526,13 +526,13 @@
     start: 0x12A4F0
     vram: 0x87800000
     subsegments:
-    - [0x12A4F0, textbin, fragments/widget_toolkit/widget_toolkit_header]
+    - [0x12A4F0, textbin, fragments/minigame_hud/minigame_hud_header]
     - [0x12A510, asm, fragment2_12A510]
-    - [0x12FF30, data, fragments/widget_toolkit/widget_toolkit_1]
-    - [0x130090, data, fragments/widget_toolkit/widget_toolkit_2]
-    - {vram: 0x8780F240, type:  bss, name: fragments/widget_toolkit/widget_toolkit}
-    - {vram: 0x8780F2E0, type:  bss, name: fragments/widget_toolkit/widget_toolkit_1}
-    - {vram: 0x8780F460, type:  bss, name: fragments/widget_toolkit/widget_toolkit_2}
+    - [0x12FF30, data, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x130090, data, fragments/minigame_hud/minigame_hud_pause_menu]
+    - {vram: 0x8780F240, type:  bss, name: fragments/minigame_hud/minigame_hud}
+    - {vram: 0x8780F2E0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+    - {vram: 0x8780F460, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
     type: code
     bss_size: 0x0
@@ -1063,9 +1063,9 @@
     start: 0x201D70
     vram: 0x88500000
     subsegments:
-    - [0x201D70, textbin,   fragments/widget_tree/widget_tree_header]
-    - [0x201D90, asm, fragments/widget_tree/widget_tree]
-    - [0x20E7F0, data, fragments/widget_tree/widget_tree]
+    - [0x201D70, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
+    - [0x201D90, asm, fragments/lab_widget_tree/lab_widget_tree]
+    - [0x20E7F0, data, fragments/lab_widget_tree/lab_widget_tree]
   - name: fragment26_relocs
     type: code
     bss_size: 0x0
@@ -1216,9 +1216,9 @@
     start: 0x26F340
     vram: 0x81100000
     subsegments:
-    - [0x26F340, textbin,   fragments/fatal_error_screen/fatal_error_screen_header]
+    - [0x26F340, textbin,   fragments/transfer_pak_error/transfer_pak_error_header]
     - [0x26F360, asm, fragment32_26F360]
-    - {vram: 0x81100A90, type:  bss, name: fragments/fatal_error_screen/fatal_error_screen}
+    - {vram: 0x81100A90, type:  bss, name: fragments/transfer_pak_error/transfer_pak_error}
   - name: fragment32_relocs
     type: code
     bss_size: 0x0

@@ -13,10 +13,10 @@ typedef struct unk_func_8001B1FC {
     /* 0x06 */ s16 unk_06;
     /* 0x08 */ s16 unk_08;
     /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ u8* unk_0C;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s32 unk_14;
+    /* 0x14 */ intptr_t unk_14; // BattleMon address or species id, selected by unk_00.
     /* 0x18 */ f32 unk_18;
     /* 0x1C */ ModelLoadContext* unk_1C;
     /* 0x20 */ GraphNode* unk_20;

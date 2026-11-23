@@ -4,12 +4,12 @@
 #include "global.h"
 #include "game_state.h"
 
-extern u8 D_80075680[3];
+extern u8 gEventBattleSettings[3];
 
 void Team_ClearTrainerSlot(BattleSessionTeams* arg0);
 void Session_SetMode(s32 arg0, s32 arg1, s32 arg2);
 void Team_ResetOpponentHistory(void);
-TeamRoster* Trainer_Create(s32 arg0, s16 arg1, char* arg2, char* arg3);
+TeamRoster* Trainer_Create(s32 port, s16 arg1, char* trainer_name, char* player_label);
 void Team_AddTrainer(s32 arg0, TeamRoster* arg1);
 void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1);
 BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2);

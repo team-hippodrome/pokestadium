@@ -27,6 +27,7 @@
 #define SFX_PANEL_OPEN 0x04
 #define SFX_MENU_ERROR 0x08
 #define SFX_N64_LOGO 0x0A
+#define SFX_BIG_CONFIRM 0x1D
 #define SFX_TITLE_START 0x0F
 #define SFX_MOVE_SWAP 0x18 // PC Pokemon, item, box and move reordering.
 #define SFX_ZOOM_IN 0x19   // Gallery enlargement and Pokedex area detail.
@@ -34,6 +35,7 @@
 #define SFX_PAUSE 0x23
 #define SFX_RESUME 0x24
 #define SFX_PAK_CURSOR 0x25  // Transfer Pak and trade-machine port selection.
+#define SFX_FREE_BATTLE_RULE_CONFIRM 0x26
 #define SFX_PAGE_CHANGE 0x27 // Gallery pages and Pokemon boxes.
 #define SFX_TROPHY_APPEAR 0x28
 #define SFX_PAK_LAB_SELECT 0x2A
@@ -265,26 +267,20 @@ extern u8 D_3028E00[];
 extern u8 D_3029A80[];
 extern u8 D_302A700[];
 extern u8 D_302B380[];
-extern u8 D_2000C80[];
-extern u8 D_2000D80[];
-extern u8 D_2000E80[];
-extern u8 D_2000F80[];
-#define BOTTOM_LEFT_SECTION_CORNER D_2000C80
-#define BOTTOM_RIGHT_SECTION_CORNER D_2000D80
-#define TOP_LEFT_SECTION_CORNER D_2000F80
-#define TOP_RIGHT_SECTION_CORNER D_2000E80
-extern u8 D_2006C00[];
-#define POKEBALL_ICON_TOP D_2006C00
-extern u8 D_2007500[];
-#define POKEBALL_ICON_BOTTOM D_2007500
+extern u8 gBottomLeftSelectionCorner[];
+extern u8 gBottomRightSelectionCorner[];
+extern u8 gTopLeftSelectionCorner[];
+extern u8 gTopRightSelectionCorner[];
+extern u8 gPokeBallIconTop[];
+extern u8 gPokeBallIconBottom[];
 extern u8 D_20003C0[];
 extern u8 D_20005C0[];
 extern u8 D_20002C0[];
 extern u8 D_2000300[];
 extern u8 D_2000340[];
 extern u8 D_2000380[];
-extern u8 D_3024C80[];
-extern u8 D_30260C0[];
+extern u8 gPlayer1LabelLarge[];
+extern u8 gPlayer2LabelLarge[];
 extern u8 D_2000B40[];
 extern u8 D_2000B80[];
 extern u8 D_2000BC0[];
@@ -298,7 +294,7 @@ extern u8 D_302FBC0[];
 extern u8 D_30300C0[];
 extern u8 D_30242C0[];
 extern u8 D_30243A0[];
-extern u8 D_302EBC0[];
+extern u8 gEventBattleBackground[];
 extern u8 D_201D820[];
 extern u8 D_201DB20[];
 extern u8 D_201DE20[];
@@ -607,9 +603,9 @@ extern u8 D_300E820[];
 extern u8 D_300ED30[];
 extern u8 D_300F580[];
 extern u8 D_3022AA0[];
-extern u8 D_200B3E0[];
-extern u8 D_200C380[];
-extern u8 D_200D320[];
+extern u8 gVsTop[];
+extern u8 gVsMiddle[];
+extern u8 gVsBottom[];
 extern u8 gComPlayerLabelIcon[];
 extern u8 D_302E440[];
 extern u8 D_302E840[];
@@ -909,11 +905,11 @@ typedef struct unk_D_8006FF00 {
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ char* name;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ u8 unk_0C;
+    /* 0x0C */ u8 cupEligibilityFlags;
     /* 0x0D */ u8 unk_0D;
     /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
+    /* 0x10 */ s16 unk_10; // Nickname color variant minimum; Model_ComputeNicknameColorVariant.
+    /* 0x12 */ s16 unk_12; // Nickname color variant maximum.
     /* 0x14 */ u32 unk_14;
     /* 0x18 */ u32 unk_18;
 } unk_D_8006FF00; // size = 0x1C
@@ -929,7 +925,7 @@ typedef struct FontSet {
 typedef struct FontContext {
     /* 0x00 */ FontSet unk_00[6];
     /* 0x48 */ void* unk_48;
-    /* 0x4C */ s32 unk_4C;
+    /* 0x4C */ u8* unk_4C; // Cached glyph source address; Font_DrawChar compares this.
     /* 0x50 */ u8 setIndex;
     /* 0x51 */ s8 letterSpacing; // Added to the glyph advance.
     /* 0x52 */ u8 lineHeight;

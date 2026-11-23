@@ -209,7 +209,7 @@ typedef struct GbSaveParty {
 
 typedef struct GbSaveBoxEntry {
     /* 0x000 */ u8 unk_000;
-    /* 0x000 */ u8 unk_001[1];
+    /* 0x001 */ u8 unk_001[1];
     /* 0x002 */ char unk002[0x12];
 } GbSaveBoxEntry; // size = 0x14
 
@@ -267,7 +267,7 @@ typedef struct GbSaveMainData {
 
 typedef struct GbSaveBoxPair {
     /* 0x000 */ GbSaveBoxEntry unk_000;
-    /* 0x000 */ GbSaveBoxEntry unk_014;
+    /* 0x014 */ GbSaveBoxEntry unk_014;
     /* 0x028 */ char unk028[0x43A];
 } GbSaveBoxPair; // size = 0x462
 
@@ -300,10 +300,10 @@ typedef struct GbSavePlayerIdentity {
 #if defined(VERSION_JP)
 typedef struct GbSavePort {
     /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
+    /* 0x02 */ u8 gameId;
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x05 */ u8 partyCount;
     /* 0x06 */ u8 unk_06[0x13];
     /* 0x19 */ u8 unk_19[0x20];
     /* 0x39 */ char unk39[0x7];
@@ -314,10 +314,10 @@ typedef struct GbSavePort {
 #else
 typedef struct GbSavePort {
     /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
+    /* 0x02 */ u8 gameId;
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x05 */ u8 partyCount;
     /* 0x06 */ u8 unk_06[0x13];
     /* 0x19 */ u8 unk_19[0x20];
     /* 0x39 */ char unk39[0x7];

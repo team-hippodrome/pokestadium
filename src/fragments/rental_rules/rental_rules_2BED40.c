@@ -451,7 +451,7 @@ void RentalRules_DrawBackgroundFallback(void) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, 110, 160, 170, 255);
     gSPClearGeometryMode(gDisplayListHead++, G_ZBUFFER | G_LIGHTING);
 
-    gDPLoadTextureBlock_4b(gDisplayListHead++, D_302EBC0, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureBlock_4b(gDisplayListHead++, gEventBattleBackground, G_IM_FMT_I, 128, 64, 0, G_TX_NOMIRROR | G_TX_WRAP,
                            G_TX_NOMIRROR | G_TX_WRAP, 7, 6, G_TX_NOLOD, G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped(0, 0, 640, 480, 0, 0, 0x400, 0x400, 0);
@@ -491,8 +491,8 @@ void RentalRules_DrawHeaderBanner(void) {
     } else {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(48, var_s1 - 8, 48, 24, D_2006C00, 48, 0);
-        Gfx_DrawTextureRgba16(48, var_s1 + 0x10, 48, 24, D_2007500, 48, 0);
+        Gfx_DrawTextureRgba16(48, var_s1 - 8, 48, 24, gPokeBallIconTop, 48, 0);
+        Gfx_DrawTextureRgba16(48, var_s1 + 0x10, 48, 24, gPokeBallIconBottom, 48, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 

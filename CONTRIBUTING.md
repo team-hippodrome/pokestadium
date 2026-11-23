@@ -112,15 +112,30 @@ The format used in Stadium is commonly called "bring 6, pick 3." To distinguish 
 
 As AI is now a term to refer to a technology, use the term "COM" to refer to the non-player trainers since that is the label in Free Battle. Battle AI procedures may still be called `BattleAi` as a function domain.
 
+##### Valid vs Legal vs Eligible Pokemon
+
+A Pokemon is *valid* if it has valid summary data (move and species index within bounds, nickname uses valid characters for version, data structure matches). Invalid pokemon cannot even be read by the game
+
+A pokemon is *legal* if it has moves it can learn in-game. Illegal pokemon are still allowed to be used in Stadium, but have their trainer's name marked in purple to make it clear the moveset is illegal.
+
+A Pokemon is *eligible* if it meets level and species requirement of the cup in question.
+
+A Level 70 Mewtwo that only nows Lick is:
+- Valid (has the correct data structure)
+- Illegal (Mewtwo cannot learn like)
+- Only Eligible in prime cup and the gym leader castle.
+
+
 #### Game
 
 Use English names for Pokemon and Characters.
 
-Never use the name Poke Cup. All versions of the game contain duplicate internal strings for Poke Cup. In the Japanese version, the five different versions were called Nintendo Cup.
+Never use the name Poke Cup. All versions of the game contain duplicate internal strings for Poke Cup. In the Japanese version, the three different versions were called Nintendo Cup.
 
 The adopted term for the creature in Kangaskhan's pouch is Kangaskid.
 
 Explosion and self-destruct are collectively referred to as "boom" (following competitive pokemon terminology). This is to allow for using the term explosion descriptively elsewhere.
+
 
 ##### Area Names 
 
@@ -188,5 +203,7 @@ Hex is for bit structure. Decimal is for quantities.
 ### Either is acceptable
 - One-off powers of 2 and values one less than a power of 2 (`16` / `0x10`, `255` / `0xFF`, `4096` / `0x1000`). Pick whichever matches the role of the number: a count reads better in decimal, a width or alignment reads better in hex.
 
-### Do not churn
-Never change the base of an existing literal unless you are already editing that line for a functional reason. Matching the surrounding code beats matching this guide. A diff that only flips 15 to 0xF will be rejected.
+Do not change an existing literal from one acceptable form to the other (for example `15` to `0xF`) unless you are already editing that line for a functional reason. Matching the surrounding code beats matching this guide. A diff that only flips such a literal will be rejected.
+
+### Everything else
+A literal that falls under "Must be hex" or "Must be decimal" must use that base. Correct it even when the line is otherwise unchanged. For example, `buttonPressed & 512` becomes `0x200`, and `i < 0x10` as a loop bound becomes `16`.

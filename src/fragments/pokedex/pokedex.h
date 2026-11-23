@@ -2,7 +2,7 @@
 #define _FRAGMENT28_H_
 
 #include "global.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "src/fragments/lab_widget_tree/lab_widget_tree.h"
 
 typedef struct unk_func_888044BC_038_02C_02C_000 {
     /* 0x00 */ u8 unk_00;

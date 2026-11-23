@@ -7,7 +7,7 @@
 #include "PR/leo.h"
 
 typedef struct arg1_func_80019420 {
-    /* 0x00 */ s8 unk_00;
+    /* 0x00 */ s8 unk_00; // Resource kind; zero terminates this big-endian fragment table.
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ void* unk_04;
 } arg1_func_80019420; // size = 0x8
@@ -120,15 +120,15 @@ typedef struct BattleSessionTeams {
     /* 0x00 */ u8 uniqueStatusFlags;
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
-    /* 0x04 */ TeamRoster* unk_04;
+    /* 0x04 */ BattleMon* unk_04; // Pokemon whose species and nickname color are loaded by Trainer_RequestPokeIcon.
     /* 0x08 */ TeamRoster* tagTeamMember[2];
     /* 0x10 */ ModelLoadContext* unk_10;
-    /* 0x14 */ ModelNodeView* loadedModel;
+    /* 0x14 */ ModelAnimationBank* loadedModel;
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;
     /* 0x1D */ u8 assetIsBusy;
     /* 0x1E */ u8 unk_1E;
-    /* 0x20 */ s32 unk_20;
+    /* 0x20 */ s16* unk_20; // Resource archive indices, terminated by -1; PokeIcon_LoadMultipleModels.
     /* 0x24 */ arg1_func_80019420* unk_24;
 } BattleSessionTeams; // size = 0x28
 

@@ -1,5 +1,5 @@
 #include "credits.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 
 // Frames the end logo has been fully opaque (see Credits_MainLoop).
 u16 sLogoHoldTimer = 0;

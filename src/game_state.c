@@ -1106,7 +1106,7 @@ void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
 
     main_pool_pop_state('GAME');
 
-    FRAGMENT_LOAD_AND_CALL(FRAGMENT_FATAL_ERROR_SCREEN, arg0, arg1);
+    FRAGMENT_LOAD_AND_CALL(FRAGMENT_TRANSFER_PAK_ERROR, arg0, arg1);
 }
 
 void Game_ResetStorageDevice(void) {

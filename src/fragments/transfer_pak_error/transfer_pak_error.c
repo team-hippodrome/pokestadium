@@ -1,4 +1,4 @@
-#include "fatal_error_screen.h"
+#include "transfer_pak_error.h"
 #include "src/graphics_textures.h"
 #include "src/ui_graphics.h"
 #include "src/text_system.h"
@@ -12,14 +12,14 @@ static s32 sErrorPort;
 // Error code passed to Game_ShutdownAndLoadFragment (1-3); selects the message in text file 0xD.
 static s32 sErrorMessageId;
 // Text file 0xD: the three Transfer Pak / Game Boy error messages, indexed by sErrorMessageId - 1.
-static char** sFatalErrorText;
+static char** sTransferPakErrorText;
 
 /**
  * Fills the 320x240 screen with the green Poke Ball wallpaper from transfer_pak_error_ui
  * (64x64 RGBA16 at segment offset 0x0), drawn in COPY mode as 64x16 strips.
- * The three arguments (0x55, 0x70, 0x88 from FatalError_DrawFrame) are unused.
+ * The three arguments (0x55, 0x70, 0x88 from TransferPakError_DrawFrame) are unused.
  */
-void FatalError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
+void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 j;
     s32 idx;
@@ -43,7 +43,7 @@ void FatalError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
 /**
  * Draws the 24x24 yellow "!" warning icon (transfer_pak_error_ui offset 0x2000) at (x, y).
  */
-void FatalError_DrawIcon(s32 x, s32 y) {
+void TransferPakError_DrawIcon(s32 x, s32 y) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
@@ -60,13 +60,13 @@ void FatalError_DrawIcon(s32 x, s32 y) {
  * message_id is 1-based: 1 = Transfer Pak not set properly, 2 = problem with the Game Boy
  * Game Pak's connector, 3 = Game Boy saved data corrupted (choose NEW GAME).
  */
-void FatalError_DrawMessagePanel(s32 message_id) {
+void TransferPakError_DrawMessagePanel(s32 message_id) {
     Ui_DrawBorderedPanel(0x16, 0x10, 0x114, 0x76, 0x11C5); // #103910
-    FatalError_DrawIcon(0x27, 0x22);
+    TransferPakError_DrawIcon(0x27, 0x22);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x52, 0x21, Text_GetString(NULL, 0, sFatalErrorText, message_id - 1));
+    Font_Printf(0x52, 0x21, Text_GetString(NULL, 0, sTransferPakErrorText, message_id - 1));
     Font_EndTexturedTextRendering();
 }
 
@@ -77,7 +77,7 @@ void FatalError_DrawMessagePanel(s32 message_id) {
  * The cable is built from 8x8 RGBA16 corner/end pieces plus gSPTextureRectangle spans that
  * stretch a single texel row or column of the previously loaded piece.
  */
-void FatalError_DrawPortDiagram(s32 port) {
+void TransferPakError_DrawPortDiagram(s32 port) {
     // Screen X of the console's four controller jacks (ports 1-4) on the console texture drawn at X 0xAA.
     u16 jack[] = {
         0x00BC,
@@ -126,11 +126,11 @@ void FatalError_DrawPortDiagram(s32 port) {
 /**
  * Per-frame draw callback: wallpaper, message window and port diagram for the stored error.
  */
-s32 FatalError_DrawFrame(u8 arg0) {
+s32 TransferPakError_DrawFrame(u8 arg0) {
     BgStage_DrawFrame();
-    FatalError_DrawBackgroundPattern(0x55, 0x70, 0x88);
-    FatalError_DrawMessagePanel(sErrorMessageId);
-    FatalError_DrawPortDiagram(sErrorPort);
+    TransferPakError_DrawBackgroundPattern(0x55, 0x70, 0x88);
+    TransferPakError_DrawMessagePanel(sErrorMessageId);
+    TransferPakError_DrawPortDiagram(sErrorPort);
     return 0;
 }
 
@@ -146,7 +146,7 @@ s32 FatalError_DrawFrame(u8 arg0) {
  * Loads transfer_pak_error_ui and text file 0xD, then draws forever: the only exit is turning
  * the console off, as the message instructs.
  */
-void FatalError_Main(s32 port, s32 message_id) {
+void TransferPakError_Main(s32 port, s32 message_id) {
     StageContext* stage_context;
 
     sErrorPort = port;
@@ -160,10 +160,10 @@ void FatalError_Main(s32 port, s32 message_id) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, transfer_pak_error_ui, 0);
     Text_InitStringTables();
-    sFatalErrorText = Text_GetStringTable(0xD);
+    sTransferPakErrorText = Text_GetStringTable(0xD);
     StageContext_Activate(stage_context);
 
     while (true) {
-        BgStage_WaitForCondition(FatalError_DrawFrame, 8, 8);
+        BgStage_WaitForCondition(TransferPakError_DrawFrame, 8, 8);
     }
 }

@@ -1,7 +1,7 @@
 #include "minigame_select.h"
 #include "src/graphics_textures.h"
 #include "src/text_system.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 
 static unk_D_8250A480 D_8250A480;
 static unk_D_8250A498 D_8250A498;

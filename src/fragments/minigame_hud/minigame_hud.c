@@ -1,4 +1,4 @@
-#include "widget_toolkit.h"
+#include "minigame_hud.h"
 #include "src/graphics_textures.h"
 #include "src/text_system.h"
 #include "src/controller.h"

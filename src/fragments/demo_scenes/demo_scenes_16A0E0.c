@@ -460,10 +460,10 @@ void FirstClearBonus_InitScene(void) {
 
     if (gSessionContext.mode == 0x16) {
         D_86B10844 = Model_LoadByArchiveIndex(0xD5);
-        Model_InitDisplayObject(&D_86B10850, 0, 0xD5, D_86B10844->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&D_86B10850, 0, 0xD5, D_86B10844->nodes[0]);
     } else {
         D_86B10844 = Model_LoadByArchiveIndex(0xD4);
-        Model_InitDisplayObject(&D_86B10850, 0, 0xD4, D_86B10844->unk_08->unk_00[0]);
+        Model_InitDisplayObject(&D_86B10850, 0, 0xD4, D_86B10844->nodes[0]);
     }
 
     ModelAnim_SetAnimation(&D_86B10850, 0);

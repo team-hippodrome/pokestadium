@@ -198,9 +198,9 @@ static MenuRectAnim sMenuRectAnimations[] = {
         8192,
         0,
     },
+    { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 },
+    { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 },
 };
-static s16 sMenuAnimFlag0[] = { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 };
-static s16 sMenuAnimFlag1[] = { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 };
 static u8 sMenuOptionRanges[][2] = {
     {
         0x32,
@@ -598,11 +598,11 @@ void StadiumSelect_InitSparkleFlags(void) {
     }
 
     if (D_84103CF0.clearedModes & 0x10) {
-        sMenuAnimFlag0[0] = 1;
+        sMenuRectAnimations[10].unk_00 = 1;
     }
 
     if (D_84103CF0.clearedModes & 0x20) {
-        sMenuAnimFlag1[0] = 1;
+        sMenuRectAnimations[11].unk_00 = 1;
     }
 }
 
@@ -695,10 +695,10 @@ void StadiumSelect_DrawSelectionCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3, 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, arg4, arg5, arg6, arg7);
 
-    Gfx_DrawTextureIa8((arg0 + sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, D_2000C80, 0x10, 0);
-    Gfx_DrawTextureIa8((arg0 + sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, D_2000F80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, D_2000D80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, D_2000E80, 0x10, 0);
+    Gfx_DrawTextureIa8((arg0 + sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8((arg0 + sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, gTopRightSelectionCorner, 0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 

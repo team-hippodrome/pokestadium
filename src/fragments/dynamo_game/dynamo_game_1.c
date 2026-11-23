@@ -2,7 +2,7 @@
 #include "src/audio_sfx.h"
 #include "src/gfx_buffer.h"
 #include "src/matrix.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/fragments/minigame_shared_library/minigame_shared_library.h"
 
 static u8 D_86502F50[0x3000] = {

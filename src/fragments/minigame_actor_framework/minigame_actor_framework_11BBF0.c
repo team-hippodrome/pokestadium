@@ -1,5 +1,5 @@
 #include "minigame_actor_framework.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/graphics_textures.h"
 
 void ParticleGfx_LoadTextureCallbackI4ParticleFrame_32x32();

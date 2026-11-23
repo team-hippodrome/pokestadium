@@ -21,7 +21,7 @@ typedef struct unk_D_8423D3A8 {
     /* 0x0C */ s16 unk_0C;
     /* 0x0E */ Rectangle unk_0E;
     /* 0x16 */ Rectangle unk_16;
-    /* 0x20 */ s32 unk_20;
+    /* 0x20 */ u8* unk_20;
     /* 0x24 */ ModelLoadContext* unk_24;
     /* 0x28 */ unk_func_8001B1FC* unk_28;
     /* 0x2C */ unk_D_838067F0_0168_0000* unk_2C;
@@ -70,7 +70,7 @@ typedef struct RentalTeamTray {
 } RentalTeamTray; // size = 0x4D4C
 
 typedef struct RentalRoster {
-    /* 0x00 */ u32 unk_00;
+    /* 0x00 */ u32 unk_00; // Big-endian archive count; followed by this many BattleMon records.
     /* 0x04 */ BattleMon unk_04[1];
 } RentalRoster; // size >= 0x58
 

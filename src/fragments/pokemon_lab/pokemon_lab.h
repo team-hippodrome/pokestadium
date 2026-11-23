@@ -2,7 +2,7 @@
 #define _FRAGMENT22_H_
 
 #include "global.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "src/fragments/lab_widget_tree/lab_widget_tree.h"
 
 typedef struct unk_func_8800071C {
     /* 0x00 */ WidgetNode unk_00;

@@ -1245,10 +1245,10 @@ void PakUi_DrawRotatingCorners(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, arg4, arg5, arg6, arg7);
 
-    Gfx_DrawTextureIa8((arg0 + sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, D_2000C80, 0x10, 0);
-    Gfx_DrawTextureIa8((arg0 + sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, D_2000F80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, D_2000D80, 0x10, 0);
-    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, D_2000E80, 0x10, 0);
+    Gfx_DrawTextureIa8((arg0 + sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, gBottomLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8((arg0 + sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, gTopLeftSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, (arg1 + sp56) - 8, 0x10, 0x10, gBottomRightSelectionCorner, 0x10, 0);
+    Gfx_DrawTextureIa8(((arg0 + arg2) - sp56) - 8, ((arg1 + arg3) - sp56) - 8, 0x10, 0x10, gTopRightSelectionCorner, 0x10, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -2335,9 +2335,9 @@ void PakUi_DrawStatusPopup(PakUi_StatusPopup* arg0) {
         if (arg0->unk_02 == 0xA6) {
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x20, 0x48, 0x12, D_3024C80, 0x48, 0);
+            Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x20, 0x48, 0x12, gPlayer1LabelLarge, 0x48, 0);
             Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x32, 0x48, 0x12, &D_30256A0, 0x48, 0);
-            Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x62, 0x48, 0x12, D_30260C0, 0x48, 0);
+            Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x62, 0x48, 0x12, gPlayer2LabelLarge, 0x48, 0);
             Gfx_DrawTextureRgba16(sp4A + 0x1E, temp_s0 + 0x74, 0x48, 0x12, &D_3026AE0, 0x48, 0);
 
             gDPSetEnvColor(gDisplayListHead++, 200, 30, 30, 150);

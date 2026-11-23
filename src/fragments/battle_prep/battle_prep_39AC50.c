@@ -169,7 +169,7 @@ s32 BattlePrepRoster_ScrollBackgroundTexture(s32 arg0, unk_func_80011B94* arg1) 
     }
 }
 
-static Vtx D_84B12498[] = {
+static Vtx D_84B12498[362] = {
     VTX(-1, -38, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-31, 28, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-21, 35, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(0, -11, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(23, 36, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),  VTX(34, 31, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
@@ -186,8 +186,6 @@ static Vtx D_84B12498[] = {
     VTX(-19, 42, -19, 0, 0, 0x4D, 0x22, 0xAC, 0xFF), VTX(-19, 42, -19, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
     VTX(-21, 35, -25, 0, 0, 0xD1, 0x46, 0xAC, 0xFF), VTX(-31, 28, -25, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
     VTX(-37, 29, -19, 0, 0, 0xD1, 0x46, 0xAC, 0xFF),
-};
-static Vtx D_84B12688[] = {
     VTX(-37, 29, -19, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF), VTX(-31, 28, -25, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF),
     VTX(-1, -38, -25, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF), VTX(-4, -43, -19, 0, 0, 0xB3, 0xDD, 0xAC, 0xFF),
     VTX(-4, -43, 19, 0, 0, 0xF7, 0x89, 0x00, 0xFF),  VTX(-4, -43, -19, 0, 0, 0xF7, 0x89, 0x00, 0xFF),
@@ -204,8 +202,6 @@ static Vtx D_84B12688[] = {
     VTX(-37, 29, -19, 0, 0, 0xBD, 0x63, 0x00, 0xFF), VTX(-37, 29, 19, 0, 0, 0xBD, 0x63, 0x00, 0xFF),
     VTX(-37, 29, 19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),  VTX(-37, 29, -19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),
     VTX(-4, -43, -19, 0, 0, 0x93, 0xCF, 0x00, 0xFF), VTX(-4, -43, 19, 0, 0, 0x93, 0xCF, 0x00, 0xFF),
-};
-static Vtx D_84B12888[] = {
     VTX(-1, -38, 25, 0, 0, 0xF9, 0xAC, 0x54, 0xFF), VTX(-4, -43, 19, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),
     VTX(3, -43, 19, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),  VTX(0, -38, 25, 0, 0, 0xF9, 0xAC, 0x54, 0xFF),
     VTX(0, -38, 25, 0, 0, 0x4C, 0xDB, 0x54, 0xFF),  VTX(3, -43, 19, 0, 0, 0x4C, 0xDB, 0x54, 0xFF),
@@ -222,13 +218,9 @@ static Vtx D_84B12888[] = {
     VTX(-4, -43, 19, 0, 0, 0xB3, 0xDD, 0x54, 0xFF), VTX(-1, -38, 25, 0, 0, 0xB3, 0xDD, 0x54, 0xFF),
     VTX(0, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(34, 31, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(23, 36, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, -11, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B12A88[] = {
     VTX(0, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, -11, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-21, 35, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF), VTX(-31, 28, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-1, -38, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B12AD8[] = {
     VTX(0, 33, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(8, 36, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(12, 30, -25, 0, 0, 0x0D, 0xD5, 0x92, 0xFF),  VTX(12, 30, -25, 0, 0, 0x13, 0xC7, 0x99, 0xFF),
     VTX(8, 28, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(23, -12, -19, 0, 0, 0x51, 0x02, 0xA8, 0xFF),
@@ -245,8 +237,6 @@ static Vtx D_84B12AD8[] = {
     VTX(-1, 37, -19, 0, 0, 0xD9, 0x4A, 0xAB, 0xFF),  VTX(-9, 26, -25, 0, 0, 0xCA, 0x40, 0xAB, 0xFF),
     VTX(-12, 30, -19, 0, 0, 0xCA, 0x40, 0xAB, 0xFF), VTX(-16, 19, -25, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF),
     VTX(-20, 21, -19, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF), VTX(-18, 14, -25, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),
-};
-static Vtx D_84B12CD8[] = {
     VTX(-20, 21, -19, 0, 0, 0xBA, 0x2D, 0xAB, 0xFF),  VTX(-18, 14, -25, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),
     VTX(-23, 14, -19, 0, 0, 0xB2, 0x1F, 0xAC, 0xFF),  VTX(-23, 14, -19, 0, 0, 0xB1, 0xE4, 0xAC, 0xFF),
     VTX(-18, 14, -25, 0, 0, 0xB1, 0xE4, 0xAC, 0xFF),  VTX(-16, 8, -25, 0, 0, 0xB8, 0xD6, 0xAB, 0xFF),
@@ -263,8 +253,6 @@ static Vtx D_84B12CD8[] = {
     VTX(-9, -38, -25, 0, 0, 0x25, 0xB4, 0xAC, 0xFF),  VTX(-2, -34, -25, 0, 0, 0x2C, 0xB9, 0xAB, 0xFF),
     VTX(0, -38, -19, 0, 0, 0x2C, 0xB9, 0xAB, 0xFF),   VTX(7, -26, -25, 0, 0, 0x39, 0xC3, 0xAB, 0xFF),
     VTX(11, -30, -19, 0, 0, 0x39, 0xC3, 0xAB, 0xFF),  VTX(15, -17, -25, 0, 0, 0x47, 0xD5, 0xAB, 0xFF),
-};
-static Vtx D_84B12ED8[] = {
     VTX(11, -30, -19, 0, 0, 0x39, 0xC3, 0xAB, 0xFF), VTX(15, -17, -25, 0, 0, 0x47, 0xD5, 0xAB, 0xFF),
     VTX(19, -20, -19, 0, 0, 0x47, 0xD5, 0xAB, 0xFF), VTX(17, -12, -25, 0, 0, 0x51, 0x02, 0xA8, 0xFF),
     VTX(23, -12, -19, 0, 0, 0x51, 0x02, 0xA8, 0xFF), VTX(23, -12, 19, 0, 0, 0x77, 0x03, 0x00, 0xFF),
@@ -281,8 +269,6 @@ static Vtx D_84B12ED8[] = {
     VTX(20, 27, -19, 0, 0, 0x63, 0x42, 0x00, 0xFF),  VTX(10, 42, -19, 0, 0, 0x63, 0x42, 0x00, 0xFF),
     VTX(10, 42, 19, 0, 0, 0x63, 0x42, 0x00, 0xFF),   VTX(10, 42, 19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),
     VTX(10, 42, -19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),  VTX(-1, 37, -19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),
-};
-static Vtx D_84B130D8[] = {
     VTX(10, 42, 19, 0, 0, 0xD4, 0x6F, 0x00, 0xFF),    VTX(-1, 37, -19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),
     VTX(-1, 37, 19, 0, 0, 0xC8, 0x6A, 0x00, 0xFF),    VTX(-12, 30, -19, 0, 0, 0xB3, 0x5B, 0x00, 0xFF),
     VTX(-12, 30, 19, 0, 0, 0xB3, 0x5B, 0x00, 0xFF),   VTX(-20, 21, -19, 0, 0, 0x9C, 0x40, 0x00, 0xFF),
@@ -299,8 +285,6 @@ static Vtx D_84B130D8[] = {
     VTX(-19, -27, -19, 0, 0, 0x90, 0xD6, 0x00, 0xFF), VTX(-12, -45, -19, 0, 0, 0x90, 0xD6, 0x00, 0xFF),
     VTX(-12, -45, 19, 0, 0, 0x90, 0xD6, 0x00, 0xFF),  VTX(-12, -45, 19, 0, 0, 0x35, 0x95, 0x00, 0xFF),
     VTX(-12, -45, -19, 0, 0, 0x35, 0x95, 0x00, 0xFF), VTX(0, -38, -19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),
-};
-static Vtx D_84B132D8[] = {
     VTX(-12, -45, 19, 0, 0, 0x35, 0x95, 0x00, 0xFF), VTX(0, -38, -19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),
     VTX(0, -38, 19, 0, 0, 0x3F, 0x9B, 0x00, 0xFF),   VTX(11, -30, -19, 0, 0, 0x51, 0xA9, 0x00, 0xFF),
     VTX(11, -30, 19, 0, 0, 0x51, 0xA9, 0x00, 0xFF),  VTX(19, -20, -19, 0, 0, 0x66, 0xC2, 0x00, 0xFF),
@@ -317,8 +301,6 @@ static Vtx D_84B132D8[] = {
     VTX(12, 30, 25, 0, 0, 0x0D, 0xD5, 0x6E, 0xFF),   VTX(12, 30, 25, 0, 0, 0x46, 0x2F, 0x54, 0xFF),
     VTX(20, 27, 19, 0, 0, 0x46, 0x2F, 0x54, 0xFF),   VTX(10, 42, 19, 0, 0, 0x15, 0x46, 0x5E, 0xFF),
     VTX(8, 36, 25, 0, 0, 0x15, 0x46, 0x5E, 0xFF),    VTX(-1, 37, 19, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),
-};
-static Vtx D_84B134D8[] = {
     VTX(8, 36, 25, 0, 0, 0x15, 0x46, 0x5E, 0xFF),    VTX(-1, 37, 19, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),
     VTX(0, 33, 25, 0, 0, 0xD9, 0x4A, 0x55, 0xFF),    VTX(-12, 30, 19, 0, 0, 0xCA, 0x40, 0x55, 0xFF),
     VTX(-9, 26, 25, 0, 0, 0xCA, 0x40, 0x55, 0xFF),   VTX(-20, 21, 19, 0, 0, 0xBA, 0x2D, 0x55, 0xFF),
@@ -335,8 +317,6 @@ static Vtx D_84B134D8[] = {
     VTX(-9, -38, 25, 0, 0, 0xAE, 0xDE, 0x4F, 0xFF),  VTX(-9, -38, 25, 0, 0, 0x25, 0xB4, 0x54, 0xFF),
     VTX(-12, -45, 19, 0, 0, 0x25, 0xB4, 0x54, 0xFF), VTX(0, -38, 19, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),
     VTX(-2, -34, 25, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),  VTX(11, -30, 19, 0, 0, 0x39, 0xC3, 0x55, 0xFF),
-};
-static Vtx D_84B136D8[] = {
     VTX(-2, -34, 25, 0, 0, 0x2C, 0xB9, 0x55, 0xFF),   VTX(11, -30, 19, 0, 0, 0x39, 0xC3, 0x55, 0xFF),
     VTX(7, -26, 25, 0, 0, 0x39, 0xC3, 0x55, 0xFF),    VTX(19, -20, 19, 0, 0, 0x47, 0xD5, 0x55, 0xFF),
     VTX(15, -17, 25, 0, 0, 0x47, 0xD5, 0x55, 0xFF),   VTX(23, -12, 19, 0, 0, 0x51, 0x02, 0x58, 0xFF),
@@ -353,8 +333,6 @@ static Vtx D_84B136D8[] = {
     VTX(0, 8, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),     VTX(7, 0, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(1, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(15, -6, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(17, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),  VTX(15, -17, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
-};
-static Vtx D_84B138D8[] = {
     VTX(-2, -21, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(1, -12, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(15, -17, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(7, -26, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-8, -26, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-2, -34, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
@@ -371,8 +349,6 @@ static Vtx D_84B138D8[] = {
     VTX(-2, -5, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),   VTX(1, -12, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(17, -12, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(15, -17, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(7, -26, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),   VTX(-2, -21, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
-};
-static Vtx D_84B13AD8[] = {
     VTX(7, 0, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),   VTX(-2, -5, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF),
     VTX(-10, 1, -25, 0, 0, 0x00, 0x00, 0x88, 0xFF), VTX(-16, 8, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
     VTX(-10, 1, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),  VTX(0, 8, 25, 0, 0, 0x00, 0x00, 0x78, 0xFF),
@@ -389,7 +365,7 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(19, 21, 22, 0, 23, 24, 25, 0),
     gsSP2Triangles(23, 25, 26, 0, 27, 28, 29, 0),
     gsSP1Triangle(27, 29, 30, 0),
-    gsSPVertex(D_84B12688, 32, 0),
+    gsSPVertex(&D_84B12498[31], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
     gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
@@ -398,7 +374,7 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(20, 21, 22, 0, 20, 22, 23, 0),
     gsSP2Triangles(24, 25, 26, 0, 24, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B12888, 32, 0),
+    gsSPVertex(&D_84B12498[63], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
     gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
@@ -407,13 +383,13 @@ static Gfx D_84B13B38[] = {
     gsSP2Triangles(20, 21, 22, 0, 20, 22, 23, 0),
     gsSP2Triangles(24, 25, 26, 0, 24, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B12A88, 5, 0),
+    gsSPVertex(&D_84B12498[95], 5, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP1Triangle(0, 3, 4, 0),
     gsSPEndDisplayList(),
 };
 static Gfx D_84B13C40[] = {
-    gsSPVertex(D_84B12AD8, 32, 0),
+    gsSPVertex(&D_84B12498[100], 32, 0),
     gsSPSetGeometryMode(G_CULL_BACK),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(0, 3, 4, 0, 5, 6, 7, 0),
@@ -429,7 +405,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(24, 25, 26, 0, 26, 25, 27, 0),
     gsSP2Triangles(26, 27, 28, 0, 28, 27, 29, 0),
     gsSP2Triangles(28, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B12CD8, 32, 0),
+    gsSPVertex(&D_84B12498[132], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
     gsSP2Triangles(3, 5, 6, 0, 6, 5, 7, 0),
     gsSP2Triangles(6, 7, 8, 0, 8, 7, 9, 0),
@@ -442,7 +418,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(21, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 28, 27, 29, 0),
     gsSP2Triangles(28, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B12ED8, 32, 0),
+    gsSPVertex(&D_84B12498[164], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 5, 6, 7, 0),
     gsSP2Triangles(5, 7, 8, 0, 8, 7, 9, 0),
@@ -454,7 +430,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(20, 21, 22, 0, 22, 21, 23, 0),
     gsSP2Triangles(22, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 29, 30, 31, 0),
-    gsSPVertex(D_84B130D8, 32, 0),
+    gsSPVertex(&D_84B12498[196], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -468,7 +444,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(20, 21, 22, 0, 22, 21, 23, 0),
     gsSP2Triangles(22, 23, 24, 0, 25, 26, 27, 0),
     gsSP2Triangles(25, 27, 28, 0, 29, 30, 31, 0),
-    gsSPVertex(D_84B132D8, 32, 0),
+    gsSPVertex(&D_84B12498[228], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -482,7 +458,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(22, 23, 24, 0, 24, 23, 25, 0),
     gsSP2Triangles(24, 25, 26, 0, 27, 28, 29, 0),
     gsSP2Triangles(27, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B134D8, 32, 0),
+    gsSPVertex(&D_84B12498[260], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 6, 5, 7, 0),
@@ -497,7 +473,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(22, 23, 24, 0, 24, 23, 25, 0),
     gsSP2Triangles(24, 25, 26, 0, 27, 28, 29, 0),
     gsSP2Triangles(27, 29, 30, 0, 30, 29, 31, 0),
-    gsSPVertex(D_84B136D8, 32, 0),
+    gsSPVertex(&D_84B12498[292], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 2, 1, 3, 0),
     gsSP2Triangles(2, 3, 4, 0, 4, 3, 5, 0),
     gsSP2Triangles(4, 5, 6, 0, 7, 8, 9, 0),
@@ -509,7 +485,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(24, 23, 22, 0, 25, 24, 22, 0),
     gsSP2Triangles(25, 22, 26, 0, 25, 26, 27, 0),
     gsSP2Triangles(28, 29, 30, 0, 28, 30, 31, 0),
-    gsSPVertex(D_84B138D8, 32, 0),
+    gsSPVertex(&D_84B12498[324], 32, 0),
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSP2Triangles(4, 0, 3, 0, 4, 3, 5, 0),
     gsSP2Triangles(6, 7, 8, 0, 6, 8, 9, 0),
@@ -523,7 +499,7 @@ static Gfx D_84B13C40[] = {
     gsSP2Triangles(29, 28, 27, 0, 30, 29, 27, 0),
     gsSP2Triangles(30, 27, 31, 0, 10, 30, 31, 0),
     gsSP2Triangles(10, 31, 6, 0, 21, 26, 20, 0),
-    gsSPVertex(D_84B13AD8, 6, 0),
+    gsSPVertex(&D_84B12498[356], 6, 0),
     gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
     gsSPEndDisplayList(),
 };

@@ -1,5 +1,5 @@
 #include "minigame_shared_graphics.h"
-#include "src/fragments/widget_toolkit/widget_toolkit.h"
+#include "src/fragments/minigame_hud/minigame_hud.h"
 #include "src/gfx_buffer.h"
 #include "src/audio_commands_category2.h"
 

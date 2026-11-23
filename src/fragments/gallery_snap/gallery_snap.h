@@ -30,6 +30,6 @@ s32 Gallery_SnapUpdate(void);
 void Gallery_SnapReadInput(void);
 void Gallery_SnapLoop(void);
 s32 Gallery_SnapGetResult(void);
-void Gallery_SnapMain(s32 arg0, s32 arg1);
+s32 Gallery_SnapMain(s32 arg0, s32 arg1);
 
 #endif // _FRAGMENT42_H_
