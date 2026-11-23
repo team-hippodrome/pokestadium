@@ -121,24 +121,24 @@ void Sched_HandleRdpCompletion(UnkStruct80001380* arg0) {
     arg0->unk_1E = 2;
 }
 
-void Sched_InitClientQueue(UnkStruct80083CA0_2* arg0, s32 arg1, s32 arg2) {
-    arg0->unk_1DC = arg1;
-    arg0->unk_1D8 = 0;
-    osCreateMesgQueue(&arg0->unk_1C0, &arg0->unk_1B0, arg2);
+void Sched_InitClientQueue(SchedClient* client, s32 type, s32 msgCount) {
+    client->type = type;
+    client->next = NULL;
+    osCreateMesgQueue(&client->queue, client->msgs, msgCount);
 }
 
-s32 Sched_WaitClientQueue(UnkStruct80083CA0_2* arg0) {
+s32 Sched_WaitClientQueue(SchedClient* client) {
     void* sp1C;
 
-    osRecvMesg(&arg0->unk_1C0, &sp1C, 1);
+    osRecvMesg(&client->queue, &sp1C, 1);
     return sp1C;
 }
 
-s32 Sched_TryReceiveClientQueue(UnkStruct80083CA0_2* arg0) {
+s32 Sched_TryReceiveClientQueue(SchedClient* client) {
     u32 sp1C = 'NULL';
 
-    if (arg0->unk_1C0.validCount != 0) {
-        osRecvMesg(&arg0->unk_1C0, &sp1C, 1);
+    if (client->queue.validCount != 0) {
+        osRecvMesg(&client->queue, &sp1C, 1);
     }
 
     return sp1C;
@@ -160,17 +160,17 @@ void func_80004DB4(void) {
 }
 
 void Sched_NotifyClients(u32 arg0) {
-    unk_D_800AA660* var_s0 = D_800A62E0.unk_A10;
+    SchedClient* var_s0 = D_800A62E0.unk_A10;
 
     while (var_s0 != NULL) {
         if (D_800A62E0.unk_A38 == 0) {
-            if (var_s0->unk_01DC != 2) {
-                osSendMesg(&var_s0->queue1, arg0, 0);
+            if (var_s0->type != 2) {
+                osSendMesg(&var_s0->queue, arg0, 0);
             }
-        } else if (var_s0->unk_01DC != 0) {
-            osSendMesg(&var_s0->queue1, arg0, 0);
+        } else if (var_s0->type != 0) {
+            osSendMesg(&var_s0->queue, arg0, 0);
         }
-        var_s0 = var_s0->nextClient;
+        var_s0 = var_s0->next;
     }
 }
 
@@ -200,13 +200,13 @@ s32 Sched_TryYieldActiveTask(void) {
 }
 
 void Sched_HandlePreNMI(void) {
-    unk_D_800AA660* var_s0 = D_800A62E0.unk_A10;
+    SchedClient* var_s0 = D_800A62E0.unk_A10;
 
     while (var_s0 != NULL) {
-        if (var_s0->unk_01DC == 0) {
+        if (var_s0->type == 0) {
             osStopThread(&var_s0->thread);
         }
-        var_s0 = var_s0->nextClient;
+        var_s0 = var_s0->next;
     }
     D_800A62E0.unk_A38 = 1;
     Audio_FadeOutForShutdown();
@@ -335,36 +335,36 @@ void Sched_Init(void) {
     osStartThread(&D_800A62E0.thread);
 }
 
-void Sched_AddClient(unk_D_800AA660* arg0) {
-    unk_D_800AA660* var_v1;
-    unk_D_800AA660* var_a1;
+void Sched_AddClient(SchedClient* client) {
+    SchedClient* var_v1;
+    SchedClient* var_a1;
 
     if (D_800A62E0.unk_A10 == NULL) {
-        D_800A62E0.unk_A10 = arg0;
+        D_800A62E0.unk_A10 = client;
     } else {
         var_v1 = D_800A62E0.unk_A10;
-        var_a1 = var_v1->nextClient;
+        var_a1 = var_v1->next;
 
         while (var_a1 != NULL) {
             var_v1 = var_a1;
-            var_a1 = var_a1->nextClient;
+            var_a1 = var_a1->next;
         }
-        var_v1->nextClient = arg0;
+        var_v1->next = client;
     }
-    arg0->nextClient = NULL;
+    client->next = NULL;
 }
 
-void Sched_RemoveClient(unk_D_800AA660* arg0) {
-    unk_D_800AA660** var_v0 = &D_800A62E0.unk_A10;
-    unk_D_800AA660* var_v1 = D_800A62E0.unk_A10;
+void Sched_RemoveClient(SchedClient* client) {
+    SchedClient** var_v0 = &D_800A62E0.unk_A10;
+    SchedClient* var_v1 = D_800A62E0.unk_A10;
 
     while (var_v1 != NULL) {
-        if (var_v1 == arg0) {
-            *var_v0 = var_v1->nextClient;
+        if (var_v1 == client) {
+            *var_v0 = var_v1->next;
             break;
         }
-        var_v0 = &var_v1->nextClient;
-        var_v1 = var_v1->nextClient;
+        var_v0 = &var_v1->next;
+        var_v1 = var_v1->next;
     }
 }
 

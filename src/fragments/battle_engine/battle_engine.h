@@ -558,7 +558,7 @@ typedef struct BattleSceneStateRow {
 typedef struct unk_D_843C4E44 {
     /* 0x000 */ u8 unk_000;
     /* 0x001 */ u8 unk_001;
-    /* 0x3F2 */ char unk02[0x3F2];
+    /* 0x002 */ char unk02[0x3F2];
 } unk_D_843C4E44; // size >= 0x3F4
 
 typedef struct unk_D_843C4DEC {
@@ -567,7 +567,7 @@ typedef struct unk_D_843C4DEC {
 } unk_D_843C4DEC; // size = 0x58
 
 typedef struct BattleSceneStateTickSlot {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ ActivePokemon* unk_00;
     /* 0x04 */ BattleSceneStateCallback callback;
 } BattleSceneStateTickSlot; // size = 0x8
 
@@ -796,7 +796,7 @@ typedef struct Trail40Variant {
 
 typedef struct TexturedRibbonSheetNode {
     /* 0x00 */ f32 unk_00;
-    /* 0x08 */ u8 unk_04;
+    /* 0x04 */ u8 unk_04;
     /* 0x08 */ f32 unk_08;
     /* 0x0C */ Vec3f unk_0C;
     /* 0x18 */ Vec3f unk_18;
@@ -891,7 +891,7 @@ typedef struct OwnerAnchoredFourStream {
     /* 0x004 */ s16 unk_004;
     /* 0x006 */ s16 unk_006;
     /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x010 */ f32 unk_00C;
+    /* 0x00C */ f32 unk_00C;
     /* 0x010 */ f32 unk_010;
     /* 0x014 */ Vtx* unk_014;
     /* 0x018 */ Particle* unk_018;
@@ -1054,7 +1054,7 @@ typedef struct BattleAiMonState {
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 unk_05[1];
-    /* 0x0C */ char unk06[0xC];
+    /* 0x06 */ char unk06[0xC];
     /* 0x12 */ BattleMonRuntime unk_12;
 } BattleAiMonState; // size = 0x76
 

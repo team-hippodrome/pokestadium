@@ -1194,7 +1194,7 @@ s32 Gallery_AlbumGetResult(unk_D_83407B38* arg0) {
     return sp1C;
 }
 
-void Gallery_AlbumMain(s32 arg0, s32 arg1) {
+s32 Gallery_AlbumMain(s32 arg0, s32 arg1) {
     StageContext* sp24;
 
     main_pool_push_state('ALBM');
@@ -1223,5 +1223,5 @@ void Gallery_AlbumMain(s32 arg0, s32 arg1) {
 
     main_pool_pop_state('ALBM');
 
-    Gallery_AlbumGetResult(&D_83503FC8);
+    return Gallery_AlbumGetResult(&D_83503FC8);
 }

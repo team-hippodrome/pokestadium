@@ -27,9 +27,9 @@ typedef struct unk_D_800ABB28 {
     /* 0x1C */ struct unk_D_800ABB28* unk_1C;
     /* 0x20 */ Gfx* unk_20;
     /* 0x24 */ u8 unk_24;
-    /* 0x24 */ u8 unk_25;
-    /* 0x24 */ u8 unk_26;
-    /* 0x24 */ u8 unk_27;
+    /* 0x25 */ u8 unk_25;
+    /* 0x26 */ u8 unk_26;
+    /* 0x27 */ u8 unk_27;
 } unk_D_800ABB28; // size = 0x28
 
 typedef struct unk_D_800ABB10 {

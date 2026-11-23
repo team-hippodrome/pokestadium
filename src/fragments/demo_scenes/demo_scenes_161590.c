@@ -5,11 +5,15 @@
 #include "src/gfx_rect.h"
 #include "src/controller.h"
 
-void Diorama_DrawEndBackgroundTiles(u8* arg0) {
+/**
+ * Draws the 320x240 title screen background (20x15 RGBA16 tiles of 16x16), but only after the
+ * finale has ended. The image is the same backgrounds file the title screen uses.
+ */
+void Diorama_DrawTitleBackground(u8* arg0) {
     s32 i;
     s32 j;
 
-    if (D_86B0E5DC == 0) {
+    if (sDioramaSequenceFinished == 0) {
         return;
     }
 
@@ -33,6 +37,10 @@ void Diorama_DrawEndBackgroundTiles(u8* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/**
+ * Draws an RGBA16 texture of arg5 x arg6 texels stretched over the rectangle (arg1, arg2,
+ * arg3, arg4), using an orthographic projection.
+ */
 void Diorama_DrawFullscreenTexture(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 arg5, u8 arg6) {
     DepthBuffer* temp_s1 = GfxImage_GetCurrent();
     Vtx* temp_s2 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
@@ -79,20 +87,25 @@ void Diorama_DrawFullscreenTexture(u8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 a
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
 }
 
-// The Japanese build has no scrolling end caption: its Diorama_RenderFrame goes from
-// Diorama_DrawFadeOverlay straight to BgStage_AdvanceFrame, and this file ends after
+// The Japanese build has no no-controller warning: its Diorama_RenderFrame goes from
+// Diorama_DrawSkipFadeOverlay straight to BgStage_AdvanceFrame, and this file ends after
 // Diorama_DrawFullscreenTexture (ROM 0x179F70-0x17A6C0).
 #if !defined(VERSION_JP)
-void Diorama_DrawEndCaption(void) {
-    static s32 sDioramaCaptionYOffset = 0;
+/**
+ * If controller 1 is not connected, scrolls the "Controller 1 is not connected" message
+ * across the bottom of the screen until the finale ends. Same as Title_DrawNoControllerWarning.
+ * //@src/title_screen.c
+ */
+void Diorama_DrawNoControllerWarning(void) {
+    static s32 sDioramaWarningScrollX = 0;
 
     s32 sp24;
     s16 temp_s0;
 
     if (!(Cont_GetControllerBits() & 1)) {
         sp24 = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sControllerErrorText, 0));
-        temp_s0 = 0x50 - sDioramaCaptionYOffset;
-        if (D_86B0E5DC != 1) {
+        temp_s0 = 0x50 - sDioramaWarningScrollX;
+        if (sDioramaSequenceFinished != 1) {
             gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
 
             Font_BeginTranslucentTextRendering();
@@ -108,9 +121,9 @@ void Diorama_DrawEndCaption(void) {
 
             gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
 
-            sDioramaCaptionYOffset++;
-            if (sDioramaCaptionYOffset >= (sp24 + 0x50)) {
-                sDioramaCaptionYOffset = 0x32;
+            sDioramaWarningScrollX++;
+            if (sDioramaWarningScrollX >= (sp24 + 0x50)) {
+                sDioramaWarningScrollX = 0x32;
             }
         }
     }

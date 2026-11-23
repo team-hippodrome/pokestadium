@@ -15,9 +15,9 @@ typedef struct AnimationFlagTarget {
 
 typedef struct AnimationRangeFlagState {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ AnimationFlagTarget* target;
+    /* 0x04 */ AnimationFlagTarget* target; // GraphNode.prevSibling; byte 1 holds its render flags.
     /* 0x08 */ char unk08[0xC];
-    /* 0x14 */ AnimationFrameRange* range;
+    /* 0x14 */ AnimationFrameRange* range; // GraphNode.callbackArg: animation id and inclusive frame range.
 } AnimationRangeFlagState; // size = 0x18
 
 /**

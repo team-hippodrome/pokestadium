@@ -142,7 +142,7 @@ typedef struct unk_func_8820B12C_000 {
 typedef struct unk_func_8820B12C {
     /* 0x00 */ unk_func_8820B12C_000 unk_00;
     /* 0x28 */ WidgetGridMenu* unk_28;
-    /* 0x28 */ unk_func_8820B12C_02C* unk_2C;
+    /* 0x2C */ unk_func_8820B12C_02C* unk_2C;
 } unk_func_8820B12C; // size = 0x30
 
 typedef struct unk_func_8820BE14_02C_070 {
@@ -354,7 +354,7 @@ typedef struct unk_func_8821421C_02C {
     /* 0x6C */ unk_func_8821421C_02C_06C* unk_6C;
     /* 0x70 */ unk_func_8821421C_02C_070* unk_70[2];
     /* 0x78 */ struct unk_func_8821421C_03C* unk_78;
-    /* 0x78 */ struct unk_func_8821421C_03C* unk_7C;
+    /* 0x7C */ struct unk_func_8821421C_03C* unk_7C;
     /* 0x80 */ s32 unk_80;
     /* 0x84 */ struct unk_func_8821421C_038* unk_84;
     /* 0x88 */ struct unk_func_8821421C_034* unk_88;
@@ -417,7 +417,7 @@ typedef struct unk_func_8821421C_038 {
 typedef struct unk_func_8821421C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8821421C_02C* unk_2C;
-    /* 0x34 */ unk_func_88509F48* unk_30;
+    /* 0x30 */ unk_func_88509F48* unk_30;
     /* 0x34 */ unk_func_8821421C_034* unk_34;
     /* 0x38 */ unk_func_8821421C_038* unk_38;
     /* 0x3C */ unk_func_8821421C_03C unk_3C[3];
@@ -583,7 +583,7 @@ s32 LabPC_SwapScreen_UpdatePageSelection(unk_func_8820BE14_02C* arg0);
 s32 LabPC_HandleInput(unk_func_8820BE14_02C* arg0, Controller* arg1);
 s32 LabPC_RunSwapScreenModal(unk_func_8820BE14_02C* arg0, Controller* arg1);
 void LabPC_SwapScreen_SetMenuState(unk_func_8820BE14_02C* arg0, s32 arg1);
-void LabPC_ReleaseSwapWidgets(unk_func_8820B12C_02C* arg0);
+void LabPC_ReleaseSwapWidgets(unk_func_8820BE14_02C* arg0);
 void LabPC_InitSwapController(unk_func_8820B12C* arg0, unk_func_8820BE14_02C* arg1);
 s32 LabPC_DeckHasChanged(unk_func_8820BE14_06C_000* arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 LabPC_CheckDirtyDecks(unk_func_8820BE14_02C* arg0);

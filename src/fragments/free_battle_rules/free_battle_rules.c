@@ -48,7 +48,7 @@ typedef struct TagTeamOption {
 static char** sRuleSelectText;
 static char** sPokemonDetailText;
 #if defined(VERSION_US_REV2)
-static s32 pad_D_84002D08_us_rev2;
+static char** sPlayerLabelText;
 #endif
 static BinArchive* D_84002D08;
 static u8* D_84002D0C;
@@ -601,9 +601,6 @@ void FreeBattle_DrawComDifficultyText(s16 position, char* text) {
     Font_Printf(sComDifficultyWindow.x + 52, sComDifficultyWindow.y + (position * 28) + 43, text);
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_DrawComDifficultyWindow.s")
-#else
 // Popup shown when the right-side option is COM
 void FreeBattle_DrawComDifficultyWindow(void) {
     if (sComDifficultyWindow.openTicks > 0) {
@@ -611,6 +608,9 @@ void FreeBattle_DrawComDifficultyWindow(void) {
 
         Ui_DrawBorderedPanel(sComDifficultyWindow.x, sComDifficultyWindow.y + (s16)((136 - opening_progress) / 2), 152, opening_progress, 0x2121); // #212100
         if (sComDifficultyWindow.openTicks == 8) {
+#if defined(VERSION_US_REV2)
+            Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
+#endif
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
             Gfx_DrawTextureRgba16(sComDifficultyWindow.x + 12, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
@@ -629,7 +629,6 @@ void FreeBattle_DrawComDifficultyWindow(void) {
         }
     }
 }
-#endif
 
 void FreeBattle_InitComDifficultyWindow(void) {
     sComDifficultyWindow.x = 400;
@@ -759,11 +758,15 @@ void FreeBattle_SlideOutPanel(void) {
     }
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_ApplySettings.s")
-#else
+/** Applies player/COM settings and creates trainers for both sides. */
 void FreeBattle_ApplySettings(void) {
+#if defined(VERSION_US_REV2)
+    char port_player_name[20];
+    char* name;
+    UNUSED s32 pad[2];
+#else
     char port_player_name[12];
+#endif
     TeamRoster* temp_v0;
     s32 i;
 
@@ -771,14 +774,24 @@ void FreeBattle_ApplySettings(void) {
 
     for (i = 0; i < 4; i++) {
         if (sTagTeamOptions[sTagTeamSelection.leftSideTeam].controllerMask & (1 << i)) {
+#if defined(VERSION_US_REV2)
+            Text_SetNumberToken(1, i + 1);
+            name = Text_GetString(port_player_name, 0x10, sPlayerLabelText, 4);
+            Team_AddTrainer(0, Trainer_Create(i, 0, name, Text_GetPlayerLabel(1)));
+#else
             sprintf(port_player_name, "%dP", i + 1);
             Team_AddTrainer(0, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
+#endif
         }
     }
 
     if (sTagTeamSelection.rightSideTeam == 3) {
         gSessionContext.aiDifficulty = sComDifficulty;
+#if defined(VERSION_US_REV2)
+        temp_v0 = Trainer_Create(-1, 0, Text_GetString(NULL, 0, sPlayerLabelText, 3), Text_GetPlayerLabel(3));
+#else
         temp_v0 = Trainer_Create(-1, 0, "COM", Text_GetPlayerLabel(3));
+#endif
         Team_AddTrainer(1, temp_v0);
         if (sTagTeamSelection.leftSideTeam == 3) {
             temp_v0->controllerPort = 2;
@@ -788,8 +801,14 @@ void FreeBattle_ApplySettings(void) {
     } else {
         for (i = 0; i < 4; i++) {
             if (sTagTeamOptions[sTagTeamSelection.rightSideTeam + 4].controllerMask & (1 << i)) {
+#if defined(VERSION_US_REV2)
+                Text_SetNumberToken(1, i + 1);
+                name = Text_GetString(port_player_name, 0x10, sPlayerLabelText, 4);
+                Team_AddTrainer(1, Trainer_Create(i, 0, name, Text_GetPlayerLabel(1)));
+#else
                 sprintf(port_player_name, "%dP", i + 1);
                 Team_AddTrainer(1, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
+#endif
             }
         }
     }
@@ -804,7 +823,6 @@ void FreeBattle_ApplySettings(void) {
         gSessionContext.battleSides[1].tagTeamMember[1]->rosterInfo->unk_003 = 0x35;
     }
 }
-#endif
 
 s32 FreeBattle_SettingsLoop(void) {
     sSettingsState = 0;
@@ -853,9 +871,6 @@ s32 FreeBattle_SettingsLoop(void) {
     return 1;
 }
 
-#if defined(VERSION_US_REV2)
-#pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/free_battle_rules/free_battle_rules/FreeBattle_SettingsMain.s")
-#else
 s32 FreeBattle_SettingsMain(UNUSED s32 arg0, UNUSED s32 arg1) {
     s32 active;
 
@@ -868,6 +883,9 @@ s32 FreeBattle_SettingsMain(UNUSED s32 arg0, UNUSED s32 arg1) {
     Text_InitStringTables();
     sRuleSelectText = Text_GetStringTable(15);
     sPokemonDetailText = Text_GetStringTable(6);
+#if defined(VERSION_US_REV2)
+    sPlayerLabelText = Text_GetStringTable(0x11);
+#endif
     D_84002D08 = ASSET_LOAD2(backgrounds, 1, 1);
     D_84002D0C = BinArchive_GetFile(D_84002D08, 6);
     sConnectedControllers = Cont_GetControllerBits();
@@ -878,4 +896,3 @@ s32 FreeBattle_SettingsMain(UNUSED s32 arg0, UNUSED s32 arg1) {
     main_pool_pop_state('RULE');
     return active;
 }
-#endif
