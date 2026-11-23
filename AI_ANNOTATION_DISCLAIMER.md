@@ -31,15 +31,14 @@ These unannotated fragments are planned to require substantial human involvement
 These Fragments had a human in the loop verifying their status.
 - `battle_prep` (Intro and results screen)
 - `credits`
-- `demo_scenes` (cutscenes)
 - `transfer_pak_error`
 - `gym_leader_castle_clear`
 - `n64_logo`
-- `pikachu_reward`
 - `particle_data_library`
 
 ## AI-Generated
 These fragments had annotation almost entirely done by AI agents with minimal human involvement. Their annotations may contain hallucinations but should be of higher quality than unassigned fragments.
+- `demo_scenes` (cutscenes)
 - `gb_tower_emulator`
 - `particle_math`
 
