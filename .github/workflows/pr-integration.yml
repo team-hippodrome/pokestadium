@@ -1,6 +1,6 @@
 name: Public PR Integration
 
-# This workflow is deliberately separate from the self-hosted ROM gate. It
+# This workflow is deliberately separate from the ROM gate. It
 # runs only on GitHub-hosted infrastructure and never executes PR-provided
 # scripts. The checked-out PR tree is treated as data by the trusted coverage
 # generator from the base commit.
