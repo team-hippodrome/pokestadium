@@ -1084,7 +1084,7 @@ void BattlePrepRoster_Load(BattlePrepRoster* roster, BinArchive* portrait_archiv
     u8* side1_portrait = BinArchive_GetFile(portrait_archive, gSessionContext.battleSides[1].tagTeamMember[0]->rosterInfo->unk_003);
 
     PokeIcon_OpenModelArchives();
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     if (roster->isDoubleLayout == 1) {
         BattlePrepRoster_QueueIconsDouble(roster);

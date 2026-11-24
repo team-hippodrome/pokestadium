@@ -1,6 +1,6 @@
 #include "gallery.h"
 #include "src/fragments/gallery_camera/gallery_camera.h"
-#include "src/fragments/particle_data_library/particle_data_library.h"
+#include "src/fragments/model_callback_library/model_callback_library.h"
 #include "src/fragments/particle_math/particle_math.h"
 #include "src/geo_node.h"
 #include "src/geo_render.h"
@@ -360,7 +360,7 @@ void Gallery_Dispatch(void) {
                 // button GFX for How to Snap, but it doesnt use them.
                 ASSET_LOAD(D_3000000, kids_club_game_ui, 0);
                 FRAGMENT_LOAD(FRAGMENT_MINIGAME_ACTOR_FRAMEWORK);
-                FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+                FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
                 // determine if this is "How to Snap" or regular Snap Mode.
                 if (var_s5 == 1) {

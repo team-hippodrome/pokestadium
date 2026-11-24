@@ -1230,7 +1230,7 @@ void BattlePrepTeamIcons_Load(BattlePrepTeamIcons* team_icons, BinArchive* portr
 
     PokeIcon_OpenModelArchives();
 
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     if (team_icons->isDoubleLayout == 1) {
         BattlePrepTeamIcons_QueueIconsDouble(team_icons);

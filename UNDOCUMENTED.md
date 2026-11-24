@@ -133,13 +133,13 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_tint_and_alpha_effects.c` | 38 | 17 | 1 | 0 | 0 | 31 | 0 |
 | `src/fragments/gallery_camera/gallery_camera_14EC80.c` | 17 | 17 | 1 | 18 | 3 | 10 | 0 |
 | `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 | 21 | 0 | 3 | 3 | 21 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_258080.c` | 15 | 15 | 1 | 15 | 4 | 13 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 | 15 | 1 | 15 | 4 | 13 | 0 |
 | `src/scheduler.c` | 24 | 24 | 1 | 1 | 7 | 15 | 0 |
 | `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 | 22 | 0 | 6 | 1 | 18 | 0 |
 | `src/model_animation.c` | 20 | 20 | 0 | 2 | 12 | 13 | 0 |
 | `src/fragments/particle_math/particle_math_264380.c` | 100 | 0 | 0 | 36 | 9 | 0 | 0 |
 | `src/fragments/battle_engine/battle_engine_debug_strings.c` | 1 | 1 | 1 | 42 | 0 | 0 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_2558B0.c` | 10 | 10 | 2 | 16 | 7 | 9 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_2558B0.c` | 10 | 10 | 2 | 16 | 7 | 9 | 0 |
 | `src/fragments/battle_engine/battle_engine_electric_burst_effects.c` | 28 | 22 | 0 | 0 | 0 | 21 | 0 |
 | `src/fragments/battle_engine/battle_engine_lasso.c` | 14 | 10 | 0 | 12 | 11 | 10 | 0 |
 | `src/fragments/trade_machine/trade_machine_28D1A0.c` | 14 | 14 | 0 | 14 | 5 | 10 | 0 |
@@ -220,7 +220,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_3540B0.c` | 6 | 6 | 0 | 3 | 5 | 4 | 0 |
 | `src/fragments/battle_engine/battle_engine_spike_cannon.c` | 6 | 6 | 0 | 3 | 5 | 4 | 0 |
 | `src/fragments/minigame_select/minigame_select_281C40.c` | 4 | 4 | 0 | 11 | 1 | 2 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_2554C0.c` | 4 | 4 | 0 | 11 | 1 | 2 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_2554C0.c` | 4 | 4 | 0 | 11 | 1 | 2 | 0 |
 | `src/fragments/battle_engine/battle_engine_hypnosis_screech.c` | 6 | 6 | 0 | 3 | 4 | 4 | 0 |
 | `src/fragments/gallery_enlarge/gallery_enlarge.c` | 8 | 8 | 1 | 7 | 0 | 1 | 0 |
 | `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 | 6 | 2 | 7 | 0 | 2 | 0 |
@@ -235,7 +235,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/audio_sfx.c` | 1 | 1 | 0 | 11 | 1 | 0 | 0 |
 | `src/fragments/battle_engine/battle_engine_intro.c` | 13 | 13 | 0 | 0 | 0 | 0 | 0 |
 | `src/fragments/drowzee_game/drowzee_game_1.c` | 1 | 1 | 0 | 10 | 1 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_257AF0.c` | 4 | 4 | 1 | 3 | 2 | 3 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_257AF0.c` | 4 | 4 | 1 | 3 | 2 | 3 | 0 |
 | `src/audio_stream_channel.c` | 5 | 5 | 0 | 0 | 2 | 5 | 0 |
 | `src/fragments/rental_rules/rental_rules_2C0F90.c` | 10 | 10 | 0 | 2 | 0 | 0 | 0 |
 | `src/fragments/battle_prep/battle_prep_3974E0.c` | 4 | 4 | 0 | 0 | 4 | 3 | 0 |
@@ -248,8 +248,8 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/profiler.c` | 14 | 9 | 0 | 1 | 0 | 0 | 0 |
 | `src/audio_data.c` | 2 | 2 | 0 | 6 | 0 | 1 | 0 |
 | `src/fragments/gallery_backgrounds/gallery_backgrounds_2A3E70.c` | 5 | 5 | 0 | 0 | 0 | 4 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_2577F0.c` | 2 | 2 | 1 | 4 | 1 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_2590C0.c` | 3 | 3 | 0 | 1 | 2 | 3 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_2577F0.c` | 2 | 2 | 1 | 4 | 1 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_2590C0.c` | 3 | 3 | 0 | 1 | 2 | 3 | 0 |
 | `src/libleo/leoc2ecc.c` | 7 | 7 | 0 | 2 | 0 | 0 | 0 |
 | `src/audio_sound_state.c` | 5 | 5 | 0 | 0 | 1 | 2 | 0 |
 | `src/controller_ram.c` | 4 | 4 | 0 | 3 | 0 | 1 | 0 |
@@ -262,7 +262,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/fragments/battle_engine/battle_engine_effect_render_pipeline.c` | 4 | 4 | 0 | 2 | 0 | 1 | 0 |
 | `src/fragments/battle_order_select/battle_order_select.c` | 36 | 1 | 0 | 5 | 0 | 1 | 0 |
 | `src/fragments/demo_scenes/demo_scenes_169510.c` | 3 | 3 | 0 | 0 | 1 | 3 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_2557A0.c` | 4 | 4 | 0 | 1 | 0 | 2 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_2557A0.c` | 4 | 4 | 0 | 1 | 0 | 2 | 0 |
 | `src/libnaudio/n_mainbus.c` | 1 | 1 | 0 | 6 | 0 | 0 | 0 |
 | `src/libnaudio/n_synthesizer.c` | 9 | 7 | 0 | 0 | 0 | 0 | 0 |
 | `src/rom_device.c` | 2 | 2 | 0 | 3 | 1 | 1 | 0 |
@@ -274,9 +274,9 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/libnaudio/n_env.c` | 7 | 6 | 0 | 0 | 0 | 0 | 0 |
 | `src/fragments/battle_engine/battle_engine_broll.c` | 23 | 2 | 0 | 3 | 0 | 0 | 0 |
 | `src/fragments/battle_engine/battle_engine_stinger_projectiles.c` | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_257DE0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_257EC0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_257FA0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_257DE0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_257EC0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_257FA0.c` | 2 | 2 | 0 | 2 | 0 | 1 | 0 |
 | `src/gb_mbc.c` | 3 | 3 | 0 | 1 | 1 | 0 | 0 |
 | `src/libleo/leofunc.c` | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
 | `src/libleo/leoint.c` | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
@@ -285,7 +285,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/audio_sfx_wrapper.c` | 2 | 2 | 1 | 0 | 0 | 1 | 0 |
 | `src/fragments/battle_engine/battle_engine_math.c` | 22 | 4 | 0 | 0 | 0 | 0 | 0 |
 | `src/fragments/event_battle/event_battle.c` | 56 | 0 | 0 | 3 | 0 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_257750.c` | 2 | 2 | 0 | 1 | 0 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_257750.c` | 2 | 2 | 0 | 1 | 0 | 1 | 0 |
 | `src/fragments/pokemon_lab_unused/pokemon_lab_unused.c` | 1 | 1 | 1 | 1 | 0 | 1 | 0 |
 | `src/gb_tower_audio.c` | 5 | 0 | 0 | 2 | 0 | 2 | 0 |
 | `src/jpeg_decoder.c` | 4 | 4 | 0 | 0 | 0 | 0 | 0 |
@@ -293,7 +293,7 @@ Generic fields are named unk/pad/field/filler with an optional hex suffix; neste
 | `src/audio_cache.c` | 1 | 1 | 1 | 0 | 0 | 1 | 0 |
 | `src/fragments/debug_menu_slot76/debug_menu_slot76.c` | 1 | 1 | 1 | 0 | 0 | 1 | 0 |
 | `src/fragments/debug_menu_slot77/debug_menu_slot77.c` | 1 | 1 | 1 | 0 | 0 | 1 | 0 |
-| `src/fragments/particle_data_library/particle_data_library_259030.c` | 1 | 1 | 0 | 1 | 0 | 1 | 0 |
+| `src/fragments/model_callback_library/model_callback_library_259030.c` | 1 | 1 | 0 | 1 | 0 | 1 | 0 |
 | `src/fragments/transfer_pak_error/transfer_pak_error.c` | 6 | 0 | 0 | 1 | 0 | 2 | 0 |
 | `src/libleo/bootdisk.c` | 2 | 2 | 0 | 0 | 1 | 0 | 0 |
 | `src/libleo/leointerrupt.c` | 3 | 3 | 0 | 0 | 0 | 0 | 0 |
