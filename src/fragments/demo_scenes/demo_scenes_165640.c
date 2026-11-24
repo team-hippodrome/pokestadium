@@ -1304,7 +1304,7 @@ s32 Stage_ShowClearCeremony(void) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, cup_clear_ui, 0);
 
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     ClearCeremony_LoadScene();
     StageContext_Activate(sp24);

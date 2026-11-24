@@ -1622,7 +1622,7 @@ s32 Credits_Main(s32 unused, s32 is_round_1) {
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, kids_club_game_ui, 0);
-    FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
+    FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
     Credits_InitScene(is_round_1);
     StageContext_Activate(stage_context);

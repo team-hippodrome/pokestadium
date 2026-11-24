@@ -5,13 +5,13 @@
 #include "gallery.h"
 
 /*
- * Fragment 31 (loaded at 0x81000000, memmap id 0) despite its name is a library of geo display-list
+ * Fragment 31 (loaded at 0x81000000, memmap id 0) is a library of geo display-list
  * callbacks for 3D models. Its header is followed by a 60-entry jump table at 0x81000020
  * (asm fragments/31/fragment31_unk_table.s, one `j` per 8 bytes); model data stores those
  * 0x810000xx slot addresses as node callbacks, so the slots keep a fixed address while the targets
  * move. About half the slots jump to this fragment's own functions (animated textures, scrolling
  * panels, conditional parts, minigame and Hall of Fame glyph helpers, and the species particle
- * effects in particle_data_library_2558B0.c); the rest jump to battle-engine move effect, minigame
+ * effects in model_callback_library_2558B0.c); the rest jump to battle-engine move effect, minigame
  * and ParticleGfx functions. Many fragments that draw 3D models load it with FRAGMENT_LOAD
  * (battle engine, battle prep, demo scenes, minigames, gallery, Pokedex, Hall of Fame and others);
  * in battle, move animations then reach it through those slots without loading it again.
