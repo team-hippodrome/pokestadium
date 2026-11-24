@@ -124,7 +124,7 @@ D_03002F60 = 0x03002F60;
 D_03003F28 = 0x03003F28;
 D_3000000 = 0x03000000;
 D_3000000_2 = 0x03000000;
-// IA8 glyph texture address that the Japanese func_81003A54 passes to Util_ConvertAddrToVirtAddr
+// IA8 glyph texture address that the Japanese DisplayList_BuildDigitOrGlyphSegment passes to Util_ConvertAddrToVirtAddr
 // (src/fragments/particle_data_library/particle_data_library_258080.c).
 D_3000210 = 0x03000210;
 D_30C1290 = 0x030A9B90;

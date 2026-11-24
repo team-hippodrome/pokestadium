@@ -3,17 +3,17 @@
 #include "src/geo_render.h"
 #include "src/battle_hud.h"
 
-typedef struct unk_arg1_func_81002830 {
-    /* 0x00 */ s16 unk_00;
+typedef struct AnimatedFrameTextures {
+    /* 0x00 */ s16 scrollStep;
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s32 unk_04[6];
-} unk_arg1_func_81002830; // size = 0x1C
+    /* 0x04 */ s32 frames[6];
+} AnimatedFrameTextures; // size = 0x1C
 
-typedef struct unk_arg1_func_81002968 {
+typedef struct AnimatedFrameState {
     /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ u32* unk_14;
-    /* 0x18 */ Gfx* unk_18;
-} unk_arg1_func_81002968; // size = 0x1C
+    /* 0x14 */ u32* frameTextures;
+    /* 0x18 */ Gfx* gfx;
+} AnimatedFrameState; // size = 0x1C
 
 typedef struct TextureState {
     /* 0x00 */ char unk00[0x14];
@@ -21,39 +21,51 @@ typedef struct TextureState {
     /* 0x18 */ Gfx* gfx;
 } TextureState; // size = 0x1C
 
-void func_81002830(Gfx* gfx, unk_arg1_func_81002830* arg1) {
+/**
+ * Loads one of the 64x32 RGBA16 texture frames in arg1->frames (picked by D_800AF7AE & 7) and
+ * scrolls its S coordinate by scrollStep * D_800AF7AE. Skipped while textureMode != 0.
+ */
+void DisplayList_BuildAnimatedFrameSegment(Gfx* gfx, AnimatedFrameTextures* arg1) {
     s16 temp_v0;
     s32 var_a3;
-    unk_arg1_func_81002830* p;
+    AnimatedFrameTextures* p;
     p = arg1;
     if (D_8006F09C->textureMode == 0) {
         temp_v0 = 0x4000;
         // FAKE
         if ((arg1 && arg1) && arg1) {}
         var_a3 = D_800AF7AE;
-        temp_v0 = temp_v0 - (arg1->unk_00 * var_a3);
+        temp_v0 = temp_v0 - (arg1->scrollStep * var_a3);
         // FAKE
         arg1 = NULL;
         var_a3 = D_800AF7AE;
-        gDPLoadTextureBlock(gfx++, p->unk_04[var_a3 & 0x7], G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0,
+        gDPLoadTextureBlock(gfx++, p->frames[var_a3 & 0x7], G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_CLAMP, 6, 5, G_TX_NOLOD, G_TX_NOLOD);
         gDPSetTileSize(gfx++, 0, temp_v0, 0, ((temp_v0 + 63) << 2), 124);
     }
     gSPEndDisplayList(gfx++);
 }
 
-void DisplayList_InitAnimatedFrameSegment(s32 arg0, unk_arg1_func_81002968* arg1) {
+/**
+ * Geo callback (jump-table slot 0x108). Builds DisplayList_BuildAnimatedFrameSegment on the
+ * build pass. Referenced many times by the Ponyta, Rapidash and Moltres models (flame mane and tail);
+ * the debugger hit it for all three.
+ */
+void DisplayList_InitAnimatedFrameSegment(s32 arg0, AnimatedFrameState* arg1) {
     s32 temp_v0;
     s32 sp18;
 
     if (arg0 == 2) {
-        sp18 = arg1->unk_14;
+        sp18 = arg1->frameTextures;
         temp_v0 = Gfx_AllocDisplayList(0x50);
-        arg1->unk_18 = temp_v0;
-        func_81002830(temp_v0, sp18);
+        arg1->gfx = temp_v0;
+        DisplayList_BuildAnimatedFrameSegment(temp_v0, sp18);
     }
 }
 
+/**
+ * Loads textures[index + 1] as a 32x32 RGBA16 texture block.
+ */
 Gfx* DisplayList_BuildSelectedTextureSegment(Gfx* gfx, u32* textures, s32 index) {
     gDPLoadTextureBlock(gfx++, textures[index + 1], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD, G_TX_NOLOD);
@@ -61,6 +73,12 @@ Gfx* DisplayList_BuildSelectedTextureSegment(Gfx* gfx, u32* textures, s32 index)
     return gfx;
 }
 
+/**
+ * Geo callback (jump-table slot 0x118). Chooses a texture frame and builds
+ * DisplayList_BuildSelectedTextureSegment. Grimer (objectType 88) uses its animation frame: frames 66-73
+ * of animations 0 and 1 map to textures 0-7, everything else to texture 0. Other models cycle with
+ * D_8006F084 & 7. The debugger hit it for Grimer in battle.
+ */
 void DisplayList_InitSelectedTextureSegment(s32 arg0, TextureState* state) {
     s32 index;
     u32* textures;

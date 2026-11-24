@@ -3,6 +3,10 @@
 #include "src/geo_render.h"
 #include "src/battle_hud.h"
 
+/**
+ * Multiplies the modelview matrix by a rotation around the X axis, using angle
+ * D_800AF778[effectSlot & 3] of the current display object.
+ */
 void DisplayList_BuildRotationMatrixSegment(Gfx* gfx) {
     Mtx* mtx;
     u8 angle;
@@ -14,6 +18,10 @@ void DisplayList_BuildRotationMatrixSegment(Gfx* gfx) {
     gSPEndDisplayList(gfx++);
 }
 
+/**
+ * Geo callback (jump-table slot 0x168). Builds
+ * DisplayList_BuildRotationMatrixSegment on the build pass. Only non-species models reference it.
+ */
 void DisplayList_InitRotationMatrixSegment(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
 

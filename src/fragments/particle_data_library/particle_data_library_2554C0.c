@@ -27,6 +27,11 @@ const char D_81004214[0x4] = "";
 const char D_81004218[0x4] = "";
 const char D_8100421C[0x4] = "";
 
+/**
+ * Writes a display list that calls segments[0], loads one 32x64 I16-sized texture block from
+ * textures[index], sets up the render tile, then calls segments[1]. Built by
+ * DisplayList_InitIndexedTextureSegment (geo callback slot 0x20 of the fragment's jump table).
+ */
 Gfx* DisplayList_BuildIndexedTextureSegment(Gfx* gfx, DisplayListAddresses* addresses, s32 index) {
     gSPDisplayList(gfx++, addresses->segments[0]);
     // TODO: Convert to gDPLoadTextureBlock
@@ -43,6 +48,11 @@ Gfx* DisplayList_BuildIndexedTextureSegment(Gfx* gfx, DisplayListAddresses* addr
     return gfx;
 }
 
+/**
+ * Geo callback (jump-table slot 0x20). On the build pass (arg0 == 2) allocates a display list and
+ * fills it with DisplayList_BuildIndexedTextureSegment, picking texture D_8006F084 & 7, so the texture
+ * cycles through 8 frames as the global frame counter advances.
+ */
 void DisplayList_InitIndexedTextureSegment(s32 arg0, DisplayListState* state) {
     Gfx* gfx;
     DisplayListAddresses* addresses;
@@ -55,6 +65,11 @@ void DisplayList_InitIndexedTextureSegment(s32 arg0, DisplayListState* state) {
     }
 }
 
+/**
+ * Loads textures[index] as a 32x64 IA8 texture, then renders the active model-renderer slot with
+ * that texture bound (ModelRenderer_UpdateSlotVertices / ModelRenderer_RenderActiveSlot) and enables
+ * geometry mode 0x00020000 afterwards. Used for animated flame textures.
+ */
 Gfx* DisplayList_BuildAnimatedModelTexture(Gfx* gfx, DisplayListAddresses* addresses, s32 index) {
     gDPLoadTextureBlock(gfx++, addresses->textures[index], G_IM_FMT_IA, G_IM_SIZ_8b, 32, 64, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -68,8 +83,16 @@ Gfx* DisplayList_BuildAnimatedModelTexture(Gfx* gfx, DisplayListAddresses* addre
     }
 }
 
+/**
+ * Geo callback (jump-table slot 0xD8). Picks one of 8 flame texture frames from D_800AF7B0 for the
+ * active renderer mode plus a per-call counter, then builds the list with
+ * DisplayList_BuildAnimatedModelTexture.
+ * The models that reference this slot are Charmander, Charmeleon, Charizard, Magmar and Moltres
+ * (pokemon_models files 3-5, 125, 145); the debugger hit it for Charmander, Charizard, Magmar and
+ * Moltres in battle. This, rather than the species particle system, animates their flames.
+ */
 void DisplayList_InitAnimatedModelTexture(s32 arg0, DisplayListState* state) {
-    static s32 D_81003FD0 = 0;
+    static s32 sAnimatedTextureFrame = 0;
     Gfx* gfx;
     DisplayListAddresses* addresses;
     u8 temp_v1;
@@ -79,7 +102,7 @@ void DisplayList_InitAnimatedModelTexture(s32 arg0, DisplayListState* state) {
         addresses = state->addresses;
         gfx = Gfx_AllocDisplayList(0x140);
         state->gfx = gfx;
-        DisplayList_BuildAnimatedModelTexture(gfx, addresses, ((D_800AF7B0[temp_v1 & 1] * 3) + D_81003FD0) % 8);
-        D_81003FD0 += 1;
+        DisplayList_BuildAnimatedModelTexture(gfx, addresses, ((D_800AF7B0[temp_v1 & 1] * 3) + sAnimatedTextureFrame) % 8);
+        sAnimatedTextureFrame += 1;
     }
 }

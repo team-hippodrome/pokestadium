@@ -4,28 +4,32 @@
 #include "gfx_buffer.h"
 #include "src/matrix.h"
 
-typedef struct unk_D_810047E0 {
+// One species body-effect particle (smoke puff, ember, sparkle or gas cloud).
+typedef struct SpeciesParticle {
     /* 0x00 */ s16 active;
     /* 0x02 */ char unk02[0x2];
     /* 0x04 */ Vec3f position;
     /* 0x10 */ Vec3f velocity;
     /* 0x1C */ Vec3f scale;
-    /* 0x28 */ s16 misc;
+    /* 0x28 */ s16 age;
     /* 0x2A */ char unk2A[0x2];
-} unk_D_810047E0; // size = 0x2C
+} SpeciesParticle; // size = 0x2C
 
-typedef struct unk_arg2_func_81001D80 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08[1];
-} unk_arg2_func_81001D80; // size = 0xC
+// Display-list data that a model passes to Particle31_SpeciesEffectCallback: a setup list, the quad
+// list, and the particle texture frames (indexed by age / 2).
+typedef struct SpeciesParticleGfx {
+    /* 0x00 */ s32 setupDisplayList;
+    /* 0x04 */ s32 quadDisplayList;
+    /* 0x08 */ s32 textureFrames[1];
+} SpeciesParticleGfx; // size = 0xC
 
-typedef struct unk_D_81003FE0 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04[3];
-    /* 0x0A */ s16 unk_0A;
-} unk_D_81003FE0; // size = 0xC
+// Animation frames on which Koffing and Weezing release a smoke puff, per animation id.
+typedef struct SmokePuffFrames {
+    /* 0x00 */ s16 otherAnimationFrame;
+    /* 0x02 */ s16 animation4Frame;
+    /* 0x04 */ s16 animation3Frames[3];
+    /* 0x0A */ s16 animation2Frame;
+} SmokePuffFrames; // size = 0xC
 
 typedef struct unk_D_81004160 {
     /* 0x00 */ f32 x;
@@ -35,7 +39,8 @@ typedef struct unk_D_81004160 {
 } unk_D_81004160; // size = 0x10
 
 // .data
-unk_D_81003FE0 D_81003FE0[18] = {
+// 18 puff frame sets, stepped through in sSmokePuffSetOrder order.
+SmokePuffFrames sSmokePuffFrameSets[18] = {
     { 0x002C, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 }, { 0x0020, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 },
     { 0x0024, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 }, { 0x002C, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 },
     { 0x0020, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 }, { 0x002C, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 },
@@ -46,11 +51,13 @@ unk_D_81003FE0 D_81003FE0[18] = {
     { 0x002C, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 }, { 0x0024, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 },
     { 0x002C, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 }, { 0x0024, 0x0041, 0x0008, 0x0026, 0x0060, 0x0073 },
 };
-s16 D_810040B8[18] = {
+// Order in which sSmokePuffFrameSets is used, indexed by sEffectCallbackCount % 18.
+s16 sSmokePuffSetOrder[18] = {
     0x0011, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0000,
     0x0010, 0x000F, 0x000E, 0x000D, 0x000C, 0x000B, 0x000A, 0x0009, 0x0008,
 };
-f32 D_810040DC[12] = {
+// Grow-then-shrink scale curve for Vaporeon and Articuno sparkles, indexed by age % 12.
+f32 sSparkleScaleCurve[12] = {
     0.5f,          0.6499999762f, 0.8000000119f, 0.9499999881f, 0.875f,        0.8000000119f,
     0.7250000238f, 0.6499999762f, 0.5749999881f, 0.5f,          0.4250000119f, 0.349999994f,
 };
@@ -65,10 +72,17 @@ Vec3f D_81004160 = { 1.0f, 1.0f, 1.0f };
 static u32 pad_D_8100416C = 0;
 
 // .bss
-static unk_D_810047E0 D_810047E0[2][10];
-static s32 D_81004B50;
-static s32 D_81004B54;
+// Species particles for battle side 0 and side 1 (effectSlot 0 or 1), 10 each.
+static SpeciesParticle sSpeciesParticles[2][10];
+// Particles drawn since the last Particle31_ResetCounters.
+static s32 sParticleDrawCount;
+// Particle31_SpeciesEffectCallback calls since the last Particle31_ResetCounters.
+static s32 sEffectCallbackCount;
 
+/**
+ * Clears species particle arg1 on the side given by the object's effectSlot (0xFF and 0xFE use
+ * side 0): inactive, age 0, zero position and velocity, unit scale.
+ */
 void Particle31_ResetSlot(DisplayObject* arg0, s32 arg1) {
     u8 var_v0 = arg0->effectSlot;
     s32 pad[2];
@@ -86,13 +100,18 @@ void Particle31_ResetSlot(DisplayObject* arg0, s32 arg1) {
         var_v0 = 0;
     }
 
-    D_810047E0[var_v0 & 1][arg1].active = 0;
-    D_810047E0[var_v0 & 1][arg1].misc = 0;
-    D_810047E0[var_v0 & 1][arg1].position = sp50;
-    D_810047E0[var_v0 & 1][arg1].velocity = sp44;
-    D_810047E0[var_v0 & 1][arg1].scale = sp38;
+    sSpeciesParticles[var_v0 & 1][arg1].active = 0;
+    sSpeciesParticles[var_v0 & 1][arg1].age = 0;
+    sSpeciesParticles[var_v0 & 1][arg1].position = sp50;
+    sSpeciesParticles[var_v0 & 1][arg1].velocity = sp44;
+    sSpeciesParticles[var_v0 & 1][arg1].scale = sp38;
 }
 
+/**
+ * Clears all 10 species particles of the object's side. Called through a virtual pointer from
+ * battle_hud.c when a display object's animation starts (objectType < 0x98). In the debugger's
+ * Metronome run it fired only for Transform, which swaps the user's model.
+ */
 void Particle31_ResetAllSlots(DisplayObject* arg0) {
     s32 i;
 
@@ -101,12 +120,23 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
     }
 }
 
+/**
+ * Resets sParticleDrawCount and sEffectCallbackCount. Called from battle_hud.c on animation
+ * start; the debugger saw it for every species on screen, including ones with no species effect.
+ */
 void Particle31_ResetCounters(void) {
-    D_81004B50 = 0;
-    D_81004B54 = 0;
+    sParticleDrawCount = 0;
+    sEffectCallbackCount = 0;
 }
 
-void Particle31_SpawnSpeciesEffect(unk_D_810047E0* arg0) {
+/**
+ * Activates the first free particle (of 10, or of 3 for Gastly) at the model's current matrix
+ * origin with a species-specific random offset, start scale and outward speed:
+ * Koffing/Weezing (109/110) smoke, Moltres (146), Ponyta (77) and Rapidash (78) embers, Articuno (144)
+ * and Vaporeon (134) sparkles, Gastly (92) gas. The debugger hit it for all of these except Rapidash,
+ * whose model has a slot-0xE0 material that no geometry node uses.
+ */
+void Particle31_SpawnSpeciesEffect(SpeciesParticle* arg0) {
     s32 var_v0;
     Vec3f sp90;
     Vec3f sp84;
@@ -163,18 +193,18 @@ void Particle31_SpawnSpeciesEffect(unk_D_810047E0* arg0) {
             break;
         case 0x90:
             var_fs0 = 0.0f;
-            sp64.x = D_810040DC[0];
-            sp64.y = D_810040DC[0];
-            sp64.z = D_810040DC[0];
+            sp64.x = sSparkleScaleCurve[0];
+            sp64.y = sSparkleScaleCurve[0];
+            sp64.z = sSparkleScaleCurve[0];
             sp84.x += (f32)((guRandom() % 20) - 0xA) * sp60;
             sp84.y += (f32)((guRandom() % 20) - 0xA) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 0xA) * sp58;
             break;
         case 0x86:
             var_fs0 = 0.0f;
-            sp64.x = D_810040DC[0];
-            sp64.y = D_810040DC[0];
-            sp64.z = D_810040DC[0];
+            sp64.x = sSparkleScaleCurve[0];
+            sp64.y = sSparkleScaleCurve[0];
+            sp64.z = sSparkleScaleCurve[0];
             sp84.x += (f32)((guRandom() % 60) - 0x1E) * sp60;
             sp84.y += (f32)((guRandom() % 40) - 0xA) * sp5C;
             sp84.z += (f32)((guRandom() % 60) - 0x1E) * sp58;
@@ -209,7 +239,7 @@ void Particle31_SpawnSpeciesEffect(unk_D_810047E0* arg0) {
             arg0->velocity.z = (f32)(var_fs0 * sp78.z);
             arg0->position = sp84;
             arg0->scale = sp64;
-            arg0->misc = 0;
+            arg0->age = 0;
             arg0->active = 1;
             break;
         }
@@ -217,7 +247,12 @@ void Particle31_SpawnSpeciesEffect(unk_D_810047E0* arg0) {
     }
 }
 
-void Particle31_UpdateSpeciesEffectTrigger(unk_D_810047E0* arg0) {
+/**
+ * Decides whether to spawn a particle this frame. Koffing and Weezing spawn on fixed animation
+ * frames from sSmokePuffFrameSets (separate frames for animations 2, 3 and 4). Gastly spawns every frame.
+ * Moltres has a 1/60 chance, Articuno 1/30, Vaporeon, Ponyta and Rapidash 1/7.
+ */
+void Particle31_UpdateSpeciesEffectTrigger(SpeciesParticle* arg0) {
     s32 pad[1];
     s16 temp_v1;
     s32 var_a1;
@@ -230,17 +265,17 @@ void Particle31_UpdateSpeciesEffectTrigger(unk_D_810047E0* arg0) {
         case 0x6D:
         case 0x6E:
             temp_v1 = D_8006F09C->transformAnim.animationId;
-            temp_a0 = D_810040B8[D_81004B54 % 18];
+            temp_a0 = sSmokePuffSetOrder[sEffectCallbackCount % 18];
             switch (temp_v1) {
                 case 4:
-                    if (var_a1 == D_81003FE0[temp_a0].unk_02) {
+                    if (var_a1 == sSmokePuffFrameSets[temp_a0].animation4Frame) {
                         Particle31_SpawnSpeciesEffect(arg0);
                         return;
                     }
                     break;
                 case 3:
                     var_v0 = 0;
-                    var_v1 = &D_81003FE0[temp_a0].unk_00;
+                    var_v1 = &sSmokePuffFrameSets[temp_a0].otherAnimationFrame;
                     do {
                         if (var_a1 == var_v1[2]) {
                             Particle31_SpawnSpeciesEffect(arg0);
@@ -251,13 +286,13 @@ void Particle31_UpdateSpeciesEffectTrigger(unk_D_810047E0* arg0) {
                     return;
                     break;
                 case 2:
-                    if (var_a1 == D_81003FE0[temp_a0].unk_0A) {
+                    if (var_a1 == sSmokePuffFrameSets[temp_a0].animation2Frame) {
                         Particle31_SpawnSpeciesEffect(arg0);
                         return;
                     }
                     break;
                 default:
-                    if (var_a1 == D_81003FE0[temp_a0].unk_00) {
+                    if (var_a1 == sSmokePuffFrameSets[temp_a0].otherAnimationFrame) {
                         Particle31_SpawnSpeciesEffect(arg0);
                         return;
                     }
@@ -294,7 +329,15 @@ void Particle31_UpdateSpeciesEffectTrigger(unk_D_810047E0* arg0) {
     }
 }
 
-Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2, s16 arg3) {
+/**
+ * Draws one species particle as a textured quad facing the camera: scales by the object and particle
+ * scale, translates to the particle (Gastly's gas, and Koffing/Weezing puffs in the 0xFF display
+ * mode, sit at the model origin instead), and picks the texture frame from age / 2 and a species
+ * color: near-black fading smoke for Koffing and Weezing, purple gas for Gastly, yellow I4 embers for
+ * Ponyta, Rapidash and Moltres, white IA16 sparkles for Vaporeon and Articuno. Unless the model phase is idle it then ages the particle, moves it
+ * (smoke and embers rise, Articuno's sparkles fall), slows its velocity by 0.9 and frees it when done.
+ */
+Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx* arg2, s16 arg3) {
     Mtx* sp294;
     Mtx sp250;
     Mtx sp210;
@@ -340,53 +383,53 @@ Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2,
     }
     guMtxCatL(&sp1D0, sp294, sp294);
     gSPMatrix(gfx++, sp294, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfx++, arg2->unk_00);
+    gSPDisplayList(gfx++, arg2->setupDisplayList);
     switch (D_8006F09C->objectType) {
         case 0x6D:
         case 0x6E:
-            gDPLoadTextureBlock_4b(gfx++, arg2->unk_08[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, arg2->textureFrames[arg1->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->misc * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->age * 0xD));
             break;
         case 0x5C:
-            gDPLoadTextureBlock_4b(gfx++, arg2->unk_08[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, arg2->textureFrames[arg1->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
             gDPSetEnvColor(gfx++, 0x32, 0x14, 0x46, 0x00);
-            if (arg1->misc < 0xA) {
+            if (arg1->age < 0xA) {
                 gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0xFF);
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (arg1->misc * 0x28));
+                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (arg1->age * 0x28));
             }
             break;
         case 0x92:
         case 0x4D:
         case 0x4E:
-            gDPLoadTextureBlock_4b(gfx++, arg2->unk_08[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, arg2->textureFrames[arg1->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (arg1->misc * 3));
+            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (arg1->age * 3));
             break;
         case 0x86:
         case 0x90:
-            gDPLoadTextureBlock(gfx++, arg2->unk_08[arg1->misc / 2], G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0,
+            gDPLoadTextureBlock(gfx++, arg2->textureFrames[arg1->age / 2], G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            if (arg1->misc < 4) {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (arg1->misc * 0x14) + 0xB4);
+            if (arg1->age < 4) {
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (arg1->age * 0x14) + 0xB4);
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (arg1->misc * 0xA));
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (arg1->age * 0xA));
             }
             break;
         default:
-            gDPLoadTextureBlock_4b(gfx++, arg2->unk_08[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, arg2->textureFrames[arg1->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->misc * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->age * 0xD));
             break;
     }
-    gSPDisplayList(gfx++, arg2->unk_04);
+    gSPDisplayList(gfx++, arg2->quadDisplayList);
     gSPPopMatrix(gfx++, G_MTX_MODELVIEW);
     if (ModelPhase_IsIdle() == 0) {
         ptr = D_8006F09C;
@@ -395,60 +438,60 @@ Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2,
             case 0x6E:
                 if (ptr->effectSlot != 0xFF) {
                     arg1->position.y += 0.5f * ptr->scale.y;
-                    arg1->misc++;
+                    arg1->age++;
                     arg1->scale.x += 0.1f;
                     arg1->scale.y += 0.1f;
                     arg1->scale.z += 0.1f;
-                    if (arg1->misc >= 0x10) {
+                    if (arg1->age >= 0x10) {
                         arg1->active = 0;
                     }
                 }
                 break;
             case 0x5C:
                 if (ptr->effectSlot == 0xFF) {
-                    arg1->misc += 2;
+                    arg1->age += 2;
                 } else {
-                    arg1->misc++;
+                    arg1->age++;
                 }
-                if (arg1->misc >= 0x10) {
+                if (arg1->age >= 0x10) {
                     arg1->active = 0;
                 }
                 break;
             case 0x92:
                 arg1->position.y += 1.5f * ptr->scale.y;
-                arg1->misc++;
+                arg1->age++;
                 arg1->scale.x += 0.005f;
                 arg1->scale.y += 0.005f;
                 arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
+                if (arg1->age >= 0x10) {
                     arg1->active = 0;
                 }
                 break;
             case 0x4D:
                 arg1->position.y += 0.75f * ptr->scale.y;
-                arg1->misc++;
+                arg1->age++;
                 arg1->scale.x += 0.005f;
                 arg1->scale.y += 0.005f;
                 arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
+                if (arg1->age >= 0x10) {
                     arg1->active = 0;
                 }
                 break;
             case 0x4E:
                 arg1->position.y += ptr->scale.y;
-                arg1->misc++;
+                arg1->age++;
                 arg1->scale.x += 0.005f;
                 arg1->scale.y += 0.005f;
                 arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
+                if (arg1->age >= 0x10) {
                     arg1->active = 0;
                 }
                 break;
             case 0x90:
                 arg1->position.y -= 0.5f * ptr->scale.y;
-                arg1->misc++;
-                temp_v1 = arg1->misc;
-                temp_f0 = D_810040DC[temp_v1 % 12];
+                arg1->age++;
+                temp_v1 = arg1->age;
+                temp_f0 = sSparkleScaleCurve[temp_v1 % 12];
                 arg1->scale.x = temp_f0;
                 arg1->scale.y = temp_f0;
                 arg1->scale.z = temp_f0;
@@ -457,9 +500,9 @@ Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2,
                 }
                 break;
             case 0x86:
-                arg1->misc++;
-                temp_v1 = arg1->misc;
-                temp_f0 = D_810040DC[temp_v1 % 12];
+                arg1->age++;
+                temp_v1 = arg1->age;
+                temp_f0 = sSparkleScaleCurve[temp_v1 % 12];
                 arg1->scale.x = temp_f0;
                 arg1->scale.y = temp_f0;
                 arg1->scale.z = temp_f0;
@@ -468,8 +511,8 @@ Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2,
                 }
                 break;
             default:
-                arg1->misc++;
-                if (arg1->misc >= 0x10) {
+                arg1->age++;
+                if (arg1->age >= 0x10) {
                     arg1->active = 0;
                 }
                 break;
@@ -481,32 +524,44 @@ Gfx* func_810010BC(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2,
         arg1->velocity.y *= 0.9f;
         arg1->velocity.z *= 0.9f;
     }
-    D_81004B50 += 1;
+    sParticleDrawCount += 1;
     return gfx;
 }
 
-Gfx* Particle31_BuildDisplayList(Gfx* gfx, unk_D_810047E0* arg1, unk_arg2_func_81001D80* arg2, s16 arg3) {
+/**
+ * Draws every active particle in a 10-entry side array with Particle31_DrawParticle.
+ */
+Gfx* Particle31_BuildDisplayList(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx* arg2, s16 arg3) {
     s32 i;
 
     for (i = 0; i < 10; i++, arg1++) {
         if (arg1->active == 1) {
-            gfx = func_810010BC(gfx, arg1, arg2, arg3);
+            gfx = Particle31_DrawParticle(gfx, arg1, arg2, arg3);
         }
     }
     return gfx;
 }
 
-void func_81001E24(s32 arg0, DisplayListState* state) {
+/**
+ * Geo callback (jump-table slot 0xE0) for the species particle effects. On the build pass it
+ * allocates a display list and, by the current display object's effectSlot: 0 or 1 updates and draws
+ * that battle side's particles; 0xFE draws side 0 without updating it (likely the particles restored
+ * by Particle31_UnpackSlotData for a gallery photo); 0xFF (a single
+ * model shown outside battle) draws Gastly's particles, or one Koffing/Weezing puff when the animation is
+ * within 15 frames of a puff frame. Referenced by the Ponyta, Rapidash, Gastly, Koffing, Weezing,
+ * Vaporeon, Articuno and Moltres models. Lapras' model does not reference it.
+ */
+void Particle31_SpeciesEffectCallback(s32 arg0, DisplayListState* state) {
     s32 pad[2];
     s32 sp5C;
-    unk_D_810047E0* sp1C;
+    SpeciesParticle* sp1C;
     s32 sp18;
-    unk_D_810047E0* temp_a1_3;
+    SpeciesParticle* temp_a1_3;
     s32 temp_a0;
     s16 temp_a2;
     s16 temp_v0;
     s16 temp_v0_2;
-    unk_D_810047E0* temp_a1_2;
+    SpeciesParticle* temp_a1_2;
     s32 temp_a1;
     Gfx* gfx;
     s32 var_a3;
@@ -516,7 +571,7 @@ void func_81001E24(s32 arg0, DisplayListState* state) {
 
     sp5C = state->addresses;
     if (arg0 == 2) {
-        if (D_81004B54 == 0) {
+        if (sEffectCallbackCount == 0) {
             state->gfx = Gfx_AllocDisplayList(0x500);
         } else {
             state->gfx = Gfx_AllocDisplayList(0x80);
@@ -527,71 +582,75 @@ void func_81001E24(s32 arg0, DisplayListState* state) {
             temp_v0 = D_8006F09C->objectType;
             switch (D_8006F09C->objectType) {
                 case 0x5C:
-                    Particle31_UpdateSpeciesEffectTrigger(&D_810047E0);
-                    if (D_81004B54 == 0) {
-                        gfx = Particle31_BuildDisplayList(gfx, &D_810047E0, sp5C, 0);
+                    Particle31_UpdateSpeciesEffectTrigger(&sSpeciesParticles);
+                    if (sEffectCallbackCount == 0) {
+                        gfx = Particle31_BuildDisplayList(gfx, &sSpeciesParticles, sp5C, 0);
                     }
                     break;
                 case 0x6D:
                 case 0x6E:
                     var_a3 = 0;
                     temp_v0_2 = D_8006F09C->transformAnim.animationId;
-                    temp_a2 = D_810040B8[D_81004B54 % 18];
+                    temp_a2 = sSmokePuffSetOrder[sEffectCallbackCount % 18];
                     temp_a1 = (s32)D_8006F09C->transformAnim.frameFixed >> 0x10;
                     switch (temp_v0_2) {
                         case 4:
-                            temp_a0 = D_81003FE0[temp_a2].unk_02;
+                            temp_a0 = sSmokePuffFrameSets[temp_a2].animation4Frame;
                             if (((u32)temp_a1 >= (u32)temp_a0) && ((u32)temp_a1 < (u32)(temp_a0 + 0xF))) {
                                 var_a3 = 1;
                             }
                             break;
                         case 3:
                             for (i = 0; i < 3; i++) {
-                                temp_a0 = D_81003FE0[temp_a2].unk_04[i];
+                                temp_a0 = sSmokePuffFrameSets[temp_a2].animation3Frames[i];
                                 if (((u32)temp_a1 >= (u32)temp_a0) && ((u32)temp_a1 < (u32)(temp_a0 + 0xF))) {
                                     var_a3 = 1;
                                 }
                             }
                             break;
                         case 2:
-                            temp_a0 = D_81003FE0[temp_a2].unk_0A;
+                            temp_a0 = sSmokePuffFrameSets[temp_a2].animation2Frame;
                             if (((u32)temp_a1 >= (u32)temp_a0) && ((u32)temp_a1 < (u32)(temp_a0 + 0xF))) {
                                 var_a3 = 1;
                             }
                             break;
                         default:
-                            temp_a0 = D_81003FE0[temp_a2].unk_00;
+                            temp_a0 = sSmokePuffFrameSets[temp_a2].otherAnimationFrame;
                             if (((u32)temp_a1 >= (u32)temp_a0) && ((u32)temp_a1 < (u32)(temp_a0 + 0xF))) {
                                 var_a3 = 1;
                             }
                             break;
                     }
                     if (var_a3 == 1) {
-                        temp_a1_2 = &D_810047E0[0][D_81004B50];
+                        temp_a1_2 = &sSpeciesParticles[0][sParticleDrawCount];
                         if (temp_a1_2->active == 1) {
-                            gfx = func_810010BC(gfx, temp_a1_2, sp5C, 0);
+                            gfx = Particle31_DrawParticle(gfx, temp_a1_2, sp5C, 0);
                         }
                     }
                     break;
             }
         } else if (temp_v1 == 0xFE) {
-            if (D_81004B54 == 0) {
-                gfx = Particle31_BuildDisplayList(gfx, &D_810047E0, sp5C, 0);
+            if (sEffectCallbackCount == 0) {
+                gfx = Particle31_BuildDisplayList(gfx, &sSpeciesParticles, sp5C, 0);
             }
-        } else if (((s32)temp_v1 < 2) && (D_81004B50 >= 0) && (D_81004B50 < 0xB)) {
-            temp_a1_3 = &D_810047E0[temp_v1 & 1][0];
+        } else if (((s32)temp_v1 < 2) && (sParticleDrawCount >= 0) && (sParticleDrawCount < 0xB)) {
+            temp_a1_3 = &sSpeciesParticles[temp_v1 & 1][0];
             sp1C = temp_a1_3;
             sp18 = (s32)temp_v1;
             Particle31_UpdateSpeciesEffectTrigger(temp_a1_3);
-            if (D_81004B54 == 0) {
+            if (sEffectCallbackCount == 0) {
                 gfx = Particle31_BuildDisplayList(gfx, temp_a1_3, sp5C, (s16)temp_v1);
             }
         }
         gSPEndDisplayList(gfx);
     }
-    D_81004B54 += 1;
+    sEffectCallbackCount += 1;
 }
 
+/**
+ * Packs side 0's 10 particles into 7 bytes each (active bit and age, then position * 10 as
+ * little-endian s16s) for a gallery snapshot; called by gallery_camera.
+ */
 void Particle31_PackSlotData(u8* arg0) {
     s32 i;
     s16 var_a1;
@@ -604,15 +663,15 @@ void Particle31_PackSlotData(u8* arg0) {
     u8 var_v0;
 
     for (i = 0; i < 10; i++) {
-        if (D_810047E0[0][i].active == 1) {
+        if (sSpeciesParticles[0][i].active == 1) {
             var_v0 = 0x80;
-            var_a0 = D_810047E0[0][i].misc & 0x7F;
-            var_a1 = D_810047E0[0][i].position.x * 10.0f;
-            var_a2 = D_810047E0[0][i].position.y * 10.0f;
-            var_a3 = D_810047E0[0][i].position.z * 10.0f;
-            var_t0 = D_810047E0[0][i].velocity.x * 10.0f;
-            var_t1 = D_810047E0[0][i].velocity.y * 10.0f;
-            var_t2 = D_810047E0[0][i].velocity.z * 10.0f;
+            var_a0 = sSpeciesParticles[0][i].age & 0x7F;
+            var_a1 = sSpeciesParticles[0][i].position.x * 10.0f;
+            var_a2 = sSpeciesParticles[0][i].position.y * 10.0f;
+            var_a3 = sSpeciesParticles[0][i].position.z * 10.0f;
+            var_t0 = sSpeciesParticles[0][i].velocity.x * 10.0f;
+            var_t1 = sSpeciesParticles[0][i].velocity.y * 10.0f;
+            var_t2 = sSpeciesParticles[0][i].velocity.z * 10.0f;
         } else {
             var_v0 = 0;
             var_a0 = 0;
@@ -638,8 +697,12 @@ void Particle31_PackSlotData(u8* arg0) {
     }
 }
 
-void Particle31_UnpackSlotData(unk_arg0_func_81002260* arg0, u8* arg1) {
-    unk_D_810047E0* var_v1;
+/**
+ * Restores side 0's particles from Particle31_PackSlotData's bytes, rebuilding each scale from the
+ * age and the snapshot object's species. Called through a virtual pointer from gallery.c.
+ */
+void Particle31_UnpackSlotData(ParticleSnapshotObject* arg0, u8* arg1) {
+    SpeciesParticle* var_v1;
     f32 var_fv0;
     s16 var_a2;
     s16 var_t0;
@@ -652,7 +715,7 @@ void Particle31_UnpackSlotData(unk_arg0_func_81002260* arg0, u8* arg1) {
     s32 i;
 
     for (i = 0; i < 10; i++) {
-        var_v1 = &D_810047E0[0][i];
+        var_v1 = &sSpeciesParticles[0][i];
         temp_a0 = *arg1 & 0x80;
         temp_a3 = *arg1++;
         if (!temp_a0) {
@@ -674,22 +737,22 @@ void Particle31_UnpackSlotData(unk_arg0_func_81002260* arg0, u8* arg1) {
             var_t0 = temp_t3;
         }
         temp_a3 &= 0x7F;
-        var_v1->misc = temp_a3;
-        switch (arg0->unk_1A) {
+        var_v1->age = temp_a3;
+        switch (arg0->objectType) {
             case 0x92:
-                var_fv0 = ((f32)var_v1->misc * 0.005f) + 0.1f;
+                var_fv0 = ((f32)var_v1->age * 0.005f) + 0.1f;
                 break;
             case 0x4D:
             case 0x4E:
-                var_fv0 = ((f32)var_v1->misc * 0.005f) + 0.002f;
+                var_fv0 = ((f32)var_v1->age * 0.005f) + 0.002f;
                 break;
             case 0x86:
             case 0x90:
-                var_fv0 = D_810040DC[var_v1->misc % 12];
+                var_fv0 = sSparkleScaleCurve[var_v1->age % 12];
                 break;
             case 0x6D:
             case 0x6E:
-                var_fv0 = ((f32)var_v1->misc * 0.1f) + 1.0f;
+                var_fv0 = ((f32)var_v1->age * 0.1f) + 1.0f;
                 break;
             case 0x5C:
                 var_fv0 = 20.0f;
