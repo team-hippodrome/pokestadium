@@ -17,16 +17,6 @@ These sections of the code involved a substantial degree of human verification f
 - `rental_hub`
 - `rental_rules`
 
-## Planned for substantial human Involvement
-These unannotated fragments are planned to require substantial human involvement.
-- All code outside of a fragment
-- Fragment 61 (still unnamed, likely pokemon team registration)
-- `rental_team_selection`
-- `stadium_select`
-- `title_screen`
-- `victory_palace` (hall of fame)
-
-
 ## Human Review and Cross-checking
 These Fragments had a human in the loop verifying their status.
 - `battle_prep` (Intro and results screen)
