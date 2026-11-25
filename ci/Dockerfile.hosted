@@ -2,7 +2,7 @@
 # runner (see .github/workflows/rebuild-baseline-image.yml).
 #
 # ci/Dockerfile stages its derived state (asm/, assets/, lib and build
-# objects) from an incremental build on the Mac runner. A GitHub-hosted
+# objects) from an incremental build on a local Mac. A GitHub-hosted
 # runner has no persistent checkout, so this file runs the same steps as
 # ci/build-baseline.sh inside the image instead: extract, build the US ROM,
 # and require the retail checksum. It runs natively on x86-64.

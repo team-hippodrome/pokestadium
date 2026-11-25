@@ -1,6 +1,6 @@
 # Public Pokemon Stadium GS ROM-gate baseline.
 #
-# This image is staged locally on the isolated Mac runner from a persistent,
+# This image is staged locally on a Mac from a persistent,
 # incrementally-maintained host checkout (see ci/build-baseline.sh) rather
 # than compiled inside this Dockerfile. A `COPY . /work` followed by a full
 # `make extract && make rom` inside Docker busts its own build cache on

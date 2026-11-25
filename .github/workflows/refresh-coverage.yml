@@ -22,7 +22,7 @@ name: Refresh coverage after merge
 # exactly as they would for any other eligible PR.
 on:
   # Hourly instead of after every merge: each refresh is a PR that needs a
-  # "Validate ROM against master" run on the single self-hosted runner, and a
+  # "Validate ROM against master" run of its own, and a
   # busy day merges dozens of changes. One refresh per hour (and none when
   # nothing changed) keeps those runs from queueing behind real PRs.
   schedule:
