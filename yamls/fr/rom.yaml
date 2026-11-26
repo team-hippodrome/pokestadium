@@ -1455,25 +1455,26 @@
     - [0x289930, c,      fragments/trade_machine/trade_machine_289240]
     - [0x28D890, c,      fragments/trade_machine/trade_machine_28D1A0]
     - [0x28F3F0, c,      fragments/trade_machine/trade_machine_28ED00]
-    - [0x292450, asm, fragments/trade_machine/trade_machine_291D60]
+    - [0x292450, c, fragments/trade_machine/trade_machine_291D60]
+    - [0x294A90, c, fragments/trade_machine/trade_machine_2942C0]
     - [0x29C1F0, .data,   fragments/trade_machine/trade_machine_287ED0]
     - [0x29C210, .data,   fragments/trade_machine/trade_machine_289240]
     - [0x29C290, .data,   fragments/trade_machine/trade_machine_28D1A0]
     - [0x29C330, .data,   fragments/trade_machine/trade_machine_28ED00]
-    - [0x29C5F0, data, fragments/trade_machine/trade_machine_291D60]
-    - [0x29C610, data, fragments/trade_machine/trade_machine_2942C0]
+    - [0x29C5F0, .data, fragments/trade_machine/trade_machine_291D60]
+    - [0x29C610, .data, fragments/trade_machine/trade_machine_2942C0]
     - [0x29C750, .rodata, fragments/trade_machine/trade_machine_287ED0]
     - [0x29C7E0, .rodata, fragments/trade_machine/trade_machine_289240]
     - [0x29C810, .rodata, fragments/trade_machine/trade_machine_28D1A0]
     - [0x29C860, .rodata, fragments/trade_machine/trade_machine_28ED00]
-    - [0x29C910, rodata, fragment41_29C910]
-    - [0x29C950, rodata, fragments/trade_machine/trade_machine_2942C0]
+    - [0x29C910, .rodata, fragments/trade_machine/trade_machine_291D60]
+    - [0x29C950, .rodata, fragments/trade_machine/trade_machine_2942C0]
     - {vram: 0x82F14500, type:  .bss, name: fragments/trade_machine/trade_machine_287ED0}
     - {vram: 0x82F145B0, type:  .bss, name: fragments/trade_machine/trade_machine_289240}
     - {vram: 0x82F20AF0, type:  .bss, name: fragments/trade_machine/trade_machine_28D1A0}
     - {vram: 0x82F20B20, type:  .bss, name: fragments/trade_machine/trade_machine_28ED00}
-    - {vram: 0x82F211C0, type:  bss, name: fragments/trade_machine/trade_machine_291D60}
-    - {vram: 0x82F21220, type:  bss, name: fragments/trade_machine/trade_machine_2942C0}
+    - {vram: 0x82F211C0, type: .bss, name: fragments/trade_machine/trade_machine_291D60}
+    - {vram: 0x82F21220, type: .bss, name: fragments/trade_machine/trade_machine_2942C0}
   - name: fragment41_relocs
     type: code
     bss_size: 0x0

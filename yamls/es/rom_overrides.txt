@@ -316,3 +316,22 @@
 -> - [0x749F0, .data, save_data]
 - {vram: 0x800AEC80, type: bss, name: save_data}
 -> - {vram: 0x800AEC80, type: .bss, name: save_data}
+
+# trade_machine_291D60: built from the shared C (US Rev. 2 code).
+- [0x2924B0, asm, fragments/trade_machine/trade_machine_291D60]
+-> - [0x2924B0, c, fragments/trade_machine/trade_machine_291D60]
+-> - [0x294AF0, c, fragments/trade_machine/trade_machine_2942C0]
+- [0x29C650, data, fragments/trade_machine/trade_machine_291D60]
+-> - [0x29C650, .data, fragments/trade_machine/trade_machine_291D60]
+- {vram: 0x82F211C0, type:  bss, name: fragments/trade_machine/trade_machine_291D60}
+-> - {vram: 0x82F211C0, type: .bss, name: fragments/trade_machine/trade_machine_291D60}
+
+# trade_machine_2942C0 (merged into 291D60 by the porter) and 291D60's .rodata blob.
+- [0x29C670, data, fragments/trade_machine/trade_machine_2942C0]
+-> - [0x29C670, .data, fragments/trade_machine/trade_machine_2942C0]
+- [0x29C970, rodata, fragment41_29C970]
+-> - [0x29C970, .rodata, fragments/trade_machine/trade_machine_291D60]
+- [0x29C9B0, rodata, fragments/trade_machine/trade_machine_2942C0]
+-> - [0x29C9B0, .rodata, fragments/trade_machine/trade_machine_2942C0]
+- {vram: 0x82F21220, type:  bss, name: fragments/trade_machine/trade_machine_2942C0}
+-> - {vram: 0x82F21220, type: .bss, name: fragments/trade_machine/trade_machine_2942C0}
