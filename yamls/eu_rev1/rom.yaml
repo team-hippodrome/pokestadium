@@ -548,16 +548,17 @@
     subsegments:
     - [0x118C10, textbin, fragments/minigame_actor_framework/minigame_actor_framework_header]
     - [0x118C30, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
-    - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
     - [0x119660, c,       fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11A230, c,       fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x11BE70, c,       fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
     - [0x11C210, asm, fragment3_11C210]
+    - [0x11C9C0, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
     - [0x11CA00, .data,    fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11CA20, .data,    fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
     - [0x11EAA0, .rodata,  fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11EBE0, .rodata,  fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x11EC30, .rodata,  fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
+    - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
     - {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
     - {vram: 0x87906130, type:  bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
   - name: fragment3_relocs

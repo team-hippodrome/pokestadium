@@ -220,15 +220,27 @@
 -> - [0x10ECA0, data, fragments/minigame_hud/minigame_hud_pause_menu]
 -> - [0x118180, .rodata, fragments/minigame_hud/minigame_hud_countdown]
 
-# lab_pc_list_1D7B40: built from the shared C.
+# lab_pc_list_1D7B40 and 1E46B0 (merged by the porter): built from the shared C.
 - [0x1D83D0, asm, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1D83D0, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
+-> - [0x1E4F40, c, fragments/lab_pc_list/lab_pc_list_1E46B0]
 - [0x1E65D0, data, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1E65D0, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
+- [0x1E6940, data, fragments/lab_pc_list/lab_pc_list_1E46B0]
+-> - [0x1E6940, .data, fragments/lab_pc_list/lab_pc_list_1E46B0]
 - [0x1E9640, rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1E9640, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 
-# minigame_actor_framework_1189B0: built from the shared C.
+# minigame_actor_framework_1189B0: built from the shared C (its .bss goes before 1193E0's).
 - [0x1191C0, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
 -> - [0x1191C0, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# minigame_actor_framework_1189B0 .bss, in vram order.
+- {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
 -> - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
+-> - {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
+
+# minigame_actor_framework_1189B0 .data (0x40 bytes) sits at the end of the merged 11BF90 text blob.
+- [0x11C7A0, asm, fragment3_11C7A0]
+-> - [0x11C7A0, asm, fragment3_11C7A0]
+-> - [0x11CF50, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]

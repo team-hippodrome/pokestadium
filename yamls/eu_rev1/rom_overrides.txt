@@ -227,7 +227,16 @@
 - {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 -> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 
-# minigame_actor_framework_1189B0: built from the shared C.
+# minigame_actor_framework_1189B0: built from the shared C (its .bss goes before 1193E0's).
 - [0x118C30, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
 -> - [0x118C30, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# minigame_actor_framework_1189B0 .bss, in vram order.
+- {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
 -> - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
+-> - {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
+
+# minigame_actor_framework_1189B0 .data (0x40 bytes) sits at the end of the merged 11BF90 text blob.
+- [0x11C210, asm, fragment3_11C210]
+-> - [0x11C210, asm, fragment3_11C210]
+-> - [0x11C9C0, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
