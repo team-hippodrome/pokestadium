@@ -53,7 +53,7 @@ void DynamoGame_PickNextCrankCue(void) {
     }
 
     D_8650AD84 = 0;
-    D_8650AD85 = (MiniGame_RandomRange(4) * 0xF) + 0x1E;
+    D_8650AD85 = (MiniGame_RandomRange(4) * NTSC_PAL(0xF, 0xD)) + NTSC_PAL(0x1E, 0x1A);
 
     if (D_86509254 != 0) {
         Audio_PlaySoundEffectById(0x11);

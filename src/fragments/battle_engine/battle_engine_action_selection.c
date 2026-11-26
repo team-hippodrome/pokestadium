@@ -33,13 +33,13 @@ static u8 sPowersOfTwo[] = {
 };
 
 void BattleScene_InitializeBattleTimers(void) {
-    sInitialOrderTimer = gSessionContext.orderLimitSeconds * 30;
-    sInitalBattleTimer = gSessionContext.battleLimitMinutes * 1800;
-    sBattleTimer = gSessionContext.battleLimitMinutes * 1800;
+    sInitialOrderTimer = gSessionContext.orderLimitSeconds * NTSC_PAL(30, 25);
+    sInitalBattleTimer = gSessionContext.battleLimitMinutes * NTSC_PAL(1800, 1500);
+    sBattleTimer = gSessionContext.battleLimitMinutes * NTSC_PAL(1800, 1500);
 }
 
 void BattleScene_QuantizeBattleTimer(void) {
-    s32 tmp = (s32)(sBattleTimer / 30.0f) * 30;
+    s32 tmp = (s32)(sBattleTimer / NTSC_PAL(30.0f, 25.0f)) * NTSC_PAL(30, 25);
 
     sBattleTimer = tmp;
 }
@@ -62,7 +62,7 @@ s32 BattleScene_IsBattleCountdownComplete(void) {
         return 0;
     }
 
-    if ((((s32)sBattleTimer % 30) == 0) && (sBattleTimer != 0.0f)) {
+    if ((((s32)sBattleTimer % NTSC_PAL(30, 25)) == 0) && (sBattleTimer != 0.0f)) {
         Audio_PlayCommand(0x3E, 0, 0);
     }
 
@@ -181,23 +181,23 @@ s32 BattleScene_IsActionSelectionTimerExpired(void) {
         return 0;
     }
 
-    if (sOrderTimer == 329.0f) {
+    if (sOrderTimer == NTSC_PAL(329.0f, 274.0f)) {
         Audio_PlayCommand(0x3C, 0, 0);
     }
 
-    if (sOrderTimer == 91.0f) {
+    if (sOrderTimer == NTSC_PAL(91.0f, 75.0f)) {
         Audio_PlayCommand(0x3D, 3, 0);
     }
 
-    if (sOrderTimer == 61.0f) {
+    if (sOrderTimer == NTSC_PAL(61.0f, 50.0f)) {
         Audio_PlayCommand(0x3D, 2, 0);
     }
 
-    if (sOrderTimer == 31.0f) {
+    if (sOrderTimer == NTSC_PAL(31.0f, 25.0f)) {
         Audio_PlayCommand(0x3D, 1, 0);
     }
 
-    if (sOrderTimer == 1.0f) {
+    if (sOrderTimer == NTSC_PAL(1.0f, 0.0f)) {
         Audio_PlayCommand(0x3D, 0, 0);
     }
 
@@ -208,7 +208,7 @@ s32 BattleScene_IsActionSelectionTimerExpired(void) {
 }
 
 void BattleScene_ResetActionSelectionTimerHelper(void) {
-    sOrderTimer = gSessionContext.orderLimitSeconds * 30;
+    sOrderTimer = gSessionContext.orderLimitSeconds * NTSC_PAL(30, 25);
 }
 
 s32 BattleScene_TickActionSelectionTimers(void) {

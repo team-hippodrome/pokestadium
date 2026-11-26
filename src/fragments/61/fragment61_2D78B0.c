@@ -271,7 +271,17 @@ void TeamSelection_DrawRegistrationHeaderBackdrop(s16 arg0, s16 arg1) {
 }
 
 void TeamSelection_DrawCategoryBanner(s16 arg0, s16 arg1, s16 arg2) {
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_IT)
+    // The French, German and Italian banner textures sit further into segment 2.
+    extern u8 D_200E9C0[];
+    extern u8 D_200FE00[];
+    extern u8 D_2011240[];
+    extern u8 D_2012680[];
+    extern u8 D_2013AC0[];
+    static u8* D_84210D5C[] = { D_200E9C0, D_200FE00, D_2011240, D_2012680, D_2013AC0 };
+#else
     static u8* D_84210D5C[] = { D_200DFA0, D_200F3E0, D_2010820, D_2011C60, D_20130A0 };
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -451,7 +461,10 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     }
 
     if (arg0 == 0) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_ES) || defined(VERSION_IT)
+        // The Spanish and Italian banners are drawn after the measured category text.
+        s32 width = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
+#elif defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         // Measures the category banner string; the width is never used.
         UNUSED s32 width = Font_MeasureTextExtent(4, 0, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
 #endif
@@ -460,7 +473,11 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
         TeamSelection_DrawGradientPanel(0x48, 0x28, 0x208, &sp34, &sp30);
         TeamSelection_DrawHeaderBackdrop(0x30, 0x20);
         if (var_t0 != 0) {
+#if defined(VERSION_ES) || defined(VERSION_IT)
+            TeamSelection_DrawCategoryBanner(width + 0x1AE, 0x26, arg1);
+#else
             TeamSelection_DrawCategoryBanner(0x1AE, 0x26, arg1);
+#endif
         }
     } else {
         Color_SetRGB(&sp34, 0xB4, 0x5A, 0xA0);
@@ -479,7 +496,11 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
 
     if ((arg0 == 0) && (var_t0 != 0)) {
         Font_SetActive(4, 0);
+#if defined(VERSION_ES) || defined(VERSION_IT)
+        Font_Printf(0x1AE, 0x2F, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
+#else
         Font_Printf(0x1F9, 0x2F, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
+#endif
     }
     Font_EndTexturedTextRendering();
 }

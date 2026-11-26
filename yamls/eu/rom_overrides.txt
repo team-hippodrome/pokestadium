@@ -243,3 +243,21 @@
 -> - {vram: 0x8122C770, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
 - {vram: 0x81231430, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
 -> - {vram: 0x81231430, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+
+# fragments/dynamo_game/dynamo_game_2: built from the shared C.
+- [0x13B9A0, asm, fragment11_13B9A0]
+-> - [0x13B9A0, c, fragments/dynamo_game/dynamo_game_2]
+- [0x1421C0, data, fragments/dynamo_game/dynamo_game_2]
+-> - [0x1421C0, .data, fragments/dynamo_game/dynamo_game_2]
+- [0x1422B0, rodata, fragments/dynamo_game/dynamo_game_2]
+-> - [0x1422B0, .rodata, fragments/dynamo_game/dynamo_game_2]
+- {vram: 0x8650AD90, type:  bss, name: fragments/dynamo_game/dynamo_game_2}
+-> - {vram: 0x8650AD90, type: .bss, name: fragments/dynamo_game/dynamo_game_2}
+
+# fragments/battle_engine/battle_engine_action_selection: built from the shared C.
+- [0x2E9830, asm, fragment62_2E9830]
+-> - [0x2E9830, c, fragments/battle_engine/battle_engine_action_selection]
+- [0x362370, data, fragments/battle_engine/battle_engine_action_selection]
+-> - [0x362370, .data, fragments/battle_engine/battle_engine_action_selection]
+- {vram: 0x84390120, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
+-> - {vram: 0x84390120, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}

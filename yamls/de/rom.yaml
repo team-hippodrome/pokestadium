@@ -563,7 +563,7 @@
     - [0x119B00, c,       fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11A6D0, c,       fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x11C310, c,       fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
-    - [0x11C6B0, asm, fragment3_11C6B0]
+    - [0x11C6B0, c, fragments/minigame_actor_framework/minigame_actor_framework_11BF90]
     - [0x11CE60, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
     - [0x11CEA0, .data,    fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11CEC0, .data,    fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
@@ -572,7 +572,7 @@
     - [0x11F0D0, .rodata,  fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
     - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
     - {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
-    - {vram: 0x87906130, type:  bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
+    - {vram: 0x87906130, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
   - name: fragment3_relocs
     type: code
     bss_size: 0x0
@@ -738,15 +738,15 @@
     - [0x139650, textbin,   fragments/dynamo_game/dynamo_game_header]
     - [0x139670, c, fragments/dynamo_game/dynamo_game]
     - [0x13B760, c,      fragments/dynamo_game/dynamo_game_1]
-    - [0x13C010, asm, fragment11_13C010]
+    - [0x13C010, c, fragments/dynamo_game/dynamo_game_2]
     - [0x13C280, .data, fragments/dynamo_game/dynamo_game]
     - [0x13C5B0, .data,   fragments/dynamo_game/dynamo_game_1]
-    - [0x142830, data, fragments/dynamo_game/dynamo_game_2]
+    - [0x142830, .data, fragments/dynamo_game/dynamo_game_2]
     - [0x1428D0, .rodata, fragments/dynamo_game/dynamo_game]
     - [0x142910, .rodata, fragments/dynamo_game/dynamo_game_1]
-    - [0x142920, rodata, fragments/dynamo_game/dynamo_game_2]
+    - [0x142920, .rodata, fragments/dynamo_game/dynamo_game_2]
     - {vram: 0x865092F0, type: .bss, name: fragments/dynamo_game/dynamo_game}
-    - {vram: 0x8650AD90, type:  bss, name: fragments/dynamo_game/dynamo_game_2}
+    - {vram: 0x8650AD90, type: .bss, name: fragments/dynamo_game/dynamo_game_2}
   - name: fragment11_relocs
     type: code
     bss_size: 0x0
@@ -1871,28 +1871,28 @@
     vram: 0x84200000
     subsegments:
     - [0x2CA2B0, textbin,   fragments/rental_team_selection/rental_team_selection_header]
-    - [0x2CA2D0, asm, fragment61_2CA2D0]
+    - [0x2CA2D0, c, fragments/61/fragment61_2D78B0]
     - [0x2CE340, c,      fragments/rental_team_selection/rental_team_selection_2DB900]
     - [0x2D0150, c,      fragments/61/fragment61_2DD710]
     - [0x2D25A0, c,      fragments/61/fragment61_2DFB60]
     - [0x2D5660, c,      fragments/rental_team_selection/rental_team_selection_2E2C20]
     - [0x2D6A80, c, fragments/rental_team_selection/rental_team_selection_2E4040]
     - [0x2D7E80, c,      fragments/rental_team_selection/rental_team_selection_2E5430]
-    - [0x2DB020, data, fragments/61/fragment61_2D78B0]
+    - [0x2DB020, .data, fragments/61/fragment61_2D78B0]
     - [0x2DB080, .data,   fragments/rental_team_selection/rental_team_selection_2DB900]
     - [0x2DB890, .data,   fragments/61/fragment61_2DD710]
     - [0x2DB8B0, .data,   fragments/61/fragment61_2DFB60]
     - [0x2DB8D0, .data,   fragments/rental_team_selection/rental_team_selection_2E2C20]
     - [0x2DB9E0, .data, fragments/rental_team_selection/rental_team_selection_2E4040]
     - [0x2DBB30, .data,   fragments/rental_team_selection/rental_team_selection_2E5430]
-    - [0x2DBB70, rodata, fragments/61/fragment61_2D78B0]
+    - [0x2DBB70, .rodata, fragments/61/fragment61_2D78B0]
     - [0x2DBBA0, .rodata, fragments/rental_team_selection/rental_team_selection_2DB900]
     - [0x2DBC20, .rodata, fragments/61/fragment61_2DD710]
     - [0x2DBCA0, .rodata, fragments/61/fragment61_2DFB60]
     - [0x2DBD00, .rodata, fragments/rental_team_selection/rental_team_selection_2E2C20]
     - [0x2DBD30, .rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
     - [0x2DBDA0, .rodata, fragments/rental_team_selection/rental_team_selection_2E5430]
-    - {vram: 0x84211B60, type:  bss, name: fragments/61/fragment61_2D78B0}
+    - {vram: 0x84211B60, type: .bss, name: fragments/61/fragment61_2D78B0}
     - {vram: 0x8423D430, type:  .bss, name: fragments/rental_team_selection/rental_team_selection_2DB900}
     - {vram: 0x8423E5B0, type: .bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
   - name: fragment61_relocs
@@ -1917,7 +1917,7 @@
     - [0x2E4E00, c,      fragments/battle_engine/battle_engine_helper]
     - [0x2E6710, c, fragments/battle_engine/battle_engine_move_model_transforms]
     - [0x2E9390, c,      fragments/battle_engine/battle_engine_math]
-    - [0x2E9F40, asm, fragment62_2E9F40]
+    - [0x2E9F40, c, fragments/battle_engine/battle_engine_action_selection]
     - [0x2ECF40, c, fragments/battle_engine/battle_engine_hud]
     - [0x2F4B40, c,      fragments/battle_engine/battle_engine_messages]
     - [0x2F6AD0, c,      fragments/battle_engine/battle_engine_broll]
@@ -1963,7 +1963,7 @@
     - [0x361680, .data,   fragments/battle_engine/battle_engine_main]
     - [0x3618A0, .data,   fragments/battle_engine/battle_engine_move_animation]
     - [0x361930, .data, fragments/battle_engine/battle_engine_move_model_transforms]
-    - [0x362A80, data, fragments/battle_engine/battle_engine_action_selection]
+    - [0x362A80, .data, fragments/battle_engine/battle_engine_action_selection]
     - [0x362AC0, .data, fragments/battle_engine/battle_engine_hud]
     - [0x362CC0, .data,   fragments/battle_engine/battle_engine_messages]
     - [0x362D10, .data,   fragments/battle_engine/battle_engine_broll]
@@ -2034,7 +2034,7 @@
     - {vram: 0x8438E440, type:  .bss, name: fragments/battle_engine/battle_engine_main}
     - {vram: 0x8438E7B0, type:  .bss, name: fragments/battle_engine/battle_engine_move_animation}
     - {vram: 0x843900D0, type:  .bss, name: fragments/battle_engine/battle_engine_math}
-    - {vram: 0x84390120, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
+    - {vram: 0x84390120, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}
     - {vram: 0x84390190, type: .bss, name: fragments/battle_engine/battle_engine_hud}
     - {vram: 0x843901A0, type:  .bss, name: fragments/battle_engine/battle_engine_messages}
     - {vram: 0x843901B0, type:  .bss, name: fragments/battle_engine/battle_engine_camera}

@@ -412,3 +412,37 @@
 -> - [0x2C13B0, .rodata, fragments/transfer_pak_check/transfer_pak_check]
 - {vram: 0x82D0A010, type:  bss, name: fragments/transfer_pak_check/transfer_pak_check}
 -> - {vram: 0x82D0A010, type: .bss, name: fragments/transfer_pak_check/transfer_pak_check}
+
+# fragments/dynamo_game/dynamo_game_2: built from the shared C.
+- [0x13C0E0, asm, fragment11_13C0E0]
+-> - [0x13C0E0, c, fragments/dynamo_game/dynamo_game_2]
+- [0x142900, data, fragments/dynamo_game/dynamo_game_2]
+-> - [0x142900, .data, fragments/dynamo_game/dynamo_game_2]
+- [0x1429F0, rodata, fragments/dynamo_game/dynamo_game_2]
+-> - [0x1429F0, .rodata, fragments/dynamo_game/dynamo_game_2]
+- {vram: 0x8650AD90, type:  bss, name: fragments/dynamo_game/dynamo_game_2}
+-> - {vram: 0x8650AD90, type: .bss, name: fragments/dynamo_game/dynamo_game_2}
+
+# fragments/battle_engine/battle_engine_action_selection: built from the shared C.
+- [0x2EA000, asm, fragment62_2EA000]
+-> - [0x2EA000, c, fragments/battle_engine/battle_engine_action_selection]
+- [0x362BD0, data, fragments/battle_engine/battle_engine_action_selection]
+-> - [0x362BD0, .data, fragments/battle_engine/battle_engine_action_selection]
+- {vram: 0x843901B0, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
+-> - {vram: 0x843901B0, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}
+
+# fragments/minigame_actor_framework/minigame_actor_framework_11BF90: built from the shared C.
+- [0x11C780, asm, fragment3_11C780]
+-> - [0x11C780, c, fragments/minigame_actor_framework/minigame_actor_framework_11BF90]
+- {vram: 0x87906130, type:  bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
+-> - {vram: 0x87906130, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
+
+# fragments/61/fragment61_2D78B0: built from the shared C.
+- [0x2CA380, asm, fragment61_2CA380]
+-> - [0x2CA380, c, fragments/61/fragment61_2D78B0]
+- [0x2DB0E0, data, fragments/61/fragment61_2D78B0]
+-> - [0x2DB0E0, .data, fragments/61/fragment61_2D78B0]
+- [0x2DBC30, rodata, fragments/61/fragment61_2D78B0]
+-> - [0x2DBC30, .rodata, fragments/61/fragment61_2D78B0]
+- {vram: 0x84211B70, type:  bss, name: fragments/61/fragment61_2D78B0}
+-> - {vram: 0x84211B70, type: .bss, name: fragments/61/fragment61_2D78B0}
