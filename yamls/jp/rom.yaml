@@ -965,9 +965,10 @@
     vram: 0x86E00000
     subsegments:
     - [0x198A00, textbin,   fragments/metapod_game/metapod_game_header]
-    - [0x198A20, asm, fragments/metapod_game/metapod_game]
-    - [0x19B8C0, data, fragments/metapod_game/metapod_game]
-    - {vram: 0x86E04E10, type:  bss, name: fragments/metapod_game/metapod_game}
+    - [0x198A20, c, fragments/metapod_game/metapod_game]
+    - [0x19B8C0, .data, fragments/metapod_game/metapod_game]
+    - [0x19D630, .rodata, fragments/metapod_game/metapod_game]
+    - {vram: 0x86E04E10, type: .bss, name: fragments/metapod_game/metapod_game}
   - name: fragment20_relocs
     type: code
     bss_size: 0x0
