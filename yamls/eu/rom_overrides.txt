@@ -261,3 +261,13 @@
 -> - [0x362370, .data, fragments/battle_engine/battle_engine_action_selection]
 - {vram: 0x84390120, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
 -> - {vram: 0x84390120, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}
+
+# fragments/minigame_select/minigame_select_27BCC0: built from the shared C.
+- [0x27BDE0, asm, fragment39_27BDE0]
+-> - [0x27BDE0, c, fragments/minigame_select/minigame_select_27BCC0]
+- [0x281EC0, data, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x281EC0, .data, fragments/minigame_select/minigame_select_27BCC0]
+- [0x284730, rodata, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x284730, .rodata, fragments/minigame_select/minigame_select_27BCC0]
+- {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
+-> - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}

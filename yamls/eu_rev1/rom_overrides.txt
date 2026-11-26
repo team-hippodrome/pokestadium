@@ -458,3 +458,22 @@
 -> - [0x2DB7D0, .rodata, fragments/61/fragment61_2D78B0]
 - {vram: 0x84211B60, type:  bss, name: fragments/61/fragment61_2D78B0}
 -> - {vram: 0x84211B60, type: .bss, name: fragments/61/fragment61_2D78B0}
+
+# fragments/minigame_select/minigame_select_27BCC0: built from the shared C.
+- [0x27BFD0, asm, fragment39_27BFD0]
+-> - [0x27BFD0, c, fragments/minigame_select/minigame_select_27BCC0]
+- [0x2820B0, data, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x2820B0, .data, fragments/minigame_select/minigame_select_27BCC0]
+- [0x284920, rodata, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x284920, .rodata, fragments/minigame_select/minigame_select_27BCC0]
+- {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
+-> - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}
+
+- [0x1AE970, asm, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1AE970, c, fragments/lab_pc/lab_pc_1AE680]
+- [0x1C0570, data, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1C0570, .data, fragments/lab_pc/lab_pc_1AE680]
+- [0x1CD6F0, rodata, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1CD6F0, .rodata, fragments/lab_pc/lab_pc_1AE680]
+- {vram: 0x88224FB0, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
+-> - {vram: 0x88224FB0, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}

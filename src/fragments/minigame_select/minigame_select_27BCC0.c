@@ -21,6 +21,9 @@ extern void Ui_DrawTextureMarker();
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+// Frames a menu widget takes to flip or fade in; fewer at 50 Hz.
+#define WIDGET_ANIM_FRAMES NTSC_PAL(10, 8)
+
 typedef struct unk_D_8250A2A0 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
@@ -1183,7 +1186,7 @@ s32 MiniGameSelect_FindTableIndex(s16 arg0, s32 arg1) {
 }
 
 void MiniGameSelect_ResetAttractShuffle(void) {
-    D_8250A296 = 0x78;
+    D_8250A296 = NTSC_PAL(0x78, 0x64);
     D_8250A298 = Rand_Range(3);
 }
 
@@ -1412,7 +1415,7 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
     switch (arg0->unk_02) {
         case 1:
             arg0->unk_06 |= 1;
-            arg0->unk_08 = 0xA;
+            arg0->unk_08 = WIDGET_ANIM_FRAMES;
             arg0->unk_3C.node.flags |= 1;
 
             arg0->unk_0E[0] = 0xFF;
@@ -1430,14 +1433,14 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
             break;
 
         case 3:
-            arg0->unk_08 = 0xA;
+            arg0->unk_08 = WIDGET_ANIM_FRAMES;
             if (arg0->unk_34 != NULL) {
                 var_v0 = 1;
             }
             break;
 
         case 5:
-            arg0->unk_08 = 0xA;
+            arg0->unk_08 = WIDGET_ANIM_FRAMES;
             arg0->unk_0C = D_8250A288.unk_06;
 
             for (i = 0; i < 4; i++) {
@@ -1450,14 +1453,14 @@ void func_82501B18(unk_D_8250A228* arg0, s16 arg1) {
             break;
 
         case 8:
-            arg0->unk_08 = 0xA;
+            arg0->unk_08 = WIDGET_ANIM_FRAMES;
             if (arg0->unk_34 != NULL) {
                 var_v0 = 1;
             }
             break;
 
         case 7:
-            arg0->unk_08 = 0xA;
+            arg0->unk_08 = WIDGET_ANIM_FRAMES;
             if (arg0->unk_34 != NULL) {
                 var_v0 = 1;
             }
@@ -1476,7 +1479,7 @@ void MiniGameSelect_SetWidgetTargetState(unk_D_8250A228* arg0, s16 arg1, s32 arg
             arg0->unk_0A = arg0->unk_0C;
         }
     }
-    arg0->unk_08 = 6;
+    arg0->unk_08 = NTSC_PAL(6, 5);
     arg0->unk_0C = arg1;
 }
 
@@ -1501,7 +1504,7 @@ void MiniGameSelect_UpdateWidgetFade(unk_D_82508B30* arg0) {
     s32 i;
 
     arg0->unk_008 -= 1;
-    arg0->unk_00E[0] = (arg0->unk_008 * 0xFF) / 6;
+    arg0->unk_00E[0] = (arg0->unk_008 * 0xFF) / NTSC_PAL(6, 5);
 
     for (i = 1; i < 4; i++) {
         arg0->unk_00E[i] = arg0->unk_00E[0];
@@ -1547,11 +1550,11 @@ s32 MiniGameSelect_StaggerWidgetFade(unk_D_82508B30* arg0) {
             var_v0 = 0;
         }
 
-        if (var_v0 >= 0xB) {
-            var_v0 = 0xA;
+        if (var_v0 > WIDGET_ANIM_FRAMES) {
+            var_v0 = WIDGET_ANIM_FRAMES;
         }
 
-        arg0->unk_00E[var_a1] = (var_v0 * 0xFF) / 10;
+        arg0->unk_00E[var_a1] = (var_v0 * 0xFF) / WIDGET_ANIM_FRAMES;
     }
 
     if (MiniGameSelect_CountWidgetChannels(arg0, 0) >= 2) {
@@ -1583,7 +1586,7 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 1:
                 var_s0->unk_008--;
-                temp_v0->rotation.x = (((0xA - var_s0->unk_008) << 0xE) / 10) - 0x4000;
+                temp_v0->rotation.x = (((WIDGET_ANIM_FRAMES - var_s0->unk_008) << 0xE) / WIDGET_ANIM_FRAMES) - 0x4000;
                 if (var_s0->unk_008 <= 0) {
                     temp_v0->rotation.x = 0;
                     var_s0->unk_002 = 2;
@@ -1599,7 +1602,7 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 3:
                 var_s0->unk_008--;
-                temp_v0->rotation.x = ((0xA - var_s0->unk_008) << 0xE) / 10;
+                temp_v0->rotation.x = ((WIDGET_ANIM_FRAMES - var_s0->unk_008) << 0xE) / WIDGET_ANIM_FRAMES;
                 if (var_s0->unk_008 <= 0) {
                     var_s0->unk_002 = 4;
                     var_s0->unk_008 = 0;
@@ -1662,7 +1665,7 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 8:
                 var_s0->unk_008--;
-                temp_v0->rotation.x = ((0xA - var_s0->unk_008) * -0x4000) / 10;
+                temp_v0->rotation.x = ((WIDGET_ANIM_FRAMES - var_s0->unk_008) * -0x4000) / WIDGET_ANIM_FRAMES;
                 if (var_s0->unk_008 <= 0) {
                     temp_v0->rotation.x = -0x4000;
                     var_s0->unk_002 = 0;
@@ -1676,7 +1679,7 @@ void MiniGameSelect_UpdateWidgets(void) {
 
             case 7:
                 var_s0->unk_008--;
-                temp_v0->rotation.x = 0x4000 - (((0xA - var_s0->unk_008) << 0xE) / 10);
+                temp_v0->rotation.x = 0x4000 - (((WIDGET_ANIM_FRAMES - var_s0->unk_008) << 0xE) / WIDGET_ANIM_FRAMES);
                 if (var_s0->unk_008 <= 0) {
                     var_s0->unk_002 = 2;
                     var_s0->unk_008 = 0;
@@ -2071,8 +2074,8 @@ void MiniGameSelect_UpdateMainMenu(void) {
         D_8250A26C = 7;
         D_8250A288.unk_06 = -1;
         StageContext_SetClearColor(1);
-        StageFade_StartFromTransparent(0xF);
-        Audio_FadeOutAll(0xF);
+        StageFade_StartFromTransparent(NTSC_PAL(0xF, 0xD));
+        Audio_FadeOutAll(NTSC_PAL(0xF, 0xD));
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     }
 }
@@ -2447,7 +2450,7 @@ s32 MiniGameSelect_AttractCursorShuffle(s16* arg0, s16 arg1) {
     sp68 = 0;
     if (arg1 >= 0) {
         Rand_Range(2);
-        if ((arg1 % 6) == 0) {
+        if ((arg1 % NTSC_PAL(6, 5)) == 0) {
             *arg0 = Rand_Range(9);
             KidsClub_SetRoundBannerLabel(*arg0);
 
@@ -2550,7 +2553,7 @@ void MiniGameSelect_ConfirmUpdate(void) {
     if (MiniGameSelect_CountWidgetChannels(D_8250A240[4], 0) >= 3) {
         D_8250A26C = 7;
         StageContext_SetClearColor(1);
-        StageFade_StartFromTransparent(0xA);
+        StageFade_StartFromTransparent(NTSC_PAL(0xA, 8));
     }
 }
 
@@ -2560,7 +2563,7 @@ void MiniGameSelect_MainLoop(s16 arg0, s16 arg1) {
 
     MiniGameSelect_InitMenuNodes(arg0, arg1);
     Audio_StartMusicTrack(0x16);
-    StageFade_StartFromOpaque(0xF);
+    StageFade_StartFromOpaque(NTSC_PAL(0xF, 0xD));
     D_82508AF4 = 0;
 
     while (var_s6 != 0) {

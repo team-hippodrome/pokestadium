@@ -1029,19 +1029,21 @@
     - [0x1A8D00, textbin,   fragments/lab_pc/lab_pc_header]
     - [0x1A8D20, c,      fragments/lab_pc/lab_pc_1A8590]
     - [0x1A8F90, c,      fragments/lab_pc/lab_pc_1A8800]
-    - [0x1A9F10, asm, fragment23_1A9F10]
+    - [0x1A9F10, c, fragments/lab_pc/lab_pc_1A9780]
+    - [0x1AED80, c, fragments/lab_pc/lab_pc_1AE680]
     - [0x1B55D0, c, fragments/lab_pc/lab_pc_1B4EA0]
     - [0x1BD640, c,      fragments/lab_pc/lab_pc_1BCF10]
     - [0x1C0890, .data,   fragments/lab_pc/lab_pc_1A8800]
-    - [0x1C08C0, data, fragment23_1C08C0]
-    - [0x1C09B0, data, fragments/lab_pc/lab_pc_1AE680]
+    - [0x1C08C0, .data, fragments/lab_pc/lab_pc_1A9780]
+    - [0x1C09B0, .data, fragments/lab_pc/lab_pc_1AE680]
     - [0x1C0C70, .data, fragments/lab_pc/lab_pc_1B4EA0]
     - [0x1C0E50, .data,   fragments/lab_pc/lab_pc_882181B0]
-    - [0x1CDAF0, data, fragment23_1CDAF0]
+    - [0x1CDAF0, .rodata, fragments/lab_pc/lab_pc_1A9780]
+    - [0x1CDB40, .rodata, fragments/lab_pc/lab_pc_1AE680]
     - [0x1CDBB0, .rodata, fragments/lab_pc/lab_pc_1B4EA0]
     - {vram: 0x88224F40, type:  .bss, name: fragments/lab_pc/lab_pc_1A8800}
-    - {vram: 0x88224F50, type:  bss, name: fragments/lab_pc/lab_pc_1A9780}
-    - {vram: 0x88224F60, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
+    - {vram: 0x88224F50, type: .bss, name: fragments/lab_pc/lab_pc_1A9780}
+    - {vram: 0x88224F60, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}
     - {vram: 0x88224F80, type: .bss, name: fragments/lab_pc/lab_pc_1B4EA0}
   - name: fragment23_relocs
     type: code
@@ -1415,13 +1417,13 @@
     vram: 0x82500000
     subsegments:
     - [0x27C350, textbin,   fragments/minigame_select/minigame_select_header]
-    - [0x27C370, asm, fragment39_27C370]
+    - [0x27C370, c, fragments/minigame_select/minigame_select_27BCC0]
     - [0x280AC0, c,      fragments/minigame_select/minigame_select_2804C0]
     - [0x282240, c,      fragments/minigame_select/minigame_select_281C40]
-    - [0x282450, data, fragments/minigame_select/minigame_select_27BCC0]
-    - [0x284CC0, rodata, fragments/minigame_select/minigame_select_27BCC0]
+    - [0x282450, .data, fragments/minigame_select/minigame_select_27BCC0]
+    - [0x284CC0, .rodata, fragments/minigame_select/minigame_select_27BCC0]
     - [0x284D80, .rodata, fragments/minigame_select/minigame_select_2804C0]
-    - {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
+    - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}
     - {vram: 0x8250A3D0, type:  .bss, name: fragments/minigame_select/minigame_select_2804C0}
   - name: fragment39_relocs
     type: code

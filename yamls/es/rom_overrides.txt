@@ -438,3 +438,30 @@
 -> - [0x2DBCD0, .rodata, fragments/61/fragment61_2D78B0]
 - {vram: 0x84211B70, type:  bss, name: fragments/61/fragment61_2D78B0}
 -> - {vram: 0x84211B70, type: .bss, name: fragments/61/fragment61_2D78B0}
+
+# fragments/minigame_select/minigame_select_27BCC0: built from the shared C.
+- [0x27C4C0, asm, fragment39_27C4C0]
+-> - [0x27C4C0, c, fragments/minigame_select/minigame_select_27BCC0]
+- [0x2825A0, data, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x2825A0, .data, fragments/minigame_select/minigame_select_27BCC0]
+- [0x284E10, rodata, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x284E10, .rodata, fragments/minigame_select/minigame_select_27BCC0]
+- {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
+-> - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}
+
+# lab_pc_1A9780 and lab_pc_1AE680: built from the shared C. The porter merges their text
+# into one blob and their .rodata into one data blob.
+- [0x1AA060, asm, fragment23_1AA060]
+-> - [0x1AA060, c, fragments/lab_pc/lab_pc_1A9780]
+-> - [0x1AEED0, c, fragments/lab_pc/lab_pc_1AE680]
+- [0x1C0A10, data, fragment23_1C0A10]
+-> - [0x1C0A10, .data, fragments/lab_pc/lab_pc_1A9780]
+- [0x1C0B00, data, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1C0B00, .data, fragments/lab_pc/lab_pc_1AE680]
+- [0x1CDC40, data, fragment23_1CDC40]
+-> - [0x1CDC40, .rodata, fragments/lab_pc/lab_pc_1A9780]
+-> - [0x1CDC90, .rodata, fragments/lab_pc/lab_pc_1AE680]
+- {vram: 0x88224F50, type:  bss, name: fragments/lab_pc/lab_pc_1A9780}
+-> - {vram: 0x88224F50, type: .bss, name: fragments/lab_pc/lab_pc_1A9780}
+- {vram: 0x88224F60, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
+-> - {vram: 0x88224F60, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}
