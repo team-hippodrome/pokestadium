@@ -1,0 +1,9 @@
+# Reviewed rom.yaml lines that tools/port_version.py cannot generate: files built from
+# version-specific C. Each line is one generated line; the lines after "->" replace it.
+# The porter stops if a generated line is missing, so check overrides after US changes.
+
+# n64_logo: N64Logo_Main waits 12 frames before the fade-in (VERSION_PAL); the fragment's
+# sizes are those of US, so its .bss starts at the US address.
+- [0x271A20, asm, fragments/n64_logo/n64_logo]
+-> - [0x271A20, c, fragments/n64_logo/n64_logo]
+-> - {vram: 0x82000560, type: .bss, name: fragments/n64_logo/n64_logo}

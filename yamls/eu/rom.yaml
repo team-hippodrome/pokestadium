@@ -1331,7 +1331,8 @@
     vram: 0x82000000
     subsegments:
     - [0x271380, textbin,   fragments/n64_logo/n64_logo_header]
-    - [0x2713A0, asm, fragments/n64_logo/n64_logo]
+    - [0x2713A0, c, fragments/n64_logo/n64_logo]
+    - {vram: 0x82000560, type: .bss, name: fragments/n64_logo/n64_logo}
   - name: fragment35_relocs
     type: code
     bss_size: 0x0
