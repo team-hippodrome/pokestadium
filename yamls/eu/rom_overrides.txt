@@ -289,7 +289,9 @@
 # audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
 # libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
 - [0x7D340, rodata, audio_commands]
--> - [0x7D340, rodata, audio_commands]
+-> - [0x7D340, .rodata, audio_commands]
+-> - [0x7D450, .rodata, audio_loop_point]
+-> - [0x7D630, .rodata, cry]
 -> - [0x7D6A0, .rodata, audio_channel]
 - [0x7E5C0, rodata, libnaudio/n_env]
 -> - [0x7E5C0, rodata, libnaudio/n_env]
@@ -315,3 +317,30 @@
 - [0x7D6D0, rodata, audio_commands_category2]
 -> - [0x7D6D0, rodata, audio_commands_category2]
 -> - [0x7DA30, .rodata, audio_fade]
+
+# audio_stored_fade, audio_commands, audio_loop_point, cry and audio_bank_init: built from the
+# shared C. PAL links audio_loop_point and cry between the two halves of audio_commands, and the
+# porter merges all five files (plus audio_channel's .data) into one blob per section.
+- [0x36EF0, asm, audio_stored_fade]
+-> - [0x36EF0, c, audio_stored_fade]
+-> - [0x37340, c, audio_commands]
+-> - [0x37EF0, c, audio_loop_point]
+-> - [0x38D10, c, cry]
+-> - [0x39120, c, audio_bank_init]
+- [0x78630, data, audio_stored_fade]
+-> - [0x78630, .data, audio_stored_fade]
+-> - [0x78650, .data, audio_commands]
+-> - [0x78960, .data, audio_loop_point]
+-> - [0x789D0, .data, cry]
+-> - [0x78CD0, .data, audio_bank_init]
+-> - [0x78CE0, .data, audio_channel]
+- [0x7D2F0, rodata, text_7D2F0]
+-> - [0x7D2F0, .rodata, audio_stored_fade]
+
+# audio_loop_point and audio_bank_init .bss: built from the shared C. The porter merges them under
+# the audio_bank_init name, and names the libleo/leofunc .bss after audio_loop_point.
+- {vram: 0x800B3370, type: bss, name: audio_bank_init}
+-> - {vram: 0x800B3370, type: .bss, name: audio_loop_point}
+-> - {vram: 0x800B3380, type: .bss, name: audio_bank_init}
+- {vram: 0x800FFAA0, type: bss, name: audio_loop_point}
+-> - {vram: 0x800FFAA0, type: bss, name: libleo/leofunc}

@@ -83,7 +83,11 @@
     - [0x339C0, c, 33E30]
     - [0x33C70, c, 33FE0]
     - [0x37000, c, audio_sfx_wrapper]
-    - [0x37030, asm, audio_stored_fade]
+    - [0x37030, c, audio_stored_fade]
+    - [0x37480, c, audio_commands]
+    - [0x38030, c, audio_loop_point]
+    - [0x38E50, c, cry]
+    - [0x39260, c, audio_bank_init]
     - [0x39ED0, c, audio_sound_state]  # audio functions to 0x50C00
     - [0x39FC0, c, audio_channel]
     - [0x3A2F0, asm, audio_commands_category2]
@@ -293,7 +297,12 @@
     - [0x77070, .data, model_renderer_callbacks]
     - [0x770F0, .data, 33E30]
     - [0x771B0, .data, 33FE0]
-    - [0x78770, data, audio_stored_fade]
+    - [0x78770, .data, audio_stored_fade]
+    - [0x78790, .data, audio_commands]
+    - [0x78AA0, .data, audio_loop_point]
+    - [0x78B10, .data, cry]
+    - [0x78E10, .data, audio_bank_init]
+    - [0x78E20, .data, audio_channel]
     - [0x78E30, data, audio_commands_category2]
     - [0x78FF0, .data, audio_fade]
     - [0x79300, .data, 3D140_2]
@@ -358,8 +367,10 @@
     - [0x7D300, rodata, vector_math]
     - [0x7D370, .rodata, 33E30]
     - [0x7D3A0, .rodata, 33FE0]
-    - [0x7D420, rodata, text_7D420]
-    - [0x7D470, rodata, audio_commands]
+    - [0x7D420, .rodata, audio_stored_fade]
+    - [0x7D470, .rodata, audio_commands]
+    - [0x7D580, .rodata, audio_loop_point]
+    - [0x7D760, .rodata, cry]
     - [0x7D7D0, .rodata, audio_channel]
     - [0x7D800, rodata, audio_commands_category2]
     - [0x7DB60, .rodata, audio_fade]
@@ -436,7 +447,8 @@
     - {vram: 0x800AF970, type: .bss, name: battle_hud}
     - {vram: 0x800AF9C0, type: .bss, name: model_renderer_callbacks}
     - {vram: 0x800B3150, type: .bss, name: 33FE0}
-    - {vram: 0x800B34A0, type: bss, name: audio_commands}
+    - {vram: 0x800B34A0, type: .bss, name: audio_loop_point}
+    - {vram: 0x800B34B0, type: .bss, name: audio_bank_init}
     - {vram: 0x800FC9B0, type: .bss, name: audio_data}
     - {vram: 0x800FC9C0, type: bss, name: 3D140}
     - {vram: 0x800FCBF0, type: bss, name: gb_audio}
@@ -444,7 +456,7 @@
     - {vram: 0x800FCF60, type: bss, name: gb_audio_render}
     - {vram: 0x800FFB20, type: .bss, name: audio_stream}
     - {vram: 0x800FFBB0, type: .bss, name: rom_device}
-    - {vram: 0x800FFBD0, type: bss, name: audio_loop_point}
+    - {vram: 0x800FFBD0, type: bss, name: libleo/leofunc}
     - {vram: 0x801008C0, type: .bss, name: libleo/leocmdex}
     - {vram: 0x801008E0, type: .bss, name: libleo/leoint}
     - {vram: 0x80100930, type: .bss, name: libleo/leomecha}

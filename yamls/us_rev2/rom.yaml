@@ -87,6 +87,7 @@
     - [0x34120, c, 33FE0]
     - [0x374B0, c, audio_sfx_wrapper]
     - [0x374E0, c, audio_commands]  # battle code
+    - [0x38080, c, audio_bank_init]
     - [0x38CF0, c, libnumus/player]
     - [0x3D280, c, 3D140]  # music code
     - [0x3E2B0, c, 3D140_2]  # music code
@@ -543,7 +544,7 @@
     - {vram: 0x800AF8A0, type: .bss, name: battle_hud}
     - {vram: 0x800AF8F0, type: .bss, name: model_renderer_callbacks}
     - {vram: 0x800B3080, type: .bss, name: 33FE0}
-    - {vram: 0x800B33D0, type: .bss, name: audio_commands}
+    - {vram: 0x800B33D0, type: .bss, name: audio_bank_init}
     - {vram: 0x800FC8D0, type: .bss, name: libnumus/player}
     - {vram: 0x800FC950, type: .bss, name: 3D140}
     - {vram: 0x800FCE70, type: .bss, name: gb_audio}

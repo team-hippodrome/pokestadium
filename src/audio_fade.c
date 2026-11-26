@@ -22,8 +22,6 @@ extern u8 sMoveSoundBankStale;
 #endif
 #if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
 extern s32 D_80078388;
-extern u8 D_80078E78;
-extern u8 sLoopPointTable[];
 #endif
 
 // .data

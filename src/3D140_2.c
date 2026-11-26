@@ -2418,7 +2418,7 @@ void QueuePlayerDefeatMessage(s32 arg0) {
 }
 
 void Audio_StartBattleMusicSequence(void) {
-    if (D_80078E80 == 0) {
+    if (sLoopPointTable[0] == 0) {
         Audio_StartMusicTrack(0x3D);
         Audio_PlayCommand(0x16, D_80078400, 0);
         if (D_80078404 == 0xC) {
