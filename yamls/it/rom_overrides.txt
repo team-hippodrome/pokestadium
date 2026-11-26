@@ -364,3 +364,13 @@
 -> - [0x23B730, .rodata, fragments/pokedex/pokedex_2190D0]
 - {vram: 0x888268C0, type:  bss, name: fragments/pokedex/pokedex_2190D0}
 -> - {vram: 0x888268C0, type: .bss, name: fragments/pokedex/pokedex_2190D0}
+
+# pokedex_214920: built from the shared C (metric heights and weights, per-language name order).
+- [0x215170, asm, fragments/pokedex/pokedex_214920]
+-> - [0x215170, c, fragments/pokedex/pokedex_214920]
+- [0x21D1B0, data, fragments/pokedex/pokedex_214920]
+-> - [0x21D1B0, .data, fragments/pokedex/pokedex_214920]
+- [0x23B6E0, rodata, fragments/pokedex/pokedex_214920]
+-> - [0x23B6E0, .rodata, fragments/pokedex/pokedex_214920]
+- {vram: 0x888266A0, type:  bss, name: fragments/pokedex/pokedex_214920}
+-> - {vram: 0x888266A0, type: .bss, name: fragments/pokedex/pokedex_214920}
