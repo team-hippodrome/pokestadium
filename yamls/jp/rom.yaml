@@ -984,10 +984,10 @@
     vram: 0x86F00000
     subsegments:
     - [0x19E290, textbin,   fragments/sandshrew_game/sandshrew_game_header]
-    - [0x19E2B0, asm, fragment21_19E2B0]
-    - [0x1A08A0, data, fragments/sandshrew_game/sandshrew_game]
-    - [0x1A94C0, rodata, fragments/sandshrew_game/sandshrew_game]
-    - {vram: 0x86F0B2A0, type:  bss, name: fragments/sandshrew_game/sandshrew_game}
+    - [0x19E2B0, c, fragments/sandshrew_game/sandshrew_game]
+    - [0x1A08A0, .data, fragments/sandshrew_game/sandshrew_game]
+    - [0x1A93C0, .rodata, fragments/sandshrew_game/sandshrew_game]
+    - {vram: 0x86F0B2A0, type: .bss, name: fragments/sandshrew_game/sandshrew_game}
   - name: fragment21_relocs
     type: code
     bss_size: 0x0

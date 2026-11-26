@@ -1460,3 +1460,4 @@ _binary_assets_us_pokemon_models_bin_start = 0x90000000;
 _binary_assets_us_audio_main_archive_bin_start = 0x91000000;
 _binary_assets_us_audio_archive_4_seq1_bin_end = 0x91290C20;
 gBattleMessageTexts = 0x84386CEC;
+gMinigameStrings = 0x87903CE0;
