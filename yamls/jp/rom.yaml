@@ -680,10 +680,10 @@
     vram: 0x86200000
     subsegments:
     - [0x14F930, textbin,   fragments/rattata_game/rattata_game_header]
-    - [0x14F950, asm, fragment8_14F950]
-    - [0x153050, data, fragments/rattata_game/rattata_game]
-    - [0x153550, rodata, fragments/rattata_game/rattata_game]
-    - {vram: 0x86203C90, type:  bss, name: fragments/rattata_game/rattata_game}
+    - [0x14F950, c, fragments/rattata_game/rattata_game]
+    - [0x153050, .data, fragments/rattata_game/rattata_game]
+    - [0x153550, .rodata, fragments/rattata_game/rattata_game]
+    - {vram: 0x86203C90, type: .bss, name: fragments/rattata_game/rattata_game}
   - name: fragment8_relocs
     type: code
     bss_size: 0x0
