@@ -1866,3 +1866,6 @@ D_80075BCC = 0x80079B0C;
 // Japanese poke_icon assembly addresses directly; the C struct places them at +0xA10/+0xA14.
 D_800B3410_jp = 0x800B3410;
 D_800B3414_jp = 0x800B3414;
+// Fields inside objects that shared C now defines, addressed directly by the remaining Japanese
+// assembly (the C objects own these addresses under other names).
+D_84391484_jp = 0x84391484;
