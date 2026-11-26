@@ -416,8 +416,10 @@ char D_86A06120 = '\x00';
 char D_86A06124 = '\x00';
 char D_86A06128 = '\x00';
 char D_86A0612C = '\x00';
+#if !defined(VERSION_IT)
 char D_86A06130 = '\x00';
 char D_86A06134 = '\x00';
+#endif
 #if defined(VERSION_ES)
 char D_86A06138 = '\x00';
 char D_86A0613C = '\x00';

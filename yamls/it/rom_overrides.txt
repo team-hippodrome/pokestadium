@@ -541,3 +541,61 @@
 -> - [0x6AB70, .data, gb_tower]
 - {vram: 0x800A88A0, type: bss, name: gb_tower}
 -> - {vram: 0x800A88A0, type: .bss, name: gb_tower}
+
+# fragments/battle_engine/battle_engine_mechanics: built from the shared C.
+- [0x34CB20, asm, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x34CB20, c, fragments/battle_engine/battle_engine_mechanics]
+- [0x3680E0, data, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x3680E0, .data, fragments/battle_engine/battle_engine_mechanics]
+- [0x36B070, rodata, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x36B070, .rodata, fragments/battle_engine/battle_engine_mechanics]
+- {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+-> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
+
+# fragments/free_battle_rules/free_battle_rules: built from the shared C.
+- [0x2C1DE0, asm, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C1DE0, c, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4A10, data, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4A10, .data, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4AE0, rodata, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4AE0, .rodata, fragments/free_battle_rules/free_battle_rules]
+- {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+-> - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
+
+# minigame_hud_pause_menu: PAL timers; Italian player icons.
+- [0x10B150, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10B150, c, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10EC80, data, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10EC80, .data, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x118170, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x118170, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+- {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+-> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+
+# lab_pc_icons: built from the shared C with the Italian type icons.
+- [0x1F8500, asm, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1F8500, c, fragments/lab_pc_icons/lab_pc_icons]
+- [0x1FDFA0, data, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1FDFA0, .data, fragments/lab_pc_icons/lab_pc_icons]
+- [0x2148B0, rodata, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x2148B0, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+- {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+-> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
+
+# credits: the porter merges the four credits files' text into one blob and the
+# 15AD80 .data into the 15A2B0 .data, and leaves out the 15A2B0 .rodata.
+- [0x1591F0, asm, fragments/credits/credits_158A00]
+-> - [0x1591F0, c, fragments/credits/credits_158A00]
+-> - [0x15AA90, c, fragments/credits/credits_15A2A0]
+-> - [0x15AAA0, c, fragments/credits/credits_15A2B0]
+-> - [0x15B570, c, fragments/credits/credits_15AD80]
+- [0x15B770, data, fragments/credits/credits_158A00]
+-> - [0x15B770, .data, fragments/credits/credits_158A00]
+- [0x15C330, data, fragments/credits/credits_15A2B0]
+-> - [0x15C330, .data, fragments/credits/credits_15A2B0]
+-> - [0x15ED10, .data, fragments/credits/credits_15AD80]
+-> - [0x15F2F0, .rodata, fragments/credits/credits_15A2B0]
+- {vram: 0x86A06150, type:  bss, name: fragments/credits/credits_158A00}
+-> - {vram: 0x86A06150, type: .bss, name: fragments/credits/credits_158A00}
+- {vram: 0x86A06200, type:  bss, name: fragments/credits/credits_15A2B0}
+-> - {vram: 0x86A06200, type: .bss, name: fragments/credits/credits_15A2B0}

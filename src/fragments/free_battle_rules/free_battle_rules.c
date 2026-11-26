@@ -602,7 +602,7 @@ void FreeBattle_DrawComDifficultyText(s16 position, char* text) {
 }
 
 // Popup shown when the right-side option is COM
-#if defined(VERSION_ES)
+#if defined(VERSION_ES) || defined(VERSION_IT)
 #define COM_ICON_X (sComDifficultyWindow.x + width + 12)
 #define COM_TITLE_X (sComDifficultyWindow.x + 12)
 #else
@@ -616,8 +616,8 @@ void FreeBattle_DrawComDifficultyWindow(void) {
 
         Ui_DrawBorderedPanel(sComDifficultyWindow.x, sComDifficultyWindow.y + (s16)((136 - opening_progress) / 2), 152, opening_progress, 0x2121); // #212100
         if (sComDifficultyWindow.openTicks == 8) {
-#if defined(VERSION_ES)
-            // Spanish prints the title first and puts the COM icon after it.
+#if defined(VERSION_ES) || defined(VERSION_IT)
+            // Spanish and Italian print the title first and puts the COM icon after it.
             s32 width = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
 #elif defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));

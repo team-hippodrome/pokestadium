@@ -588,11 +588,14 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
 #define ROLE_STYLE(english, translated) (english)
 #endif
 
-// The Spanish staff roll ends with one more line and sets a few of the last lines differently.
+// The Spanish staff roll ends with one more line and the Italian one with one fewer, and
+// both set a few of the last lines differently.
 #if defined(VERSION_ES)
-#define ROLE_STYLE_ES(other, spanish) (spanish)
+#define ROLE_STYLE_ES_IT(other, spanish, italian) (spanish)
+#elif defined(VERSION_IT)
+#define ROLE_STYLE_ES_IT(other, spanish, italian) (italian)
 #else
-#define ROLE_STYLE_ES(other, spanish) (other)
+#define ROLE_STYLE_ES_IT(other, spanish, italian) (other)
 #endif
 
 // The 187 staff-roll lines in display order, one per string of textdata table 45 (US 1.0
@@ -1305,27 +1308,27 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A060D8, &D_86A060DC },
     },
     {
-        1,
+        ROLE_STYLE_ES_IT(1, 1, 0),
         { &D_86A060E0, &D_86A060E4 },
     },
     {
-        ROLE_STYLE_ES(0, 1),
+        ROLE_STYLE_ES_IT(0, 1, 1),
         { &D_86A060E8, &D_86A060EC },
     },
     {
-        ROLE_STYLE_ES(1, 0),
+        ROLE_STYLE_ES_IT(1, 0, 1),
         { &D_86A060F0, &D_86A060F4 },
     },
     {
-        1,
+        ROLE_STYLE_ES_IT(1, 1, 0),
         { &D_86A060F8, &D_86A060FC },
     },
     {
-        ROLE_STYLE_ES(0, 1),
+        ROLE_STYLE_ES_IT(0, 1, 1),
         { &D_86A06100, &D_86A06104 },
     },
     {
-        ROLE_STYLE_ES(1, 0),
+        ROLE_STYLE_ES_IT(1, 0, 1),
         { &D_86A06108, &D_86A0610C },
     },
     {
@@ -1337,17 +1340,19 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A06118, &D_86A0611C },
     },
     {
-        1,
+        ROLE_STYLE_ES_IT(1, 1, 0),
         { &D_86A06120, &D_86A06124 },
     },
     {
-        ROLE_STYLE_ES(0, 1),
+        ROLE_STYLE_ES_IT(0, 1, 1),
         { &D_86A06128, &D_86A0612C },
     },
+#if !defined(VERSION_IT)
     {
-        ROLE_STYLE_ES(1, 0),
+        ROLE_STYLE_ES_IT(1, 0, 0),
         { &D_86A06130, &D_86A06134 },
     },
+#endif
 #if defined(VERSION_ES)
     {
         1,
@@ -1359,8 +1364,8 @@ static CreditsRoleLine sRoleLines[] = {
 // The staff roll in 27 pages followed by two terminators (duration 0). Page 0 points at
 // sRoleLines; Credits_DrawRoleList chains each following page to the line after the previous
 // page's last line. Durations sum to 9120 frames, the same total as sBackgroundSegments.
-#if defined(VERSION_ES)
-// The Spanish table has a single terminator.
+#if defined(VERSION_ES) || defined(VERSION_IT)
+// The Spanish and Italian tables have a single terminator.
 CreditsRolePage sRolePages[28] = {
 #else
 CreditsRolePage sRolePages[29] = {
@@ -1539,6 +1544,8 @@ CreditsRolePage sRolePages[29] = {
         NTSC_PAL(40, 33),
 #if defined(VERSION_ES)
         10,
+#elif defined(VERSION_IT)
+        8,
 #else
         9,
 #endif
@@ -1565,7 +1572,7 @@ CreditsRolePage sRolePages[29] = {
         0,
         NULL,
     },
-#if !defined(VERSION_ES)
+#if !defined(VERSION_ES) && !defined(VERSION_IT)
     {
         0,
         0,
@@ -1745,6 +1752,10 @@ static void lcomm_walk_pad_3(void);
 #if !defined(VERSION_ES) // The Spanish table's two extra line externs take their place.
 static void lcomm_walk_pad_4(void);
 static void lcomm_walk_pad_5(void);
+#endif
+#if defined(VERSION_IT) // Two more stand in for the Italian table's missing line externs.
+static void lcomm_walk_pad_6(void);
+static void lcomm_walk_pad_7(void);
 #endif
 
 /**

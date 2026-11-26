@@ -1960,7 +1960,9 @@ static Gfx D_88607730[] = {
 #elif defined(VERSION_DE)
 #include "lab_pc_icons_type_icons_de.inc.c"
 #else
-#if defined(VERSION_FR)
+#if defined(VERSION_IT)
+#include "lab_pc_icons_type_icons_it.inc.c"
+#elif defined(VERSION_FR)
 #include "lab_pc_icons_type_icons_fr.inc.c"
 #else
 static u8 D_88607738[] = {

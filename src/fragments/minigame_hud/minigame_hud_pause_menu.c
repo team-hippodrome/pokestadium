@@ -54,6 +54,8 @@ u32 D_87806730[] = {
 #else
 #if defined(VERSION_ES)
 #include "minigame_hud_pause_menu_player_icons_es.inc.c"
+#elif defined(VERSION_IT)
+#include "minigame_hud_pause_menu_player_icons_it.inc.c"
 #else
 u32 D_878067F0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,

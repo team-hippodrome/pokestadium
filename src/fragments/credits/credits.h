@@ -454,8 +454,10 @@ extern char D_86A06120;
 extern char D_86A06124;
 extern char D_86A06128;
 extern char D_86A0612C;
+#if !defined(VERSION_IT)
 extern char D_86A06130;
 extern char D_86A06134;
+#endif
 #if defined(VERSION_ES)
 extern char D_86A06138;
 extern char D_86A0613C;

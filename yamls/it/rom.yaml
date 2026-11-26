@@ -532,15 +532,15 @@
     - [0x108780, textbin, fragments/minigame_hud/minigame_hud_header]
     - [0x1087A0, c,       fragments/minigame_hud/minigame_hud]
     - [0x10AAE0, c, fragments/minigame_hud/minigame_hud_countdown]
-    - [0x10B150, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x10B150, c, fragments/minigame_hud/minigame_hud_pause_menu]
     - [0x10EAC0, .data,   fragments/minigame_hud/minigame_hud]
     - [0x10EB20, .data, fragments/minigame_hud/minigame_hud_countdown]
-    - [0x10EC80, data, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x10EC80, .data, fragments/minigame_hud/minigame_hud_pause_menu]
     - [0x118160, .rodata, fragments/minigame_hud/minigame_hud_countdown]
-    - [0x118170, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+    - [0x118170, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
     - {vram: 0x8780FA30, type:  .bss, name: fragments/minigame_hud/minigame_hud}
     - {vram: 0x8780FAD0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}
-    - {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+    - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
     type: code
     bss_size: 0x0
@@ -853,11 +853,16 @@
     vram: 0x86A00000
     subsegments:
     - [0x1591D0, textbin,   fragments/credits/credits_header]
-    - [0x1591F0, asm, fragments/credits/credits_158A00]
-    - [0x15B770, data, fragments/credits/credits_158A00]
-    - [0x15C330, data, fragments/credits/credits_15A2B0]
-    - {vram: 0x86A06150, type:  bss, name: fragments/credits/credits_158A00}
-    - {vram: 0x86A06200, type:  bss, name: fragments/credits/credits_15A2B0}
+    - [0x1591F0, c, fragments/credits/credits_158A00]
+    - [0x15AA90, c, fragments/credits/credits_15A2A0]
+    - [0x15AAA0, c, fragments/credits/credits_15A2B0]
+    - [0x15B570, c, fragments/credits/credits_15AD80]
+    - [0x15B770, .data, fragments/credits/credits_158A00]
+    - [0x15C330, .data, fragments/credits/credits_15A2B0]
+    - [0x15ED10, .data, fragments/credits/credits_15AD80]
+    - [0x15F2F0, .rodata, fragments/credits/credits_15A2B0]
+    - {vram: 0x86A06150, type: .bss, name: fragments/credits/credits_158A00}
+    - {vram: 0x86A06200, type: .bss, name: fragments/credits/credits_15A2B0}
   - name: fragment16_relocs
     type: code
     bss_size: 0x0
@@ -1116,10 +1121,10 @@
     vram: 0x88600000
     subsegments:
     - [0x1F84E0, textbin,   fragments/lab_pc_icons/lab_pc_icons_header]
-    - [0x1F8500, asm, fragments/lab_pc_icons/lab_pc_icons]
-    - [0x1FDFA0, data, fragments/lab_pc_icons/lab_pc_icons]
-    - [0x2148B0, rodata, fragments/lab_pc_icons/lab_pc_icons]
-    - {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+    - [0x1F8500, c, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x1FDFA0, .data, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x2148B0, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+    - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
   - name: fragment27_relocs
     type: code
     bss_size: 0x0
@@ -1807,10 +1812,10 @@
     vram: 0x84000000
     subsegments:
     - [0x2C1DC0, textbin,   fragments/free_battle_rules/free_battle_rules_header]
-    - [0x2C1DE0, asm, fragments/free_battle_rules/free_battle_rules]
-    - [0x2C4A10, data, fragments/free_battle_rules/free_battle_rules]
-    - [0x2C4AE0, rodata, fragments/free_battle_rules/free_battle_rules]
-    - {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+    - [0x2C1DE0, c, fragments/free_battle_rules/free_battle_rules]
+    - [0x2C4A10, .data, fragments/free_battle_rules/free_battle_rules]
+    - [0x2C4AE0, .rodata, fragments/free_battle_rules/free_battle_rules]
+    - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
   - name: fragment58_relocs
     type: code
     bss_size: 0x0
@@ -1952,7 +1957,7 @@
     - [0x34BD70, c,      fragments/battle_engine/battle_engine_3591E0]
     - [0x34C340, c,      fragments/battle_engine/battle_engine_3597B0]
     - [0x34CB10, c,      fragments/battle_engine/battle_engine_debug_strings]
-    - [0x34CB20, asm, fragments/battle_engine/battle_engine_mechanics]
+    - [0x34CB20, c, fragments/battle_engine/battle_engine_mechanics]
     - [0x350B00, c,      fragments/battle_engine/battle_engine_move_mechanics]
     - [0x353BE0, c, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x3617D0, .data,   fragments/battle_engine/battle_engine_main]
@@ -1983,7 +1988,7 @@
     - [0x367160, .data,   fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x3671E0, .data,   fragments/battle_engine/battle_engine_3591E0]
     - [0x367CD0, .data,   fragments/battle_engine/battle_engine_3597B0]
-    - [0x3680E0, data, fragments/battle_engine/battle_engine_mechanics]
+    - [0x3680E0, .data, fragments/battle_engine/battle_engine_mechanics]
     - [0x3682D0, .data,   fragments/battle_engine/battle_engine_move_mechanics]
     - [0x368430, .data, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x368580, .rodata, fragments/battle_engine/battle_engine_move_animation]
@@ -2023,7 +2028,7 @@
     - [0x36AD60, .rodata, fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x36AD80, .rodata, fragments/battle_engine/battle_engine_3591E0]
     - [0x36AD90, .rodata, fragments/battle_engine/battle_engine_debug_strings]
-    - [0x36B070, rodata, fragments/battle_engine/battle_engine_mechanics]
+    - [0x36B070, .rodata, fragments/battle_engine/battle_engine_mechanics]
     - [0x36B0F0, .rodata, fragments/battle_engine/battle_engine_move_mechanics]
     - [0x36B260, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
     - {vram: 0x8438E4D0, type:  .bss, name: fragments/battle_engine/battle_engine_main}
@@ -2052,7 +2057,7 @@
     - {vram: 0x843C3590, type:  .bss, name: fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails}
     - {vram: 0x843C4A50, type:  .bss, name: fragments/battle_engine/battle_engine_3591E0}
     - {vram: 0x843C4E20, type:  .bss, name: fragments/battle_engine/battle_engine_3597B0}
-    - {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+    - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
     - {vram: 0x843C53A0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
   - name: fragment62_relocs
     type: code
