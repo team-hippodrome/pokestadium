@@ -52,8 +52,8 @@
     - [0xDDC0, c, DDC0]
     - [0xE1C0, c, gb_tower_audio] # load gb emulator (fragment 1)
     - [0xE570, c, gb_mbc] # gameboy memory bank controller
-    - [0xE890, asm, leo]
-    - [0xF420, asm, matrix]
+    - [0xE890, c, leo]
+    - [0xF420, c, matrix]
     - [0x11BA0, c, geo_node] #
     - [0x12D80, c, geo_render] #
     - [0x17300, c, model_animation] #
@@ -268,8 +268,8 @@
     - [0x6AA50, data, gb_tower]
     - [0x6AA60, .data, controller_ram]
     - [0x6AA70, .data, math_util]
-    - [0x70280, data, leo]
-    - [0x70290, data, matrix]
+    - [0x70280, .data, leo]
+    - [0x70290, .data, matrix]
     - [0x70300, .data, geo_render]
     - [0x70530, .data, geo_layout]
     - [0x705D0, data, poke_icon]
@@ -337,6 +337,8 @@
     - [0x7C280, .rodata, crash_screen]
     - [0x7C640, .rodata, profiler]
     - [0x7C660, rodata, gb_tower]
+    - [0x7C6A0, .rodata, leo]
+    - [0x7C820, .rodata, matrix]
     - [0x7C830, .rodata, poke_icon_preview]
     - [0x7C860, rodata, status_icons]
     - [0x7D340, rodata, gb_data]
@@ -403,7 +405,7 @@
     - {vram: 0x800A8A20, type: .bss, name: DDC0}
     - {vram: 0x800AACE0, type: .bss, name: gb_tower_audio}
     - {vram: 0x800AACF0, type: .bss, name: gb_mbc}
-    - {vram: 0x800AAD00, type: bss, name: leo}
+    - {vram: 0x800AAD00, type: .bss, name: leo}
     - {vram: 0x800AAD40, type: .bss, name: geo_render}
     - {vram: 0x800AC340, type: .bss, name: model_animation}
     - {vram: 0x800AC380, type: .bss, name: model_animation_events}
@@ -1817,9 +1819,9 @@
     vram: 0x84100000
     subsegments:
     - [0x2C4EE0, textbin,   fragments/stadium_select/stadium_select_header]
-    - [0x2C4F00, asm, fragments/stadium_select/stadium_select]
-    - [0x2C7310, data, fragments/stadium_select/stadium_select]
-    - {vram: 0x84103440, type:  bss, name: fragments/stadium_select/stadium_select}
+    - [0x2C4F00, c, fragments/stadium_select/stadium_select]
+    - [0x2C7310, .data, fragments/stadium_select/stadium_select]
+    - {vram: 0x84103440, type: .bss, name: fragments/stadium_select/stadium_select}
   - name: fragment59_relocs
     type: code
     bss_size: 0x0

@@ -244,3 +244,23 @@
 - [0x11C7A0, asm, fragment3_11C7A0]
 -> - [0x11C7A0, asm, fragment3_11C7A0]
 -> - [0x11CF50, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# matrix: built from the shared C.
+- [0xF420, asm, matrix]
+-> - [0xF420, c, matrix]
+- [0x703B0, data, matrix]
+-> - [0x703B0, .data, matrix]
+
+# leo: built from the shared C.
+- [0xE890, asm, leo]
+-> - [0xE890, c, leo]
+- [0x703A0, data, leo]
+-> - [0x703A0, .data, leo]
+- {vram: 0x800AAE20, type: bss, name: leo}
+-> - {vram: 0x800AAE20, type: .bss, name: leo}
+
+# leo and matrix .rodata: merged into the gb_tower rodata by the porter.
+- [0x7C780, rodata, gb_tower]
+-> - [0x7C780, rodata, gb_tower]
+-> - [0x7C7C0, .rodata, leo]
+-> - [0x7C940, .rodata, matrix]

@@ -52,8 +52,8 @@
     - [0xDDC0, c, DDC0]
     - [0xE1C0, c, gb_tower_audio] # load gb emulator (fragment 1)
     - [0xE570, c, gb_mbc] # gameboy memory bank controller
-    - [0xE890, asm, leo]
-    - [0xF420, asm, matrix]
+    - [0xE890, c, leo]
+    - [0xF420, c, matrix]
     - [0x11BA0, c, geo_node] #
     - [0x12D80, c, geo_render] #
     - [0x17300, c, model_animation] #
@@ -267,8 +267,8 @@
     - [0x6A5D0, data, gb_tower]
     - [0x6A5E0, .data, controller_ram]
     - [0x6A5F0, .data, math_util]
-    - [0x6FE00, data, leo]
-    - [0x6FE10, data, matrix]
+    - [0x6FE00, .data, leo]
+    - [0x6FE10, .data, matrix]
     - [0x6FE80, .data, geo_render]
     - [0x700B0, .data, geo_layout]
     - [0x70150, data, poke_icon]
@@ -336,6 +336,8 @@
     - [0x7BE00, .rodata, crash_screen]
     - [0x7C1C0, .rodata, profiler]
     - [0x7C1E0, rodata, gb_tower]
+    - [0x7C220, .rodata, leo]
+    - [0x7C3A0, .rodata, matrix]
     - [0x7C3B0, .rodata, poke_icon_preview]
     - [0x7C3E0, rodata, status_icons]
     - [0x7CEC0, rodata, gb_data]
@@ -403,7 +405,7 @@
     - {vram: 0x800A85A0, type: .bss, name: DDC0}
     - {vram: 0x800AA860, type: .bss, name: gb_tower_audio}
     - {vram: 0x800AA870, type: .bss, name: gb_mbc}
-    - {vram: 0x800AA880, type: bss, name: leo}
+    - {vram: 0x800AA880, type: .bss, name: leo}
     - {vram: 0x800AA8C0, type: .bss, name: geo_render}
     - {vram: 0x800ABEC0, type: .bss, name: model_animation}
     - {vram: 0x800ABF00, type: .bss, name: model_animation_events}

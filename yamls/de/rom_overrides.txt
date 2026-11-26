@@ -251,3 +251,31 @@
 - [0x11C6B0, asm, fragment3_11C6B0]
 -> - [0x11C6B0, asm, fragment3_11C6B0]
 -> - [0x11CE60, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# matrix: built from the shared C.
+- [0xF420, asm, matrix]
+-> - [0xF420, c, matrix]
+- [0x70290, data, matrix]
+-> - [0x70290, .data, matrix]
+
+# leo: built from the shared C.
+- [0xE890, asm, leo]
+-> - [0xE890, c, leo]
+- [0x70280, data, leo]
+-> - [0x70280, .data, leo]
+- {vram: 0x800AAD00, type: bss, name: leo}
+-> - {vram: 0x800AAD00, type: .bss, name: leo}
+
+# stadium_select: built from the shared C.
+- [0x2C4F00, asm, fragments/stadium_select/stadium_select]
+-> - [0x2C4F00, c, fragments/stadium_select/stadium_select]
+- [0x2C7310, data, fragments/stadium_select/stadium_select]
+-> - [0x2C7310, .data, fragments/stadium_select/stadium_select]
+- {vram: 0x84103440, type:  bss, name: fragments/stadium_select/stadium_select}
+-> - {vram: 0x84103440, type: .bss, name: fragments/stadium_select/stadium_select}
+
+# leo and matrix .rodata: merged into the gb_tower rodata by the porter.
+- [0x7C660, rodata, gb_tower]
+-> - [0x7C660, rodata, gb_tower]
+-> - [0x7C6A0, .rodata, leo]
+-> - [0x7C820, .rodata, matrix]

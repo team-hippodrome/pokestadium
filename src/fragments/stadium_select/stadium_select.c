@@ -224,7 +224,18 @@ static u8 sMenuOptionRanges[][2] = {
     },
     { 0xF, 0x14 },
 };
+#if defined(VERSION_DE) || defined(VERSION_IT)
+// The German and Italian menu textures before these are larger, so these sit later in segment 3.
+extern u8 D_030294E0[];
+extern u8 D_0302A260[];
+extern u8 D_0302AFE0[];
+extern u8 D_0302BD60[];
+extern u8 D_0302CAE0[];
+extern u8 D_0302DAA0[];
+static u8* sMenuOptionTexturePointers[] = { D_030294E0, D_0302A260, D_0302AFE0, D_0302BD60, D_0302CAE0, D_0302DAA0 };
+#else
 static u8* sMenuOptionTexturePointers[] = { D_03028EC0, D_03029C40, D_0302A9C0, D_0302B740, D_0302C4C0, D_0302D480 };
+#endif
 static u32 sMenuGeoLayoutRoot[] = {
     0x0C000000,  0x05000000, 0x0B00002D, 0x00000000, 0x028001E0, 0x00000000, 0xFDBD0000, 0x00000243, 0x05000000,
     0x0D000000,  0x05000000, 0x14000000, 0x00000000, 0xFFFFFF32, 0x16FFFFFF, 0x0F000002, 0x05000000, 0x0A000000,
