@@ -4936,6 +4936,9 @@ void BattleAnim_ProcessQueuedEffects(void) {
 void BattleAnim_UpdateFrame(UNUSED CameraNode* camera) {
     Particle_UpdateFrameCounters();
     BattleAnim_ProcessQueuedEffects();
+#if defined(VERSION_JP)
+    func_84359274_jp();
+#endif
     BattleAnim_UpdateEffects();
     BattleAnim_NoopUpdateHook();
 }

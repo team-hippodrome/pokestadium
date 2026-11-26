@@ -3097,6 +3097,11 @@ void BattleAnim_RenderEffectsFrame(CameraNode*);
 
 //@src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c
 void BattleAnim_NoopUpdateHook(void);
+#if defined(VERSION_JP)
+// Japanese-only empty hook that BattleAnim_UpdateFrame calls before BattleAnim_UpdateEffects. It
+// follows battle_engine_shared_move_effects in the Japanese fragment, which US 1.0 does not have.
+void func_84359274_jp(void);
+#endif
 void func_843592E8(void);
 void func_843592F0(void);
 void func_843592F8(void);
