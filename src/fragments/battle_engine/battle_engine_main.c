@@ -689,8 +689,10 @@ void BattleScene_Init(unk_func_80007444* stage_context) {
 
     if (gSessionContext.mode == 0x11) {
         Font_Init(4, 0);
+#if !defined(VERSION_JP)
     } else if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
         Font_Init(7, 0);
+#endif
     } else {
         Font_Init(3, 0);
     }
