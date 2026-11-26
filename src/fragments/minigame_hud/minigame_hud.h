@@ -11,40 +11,40 @@ typedef struct unk_func_87801684 {
 extern char** gMinigameText;
 
 #if defined(VERSION_JP)
+// Japanese minigame player labels: "おいらのポケモン" ("Our Pokemon") and "メカポケモン" ("Mecha Pokemon").
+extern char* gMinigameOwnerNames[2];
 // Strings shared by the Japanese minigames, built into the ROM instead of loaded from a text file.
 extern char* gMinigameStrings[];
 
 typedef enum MinigameStringId {
-    /*  0 */ MINIGAME_STR_OUR_POKEMON,       // "おいらのポケモン" "Our Pokemon"
-    /*  1 */ MINIGAME_STR_MECHA_POKEMON,     // "メカポケモン" "Mecha Pokemon"
-    /*  2 */ MINIGAME_STR_HOW_TO_PLAY,       // "ゲームのせつめい" "How to play"
-    /*  3 */ MINIGAME_STR_START_GAME,        // "ゲームをはじめる" "Start the game"
-    /*  4 */ MINIGAME_STR_CONTROL_STICK,     // "３Ｄスティック" "Control Stick"
-    /*  5 */ MINIGAME_STR_SHAKE_HEAD,        // "くびをふる" "Shake head"
-    /*  6 */ MINIGAME_STR_THROW,             // "なげる" "Throw"
-    /*  7 */ MINIGAME_STR_A_BUTTON,          // "Ａボタン" "A Button"
-    /*  8 */ MINIGAME_STR_HARDEN,            // "かたくなる" "Harden"
-    /*  9 */ MINIGAME_STR_DIG,               // "あなをほる" "Dig"
-    /* 10 */ MINIGAME_STR_CONTROL_PAD,       // "じゅうじキー" "Control Pad"
-    /* 11 */ MINIGAME_STR_ELLIPSIS,          // "・・・"
-    /* 12 */ MINIGAME_STR_L_BUTTON,          // "Ｌボタン" "L Button"
-    /* 13 */ MINIGAME_STR_R_BUTTON,          // "Ｒボタン" "R Button"
-    /* 14 */ MINIGAME_STR_1P,                // "１Ｐ"
-    /* 15 */ MINIGAME_STR_2P,                // "２Ｐ"
-    /* 16 */ MINIGAME_STR_3P,                // "３Ｐ"
-    /* 17 */ MINIGAME_STR_4P,                // "４Ｐ"
-    /* 18 */ MINIGAME_STR_BEGIN,             // "はじめ" "Begin"
-    /* 19 */ MINIGAME_STR_END,               // "おわり" "End"
-    /* 20 */ MINIGAME_STR_NEXT,              // "つぎ" "Next"
-    /* 21 */ MINIGAME_STR_1P_WINS,           // "１Ｐのかち" "1P wins"
-    /* 22 */ MINIGAME_STR_2P_WINS,           // "２Ｐのかち" "2P wins"
-    /* 23 */ MINIGAME_STR_3P_WINS,           // "３Ｐのかち" "3P wins"
-    /* 24 */ MINIGAME_STR_4P_WINS,           // "４Ｐのかち" "4P wins"
-    /* 25 */ MINIGAME_STR_DRAW,              // "ひきわけ" "Draw"
-    /* 26 */ MINIGAME_STR_WINS,              // "のかち" "wins" (after a name)
-    /* 27 */ MINIGAME_STR_EKANS_TITLE,       // "アーボでわなげ" "Ring Toss with Ekans"
-    /* 28 */ MINIGAME_STR_METAPOD_TITLE,     // "かたくなるがっせん" "Harden Battle"
-    /* 29 */ MINIGAME_STR_SANDSHREW_TITLE,   // "サンドのいどほりきょうそう" "Sandshrew's Well-Digging Race"
+    /*  0 */ MINIGAME_STR_HOW_TO_PLAY, // "ゲームのせつめい" "How to play"
+    /*  1 */ MINIGAME_STR_START_GAME, // "ゲームをはじめる" "Start the game"
+    /*  2 */ MINIGAME_STR_CONTROL_STICK, // "３Ｄスティック" "Control Stick"
+    /*  3 */ MINIGAME_STR_SHAKE_HEAD, // "くびをふる" "Shake head"
+    /*  4 */ MINIGAME_STR_THROW, // "なげる" "Throw"
+    /*  5 */ MINIGAME_STR_A_BUTTON, // "Ａボタン" "A Button"
+    /*  6 */ MINIGAME_STR_HARDEN, // "かたくなる" "Harden"
+    /*  7 */ MINIGAME_STR_DIG, // "あなをほる" "Dig"
+    /*  8 */ MINIGAME_STR_CONTROL_PAD, // "じゅうじキー" "Control Pad"
+    /*  9 */ MINIGAME_STR_ELLIPSIS, // "・・・"
+    /* 10 */ MINIGAME_STR_L_BUTTON, // "Ｌボタン" "L Button"
+    /* 11 */ MINIGAME_STR_R_BUTTON, // "Ｒボタン" "R Button"
+    /* 12 */ MINIGAME_STR_1P, // "１Ｐ"
+    /* 13 */ MINIGAME_STR_2P, // "２Ｐ"
+    /* 14 */ MINIGAME_STR_3P, // "３Ｐ"
+    /* 15 */ MINIGAME_STR_4P, // "４Ｐ"
+    /* 16 */ MINIGAME_STR_BEGIN, // "はじめ" "Begin"
+    /* 17 */ MINIGAME_STR_END, // "おわり" "End"
+    /* 18 */ MINIGAME_STR_NEXT, // "つぎ" "Next"
+    /* 19 */ MINIGAME_STR_1P_WINS, // "１Ｐのかち" "1P wins"
+    /* 20 */ MINIGAME_STR_2P_WINS, // "２Ｐのかち" "2P wins"
+    /* 21 */ MINIGAME_STR_3P_WINS, // "３Ｐのかち" "3P wins"
+    /* 22 */ MINIGAME_STR_4P_WINS, // "４Ｐのかち" "4P wins"
+    /* 23 */ MINIGAME_STR_DRAW, // "ひきわけ" "Draw"
+    /* 24 */ MINIGAME_STR_WINS, // "のかち" "wins" (after a name)
+    /* 25 */ MINIGAME_STR_EKANS_TITLE, // "アーボでわなげ" "Ring Toss with Ekans"
+    /* 26 */ MINIGAME_STR_METAPOD_TITLE, // "かたくなるがっせん" "Harden Battle"
+    /* 27 */ MINIGAME_STR_SANDSHREW_TITLE, // "サンドのいどほりきょうそう" "Sandshrew's Well-Digging Race"
 } MinigameStringId;
 #endif
 extern s16 D_87806338;

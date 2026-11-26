@@ -927,9 +927,10 @@
     vram: 0x86C00000
     subsegments:
     - [0x188F50, textbin,   fragments/ekans_game/ekans_game_header]
-    - [0x188F70, asm, fragments/ekans_game/ekans_game]
-    - [0x18D5F0, data, fragments/ekans_game/ekans_game]
-    - {vram: 0x86C0E4E0, type:  bss, name: fragments/ekans_game/ekans_game}
+    - [0x188F70, c, fragments/ekans_game/ekans_game]
+    - [0x18D5F0, .data, fragments/ekans_game/ekans_game]
+    - [0x1971A0, .rodata, fragments/ekans_game/ekans_game]
+    - {vram: 0x86C0E4E0, type: .bss, name: fragments/ekans_game/ekans_game}
   - name: fragment18_relocs
     type: code
     bss_size: 0x0
