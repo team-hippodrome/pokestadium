@@ -309,6 +309,9 @@ extern s32 sParticleMatrixPoolIndex;
 extern s32 sParticleMatrixPoolIndex;
 extern ParticleRenderContext sParticleRenderContext;
 extern ParticleCameraState* sParticleCameraState;
+#if defined(VERSION_JP)
+extern s32 D_8140E6B8_jp;
+#endif
 extern u32 sParticleFrameCounter;
 extern s32 sParticleFrameMod64;
 extern s32 sParticleFrameMod32;

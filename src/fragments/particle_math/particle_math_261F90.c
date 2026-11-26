@@ -14,8 +14,8 @@ s32 sParticleMatrixPoolIndex;
 ParticleRenderContext sParticleRenderContext;
 ParticleCameraState* sParticleCameraState;
 #if defined(VERSION_JP)
-// Japanese-only word between the camera state and the frame counters, read by the Japanese
-// particle code that follows particle_math_26E540 (still assembly; function at 0x8140C540).
+// Japanese-only countdown between the camera state and the frame counters. Each particle clock
+// tick in Particle_UpdateFrameCounters lowers it until it reaches zero.
 s32 D_8140E6B8_jp;
 #endif
 u32 sParticleFrameCounter;

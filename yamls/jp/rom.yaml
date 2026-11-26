@@ -1296,7 +1296,7 @@
     - [0x276BE0, c, fragments/particle_math/particle_math_261F90]
     - [0x278F90, c, fragments/particle_math/particle_math_264380]
     - [0x27E3E0, c,      fragments/particle_math/particle_math_269820]
-    - [0x283100, asm, fragment34_283100]
+    - [0x283100, c, fragments/particle_math/particle_math_26E540]
     - [0x283320, c,      fragments/particle_math/particle_math_26E6D0]
     - [0x284600, c,      fragments/particle_math/particle_math_26F9B0]
     - [0x284610, .data, fragments/particle_math/particle_math_264380]
