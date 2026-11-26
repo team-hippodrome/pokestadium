@@ -22,14 +22,14 @@ s32 Credits_RandomRange(s32 range) {
  * which Credits_MainLoop uses to end the credits.
  */
 void Credits_DrawStadiumLogo(u8 fade_in) {
-    static u8 sLogoFadeFrame = 0; // 0-30 fade-in progress of the end logo
+    static u8 sLogoFadeFrame = 0; // 0-30 (0-25 in PAL) fade-in progress of the end logo
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     if (!fade_in) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
-    } else if (sLogoFadeFrame < 0x1E) {
-        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, (s32)ROUND_MAX((sLogoFadeFrame * 255.0f) / 30.0f));
+    } else if (sLogoFadeFrame < NTSC_PAL(30, 25)) {
+        gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, (s32)ROUND_MAX((sLogoFadeFrame * 255.0f) / NTSC_PAL(30.0f, 25.0f)));
         sLogoFadeFrame++;
     } else {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);

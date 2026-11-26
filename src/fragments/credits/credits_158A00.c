@@ -60,42 +60,42 @@ CreditsBackgroundSegment sBackgroundSegments[9] = {
     {
         0x00,
         0x00,
-        0x0528,
+        NTSC_PAL(0x0528, 0x044C),
     },
     {
         0x00,
         0x01,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0x00,
         0x02,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0x00,
         0x03,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0x00,
         0x04,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0x00,
         0x05,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0x00,
         0x06,
-        0x0528,
+        NTSC_PAL(0x0528, 0x044C),
     },
     {
         0x00,
         0x07,
-        0x0438,
+        NTSC_PAL(0x0438, 0x0384),
     },
     {
         0xFF,
@@ -288,7 +288,7 @@ void Credits_LoadBackgroundScene(s8 arena_index, u8 shot) {
         Credits_InitCameraOrbitBlend(&sCameraRotationX, &sCameraRotationY, &sCameraDistance, sArenaCamera, sBackgroundSegments[sSegmentIndex].duration, arena_index, shot);
     } else if (shot < 0xF) {
         if (sSegmentIndex == 7) {
-            Credits_InitCameraKeyframeBlend(sArenaCamera, sBackgroundSegments[sSegmentIndex].duration - 0x28, arena_index, shot);
+            Credits_InitCameraKeyframeBlend(sArenaCamera, sBackgroundSegments[sSegmentIndex].duration - NTSC_PAL(0x28, 0x21), arena_index, shot);
         } else {
             Credits_InitCameraKeyframeBlend(sArenaCamera, sBackgroundSegments[sSegmentIndex].duration, arena_index, shot);
         }
@@ -333,16 +333,16 @@ void Credits_DrawFadeOverlay(void) {
     u8 alpha;
 
     if (sBackgroundSegments[sSegmentIndex].endMarker != -1) {
-        if (sSegmentTimer < 8) {
-            alpha = (s8)ROUND_MAX(((-(f32)sSegmentTimer / 8) + 1.0f) * 255.0f);
+        if (sSegmentTimer < NTSC_PAL(8, 7)) {
+            alpha = (s8)ROUND_MAX(((-(f32)sSegmentTimer / NTSC_PAL(8, 7)) + 1.0f) * 255.0f);
             if (alpha != 0) {
                 Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, alpha);
             }
         } else {
-            if ((sBackgroundSegments[sSegmentIndex].duration - 0x28) < sSegmentTimer) {
+            if ((sBackgroundSegments[sSegmentIndex].duration - NTSC_PAL(0x28, 0x21)) < sSegmentTimer) {
                 s32 duration = sBackgroundSegments[sSegmentIndex].duration;
 
-                alpha = (s32)ROUND_MAX((((sSegmentTimer - duration) + 0x28) * 255.0f) / 40.0f);
+                alpha = (s32)ROUND_MAX((((sSegmentTimer - duration) + NTSC_PAL(0x28, 0x21)) * 255.0f) / NTSC_PAL(40.0f, 33.0f));
                 if (alpha != 0) {
                     Gfx_FillRectWithDisplayState(0, 0, 0x140, 0xF0, 0, 0, 0, alpha);
                 }
@@ -358,7 +358,7 @@ void Credits_DrawFadeOverlay(void) {
 void Credits_DrawFadeAndRoleList(u8 draw_mode) {
     if ((draw_mode == 1) || (draw_mode == 2)) {
         Credits_DrawFadeOverlay();
-        if ((sSegmentIndex != 0) || (sSegmentTimer >= 0xF0)) {
+        if ((sSegmentIndex != 0) || (sSegmentTimer >= NTSC_PAL(240, 200))) {
             Credits_DrawRoleList();
         }
     }
@@ -400,25 +400,25 @@ void Credits_IntroLoop(void) {
     u8 phase_frames;
     s32 frame_count;
 
-    Audio_FadeOutAll(0x1E);
+    Audio_FadeOutAll(NTSC_PAL(30, 25));
 
     for (i = 0; i < 3; i++) {
         frame_count = phase_frames;
 
         switch (i) {
             case 0:
-                phase_frames = 0x1E;
+                phase_frames = NTSC_PAL(30, 25);
                 StageFade_StartFromOpaque(phase_frames);
-                frame_count = 0x1E;
+                frame_count = NTSC_PAL(30, 25);
                 break;
 
             case 1:
-                phase_frames = 0x5A;
+                phase_frames = NTSC_PAL(90, 75);
                 frame_count = phase_frames;
                 break;
 
             case 2:
-                phase_frames = 0x78;
+                phase_frames = NTSC_PAL(120, 100);
                 StageFade_StartFromTransparent(phase_frames);
                 frame_count = phase_frames;
                 break;
@@ -440,7 +440,7 @@ void Credits_IntroLoop(void) {
  * then each frame advances sFrameDelta, the camera move and the backdrop segment timer.
  * When a segment ends it picks and loads the next arena (segment 3 also swaps arenas at 1/3
  * and 2/3 of its length keeping the camera move); after the end marker the arena is cleared.
- * Exits 721 frames after the end logo is fully opaque, or after 361 frames on A or Start.
+ * Exits 721 frames (601 in PAL) after the end logo is fully opaque, or after 361 (301) on A or Start.
  */
 void Credits_MainLoop(s32 is_round_1) {
     // Extra arena swaps already made during segment 3 (at most 2).
@@ -448,8 +448,8 @@ void Credits_MainLoop(s32 is_round_1) {
 
     s32 running = 1;
 
-    StageLoader_RunFrames(0x3C);
-    StageFade_StartFromOpaque(0xB4);
+    StageLoader_RunFrames(NTSC_PAL(60, 50));
+    StageFade_StartFromOpaque(NTSC_PAL(180, 150));
 
     if (is_round_1 != 0) {
         Audio_StartMusicTrack(0x42);
@@ -509,9 +509,9 @@ void Credits_MainLoop(s32 is_round_1) {
         Credits_PollInput();
         Credits_UpdateCamera();
 
-        if (sLogoHoldTimer >= 0x2D1) {
+        if (sLogoHoldTimer >= NTSC_PAL(721, 601)) {
             running = 0;
-        } else if ((sLogoHoldTimer >= 0x169) &&
+        } else if ((sLogoHoldTimer >= NTSC_PAL(361, 301)) &&
                    ((gPlayer1Controller->buttonPressed & 0x1000) || (gPlayer1Controller->buttonPressed & 0x8000))) {
             running = 0;
         }
@@ -540,7 +540,7 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
         },
     },
     {
-        8,
+        NTSC_PAL(8, 7),
         0xFF,
         {
             { 0xFF, 0xC8, 0xFF }, // #FFC8FF
@@ -550,7 +550,7 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
         },
     },
     {
-        0x1E,
+        NTSC_PAL(0x1E, 0x19),
         0xFF,
         {
             { 0xFF, 0, 0xFF }, // #FF00FF
@@ -560,7 +560,7 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
         },
     },
     {
-        0x153,
+        NTSC_PAL(0x153, 0x11A),
         0xFF,
         {
             { 0xFF, 0, 0xFF }, // #FF00FF
@@ -570,7 +570,7 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
         },
     },
     {
-        0x167,
+        NTSC_PAL(0x167, 0x12B),
         0,
         {
             { 0xFF, 0, 0xE6 }, // #FF00E6
@@ -580,6 +580,13 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
         },
     },
 };
+
+// The translated releases set some staff roll lines as headings instead of names and the other way round.
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+#define ROLE_STYLE(english, translated) (translated)
+#else
+#define ROLE_STYLE(english, translated) (english)
+#endif
 
 // The 187 staff-roll lines in display order, one per string of textdata table 45 (US 1.0
 // assets/us/textdata/45.bin). Entry 0 is "DIRECTOR" / "Takao Shimizu" ...; the last is
@@ -1251,7 +1258,7 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A06088, &D_86A0608C },
     },
     {
-        1,
+        ROLE_STYLE(1, 0),
         { &D_86A06090, &D_86A06094 },
     },
     {
@@ -1259,11 +1266,11 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A06098, &D_86A0609C },
     },
     {
-        0,
+        ROLE_STYLE(0, 1),
         { &D_86A060A0, &D_86A060A4 },
     },
     {
-        1,
+        ROLE_STYLE(1, 0),
         { &D_86A060A8, &D_86A060AC },
     },
     {
@@ -1279,7 +1286,7 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A060C0, &D_86A060C4 },
     },
     {
-        0,
+        ROLE_STYLE(0, 1),
         { &D_86A060C8, &D_86A060CC },
     },
     {
@@ -1342,197 +1349,197 @@ static CreditsRoleLine sRoleLines[] = {
 CreditsRolePage sRolePages[29] = {
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         6,
         sRoleLines,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         6,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         8,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         6,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         6,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         5,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         3,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         9,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         9,
         NULL,
     },
     {
         0,
-        232,
-        40,
+        NTSC_PAL(232, 193),
+        NTSC_PAL(40, 33),
         4,
         NULL,
     },
     {
         0,
-        240,
-        40,
+        NTSC_PAL(240, 200),
+        NTSC_PAL(40, 33),
         5,
         NULL,
     },
     {
         0,
-        240,
-        40,
+        NTSC_PAL(240, 200),
+        NTSC_PAL(40, 33),
         5,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         9,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         7,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         6,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         9,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        240,
-        40,
+        NTSC_PAL(240, 200),
+        NTSC_PAL(40, 33),
         2,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         10,
         NULL,
     },
     {
         0,
-        368,
-        48,
+        NTSC_PAL(368, 307),
+        NTSC_PAL(48, 40),
         11,
         NULL,
     },
     {
         0,
-        352,
-        40,
+        NTSC_PAL(352, 293),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         9,
         NULL,
     },
     {
         0,
-        360,
-        40,
+        NTSC_PAL(360, 300),
+        NTSC_PAL(40, 33),
         5,
         NULL,
     },
     {
         0,
-        240,
-        40,
+        NTSC_PAL(240, 200),
+        NTSC_PAL(40, 33),
         2,
         NULL,
     },
     {
         0,
         0,
-        40,
+        NTSC_PAL(40, 33),
         0,
         NULL,
     },
@@ -1552,16 +1559,16 @@ CreditsRolePage sRolePages[29] = {
 void Credits_OutroLoop(void) {
     u8 i;
 
-    Audio_FadeCategories(1, 0x78);
-    Audio_FadeCategories(2, 0x78);
-    StageFade_StartFromTransparent(0x78);
+    Audio_FadeCategories(1, NTSC_PAL(120, 100));
+    Audio_FadeCategories(2, NTSC_PAL(120, 100));
+    StageFade_StartFromTransparent(NTSC_PAL(120, 100));
 
-    for (i = 0; i < 120; i++) {
+    for (i = 0; i < NTSC_PAL(120, 100); i++) {
         Credits_PollInput();
         Credits_DrawFrame(2);
     }
 
-    StageLoader_RunFrames(0x3C);
+    StageLoader_RunFrames(NTSC_PAL(60, 50));
 }
 
 /**
@@ -1653,7 +1660,7 @@ s32 Credits_InterpolateRoleColor(Color_RGBA8_u32* colors, u16 timer, u16 duratio
         return 0;
     }
 
-    sRoleColorKeyframes[3].frame = (duration - blank_frames) - 0x15;
+    sRoleColorKeyframes[3].frame = (duration - blank_frames) - NTSC_PAL(0x15, 0x12);
     sRoleColorKeyframes[4].frame = (duration - blank_frames) - 1;
 
     for (i = 0; i < 5; i++) {

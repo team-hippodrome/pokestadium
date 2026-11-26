@@ -370,3 +370,18 @@
 -> - [0x2A01E0, .data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
 - {vram: 0x834021E0, type:  bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
 -> - {vram: 0x834021E0, type: .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+
+# credits_158A00 and 15A2A0 (merged by the porter): built from the shared C.
+- [0x158C80, asm, fragments/credits/credits_158A00]
+-> - [0x158C80, c, fragments/credits/credits_158A00]
+-> - [0x15A520, c, fragments/credits/credits_15A2A0]
+- [0x15B200, data, fragments/credits/credits_158A00]
+-> - [0x15B200, .data, fragments/credits/credits_158A00]
+- {vram: 0x86A06170, type:  bss, name: fragments/credits/credits_158A00}
+-> - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
+
+# credits_15AD80: built from the shared C.
+- [0x15B000, asm, fragments/credits/credits_15AD80]
+-> - [0x15B000, c, fragments/credits/credits_15AD80]
+- [0x15E7B0, data, fragments/credits/credits_15AD80]
+-> - [0x15E7B0, .data, fragments/credits/credits_15AD80]

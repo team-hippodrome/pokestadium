@@ -852,14 +852,15 @@
     vram: 0x86A00000
     subsegments:
     - [0x158A90, textbin,   fragments/credits/credits_header]
-    - [0x158AB0, asm, fragments/credits/credits_158A00]
+    - [0x158AB0, c, fragments/credits/credits_158A00]
+    - [0x15A350, c, fragments/credits/credits_15A2A0]
     - [0x15A360, c,      fragments/credits/credits_15A2B0]
-    - [0x15AE30, asm, fragments/credits/credits_15AD80]
-    - [0x15B030, data, fragments/credits/credits_158A00]
+    - [0x15AE30, c, fragments/credits/credits_15AD80]
+    - [0x15B030, .data, fragments/credits/credits_158A00]
     - [0x15BC00, .data,   fragments/credits/credits_15A2B0]
-    - [0x15E5E0, data, fragments/credits/credits_15AD80]
+    - [0x15E5E0, .data, fragments/credits/credits_15AD80]
     - [0x15EBD0, .rodata, fragments/credits/credits_15A2B0]
-    - {vram: 0x86A06170, type:  bss, name: fragments/credits/credits_158A00}
+    - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
     - {vram: 0x86A06220, type:  .bss, name: fragments/credits/credits_15A2B0}
   - name: fragment16_relocs
     type: code
