@@ -1724,6 +1724,7 @@
     - [0x358920, c,      fragments/battle_engine/battle_engine_3591E0]
     - [0x358EF0, c,      fragments/battle_engine/battle_engine_3597B0]
     - [0x3596C0, asm, fragments/battle_engine/battle_engine_debug_strings]
+    - [0x360910, c, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x36E4B0, .data, fragments/battle_engine/battle_engine_main]
     - [0x36E6D0, data, fragments/battle_engine/battle_engine_move_animation]
     - [0x36E760, .data,   fragments/battle_engine/battle_engine_move_model_transforms]
@@ -1755,7 +1756,7 @@
     - [0x375960, .data,   fragments/battle_engine/battle_engine_3597B0]
     - [0x375D70, data, fragments/battle_engine/battle_engine_mechanics]
     - [0x375F60, data, fragments/battle_engine/battle_engine_move_mechanics]
-    - [0x3760C0, data, fragments/battle_engine/battle_engine_com_decision_logic]
+    - [0x3760C0, .data, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x376210, rodata, fragments/battle_engine/battle_engine_move_animation]
     - [0x3762B0, .rodata, fragments/battle_engine/battle_engine_move_model_transforms]
     - [0x3763B0, .rodata, fragments/battle_engine/battle_engine_math]
@@ -1795,7 +1796,7 @@
     - [0x378A80, .rodata, fragments/battle_engine/battle_engine_3591E0]
     - [0x378A90, rodata, fragment62_378A90]
     - [0x378DE0, rodata, fragments/battle_engine/battle_engine_move_mechanics]
-    - [0x378F50, rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+    - [0x378F50, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
     - {vram: 0x8438F730, type: .bss, name: fragments/battle_engine/battle_engine_main}
     - {vram: 0x8438FAA0, type:  bss, name: fragments/battle_engine/battle_engine_move_animation}
     - {vram: 0x843913A0, type:  .bss, name: fragments/battle_engine/battle_engine_math}
@@ -1823,7 +1824,7 @@
     - {vram: 0x843C5C90, type:  .bss, name: fragments/battle_engine/battle_engine_3591E0}
     - {vram: 0x843C6060, type:  .bss, name: fragments/battle_engine/battle_engine_3597B0}
     - {vram: 0x843C6070, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
-    - {vram: 0x843C65E0, type:  bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+    - {vram: 0x843C65E0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
   - name: fragment62_relocs
     type: code
     bss_size: 0x0

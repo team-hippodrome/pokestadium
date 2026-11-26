@@ -337,9 +337,15 @@ void BattleAI_ResetTeamState(BattleAiMonState* arg0) {
         temp_v0->statChanges[i] = 7;
     }
 
+#if defined(VERSION_JP)
+    temp_v0->uniqueStatusFlags = 0;
+    temp_v0->volatileStatusFlags = 0;
+    temp_v0->immobilizedReason = 0;
+#else
     temp_v0->immobilizedReason = 0;
     temp_v0->volatileStatusFlags = 0;
     temp_v0->uniqueStatusFlags = 0;
+#endif
 }
 
 s32 BattleAI_ScaleSignedRatio(s32 arg0, s32 arg1) {
@@ -1596,8 +1602,13 @@ void BattleAI_BuildMoveCandidateScores(BattleAiMonState* arg0, BattleAiMonState*
             }
         }
 
+#if defined(VERSION_JP)
+        if ((var_s3->immobilizedReason & 0x40) && (var_s0->modifiedSpeed >= var_s3->modifiedSpeed) && (var_s2->unk_03 != 0x27) &&
+            (var_s2->unk_03 != 0x2B)) {
+#else
         if ((var_s3->immobilizedReason & 0x40) && (var_s0->modifiedSpeed >= var_s3->modifiedSpeed) && (var_s2->unk_03 != 0x27) &&
             (var_s2->unk_03 != 0x2B) && (var_s2->unk_03 != 0x11)) {
+#endif
             var_s1 = 0;
         }
 
@@ -3640,13 +3651,22 @@ void BattleAI_InitTeamContext(TeamRoster* arg0, TeamRoster* arg1, BattleAiTeamSt
     }
 }
 
+// In the Japanese version the result is inverted: it returns 1 when the species is in the list.
 s32 BattleAI_IsSpeciesUnselected(BattleAiTeamState* arg0, u8* arg1, u8 arg2) {
     u8 i;
+#if defined(VERSION_JP)
+    s32 var_v1 = 0;
+#else
     s32 var_v1 = 1;
+#endif
 
     for (i = 0; i < arg2; i++) {
         if (arg0->unk_11 == arg1[i]) {
+#if defined(VERSION_JP)
+            var_v1 = 1;
+#else
             var_v1 = 0;
+#endif
         }
     }
 
@@ -3678,6 +3698,25 @@ s32 BattleAI_MeetsHpBudgetConstraint(BattleAiTeamState* arg0, u8* arg1, u8 arg2,
     s32 temp_t0;
 
     switch (arg3) {
+#if defined(VERSION_JP)
+        case 1:
+            var_t0 = 0x32;
+            var_a3 = 0x37;
+            var_a2 = 0x9B;
+            break;
+
+        case 2:
+            var_t0 = 1;
+            var_a3 = 0x1E;
+            var_a2 = 0x5A;
+            break;
+
+        case 3:
+            var_t0 = 1;
+            var_a3 = 0x32;
+            var_a2 = 0x96;
+            break;
+#else
         case 1:
         case 2:
         case 3:
@@ -3685,6 +3724,7 @@ s32 BattleAI_MeetsHpBudgetConstraint(BattleAiTeamState* arg0, u8* arg1, u8 arg2,
             var_a3 = 0x37;
             var_a2 = 0x9B;
             break;
+#endif
 
         case 4:
             var_t0 = 0x19;
@@ -3751,9 +3791,12 @@ s32 BattleAI_IsCandidateEligible(BattleAiTeamState* arg0, u8* arg1, u8 arg2, u8 
             if (BattleAI_IsSpeciesUnselected(arg0, arg1, arg2) != 0) {
                 sp1C = 1;
             }
-        } else {
+        }
+#if !defined(VERSION_JP)
+        else {
             sp1C = 1;
         }
+#endif
     }
     return sp1C;
 }
@@ -5057,8 +5100,12 @@ s32 BattleAI_ResolveTiedActionChoice(s32 arg0) {
             var_s0 = (temp_v1 * ((f32)arg0 / 255.0)) + (temp_a0 * ((f32)var_s6 / 255.0));
         }
 
+#if defined(VERSION_JP)
+        if ((var_s2 < var_s0) || ((var_s0 == var_s2) && (BattleAI_RandomBelowInclusive(1) != 0))) {
+#else
         if ((D_843C60B4->pp[i] > 0) &&
             ((var_s2 < var_s0) || ((var_s0 == var_s2) && (BattleAI_RandomBelowInclusive(1) != 0)))) {
+#endif
             var_s2 = var_s0;
             var_fp = i;
         }
@@ -5188,7 +5235,11 @@ s32 BattleAI_IsMoveIneffective(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u
             if (arg1->pendingStatusCondition & 0x20) {
                 return 1;
             }
+#if defined(VERSION_JP)
+            // fallthrough: the Japanese version is missing this break
+#else
             break;
+#endif
 
         case 0x43:
             if ((arg1->pendingStatusCondition != 0) || (arg1->volatileStatusFlags & 0x10) ||
@@ -5686,7 +5737,11 @@ label1:
         sp44 = BattleAI_SelectRandomUsableCandidate(D_843C60A4) + 4;
     }
 
+#if defined(VERSION_JP)
+    if ((sp44 >= 0) && ((sp44 >= 4) || (D_843C60B4->moves[sp44] != 0))) {
+#else
     if ((sp44 >= 0) && ((sp44 >= 4) || ((D_843C60B4->moves[sp44] != 0) && (D_843C60B4->pp[sp44] != 0)))) {
+#endif
         if ((D_843C60B4->displayHp != 0) && (sp44 >= 4)) {
             if (BattleAI_HasExactlyOneUsableCandidate(D_843C60A4) != 0) {
                 goto block_44;
