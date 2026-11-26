@@ -1352,8 +1352,10 @@
     vram: 0x82200000
     subsegments:
     - [0x287A80, textbin,   fragments/area_select/area_select_header]
-    - [0x287AA0, asm, fragments/area_select/area_select]
-    - [0x28AAD0, data, fragments/area_select/area_select]
+    - [0x287AA0, c,      fragments/area_select/area_select]
+    - [0x28AAD0, .data,   fragments/area_select/area_select]
+    - [0x28AC20, .rodata, fragments/area_select/area_select]
+    - {vram: 0x822034B0, type:  .bss, name: fragments/area_select/area_select}
   - name: fragment37_relocs
     type: code
     bss_size: 0x0
