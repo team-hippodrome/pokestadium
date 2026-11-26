@@ -1632,8 +1632,10 @@
     vram: 0x84100000
     subsegments:
     - [0x2D13B0, textbin,   fragments/stadium_select/stadium_select_header]
-    - [0x2D13D0, asm, fragment59_2D13D0]
-    - [0x2D3810, data, fragments/stadium_select/stadium_select]
+    - [0x2D13D0, c,      fragments/stadium_select/stadium_select]
+    - [0x2D37E0, .data,   fragments/stadium_select/stadium_select]
+    - [0x2D4810, .rodata, fragments/stadium_select/stadium_select]
+    - {vram: 0x84103770, type:  .bss, name: fragments/stadium_select/stadium_select}
   - name: fragment59_relocs
     type: code
     bss_size: 0x0
