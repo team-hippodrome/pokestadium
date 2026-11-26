@@ -60,14 +60,14 @@
     - [0x18140, c, model_animation_events] # dp model animations
     - [0x18480, c, geo_layout] # dp model animations
     - [0x19840, asm, display_object_textures]
-    - [0x1AB70, asm, poke_icon]
+    - [0x1AB70, c, poke_icon]
     - [0x1BD50, c, poke_icon_preview]
     - [0x1C730, c, model_renderer] #
     - [0x1CF40, c, graphics_textures] # dp list code
     - [0x20340, c, input] # some cache cleaner
     - [0x20480, asm, ui_graphics]
     - [0x29BA0, c, game_state] # scenary code
-    - [0x2C1C0, asm, session]
+    - [0x2C1C0, c, session]
     - [0x2D340, c, table_view] # pkm lab pc code
     - [0x2E110, c, text_system] # stack cleaner
     - [0x2E460, c, gb_save] # pkm lab pokedex code
@@ -271,7 +271,7 @@
     - [0x6FE10, .data, matrix]
     - [0x6FE80, .data, geo_render]
     - [0x700B0, .data, geo_layout]
-    - [0x70150, data, poke_icon]
+    - [0x70150, .data, poke_icon]
     - [0x701E0, .data, poke_icon_preview]
     - [0x70270, data, ui_graphics]
     - [0x705E0, data, status_icons]
@@ -279,7 +279,7 @@
     - [0x74030, data, pokemon_stats]
     - [0x74450, data, save_data]
     - [0x74460, .data, game_state]
-    - [0x76480, data, session]
+    - [0x76480, .data, session]
     - [0x76490, .data, table_view]
     - [0x766A0, .data, gb_save]
     - [0x76750, .data, lab_item]
@@ -343,7 +343,7 @@
     - [0x7CEC0, rodata, gb_data]
     - [0x7CF30, rodata, pokemon_stats]
     - [0x7D0D0, .rodata, game_state]
-    - [0x7D1E0, rodata, session]
+    - [0x7D1E0, .rodata, session]
     - [0x7D240, .rodata, text_system]
     - [0x7D250, .rodata, gb_save]
     - [0x7D2A0, .rodata, minigame_dispatch]

@@ -272,3 +272,17 @@
 -> - [0x7C780, rodata, gb_tower]
 -> - [0x7C7C0, .rodata, leo]
 -> - [0x7C940, .rodata, matrix]
+
+# poke_icon: built from the shared C.
+- [0x1AB70, asm, poke_icon]
+-> - [0x1AB70, c, poke_icon]
+- [0x706F0, data, poke_icon]
+-> - [0x706F0, .data, poke_icon]
+
+# session: built from the shared C.
+- [0x2C1C0, asm, session]
+-> - [0x2C1C0, c, session]
+- [0x76A20, data, session]
+-> - [0x76A20, .data, session]
+- [0x7D780, rodata, session]
+-> - [0x7D780, .rodata, session]
