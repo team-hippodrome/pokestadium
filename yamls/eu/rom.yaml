@@ -1510,13 +1510,13 @@
     vram: 0x83400000
     subsegments:
     - [0x29DDE0, textbin,   fragments/gallery_backgrounds/gallery_backgrounds_header]
-    - [0x29DE00, asm, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+    - [0x29DE00, c, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
     - [0x29F420, c,      fragments/gallery_backgrounds/gallery_backgrounds_2A3E70]
     - [0x29F510, c,      fragments/gallery_backgrounds/gallery_backgrounds_2A3F60]
-    - [0x29FF00, data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+    - [0x29FF00, .data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
     - [0x29FF20, .data,   fragments/gallery_backgrounds/gallery_backgrounds_2A3F60]
     - [0x29FFA0, .rodata, fragments/gallery_backgrounds/gallery_backgrounds_2A3F60]
-    - {vram: 0x834021E0, type:  bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+    - {vram: 0x834021E0, type: .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
     - {vram: 0x83406EF0, type:  .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A3E70}
     - {vram: 0x83406F00, type:  .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A3F60}
   - name: fragment43_relocs

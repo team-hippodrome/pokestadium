@@ -6,3 +6,11 @@
 -> - [0x120AA0, .data, fragments/minigame_shared_library/minigame_shared_library]
 - {vram: 0x87B000E0, type:  bss, name: fragments/minigame_shared_library/minigame_shared_library}
 -> - {vram: 0x87B000E0, type: .bss, name: fragments/minigame_shared_library/minigame_shared_library}
+
+# gallery_backgrounds_2A1B50: built from the shared C (four drawing functions are empty in PAL).
+- [0x29DE00, asm, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+-> - [0x29DE00, c, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+- [0x29FF00, data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+-> - [0x29FF00, .data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+- {vram: 0x834021E0, type:  bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+-> - {vram: 0x834021E0, type: .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
