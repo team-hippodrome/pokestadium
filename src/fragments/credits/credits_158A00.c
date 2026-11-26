@@ -588,6 +588,13 @@ CreditsRoleColorKeyframe sRoleColorKeyframes[] = {
 #define ROLE_STYLE(english, translated) (english)
 #endif
 
+// The Spanish staff roll ends with one more line and sets a few of the last lines differently.
+#if defined(VERSION_ES)
+#define ROLE_STYLE_ES(other, spanish) (spanish)
+#else
+#define ROLE_STYLE_ES(other, spanish) (other)
+#endif
+
 // The 187 staff-roll lines in display order, one per string of textdata table 45 (US 1.0
 // assets/us/textdata/45.bin). Entry 0 is "DIRECTOR" / "Takao Shimizu" ...; the last is
 // "EXECUTIVE PRODUCER" / "Hiroshi Yamauchi". Style 2 entries are blank spacers whose table
@@ -1302,11 +1309,11 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A060E0, &D_86A060E4 },
     },
     {
-        0,
+        ROLE_STYLE_ES(0, 1),
         { &D_86A060E8, &D_86A060EC },
     },
     {
-        1,
+        ROLE_STYLE_ES(1, 0),
         { &D_86A060F0, &D_86A060F4 },
     },
     {
@@ -1314,11 +1321,11 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A060F8, &D_86A060FC },
     },
     {
-        0,
+        ROLE_STYLE_ES(0, 1),
         { &D_86A06100, &D_86A06104 },
     },
     {
-        1,
+        ROLE_STYLE_ES(1, 0),
         { &D_86A06108, &D_86A0610C },
     },
     {
@@ -1334,19 +1341,30 @@ static CreditsRoleLine sRoleLines[] = {
         { &D_86A06120, &D_86A06124 },
     },
     {
-        0,
+        ROLE_STYLE_ES(0, 1),
         { &D_86A06128, &D_86A0612C },
     },
     {
-        1,
+        ROLE_STYLE_ES(1, 0),
         { &D_86A06130, &D_86A06134 },
     },
+#if defined(VERSION_ES)
+    {
+        1,
+        { &D_86A06138, &D_86A0613C },
+    },
+#endif
 };
 
 // The staff roll in 27 pages followed by two terminators (duration 0). Page 0 points at
 // sRoleLines; Credits_DrawRoleList chains each following page to the line after the previous
 // page's last line. Durations sum to 9120 frames, the same total as sBackgroundSegments.
+#if defined(VERSION_ES)
+// The Spanish table has a single terminator.
+CreditsRolePage sRolePages[28] = {
+#else
 CreditsRolePage sRolePages[29] = {
+#endif
     {
         0,
         NTSC_PAL(360, 300),
@@ -1519,7 +1537,11 @@ CreditsRolePage sRolePages[29] = {
         0,
         NTSC_PAL(360, 300),
         NTSC_PAL(40, 33),
+#if defined(VERSION_ES)
+        10,
+#else
         9,
+#endif
         NULL,
     },
     {
@@ -1543,6 +1565,7 @@ CreditsRolePage sRolePages[29] = {
         0,
         NULL,
     },
+#if !defined(VERSION_ES)
     {
         0,
         0,
@@ -1550,6 +1573,7 @@ CreditsRolePage sRolePages[29] = {
         0,
         NULL,
     },
+#endif
 };
 
 /**
@@ -1718,8 +1742,10 @@ static void lcomm_walk_pad_0(void);
 static void lcomm_walk_pad_1(void);
 static void lcomm_walk_pad_2(void);
 static void lcomm_walk_pad_3(void);
+#if !defined(VERSION_ES) // The Spanish table's two extra line externs take their place.
 static void lcomm_walk_pad_4(void);
 static void lcomm_walk_pad_5(void);
+#endif
 
 /**
  * Prepares the staff roll: loads every string of textdata table 45 (the US staff credits)

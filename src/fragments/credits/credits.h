@@ -456,6 +456,10 @@ extern char D_86A06128;
 extern char D_86A0612C;
 extern char D_86A06130;
 extern char D_86A06134;
+#if defined(VERSION_ES)
+extern char D_86A06138;
+extern char D_86A0613C;
+#endif
 
 // Retrace (video frame) count since the previous Credits_UpdateFrameDelta; every timer steps by it.
 extern u8 sFrameDelta;

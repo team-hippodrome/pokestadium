@@ -533,3 +533,28 @@
 -> - [0x6AB70, .data, gb_tower]
 - {vram: 0x800A88A0, type: bss, name: gb_tower}
 -> - {vram: 0x800A88A0, type: .bss, name: gb_tower}
+
+# minigame_hud_pause_menu: PAL timers; Spanish player icon strip layout.
+- [0x10B1C0, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10B1C0, c, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10ECF0, data, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10ECF0, .data, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x1181E0, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x1181E0, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+- {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+-> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+
+# credits_158A00 and 15A2A0 (merged by the porter): built from the shared C.
+- [0x159260, asm, fragments/credits/credits_158A00]
+-> - [0x159260, c, fragments/credits/credits_158A00]
+-> - [0x15AB00, c, fragments/credits/credits_15A2A0]
+- [0x15B7E0, data, fragments/credits/credits_158A00]
+-> - [0x15B7E0, .data, fragments/credits/credits_158A00]
+- {vram: 0x86A06170, type:  bss, name: fragments/credits/credits_158A00}
+-> - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
+
+# credits_15AD80: built from the shared C.
+- [0x15B5E0, asm, fragments/credits/credits_15AD80]
+-> - [0x15B5E0, c, fragments/credits/credits_15AD80]
+- [0x15ED90, data, fragments/credits/credits_15AD80]
+-> - [0x15ED90, .data, fragments/credits/credits_15AD80]

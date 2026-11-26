@@ -49,6 +49,9 @@ u32 D_87806730[] = {
     0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE,
 };
 
+#if defined(VERSION_ES)
+#include "minigame_hud_pause_menu_player_icons_es.inc.c"
+#else
 u32 D_878067F0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -476,6 +479,7 @@ u32 D_878093D0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
+#endif
 
 u32 D_8780A270[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -1646,6 +1650,17 @@ void func_87803EAC(u32* arg0, u16 arg1, UNUSED u16 arg2, u16 arg3, u16 arg4, u8 
     }
 }
 
+// The Spanish pause menu places its player icon strip differently.
+#if defined(VERSION_ES)
+#define PAUSE_ICON_ARG 0x68
+#define PAUSE_ICON_X0 0x20
+#define PAUSE_ICON_X1 0x68
+#else
+#define PAUSE_ICON_ARG 0x23
+#define PAUSE_ICON_X0 -0x63
+#define PAUSE_ICON_X1 -0x1B
+#endif
+
 typedef struct Vtx4 {
     /* 0x00 */ Vtx vtx1;
     /* 0x10 */ Vtx vtx2;
@@ -1744,7 +1759,7 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
         D_8780FCCC[1] = 0x1A;
         D_8780FCCC[2] = 0x34;
 
-        func_87803EAC(&D_3010000, 0x88, 0x34, 0x23, 0x1A, 5, 3);
+        func_87803EAC(&D_3010000, 0x88, 0x34, PAUSE_ICON_ARG, 0x1A, 5, 3);
 
         spAC = Gfx_AllocDisplayList(sizeof(Vtx) * 4 * temp_s2);
 
@@ -1772,11 +1787,11 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
             s32 k = var_s4;
 
             if (spA0[i] == 1) {
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx1, -0x63, spA4[var_s4], 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx2, -0x1B, spA4[var_s4], 0, 0x480, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, -0x63, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF,
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx1, PAUSE_ICON_X0, spA4[var_s4], 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx2, PAUSE_ICON_X1, spA4[var_s4], 0, 0x480, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, PAUSE_ICON_X0, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF,
                                         0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, -0x1B, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF,
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, PAUSE_ICON_X1, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF,
                                         0xFF, 0xFF);
 
                 gSPVertex(gDisplayListHead++, &spAC[var_s4].vtx1, 4, 0);
