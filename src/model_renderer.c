@@ -159,7 +159,11 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
             var_a0 += 0; // FAKE: preserves the matching checksum loop.
         }
 
+#if defined(VERSION_JP)
+        var_v1 = arg1->unk_40;
+#else
         var_v1 = arg1->unk_3B;
+#endif
         while (*var_v1) {
             var_a0 += *var_v1++ & 0xFF;
             var_a0 += 0; // FAKE: preserves the matching checksum loop.
@@ -179,7 +183,11 @@ void Model_ComputeNicknameColorVariantFromRecord(arg1_func_80010CA8* arg0, unk_f
     stack.unk_0E = arg1->unk_02;
 
     _bcopy(arg1->unk_04, stack.nickname, 0x10);
+#if defined(VERSION_JP)
+    _bcopy(arg1->unk_14, stack.unk_40, 0x10);
+#else
     _bcopy(arg1->unk_14, stack.unk_3B, 0x10);
+#endif
     Model_ComputeNicknameColorVariant(arg0, &stack);
 }
 
@@ -194,7 +202,11 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
         temp_a1 = arg0->unk_04;
         if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->species.id)) {
             Model_ComputeNicknameColorVariant(&sp2C, (BattleMon*)arg0->unk_04);
+#if defined(VERSION_JP)
+            if ((sp2A == 0x19) && (arg0->unk_04->unk_3C & 0x80)) {
+#else
             if ((sp2A == 0x19) && (arg0->unk_04->unk_52 & 0x80)) {
+#endif
                 sp2A = 0x99;
             }
         }

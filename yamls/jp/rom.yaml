@@ -57,7 +57,9 @@
     - [0x17D80, c, model_animation_events] # dp model animations
     - [0x180C0, c, geo_layout] # dp model animations
     - [0x19480, c, display_object_textures]
-    - [0x1A7B0, asm, poke_icon]
+    - [0x1A7B0, c, poke_icon]
+    - [0x1B990, c, poke_icon_preview]
+    - [0x1C370, c, model_renderer]
     - [0x1CB80, asm, graphics_textures]
     - [0x200E0, c, ui_graphics]
     - [0x22190, c, status_icons]
@@ -270,7 +272,8 @@
     - [0x6C7B0, .data, matrix]
     - [0x6C820, .data, geo_render]
     - [0x6CA50, .data, geo_layout]
-    - [0x6CAF0, data, poke_icon]
+    - [0x6CAF0, .data, poke_icon]
+    - [0x6CB80, .data, poke_icon_preview]
     - [0x6CC10, .data, ui_graphics]
     - [0x6CFD0, .data, status_icons]
     - [0x72240, data, gb_data]
@@ -337,7 +340,7 @@
     - [0x7FAE0, .rodata, gb_tower]
     - [0x7FB20, .rodata, leo]
     - [0x7FCA0, .rodata, matrix]
-    - [0x7FCB0, rodata, poke_icon]
+    - [0x7FCB0, .rodata, poke_icon_preview]
     - [0x7FCE0, .rodata, status_icons]
     - [0x818C0, .rodata, gb_data]
     - [0x81930, .rodata, pokemon_stats]
@@ -417,8 +420,8 @@
     - {vram: 0x800B28F0, type: .bss, name: model_animation_events}
     - {vram: 0x800B2920, type: .bss, name: geo_layout}
     - {vram: 0x800B2A00, type: .bss, name: display_object_textures}
-    - {vram: 0x800B3420, type: bss, name: poke_icon}
-    - {vram: 0x800B3430, type: bss, name: model_renderer}
+    - {vram: 0x800B3420, type: .bss, name: poke_icon_preview}
+    - {vram: 0x800B3430, type: .bss, name: model_renderer}
     - {vram: 0x800B3460, type: bss, name: graphics_textures}
     - {vram: 0x800B3470, type: bss, name: input}
     - {vram: 0x800B3480, type: .bss, name: pokemon_stats}
