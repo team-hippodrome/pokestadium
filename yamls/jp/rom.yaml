@@ -719,12 +719,12 @@
     vram: 0x86400000
     subsegments:
     - [0x155E80, textbin,   fragments/drowzee_game/drowzee_game_header]
-    - [0x155EA0, asm, fragments/drowzee_game/drowzee_game]
+    - [0x155EA0, c, fragments/drowzee_game/drowzee_game]
     - [0x158480, c,      fragments/drowzee_game/drowzee_game_1]
-    - [0x158570, data, fragments/drowzee_game/drowzee_game]
+    - [0x158570, .data, fragments/drowzee_game/drowzee_game]
     - [0x1587A0, .data,   fragments/drowzee_game/drowzee_game_1]
-    - [0x159E10, data, fragment10_159E10]
-    - {vram: 0x864040D0, type:  bss, name: fragments/drowzee_game/drowzee_game}
+    - [0x159E10, .rodata, fragments/drowzee_game/drowzee_game]
+    - {vram: 0x864040D0, type: .bss, name: fragments/drowzee_game/drowzee_game}
   - name: fragment10_relocs
     type: code
     bss_size: 0x0
