@@ -331,6 +331,9 @@ extern u8 D_20069A0[];
 extern u8 D_2002000[];
 extern u8 D_30C1290[];
 extern u8 D_0302EE00[];
+#if defined(VERSION_JP)
+extern u8 D_030C1290[];
+#endif
 extern u8 D_03034580[];
 extern u8 D_03039D00[];
 extern u8 D_0303F480[];

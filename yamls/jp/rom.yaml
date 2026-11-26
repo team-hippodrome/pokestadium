@@ -1383,11 +1383,15 @@
     vram: 0x82500000
     subsegments:
     - [0x291640, textbin,   fragments/minigame_select/minigame_select_header]
-    - [0x291660, asm, fragments/minigame_select/minigame_select_27BCC0]
+    - [0x291660, c,      fragments/minigame_select/minigame_select_27BCC0]
+    - [0x295E30, c,      fragments/minigame_select/minigame_select_2804C0]
     - [0x297550, c,      fragments/minigame_select/minigame_select_281C40]
-    - [0x297760, data, fragments/minigame_select/minigame_select_27BCC0]
-    - {vram: 0x82508C10, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
-    - {vram: 0x8250A5A0, type:  bss, name: fragments/minigame_select/minigame_select_2804C0}
+    - [0x297760, .data, fragments/minigame_select/minigame_select_27BCC0]
+    - [0x299FF0, .data, fragments/minigame_select/minigame_select_2804C0]
+    - [0x29A020, .rodata, fragments/minigame_select/minigame_select_27BCC0]
+    - [0x29A110, .rodata, fragments/minigame_select/minigame_select_2804C0]
+    - {vram: 0x82508C10, type:  .bss, name: fragments/minigame_select/minigame_select_27BCC0}
+    - {vram: 0x8250A5A0, type:  .bss, name: fragments/minigame_select/minigame_select_2804C0}
   - name: fragment39_relocs
     type: code
     bss_size: 0x0
