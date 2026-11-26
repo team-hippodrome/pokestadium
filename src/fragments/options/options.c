@@ -12,9 +12,33 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+#if defined(VERSION_JP)
+// "Stereo", "Mono"
+static char* sSoundModeNames[] = { "ステレオ", "モノラル" };
+// Announcer: "On", "Off"
+static char* sAnnouncerNames[] = { "あり", "なし" };
+#else
 static char** sOptionsText;
+#endif
 static s16 sSelectedOption;
 static u16 sPendingSoundSettings;
+
+#define OPTIONS_MAIN_PANEL_HEIGHT(step) (((step) * 22) + 10)
+#define OPTIONS_ERASE_PROMPT_HEIGHT(step) (((step) * 17) + 2)
+#define OPTIONS_ERASE_COMPLETE_HEIGHT(step) ((step) * 9)
+
+// JP checks whether a panel is fully open by its height instead of its opening step.
+#if defined(VERSION_JP)
+#define OPTIONS_IS_FULLY_OPEN(step, height_of) (height_of(step) == height_of(8))
+#define OPTIONS_LETTER_SPACING -2
+#define OPTIONS_TYPE17_RECORD_COUNT 8
+#define OPTIONS_TEXT(id, jp_text) (jp_text)
+#else
+#define OPTIONS_IS_FULLY_OPEN(step, height_of) ((step) == 8)
+#define OPTIONS_LETTER_SPACING 0
+#define OPTIONS_TYPE17_RECORD_COUNT 12
+#define OPTIONS_TEXT(id, jp_text) Text_GetString(NULL, 0, sOptionsText, id)
+#endif
 
 /* Tiles the options background with the menu's intensity texture and colors. */
 void Options_DrawBackground(void) {
@@ -71,15 +95,19 @@ void Options_DrawValueCapsule(s16 x, s16 y) {
 void Options_DrawMainPanel(s16 opening_progress, s32 show_cursor) {
     // FAKE: unused stack slot retained for matching.
     UNUSED s32 pad;
+#if !defined(VERSION_JP)
     s32 text_blue;
-    s16 height = (opening_progress * 22) + 10;
+#endif
+    s16 height = OPTIONS_MAIN_PANEL_HEIGHT(opening_progress);
     s16 y = ((186 - height) / 2) + 229;
 
     if (opening_progress > 0) {
         Ui_DrawBorderedPanelNoFill(137, y, 366, height);
 
-        if (opening_progress == 8) {
+        if (OPTIONS_IS_FULLY_OPEN(opening_progress, OPTIONS_MAIN_PANEL_HEIGHT)) {
+#if !defined(VERSION_JP)
             char* text;
+#endif
 
             Options_DrawFilledPanel(144, y + 7, 352, 0x20, 0x3C, 0x3C, 0xA0, 0xFF); // #3C3CA0
             Options_DrawFilledPanel(144, y + 39, 352, 140, 0x1E, 0x1E, 0x64, 0xFF); // #1E1E64
@@ -95,6 +123,30 @@ void Options_DrawMainPanel(s16 opening_progress, s32 show_cursor) {
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
+#if defined(VERSION_JP)
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(0x10, OPTIONS_LETTER_SPACING);
+            // "Options"
+            Font_Printf(265, y + 10, "オプション");
+
+            Gfx_SetEnvColor(0xFF, 0xFF, (sSelectedOption == 0) ? 0 : 0xFF, 0xFF);
+            // "Sound"
+            Font_Printf(187, y + 49, "サウンド");
+            Font_Printf(376, y + 49, sSoundModeNames[(sPendingSoundSettings & 0x1) != 0]);
+
+            Gfx_SetEnvColor(0xFF, 0xFF, (sSelectedOption == 1) ? 0 : 0xFF, 0xFF);
+            // "Announcer"
+            Font_Printf(187, y + 81, "じっきょう");
+            Font_Printf(398, y + 81, sAnnouncerNames[(sPendingSoundSettings & 0x2) != 0]);
+
+            Gfx_SetEnvColor(0xFF, 0xFF, (sSelectedOption == 2) ? 0 : 0xFF, 0xFF);
+            // "Clear save data"
+            Font_Printf(187, y + 113, "セーブデータをクリア");
+
+            Gfx_SetEnvColor(0xFF, 0xFF, (sSelectedOption == 3) ? 0 : 0xFF, 0xFF);
+            // "Exit"
+            Font_Printf(187, y + 145, "おわり");
+#else
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
             text = Text_GetString(NULL, 0, sOptionsText, 4);
@@ -139,6 +191,7 @@ void Options_DrawMainPanel(s16 opening_progress, s32 show_cursor) {
 
             Gfx_SetEnvColor(0xFF, 0xFF, text_blue, 0xFF);
             Font_Printf(187, y + 145, Text_GetString(NULL, 0, sOptionsText, 8));
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -148,32 +201,48 @@ void Options_DrawMainPanel(s16 opening_progress, s32 show_cursor) {
 void Options_DrawErasePrompt(s32 confirmation_step, s32 selected_choice, s32 opening_progress) {
     // FAKE: unused stack slot retained for matching.
     UNUSED s32 pad;
-    s16 height = (opening_progress * 17) + 2;
+    s16 height = OPTIONS_ERASE_PROMPT_HEIGHT(opening_progress);
     s16 y_start = ((138 - height) / 2) + 84;
 
     if (opening_progress > 0) {
         Ui_DrawBorderedPanel(81, y_start, 478, height, 0x6109); // #632121
 
-        if (opening_progress == 8) {
+        if (OPTIONS_IS_FULLY_OPEN(opening_progress, OPTIONS_ERASE_PROMPT_HEIGHT)) {
             Ui_DrawAnimatedTextureMarker(281, y_start + (selected_choice * 28) + 72);
             Font_BeginTranslucentTextRendering();
-            Font_SetActive(0x10, 0);
+            Font_SetActive(0x10, OPTIONS_LETTER_SPACING);
             Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF); // #FFFF64
 
             if (confirmation_step == 0) {
+#if defined(VERSION_JP)
+                // "The save data on the 64 Game Pak will be cleared."
+                Font_Printf(99, y_start + 12, "６４カセットのセーブデータをクリアします");
+                // "Is that OK?"
+                Font_Printf(99, y_start + 40, "よろしいですね？");
+#else
                 Font_SetLineHeight(28);
                 // The N64 Game Pak data will be deleted. OK?
                 Font_Printf(99, y_start + 12, Text_GetString(NULL, 0, sOptionsText, 9));
+#endif
             } else {
+#if defined(VERSION_JP)
+                // "All Pokémon and items on the 64 Game Pak"
+                Font_Printf(99, y_start + 12, "６４カセットのポケモンとどうぐもすべて");
+                // "will be lost. Are you really sure?"
+                Font_Printf(99, y_start + 40, "きえてしまいます。ほんとうにいいですか？");
+#else
                 // "All GB items & Pokémon transferred to the\nN64 Game Pak will also be lost. Are you sure?"
                 Font_SetLineHeight(28);
                 Font_Printf(99, y_start + 12, Text_GetString(NULL, 0, sOptionsText, 10));
+#endif
             }
 
             Gfx_SetEnvColor(0xFF, 0xFF, (selected_choice == 0) ? 0 : 0xFF, 0xFF);
-            Font_Printf(321, y_start + 72, Text_GetString(NULL, 0, sOptionsText, 11));
+            // "Yes"
+            Font_Printf(321, y_start + 72, OPTIONS_TEXT(11, "はい"));
             Gfx_SetEnvColor(0xFF, 0xFF, (selected_choice == 1) ? 0 : 0xFF, 0xFF);
-            Font_Printf(321, y_start + 100, Text_GetString(NULL, 0, sOptionsText, 12));
+            // "No"
+            Font_Printf(321, y_start + 100, OPTIONS_TEXT(12, "いいえ"));
             Font_EndTexturedTextRendering();
         }
     }
@@ -183,16 +252,17 @@ void Options_DrawErasePrompt(s32 confirmation_step, s32 selected_choice, s32 ope
 void Options_DrawEraseCompleteMessage(s32 opening_progress) {
     // FAKE: unused stack slot retained for matching.
     UNUSED s32 pad;
-    s16 height = opening_progress * 9;
+    s16 height = OPTIONS_ERASE_COMPLETE_HEIGHT(opening_progress);
     s16 y = ((56 - height) / 2) + 130;
 
     if (opening_progress >= 2) {
         Ui_DrawBorderedPanel(135, y, 370, height, 0x6109); // #632121
-        if (opening_progress == 8) {
+        if (OPTIONS_IS_FULLY_OPEN(opening_progress, OPTIONS_ERASE_COMPLETE_HEIGHT)) {
             Font_BeginTranslucentTextRendering();
-            Font_SetActive(0x10, 0);
+            Font_SetActive(0x10, OPTIONS_LETTER_SPACING);
             Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF); // #FFFF64
-            Font_Printf(155, y + 24, Text_GetString(NULL, 0, sOptionsText, 13));
+            // "Save data cleared."
+            Font_Printf(155, y + 24, OPTIONS_TEXT(13, "セーブデータクリアしゅうりょう"));
             Font_EndTexturedTextRendering();
         }
     }
@@ -296,7 +366,7 @@ void Options_EraseSaveData(void) {
         }
     }
 
-    for (j = 0; j < 12; j++) {
+    for (j = 0; j < OPTIONS_TYPE17_RECORD_COUNT; j++) {
         Save_ResetAndCommitTypedRecord(17, j);
     }
 
@@ -307,8 +377,10 @@ void Options_EraseSaveData(void) {
     Save_ResetAndCommitTypedRecord(19, 0);
     Save_ResetAndCommitTypedRecord(20, 0);
     Save_ResetAndCommitTypedRecord(21, 0);
+#if !defined(VERSION_JP)
     Save_ResetAndCommitTypedRecord(22, 0);
     Save_ResetAndCommitTypedRecord(23, 0);
+#endif
     Save_FlushDirtyBanks();
     gSessionContext.inRound2 = 0;
     Audio_SetMonoOutput(0);
@@ -440,8 +512,10 @@ s32 Options_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_3000000, menu_select_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sOptionsText = Text_GetStringTable(21);
+#endif
     Save_EnsureAllBanksLoaded();
     Save_GetOptionsField02(&sPendingSoundSettings);
     sSelectedOption = 0;

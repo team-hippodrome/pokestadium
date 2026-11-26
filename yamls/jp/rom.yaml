@@ -1577,7 +1577,10 @@
     vram: 0x82C00000
     subsegments:
     - [0x2C2850, textbin, fragments/options/options_header]
-    - [0x2C2870, asm, fragments/options/options]
+    - [0x2C2870, c, fragments/options/options]
+    - [0x2C3D10, .data, fragments/options/options]
+    - [0x2C3D20, .rodata, fragments/options/options]
+    - {vram: 0x82C01600, type: .bss, name: fragments/options/options}
   - name: fragment56_relocs
     type: code
     bss_size: 0x0
