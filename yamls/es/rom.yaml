@@ -1023,19 +1023,19 @@
     - [0x1A8E70, c,      fragments/lab_pc/lab_pc_1A8590]
     - [0x1A90E0, c,      fragments/lab_pc/lab_pc_1A8800]
     - [0x1AA060, asm, fragment23_1AA060]
-    - [0x1B5720, asm, fragments/lab_pc/lab_pc_1B4EA0]
+    - [0x1B5720, c, fragments/lab_pc/lab_pc_1B4EA0]
     - [0x1BD790, c,      fragments/lab_pc/lab_pc_1BCF10]
     - [0x1C09E0, .data,   fragments/lab_pc/lab_pc_1A8800]
     - [0x1C0A10, data, fragment23_1C0A10]
     - [0x1C0B00, data, fragments/lab_pc/lab_pc_1AE680]
-    - [0x1C0DC0, data, fragments/lab_pc/lab_pc_1B4EA0]
+    - [0x1C0DC0, .data, fragments/lab_pc/lab_pc_1B4EA0]
     - [0x1C0FA0, .data,   fragments/lab_pc/lab_pc_882181B0]
     - [0x1CDC40, data, fragment23_1CDC40]
-    - [0x1CDD00, rodata, fragments/lab_pc/lab_pc_1B4EA0]
+    - [0x1CDD00, .rodata, fragments/lab_pc/lab_pc_1B4EA0]
     - {vram: 0x88224F40, type:  .bss, name: fragments/lab_pc/lab_pc_1A8800}
     - {vram: 0x88224F50, type:  bss, name: fragments/lab_pc/lab_pc_1A9780}
     - {vram: 0x88224F60, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
-    - {vram: 0x88224F80, type:  bss, name: fragments/lab_pc/lab_pc_1B4EA0}
+    - {vram: 0x88224F80, type: .bss, name: fragments/lab_pc/lab_pc_1B4EA0}
   - name: fragment23_relocs
     type: code
     bss_size: 0x0
@@ -1135,13 +1135,13 @@
     subsegments:
     - [0x2151F0, textbin,   fragments/pokedex/pokedex_header]
     - [0x215210, asm, fragments/pokedex/pokedex_214920]
-    - [0x2198D0, asm, fragments/pokedex/pokedex_2190D0]
+    - [0x2198D0, c, fragments/pokedex/pokedex_2190D0]
     - [0x21D250, data, fragments/pokedex/pokedex_214920]
-    - [0x235350, data, fragments/pokedex/pokedex_2190D0]
+    - [0x235350, .data, fragments/pokedex/pokedex_2190D0]
     - [0x23B780, rodata, fragments/pokedex/pokedex_214920]
-    - [0x23B7D0, rodata, fragments/pokedex/pokedex_2190D0]
+    - [0x23B7D0, .rodata, fragments/pokedex/pokedex_2190D0]
     - {vram: 0x888266A0, type:  bss, name: fragments/pokedex/pokedex_214920}
-    - {vram: 0x888268C0, type:  bss, name: fragments/pokedex/pokedex_2190D0}
+    - {vram: 0x888268C0, type: .bss, name: fragments/pokedex/pokedex_2190D0}
   - name: fragment28_relocs
     type: code
     bss_size: 0x0

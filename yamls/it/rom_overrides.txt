@@ -343,3 +343,24 @@
 -> - [0x29C910, .rodata, fragments/trade_machine/trade_machine_2942C0]
 - {vram: 0x82F21220, type:  bss, name: fragments/trade_machine/trade_machine_2942C0}
 -> - {vram: 0x82F21220, type: .bss, name: fragments/trade_machine/trade_machine_2942C0}
+
+# lab_pc_1B4EA0: built from the shared C.
+- [0x1B5680, asm, fragments/lab_pc/lab_pc_1B4EA0]
+-> - [0x1B5680, c, fragments/lab_pc/lab_pc_1B4EA0]
+- [0x1C0D20, data, fragments/lab_pc/lab_pc_1B4EA0]
+-> - [0x1C0D20, .data, fragments/lab_pc/lab_pc_1B4EA0]
+- [0x1CDC60, rodata, fragments/lab_pc/lab_pc_1B4EA0]
+-> - [0x1CDC60, .rodata, fragments/lab_pc/lab_pc_1B4EA0]
+- {vram: 0x88224F80, type:  bss, name: fragments/lab_pc/lab_pc_1B4EA0}
+-> - {vram: 0x88224F80, type: .bss, name: fragments/lab_pc/lab_pc_1B4EA0}
+
+
+# pokedex_2190D0: built from the shared C.
+- [0x219830, asm, fragments/pokedex/pokedex_2190D0]
+-> - [0x219830, c, fragments/pokedex/pokedex_2190D0]
+- [0x2352B0, data, fragments/pokedex/pokedex_2190D0]
+-> - [0x2352B0, .data, fragments/pokedex/pokedex_2190D0]
+- [0x23B730, rodata, fragments/pokedex/pokedex_2190D0]
+-> - [0x23B730, .rodata, fragments/pokedex/pokedex_2190D0]
+- {vram: 0x888268C0, type:  bss, name: fragments/pokedex/pokedex_2190D0}
+-> - {vram: 0x888268C0, type: .bss, name: fragments/pokedex/pokedex_2190D0}
