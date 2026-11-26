@@ -18,8 +18,8 @@ VERSION_FLAGS = {
     "us_rev2": ["-DVERSION_US=1", "-DVERSION_US_REV2=1"],
     "jp": ["-DVERSION_JP=1"],
     "eu": ["-DVERSION_PAL=1", "-DVERSION_EU=1"],
-    "eu_rev1": ["-DVERSION_PAL=1", "-DVERSION_EU=1", "-DVERSION_EU_REV1=1"],
-    **{version: ["-DVERSION_PAL=1", f"-DVERSION_{version.upper()}=1"]
+    "eu_rev1": ["-DVERSION_PAL=1", "-DVERSION_PAL_LATE=1", "-DVERSION_EU=1", "-DVERSION_EU_REV1=1"],
+    **{version: ["-DVERSION_PAL=1", "-DVERSION_PAL_LATE=1", f"-DVERSION_{version.upper()}=1"]
        for version in ("fr", "de", "es", "it")},
 }
 

@@ -150,19 +150,20 @@ else ifeq ($(VERSION),us_rev2)
 # PAL and Japanese releases: files that differ from US 1.0 are built from assembly unless
 # their C selects the version's code with these macros. VERSION_PAL covers every European
 # release; VERSION_EU (English, both revisions), VERSION_EU_REV1, VERSION_FR, VERSION_DE,
-# VERSION_ES and VERSION_IT select one of them.
+# VERSION_ES and VERSION_IT select one of them. VERSION_PAL_LATE covers every European release
+# except English 1.0 (eu_rev1, fr, de, es, it): they share many of US Rev. 2's changes.
 else ifeq ($(VERSION),eu)
   BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_EU=1
 else ifeq ($(VERSION),eu_rev1)
-  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_EU=1 -DVERSION_EU_REV1=1
+  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_PAL_LATE=1 -DVERSION_EU=1 -DVERSION_EU_REV1=1
 else ifeq ($(VERSION),fr)
-  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_FR=1
+  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_PAL_LATE=1 -DVERSION_FR=1
 else ifeq ($(VERSION),de)
-  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_DE=1
+  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_PAL_LATE=1 -DVERSION_DE=1
 else ifeq ($(VERSION),es)
-  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_ES=1
+  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_PAL_LATE=1 -DVERSION_ES=1
 else ifeq ($(VERSION),it)
-  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_IT=1
+  BUILD_DEFINES   += -DVERSION_PAL=1 -DVERSION_PAL_LATE=1 -DVERSION_IT=1
 else ifeq ($(VERSION),jp)
   BUILD_DEFINES   += -DVERSION_JP=1
 else

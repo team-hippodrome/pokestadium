@@ -869,7 +869,7 @@
     - [0x161DA0, c,      fragments/demo_scenes/demo_scenes_161590]
     - [0x162670, c,      fragments/demo_scenes/demo_scenes_161E60]
     - [0x165310, c,      fragments/demo_scenes/demo_scenes_164B00]
-    - [0x165E50, asm, fragments/demo_scenes/demo_scenes_165640]
+    - [0x165E50, c, fragments/demo_scenes/demo_scenes_165640]
     - [0x168920, asm, fragments/demo_scenes/demo_scenes_168110]
     - [0x168FF0, c,      fragments/demo_scenes/demo_scenes_1687E0]
     - [0x169D20, c,      fragments/demo_scenes/demo_scenes_169510]
@@ -878,18 +878,19 @@
     - [0x16BD90, data, fragments/demo_scenes/demo_scenes_15FA60]
     - [0x16BEF0, .data,   fragments/demo_scenes/demo_scenes_161590]
     - [0x16BF00, .data,   fragments/demo_scenes/demo_scenes_161E60]
-    - [0x16DE80, data, fragments/demo_scenes/demo_scenes_165640]
+    - [0x16DE80, .data, fragments/demo_scenes/demo_scenes_165640]
+    - [0x16E160, data, fragments/demo_scenes/demo_scenes_168110]
     - [0x16E170, .data,   fragments/demo_scenes/demo_scenes_1687E0]
     - [0x16E3F0, .data,   fragments/demo_scenes/demo_scenes_169A40]
     - [0x16E450, .data,   fragments/demo_scenes/demo_scenes_16A0E0]
     - [0x16E580, .rodata, fragments/demo_scenes/demo_scenes_15F9B0]
     - [0x16E5B0, rodata, fragments/demo_scenes/demo_scenes_15FA60]
     - [0x16E600, .rodata, fragments/demo_scenes/demo_scenes_161E60]
-    - [0x16E6B0, rodata, fragments/demo_scenes/demo_scenes_165640]
+    - [0x16E6B0, .rodata, fragments/demo_scenes/demo_scenes_165640]
     - [0x16E740, .rodata, fragments/demo_scenes/demo_scenes_16A0E0]
     - {vram: 0x86B0E5D0, type: bss, name: fragments/demo_scenes/demo_scenes_15FA60}
     - {vram: 0x86B0EBC0, type: .bss, name: fragments/demo_scenes/demo_scenes_161E60}
-    - {vram: 0x86B0F9D0, type: bss, name: fragments/demo_scenes/demo_scenes_165640}
+    - {vram: 0x86B0F9D0, type: .bss, name: fragments/demo_scenes/demo_scenes_165640}
     - {vram: 0x86B106A0, type: .bss, name: fragments/demo_scenes/demo_scenes_1687E0}
     - {vram: 0x86B106B0, type: .bss, name: fragments/demo_scenes/demo_scenes_169A40}
     - {vram: 0x86B10840, type: .bss, name: fragments/demo_scenes/demo_scenes_16A0E0}
@@ -1212,19 +1213,19 @@
     - [0x258560, c,      fragments/model_callback_library/model_callback_library_257DE0]
     - [0x258640, c,      fragments/model_callback_library/model_callback_library_257EC0]
     - [0x258720, c,      fragments/model_callback_library/model_callback_library_257FA0]
-    - [0x258800, asm, fragments/model_callback_library/model_callback_library_258080]
+    - [0x258800, c, fragments/model_callback_library/model_callback_library_258080]
     - [0x2597C0, c,      fragments/model_callback_library/model_callback_library_259030]
     - [0x259850, c,      fragments/model_callback_library/model_callback_library_2590C0]
     - [0x259A20, .data,  fragments/model_callback_library/model_callback_library_2554C0]
     - [0x259A30, .data,  fragments/model_callback_library/model_callback_library_2558B0]
     - [0x259BC0, .data,  fragments/model_callback_library/model_callback_library_2577F0]
-    - [0x259BE0, data, fragments/model_callback_library/model_callback_library_258080]
+    - [0x259BE0, .data, fragments/model_callback_library/model_callback_library_258080]
     - [0x259C10, .rodata, fragments/model_callback_library/model_callback_library_2554C0]
     - [0x259C70, .rodata, fragments/model_callback_library/model_callback_library_2558B0]
-    - [0x25A220, rodata, fragment31_25A220]
+    - [0x25A220, .rodata, fragments/model_callback_library/model_callback_library_258080]
     - {vram: 0x810047F0, type: .bss, name: fragments/model_callback_library/model_callback_library_2558B0}
     - {vram: 0x81004B70, type: .bss, name: fragments/model_callback_library/model_callback_library_2577F0}
-    - {vram: 0x81004B80, type: bss, name: fragments/model_callback_library/model_callback_library_258080}
+    - {vram: 0x81004B80, type: .bss, name: fragments/model_callback_library/model_callback_library_258080}
   - name: fragment31_relocs
     type: code
     bss_size: 0x0
@@ -2061,7 +2062,7 @@
     - [0x391960, c,      fragments/battle_prep/battle_prep_39ED60]
     - [0x392C10, c,      fragments/battle_prep/battle_prep_3A0010]
     - [0x394570, c,      fragments/battle_prep/battle_prep_3A1970]
-    - [0x394830, asm, fragments/battle_prep/battle_prep_3A1C30]
+    - [0x394830, c, fragments/battle_prep/battle_prep_3A1C30]
     - [0x396800, data, fragments/battle_prep/battle_prep_394120]
     - [0x396930, .data,   fragments/battle_prep/battle_prep_397B10]
     - [0x398910, .data,   fragments/battle_prep/battle_prep_39AC50]
@@ -2069,7 +2070,7 @@
     - [0x39D080, .data,   fragments/battle_prep/battle_prep_39ED60]
     - [0x39D790, .data,   fragments/battle_prep/battle_prep_3A0010]
     - [0x39DBF0, .data,   fragments/battle_prep/battle_prep_3A1970]
-    - [0x39E240, data, fragments/battle_prep/battle_prep_3A1C30]
+    - [0x39E240, .data, fragments/battle_prep/battle_prep_3A1C30]
     - [0x39E310, data, fragments/battle_prep/battle_prep_data]
     - [0x3A0450, rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3A04A0, .rodata, fragments/battle_prep/battle_prep_3974E0]
@@ -2079,7 +2080,7 @@
     - [0x3A0510, .rodata, fragments/battle_prep/battle_prep_39ED60]
     - [0x3A0520, .rodata, fragments/battle_prep/battle_prep_3A0010]
     - [0x3A0560, .rodata, fragments/battle_prep/battle_prep_3A1970]
-    - [0x3A0570, rodata, fragment63_3A0570]
+    - [0x3A0570, .rodata, fragments/battle_prep/battle_prep_3A1C30]
     - {vram: 0x84B198F0, type:  bss, name: fragments/battle_prep/battle_prep_394120}
   - name: fragment63_relocs
     type: code
@@ -2097,10 +2098,10 @@
     vram: 0x84800000
     subsegments:
     - [0x3A1A20, textbin,   fragments/battle_order_select/battle_order_select_header]
-    - [0x3A1A40, asm, fragments/battle_order_select/battle_order_select]
-    - [0x3A4F70, data, fragments/battle_order_select/battle_order_select]
-    - [0x3A5110, rodata, fragments/battle_order_select/battle_order_select]
-    - {vram: 0x84803770, type:  bss, name: fragments/battle_order_select/battle_order_select}
+    - [0x3A1A40, c, fragments/battle_order_select/battle_order_select]
+    - [0x3A4F70, .data, fragments/battle_order_select/battle_order_select]
+    - [0x3A5110, .rodata, fragments/battle_order_select/battle_order_select]
+    - {vram: 0x84803770, type: .bss, name: fragments/battle_order_select/battle_order_select}
   - name: fragment64_relocs
     type: code
     bss_size: 0x0
@@ -2117,10 +2118,10 @@
     vram: 0x84A00000
     subsegments:
     - [0x3A56C0, textbin,   fragments/gym_leader_castle/gym_leader_castle_header]
-    - [0x3A56E0, asm, fragments/gym_leader_castle/gym_leader_castle]
-    - [0x3A85C0, data, fragments/gym_leader_castle/gym_leader_castle]
-    - [0x3A87C0, rodata, fragments/gym_leader_castle/gym_leader_castle]
-    - {vram: 0x84A03130, type:  bss, name: fragments/gym_leader_castle/gym_leader_castle}
+    - [0x3A56E0, c, fragments/gym_leader_castle/gym_leader_castle]
+    - [0x3A85C0, .data, fragments/gym_leader_castle/gym_leader_castle]
+    - [0x3A87C0, .rodata, fragments/gym_leader_castle/gym_leader_castle]
+    - {vram: 0x84A03130, type: .bss, name: fragments/gym_leader_castle/gym_leader_castle}
   - name: fragment65_relocs
     type: code
     bss_size: 0x0
@@ -2136,9 +2137,9 @@
     vram: 0x83200000
     subsegments:
     - [0x3A8D10, textbin,   fragments/pikachu_reward/pikachu_reward_header]
-    - [0x3A8D30, asm, fragments/pikachu_reward/pikachu_reward]
-    - [0x3AAD40, data, fragments/pikachu_reward/pikachu_reward]
-    - {vram: 0x832020F0, type:  bss, name: fragments/pikachu_reward/pikachu_reward}
+    - [0x3A8D30, c, fragments/pikachu_reward/pikachu_reward]
+    - [0x3AAD40, .data, fragments/pikachu_reward/pikachu_reward]
+    - {vram: 0x832020F0, type: .bss, name: fragments/pikachu_reward/pikachu_reward}
   - name: fragment66_relocs
     type: code
     bss_size: 0x0

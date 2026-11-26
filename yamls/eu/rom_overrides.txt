@@ -117,3 +117,14 @@
 -> - [0x367F00, .rodata, fragments/battle_engine/battle_engine_hud]
 - {vram: 0x84390190, type:  bss, name: fragments/battle_engine/battle_engine_hud}
 -> - {vram: 0x84390190, type: .bss, name: fragments/battle_engine/battle_engine_hud}
+
+# demo_scenes_165640 (its .data is 0x2E0 bytes; demo_scenes_168110's .data follows): US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x1656F0, asm, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x1656F0, c, fragments/demo_scenes/demo_scenes_165640]
+- [0x16D720, data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16D720, .data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16DA00, data, fragments/demo_scenes/demo_scenes_168110]
+- [0x16DF50, rodata, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16DF50, .rodata, fragments/demo_scenes/demo_scenes_165640]
+- {vram: 0x86B0F9D0, type: bss, name: fragments/demo_scenes/demo_scenes_165640}
+-> - {vram: 0x86B0F9D0, type: .bss, name: fragments/demo_scenes/demo_scenes_165640}

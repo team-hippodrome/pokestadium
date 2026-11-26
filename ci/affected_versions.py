@@ -58,8 +58,8 @@ DEFINES = {
     "us_rev2": {"VERSION_US", "VERSION_US_REV2"},
     "jp": {"VERSION_JP"},
     "eu": {"VERSION_PAL", "VERSION_EU"},
-    "eu_rev1": {"VERSION_PAL", "VERSION_EU", "VERSION_EU_REV1"},
-    **{v: {"VERSION_PAL", f"VERSION_{v.upper()}"} for v in ("fr", "de", "es", "it")},
+    "eu_rev1": {"VERSION_PAL", "VERSION_PAL_LATE", "VERSION_EU", "VERSION_EU_REV1"},
+    **{v: {"VERSION_PAL", "VERSION_PAL_LATE", f"VERSION_{v.upper()}"} for v in ("fr", "de", "es", "it")},
 }
 
 

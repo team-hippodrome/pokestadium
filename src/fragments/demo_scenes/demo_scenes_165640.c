@@ -118,7 +118,7 @@ static u8 sSettledPanelColors[] = {
 // US 1.2 gives entry 5 its own model (0xA6); other versions repeat 0xA5. Entries 6..19 are unused filler.
 static TrophyModelInfo sTrophyModels[20] = {
     { 0xA7, 47.5f, 30.0f }, { 0xA8, 47.5f, 30.0f }, { 0xA9, 47.5f, 30.0f }, { 0xAA, 47.5f, 30.0f },
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     { 0xA5, 66.5f, 85.0f }, { 0xA6, 50.0f, 55.0f }, { 0xA7, 0.0f, 0.0f },   { 0xA7, 0.0f, 0.0f },
 #else
     { 0xA5, 66.5f, 85.0f }, { 0xA5, 66.5f, 85.0f }, { 0xA7, 0.0f, 0.0f },   { 0xA7, 0.0f, 0.0f },
@@ -1095,7 +1095,7 @@ void ClearCeremony_FadeOutSequence(void) {
     void (*temp_s2)(void) = Util_ConvertAddrToVirtAddr(Particle_UpdateFrameCountersAlias);
 
     if (gSessionContext.ruleCategory == 7) {
-        for (i = 0; i < 100; i++) {
+        for (i = 0; i < NTSC_PAL(100, 60); i++) {
             ClearCeremony_ReadControllerInput();
             MiniFx_UpdateParticles();
 
@@ -1106,7 +1106,7 @@ void ClearCeremony_FadeOutSequence(void) {
     }
 
     if (gSessionContext.ruleCategory == 7) {
-        var_s1 = 0x64;
+        var_s1 = NTSC_PAL(100, 60);
     } else {
         var_s1 = 0xA;
     }
@@ -1130,7 +1130,7 @@ void ClearCeremony_FadeOutSequence(void) {
     }
 
     if (gSessionContext.ruleCategory == 7) {
-        for (i = 0; i < 30; i++) {
+        for (i = 0; i < NTSC_PAL(30, 23); i++) {
             ClearCeremony_ReadControllerInput();
             MiniFx_UpdateParticles();
 
@@ -1173,7 +1173,7 @@ void ClearCeremony_LoadScene(void) {
             break;
 
         case 4:
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             sTrophyIndex = 4;
 #else
             sTrophyIndex = 5;

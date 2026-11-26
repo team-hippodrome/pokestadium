@@ -117,3 +117,64 @@
 -> - [0x368790, .rodata, fragments/battle_engine/battle_engine_hud]
 - {vram: 0x84390220, type:  bss, name: fragments/battle_engine/battle_engine_hud}
 -> - {vram: 0x84390220, type: .bss, name: fragments/battle_engine/battle_engine_hud}
+
+# gym_leader_castle: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A56E0, asm, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A56E0, c, fragments/gym_leader_castle/gym_leader_castle]
+- [0x3A85C0, data, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A85C0, .data, fragments/gym_leader_castle/gym_leader_castle]
+- [0x3A87C0, rodata, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A87C0, .rodata, fragments/gym_leader_castle/gym_leader_castle]
+- {vram: 0x84A03130, type:  bss, name: fragments/gym_leader_castle/gym_leader_castle}
+-> - {vram: 0x84A03130, type: .bss, name: fragments/gym_leader_castle/gym_leader_castle}
+
+# demo_scenes_165640 (its .data is 0x2E0 bytes; demo_scenes_168110's .data follows): US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x165E50, asm, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x165E50, c, fragments/demo_scenes/demo_scenes_165640]
+- [0x16DE80, data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16DE80, .data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16E160, data, fragments/demo_scenes/demo_scenes_168110]
+- [0x16E6B0, rodata, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16E6B0, .rodata, fragments/demo_scenes/demo_scenes_165640]
+- {vram: 0x86B0F9D0, type: bss, name: fragments/demo_scenes/demo_scenes_165640}
+-> - {vram: 0x86B0F9D0, type: .bss, name: fragments/demo_scenes/demo_scenes_165640}
+
+# pikachu_reward: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A8D30, asm, fragments/pikachu_reward/pikachu_reward]
+-> - [0x3A8D30, c, fragments/pikachu_reward/pikachu_reward]
+- [0x3AAD40, data, fragments/pikachu_reward/pikachu_reward]
+-> - [0x3AAD40, .data, fragments/pikachu_reward/pikachu_reward]
+- {vram: 0x832020F0, type:  bss, name: fragments/pikachu_reward/pikachu_reward}
+-> - {vram: 0x832020F0, type: .bss, name: fragments/pikachu_reward/pikachu_reward}
+
+# model_callback_library_258080: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x258800, asm, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x258800, c, fragments/model_callback_library/model_callback_library_258080]
+- [0x259BE0, data, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x259BE0, .data, fragments/model_callback_library/model_callback_library_258080]
+- {vram: 0x81004B80, type: bss, name: fragments/model_callback_library/model_callback_library_258080}
+-> - {vram: 0x81004B80, type: .bss, name: fragments/model_callback_library/model_callback_library_258080}
+
+# battle_prep_3A1C30: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x394830, asm, fragments/battle_prep/battle_prep_3A1C30]
+-> - [0x394830, c, fragments/battle_prep/battle_prep_3A1C30]
+- [0x39E240, data, fragments/battle_prep/battle_prep_3A1C30]
+-> - [0x39E240, .data, fragments/battle_prep/battle_prep_3A1C30]
+
+# battle_order_select: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A1A40, asm, fragments/battle_order_select/battle_order_select]
+-> - [0x3A1A40, c, fragments/battle_order_select/battle_order_select]
+- [0x3A4F70, data, fragments/battle_order_select/battle_order_select]
+-> - [0x3A4F70, .data, fragments/battle_order_select/battle_order_select]
+- [0x3A5110, rodata, fragments/battle_order_select/battle_order_select]
+-> - [0x3A5110, .rodata, fragments/battle_order_select/battle_order_select]
+- {vram: 0x84803770, type:  bss, name: fragments/battle_order_select/battle_order_select}
+-> - {vram: 0x84803770, type: .bss, name: fragments/battle_order_select/battle_order_select}
+
+# battle_prep_3A1C30's .rodata (jump tables), which the porter leaves as an unnamed blob.
+- [0x3A0570, rodata, fragment63_3A0570]
+-> - [0x3A0570, .rodata, fragments/battle_prep/battle_prep_3A1C30]
+
+# model_callback_library_258080's .rodata, which the porter leaves as an unnamed blob.
+- [0x25A220, rodata, fragment31_25A220]
+-> - [0x25A220, .rodata, fragments/model_callback_library/model_callback_library_258080]

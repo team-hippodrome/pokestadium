@@ -328,7 +328,7 @@ void DisplayList_BuildDigitOrGlyphSegment(Gfx* gfx) {
 #else
             sp34 = Text_GetString(0, 0, gVictoryPokemonNames, temp_t0);
 #endif
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             bzero(sNameBuffer, 0x1E);
             sprintf(sNameBuffer, "%s", sp34);
 #else
