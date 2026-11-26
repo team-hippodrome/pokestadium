@@ -894,7 +894,7 @@
     - [0x179690, c, fragments/demo_scenes/demo_scenes_160CB0]
     - [0x1799E0, c,      fragments/demo_scenes/demo_scenes_161000]
     - [0x179F70, c, fragments/demo_scenes/demo_scenes_161590]
-    - [0x17A6C0, asm, fragments/demo_scenes/demo_scenes_161E60]
+    - [0x17A6C0, c,      fragments/demo_scenes/demo_scenes_161E60]
     - [0x17D1C0, c,      fragments/demo_scenes/demo_scenes_164B00]
     - [0x17DD00, c, fragments/demo_scenes/demo_scenes_165640]
     - [0x1807B0, c, fragments/demo_scenes/demo_scenes_168110]
@@ -903,7 +903,7 @@
     - [0x1820E0, c, fragments/demo_scenes/demo_scenes_169A40]
     - [0x182780, c, fragments/demo_scenes/demo_scenes_16A0E0]
     - [0x183BF0, .data, fragments/demo_scenes/demo_scenes_15FA60]
-    - [0x183D50, data, fragments/demo_scenes/demo_scenes_161E60]
+    - [0x183D50, .data,   fragments/demo_scenes/demo_scenes_161E60]
     - [0x185E80, .data, fragments/demo_scenes/demo_scenes_165640]
     - [0x186160, .data, fragments/demo_scenes/demo_scenes_168110]
     - [0x186170, .data,   fragments/demo_scenes/demo_scenes_1687E0]
@@ -912,12 +912,11 @@
     - [0x186580, .rodata, fragments/demo_scenes/demo_scenes_15F9B0]
     - [0x1865B0, .rodata, fragments/demo_scenes/demo_scenes_15FA60]
     - [0x1865E0, .rodata, fragments/demo_scenes/demo_scenes_160CB0]
-    - [0x186600, rodata, fragments/demo_scenes/demo_scenes_15FA60_b]
-    - [0x186620, rodata, fragments/demo_scenes/demo_scenes_161E60]
+    - [0x186600, .rodata, fragments/demo_scenes/demo_scenes_161E60]
     - [0x1866D0, .rodata, fragments/demo_scenes/demo_scenes_165640]
     - [0x186760, .rodata, fragments/demo_scenes/demo_scenes_16A0E0]
     - {vram: 0x86B0E3F0, type: .bss, name: fragments/demo_scenes/demo_scenes_15FA60}
-    - {vram: 0x86B0E9E0, type: bss, name: fragments/demo_scenes/demo_scenes_161E60}
+    - {vram: 0x86B0E9E0, type: .bss, name: fragments/demo_scenes/demo_scenes_161E60}
     - {vram: 0x86B0F7F0, type: .bss, name: fragments/demo_scenes/demo_scenes_165640}
     - {vram: 0x86B104C0, type: .bss, name: fragments/demo_scenes/demo_scenes_1687E0}
     - {vram: 0x86B104D0, type: .bss, name: fragments/demo_scenes/demo_scenes_169A40}
