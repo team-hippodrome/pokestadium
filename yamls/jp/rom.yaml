@@ -1335,7 +1335,10 @@
     vram: 0x82100000
     subsegments:
     - [0x286410, textbin,   fragments/title_screen/title_screen_header]
-    - [0x286430, asm, fragment36_286430]
+    - [0x286430, c, fragments/title_screen/title_screen]
+    - [0x287450, .data, fragments/title_screen/title_screen]
+    - [0x2875A0, .rodata, fragments/title_screen/title_screen]
+    - {vram: 0x82101410, type: .bss, name: fragments/title_screen/title_screen}
   - name: fragment36_relocs
     type: code
     bss_size: 0x0

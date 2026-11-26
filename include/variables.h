@@ -277,6 +277,8 @@ extern u8 D_20003C0[];
 extern u8 D_20005C0[];
 extern u8 D_20002C0[];
 extern u8 D_2000300[];
+extern u8 D_2000580[];
+extern u8 D_2000840[];
 extern u8 D_2000340[];
 extern u8 D_2000380[];
 extern u8 gPlayer1LabelLarge[];
