@@ -295,3 +295,14 @@
 -> - [0x7E5C0, rodata, libnaudio/n_env]
 -> - [0x7E6E0, .rodata, audio_stream]
 -> - [0x7E700, rodata, libleo/leofunc]
+
+# 3D140_2: built from the shared C (PAL battle music volume). The porter merges it into the
+# audio_fade text and merges the 3D140 .rodata into its .rodata.
+- [0x3D110, asm, text_3D110]
+-> - [0x3D110, asm, text_3D110]
+-> - [0x3D830, c, 3D140_2]
+- [0x791C0, data, 3D140_2]
+-> - [0x791C0, .data, 3D140_2]
+- [0x7E0E0, rodata, 3D140_2]
+-> - [0x7E0E0, .rodata, 3D140_2]
+-> - [0x7E500, rodata, 3D140]

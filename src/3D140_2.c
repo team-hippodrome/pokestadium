@@ -2460,7 +2460,7 @@ void Audio_UpdateBattleAudioFrame(void) {
     if ((D_800783B4 < D_800783B8) && (D_80078388 != 0) && (AudioStream_IsPlaying(1) == 0)) {
         if (D_800783A4[D_800783B4 & 3] != 0) {
             seq = D_800FC714->seqArray[D_800783A4[D_800783B4 & 3] - 1].offset;
-            AudioStream_Start(1, seq, 0x7E, 0);
+            AudioStream_Start(1, seq, NTSC_PAL(0x7E, 0x80), 0);
         }
         D_800783B4++;
     }

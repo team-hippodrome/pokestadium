@@ -567,3 +567,14 @@
 -> - [0x6AB70, .data, gb_tower]
 - {vram: 0x800A88A0, type: bss, name: gb_tower}
 -> - {vram: 0x800A88A0, type: .bss, name: gb_tower}
+
+# 3D140_2: built from the shared C (PAL battle music volume). The porter merges it into the
+# audio_fade text and merges the 3D140 .rodata into its .rodata.
+- [0x3D770, asm, text_3D770]
+-> - [0x3D770, asm, text_3D770]
+-> - [0x3DF10, c, 3D140_2]
+- [0x798A0, data, 3D140_2]
+-> - [0x798A0, .data, 3D140_2]
+- [0x7E7B0, rodata, 3D140_2]
+-> - [0x7E7B0, .rodata, 3D140_2]
+-> - [0x7EBD0, rodata, 3D140]
