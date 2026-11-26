@@ -1148,7 +1148,9 @@
     vram: 0x88900000
     subsegments:
     - [0x251940, textbin,   fragments/lab_ui_support/lab_ui_support_header]
-    - [0x251960, asm, fragment29_251960]
+    - [0x251960, c, fragments/lab_ui_support/lab_ui_support]
+    - [0x252800, .data, fragments/lab_ui_support/lab_ui_support]
+    - [0x252840, .rodata, fragments/lab_ui_support/lab_ui_support]
   - name: fragment29_relocs
     type: code
     bss_size: 0x0
