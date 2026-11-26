@@ -638,10 +638,10 @@
     vram: 0x86100000
     subsegments:
     - [0x1280F0, textbin,   fragments/clefairy_game/clefairy_game_header]
-    - [0x128110, asm, fragments/clefairy_game/clefairy_game]
-    - [0x12C730, data, fragments/clefairy_game/clefairy_game]
-    - [0x12D4B0, rodata, fragments/clefairy_game/clefairy_game]
-    - {vram: 0x86105480, type:  bss, name: fragments/clefairy_game/clefairy_game}
+    - [0x128110, c, fragments/clefairy_game/clefairy_game]
+    - [0x12C730, .data, fragments/clefairy_game/clefairy_game]
+    - [0x12D4B0, .rodata, fragments/clefairy_game/clefairy_game]
+    - {vram: 0x86105480, type: .bss, name: fragments/clefairy_game/clefairy_game}
   - name: fragment7_relocs
     type: code
     bss_size: 0x0

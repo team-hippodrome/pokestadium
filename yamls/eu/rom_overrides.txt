@@ -7,3 +7,13 @@
 - [0x2713A0, asm, fragments/n64_logo/n64_logo]
 -> - [0x2713A0, c, fragments/n64_logo/n64_logo]
 -> - {vram: 0x82000560, type: .bss, name: fragments/n64_logo/n64_logo}
+
+# clefairy_game: PAL frame counts and animation speed (NTSC_PAL).
+- [0x1279B0, asm, fragments/clefairy_game/clefairy_game]
+-> - [0x1279B0, c, fragments/clefairy_game/clefairy_game]
+- [0x12BFD0, data, fragments/clefairy_game/clefairy_game]
+-> - [0x12BFD0, .data, fragments/clefairy_game/clefairy_game]
+- [0x12CD50, rodata, fragments/clefairy_game/clefairy_game]
+-> - [0x12CD50, .rodata, fragments/clefairy_game/clefairy_game]
+- {vram: 0x86105480, type:  bss, name: fragments/clefairy_game/clefairy_game}
+-> - {vram: 0x86105480, type: .bss, name: fragments/clefairy_game/clefairy_game}

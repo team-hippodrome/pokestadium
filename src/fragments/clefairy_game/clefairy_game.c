@@ -1334,7 +1334,7 @@ s32 ClefairyGame_UpdatePatternPlayback(void) {
     s32 temp_lo;
     s32 i;
 
-    temp_lo = D_8610549C / 17;
+    temp_lo = D_8610549C / NTSC_PAL(17, 14);
     if ((temp_lo + 1) == D_861054A0) {
         D_861054BC = ClefairyGame_ComputeMaxRemainingHealth();
     }
@@ -1357,7 +1357,7 @@ s32 ClefairyGame_UpdatePatternPlayback(void) {
         return -1;
     }
 
-    if ((D_8610549C % 17) == 0) {
+    if ((D_8610549C % NTSC_PAL(17, 14)) == 0) {
         for (i = 0; i < 4; i++) {
             D_86105BC4 = &D_861054C0[i];
             if (D_86105BC4->unk_1AC == 0) {
@@ -1387,7 +1387,7 @@ s32 ClefairyGame_UpdatePatternPlayback(void) {
                 }
 
                 D_86105BC8->transformAnim.frameFixed = 0;
-                D_86105BC8->transformAnim.speedFixed = 0x10000;
+                D_86105BC8->transformAnim.speedFixed = NTSC_PAL(0x10000, 0x14000);
 
                 if (D_86105BC4->unk_18E[temp_lo] != D_86106450[temp_lo].unk_000) {
                     D_86105BC4->unk_1A6++;
@@ -1710,10 +1710,10 @@ void ClefairyGame_ShowWinnerSequence(void) {
 void ClefairyGame_FadeOutLoop(void) {
     s32 i;
 
-    Audio_FadeOutAll(0x1E);
-    StageFade_StartFromTransparent(0x1E);
+    Audio_FadeOutAll(NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         ClefairyGame_DrawFrame(D_86105498);
     }
 }
