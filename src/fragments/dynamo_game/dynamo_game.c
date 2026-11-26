@@ -478,6 +478,39 @@ void DynamoGame_DrawTutorialScreen(s32 arg0) {
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
 
+#if defined(VERSION_JP)
+    if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
+        Font_SetActive(2, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+        // "Zappy Generator Race" (Thundering Dynamo)
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, "ビリリはつでんきょうそう") / 2), 0x20, "ビリリはつでんきょうそう");
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+        // "When the lamp is blue, mash [A Button]; when it is green, mash [B Button] to store electricity.
+        // Pressing the wrong button drains the stored electricity.
+        // The first to fill up with electricity wins."
+        Font_Printf(0x28, 0x34, "ランプが あおいときは     、みどりのときは");
+        Font_Printf(0x28, 0x40, "    をれんだして でんきを ためよう。");
+        Font_Printf(0x28, 0x58, "まちがった ボタンをおすと ためた でんきが");
+        Font_Printf(0x28, 0x64, "へってしまうよ。");
+        Font_Printf(0x28, 0x7C, "はやく でんきを まんたんに したひとが かち。");
+        Font_Printf(0x84, 0xB2, "・・・");
+        Font_Printf(0x84, 0xC8, "・・・");
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0x28, 0x34, "            Ａボタン");
+        Gfx_SetEnvColor(0xC8, 0xFA, 0xD2, 0xFF);
+        Gfx_SetPrimColor(0x32, 0xE6, 0x82, 0xFF);
+        Font_Printf(0x28, 0x40, "Ｂボタン");
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0xA2, 0xB2, "でんきをためる"); // "Store electricity"
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+        Font_Printf(0xA2, 0xC8, "ゲームをはじめる"); // "Start the game"
+    }
+#else
     if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
         s32 temp_s0;
         s32 sp48;
@@ -517,6 +550,7 @@ void DynamoGame_DrawTutorialScreen(s32 arg0) {
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
         Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     }
+#endif
 
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
@@ -756,11 +790,15 @@ void DynamoGame_LoadAssets(void) {
 
                 ModelRenderer_AttachDisplayObject(D_8650AB2C);
 
+#if defined(VERSION_JP)
+                Model_InitDisplayObject(D_8650AB2C, 0, 0xC5, D_87B000E4->nodes[0]);
+#else
                 if (i == 0) {
                     Model_InitDisplayObject(D_8650AB2C, 0, 0xC5, D_87B000E4->nodes[0]);
                 } else {
                     Model_InitDisplayObject(D_8650AB2C, 0, 0xC6, D_87B000E4->nodes[0]);
                 }
+#endif
 
                 D_8650AB28->unk_008 = 0;
                 ModelAnim_SetAnimation(D_8650AB2C, D_8650AB28->unk_008);
@@ -827,7 +865,11 @@ s32 DynamoGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_push_state('MINI');
 
+#if defined(VERSION_JP)
+    Gfx_InitDisplayListBuffers(0x10000, 0);
+#else
     Gfx_InitDisplayListBuffers(0x18000, 0);
+#endif
     sp24 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_87B000E0 = Font_Init(0x16, 0);
 
@@ -846,58 +888,4 @@ s32 DynamoGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     main_pool_pop_state('MINI');
 
     return Widget_PauseMenuGetResult();
-}
-
-static s32 pad_D_86502E98 = 0;
-
-s8 DynamoGame_RollAIChargeBias(s32 arg0, s32 arg1) {
-    static u16 D_86502EA0[4][8] = {
-        { 0x0001, 0x0001, 0x0001, 0x0032, 0x0032, 0x0005, 0x0000, 0x0000 },
-        { 0x0000, 0x0001, 0x0001, 0x0005, 0x0032, 0x0032, 0x0001, 0x0000 },
-        { 0x0000, 0x0000, 0x0001, 0x0001, 0x0005, 0x005A, 0x001E, 0x0005 },
-        { 0x0000, 0x0000, 0x0000, 0x0000, 0x0005, 0x001E, 0x005A, 0x000A },
-    };
-
-    static u16 D_86502EE0[4][13] = {
-        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x0005, 0x0003, 0x0001, 0x0000, 0x0000, 0x0000 },
-        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x0005, 0x0003, 0x0001, 0x0000, 0x0000 },
-        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x000A, 0x0007, 0x0005, 0x0003, 0x0001 },
-        { 0x0000, 0x0003, 0x0006, 0x000A, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x0007, 0x0005, 0x0003 },
-    };
-
-    u8 i;
-    u16 var_a0;
-    u16 var_a2;
-    u16* sp24;
-    s8 sp23;
-    u8 sp22;
-    u16 temp_v0;
-
-    if (arg1 == 0) {
-        sp24 = D_86502EA0[arg0];
-        sp23 = -1;
-        sp22 = 8;
-    } else if (arg1 == 1) {
-        sp24 = D_86502EE0[arg0];
-        sp23 = -8;
-        sp22 = 0xD;
-    }
-
-    var_a0 = 0;
-
-    for (i = 0; i < sp22; i++) {
-        var_a0 += sp24[i];
-    }
-
-    temp_v0 = MiniGame_RandomRange(var_a0);
-
-    var_a2 = 0;
-    for (i = 0; i < sp22; i++) {
-        if ((temp_v0 >= var_a2) && (temp_v0 < (sp24[i] + var_a2))) {
-            return i + sp23;
-        }
-        var_a2 += sp24[i];
-    }
-
-    return 0;
 }

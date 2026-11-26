@@ -879,9 +879,11 @@
     subsegments:
     - [0x139130, textbin,   fragments/dynamo_game/dynamo_game_header]
     - [0x139150, c,      fragments/dynamo_game/dynamo_game]
+    - [0x13B0F0, c,      fragments/dynamo_game/dynamo_game_ai]
     - [0x13B240, c,      fragments/dynamo_game/dynamo_game_1]
     - [0x13BAF0, c,      fragments/dynamo_game/dynamo_game_2]
     - [0x13BD50, .data,   fragments/dynamo_game/dynamo_game]
+    - [0x13BFD0, .data,   fragments/dynamo_game/dynamo_game_ai]
     - [0x13C080, .data,   fragments/dynamo_game/dynamo_game_1]
     - [0x142300, .data,   fragments/dynamo_game/dynamo_game_2]
     - [0x1423A0, .rodata, fragments/dynamo_game/dynamo_game]

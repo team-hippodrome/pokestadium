@@ -743,16 +743,18 @@
     vram: 0x86500000
     subsegments:
     - [0x15A7A0, textbin,   fragments/dynamo_game/dynamo_game_header]
-    - [0x15A7C0, asm, fragments/dynamo_game/dynamo_game]
+    - [0x15A7C0, c,      fragments/dynamo_game/dynamo_game]
+    - [0x15C600, c,      fragments/dynamo_game/dynamo_game_ai]
     - [0x15C750, c, fragments/dynamo_game/dynamo_game_1]
     - [0x15D000, c,      fragments/dynamo_game/dynamo_game_2]
-    - [0x15D260, data, fragments/dynamo_game/dynamo_game]
+    - [0x15D260, .data,   fragments/dynamo_game/dynamo_game]
+    - [0x15D4E0, .data,   fragments/dynamo_game/dynamo_game_ai]
     - [0x15D590, .data, fragments/dynamo_game/dynamo_game_1]
     - [0x163810, .data,   fragments/dynamo_game/dynamo_game_2]
-    - [0x1638B0, data, fragment11_1638B0]
+    - [0x1638B0, .rodata, fragments/dynamo_game/dynamo_game]
     - [0x163A40, .rodata, fragments/dynamo_game/dynamo_game_1]
     - [0x163A50, .rodata, fragments/dynamo_game/dynamo_game_2]
-    - {vram: 0x865092D0, type:  bss, name: fragments/dynamo_game/dynamo_game}
+    - {vram: 0x865092D0, type:  .bss, name: fragments/dynamo_game/dynamo_game}
     - {vram: 0x8650AD70, type:  .bss, name: fragments/dynamo_game/dynamo_game_2}
   - name: fragment11_relocs
     type: code
