@@ -40,7 +40,7 @@
     - [0x9D00, c, profiler]
     - [0xAEE0, c, math_util]
     - [0xB110, c, hal_libc]
-    - [0xB210, asm, text_B210]
+    - [0xB210, c, gb_tower]
     - [0xC030, c, controller_ram] # extra sprites loader
     - [0xC3D0, hasm, exception_set] # exception functions
     - [0xC3F0, hasm, yay0] # Yay0 decoder
@@ -269,7 +269,7 @@
     - [0x69E40, .data, stage_loader]
     - [0x6A830, .data, crash_screen]
     - [0x6AA30, .data, profiler]
-    - [0x6AA50, data, gb_tower]
+    - [0x6AA50, .data, gb_tower]
     - [0x6AA60, .data, controller_ram]
     - [0x6AA70, .data, math_util]
     - [0x70280, .data, leo]
@@ -341,7 +341,7 @@
     - [0x7C260, .rodata, scheduler]
     - [0x7C280, .rodata, crash_screen]
     - [0x7C640, .rodata, profiler]
-    - [0x7C660, rodata, gb_tower]
+    - [0x7C660, .rodata, gb_tower]
     - [0x7C6A0, .rodata, leo]
     - [0x7C820, .rodata, matrix]
     - [0x7C830, .rodata, poke_icon_preview]
@@ -407,7 +407,7 @@
     - {vram: 0x800A7AD0, type: .bss, name: stage_loader}
     - {vram: 0x800A7B40, type: .bss, name: crash_screen}
     - {vram: 0x800A8520, type: .bss, name: profiler}
-    - {vram: 0x800A8780, type: bss, name: gb_tower}
+    - {vram: 0x800A8780, type: .bss, name: gb_tower}
     - {vram: 0x800A8930, type: .bss, name: controller_ram}
     - {vram: 0x800A8950, type: .bss, name: jpeg_decoder}
     - {vram: 0x800A8960, type: .bss, name: flash}

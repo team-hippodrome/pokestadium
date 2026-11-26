@@ -40,7 +40,7 @@
     - [0x9D00, c, profiler]
     - [0xAEE0, c, math_util]
     - [0xB110, c, hal_libc]
-    - [0xB210, asm, text_B210]
+    - [0xB210, c, gb_tower]
     - [0xC030, c, controller_ram] # extra sprites loader
     - [0xC3D0, hasm, exception_set] # exception functions
     - [0xC3F0, hasm, yay0] # Yay0 decoder
@@ -80,7 +80,7 @@
     - [0x30640, asm, text_30640]
     - [0x328A0, c, battle_hud]
     - [0x33060, c, model_renderer_callbacks]
-    - [0x339C0, asm, text_339C0]
+    - [0x339C0, c, 33E30]
     - [0x33C70, c, 33FE0]
     - [0x37000, c, audio_sfx_wrapper]
     - [0x37030, asm, audio_stored_fade]
@@ -268,7 +268,7 @@
     - [0x699C0, .data, stage_loader]
     - [0x6A3B0, .data, crash_screen]
     - [0x6A5B0, .data, profiler]
-    - [0x6A5D0, data, gb_tower]
+    - [0x6A5D0, .data, gb_tower]
     - [0x6A5E0, .data, controller_ram]
     - [0x6A5F0, .data, math_util]
     - [0x6FE00, .data, leo]
@@ -290,7 +290,7 @@
     - [0x76C40, .data, minigame_dispatch]
     - [0x76D80, data, gallery]
     - [0x77070, .data, model_renderer_callbacks]
-    - [0x770F0, data, 33E30]
+    - [0x770F0, .data, 33E30]
     - [0x771B0, .data, 33FE0]
     - [0x78770, data, audio_stored_fade]
     - [0x78E30, data, audio_commands_category2]
@@ -340,7 +340,7 @@
     - [0x7BDE0, .rodata, scheduler]
     - [0x7BE00, .rodata, crash_screen]
     - [0x7C1C0, .rodata, profiler]
-    - [0x7C1E0, rodata, gb_tower]
+    - [0x7C1E0, .rodata, gb_tower]
     - [0x7C220, .rodata, leo]
     - [0x7C3A0, .rodata, matrix]
     - [0x7C3B0, .rodata, poke_icon_preview]
@@ -354,7 +354,7 @@
     - [0x7D250, .rodata, gb_save]
     - [0x7D2A0, .rodata, minigame_dispatch]
     - [0x7D300, rodata, vector_math]
-    - [0x7D370, rodata, 33E30]
+    - [0x7D370, .rodata, 33E30]
     - [0x7D3A0, .rodata, 33FE0]
     - [0x7D420, rodata, text_7D420]
     - [0x7D470, rodata, audio_commands]
@@ -407,7 +407,7 @@
     - {vram: 0x800A7650, type: .bss, name: stage_loader}
     - {vram: 0x800A76C0, type: .bss, name: crash_screen}
     - {vram: 0x800A80A0, type: .bss, name: profiler}
-    - {vram: 0x800A8300, type: bss, name: gb_tower}
+    - {vram: 0x800A8300, type: .bss, name: gb_tower}
     - {vram: 0x800A84B0, type: .bss, name: controller_ram}
     - {vram: 0x800A84D0, type: .bss, name: jpeg_decoder}
     - {vram: 0x800A84E0, type: .bss, name: flash}

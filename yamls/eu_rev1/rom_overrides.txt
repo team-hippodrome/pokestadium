@@ -257,7 +257,7 @@
 
 # leo and matrix .rodata: merged into the gb_tower rodata by the porter.
 - [0x7C1E0, rodata, gb_tower]
--> - [0x7C1E0, rodata, gb_tower]
+-> - [0x7C1E0, .rodata, gb_tower]
 -> - [0x7C220, .rodata, leo]
 -> - [0x7C3A0, .rodata, matrix]
 
@@ -538,3 +538,19 @@
 -> - [0x7E6F0, rodata, libnaudio/n_env]
 -> - [0x7E810, .rodata, audio_stream]
 -> - [0x7E830, rodata, libleo/leofunc]
+
+# 33E30: Rev. 2 debug matrix printers.
+- [0x339C0, asm, text_339C0]
+-> - [0x339C0, c, 33E30]
+- [0x770F0, data, 33E30]
+-> - [0x770F0, .data, 33E30]
+- [0x7D370, rodata, 33E30]
+-> - [0x7D370, .rodata, 33E30]
+
+# gb_tower: built from the shared C (Rev. 2 cartridge check).
+- [0xB210, asm, text_B210]
+-> - [0xB210, c, gb_tower]
+- [0x6A5D0, data, gb_tower]
+-> - [0x6A5D0, .data, gb_tower]
+- {vram: 0x800A8300, type: bss, name: gb_tower}
+-> - {vram: 0x800A8300, type: .bss, name: gb_tower}
