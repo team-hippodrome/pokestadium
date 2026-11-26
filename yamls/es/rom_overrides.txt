@@ -578,3 +578,13 @@
 -> - [0x2C4B80, .rodata, fragments/free_battle_rules/free_battle_rules]
 - {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
 -> - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
+
+# lab_pc_icons: built from the shared C with the Spanish type icons.
+- [0x1F85A0, asm, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1F85A0, c, fragments/lab_pc_icons/lab_pc_icons]
+- [0x1FE040, data, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1FE040, .data, fragments/lab_pc_icons/lab_pc_icons]
+- [0x214950, rodata, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x214950, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+- {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+-> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}

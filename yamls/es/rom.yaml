@@ -1122,10 +1122,10 @@
     vram: 0x88600000
     subsegments:
     - [0x1F8580, textbin,   fragments/lab_pc_icons/lab_pc_icons_header]
-    - [0x1F85A0, asm, fragments/lab_pc_icons/lab_pc_icons]
-    - [0x1FE040, data, fragments/lab_pc_icons/lab_pc_icons]
-    - [0x214950, rodata, fragments/lab_pc_icons/lab_pc_icons]
-    - {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+    - [0x1F85A0, c, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x1FE040, .data, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x214950, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+    - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
   - name: fragment27_relocs
     type: code
     bss_size: 0x0

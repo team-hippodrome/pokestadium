@@ -1955,7 +1955,9 @@ static Gfx D_88607730[] = {
     gsSPEndDisplayList(),
 };
 // Type name icons, which carry the type names in each language.
-#if defined(VERSION_DE)
+#if defined(VERSION_ES)
+#include "lab_pc_icons_type_icons_es.inc.c"
+#elif defined(VERSION_DE)
 #include "lab_pc_icons_type_icons_de.inc.c"
 #else
 static u8 D_88607738[] = {
