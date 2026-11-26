@@ -178,3 +178,31 @@
 # model_callback_library_258080's .rodata, which the porter leaves as an unnamed blob.
 - [0x25A130, rodata, fragment31_25A130]
 -> - [0x25A130, .rodata, fragments/model_callback_library/model_callback_library_258080]
+
+# demo_scenes_15FA60 (0x1250 bytes of text and 0x30 of .rodata, each followed by demo_scenes_160CB0's): PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x160180, asm, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x160180, c, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x1613D0, c, fragments/demo_scenes/demo_scenes_160CB0]
+- [0x16BCA0, data, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16BCA0, .data, fragments/demo_scenes/demo_scenes_15FA60]
+- [0x16E4C0, rodata, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16E4C0, .rodata, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16E4F0, .rodata, fragments/demo_scenes/demo_scenes_160CB0]
+- {vram: 0x86B0E5D0, type: bss, name: fragments/demo_scenes/demo_scenes_15FA60}
+-> - {vram: 0x86B0E5D0, type: .bss, name: fragments/demo_scenes/demo_scenes_15FA60}
+
+# demo_scenes_168110: PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x168830, asm, fragments/demo_scenes/demo_scenes_168110]
+-> - [0x168830, c, fragments/demo_scenes/demo_scenes_168110]
+- [0x16E070, data, fragments/demo_scenes/demo_scenes_168110]
+-> - [0x16E070, .data, fragments/demo_scenes/demo_scenes_168110]
+
+# battle_prep_394120: PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x386B80, asm, fragments/battle_prep/battle_prep_394120]
+-> - [0x386B80, c, fragments/battle_prep/battle_prep_394120]
+- [0x396660, data, fragments/battle_prep/battle_prep_394120]
+-> - [0x396660, .data, fragments/battle_prep/battle_prep_394120]
+- [0x3A02B0, rodata, fragments/battle_prep/battle_prep_394120]
+-> - [0x3A02B0, .rodata, fragments/battle_prep/battle_prep_394120]
+- {vram: 0x84B198F0, type:  bss, name: fragments/battle_prep/battle_prep_394120}
+-> - {vram: 0x84B198F0, type: .bss, name: fragments/battle_prep/battle_prep_394120}
