@@ -34,7 +34,7 @@
 #define SFX_ZOOM_OUT 0x1A
 #define SFX_PAUSE 0x23
 #define SFX_RESUME 0x24
-#define SFX_PAK_CURSOR 0x25  // Transfer Pak and trade-machine port selection.
+#define SFX_PAK_CURSOR 0x25 // Transfer Pak and trade-machine port selection.
 #define SFX_FREE_BATTLE_RULE_CONFIRM 0x26
 #define SFX_PAGE_CHANGE 0x27 // Gallery pages and Pokemon boxes.
 #define SFX_TROPHY_APPEAR 0x28
@@ -560,6 +560,7 @@ extern u8 D_200A780[];
 extern u8 D_2000980[];
 extern u8 D_2000A60[];
 extern u8 D_3008200[];
+extern u8 D_3010210[];
 extern u8 D_4000C40[];
 extern u8 D_4000DD0[];
 #define ELIGIBILITY_PANEL_LEGEND D_4000DD0
@@ -935,7 +936,7 @@ typedef struct FontContext {
     /* 0x51 */ s8 letterSpacing; // Added to the glyph advance.
     /* 0x52 */ u8 lineHeight;
     /* 0x53 */ u8 flags; // 0x1 two-cycle texturing, 0x2 auxiliary texture loaded, 0x4 suppress newline handling.
-} FontContext; // size = 0x54
+} FontContext;           // size = 0x54
 
 extern Gfx gUiTranslucentFillDL[];
 

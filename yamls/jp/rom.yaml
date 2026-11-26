@@ -1468,10 +1468,10 @@
     vram: 0x82600000
     subsegments:
     - [0x2B3570, textbin,   fragments/victory_palace/victory_palace_header]
-    - [0x2B3590, asm, fragment50_2B3590]
-    - [0x2B72A0, data, fragments/victory_palace/victory_palace]
-    - [0x2BA760, rodata, fragments/victory_palace/victory_palace]
-    - {vram: 0x826072D0, type:  bss, name: fragments/victory_palace/victory_palace}
+    - [0x2B3590, c, fragments/victory_palace/victory_palace]
+    - [0x2B7370, .data, fragments/victory_palace/victory_palace]
+    - [0x2BA760, .rodata, fragments/victory_palace/victory_palace]
+    - {vram: 0x826072D0, type: .bss, name: fragments/victory_palace/victory_palace}
   - name: fragment50_relocs
     type: code
     bss_size: 0x0

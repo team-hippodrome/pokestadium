@@ -1737,6 +1737,7 @@ sBattleTarget = 0x843C650C;
 gRound2BadgeTexture = 0x020143C0; // type:u8
 D_2000580 = 0x02000580; // type:u8
 D_2000840 = 0x02000840; // type:u8
+D_3010210 = 0x03010210; // type:u8
 
 gUiPanelTopLeftTexture = 0x2028940; // type:u8
 
