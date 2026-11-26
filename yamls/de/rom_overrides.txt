@@ -17,3 +17,93 @@
 -> - [0x12D3C0, .rodata, fragments/clefairy_game/clefairy_game]
 - {vram: 0x86105480, type:  bss, name: fragments/clefairy_game/clefairy_game}
 -> - {vram: 0x86105480, type: .bss, name: fragments/clefairy_game/clefairy_game}
+
+# magikarp_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x121160, asm, fragments/magikarp_game/magikarp_game]
+-> - [0x121160, c, fragments/magikarp_game/magikarp_game]
+- [0x123A60, data, fragments/magikarp_game/magikarp_game]
+-> - [0x123A60, .data, fragments/magikarp_game/magikarp_game]
+- [0x123FC0, rodata, fragments/magikarp_game/magikarp_game]
+-> - [0x123FC0, .rodata, fragments/magikarp_game/magikarp_game]
+- {vram: 0x86002F30, type:  bss, name: fragments/magikarp_game/magikarp_game}
+-> - {vram: 0x86002F30, type: .bss, name: fragments/magikarp_game/magikarp_game}
+
+# rattata_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x12E690, asm, fragments/rattata_game/rattata_game]
+-> - [0x12E690, c, fragments/rattata_game/rattata_game]
+- [0x131F30, data, fragments/rattata_game/rattata_game]
+-> - [0x131F30, .data, fragments/rattata_game/rattata_game]
+- [0x132430, rodata, fragments/rattata_game/rattata_game]
+-> - [0x132430, .rodata, fragments/rattata_game/rattata_game]
+- {vram: 0x86203E30, type:  bss, name: fragments/rattata_game/rattata_game}
+-> - {vram: 0x86203E30, type: .bss, name: fragments/rattata_game/rattata_game}
+
+# drowzee_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x134DD0, asm, fragments/drowzee_game/drowzee_game]
+-> - [0x134DD0, c, fragments/drowzee_game/drowzee_game]
+- [0x137570, data, fragments/drowzee_game/drowzee_game]
+-> - [0x137570, .data, fragments/drowzee_game/drowzee_game]
+- {vram: 0x86404070, type:  bss, name: fragments/drowzee_game/drowzee_game}
+-> - {vram: 0x86404070, type: .bss, name: fragments/drowzee_game/drowzee_game}
+
+# dynamo_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x139670, asm, fragments/dynamo_game/dynamo_game]
+-> - [0x139670, c, fragments/dynamo_game/dynamo_game]
+- [0x13C280, data, fragments/dynamo_game/dynamo_game]
+-> - [0x13C280, .data, fragments/dynamo_game/dynamo_game]
+- [0x1428D0, rodata, fragments/dynamo_game/dynamo_game]
+-> - [0x1428D0, .rodata, fragments/dynamo_game/dynamo_game]
+- {vram: 0x865092F0, type:  bss, name: fragments/dynamo_game/dynamo_game}
+-> - {vram: 0x865092F0, type: .bss, name: fragments/dynamo_game/dynamo_game}
+
+# ekans_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x170FF0, asm, fragments/ekans_game/ekans_game]
+-> - [0x170FF0, c, fragments/ekans_game/ekans_game]
+- [0x175860, data, fragments/ekans_game/ekans_game]
+-> - [0x175860, .data, fragments/ekans_game/ekans_game]
+- {vram: 0x86C0E4E0, type:  bss, name: fragments/ekans_game/ekans_game}
+-> - {vram: 0x86C0E4E0, type: .bss, name: fragments/ekans_game/ekans_game}
+
+# sushi_game_144300: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x144A40, asm, fragments/sushi_game/sushi_game_144300]
+-> - [0x144A40, c, fragments/sushi_game/sushi_game_144300]
+- [0x14B6F0, data, fragments/sushi_game/sushi_game_144300]
+-> - [0x14B6F0, .data, fragments/sushi_game/sushi_game_144300]
+- [0x14BDA0, rodata, fragments/sushi_game/sushi_game_144300]
+-> - [0x14BDA0, .rodata, fragments/sushi_game/sushi_game_144300]
+- {vram: 0x868074F0, type:  bss, name: fragments/sushi_game/sushi_game_144300}
+-> - {vram: 0x868074F0, type: .bss, name: fragments/sushi_game/sushi_game_144300}
+
+# sushi_game_1462A0: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x1469E0, asm, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x1469E0, c, fragments/sushi_game/sushi_game_1462A0]
+- [0x14B9B0, data, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x14B9B0, .data, fragments/sushi_game/sushi_game_1462A0]
+- [0x14BDE0, rodata, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x14BDE0, .rodata, fragments/sushi_game/sushi_game_1462A0]
+- {vram: 0x86807540, type:  bss, name: fragments/sushi_game/sushi_game_1462A0}
+-> - {vram: 0x86807540, type: .bss, name: fragments/sushi_game/sushi_game_1462A0}
+
+# sushi_game_14A030: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x14A770, asm, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14A770, c, fragments/sushi_game/sushi_game_14A030]
+- [0x14BB60, data, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14BB60, .data, fragments/sushi_game/sushi_game_14A030]
+- [0x14BEC0, rodata, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14BEC0, .rodata, fragments/sushi_game/sushi_game_14A030]
+- {vram: 0x868084C0, type:  bss, name: fragments/sushi_game/sushi_game_14A030}
+-> - {vram: 0x868084C0, type: .bss, name: fragments/sushi_game/sushi_game_14A030}
+
+# rental_team_selection_2E4040: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x2D6A80, asm, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2D6A80, c, fragments/rental_team_selection/rental_team_selection_2E4040]
+- [0x2DB9E0, data, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2DB9E0, .data, fragments/rental_team_selection/rental_team_selection_2E4040]
+- [0x2DBD30, rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2DBD30, .rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
+- {vram: 0x8423E5B0, type:  bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
+-> - {vram: 0x8423E5B0, type: .bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
+
+# drowzee_game's .rodata, which the porter leaves as an unnamed blob.
+- [0x138E10, data, fragment10_138E10]
+-> - [0x138E10, .rodata, fragments/drowzee_game/drowzee_game]

@@ -159,11 +159,11 @@ void DrowzeeGame_UpdatePlayerAnimations(void) {
 
             if ((ModelAnim_IsFinished(&D_864052C8->unk_028) != 0) ||
                 ((D_864052C8->unk_010 == 0) && (D_864052C8->unk_012 > 0)) ||
-                ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 == 0x3C) && (D_87B000D4 == 1))) {
+                ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 == NTSC_PAL(60, 50)) && (D_87B000D4 == 1))) {
                 temp_s1 = D_864052C8->unk_004;
 
                 if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) &&
-                    ((D_86402840 == 0x3C) || (D_864052C8->unk_004 == 6))) {
+                    ((D_86402840 == NTSC_PAL(60, 50)) || (D_864052C8->unk_004 == 6))) {
                     D_864052C8->unk_004 = 6;
                 } else {
                     temp_fv0 = (D_864052C8->unk_010 * 100.0f) / D_864052C8->unk_00E;
@@ -248,7 +248,7 @@ void DrowzeeGame_ProcessElimination(u8 arg0) {
         D_864052CC->unk_004.transformAnim.speedFixed = 0;
         D_87B000C8 = 1;
 
-        Audio_FadeOutAll(0xA);
+        Audio_FadeOutAll(NTSC_PAL(10, 8));
 
         for (i = 0; i < 4; i++) {
             D_864052C8 = &D_86404778[i];
@@ -328,18 +328,18 @@ void DrowzeeGame_DrawPlayerOverlay(UNUSED s32 arg0) {
                         D_864052C8->unk_190->unk_28 = 0.5f;
                         break;
 
-                    case 20:
+                    case NTSC_PAL(20, 17):
                         D_864052C8->unk_190->unk_28 = temp_fs0;
                         if ((D_8780FC92 == 0) && (D_8780FC94 == 0)) {
                             Audio_DispatchSoundBankCommand(0x70004, i + 1, 0);
                         }
                         break;
 
-                    case 19:
+                    case NTSC_PAL(19, 16):
                         D_864052C8->unk_190->unk_28 = 0.2f;
                         break;
 
-                    case 18:
+                    case NTSC_PAL(18, 15):
                         D_864052C8->unk_190->unk_28 = 0.3f;
                         break;
                 }
@@ -357,10 +357,10 @@ void DrowzeeGame_DrawPlayerOverlay(UNUSED s32 arg0) {
 void DrowzeeGame_UpdateRoundTick(s32 arg0) {
     s32 temp;
     s16 sp24[] = {
-        0xFB1E,
-        0xFED4,
-        0x0120,
-        0x04B0,
+        NTSC_PAL(0xFB1E, 0xF9FE),
+        NTSC_PAL(0xFED4, 0xFE8F),
+        NTSC_PAL(0x0120, 0x0162),
+        NTSC_PAL(0x04B0, 0x05C5),
     };
     u8 i;
 
@@ -398,25 +398,25 @@ void DrowzeeGame_UpdateRoundTick(s32 arg0) {
 
                 D_864052C8->unk_012 = D_864052C8->unk_010;
 
-                if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 >= 0x3C) && (D_87B000D4 == 1) &&
-                    (D_864029C0 < 0x10)) {
+                if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 >= NTSC_PAL(60, 50)) && (D_87B000D4 == 1) &&
+                    (D_864029C0 < NTSC_PAL(16, 13))) {
                     D_864052C8->unk_028.rotation.y += sp24[i];
                 }
             }
 
             if (D_87B000C8 != 0) {
-                if (D_86402840 < 0x3C) {
+                if (D_86402840 < NTSC_PAL(60, 50)) {
                     D_86402840++;
                 } else {
-                    if (D_86402840 < 0x6A) {
-                        if (D_86402840 == 0x69) {
+                    if (D_86402840 < NTSC_PAL(106, 88)) {
+                        if (D_86402840 == NTSC_PAL(105, 87)) {
                             D_87B000CC = 1;
                             Widget_PauseMenuTrigger(1);
                         }
                         D_86402840++;
                     }
 
-                    if (D_864029C0 < 0x10) {
+                    if (D_864029C0 < NTSC_PAL(16, 13)) {
                         D_864029C0++;
                     }
                 }
@@ -426,7 +426,7 @@ void DrowzeeGame_UpdateRoundTick(s32 arg0) {
         if (D_87B000C8 != 0) {
             static f32 D_864029C4 = 1.0f;
 
-            D_864029C4 -= 0.06f;
+            D_864029C4 -= NTSC_PAL(0.06f, 0.072f);
             if (D_864029C4 < 0.0f) {
                 D_864029C4 = 0.0f;
             }
@@ -504,17 +504,17 @@ void DrowzeeGame_JudgePlayerTiming(void) {
                             }
 
                             if (D_864052C8->unk_018 == 0) {
-                                DrowzeeGame_SetPlayerState(D_864052C8, 1, 0x14, 0, 0);
+                                DrowzeeGame_SetPlayerState(D_864052C8, 1, NTSC_PAL(20, 17), 0, 0);
                             } else {
-                                DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 1, 0x14);
+                                DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 1, NTSC_PAL(20, 17));
                             }
                         }
                     } else {
                         D_864052C8->unk_010 -= 1;
                         if (D_864052C8->unk_018 == 0) {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 2, 0x14, 0, 0);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 2, NTSC_PAL(20, 17), 0, 0);
                         } else {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, 0x14);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, NTSC_PAL(20, 17));
                         }
                     }
 
@@ -547,9 +547,9 @@ void DrowzeeGame_JudgePlayerTiming(void) {
                     if (D_864052C8->unk_014 == 0) {
                         D_864052C8->unk_010--;
                         if (D_864052C8->unk_018 == 0) {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 2, 0x14, 0, 0);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 2, NTSC_PAL(20, 17), 0, 0);
                         } else {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, 0x14);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, NTSC_PAL(20, 17));
                         }
                     } else {
                         D_864052C8->unk_014 = 0;
@@ -686,10 +686,10 @@ void DrowzeeGame_WaitForStart(void) {
     var_s1 = 0;
     var_s2 = 1;
     StageLoader_RunFrames(5);
-    StageFade_StartFromOpaque(0x10);
+    StageFade_StartFromOpaque(NTSC_PAL(16, 13));
 
     while (var_s2 != 0) {
-        if (var_s1 >= 0x11) {
+        if (var_s1 >= NTSC_PAL(17, 14)) {
             if (gPlayer1Controller->buttonPressed & 0x1000) {
                 var_s2 = 0;
             } else if ((D_8780FA2A == 0) && (gPlayer1Controller->buttonPressed & 0x4000)) {
@@ -707,12 +707,12 @@ void DrowzeeGame_WaitForStart(void) {
         DrowzeeGame_LoopDrowzeeIdleAnim();
         DrowzeeGame_DrawFrame(0);
 
-        if (var_s1 < 0x11) {
+        if (var_s1 < NTSC_PAL(17, 14)) {
             var_s1++;
         }
     }
 
-    Audio_FadeOutAll(0x3C);
+    Audio_FadeOutAll(NTSC_PAL(60, 50));
     if (D_8780FC92 == 0) {
         while (true) {
             if (D_87B000C4 <= 0) {
@@ -720,7 +720,7 @@ void DrowzeeGame_WaitForStart(void) {
             }
 
             for (i = 3; i > 0; i--) {
-                if (D_87B000C4 == ((i * 0x3C) / 2)) {
+                if (D_87B000C4 == ((i * NTSC_PAL(60, 50)) / 2)) {
                     if (i == 3) {
                         Widget_CountdownStart(1);
                     }
@@ -769,11 +769,11 @@ void DrowzeeGame_MainLoop(void) {
             DrowzeeGame_UpdateRoundTick(2);
 
             if (D_87B000C8 == 0) {
-                if (D_864029E0 < 0x1E) {
+                if (D_864029E0 < NTSC_PAL(30, 25)) {
                     if (D_8780FC94 == 0) {
                         D_864029E0++;
                     }
-                } else if (D_864029E0 == 0x1E) {
+                } else if (D_864029E0 == NTSC_PAL(30, 25)) {
                     if (D_8780FC94 == 0) {
                         Audio_DispatchSoundBankCommand(0x70003, 1, 0);
                         D_864029E0++;
@@ -798,11 +798,11 @@ void DrowzeeGame_MainLoop(void) {
 void DrowzeeGame_ShowResultText(void) {
     u8 i;
 
-    Audio_FadeCategories(1, 0x1E);
-    Audio_FadeCategories(2, 0x1E);
-    StageFade_StartFromTransparent(0x1E);
+    Audio_FadeCategories(1, NTSC_PAL(30, 25));
+    Audio_FadeCategories(2, NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         MiniGame_ReadInputs();
         DrowzeeGame_UpdateRoundTick(3);
         DrowzeeGame_DrawPlayerOverlay(3);

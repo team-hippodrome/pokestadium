@@ -547,7 +547,7 @@ void DynamoGame_DrawFrame(s32 arg0) {
         if (arg0 == 2) {
             if (D_87B000C8 == 0) {
                 D_86502CD4++;
-                if (D_86502CD4 >= 0xF) {
+                if (D_86502CD4 >= NTSC_PAL(15, 13)) {
                     D_86502CD4 = 0;
 
                     for (i = 0; i < 4; i++) {
@@ -605,10 +605,10 @@ void DynamoGame_WaitForStart(void) {
     var_s2 = 1;
 
     StageLoader_RunFrames(5);
-    StageFade_StartFromOpaque(0x10);
+    StageFade_StartFromOpaque(NTSC_PAL(16, 13));
 
     while (var_s2 != 0) {
-        if (var_s1 >= 0x11) {
+        if (var_s1 >= NTSC_PAL(17, 14)) {
             if (gPlayer1Controller->buttonPressed & 0x1000) {
                 var_s2 = 0;
             } else if ((D_8780FA2A == 0) && (gPlayer1Controller->buttonPressed & 0x4000)) {
@@ -624,12 +624,12 @@ void DynamoGame_WaitForStart(void) {
         DynamoGame_UpdatePlayerAnimState();
         DynamoGame_DrawFrame(0);
 
-        if (var_s1 < 0x11) {
+        if (var_s1 < NTSC_PAL(17, 14)) {
             var_s1++;
         }
     }
 
-    Audio_FadeOutAll(0x3C);
+    Audio_FadeOutAll(NTSC_PAL(60, 50));
 
     if (D_8780FC92 == 0) {
         while (true) {
@@ -638,7 +638,7 @@ void DynamoGame_WaitForStart(void) {
             }
 
             for (i = 3; i > 0; i--) {
-                s32 tmp = (i * 0x3C) / 2;
+                s32 tmp = (i * NTSC_PAL(60, 50)) / 2;
                 if (tmp == D_87B000C4) {
                     if (i == 3) {
                         Widget_CountdownStart(1);
@@ -699,11 +699,11 @@ void DynamoGame_MainLoop(void) {
 void DynamoGame_ShowResultText(void) {
     u8 i;
 
-    Audio_FadeCategories(1, 0x1E);
-    Audio_FadeCategories(2, 0x1E);
-    StageFade_StartFromTransparent(0x1E);
+    Audio_FadeCategories(1, NTSC_PAL(30, 25));
+    Audio_FadeCategories(2, NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         MiniGame_ReadInputs();
         DynamoGame_UpdateCountdownAndCue(3);
         DynamoGame_DrawSparkEffects(3);

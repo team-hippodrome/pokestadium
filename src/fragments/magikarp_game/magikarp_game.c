@@ -903,13 +903,13 @@ void MagikarpGame_Play(void) {
             MagikarpGame_UpdateSplashRipple();
 
             D_86003B58++;
-            if (D_86003B58 >= 0x258) {
+            if (D_86003B58 >= NTSC_PAL(600, 500)) {
                 MiniSound_DispatchCommand(0x20009, 0, 0);
                 var_s6 = 0;
             } else {
-                temp_v1 = 0x258 - D_86003B58;
-                if ((temp_v1 % 30) == 0) {
-                    temp_lo = temp_v1 / 30;
+                temp_v1 = NTSC_PAL(600, 500) - D_86003B58;
+                if ((temp_v1 % NTSC_PAL(30, 25)) == 0) {
+                    temp_lo = temp_v1 / NTSC_PAL(30, 25);
                     if ((temp_lo < 6) && (temp_lo > 0)) {
                         MiniSound_DispatchCommand(0x2000A, 0, 0);
                         if (1) {}
@@ -1069,10 +1069,10 @@ void MagikarpGame_FadeOutLoop(void) {
     s32 i;
     s32 j;
 
-    Audio_FadeOutAll(30);
-    StageFade_StartFromTransparent(30);
+    Audio_FadeOutAll(NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         MagikarpGame_ReadInputs();
 
         for (j = 0; j < 4; j++) {

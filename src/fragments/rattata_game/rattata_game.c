@@ -585,11 +585,11 @@ void RattataGame_UpdateStartCountdown(void) {
         if ((D_86204718 == 1) && (StageContext_GetFadeMode() == 0) &&
             ((gPlayer1Controller->buttonPressed | gPlayer2Controller->buttonPressed |
               gPlayer3Controller->buttonPressed | (gPlayer4Controller->buttonPressed != 0)) != 0)) {
-            StageFade_StartFromTransparent(0x1E);
-            Audio_BeginVolumeTransition(0x1E);
+            StageFade_StartFromTransparent(NTSC_PAL(30, 25));
+            Audio_BeginVolumeTransition(NTSC_PAL(30, 25));
             D_86204700 = 0;
 
-            for (i = 0; i < 30; i++) {
+            for (i = 0; i < NTSC_PAL(30, 25); i++) {
                 RattataGame_UpdateCamera();
                 RattataGame_DrawFrame(D_86203E48);
             }
@@ -1024,11 +1024,11 @@ void RattataGame_MainLoop(void) {
                 }
 
                 if (D_86204704 == 0x1C2) {
-                    StageFade_StartFromTransparent(0x1E);
-                    Audio_BeginVolumeTransition(0x1E);
+                    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
+                    Audio_BeginVolumeTransition(NTSC_PAL(30, 25));
                 }
 
-                if (D_86204704 >= 0x1E0) {
+                if (D_86204704 >= 0x1C2 + NTSC_PAL(30, 25)) {
                     Widget_PauseMenuTrigger(2);
                     spA4 = 0;
                 }
@@ -1231,10 +1231,10 @@ void RattataGame_WaitForAudioToFinish(void) {
 void RattataGame_FadeOutAndTransition(void) {
     s32 i;
 
-    Audio_FadeOutAll(0x1E);
-    StageFade_StartFromTransparent(0x1E);
+    Audio_FadeOutAll(NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         RattataGame_PollInput();
         RattataGame_DrawFrame(D_86203E48);
     }

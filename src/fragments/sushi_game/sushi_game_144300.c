@@ -341,7 +341,7 @@ void func_86800B38(void) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
 
-        var_v0 = 60;
+        var_v0 = NTSC_PAL(60, 58);
         for (i = 0; i < 8; i++) {
             pad1 = i % 4;
             if (pad1) {}
@@ -406,8 +406,8 @@ void func_86800B38(void) {
                 spD0[0] = spB4;
                 spD0[1] = D_86806F44[i];
 
-                SushiGame_InterpolateColorCycle(&spB8[i], spD0, 2, 0x1E, 0);
-                SushiGame_InterpolateColorCycle(&spB8[i + 4], spD0, 2, 0x1E, 1);
+                SushiGame_InterpolateColorCycle(&spB8[i], spD0, 2, NTSC_PAL(30, 25), 0);
+                SushiGame_InterpolateColorCycle(&spB8[i + 4], spD0, 2, NTSC_PAL(30, 25), 1);
 
                 if ((i / 2) != 0) {
                     var_s7 = -0x32;
@@ -494,20 +494,20 @@ void SushiGame_UpdateWaitForStart(void) {
     if (StageContext_GetFadeMode() == 0) {
         if (D_8680753E != 0) {
             D_8680750C = 1;
-            D_86807510 = 0x1C2;
+            D_86807510 = NTSC_PAL(450, 375);
             D_86807540 = 0xF;
         } else if (gPlayer1Controller->buttonPressed & 0x1000) {
             D_8680750C = 1;
             D_8680753C &= ~1;
             D_8680753C |= 2;
-            D_86807510 = 0x708;
+            D_86807510 = NTSC_PAL(1800, 1500);
             D_86807540 = 0xF;
             Audio_FadeOutAll(0x3C);
             SushiGame_BroadcastPlayerPhase(0xF, 1);
         } else if ((D_8780FA2A == 0) && (gPlayer1Controller->buttonPressed & 0x4000)) {
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
             D_8680750C = 7;
-            D_86807540 = 0x1E;
+            D_86807540 = NTSC_PAL(30, 25);
             StageFade_StartFromTransparent(D_86807540);
             SushiGame_FadeAudio(D_86807540 / 2);
             Widget_PauseMenuTrigger(2);
@@ -545,7 +545,7 @@ s32 func_86801884(void) {
     }
     if (((D_8780FC92 != 0) || (sp18 != 0)) && (D_8680750C != 7)) {
         D_8680750C = 7;
-        D_86807540 = 0x1E;
+        D_86807540 = NTSC_PAL(30, 25);
         StageFade_StartFromTransparent(D_86807540);
         SushiGame_FadeAudio(D_86807540 / 2);
     }
@@ -573,8 +573,8 @@ s32 func_86801884(void) {
         case 3:
             if (D_8780FC94 == 0) {
                 D_86807510--;
-                if (((D_86807510 % 30) == 0) && (D_8680753E == 0)) {
-                    if (((D_86807510 / 30) > 0) && ((D_86807510 / 30) < 6)) {
+                if (((D_86807510 % NTSC_PAL(30, 25)) == 0) && (D_8680753E == 0)) {
+                    if (((D_86807510 / NTSC_PAL(30, 25)) > 0) && ((D_86807510 / NTSC_PAL(30, 25)) < 6)) {
                         Audio_DispatchSoundBankCommand(0x50002, 0, 0);
                     }
                 }
@@ -582,14 +582,14 @@ s32 func_86801884(void) {
             if (SushiGame_IsRoundTimeUp() != 0) {
                 if (D_8680753E == 0) {
                     D_8680750C = 4;
-                    D_86807540 = 0x1E;
+                    D_86807540 = NTSC_PAL(30, 25);
                     SushiGame_BroadcastPlayerPhase(0xF, 2);
                     SushiGame_SetGamePhase(2);
                     Audio_FadeOutAll(0xA);
                     Audio_DispatchSoundBankCommand(0x50004, 0, 0);
                 } else {
                     D_8680750C = 7;
-                    D_86807540 = 0x1E;
+                    D_86807540 = NTSC_PAL(30, 25);
                     StageFade_StartFromTransparent(D_86807540);
                     SushiGame_FadeAudio(D_86807540 / 2);
                     Widget_PauseMenuTrigger(2);
@@ -622,7 +622,7 @@ s32 func_86801884(void) {
         case 6:
             if (D_8780FC96 != 0) {
                 D_8680750C = 7;
-                D_86807540 = 0x1E;
+                D_86807540 = NTSC_PAL(30, 25);
                 StageFade_StartFromTransparent(D_86807540);
                 SushiGame_FadeAudio(D_86807540 / 2);
             }
@@ -644,7 +644,7 @@ void SushiGame_MainLoop(void) {
     s32 var_s0;
 
     StageLoader_RunFrames(5);
-    StageFade_StartFromOpaque(0x10);
+    StageFade_StartFromOpaque(NTSC_PAL(16, 13));
     D_86807508 = 0;
 
     var_s0 = 1;
