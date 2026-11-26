@@ -69,7 +69,7 @@
     - [0x22220, c, gb_data]
     - [0x238B0, c, pokemon_stats]
     - [0x26150, asm, save_data]
-    - [0x29100, asm, game_state]
+    - [0x29100, c, game_state]
     - [0x2B580, asm, session]
     - [0x2C700, c, table_view]
     - [0x2D400, c, gb_save]
@@ -283,7 +283,7 @@
     - [0x6CFD0, .data, status_icons]
     - [0x72240, data, gb_data]
     - [0x78200, data, save_data]
-    - [0x78210, data, game_state]
+    - [0x78210, .data, game_state]
     - [0x7A230, data, session]
     - [0x7A240, .data, gb_save]
     - [0x7A2F0, .data, lab_item]
@@ -351,6 +351,8 @@
     - [0x818C0, .rodata, gb_data]
     - [0x81930, .rodata, pokemon_stats]
     - [0x81960, rodata, save_data]
+    - [0x81A10, .rodata, game_state]
+    - [0x81B00, rodata, session]
     - [0x81BE0, .rodata, gb_save]
     - [0x81C30, .rodata, lab_item]
     - [0x83D00, .rodata, minigame_dispatch]
@@ -434,7 +436,7 @@
     - {vram: 0x800B3470, type: bss, name: input}
     - {vram: 0x800B3480, type: .bss, name: pokemon_stats}
     - {vram: 0x800B4B70, type: bss, name: save_data}
-    - {vram: 0x800B4BB0, type: bss, name: game_state}
+    - {vram: 0x800B4BB0, type: .bss, name: game_state}
     - {vram: 0x800B5D10, type: .bss, name: gb_save}
     - {vram: 0x800B5D30, type: .bss, name: battle_hud}
     - {vram: 0x800B5D80, type: .bss, name: model_renderer_callbacks}

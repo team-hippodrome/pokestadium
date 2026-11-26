@@ -63,4 +63,11 @@ void Gfx_FillRectWithDisplayState(s32 x1, s32 y1, s32 width, s32 length, s32 r, 
 s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...);
 u8 Font_GetCharWidth(s32 arg0, s32 index);
 
+#if defined(VERSION_JP)
+// JP only, still in assembly: when a disk is present, set D_8006F7C0[0] to 1 (or 0) and turn
+// Audio_SetDiskReadyPolling on (or off).
+void Storage_StartDiskReadyPolling(void);
+void Storage_StopDiskReadyPolling(void);
+#endif
+
 #endif // _1CF30_H_
