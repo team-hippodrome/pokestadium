@@ -567,3 +567,23 @@
 -> - [0x6AB70, .data, gb_tower]
 - {vram: 0x800A88A0, type: bss, name: gb_tower}
 -> - {vram: 0x800A88A0, type: .bss, name: gb_tower}
+
+# minigame_hud_pause_menu: PAL timers.
+- [0x10B170, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10B170, c, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10ECA0, data, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10ECA0, .data, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x118190, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x118190, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+- {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+-> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+
+# lab_pc_icons: built from the shared C with the French type icons.
+- [0x1F8540, asm, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1F8540, c, fragments/lab_pc_icons/lab_pc_icons]
+- [0x1FDFE0, data, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1FDFE0, .data, fragments/lab_pc_icons/lab_pc_icons]
+- [0x2148F0, rodata, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x2148F0, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+- {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+-> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}

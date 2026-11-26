@@ -49,6 +49,9 @@ u32 D_87806730[] = {
     0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE,
 };
 
+#if defined(VERSION_FR)
+#include "minigame_hud_pause_menu_player_icons_fr.inc.c"
+#else
 #if defined(VERSION_ES)
 #include "minigame_hud_pause_menu_player_icons_es.inc.c"
 #else
@@ -1015,6 +1018,7 @@ u32 D_8780DCF0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
+#endif
 
 static Vp D_8780EB90 = {
     {
