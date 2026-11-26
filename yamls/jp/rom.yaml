@@ -1685,7 +1685,7 @@
     - [0x2F9960, asm, fragments/battle_engine/battle_engine_hud]
     - [0x303600, c,      fragments/battle_engine/battle_engine_broll]
     - [0x304B80, c, fragments/battle_engine/battle_engine_camera]
-    - [0x309460, asm, fragment62_304B80]
+    - [0x309460, c, fragments/battle_engine/battle_engine_battle_phases]
     - [0x3127B0, c, fragments/battle_engine/battle_engine_intro]
     - [0x3132B0, c,      fragments/battle_engine/battle_engine_scene]
     - [0x314D80, c, fragments/battle_engine/battle_engine_status_animation]
@@ -1727,7 +1727,8 @@
     - [0x36FAB0, data, fragments/battle_engine/battle_engine_messages]
     - [0x36FB00, .data,   fragments/battle_engine/battle_engine_broll]
     - [0x36FC70, .data, fragments/battle_engine/battle_engine_camera]
-    - [0x36FC90, data, fragments/battle_engine/battle_engine_battle_phases]
+    - [0x36FC90, .data, fragments/battle_engine/battle_engine_battle_phases]
+    - [0x36FCD0, data, fragments/battle_engine/battle_engine_battle_phases_36FCD0]
     - [0x370CC0, data, fragments/battle_engine/battle_engine_animation_system]
     - [0x372C10, .data,   fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x3730D0, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
@@ -1757,7 +1758,7 @@
     - [0x376510, rodata, fragments/battle_engine/battle_engine_messages]
     - [0x376610, .rodata, fragments/battle_engine/battle_engine_broll]
     - [0x376760, .rodata, fragments/battle_engine/battle_engine_camera]
-    - [0x3769C0, rodata, fragments/battle_engine/battle_engine_battle_phases]
+    - [0x3769C0, .rodata, fragments/battle_engine/battle_engine_battle_phases]
     - [0x376D70, .rodata, fragments/battle_engine/battle_engine_intro]
     - [0x376DA0, .rodata, fragments/battle_engine/battle_engine_scene]
     - [0x376F10, rodata, fragments/battle_engine/battle_engine_animation_system]
@@ -1795,7 +1796,7 @@
     - {vram: 0x84391450, type:  bss, name: fragments/battle_engine/battle_engine_hud}
     - {vram: 0x84391470, type:  bss, name: fragments/battle_engine/battle_engine_messages}
     - {vram: 0x84391480, type: .bss, name: fragments/battle_engine/battle_engine_camera}
-    - {vram: 0x843914D0, type:  bss, name: fragments/battle_engine/battle_engine_battle_phases}
+    - {vram: 0x843914D0, type: .bss, name: fragments/battle_engine/battle_engine_battle_phases}
     - {vram: 0x84391510, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
     - {vram: 0x84391570, type:  bss, name: fragments/battle_engine/battle_engine_animation_system}
     - {vram: 0x84393390, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
