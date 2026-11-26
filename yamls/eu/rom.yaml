@@ -122,7 +122,7 @@
     - [0x4F040, asm, audio_stream]
     - [0x4FBF0, c, gsm_decoder]  # speech code
     - [0x51060, hasm, libgsm]
-    - [0x51660, asm, text_51660]
+    - [0x51660, asm, audio_stream_channel]
     - [0x51A10, c, audio_cache]
     - [0x51A70, c, rom_device]
     - [0x51BC0, asm, text_51BC0]
@@ -1218,7 +1218,7 @@
     vram: 0x81000000
     subsegments:
     - [0x2553E0, textbin,   fragments/model_callback_library/model_callback_library_header]
-    - [0x255400, textbin,    fragments/31/fragment31_unk_table] # what is this?
+    - [0x255400, hasm,       fragments/31/fragment31_unk_table]
     - [0x2555E0, c,      fragments/model_callback_library/model_callback_library_2554C0]
     - [0x2558C0, c,      fragments/model_callback_library/model_callback_library_2557A0]
     - [0x2559D0, c,      fragments/model_callback_library/model_callback_library_2558B0]
@@ -2357,6 +2357,7 @@
   - [0x51E090, bin, title_ui]
   - [0x522BC0, bin, 52F6D0] # unused. Not loaded UI graphics. Could be leftovers from Stadium 0 (JP)?
   - [0x527010, bin, battle_portraits]
+  # Archive of FRAGMENTs: each entry function selects geo layouts/material data by index.
   - [0x561CC0, bin, stadium_models]
   - [0x5BAF60, bin, 5C7A70]
   - [0x5BAFC0, bin, pokedex_area_model]

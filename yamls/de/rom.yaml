@@ -61,6 +61,7 @@
     - [0x18480, c, geo_layout] # dp model animations
     - [0x19840, asm, display_object_textures]
     - [0x1AB70, asm, poke_icon]
+    - [0x1BD50, c, poke_icon_preview]
     - [0x1C730, c, model_renderer] #
     - [0x1CF40, c, graphics_textures] # dp list code
     - [0x20340, c, input] # some cache cleaner
@@ -116,7 +117,7 @@
     - [0x4F600, asm, audio_stream]
     - [0x501B0, c, gsm_decoder]  # speech code
     - [0x51620, hasm, libgsm]
-    - [0x51C20, asm, text_51C20]
+    - [0x51C20, asm, audio_stream_channel]
     - [0x51FD0, c, audio_cache]
     - [0x52030, c, rom_device]
     - [0x52180, asm, text_52180]
@@ -272,6 +273,7 @@
     - [0x70300, .data, geo_render]
     - [0x70530, .data, geo_layout]
     - [0x705D0, data, poke_icon]
+    - [0x70660, .data, poke_icon_preview]
     - [0x706F0, data, ui_graphics]
     - [0x70A60, data, status_icons]
     - [0x72220, data, gb_data]
@@ -335,7 +337,7 @@
     - [0x7C280, .rodata, crash_screen]
     - [0x7C640, .rodata, profiler]
     - [0x7C660, rodata, gb_tower]
-    - [0x7C830, rodata, poke_icon]
+    - [0x7C830, .rodata, poke_icon_preview]
     - [0x7C860, rodata, status_icons]
     - [0x7D340, rodata, gb_data]
     - [0x7D3B0, rodata, pokemon_stats]
@@ -407,7 +409,7 @@
     - {vram: 0x800AC380, type: .bss, name: model_animation_events}
     - {vram: 0x800AC3B0, type: .bss, name: geo_layout}
     - {vram: 0x800AC490, type: bss, name: display_object_textures}
-    - {vram: 0x800ACEB0, type: bss, name: poke_icon}
+    - {vram: 0x800ACEB0, type: .bss, name: poke_icon_preview}
     - {vram: 0x800ACEC0, type: .bss, name: model_renderer}
     - {vram: 0x800ACEF0, type: .bss, name: graphics_textures}
     - {vram: 0x800ACF00, type: .bss, name: input}
@@ -1201,7 +1203,7 @@
     vram: 0x81000000
     subsegments:
     - [0x255950, textbin,   fragments/model_callback_library/model_callback_library_header]
-    - [0x255970, textbin,    fragments/31/fragment31_unk_table] # what is this?
+    - [0x255970, hasm,       fragments/31/fragment31_unk_table]
     - [0x255B50, c,      fragments/model_callback_library/model_callback_library_2554C0]
     - [0x255E30, c,      fragments/model_callback_library/model_callback_library_2557A0]
     - [0x255F40, c,      fragments/model_callback_library/model_callback_library_2558B0]
@@ -2337,6 +2339,7 @@
   - [0x521FA0, bin, title_ui]
   - [0x526AE0, bin, 52F6D0] # unused. Not loaded UI graphics. Could be leftovers from Stadium 0 (JP)?
   - [0x52AF30, bin, battle_portraits]
+  # Archive of FRAGMENTs: each entry function selects geo layouts/material data by index.
   - [0x565BE0, bin, stadium_models]
   - [0x5BEEA0, bin, 5C7A70]
   - [0x5BEF00, bin, pokedex_area_model]
