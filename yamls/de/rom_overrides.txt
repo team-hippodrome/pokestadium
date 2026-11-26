@@ -107,3 +107,13 @@
 # drowzee_game's .rodata, which the porter leaves as an unnamed blob.
 - [0x138E10, data, fragment10_138E10]
 -> - [0x138E10, .rodata, fragments/drowzee_game/drowzee_game]
+
+# battle_engine_hud: PAL timing and layout (VERSION_PAL / NTSC_PAL).
+- [0x2ECF40, asm, fragments/battle_engine/battle_engine_hud]
+-> - [0x2ECF40, c, fragments/battle_engine/battle_engine_hud]
+- [0x362AC0, data, fragments/battle_engine/battle_engine_hud]
+-> - [0x362AC0, .data, fragments/battle_engine/battle_engine_hud]
+- [0x368610, rodata, fragments/battle_engine/battle_engine_hud]
+-> - [0x368610, .rodata, fragments/battle_engine/battle_engine_hud]
+- {vram: 0x84390190, type:  bss, name: fragments/battle_engine/battle_engine_hud}
+-> - {vram: 0x84390190, type: .bss, name: fragments/battle_engine/battle_engine_hud}

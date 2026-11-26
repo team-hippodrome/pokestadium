@@ -12,6 +12,13 @@
 #include "src/memmap.h"
 #include "src/memory.h"
 
+// X offset of the trainer names in the roster panels.
+#if defined(VERSION_ES) || defined(VERSION_IT) || defined(VERSION_EU_REV1)
+#define TRAINER_NAME_X_OFFSET 60
+#else
+#define TRAINER_NAME_X_OFFSET 50
+#endif
+
 Vec3f sEndBattleBannerPos;
 
 static StatusConditionLabel sStatusLabelConfigs[] = {
@@ -511,7 +518,7 @@ void BattleHud_DrawParticipantTimer(s16 x, s16 y) {
     s32 color_index;
     s32 timer_string;
 
-    timer_string = ((s32)((sOrderTimer / 30.0f) / 60.0f) * 0x3C) + ((s32)(sOrderTimer / 30.0f) % 60);
+    timer_string = ((s32)((sOrderTimer / NTSC_PAL(30.0f, 25.0f)) / 60.0f) * 0x3C) + ((s32)(sOrderTimer / NTSC_PAL(30.0f, 25.0f)) % 60);
     if (timer_string >= 11) {
         color_index = 2;
     } else if (timer_string >= 4) {
@@ -536,7 +543,7 @@ void BattleHud_DrawParticipantTimer(s16 x, s16 y) {
 
 void BattleHud_DrawBattleTimer(s16 x, s16 y) {
     char string_buffer[16];
-    f32 time_left = sBattleTimer / 30.0f;
+    f32 time_left = sBattleTimer / NTSC_PAL(30.0f, 25.0f);
     UNUSED s32 pad[2];
 
     Gfx_FillRectWithDisplayState(x, y, 39, 12, 0, 0, 0, 0x5A);
@@ -1361,7 +1368,7 @@ void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roste
     Battle_DrawGradientRectWrapper(x + 1, y + 45, 99, 29, &dark_colors[port][2], &light_colors[port][2]);
     Battle_DrawGradientRectWrapper(x + 1, y + 74, 99, 29, &dark_colors[port][3], &light_colors[port][3]);
 
-    BattleHud_DrawPlainText((x - (Font_MeasureTextExtent(1, 0, team_roster->trainerName) / 2)) + 50, y + 3,
+    BattleHud_DrawPlainText((x - (Font_MeasureTextExtent(1, 0, team_roster->trainerName) / 2)) + TRAINER_NAME_X_OFFSET, y + 3,
                             team_roster->trainerName);
 
     if (team_roster->numberOfPokemonBrought > 0) {
@@ -1422,7 +1429,7 @@ void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s
     Battle_DrawGradientRectWrapper(x + 1, y + 45, 200, 29, &dark_colors[port][2], &light_colors[port][2]);
     Battle_DrawGradientRectWrapper(x + 1, y + 74, 200, 29, &dark_colors[port][3], &light_colors[port][3]);
     trainer_name_text_width = Font_MeasureTextExtent(1, 0, teammate_roster->trainerName) / 2;
-    BattleHud_DrawPlainText((x - trainer_name_text_width) + 50, y + 3, teammate_roster->trainerName);
+    BattleHud_DrawPlainText((x - trainer_name_text_width) + TRAINER_NAME_X_OFFSET, y + 3, teammate_roster->trainerName);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
