@@ -23,6 +23,7 @@
     - [0x11C0, c, rsp] # rsp audio
     - [0x1A80, c, dma] # DMA transfer
     - [0x1F70, asm, text_1F70]
+    - [0x1F80, c, dp_intro]
     - [0x2850, c, memmap]
     - [0x2E30, c, memory_main] # handles the main global pool
     - [0x35B0, c, memory] # memory_pool
@@ -263,7 +264,7 @@
     - [0x63850, textbin, jpg/dspMain]
     - [0x64BE0, textbin, rsp/aspMain]
     - [0x65840, textbin, rsp/3DEX2.fifo] # v2.06
-    - [0x66330, asm, text_66330]
+    - [0x66330, .data, dp_intro]
     - [0x66340, .data, util]
     - [0x66350, .data, controller]
     - [0x66360, .data, gfx_rect]
@@ -403,7 +404,7 @@
     - [0x86590]
     - {vram: 0x80085990, type: .bss, name: main}
     - {vram: 0x80088510, type: .bss, name: rsp}
-    - {vram: 0x8008A8B0, type: bss, name: dp_intro}
+    - {vram: 0x8008A8B0, type: .bss, name: dp_intro}
     - {vram: 0x800AC480, type: .bss, name: memmap}
     - {vram: 0x800ACC80, type: .bss, name: memory_main}
     - {vram: 0x800ACCC0, type: .bss, name: util}
