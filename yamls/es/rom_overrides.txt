@@ -568,3 +568,13 @@
 -> - [0x36B110, .rodata, fragments/battle_engine/battle_engine_mechanics]
 - {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
 -> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
+
+# free_battle_rules: Spanish COM difficulty title comes before its icon.
+- [0x2C1E80, asm, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C1E80, c, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4AB0, data, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4AB0, .data, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4B80, rodata, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4B80, .rodata, fragments/free_battle_rules/free_battle_rules]
+- {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+-> - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}

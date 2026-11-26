@@ -602,18 +602,29 @@ void FreeBattle_DrawComDifficultyText(s16 position, char* text) {
 }
 
 // Popup shown when the right-side option is COM
+#if defined(VERSION_ES)
+#define COM_ICON_X (sComDifficultyWindow.x + width + 12)
+#define COM_TITLE_X (sComDifficultyWindow.x + 12)
+#else
+#define COM_ICON_X (sComDifficultyWindow.x + 12)
+#define COM_TITLE_X (sComDifficultyWindow.x + 48)
+#endif
+
 void FreeBattle_DrawComDifficultyWindow(void) {
     if (sComDifficultyWindow.openTicks > 0) {
         s16 opening_progress = sComDifficultyWindow.openTicks * 17;
 
         Ui_DrawBorderedPanel(sComDifficultyWindow.x, sComDifficultyWindow.y + (s16)((136 - opening_progress) / 2), 152, opening_progress, 0x2121); // #212100
         if (sComDifficultyWindow.openTicks == 8) {
-#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
+#if defined(VERSION_ES)
+            // Spanish prints the title first and puts the COM icon after it.
+            s32 width = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
+#elif defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
 #endif
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(sComDifficultyWindow.x + 12, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
+            Gfx_DrawTextureRgba16(COM_ICON_X, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -621,7 +632,7 @@ void FreeBattle_DrawComDifficultyWindow(void) {
                                          sComDifficultyWindow.y + (sComDifficultyWindow.hoveredDifficulty * 28) + 43);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(0x10, 0);
-            Font_Printf(sComDifficultyWindow.x + 48, sComDifficultyWindow.y + 11, Text_GetString(NULL, 0, sRuleSelectText, 10));
+            Font_Printf(COM_TITLE_X, sComDifficultyWindow.y + 11, Text_GetString(NULL, 0, sRuleSelectText, 10));
             FreeBattle_DrawComDifficultyText(0, Text_GetString(NULL, 0, sRuleSelectText, 11));
             FreeBattle_DrawComDifficultyText(1, Text_GetString(NULL, 0, sRuleSelectText, 12));
             FreeBattle_DrawComDifficultyText(2, Text_GetString(NULL, 0, sRuleSelectText, 13));
