@@ -317,8 +317,9 @@ ASSET_DIRS    := $(shell find assets/$(VERSION) -type d)
 LIB_DIRS      := $(foreach f, $(LIBULTRA_DIR), $f)
 
 # Build the branch's versioned source tree, excluding local/generated analysis
-# copies that may coexist in a developer checkout after extraction.
-C_FILES       := $(shell git ls-files -- src | sed -n '/\.c$$/p')
+# copies that may coexist in a developer checkout after extraction. *.inc.c files are
+# included by other C files, not compiled on their own.
+C_FILES       := $(shell git ls-files -- src | sed -n '/\.inc\.c$$/d; /\.c$$/p')
 # A version that builds some files from assembly only compiles the C its linker script uses
 ifneq ($(filter $(VERSION),$(ASM_VERSIONS)),)
 ifneq ($(wildcard linker_scripts/$(VERSION)/$(TARGET).ld),)
@@ -387,7 +388,7 @@ define print
   @$(PRINT) "$(GREEN)$(1) $(YELLOW)$(2)$(GREEN) -> $(BLUE)$(3)$(NO_COL)\n"
 endef
 
-DECOMP_POKESTADIUM := $(filter-out src/libleo/%,$(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c)))
+DECOMP_POKESTADIUM := $(filter-out src/libleo/% %.inc.c,$(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c)))
 DECOMP_POKESTADIUM_FILTERED := $(patsubst %.c,%.o,$(addprefix $(BUILD_DIR)/,$(shell find $(DECOMP_POKESTADIUM) -type f -exec grep -l "GLOBAL_ASM" {} \;)))
 
 # only run asm processor on files that need it.
