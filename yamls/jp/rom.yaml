@@ -31,7 +31,7 @@
     - [0x54F0, asm, text_54F0]
     - [0x63D0, c, controller]
     - [0x69E0, c, gfx_buffer]
-    - [0x6B60, asm, text_6B60]
+    - [0x6B60, c, gfx_rect]
     - [0x7580, c, stage_loader] # stage loader
     - [0x8E40, c, crash_screen] # crash handler
     - [0x9CA0, c, profiler]
@@ -262,7 +262,7 @@
     - [0x66330, asm, text_66330]
     - [0x66340, .data, util]
     - [0x66350, .data, controller]
-    - [0x66360, data, text_66360]
+    - [0x66360, .data, gfx_rect]
     - [0x66370, .data, stage_loader]
     - [0x66D60, .data, crash_screen]
     - [0x66F60, .data, profiler]
