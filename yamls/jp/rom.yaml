@@ -632,10 +632,10 @@
     vram: 0x86000000
     subsegments:
     - [0x142730, textbin,   fragments/magikarp_game/magikarp_game_header]
-    - [0x142750, asm, fragment6_142750]
-    - [0x144EF0, data, fragments/magikarp_game/magikarp_game]
-    - [0x145450, rodata, fragments/magikarp_game/magikarp_game]
-    - {vram: 0x86002DD0, type:  bss, name: fragments/magikarp_game/magikarp_game}
+    - [0x142750, c, fragments/magikarp_game/magikarp_game]
+    - [0x144EF0, .data, fragments/magikarp_game/magikarp_game]
+    - [0x145450, .rodata, fragments/magikarp_game/magikarp_game]
+    - {vram: 0x86002DD0, type: .bss, name: fragments/magikarp_game/magikarp_game}
   - name: fragment6_relocs
     type: code
     bss_size: 0x0

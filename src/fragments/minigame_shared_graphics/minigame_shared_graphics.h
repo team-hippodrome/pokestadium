@@ -17,6 +17,7 @@ extern u32 D_87A011A4[];
 #define MINIGAME_SHARED_TEXT_JUMP ((char*)&D_87A01110[17])        // "ジャンプ" "Jump"
 #define MINIGAME_SHARED_TEXT_ELLIPSIS ((char*)&D_87A01110[20])    // "・・・"
 #define MINIGAME_SHARED_TEXT_GOT_IT ((char*)&D_87A01110[22])      // "ゲットだぜ！" "Got it!"
+#define MINIGAME_SHARED_TEXT_DRAW ((char*)&D_87A01110[41])        // "ひきわけ" "Draw"
 
 void MiniCam_SetActive(CameraNode*);
 Gfx* MiniCam_ApplyProjection(Gfx*);
