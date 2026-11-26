@@ -1236,8 +1236,9 @@
     vram: 0x81100000
     subsegments:
     - [0x26F340, textbin,   fragments/transfer_pak_error/transfer_pak_error_header]
-    - [0x26F360, asm, fragment32_26F360]
-    - {vram: 0x81100A90, type:  bss, name: fragments/transfer_pak_error/transfer_pak_error}
+    - [0x26F360, c, fragments/transfer_pak_error/transfer_pak_error]
+    - [0x26FC40, .data, fragments/transfer_pak_error/transfer_pak_error]
+    - {vram: 0x81100A90, type: .bss, name: fragments/transfer_pak_error/transfer_pak_error}
   - name: fragment32_relocs
     type: code
     bss_size: 0x0
