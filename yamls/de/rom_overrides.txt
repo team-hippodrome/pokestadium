@@ -371,3 +371,13 @@
 -> - [0x23B680, .rodata, fragments/pokedex/pokedex_2190D0]
 - {vram: 0x888268C0, type:  bss, name: fragments/pokedex/pokedex_2190D0}
 -> - {vram: 0x888268C0, type: .bss, name: fragments/pokedex/pokedex_2190D0}
+
+# lab_pc_icons: built from the shared C with the German type icons.
+- [0x1F8450, asm, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1F8450, c, fragments/lab_pc_icons/lab_pc_icons]
+- [0x1FDEF0, data, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x1FDEF0, .data, fragments/lab_pc_icons/lab_pc_icons]
+- [0x214800, rodata, fragments/lab_pc_icons/lab_pc_icons]
+-> - [0x214800, .rodata, fragments/lab_pc_icons/lab_pc_icons]
+- {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
+-> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
