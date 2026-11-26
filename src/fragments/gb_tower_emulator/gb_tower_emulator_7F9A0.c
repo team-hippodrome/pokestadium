@@ -243,7 +243,12 @@ const u32 sDmgRenderMicrocodeData[0x2C] = {
 };
 // "Loading..." and "Saving...", stored reversed and offset: character i of a
 // string is byte[start + count - i] - i - 0x3D.
-#if defined(VERSION_ES)
+#if defined(VERSION_FR)
+const u8 sLoadingSavingText[0x1C] = {
+    0x77, 0x76, 0x75, 0xBA, 0xB3, 0xA9, 0xB0, 0xA7, 0xA8, 0xB2, 0xA0, 0xA6, 0x80, 0x77,
+    0x76, 0x75, 0xAB, 0xA9, 0xB6, 0xA4, 0xA9, 0xA6, 0xB6, 0xB4, 0x9F, 0x90, 0x00, 0x00,
+};
+#elif defined(VERSION_ES)
 const u8 sLoadingSavingText[0x18] = {
     0x75, 0x74, 0x73, 0xB3, 0xA7, 0xB0, 0xA2, 0xA7, 0xB1, 0x9F, 0x80, 0x76,
     0x75, 0x74, 0xB4, 0xA8, 0xB1, 0xA3, 0xA5, 0xB2, 0xA0, 0xB3, 0x84, 0x00,
@@ -267,6 +272,8 @@ const u8 sLoadingSavingText[0x14] = {
 // "Loading. Please wait..." in the same reversed/offset encoding.
 #if defined(VERSION_ES)
 u8 sBootLogoTiles[0xF8] = {
+#elif defined(VERSION_FR)
+u8 sBootLogoTiles[0xF4] = {
 #else
 u8 sBootLogoTiles[0xEC] = {
 #endif
@@ -281,7 +288,10 @@ u8 sBootLogoTiles[0xEC] = {
     0xFC, 0xFC, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF0, 0xF0, 0xC3, 0xC3, 0xC3,
     0xC3, 0xC3, 0xC3, 0xFF, 0xFF, 0xCF, 0xCF, 0xCF, 0xCF, 0xCF, 0xCF, 0xC3, 0xC3, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F,
     0xFC, 0xFC, 0x3C, 0x42, 0xB9, 0xA5, 0xB9, 0xA5, 0x42, 0x3C,
-#if defined(VERSION_ES)
+#if defined(VERSION_FR)
+    0x99, 0xD9, 0x95, 0xDB, 0x91, 0xD4, 0x7F, 0xC2, 0xCD, 0xBD, 0xC5, 0xBA, 0xC7, 0xC5, 0x90, 0x6D, 0x79, 0xBD, 0xB5, 0xAA, 0xB0, 0xA6,
+    0xA6, 0xAF, 0x9C, 0xA1, 0x7A, 0xBA, 0xB2, 0xA8, 0x8F, 0x7B, 0x60, 0x5F, 0x5E, 0x5D, 0xAA, 0xAA, 0xAE, 0xAE, 0xA7, 0x79, 0x00, 0x00,
+#elif defined(VERSION_ES)
     0x9F, 0x9D, 0x9B, 0xCC, 0xDB, 0xCC, 0xD5, 0xD6, 0xC6, 0x7F, 0x89, 0xCD, 0xC8, 0xCD, 0xB6, 0xB9, 0x71, 0xC1, 0xBC, 0x9B, 0x69, 0x75, 0xB4, 0xA7,
     0xAF, 0xA0, 0xA4, 0xAD, 0x9A, 0x7A, 0xC0, 0xB2, 0xA8, 0x8F, 0x61, 0x7A, 0x5F, 0x5E, 0x5D, 0x5C, 0xA9, 0x78, 0xAD, 0xA7, 0x79, 0x00, 0x00, 0x00,
 #elif defined(VERSION_DE)
@@ -380,6 +390,16 @@ u8 sYellowTitle[0x10] = {
 #define RED_BLUE_SIGNATURE_4 0x7F
 #define YELLOW_SIGNATURE_3 0xC0
 #define YELLOW_STORED_BANK_ADDRESS 0xF618
+#elif defined(VERSION_FR)
+#define RED_GLOBAL_CHECKSUM 0x7AFC
+#define BLUE_GLOBAL_CHECKSUM 0x56A4
+#define YELLOW_GLOBAL_CHECKSUM 0xB7C1
+#define RED_BLUE_SIGNATURE_1 0x94
+#define RED_BLUE_SIGNATURE_2 0xAD
+#define RED_BLUE_SIGNATURE_3 0x7F
+#define RED_BLUE_SIGNATURE_4 0xDA
+#define YELLOW_SIGNATURE_3 0x86
+#define YELLOW_STORED_BANK_ADDRESS 0xE63C
 #elif defined(VERSION_ES)
 #define RED_GLOBAL_CHECKSUM 0x384A
 #define BLUE_GLOBAL_CHECKSUM 0x14D7
@@ -400,6 +420,13 @@ u8 sYellowTitle[0x10] = {
 #define RED_BLUE_SIGNATURE_4 0xA8
 #define YELLOW_SIGNATURE_3 0x84
 #define YELLOW_STORED_BANK_ADDRESS 0xD938
+#endif
+#if defined(VERSION_FR)
+#define YELLOW_SIGNATURE_2 0x83
+#define YELLOW_SIGNATURE_4 0x9C
+#else
+#define YELLOW_SIGNATURE_2 0x91
+#define YELLOW_SIGNATURE_4 0x92
 #endif
 
 // Screen layout. The PAL screen moves the status bar and the pause menu. The German
@@ -423,6 +450,11 @@ u8 sYellowTitle[0x10] = {
 #define ACCESS_OVERLAY_POS 0x9E
 #define ACCESS_TEXT_POS 0x770
 #define ACCESS_ICON_POS 0x90
+#elif defined(VERSION_FR)
+#define LOADING_TEXT_END 0xEB
+#define ACCESS_OVERLAY_POS 0xA6
+#define ACCESS_TEXT_POS 0x75C
+#define ACCESS_ICON_POS 0x98
 #elif defined(VERSION_ES)
 #define LOADING_TEXT_END 0xEE
 #define ACCESS_OVERLAY_POS 0x9E
@@ -442,6 +474,9 @@ u8 sYellowTitle[0x10] = {
 #if defined(VERSION_ES)
 #define PAUSE_MENU_SPEED_ICON_POS 0x7AB
 #define PAUSE_MENU_CONFIG_ICON_POS 0x3C43
+#elif defined(VERSION_FR)
+#define PAUSE_MENU_SPEED_ICON_POS 0x7B2
+#define PAUSE_MENU_CONFIG_ICON_POS 0x3C4A
 #else
 #define PAUSE_MENU_SPEED_ICON_POS 0x784
 #define PAUSE_MENU_CONFIG_ICON_POS 0x3C1C
@@ -453,6 +488,13 @@ u8 sYellowTitle[0x10] = {
 #define STATUS_TEXT_INDEX 0x11D
 #define STATUS_TEXT_END 0x46
 #define LOADING_SCREEN_TEXT_POS 0x260
+#elif defined(VERSION_FR)
+#define STATUS_BAR_ICON_SHIFT 0x58
+#define STATUS_BAR_TIER0_WIDTH 0x60
+#define STATUS_TEXT_BACK 0x2DC
+#define STATUS_TEXT_INDEX 0x11A
+#define STATUS_TEXT_END 0x46
+#define LOADING_SCREEN_TEXT_POS 0x280
 #else
 #define STATUS_BAR_ICON_SHIFT 0
 #define STATUS_BAR_TIER0_WIDTH 0x60
@@ -466,7 +508,9 @@ u8 sYellowTitle[0x10] = {
 // (bank, checksum of first 8 KB, checksum of second 8 KB), or 0x8000 | RAM bank;
 // zero ends the list. Selected by cartridgeVersion with the matching header
 // global checksum (Red 0x91E6, Blue 0x9D0A, Yellow 0x047C).
-#if defined(VERSION_ES)
+#if defined(VERSION_FR)
+#include "gb_tower_emulator_bank_lists_fr.inc.c"
+#elif defined(VERSION_ES)
 #include "gb_tower_emulator_bank_lists_es.inc.c"
 #elif defined(VERSION_DE)
 #include "gb_tower_emulator_bank_lists_de.inc.c"
@@ -687,7 +731,9 @@ u16 sVersionColors[4] = {
 };
 // Pause menu text command lists for GbEmu_DrawTextCommands; strings are noted
 // in the symbol names (sMenuTitleText = "Menu", ...).
-#if defined(VERSION_ES)
+#if defined(VERSION_FR)
+#include "gb_tower_emulator_menu_text_fr.inc.c"
+#elif defined(VERSION_ES)
 #include "gb_tower_emulator_menu_text_es.inc.c"
 #elif defined(VERSION_DE)
 #include "gb_tower_emulator_menu_text_de.inc.c"
@@ -1841,10 +1887,21 @@ void GbEmu_DrawAccessOverlay(s32 overlay_index, s32 text_offset) {
     GbEmu_DrawStretchedBorderRow(fb - 0x18, sVersionColors[i], 0x7C);
 #elif defined(VERSION_ES)
     GbEmu_DrawStretchedBorderRow(fb - 0x20, sVersionColors[i], 0x80);
+#elif defined(VERSION_FR)
+    GbEmu_DrawStretchedBorderRow(fb - 0x2C, sVersionColors[i], 0x86);
 #else
     GbEmu_DrawStretchedBorderRow(fb, sVersionColors[i], 0x70);
 #endif
 
+#if defined(VERSION_FR)
+    // "Chargement" and "Sauvegarde" are padded to the same length.
+    if (text_offset != 0) {
+        count = 0xC;
+        text_offset = 0xD;
+    } else {
+        count = 0xC;
+    }
+#else
     if (text_offset != 0) {
 #if defined(VERSION_DE) || defined(VERSION_ES)
         count = 0xB;
@@ -1863,6 +1920,7 @@ void GbEmu_DrawAccessOverlay(s32 overlay_index, s32 text_offset) {
         count = 9;
 #endif
     }
+#endif
     x = 0;
 
     for (i = 0; i <= count; i++) {
@@ -3489,15 +3547,15 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
                     break;
                 case 4:
                     if ((emu->cartridgeId.version != 0) || (emu->cartridgeId.sum != YELLOW_GLOBAL_CHECKSUM) || (emu->romSignature[1] != 0x8F) ||
-                        (emu->romSignature[2] != 0x91) || (emu->romSignature[3] != YELLOW_SIGNATURE_3) ||
-                        (emu->romSignature[4] != 0x92)) {
+                        (emu->romSignature[2] != YELLOW_SIGNATURE_2) || (emu->romSignature[3] != YELLOW_SIGNATURE_3) ||
+                        (emu->romSignature[4] != YELLOW_SIGNATURE_4)) {
                         goto start_transfer;
                     }
                     emu->unk_5D70[1] = (u32)sYellowPakBankList;
                     emu->unk_5D70[3] = YELLOW_STORED_BANK_ADDRESS;
                     emu->unk_5D70[2] = (u32)sYellowStoredBankList;
                     emu->unk_5DC6 = 0;
-#if !defined(VERSION_DE) && !defined(VERSION_ES)
+#if !defined(VERSION_DE) && !defined(VERSION_ES) && !defined(VERSION_FR)
                     bzero((u8*)emu->romImage + 0xEC000, 0x4000);
                     emu->romBankStatus[0x3B] = 0xFF;
 #endif
