@@ -1922,7 +1922,7 @@ s32 Widget_PauseMenuUpdate(void) {
                 D_8780FC60 = 1;
                 D_8780FC40 = 1;
                 D_8780FC94 = 0;
-                D_8780FE44 = 0xB4;
+                D_8780FE44 = NTSC_PAL(180, 150);
                 if (D_8780FA2A != 0) {
                     if ((D_8780FC50[0] + D_8780FC50[1] + D_8780FC50[2] + D_8780FC50[3]) != 0) {
                         for (i = 0; i < 4; i++) {
@@ -1989,7 +1989,7 @@ s32 Widget_PauseMenuUpdate(void) {
                     Audio_PlayPersistentSoundCommand(0x12, 0);
                     D_8780FC40 = 2;
                     D_8780FC64 = 1;
-                    D_8780FCAA = 0x190;
+                    D_8780FCAA = NTSC_PAL(400, 408);
                     Widget_PauseMenuCheckTournamentEnd();
                     if (D_8780FC4C != 0) {
                         D_8780FC5D = 2;
@@ -2013,7 +2013,7 @@ s32 Widget_PauseMenuUpdate(void) {
 
                         if (i == 4) {
                             D_8780FC68 = 1;
-                            D_8780FCA4 = 0xF0;
+                            D_8780FCA4 = NTSC_PAL(240, 200);
                             D_8780FCA6 = 0xA;
                         }
                     }
@@ -2034,7 +2034,7 @@ s32 Widget_PauseMenuUpdate(void) {
                                 if (Widget_PauseMenuCheckHyperUnlock() != 0) {
                                     Audio_StartMusicTrack(0x13);
                                     D_8780FC6C = 1;
-                                    D_8780FE44 = 0xB4;
+                                    D_8780FE44 = NTSC_PAL(180, 150);
                                 } else {
                                     D_8780FC40 = 3;
                                     D_8780FC70 = 1;
@@ -2049,7 +2049,7 @@ s32 Widget_PauseMenuUpdate(void) {
                                     D_8780FC70 = 1;
                                     D_8780FC6C = 0;
                                 }
-                            } else if ((D_8780FE44 < 0xAB) && (D_8780FCA7 == 0)) {
+                            } else if ((D_8780FE44 < NTSC_PAL(171, 141)) && (D_8780FCA7 == 0)) {
                                 D_8780FA28 |= 1;
                                 Save_SetOptionsField1E(D_8780FA28 & 0xFF);
                                 Save_CommitTypedRecord(0x14, 0);
@@ -2086,10 +2086,10 @@ s32 Widget_PauseMenuUpdate(void) {
                     D_8780FC74 = 1;
                     if (D_8780FC78 == 1) {
                         D_8780FC40 = 5;
-                        D_8780FCA8 = 0x2F;
+                        D_8780FCA8 = NTSC_PAL(47, 38);
                     } else {
                         D_8780FC40 = 4;
-                        D_8780FE3C = 0x60 - Rand_Range(0x20);
+                        D_8780FE3C = NTSC_PAL(96, 80) - Rand_Range(0x20);
                         D_8780FC90 = 0;
                     }
                 } else {
@@ -2117,13 +2117,13 @@ s32 Widget_PauseMenuUpdate(void) {
 
             if (D_8780FE3C <= 0) {
                 D_8780FC40 = 5;
-                D_8780FCA8 = 0x2A;
+                D_8780FCA8 = NTSC_PAL(42, 34);
             }
             break;
 
         case 5:
             D_8780FCA8--;
-            if (D_8780FCA8 == 0x29) {
+            if (D_8780FCA8 == NTSC_PAL(41, 33)) {
                 Audio_PlaySoundEffectById(0x11);
             } else if (D_8780FCA8 <= 0) {
                 D_8780FC40 = 6;
@@ -2170,7 +2170,7 @@ s32 Widget_PauseMenuUpdate(void) {
         }
 
         if (D_8780FC64 != 0) {
-            D_8780FCAA -= 0x14;
+            D_8780FCAA -= NTSC_PAL(20, 24);
             if (D_8780FCAA <= 0) {
                 D_8780FCAA = 0;
                 if (D_8780FDF8 == 0) {
@@ -2208,7 +2208,7 @@ s32 Widget_PauseMenuUpdate(void) {
             switch (D_8780FCA3) {
                 case 0:
                     D_8780FCA4 -= D_8780FCA0;
-                    if (D_8780FCA4 < 0xB4) {
+                    if (D_8780FCA4 < NTSC_PAL(180, 150)) {
                         Audio_StartMusicTrack(0x2C);
                         D_8780FCA3 = 1;
                     }

@@ -216,3 +216,13 @@
 -> - [0x117BF0, .rodata, fragments/minigame_hud/minigame_hud_countdown]
 - {vram: 0x8780FAD0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
 -> - {vram: 0x8780FAD0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}
+
+# minigame_hud_pause_menu: PAL blink, menu and result timers (NTSC_PAL).
+- [0x10ABE0, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10ABE0, c, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10E710, data, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10E710, .data, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x117C00, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x117C00, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+- {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+-> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
