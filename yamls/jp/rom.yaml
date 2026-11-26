@@ -1522,7 +1522,10 @@
     vram: 0x82B00000
     subsegments:
     - [0x2BBBB0, textbin,  fragments/rental_hub/rental_hub_header]
-    - [0x2BBBD0, asm, fragment54_2BBBD0]
+    - [0x2BBBD0, c, fragments/rental_hub/rental_hub]
+    - [0x2BCC50, .data, fragments/rental_hub/rental_hub]
+    - [0x2BCD40, .rodata, fragments/rental_hub/rental_hub]
+    - {vram: 0x82B011C0, type: .bss, name: fragments/rental_hub/rental_hub}
   - name: fragment54_relocs
     type: code
     bss_size: 0x0
