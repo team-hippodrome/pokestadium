@@ -402,3 +402,13 @@
 -> - [0x2A0630, .data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
 - {vram: 0x834021E0, type:  bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
 -> - {vram: 0x834021E0, type: .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+
+# transfer_pak_check: built from the shared C.
+- [0x2B7430, asm, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2B7430, c, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2BE3D0, data, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2BE3D0, .data, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2C13B0, rodata, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2C13B0, .rodata, fragments/transfer_pak_check/transfer_pak_check]
+- {vram: 0x82D0A010, type:  bss, name: fragments/transfer_pak_check/transfer_pak_check}
+-> - {vram: 0x82D0A010, type: .bss, name: fragments/transfer_pak_check/transfer_pak_check}

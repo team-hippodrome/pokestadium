@@ -1792,10 +1792,10 @@
     vram: 0x82D00000
     subsegments:
     - [0x2B6CE0, textbin,   fragments/transfer_pak_check/transfer_pak_check_header]
-    - [0x2B6D00, asm, fragments/transfer_pak_check/transfer_pak_check]
-    - [0x2BDCA0, data, fragments/transfer_pak_check/transfer_pak_check]
-    - [0x2C0C80, rodata, fragments/transfer_pak_check/transfer_pak_check]
-    - {vram: 0x82D0A010, type:  bss, name: fragments/transfer_pak_check/transfer_pak_check}
+    - [0x2B6D00, c, fragments/transfer_pak_check/transfer_pak_check]
+    - [0x2BDCA0, .data, fragments/transfer_pak_check/transfer_pak_check]
+    - [0x2C0C80, .rodata, fragments/transfer_pak_check/transfer_pak_check]
+    - {vram: 0x82D0A010, type: .bss, name: fragments/transfer_pak_check/transfer_pak_check}
   - name: fragment57_relocs
     type: code
     bss_size: 0x0

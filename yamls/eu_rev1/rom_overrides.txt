@@ -385,3 +385,13 @@
 -> - [0x15B000, c, fragments/credits/credits_15AD80]
 - [0x15E7B0, data, fragments/credits/credits_15AD80]
 -> - [0x15E7B0, .data, fragments/credits/credits_15AD80]
+
+# transfer_pak_check: built from the shared C.
+- [0x2B6FE0, asm, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2B6FE0, c, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2BDF80, data, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2BDF80, .data, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2C0F60, rodata, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2C0F60, .rodata, fragments/transfer_pak_check/transfer_pak_check]
+- {vram: 0x82D0A010, type:  bss, name: fragments/transfer_pak_check/transfer_pak_check}
+-> - {vram: 0x82D0A010, type: .bss, name: fragments/transfer_pak_check/transfer_pak_check}
