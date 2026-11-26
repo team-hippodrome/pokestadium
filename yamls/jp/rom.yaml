@@ -29,6 +29,7 @@
     - [0x39F0, c, util]
     - [0x3F20, c, jpeg_stream] # PRES-JPEG stream/asset loader
     - [0x54F0, asm, text_54F0]
+    - [0x5500, c, scheduler]
     - [0x6020, c, reset]
     - [0x63D0, c, controller]
     - [0x69E0, c, gfx_buffer]
@@ -338,7 +339,7 @@
     - [0x7F5F0, .rodata, rsp]
     - [0x7F640, .rodata, util]
     - [0x7F670, .rodata, jpeg_stream]
-    - [0x7F6E0, rodata, scheduler]
+    - [0x7F6E0, .rodata, scheduler]
     - [0x7F700, .rodata, crash_screen]
     - [0x7FAC0, .rodata, profiler]
     - [0x7FAE0, .rodata, gb_tower]
@@ -407,7 +408,7 @@
     - {vram: 0x800ACC80, type: .bss, name: memory_main}
     - {vram: 0x800ACCC0, type: .bss, name: util}
     - {vram: 0x800ACCD0, type: .bss, name: jpeg_stream}
-    - {vram: 0x800ACEF0, type: bss, name: scheduler}
+    - {vram: 0x800ACEF0, type: .bss, name: scheduler}
     - {vram: 0x800AD930, type: .bss, name: reset}
     - {vram: 0x800ADF30, type: .bss, name: controller}
     - {vram: 0x800AE030, type: .bss, name: gfx_buffer}
