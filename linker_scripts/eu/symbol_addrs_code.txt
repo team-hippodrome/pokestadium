@@ -1213,7 +1213,7 @@ Audio_QueueVoiceVolume = 0x80044730; // type:func
 Audio_QueueVoiceVolumeByte = 0x80044804; // type:func
 Audio_RelocateSoundBankWrapper = 0x800448D0; // type:func
 Audio_RelocateSoundBankTable = 0x800448F0; // type:func
-Audio_QueueSetMonoOutputCommand = 0x8004E314; // type:func
+// Audio_QueueSetMonoOutputCommand = 0x8004E314; // type:func // replaced by yamls/eu/symbol_overrides.txt
 Audio_SetVoiceStartTimingMode = 0x80044A24; // type:func
 Audio_StopAllSoundEffects = 0x80044A74; // type:func
 Audio_PlayMusicSequenceLooped = 0x80044BB0; // type:func
@@ -7929,3 +7929,6 @@ Snap_PrintClubIsBackgroundMode = 0x8FA00510; // type:func
 Snap_PrintClubPrintSeals = 0x8FA0051C; // type:func
 func_8FB00020 = 0x8FB00020; // type:func
 func_8FC00020 = 0x8FC00020; // type:func segment:fragment77
+
+// Reviewed addresses from yamls/eu/symbol_overrides.txt
+Audio_QueueSetMonoOutputCommand = 0x800449A0; // type:func

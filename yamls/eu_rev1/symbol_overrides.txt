@@ -1,0 +1,3 @@
+# Symbols tools/port_version.py maps to the wrong address in this version (checked
+# against the ROM). Applied by apply_symbol_overrides().
+Audio_QueueSetMonoOutputCommand = 0x80044AE0;

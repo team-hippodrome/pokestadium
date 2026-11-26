@@ -85,7 +85,7 @@
     - [0x37000, c, audio_sfx_wrapper]
     - [0x37030, asm, audio_stored_fade]
     - [0x39ED0, c, audio_sound_state]  # audio functions to 0x50C00
-    - [0x39FC0, asm, audio_channel]
+    - [0x39FC0, c, audio_channel]
     - [0x3A2F0, asm, audio_commands_category2]
     - [0x3CBA0, c, audio_category_fade]
     - [0x3CCD0, asm, text_3CCD0]
@@ -117,10 +117,10 @@
     - [0x4B330, c, libnaudio/n_synstartvoiceparam]
     - [0x4B410, c, libnaudio/n_synstopvoice]
     - [0x4B480, asm, libnaudio/n_synthesizer]
-    - [0x4F180, asm, audio_stream]
+    - [0x4F180, c, audio_stream]
     - [0x4FD30, c, gsm_decoder]  # speech code
     - [0x511A0, hasm, libgsm]
-    - [0x517A0, asm, audio_stream_channel]
+    - [0x517A0, c, audio_stream_channel]
     - [0x51B50, c, audio_cache]
     - [0x51BB0, c, rom_device]
     - [0x51D00, asm, text_51D00]
@@ -298,7 +298,8 @@
     - [0x79A90, data, 3D140]
     - [0x79EC0, data, gb_audio_render]
     - [0x7A2C0, data, gb_audio]
-    - [0x7A320, data, audio_stream]
+    - [0x7A320, .data, audio_stream]
+    - [0x7A330, data, libleo/leofunc]
     - [0x7A340, .data, libleo/leocmdex]
     - [0x7A3A0, .data, libleo/driverominit]
     - [0x7A3B0, .data, libleo/leord_diskid]
@@ -357,10 +358,13 @@
     - [0x7D3A0, .rodata, 33FE0]
     - [0x7D420, rodata, text_7D420]
     - [0x7D470, rodata, audio_commands]
+    - [0x7D7D0, .rodata, audio_channel]
     - [0x7D800, rodata, audio_commands_category2]
     - [0x7E210, rodata, 3D140_2]
     - [0x7E650, rodata, libnumus/player]
     - [0x7E6F0, rodata, libnaudio/n_env]
+    - [0x7E810, .rodata, audio_stream]
+    - [0x7E830, rodata, libleo/leofunc]
     - [0x7E840, .rodata, libleo/leocmdex]
     - [0x7E8F0, .rodata, libleo/leord_diskid]
     - [0x7E900, .rodata, libleo/leomecha]
@@ -434,7 +438,7 @@
     - {vram: 0x800FCBF0, type: bss, name: gb_audio}
     - {vram: 0x800FCEE0, type: bss, name: libnumus/player}
     - {vram: 0x800FCF60, type: bss, name: gb_audio_render}
-    - {vram: 0x800FFB20, type: bss, name: audio_stream}
+    - {vram: 0x800FFB20, type: .bss, name: audio_stream}
     - {vram: 0x800FFBB0, type: .bss, name: rom_device}
     - {vram: 0x800FFBD0, type: bss, name: audio_loop_point}
     - {vram: 0x801008C0, type: .bss, name: libleo/leocmdex}

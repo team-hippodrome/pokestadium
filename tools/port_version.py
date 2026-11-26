@@ -32,6 +32,8 @@ splat's assembly (for releases that change too much for C edits; see below). C f
 in yamls/<version>/asm_files.txt are built from assembly regardless.
 yamls/<version>/rom_overrides.txt replaces exact generated rom.yaml lines with reviewed
 ones, for files built from version-specific C.
+yamls/<version>/symbol_overrides.txt gives reviewed `name = 0xADDR;` addresses for symbols
+the mapping gets wrong (the main-segment audio region, for one).
 --report prints what moved and which functions differ (normalized), without writing files.
 """
 
@@ -1508,6 +1510,39 @@ def changed_functions(p: "Porter", elf: str) -> list[tuple[str, int, int, int | 
     return res
 
 
+
+def apply_symbol_overrides(version: str, files: dict) -> None:
+    """Apply yamls/<version>/symbol_overrides.txt: reviewed `name = 0xADDR;` lines for symbols
+    the porter maps to the wrong address. Each name gets its address in symbol_addrs_code.txt;
+    any generated line for that name, and any other name generated at that address, is
+    commented out."""
+    path = f"yamls/{version}/symbol_overrides.txt"
+    if not os.path.exists(path):
+        return
+    fixed = {}
+    for line in open(path).read().splitlines():
+        m = re.match(r"^\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+);", line)
+        if m:
+            fixed[m.group(1)] = int(m.group(2), 16)
+    if not fixed:
+        return
+    addrs = set(fixed.values())
+    types = {}
+    for key in [k for k in files if k.endswith(".txt") or k.endswith("undefined_syms.ld")]:
+        out = []
+        for line in files[key].splitlines():
+            m = re.match(r"^\s*(?:PROVIDE\()?(\w+)\s*=\s*(0x[0-9A-Fa-f]+)\)?;", line)
+            if m and (m.group(1) in fixed or (int(m.group(2), 16) in addrs and fixed.get(m.group(1)) is None)):
+                if m.group(1) in fixed and "type:func" in line:
+                    types[m.group(1)] = " // type:func"
+                out.append(f"// {line} // replaced by {path}")
+                continue
+            out.append(line)
+        files[key] = "\n".join(out) + "\n"
+    key = f"linker_scripts/{version}/symbol_addrs_code.txt"
+    files[key] += f"\n// Reviewed addresses from {path}\n" + "".join(
+        f"{n} = 0x{a:08X};{types.get(n, '')}\n" for n, a in fixed.items())
+
 def apply_rom_overrides(version: str, rom_yaml: str) -> str:
     """Apply yamls/<version>/rom_overrides.txt to the generated rom.yaml.
 
@@ -1666,6 +1701,7 @@ def main():
     if os.path.exists(und) and VERSION_ONLY_MARK in open(und).read():
         old = open(und).read()
         files[und] += old[old.index(VERSION_ONLY_MARK) - 1:]
+    apply_symbol_overrides(ver, files)
     if not report:
         for path, text in files.items():
             write(path, text)

@@ -514,3 +514,27 @@
 -> - [0x36AC10, .rodata, fragments/battle_engine/battle_engine_mechanics]
 - {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
 -> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
+
+- [0x4F180, asm, audio_stream]
+-> - [0x4F180, c, audio_stream]
+- [0x7A320, data, audio_stream]
+-> - [0x7A320, .data, audio_stream]
+-> - [0x7A330, data, libleo/leofunc]
+- {vram: 0x800FFB20, type: bss, name: audio_stream}
+-> - {vram: 0x800FFB20, type: .bss, name: audio_stream}
+
+- [0x39FC0, asm, audio_channel]
+-> - [0x39FC0, c, audio_channel]
+
+- [0x517A0, asm, audio_stream_channel]
+-> - [0x517A0, c, audio_stream_channel]
+
+# audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
+# libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
+- [0x7D470, rodata, audio_commands]
+-> - [0x7D470, rodata, audio_commands]
+-> - [0x7D7D0, .rodata, audio_channel]
+- [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E810, .rodata, audio_stream]
+-> - [0x7E830, rodata, libleo/leofunc]

@@ -544,3 +544,27 @@
 -> - {vram: 0x88224F50, type: .bss, name: fragments/lab_pc/lab_pc_1A9780}
 - {vram: 0x88224F60, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
 -> - {vram: 0x88224F60, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}
+
+- [0x4F600, asm, audio_stream]
+-> - [0x4F600, c, audio_stream]
+- [0x7A7A0, data, audio_stream]
+-> - [0x7A7A0, .data, audio_stream]
+-> - [0x7A7B0, data, libleo/leofunc]
+- {vram: 0x800FFFA0, type: bss, name: audio_stream}
+-> - {vram: 0x800FFFA0, type: .bss, name: audio_stream}
+
+- [0x3A3C0, asm, audio_channel]
+-> - [0x3A3C0, c, audio_channel]
+
+- [0x51C20, asm, audio_stream_channel]
+-> - [0x51C20, c, audio_stream_channel]
+
+# audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
+# libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
+- [0x7D8F0, rodata, audio_commands]
+-> - [0x7D8F0, rodata, audio_commands]
+-> - [0x7DC50, .rodata, audio_channel]
+- [0x7EB70, rodata, libnaudio/n_env]
+-> - [0x7EB70, rodata, libnaudio/n_env]
+-> - [0x7EC90, .rodata, audio_stream]
+-> - [0x7ECB0, rodata, libleo/leofunc]

@@ -271,3 +271,27 @@
 -> - [0x284730, .rodata, fragments/minigame_select/minigame_select_27BCC0]
 - {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
 -> - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}
+
+- [0x4F040, asm, audio_stream]
+-> - [0x4F040, c, audio_stream]
+- [0x7A1E0, data, audio_stream]
+-> - [0x7A1E0, .data, audio_stream]
+-> - [0x7A1F0, data, libleo/leofunc]
+- {vram: 0x800FF9F0, type: bss, name: audio_stream}
+-> - {vram: 0x800FF9F0, type: .bss, name: audio_stream}
+
+- [0x39E80, asm, audio_channel]
+-> - [0x39E80, c, audio_channel]
+
+- [0x51660, asm, audio_stream_channel]
+-> - [0x51660, c, audio_stream_channel]
+
+# audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
+# libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
+- [0x7D340, rodata, audio_commands]
+-> - [0x7D340, rodata, audio_commands]
+-> - [0x7D6A0, .rodata, audio_channel]
+- [0x7E5C0, rodata, libnaudio/n_env]
+-> - [0x7E5C0, rodata, libnaudio/n_env]
+-> - [0x7E6E0, .rodata, audio_stream]
+-> - [0x7E700, rodata, libleo/leofunc]
