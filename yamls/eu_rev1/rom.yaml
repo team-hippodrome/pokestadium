@@ -1807,10 +1807,10 @@
     vram: 0x84000000
     subsegments:
     - [0x2C1970, textbin,   fragments/free_battle_rules/free_battle_rules_header]
-    - [0x2C1990, asm, fragments/free_battle_rules/free_battle_rules]
-    - [0x2C45C0, data, fragments/free_battle_rules/free_battle_rules]
-    - [0x2C4690, rodata, fragments/free_battle_rules/free_battle_rules]
-    - {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+    - [0x2C1990, c, fragments/free_battle_rules/free_battle_rules]
+    - [0x2C45C0, .data, fragments/free_battle_rules/free_battle_rules]
+    - [0x2C4690, .rodata, fragments/free_battle_rules/free_battle_rules]
+    - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
   - name: fragment58_relocs
     type: code
     bss_size: 0x0

@@ -366,3 +366,13 @@
 -> - [0x23B720, .rodata, fragments/pokedex/pokedex_214920]
 - {vram: 0x888266A0, type:  bss, name: fragments/pokedex/pokedex_214920}
 -> - {vram: 0x888266A0, type: .bss, name: fragments/pokedex/pokedex_214920}
+
+# free_battle_rules: built from the shared C.
+- [0x2C1E20, asm, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C1E20, c, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4A50, data, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4A50, .data, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4B20, rodata, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4B20, .rodata, fragments/free_battle_rules/free_battle_rules]
+- {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+-> - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
