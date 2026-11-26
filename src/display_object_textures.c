@@ -317,7 +317,10 @@ ModelLoadContext* PokeIcon_AllocFramebuffers(u32 flags) {
 }
 
 void PokeIcon_OpenModelArchives(void) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_PAL_LATE)
+    D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x8FA000, NULL, 1, 1);
+    D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8A8000, NULL, 1, 1);
+#elif defined(VERSION_US_REV2)
     D_800ABE10.unk_A04.unk_00 = BinArchive_Open(0x919000, 0, 1, 1);
     D_800ABE10.unk_A04.unk_04 = BinArchive_Open(0x8C7000, 0, 1, 1);
 #elif defined(VERSION_JP)

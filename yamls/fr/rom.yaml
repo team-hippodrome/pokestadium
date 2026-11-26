@@ -59,13 +59,17 @@
     - [0x17300, c, model_animation] #
     - [0x18140, c, model_animation_events] # dp model animations
     - [0x18480, c, geo_layout] # dp model animations
-    - [0x19840, asm, display_object_textures]
+    - [0x19840, c, display_object_textures]
     - [0x1AB70, c, poke_icon]
     - [0x1BD50, c, poke_icon_preview]
     - [0x1C730, c, model_renderer] #
     - [0x1CF40, c, graphics_textures] # dp list code
     - [0x20340, c, input] # some cache cleaner
-    - [0x20480, asm, ui_graphics]
+    - [0x20480, c, ui_graphics]
+    - [0x225B0, c, status_icons]
+    - [0x22640, c, gb_data]
+    - [0x232D0, c, pokemon_stats]
+    - [0x26830, c, save_data]
     - [0x29BA0, c, game_state] # scenary code
     - [0x2C1C0, c, session]
     - [0x2D340, c, table_view] # pkm lab pc code
@@ -273,11 +277,11 @@
     - [0x70650, .data, geo_layout]
     - [0x706F0, .data, poke_icon]
     - [0x70780, .data, poke_icon_preview]
-    - [0x70810, data, ui_graphics]
-    - [0x70B80, data, status_icons]
-    - [0x72340, data, gb_data]
-    - [0x745D0, data, pokemon_stats]
-    - [0x749F0, data, save_data]
+    - [0x70810, .data, ui_graphics]
+    - [0x70B80, .data, status_icons]
+    - [0x72340, .data, gb_data]
+    - [0x745D0, .data, pokemon_stats]
+    - [0x749F0, .data, save_data]
     - [0x74A00, .data, game_state]
     - [0x76A20, .data, session]
     - [0x76A30, .data, table_view]
@@ -339,9 +343,10 @@
     - [0x7C7C0, .rodata, leo]
     - [0x7C940, .rodata, matrix]
     - [0x7C950, .rodata, poke_icon_preview]
-    - [0x7C980, rodata, status_icons]
-    - [0x7D460, rodata, gb_data]
-    - [0x7D4D0, rodata, pokemon_stats]
+    - [0x7C980, .rodata, status_icons]
+    - [0x7D460, .rodata, gb_data]
+    - [0x7D4D0, .rodata, pokemon_stats]
+    - [0x7D500, .rodata, save_data]
     - [0x7D670, .rodata, game_state]
     - [0x7D780, .rodata, session]
     - [0x7D7E0, .rodata, text_system]
@@ -409,13 +414,13 @@
     - {vram: 0x800AC460, type: .bss, name: model_animation}
     - {vram: 0x800AC4A0, type: .bss, name: model_animation_events}
     - {vram: 0x800AC4D0, type: .bss, name: geo_layout}
-    - {vram: 0x800AC5B0, type: bss, name: display_object_textures}
+    - {vram: 0x800AC5B0, type: .bss, name: display_object_textures}
     - {vram: 0x800ACFD0, type: .bss, name: poke_icon_preview}
     - {vram: 0x800ACFE0, type: .bss, name: model_renderer}
     - {vram: 0x800AD010, type: .bss, name: graphics_textures}
     - {vram: 0x800AD020, type: .bss, name: input}
-    - {vram: 0x800AD030, type: bss, name: pokemon_stats}
-    - {vram: 0x800AEC80, type: bss, name: save_data}
+    - {vram: 0x800AD030, type: .bss, name: pokemon_stats}
+    - {vram: 0x800AEC80, type: .bss, name: save_data}
     - {vram: 0x800AECC0, type: .bss, name: game_state}
     - {vram: 0x800AFEE0, type: .bss, name: text_system}
     - {vram: 0x800AFEF0, type: .bss, name: gb_save}

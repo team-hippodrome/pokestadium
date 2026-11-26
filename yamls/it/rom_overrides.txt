@@ -286,3 +286,41 @@
 -> - [0x76A20, .data, session]
 - [0x7D780, rodata, session]
 -> - [0x7D780, .rodata, session]
+
+# display_object_textures: built from the shared C.
+- [0x19840, asm, display_object_textures]
+-> - [0x19840, c, display_object_textures]
+- {vram: 0x800AC5B0, type: bss, name: display_object_textures}
+-> - {vram: 0x800AC5B0, type: .bss, name: display_object_textures}
+
+# ui_graphics: built from the shared C, with status_icons, gb_data, pokemon_stats and
+# save_data, which the porter merged into it.
+- [0x20480, asm, ui_graphics]
+-> - [0x20480, c, ui_graphics]
+-> - [0x225B0, c, status_icons]
+-> - [0x22640, c, gb_data]
+-> - [0x232D0, c, pokemon_stats]
+-> - [0x26830, c, save_data]
+- [0x70810, data, ui_graphics]
+-> - [0x70810, .data, ui_graphics]
+
+# status_icons, gb_data, pokemon_stats and save_data sections (see ui_graphics above).
+- [0x70B80, data, status_icons]
+-> - [0x70B80, .data, status_icons]
+- [0x7C980, rodata, status_icons]
+-> - [0x7C980, .rodata, status_icons]
+- [0x72340, data, gb_data]
+-> - [0x72340, .data, gb_data]
+- [0x7D460, rodata, gb_data]
+-> - [0x7D460, .rodata, gb_data]
+- [0x745D0, data, pokemon_stats]
+-> - [0x745D0, .data, pokemon_stats]
+- [0x7D4D0, rodata, pokemon_stats]
+-> - [0x7D4D0, .rodata, pokemon_stats]
+-> - [0x7D500, .rodata, save_data]
+- {vram: 0x800AD030, type: bss, name: pokemon_stats}
+-> - {vram: 0x800AD030, type: .bss, name: pokemon_stats}
+- [0x749F0, data, save_data]
+-> - [0x749F0, .data, save_data]
+- {vram: 0x800AEC80, type: bss, name: save_data}
+-> - {vram: 0x800AEC80, type: .bss, name: save_data}

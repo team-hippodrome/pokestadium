@@ -1589,7 +1589,7 @@ s8 GbCart_IdentifyGame(s32 arg0) {
                 var_s0 = POKEMON_ROM_GREEN;
             } else if (HAL_Strcmp(&sp28.game_title[8], "BLUE") == 0) {
                 var_s0 = POKEMON_ROM_BLUE;
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             } else {
                 sp28.game_title[9] = '\x0';
                 if (HAL_Strcmp(&sp28.game_title[8], "Y") == 0) {
