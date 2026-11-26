@@ -577,13 +577,22 @@
 - {vram: 0x800A8780, type: bss, name: gb_tower}
 -> - {vram: 0x800A8780, type: .bss, name: gb_tower}
 
-# 3D140_2: built from the shared C (PAL battle music volume). The porter merges it into the
-# audio_fade text and merges the 3D140 .rodata into its .rodata.
+# audio_fade and 3D140_2: built from the shared C (PAL move sound bank reload and battle music
+# volume). The porter merges them into one text blob and merges the 3D140 .rodata into the
+# 3D140_2 .rodata.
 - [0x3D650, asm, text_3D650]
--> - [0x3D650, asm, text_3D650]
+-> - [0x3D650, c, audio_fade]
 -> - [0x3DDF0, c, 3D140_2]
 - [0x79780, data, 3D140_2]
 -> - [0x79780, .data, 3D140_2]
 - [0x7E690, rodata, 3D140_2]
 -> - [0x7E690, .rodata, 3D140_2]
 -> - [0x7EAB0, rodata, 3D140]
+
+# audio_fade .data and .rodata: merged into the audio_commands_category2 blobs by the porter.
+- [0x792B0, data, audio_commands_category2]
+-> - [0x792B0, data, audio_commands_category2]
+-> - [0x79470, .data, audio_fade]
+- [0x7DC80, rodata, audio_commands_category2]
+-> - [0x7DC80, rodata, audio_commands_category2]
+-> - [0x7DFE0, .rodata, audio_fade]

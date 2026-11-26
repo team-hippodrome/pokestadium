@@ -7936,3 +7936,7 @@ Audio_QueueSetVolumeCommand = 0x800446AC; // type:func
 D_80078E60 = 0x800787C0; // type:func
 D_80078E64 = 0x800787C4; // type:func
 D_80078E68 = 0x800787C8; // type:func
+sMoveSoundBankStale = 0x800787B8;
+Audio_FadeStoredSound = 0x8003689C;
+D_80078700 = 0x80078990; // type:func
+D_800786FD = 0x8007898D;

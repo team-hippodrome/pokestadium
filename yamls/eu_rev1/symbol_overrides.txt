@@ -1,3 +1,7 @@
 # Symbols tools/port_version.py maps to the wrong address in this version (checked
 # against the ROM). Applied by apply_symbol_overrides().
 Audio_QueueSetMonoOutputCommand = 0x80044AE0;
+sMoveSoundBankStale = 0x80078218;
+Audio_FadeStoredSound = 0x80036848;
+D_80078700 = 0x800783F0;
+D_800786FD = 0x800783ED;
