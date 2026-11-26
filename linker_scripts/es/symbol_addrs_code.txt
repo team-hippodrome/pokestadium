@@ -7936,3 +7936,4 @@ Audio_QueueSetVolumeCommand = 0x800446AC; // type:func
 D_80078E60 = 0x800787C0; // type:func
 D_80078E64 = 0x800787C4; // type:func
 D_80078E68 = 0x800787C8; // type:func
+D_8120D7F3 = 0x8120D827;

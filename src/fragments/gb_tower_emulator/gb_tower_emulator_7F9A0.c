@@ -243,7 +243,12 @@ const u32 sDmgRenderMicrocodeData[0x2C] = {
 };
 // "Loading..." and "Saving...", stored reversed and offset: character i of a
 // string is byte[start + count - i] - i - 0x3D.
-#if defined(VERSION_DE)
+#if defined(VERSION_ES)
+const u8 sLoadingSavingText[0x18] = {
+    0x75, 0x74, 0x73, 0xB3, 0xA7, 0xB0, 0xA2, 0xA7, 0xB1, 0x9F, 0x80, 0x76,
+    0x75, 0x74, 0xB4, 0xA8, 0xB1, 0xA3, 0xA5, 0xB2, 0xA0, 0xB3, 0x84, 0x00,
+};
+#elif defined(VERSION_DE)
 const u8 sLoadingSavingText[0x18] = {
     0x74, 0x73, 0x72, 0xB1, 0xA7, 0xA5, 0xA1, 0x8B, 0x5E, 0x5D, 0x76, 0x75,
     0x74, 0xB3, 0xB6, 0xA8, 0xAA, 0xA4, 0xA9, 0xA4, 0xAE, 0x90, 0x00, 0x00,
@@ -260,7 +265,11 @@ const u8 sLoadingSavingText[0x14] = {
 // (25 tiles, each row byte stored once and written to every other VRAM byte by
 // GbEmu_ResetEmulatorState). The bytes after 0xC8 hold the loading-screen text
 // "Loading. Please wait..." in the same reversed/offset encoding.
+#if defined(VERSION_ES)
+u8 sBootLogoTiles[0xF8] = {
+#else
 u8 sBootLogoTiles[0xEC] = {
+#endif
     0xF0, 0xF0, 0xFC, 0xFC, 0xFC, 0xFC, 0xF3, 0xF3, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0xF0, 0xF0, 0xF0,
     0xF0, 0x00, 0x00, 0xF3, 0xF3, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xCF, 0xCF, 0x00, 0x00, 0x0F, 0x0F, 0x3F, 0x3F,
     0x0F, 0x0F, 0x00, 0x00, 0x00, 0x00, 0xC0, 0xC0, 0x0F, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0xF0, 0x00,
@@ -272,7 +281,10 @@ u8 sBootLogoTiles[0xEC] = {
     0xFC, 0xFC, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF0, 0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF0, 0xF0, 0xC3, 0xC3, 0xC3,
     0xC3, 0xC3, 0xC3, 0xFF, 0xFF, 0xCF, 0xCF, 0xCF, 0xCF, 0xCF, 0xCF, 0xC3, 0xC3, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F,
     0xFC, 0xFC, 0x3C, 0x42, 0xB9, 0xA5, 0xB9, 0xA5, 0x42, 0x3C,
-#if defined(VERSION_DE)
+#if defined(VERSION_ES)
+    0x9F, 0x9D, 0x9B, 0xCC, 0xDB, 0xCC, 0xD5, 0xD6, 0xC6, 0x7F, 0x89, 0xCD, 0xC8, 0xCD, 0xB6, 0xB9, 0x71, 0xC1, 0xBC, 0x9B, 0x69, 0x75, 0xB4, 0xA7,
+    0xAF, 0xA0, 0xA4, 0xAD, 0x9A, 0x7A, 0xC0, 0xB2, 0xA8, 0x8F, 0x61, 0x7A, 0x5F, 0x5E, 0x5D, 0x5C, 0xA9, 0x78, 0xAD, 0xA7, 0x79, 0x00, 0x00, 0x00,
+#elif defined(VERSION_DE)
     0x93, 0x91, 0x8F, 0xCD, 0xC2, 0xBF, 0xBA, 0xA3, 0x75, 0x81, 0x7F, 0x7D, 0xBB, 0xB0, 0xBD, 0xB9, 0xA6, 0xBA,
     0x61, 0xA4, 0xB1, 0xAF, 0xA2, 0x79, 0x64, 0xAE, 0xA4, 0x8B, 0x77, 0xA2, 0xAB, 0xA9, 0xA7, 0x83, 0x64, 0x00,
 #else
@@ -368,6 +380,16 @@ u8 sYellowTitle[0x10] = {
 #define RED_BLUE_SIGNATURE_4 0x7F
 #define YELLOW_SIGNATURE_3 0xC0
 #define YELLOW_STORED_BANK_ADDRESS 0xF618
+#elif defined(VERSION_ES)
+#define RED_GLOBAL_CHECKSUM 0x384A
+#define BLUE_GLOBAL_CHECKSUM 0x14D7
+#define YELLOW_GLOBAL_CHECKSUM 0x5637
+#define RED_BLUE_SIGNATURE_1 0xE5
+#define RED_BLUE_SIGNATURE_2 0x93
+#define RED_BLUE_SIGNATURE_3 0xA4
+#define RED_BLUE_SIGNATURE_4 0x7F
+#define YELLOW_SIGNATURE_3 0x84
+#define YELLOW_STORED_BANK_ADDRESS 0xE274
 #else
 #define RED_GLOBAL_CHECKSUM 0x91E6
 #define BLUE_GLOBAL_CHECKSUM 0x9D0A
@@ -401,6 +423,11 @@ u8 sYellowTitle[0x10] = {
 #define ACCESS_OVERLAY_POS 0x9E
 #define ACCESS_TEXT_POS 0x770
 #define ACCESS_ICON_POS 0x90
+#elif defined(VERSION_ES)
+#define LOADING_TEXT_END 0xEE
+#define ACCESS_OVERLAY_POS 0x9E
+#define ACCESS_TEXT_POS 0x768
+#define ACCESS_ICON_POS 0x90
 #elif defined(VERSION_EU)
 #define LOADING_TEXT_END 0xE7
 #define ACCESS_OVERLAY_POS 0x8E
@@ -412,12 +439,36 @@ u8 sYellowTitle[0x10] = {
 #define ACCESS_TEXT_POS 0x788
 #define ACCESS_ICON_POS 0x9C
 #endif
+#if defined(VERSION_ES)
+#define PAUSE_MENU_SPEED_ICON_POS 0x7AB
+#define PAUSE_MENU_CONFIG_ICON_POS 0x3C43
+#else
+#define PAUSE_MENU_SPEED_ICON_POS 0x784
+#define PAUSE_MENU_CONFIG_ICON_POS 0x3C1C
+#endif
+#if defined(VERSION_ES)
+#define STATUS_BAR_ICON_SHIFT 0x4A
+#define STATUS_BAR_TIER0_WIDTH 0x5E
+#define STATUS_TEXT_BACK 0x2CA
+#define STATUS_TEXT_INDEX 0x11D
+#define STATUS_TEXT_END 0x46
+#define LOADING_SCREEN_TEXT_POS 0x260
+#else
+#define STATUS_BAR_ICON_SHIFT 0
+#define STATUS_BAR_TIER0_WIDTH 0x60
+#define STATUS_TEXT_BACK 0x266
+#define STATUS_TEXT_INDEX (LOADING_TEXT_END + 0x2F)
+#define STATUS_TEXT_END 0x42
+#define LOADING_SCREEN_TEXT_POS 0x280
+#endif
 
 // Fast-boot lists of banks still read through the Transfer Pak. Entries are
 // (bank, checksum of first 8 KB, checksum of second 8 KB), or 0x8000 | RAM bank;
 // zero ends the list. Selected by cartridgeVersion with the matching header
 // global checksum (Red 0x91E6, Blue 0x9D0A, Yellow 0x047C).
-#if defined(VERSION_DE)
+#if defined(VERSION_ES)
+#include "gb_tower_emulator_bank_lists_es.inc.c"
+#elif defined(VERSION_DE)
 #include "gb_tower_emulator_bank_lists_de.inc.c"
 #else
 u8 sRedPakBankList[0x18C] = {
@@ -636,7 +687,9 @@ u16 sVersionColors[4] = {
 };
 // Pause menu text command lists for GbEmu_DrawTextCommands; strings are noted
 // in the symbol names (sMenuTitleText = "Menu", ...).
-#if defined(VERSION_DE)
+#if defined(VERSION_ES)
+#include "gb_tower_emulator_menu_text_es.inc.c"
+#elif defined(VERSION_DE)
 #include "gb_tower_emulator_menu_text_de.inc.c"
 #else
 u8 sMenuTitleText[0xC] = {
@@ -1786,19 +1839,29 @@ void GbEmu_DrawAccessOverlay(s32 overlay_index, s32 text_offset) {
     }
 #if defined(VERSION_DE)
     GbEmu_DrawStretchedBorderRow(fb - 0x18, sVersionColors[i], 0x7C);
+#elif defined(VERSION_ES)
+    GbEmu_DrawStretchedBorderRow(fb - 0x20, sVersionColors[i], 0x80);
 #else
     GbEmu_DrawStretchedBorderRow(fb, sVersionColors[i], 0x70);
 #endif
 
     if (text_offset != 0) {
-#if defined(VERSION_DE)
+#if defined(VERSION_DE) || defined(VERSION_ES)
         count = 0xB;
 #else
         count = 8;
 #endif
+#if defined(VERSION_ES)
+        text_offset = 0xB;
+#else
         text_offset = 0xA;
+#endif
     } else {
+#if defined(VERSION_ES)
+        count = 0xA;
+#else
         count = 9;
+#endif
     }
     x = 0;
 
@@ -1844,7 +1907,7 @@ void GbEmu_DrawStatusBar(void) {
             GbEmu_BlitWithPixelOp((u16*)(image + 0x1762), (u16*)(sUiGraphics + 0xA6D8), 0, 0x10, 5);
             GbEmu_BlitWithPixelOp((u16*)(image + 0x5DE), (u16*)(sUiGraphics + 0xAC58), 0, 8, 6);
             GbEmu_BlitWithPixelOp((u16*)(image + 0x5EE), (u16*)(sUiGraphics + 0xACB8), 0, 8, 6);
-            pos = image + 0x600;
+            pos = image + 0x600 + STATUS_BAR_ICON_SHIFT;
             break;
         case 2:
             GbEmu_DrawStretchedBorderRow(image + 0x9C, color, 0x94);
@@ -1853,22 +1916,22 @@ void GbEmu_DrawStatusBar(void) {
             GbEmu_BlitWithPixelOp((u16*)(image + 0x5D8), (u16*)(sUiGraphics + 0xAC58), 0, 8, 6);
             GbEmu_BlitWithPixelOp((u16*)(image + 0x5E8), (u16*)(sUiGraphics + 0xACB8), 0, 8, 6);
             GbEmu_BlitWithPixelOp((u16*)(image + 0x5F8), (u16*)(sUiGraphics + 0xACB8), 0, 8, 6);
-            pos = image + 0x608;
+            pos = image + 0x608 + STATUS_BAR_ICON_SHIFT;
             break;
         default:
         case 0:
-            GbEmu_DrawStretchedBorderRow(image + 0xCE, color, 0x60);
-            pos = image + 0x5D6;
+            GbEmu_DrawStretchedBorderRow(image + 0xCE, color, STATUS_BAR_TIER0_WIDTH);
+            pos = image + 0x5D6 + STATUS_BAR_ICON_SHIFT;
             break;
     }
     GbEmu_BlitWithPixelOp((u16*)(pos), (u16*)(sUiGraphics + 0xC1D8), 0, 0xC, 0xC);
 
     text_x = 0;
-    pos -= 0x266;
-    for (var_s2 = (u8*)&D_8120D7F3, var_s1 = 0x37; var_s1 < 0x42; var_s1++, var_s2--) {
-        GbEmu_BlendColorWithAlphaMap((text_x * 2) + pos, (sFont2GlyphTable[var_s2[LOADING_TEXT_END + 0x2F] - var_s1 + 0x80] * 0xC0) + gGbEmuFont2Data,
+    pos -= STATUS_TEXT_BACK;
+    for (var_s2 = (u8*)&D_8120D7F3, var_s1 = 0x37; var_s1 < STATUS_TEXT_END; var_s1++, var_s2--) {
+        GbEmu_BlendColorWithAlphaMap((text_x * 2) + pos, (sFont2GlyphTable[var_s2[STATUS_TEXT_INDEX] - var_s1 + 0x80] * 0xC0) + gGbEmuFont2Data,
                       0xFFFE, 0xC, 0xC, 0x10);
-        text_x += sFont2GlyphTable[sFont2GlyphTable[var_s2[LOADING_TEXT_END + 0x2F] - var_s1 + 0x80]];
+        text_x += sFont2GlyphTable[sFont2GlyphTable[var_s2[STATUS_TEXT_INDEX] - var_s1 + 0x80]];
         if (var_s1 == 0x3C) {
             text_x -= 1;
         }
@@ -1968,7 +2031,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u16 (*party_icons)[6][0x640], s32 port, s
 
         if (x != 0) {
             for (i = j; i != 0; i++) {
-                GbEmu_BlendColorWithAlphaMap((u16*)((xpos * 2) + D_8122C750 + 0x280),
+                GbEmu_BlendColorWithAlphaMap((u16*)((xpos * 2) + D_8122C750 + LOADING_SCREEN_TEXT_POS),
                               (sFont2GlyphTable[sBootLogoTiles[LOADING_TEXT_END - i] - i * 2 + 0x5B] * 0xC0) + gGbEmuFont2Data, 0xFFFE, 0xC,
                               0xC, 0x10);
                 xpos += sFont2GlyphTable[sFont2GlyphTable[sBootLogoTiles[LOADING_TEXT_END - i] - i * 2 + 0x5B]];
@@ -2987,7 +3050,7 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             y = 0x4A;
 #if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             if ((sGbTowerUnlockTier == 1) || (sGbTowerUnlockTier == 2)) {
-                GbEmu_BlitWithPixelOp(base + 0x784, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
+                GbEmu_BlitWithPixelOp(base + PAUSE_MENU_SPEED_ICON_POS, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
             }
             if (sGbTowerUnlockTier == 1) {
                 GbEmu_DrawTextCommands(base, sDoubleSpeedHelpText);
@@ -2998,10 +3061,10 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             }
 #else
             if (sGbTowerUnlockTier == 1) {
-                GbEmu_BlitWithPixelOp(base + 0x784, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
+                GbEmu_BlitWithPixelOp(base + PAUSE_MENU_SPEED_ICON_POS, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
                 GbEmu_DrawTextCommands(base, sDoubleSpeedHelpText);
             } else if (sGbTowerUnlockTier == 2) {
-                GbEmu_BlitWithPixelOp(base + 0x784, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
+                GbEmu_BlitWithPixelOp(base + PAUSE_MENU_SPEED_ICON_POS, (u16*)(sUiGraphics + 0xB758), 0, 16, 12);
                 GbEmu_DrawTextCommands(base, sSpeedCycleHelpText);
             } else {
                 y = 0x32;
@@ -3019,7 +3082,7 @@ void GbEmu_DrawPauseMenu(s32 framebuffer) {
             }
             sConfigTitleText[2] = y - 5;
             GbEmu_DrawTextCommands(base, sConfigTitleText);
-            GbEmu_BlitWithPixelOp(y * 320 + base + 0x3C1C, (u16*)(sUiGraphics + 0xB2D8), 0, 16, 12);
+            GbEmu_BlitWithPixelOp(y * 320 + base + PAUSE_MENU_CONFIG_ICON_POS, (u16*)(sUiGraphics + 0xB2D8), 0, 16, 12);
             sConfigCancelText[2] = y + 0x30;
             GbEmu_DrawTextCommands(base, sConfigCancelText);
             break;
@@ -3434,7 +3497,7 @@ s32 GbEmu_UpdateFrame(s32 emu_index) {
                     emu->unk_5D70[3] = YELLOW_STORED_BANK_ADDRESS;
                     emu->unk_5D70[2] = (u32)sYellowStoredBankList;
                     emu->unk_5DC6 = 0;
-#if !defined(VERSION_DE)
+#if !defined(VERSION_DE) && !defined(VERSION_ES)
                     bzero((u8*)emu->romImage + 0xEC000, 0x4000);
                     emu->romBankStatus[0x3B] = 0xFF;
 #endif

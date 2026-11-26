@@ -588,3 +588,33 @@
 -> - [0x214950, .rodata, fragments/lab_pc_icons/lab_pc_icons]
 - {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
 -> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
+
+# gb_tower_emulator: built from the shared C. The porter merges 86C30, 86CB0 and
+# fragment1_89010 into the 86920 text and the 86C30 .data into the 7F9A0 .data, and
+# splits the first 0x10 bytes of the 7F9A0 .data off as their own blob.
+- [0x80140, asm, fragment1_80140]
+-> - [0x80140, c, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+- [0x87130, asm, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+-> - [0x87130, c, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+-> - [0x87440, c, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
+-> - [0x874C0, c, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0x897E0, c, fragments/1/fragment1_89010]
+- [0x8D970, asm, fragment1_8D970]
+-> - [0x8D970, .data, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+- [0x8D980, data, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0x8EC00, .data, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
+- [0x8EC10, data, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0x8EC10, .data, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+- [0xA8850, data, fragments/1/fragment1_89010]
+-> - [0xA8850, .data, fragments/1/fragment1_89010]
+- [0xA9970, rodata, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0xA9970, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0xAB120, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+- [0xAB130, rodata, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0xAB130, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+- {vram: 0x8122B270, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_7F9A0}
+-> - {vram: 0x8122B270, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_7F9A0}
+- {vram: 0x8122C820, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
+-> - {vram: 0x8122C820, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
+- {vram: 0x812314E0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+-> - {vram: 0x812314E0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
