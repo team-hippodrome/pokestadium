@@ -558,3 +558,13 @@
 -> - [0x15B5E0, c, fragments/credits/credits_15AD80]
 - [0x15ED90, data, fragments/credits/credits_15AD80]
 -> - [0x15ED90, .data, fragments/credits/credits_15AD80]
+
+# battle_engine_mechanics: Spanish reads the disabled move's name from the move name table.
+- [0x34CBC0, asm, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x34CBC0, c, fragments/battle_engine/battle_engine_mechanics]
+- [0x368180, data, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x368180, .data, fragments/battle_engine/battle_engine_mechanics]
+- [0x36B110, rodata, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x36B110, .rodata, fragments/battle_engine/battle_engine_mechanics]
+- {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+-> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}

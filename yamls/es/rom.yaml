@@ -1959,7 +1959,7 @@
     - [0x34BE10, c,      fragments/battle_engine/battle_engine_3591E0]
     - [0x34C3E0, c,      fragments/battle_engine/battle_engine_3597B0]
     - [0x34CBB0, c,      fragments/battle_engine/battle_engine_debug_strings]
-    - [0x34CBC0, asm, fragments/battle_engine/battle_engine_mechanics]
+    - [0x34CBC0, c, fragments/battle_engine/battle_engine_mechanics]
     - [0x350BA0, c,      fragments/battle_engine/battle_engine_move_mechanics]
     - [0x353C80, c, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x361870, .data,   fragments/battle_engine/battle_engine_main]
@@ -1990,7 +1990,7 @@
     - [0x367200, .data,   fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x367280, .data,   fragments/battle_engine/battle_engine_3591E0]
     - [0x367D70, .data,   fragments/battle_engine/battle_engine_3597B0]
-    - [0x368180, data, fragments/battle_engine/battle_engine_mechanics]
+    - [0x368180, .data, fragments/battle_engine/battle_engine_mechanics]
     - [0x368370, .data,   fragments/battle_engine/battle_engine_move_mechanics]
     - [0x3684D0, .data, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x368620, .rodata, fragments/battle_engine/battle_engine_move_animation]
@@ -2030,7 +2030,7 @@
     - [0x36AE00, .rodata, fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x36AE20, .rodata, fragments/battle_engine/battle_engine_3591E0]
     - [0x36AE30, .rodata, fragments/battle_engine/battle_engine_debug_strings]
-    - [0x36B110, rodata, fragments/battle_engine/battle_engine_mechanics]
+    - [0x36B110, .rodata, fragments/battle_engine/battle_engine_mechanics]
     - [0x36B190, .rodata, fragments/battle_engine/battle_engine_move_mechanics]
     - [0x36B300, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
     - {vram: 0x8438E4D0, type:  .bss, name: fragments/battle_engine/battle_engine_main}
@@ -2059,7 +2059,7 @@
     - {vram: 0x843C3590, type:  .bss, name: fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails}
     - {vram: 0x843C4A50, type:  .bss, name: fragments/battle_engine/battle_engine_3591E0}
     - {vram: 0x843C4E20, type:  .bss, name: fragments/battle_engine/battle_engine_3597B0}
-    - {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+    - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
     - {vram: 0x843C53A0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
   - name: fragment62_relocs
     type: code
