@@ -4051,7 +4051,7 @@ s32 BattleAI_SelectRandomUsableCandidate(BattleAiTeamState* arg0) {
 
     do {
         var_v1 = BattleAI_RandomBelowInclusive(arg0->unk_06 - 1);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE))
         if (arg0->unk_00 == 2 && (arg0->unk_04[0] - 1) < var_v1) {
             var_v1 = BattleAI_RandomBelowInclusive(arg0->unk_04[1] - 1) + arg0->unk_01[0];
         }

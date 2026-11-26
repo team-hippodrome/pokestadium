@@ -1903,7 +1903,7 @@
     subsegments:
     - [0x2DD3E0, textbin,   fragments/battle_engine/battle_engine_header]
     - [0x2DD400, c,      fragments/battle_engine/battle_engine_main]
-    - [0x2DEEE0, asm, fragments/battle_engine/battle_engine_move_animation]
+    - [0x2DEEE0, c, fragments/battle_engine/battle_engine_move_animation]
     - [0x2E4880, c,      fragments/battle_engine/battle_engine_thumbnail]
     - [0x2E4EC0, c,      fragments/battle_engine/battle_engine_helper]
     - [0x2E67D0, c, fragments/battle_engine/battle_engine_move_model_transforms]
@@ -1930,7 +1930,7 @@
     - [0x31E1B0, c,      fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x32C7D0, c,      fragments/battle_engine/battle_engine_shared_move_effects]
     - [0x3363E0, c,      fragments/battle_engine/battle_engine_effect_render_pipeline]
-    - [0x3366D0, asm, fragment62_3366D0]
+    - [0x3366D0, c, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x339EC0, c,      fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x33CFE0, c,      fragments/battle_engine/battle_engine_lasso]
     - [0x340D30, c,      fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -1950,9 +1950,9 @@
     - [0x34CB10, c,      fragments/battle_engine/battle_engine_debug_strings]
     - [0x34CB20, asm, fragments/battle_engine/battle_engine_mechanics]
     - [0x350B00, c,      fragments/battle_engine/battle_engine_move_mechanics]
-    - [0x353BE0, asm, fragments/battle_engine/battle_engine_com_decision_logic]
+    - [0x353BE0, c, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x3617D0, .data,   fragments/battle_engine/battle_engine_main]
-    - [0x3619F0, data, fragments/battle_engine/battle_engine_move_animation]
+    - [0x3619F0, .data, fragments/battle_engine/battle_engine_move_animation]
     - [0x361A80, .data, fragments/battle_engine/battle_engine_move_model_transforms]
     - [0x362BD0, .data, fragments/battle_engine/battle_engine_action_selection]
     - [0x362C10, .data, fragments/battle_engine/battle_engine_hud]
@@ -1962,7 +1962,7 @@
     - [0x362FF0, .data,   fragments/battle_engine/battle_engine_battle_phases]
     - [0x363030, .data,   fragments/battle_engine/battle_engine_animation_system]
     - [0x364F80, .data,   fragments/battle_engine/battle_engine_model_and_overlay_effects]
-    - [0x365440, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x365440, .data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x365700, .data,   fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x3664E0, .data,   fragments/battle_engine/battle_engine_lasso]
     - [0x366780, .data,   fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -1981,8 +1981,8 @@
     - [0x367CD0, .data,   fragments/battle_engine/battle_engine_3597B0]
     - [0x3680E0, data, fragments/battle_engine/battle_engine_mechanics]
     - [0x3682D0, .data,   fragments/battle_engine/battle_engine_move_mechanics]
-    - [0x368430, data, fragments/battle_engine/battle_engine_com_decision_logic]
-    - [0x368580, rodata, fragments/battle_engine/battle_engine_move_animation]
+    - [0x368430, .data, fragments/battle_engine/battle_engine_com_decision_logic]
+    - [0x368580, .rodata, fragments/battle_engine/battle_engine_move_animation]
     - [0x368620, .rodata, fragments/battle_engine/battle_engine_move_model_transforms]
     - [0x368720, .rodata, fragments/battle_engine/battle_engine_math]
     - [0x368760, .rodata, fragments/battle_engine/battle_engine_hud]
@@ -2002,7 +2002,7 @@
     - [0x369690, .rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
     - [0x3696F0, .rodata, fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x36A450, .rodata, fragments/battle_engine/battle_engine_shared_move_effects]
-    - [0x36A840, rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x36A840, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x36A950, .rodata, fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x36A9F0, .rodata, fragments/battle_engine/battle_engine_lasso]
     - [0x36AB50, .rodata, fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -2021,9 +2021,9 @@
     - [0x36AD90, .rodata, fragments/battle_engine/battle_engine_debug_strings]
     - [0x36B070, rodata, fragments/battle_engine/battle_engine_mechanics]
     - [0x36B0F0, .rodata, fragments/battle_engine/battle_engine_move_mechanics]
-    - [0x36B260, rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+    - [0x36B260, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
     - {vram: 0x8438E4D0, type:  .bss, name: fragments/battle_engine/battle_engine_main}
-    - {vram: 0x8438E840, type:  bss, name: fragments/battle_engine/battle_engine_move_animation}
+    - {vram: 0x8438E840, type: .bss, name: fragments/battle_engine/battle_engine_move_animation}
     - {vram: 0x84390160, type:  .bss, name: fragments/battle_engine/battle_engine_math}
     - {vram: 0x843901B0, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}
     - {vram: 0x84390220, type: .bss, name: fragments/battle_engine/battle_engine_hud}
@@ -2032,7 +2032,7 @@
     - {vram: 0x84390290, type:  .bss, name: fragments/battle_engine/battle_engine_battle_phases}
     - {vram: 0x843902D0, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
     - {vram: 0x84390330, type:  .bss, name: fragments/battle_engine/battle_engine_animation_system}
-    - {vram: 0x84392150, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+    - {vram: 0x84392150, type: .bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
     - {vram: 0x84392670, type:  .bss, name: fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid}
     - {vram: 0x843976A0, type:  .bss, name: fragments/battle_engine/battle_engine_lasso}
     - {vram: 0x8439CAF0, type:  .bss, name: fragments/battle_engine/battle_engine_hypnosis_screech}
@@ -2049,7 +2049,7 @@
     - {vram: 0x843C4A50, type:  .bss, name: fragments/battle_engine/battle_engine_3591E0}
     - {vram: 0x843C4E20, type:  .bss, name: fragments/battle_engine/battle_engine_3597B0}
     - {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
-    - {vram: 0x843C53A0, type:  bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+    - {vram: 0x843C53A0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
   - name: fragment62_relocs
     type: code
     bss_size: 0x0

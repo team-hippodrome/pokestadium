@@ -21,10 +21,10 @@ static s16 D_843925D6;
 static s16 D_843925D8;
 static s16 D_843925DA;
 
-#if !(defined(VERSION_US_REV2))
+#if !(defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE)))
 static const char D_8438D3D0[] = "calc_vector_ATtoDM() normal error!!!\n";
 #endif
-#if !(defined(VERSION_US_REV2))
+#if !(defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE)))
 static const char D_8438D3F8[] = "calc_vector_ATtoDM2() normal error!!!\n";
 #endif
 
@@ -147,7 +147,7 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
     sp20 = sp40.y - sp4C.y;
     sp1C = sp40.z - sp4C.z;
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE))
     if (sp24 == 0.0f && sp20 == 0.0f && sp1C == 0.0f) {
         rmonPrintf("calc_vector_ATtoDM() normal error!!!\n");
     }
@@ -197,7 +197,7 @@ void BattleAnim_CalcSwiftAimVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, 
     sp20 = tmp - sp4C.y;
     sp1C = sp40.z - sp4C.z;
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE))
     if (sp24 == 0.0f && sp20 == 0.0f && sp1C == 0.0f) {
         rmonPrintf("calc_vector_ATtoDM2() normal error!!!\n");
     }

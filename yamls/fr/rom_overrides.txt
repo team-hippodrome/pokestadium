@@ -490,3 +490,40 @@
 -> - {vram: 0x88224F50, type: .bss, name: fragments/lab_pc/lab_pc_1A9780}
 - {vram: 0x88224F60, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
 -> - {vram: 0x88224F60, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}
+
+# fragments/battle_engine/battle_engine_mesh_effect_callbacks: built from the shared C.
+- [0x336700, asm, fragment62_336700]
+-> - [0x336700, c, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- [0x365470, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+-> - [0x365470, .data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- [0x36A870, rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+-> - [0x36A870, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- {vram: 0x84392150, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+-> - {vram: 0x84392150, type: .bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+
+- [0x2DEF10, asm, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x2DEF10, c, fragments/battle_engine/battle_engine_move_animation]
+- [0x361A20, data, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x361A20, .data, fragments/battle_engine/battle_engine_move_animation]
+- [0x3685B0, rodata, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x3685B0, .rodata, fragments/battle_engine/battle_engine_move_animation]
+- {vram: 0x8438E840, type:  bss, name: fragments/battle_engine/battle_engine_move_animation}
+-> - {vram: 0x8438E840, type: .bss, name: fragments/battle_engine/battle_engine_move_animation}
+
+- [0x353C10, asm, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x353C10, c, fragments/battle_engine/battle_engine_com_decision_logic]
+- [0x368460, data, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x368460, .data, fragments/battle_engine/battle_engine_com_decision_logic]
+- [0x36B290, rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x36B290, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+- {vram: 0x843C53A0, type:  bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+-> - {vram: 0x843C53A0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+
+- [0x34CB50, asm, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x34CB50, c, fragments/battle_engine/battle_engine_mechanics]
+- [0x368110, data, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x368110, .data, fragments/battle_engine/battle_engine_mechanics]
+- [0x36B0A0, rodata, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x36B0A0, .rodata, fragments/battle_engine/battle_engine_mechanics]
+- {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+-> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
