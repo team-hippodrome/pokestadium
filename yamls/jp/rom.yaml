@@ -1282,7 +1282,7 @@
     vram: 0x81400000
     subsegments:
     - [0x276BC0, textbin,   fragments/particle_math/particle_math_header]
-    - [0x276BE0, asm, fragment34_276BE0]
+    - [0x276BE0, c, fragments/particle_math/particle_math_261F90]
     - [0x278F90, c, fragments/particle_math/particle_math_264380]
     - [0x27E3E0, c,      fragments/particle_math/particle_math_269820]
     - [0x283100, asm, fragment34_283100]
@@ -1292,7 +1292,7 @@
     - [0x285020, .data,   fragments/particle_math/particle_math_269820]
     - [0x285030, .data,   fragments/particle_math/particle_math_26E6D0]
     - [0x2851C0, .rodata, fragments/particle_math/particle_math_269820]
-    - {vram: 0x8140E620, type:  bss, name: fragments/particle_math/particle_math_261F90}
+    - {vram: 0x8140E620, type: .bss, name: fragments/particle_math/particle_math_261F90}
   - name: fragment34_relocs
     type: code
     bss_size: 0x0

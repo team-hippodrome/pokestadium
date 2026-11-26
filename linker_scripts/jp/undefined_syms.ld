@@ -1869,3 +1869,4 @@ D_800B3414_jp = 0x800B3414;
 // Fields inside objects that shared C now defines, addressed directly by the remaining Japanese
 // assembly (the C objects own these addresses under other names).
 D_84391484_jp = 0x84391484;
+D_8140E62C_jp = 0x8140E62C;
