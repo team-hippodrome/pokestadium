@@ -547,7 +547,8 @@
     vram: 0x87900000
     subsegments:
     - [0x1190B0, textbin, fragments/minigame_actor_framework/minigame_actor_framework_header]
-    - [0x1190D0, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+    - [0x1190D0, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+    - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
     - [0x119B00, c,       fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11A6D0, c,       fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x11C310, c,       fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
@@ -1044,12 +1045,12 @@
     subsegments:
     - [0x1CF180, textbin,   fragments/lab_pc_list/lab_pc_list_header]
     - [0x1CF1A0, c,      fragments/lab_pc_list/lab_pc_list_1CEA00]
-    - [0x1D82E0, asm, fragments/lab_pc_list/lab_pc_list_1D7B40]
+    - [0x1D82E0, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E6350, .data,   fragments/lab_pc_list/lab_pc_list_1CEA00]
-    - [0x1E64E0, data, fragments/lab_pc_list/lab_pc_list_1D7B40]
+    - [0x1E64E0, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E6850, data, fragments/lab_pc_list/lab_pc_list_1E46B0]
     - [0x1E93E0, .rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
-    - [0x1E9550, rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
+    - [0x1E9550, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - {vram: 0x8831A4C0, type:  .bss, name: fragments/lab_pc_list/lab_pc_list_1CEA00}
   - name: fragment24_relocs
     type: code

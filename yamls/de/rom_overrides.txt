@@ -226,3 +226,16 @@
 -> - [0x1180A0, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
 - {vram: 0x8780FC40, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 -> - {vram: 0x8780FC40, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+
+# lab_pc_list_1D7B40: built from the shared C.
+- [0x1D82E0, asm, fragments/lab_pc_list/lab_pc_list_1D7B40]
+-> - [0x1D82E0, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
+- [0x1E64E0, data, fragments/lab_pc_list/lab_pc_list_1D7B40]
+-> - [0x1E64E0, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
+- [0x1E9550, rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
+-> - [0x1E9550, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
+
+# minigame_actor_framework_1189B0: built from the shared C.
+- [0x1190D0, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+-> - [0x1190D0, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+-> - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}

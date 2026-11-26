@@ -547,7 +547,8 @@
     vram: 0x87900000
     subsegments:
     - [0x118C10, textbin, fragments/minigame_actor_framework/minigame_actor_framework_header]
-    - [0x118C30, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+    - [0x118C30, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+    - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
     - [0x119660, c,       fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x11A230, c,       fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x11BE70, c,       fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
