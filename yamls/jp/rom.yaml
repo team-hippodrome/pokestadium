@@ -840,10 +840,14 @@
     subsegments:
     - [0x16F200, textbin,   fragments/credits/credits_header]
     - [0x16F220, asm, fragments/credits/credits_158A00]
+    - [0x171600, c, fragments/credits/credits_15A2B0]
+    - [0x1720D0, asm, fragments/credits/credits_15AD80]
     - [0x172460, data, fragments/credits/credits_158A00]
-    - [0x173030, data, fragments/credits/credits_15A2B0]
+    - [0x173030, .data, fragments/credits/credits_15A2B0]
+    - [0x175A10, data, fragments/credits/credits_15AD80]
+    - [0x177480, .rodata, fragments/credits/credits_15A2B0]
     - {vram: 0x86A082B0, type:  bss, name: fragments/credits/credits_158A00}
-    - {vram: 0x86A08360, type:  bss, name: fragments/credits/credits_15A2B0}
+    - {vram: 0x86A08360, type: .bss, name: fragments/credits/credits_15A2B0}
   - name: fragment16_relocs
     type: code
     bss_size: 0x0
