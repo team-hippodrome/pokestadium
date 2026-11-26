@@ -206,3 +206,15 @@
 -> - [0x3A02B0, .rodata, fragments/battle_prep/battle_prep_394120]
 - {vram: 0x84B198F0, type:  bss, name: fragments/battle_prep/battle_prep_394120}
 -> - {vram: 0x84B198F0, type: .bss, name: fragments/battle_prep/battle_prep_394120}
+
+# minigame_hud_countdown: PAL countdown timing (NTSC_PAL); US Rev. 2's texture filter in the later PAL releases except German.
+# The porter merges minigame_hud_pause_menu's text (after 0x660 bytes) into this file's.
+- [0x10AA20, asm, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10AA20, c, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10B080, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10EA50, data, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10EA50, .data, fragments/minigame_hud/minigame_hud_countdown]
+- [0x118090, rodata, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x118090, .rodata, fragments/minigame_hud/minigame_hud_countdown]
+- {vram: 0x8780FAC0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+-> - {vram: 0x8780FAC0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}

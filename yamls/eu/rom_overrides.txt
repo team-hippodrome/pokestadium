@@ -140,3 +140,15 @@
 -> - [0x16DE80, .rodata, fragments/demo_scenes/demo_scenes_160CB0]
 - {vram: 0x86B0E5D0, type: bss, name: fragments/demo_scenes/demo_scenes_15FA60}
 -> - {vram: 0x86B0E5D0, type: .bss, name: fragments/demo_scenes/demo_scenes_15FA60}
+
+# minigame_hud_countdown: PAL countdown timing (NTSC_PAL); US Rev. 2's texture filter in the later PAL releases except German.
+# The porter merges minigame_hud_pause_menu's text (after 0x660 bytes) into this file's.
+- [0x10A3C0, asm, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10A3C0, c, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10AA20, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10E3F0, data, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10E3F0, .data, fragments/minigame_hud/minigame_hud_countdown]
+- [0x117A30, rodata, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x117A30, .rodata, fragments/minigame_hud/minigame_hud_countdown]
+- {vram: 0x8780FAC0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+-> - {vram: 0x8780FAC0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}

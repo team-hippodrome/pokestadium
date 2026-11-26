@@ -521,15 +521,15 @@
     subsegments:
     - [0x108210, textbin, fragments/minigame_hud/minigame_hud_header]
     - [0x108230, c,       fragments/minigame_hud/minigame_hud]
-    - [0x10A570, asm, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10A570, c, fragments/minigame_hud/minigame_hud_countdown]
     - [0x10ABE0, asm, fragments/minigame_hud/minigame_hud_pause_menu]
     - [0x10E550, .data,   fragments/minigame_hud/minigame_hud]
-    - [0x10E5B0, data, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x10E5B0, .data, fragments/minigame_hud/minigame_hud_countdown]
     - [0x10E710, data, fragments/minigame_hud/minigame_hud_pause_menu]
-    - [0x117BF0, rodata, fragments/minigame_hud/minigame_hud_countdown]
+    - [0x117BF0, .rodata, fragments/minigame_hud/minigame_hud_countdown]
     - [0x117C00, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
     - {vram: 0x8780FA30, type:  .bss, name: fragments/minigame_hud/minigame_hud}
-    - {vram: 0x8780FAD0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+    - {vram: 0x8780FAD0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}
     - {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
     type: code

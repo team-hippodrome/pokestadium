@@ -1311,7 +1311,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FCA7 = 0;
     D_8780FDF8 = 0;
     D_8780FE01 = 0;
-    D_8780FE00 = 0xC;
+    D_8780FE00 = NTSC_PAL(12, 10);
 
     D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, gMinigameText, 0x51);
 
@@ -1810,7 +1810,7 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 
                 if ((D_8780FA48 == i) && ((D_8780FC40 == 4) || (((D_8780FC40 == 5) || (D_8780FC40 == 6)) &&
-                                                                ((D_8780FCA8 >= 0x28) || ((D_8780FCA8 % 10) < 5))))) {
+                                                                ((D_8780FCA8 >= NTSC_PAL(40, 32)) || ((D_8780FCA8 % NTSC_PAL(10, 8)) < NTSC_PAL(5, 4)))))) {
                     var_a0 = 1;
                 }
             }
