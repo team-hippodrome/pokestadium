@@ -29,6 +29,7 @@
     - [0x39F0, c, util]
     - [0x3F20, c, jpeg_stream] # PRES-JPEG stream/asset loader
     - [0x54F0, asm, text_54F0]
+    - [0x6020, c, reset]
     - [0x63D0, c, controller]
     - [0x69E0, c, gfx_buffer]
     - [0x6B60, c, gfx_rect]
@@ -407,7 +408,7 @@
     - {vram: 0x800ACCC0, type: .bss, name: util}
     - {vram: 0x800ACCD0, type: .bss, name: jpeg_stream}
     - {vram: 0x800ACEF0, type: bss, name: scheduler}
-    - {vram: 0x800AD930, type: bss, name: reset}
+    - {vram: 0x800AD930, type: .bss, name: reset}
     - {vram: 0x800ADF30, type: .bss, name: controller}
     - {vram: 0x800AE030, type: .bss, name: gfx_buffer}
     - {vram: 0x800AE060, type: .bss, name: stage_loader}
