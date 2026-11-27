@@ -58,16 +58,10 @@ void Audio_SetMusicLoopPoint(s32 arg0) {
 #define TRACK_VOLUME(volume) (volume)
 #endif
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// JP has its own track table; not matched yet.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio_loop_point/Audio_StartMusicTrack.s")
-#else
 s32 Audio_StartMusicTrack(s32 track_id) {
     u32 file_index;
     s32 file_size;
-#if !defined(VERSION_JP)
     UNUSED s32 pad;
-#endif
     s32 volume_scale;
 #if !defined(VERSION_JP)
     s32 voice_volume;
@@ -111,7 +105,12 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         D_80078ED0 = 1;
     } else {
         Audio_StopAllSoundEffects();
+#if defined(VERSION_JP)
+        // FAKE: keeps track_id in its stack home
+        D_80078E70 = track_id * 0;
+#else
         D_80078E70 = 0;
+#endif
         Audio_QueueFadeSoundCommand(D_80078ECC, 1);
         D_80078ED0 = 0;
     }
@@ -121,7 +120,9 @@ s32 Audio_StartMusicTrack(s32 track_id) {
             track_id = 0x3C;
         } else if ((D_80078404 == 0xD) && (D_80078390[0] > 0) && (D_80078390[1] == 0) && (D_80078408 == 5)) {
             track_id = 0x3E;
+#if !defined(VERSION_JP)
             D_800FF9B4 = 0x3E;
+#endif
         } else if ((D_80078404 == 0xF) && (D_80078390[0] > 0) && (D_80078390[1] == 0)) {
             track_id = 0x40;
         }
@@ -139,8 +140,14 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         track_id = 0x48;
     }
 
+#if defined(VERSION_JP)
+    // FAKE: the mask makes uopt load track_id as unsigned here, like the switch
+    file_index = track_id & 0xFFFFFFFF;
+    switch ((u32)track_id) {
+#else
     file_index = track_id;
     switch (track_id) {
+#endif
         case 0x0:
             D_80078E78 = 0;
             D_80078E7C = 0;
@@ -157,6 +164,12 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         case 0x9:
             volume_scale = 0x50;
             break;
+
+#if defined(VERSION_JP)
+        case 0xB4:
+            volume_scale = 0x78;
+            break;
+#endif
 
         case 0x7:
             volume_scale = 0x78;
@@ -216,12 +229,16 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
         case 0x1A:
             volume_scale = 0x60;
+#if !defined(VERSION_JP)
             Audio_ResetVolumeTransition();
+#endif
             break;
 
         case 0x1B:
             volume_scale = 0x58;
+#if !defined(VERSION_JP)
             Audio_ResetVolumeTransition();
+#endif
             break;
 
         case 0x2C:
@@ -278,7 +295,7 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         case 0x29:
             D_80078E78 = 0;
             D_80078E7C = 0;
-            volume_scale = 0x78;
+            volume_scale = JP_INTL(0x70, 0x78);
 #if !defined(VERSION_PAL) && !defined(VERSION_JP)
             voice_volume = 0x87;
 #endif
@@ -369,6 +386,7 @@ s32 Audio_StartMusicTrack(s32 track_id) {
             volume_scale = 0x70;
             break;
 
+#if !defined(VERSION_JP)
         case 0x49:
             volume_scale = 0x68;
             break;
@@ -380,6 +398,7 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         case 0x4B:
             volume_scale = 0x60;
             break;
+#endif
 
         case 0x42:
             D_80078E78 = 0;
@@ -531,7 +550,6 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
     return D_80078E70;
 }
-#endif
 
 void Audio_FadeOutAll(s32 arg0) {
     s32 i;
