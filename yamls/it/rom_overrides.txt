@@ -580,11 +580,11 @@
 - [0x793D0, data, audio_commands_category2]
 -> - [0x793D0, .data, audio_commands_category2]
 -> - [0x79560, .data, audio_sfx]
--> - [0x79590, data, text_3D770]
+-> - [0x79590, .data, audio_fade]
 - [0x7DDA0, rodata, audio_commands_category2]
 -> - [0x7DDA0, .rodata, audio_commands_category2]
 -> - [0x7E010, .rodata, audio_sfx]
--> - [0x7E100, rodata, text_3D770]
+-> - [0x7E100, .rodata, audio_fade]
 
 # n_synthesizer, gb_audio_render and gb_audio: built from the shared C. PAL links the GB
 # synth and music player right after n_synthesizer, and the porter merges all three texts and
@@ -605,3 +605,35 @@
 - {vram: 0x800FD500, type: bss, name: gb_audio_render}
 -> - {vram: 0x800FD500, type: .bss, name: gb_audio_render}
 -> - {vram: 0x800FFF30, type: .bss, name: gb_audio}
+
+# audio_fade and 3D140_2: built from the shared C (PAL move sound bank reload and battle music
+# volume, plus the Italian announcer tables). The porter merges them into one text blob and
+# merges the 3D140 .rodata into the 3D140_2 .rodata.
+- [0x3D770, asm, text_3D770]
+-> - [0x3D770, c, audio_fade]
+-> - [0x3DF10, c, 3D140_2]
+- [0x798A0, data, 3D140_2]
+-> - [0x798A0, .data, 3D140_2]
+- [0x7E7B0, rodata, 3D140_2]
+-> - [0x7E7B0, .rodata, 3D140_2]
+-> - [0x7EBD0, .rodata, 3D140]
+
+# 3D140 and libnumus/player: built from the shared C. PAL links player after 3D140 (US links it
+# before), and the porter merges the two into one blob per section. The 3D140 .bss holds only
+# 3D140.c's own variables in PAL; the rest belong to 3D140_2.c, which PAL links first.
+- [0x432D0, asm, 3D140]
+-> - [0x432D0, c, 3D140]
+-> - [0x443C0, c, libnumus/player]
+- [0x7A030, data, 3D140]
+-> - [0x7A030, .data, 3D140]
+-> - [0x7A0B0, .data, libnumus/player]
+-> - [0x7A1B0, data, libnaudio/n_drvrNew]
+- [0x7EBF0, rodata, libnumus/player]
+-> - [0x7EBF0, .rodata, libnumus/player]
+-> - [0x7EC70, rodata, libnaudio/n_drvrNew]
+- {vram: 0x800FCF60, type: bss, name: 3D140}
+-> - {vram: 0x800FCF60, type: .bss, name: 3D140_2}
+- {vram: 0x800FD190, type: bss, name: gb_audio}
+-> - {vram: 0x800FD190, type: .bss, name: 3D140}
+- {vram: 0x800FD480, type: bss, name: libnumus/player}
+-> - {vram: 0x800FD480, type: .bss, name: libnumus/player}
