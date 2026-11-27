@@ -7932,3 +7932,15 @@ func_8FC00020 = 0x8FC00020; // type:func segment:fragment77
 
 // Reviewed addresses from yamls/eu/symbol_overrides.txt
 Audio_QueueSetMonoOutputCommand = 0x800449A0; // type:func
+sMoveSoundBankStale = 0x800780D8;
+Audio_FadeStoredSound = 0x80036708;
+D_80078700 = 0x800782B0; // type:func
+D_800786FD = 0x800782AD;
+D_80078E83 = 0x80077D73;
+D_80078E8B = 0x80077D7B;
+D_80078E93 = 0x80077D83;
+D_80078E9B = 0x80077D8B;
+D_80078EA3 = 0x80077D93;
+D_80078EAB = 0x80077D9B;
+D_80078EB3 = 0x80077DA3;
+D_80078EBF = 0x80077DAF;

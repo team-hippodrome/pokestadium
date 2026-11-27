@@ -228,8 +228,8 @@ Gfx D_8006F798[] = {
     gsSPEndDisplayList(),
 };
 
-// Unreferenced in the US build. In the Japanese build, func_8001F210_jp and
-// func_8001F258_jp (asm/jp/graphics_textures.s) store 1 and 0 to word 0 when
+// Unreferenced in the US build. In the Japanese build, Storage_StartDiskReadyPolling and
+// Storage_StopDiskReadyPolling (asm/jp/graphics_textures.s) store 1 and 0 to word 0 when
 // Storage_GetDiskStatus returns nonzero, next to Audio_SetDiskReadyPolling(1/0);
 // global so that assembly can name it.
 s32 D_8006F7C0[] = { 0, 0, 0, 0 };

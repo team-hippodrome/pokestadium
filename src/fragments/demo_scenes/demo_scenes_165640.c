@@ -115,10 +115,11 @@ static u8 sSettledPanelColors[] = {
 
 // Trophy models indexed by sTrophyIndex: 0..3 = ball tier (modeSelection) for ruleCategory 3 and 6,
 // 4 = ruleCategory 1, 2 (and Petit Cup in US 1.2), 5 = Pika Cup (and Petit Cup outside US 1.2).
-// US 1.2 gives entry 5 its own model (0xA6); other versions repeat 0xA5. Entries 6..19 are unused filler.
+// US 1.2 and the Japanese release give entry 5 its own model (0xA6); other versions repeat 0xA5.
+// Entries 6..19 are unused filler.
 static TrophyModelInfo sTrophyModels[20] = {
     { 0xA7, 47.5f, 30.0f }, { 0xA8, 47.5f, 30.0f }, { 0xA9, 47.5f, 30.0f }, { 0xAA, 47.5f, 30.0f },
-#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE) || defined(VERSION_JP)
     { 0xA5, 66.5f, 85.0f }, { 0xA6, 50.0f, 55.0f }, { 0xA7, 0.0f, 0.0f },   { 0xA7, 0.0f, 0.0f },
 #else
     { 0xA5, 66.5f, 85.0f }, { 0xA5, 66.5f, 85.0f }, { 0xA7, 0.0f, 0.0f },   { 0xA7, 0.0f, 0.0f },
@@ -604,7 +605,11 @@ void ClearCeremony_ConfigureTextPanels(void) {
             break;
 
         case 3:
+#if defined(VERSION_JP)
+            ClearCeremony_SetupTextPanel(sCupNamePanel, &D_3004060, -100.0f, 0x1E, 0xA8, 0x14);
+#else
             ClearCeremony_SetupTextPanel(sCupNamePanel, &D_3004060, -100.0f, 0x1E, 0xB0, 0x14);
+#endif
             break;
 
         case 4:
@@ -992,8 +997,14 @@ void ClearCeremony_DrawTextPanels(void) {
                 Gfx_SetPrimColor(0, 0x82, 0xFF, 0xFF); // #0082FF
                 Gfx_SetEnvColor(0xC8, 0xFF, 0xFF, 0xFF); // #C8FFFF
                 ClearCeremony_StepPanelBounce(sNicknamePanel, 0.35f, 0.0f, 4.0f, 160.0f, 1.4f);
+#if defined(VERSION_JP)
+                // Centered by character count: the Japanese glyphs are 12 pixels wide.
+                Font_Printf((s32)sNicknamePanel->positionX - ((strlen(sNicknamePanel->text) / 2) * 12),
+                            sNicknamePanel->positionY, sNicknamePanel->text);
+#else
                 Font_Printf((s32)sNicknamePanel->positionX - (Font_MeasureTextExtent(0x10, 0, sNicknamePanel->text) / 2),
                             sNicknamePanel->positionY, sNicknamePanel->text);
+#endif
                 Font_DisableTwoCycleTexturing();
                 Font_EndTexturedTextRendering();
                 break;

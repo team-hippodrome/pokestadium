@@ -87,6 +87,7 @@
     - [0x33FE0, c]
     - [0x37370, c, audio_sfx_wrapper]
     - [0x373A0, c, audio_commands]  # battle code
+    - [0x37F40, c, audio_bank_init]
     - [0x38BB0, c, libnumus/player]
     - [0x3D140, c]  # music code
     - [0x3E170, c, 3D140_2]  # music code
@@ -543,7 +544,7 @@
     - {vram: 0x800AF770, type: .bss, name: battle_hud}
     - {vram: 0x800AF7C0, type: .bss, name: model_renderer_callbacks}
     - {vram: 0x800B2F50, type: .bss, name: 33FE0}
-    - {vram: 0x800B32A0, type: .bss, name: audio_commands}
+    - {vram: 0x800B32A0, type: .bss, name: audio_bank_init}
     - {vram: 0x800FC7A0, type: .bss, name: libnumus/player}
     - {vram: 0x800FC820, type: .bss, name: 3D140}
     - {vram: 0x800FCD40, type: .bss, name: gb_audio}
@@ -881,9 +882,11 @@
     subsegments:
     - [0x138F60, textbin,   fragments/dynamo_game/dynamo_game_header]
     - [0x138F80, c,      fragments/dynamo_game/dynamo_game]
+    - [0x13AF20, c,      fragments/dynamo_game/dynamo_game_ai]
     - [0x13B070, c,      fragments/dynamo_game/dynamo_game_1]
     - [0x13B920, c,      fragments/dynamo_game/dynamo_game_2]
     - [0x13BB80, .data,   fragments/dynamo_game/dynamo_game]
+    - [0x13BE00, .data,   fragments/dynamo_game/dynamo_game_ai]
     - [0x13BEB0, .data,   fragments/dynamo_game/dynamo_game_1]
     - [0x142130, .data,   fragments/dynamo_game/dynamo_game_2]
     - [0x1421D0, .rodata, fragments/dynamo_game/dynamo_game]
@@ -1012,15 +1015,18 @@
     subsegments:
     - [0x158A00, textbin,   fragments/credits/credits_header]
     - [0x158A20, c,      fragments/credits/credits_158A00]
+    - [0x159A20, c,      fragments/credits/credits_159A00]
     - [0x15A2C0, c,      fragments/credits/credits_15A2A0]
     - [0x15A2D0, c,      fragments/credits/credits_15A2B0]
     - [0x15ADA0, c,      fragments/credits/credits_15AD80]
     - [0x15AFA0, .data,   fragments/credits/credits_158A00]
+    - [0x15B100, .data,   fragments/credits/credits_159A00]
     - [0x15BB70, .data,   fragments/credits/credits_15A2B0]
     - [0x15E550, .data,   fragments/credits/credits_15AD80]
     - [0x15EB40, .rodata, fragments/credits/credits_15A2B0]
 
     - {vram: 0x86A06170, type:  .bss, name: fragments/credits/credits_158A00}
+    - {vram: 0x86A06210, type:  .bss, name: fragments/credits/credits_159A00}
     - {vram: 0x86A06220, type:  .bss, name: fragments/credits/credits_15A2B0}
 
   - name: fragment16_relocs

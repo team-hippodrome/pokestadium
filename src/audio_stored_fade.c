@@ -5,6 +5,10 @@
 #include "src/audio_cache.h"
 #include "libnumus/player.h"
 
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+extern s32 D_80078388;
+#endif
+
 // .data
 u8 D_80078A10[3] = { 0xFF, 0xFF, 0xFF };
 u32 D_80078A14 = 0;
@@ -123,9 +127,26 @@ block_38:
         }
         return 0;
     }
+#if defined(VERSION_PAL)
+    // PAL keeps the handle in species, so it survives the voice volume call.
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    // The translated releases play move sounds quieter while the battle music stream plays.
+    if ((D_80078388 != 0) && (D_80078E78 == 0) && (sLoopPointTable[0] == 0)) {
+        species = Audio_PlaySoundEffect(D_800FC6AC, seq, species, 0x70, 0x80, -1);
+    } else {
+        species = Audio_PlaySoundEffect(D_800FC6AC, seq, species, 0x80, 0x80, -1);
+    }
+#else
+    species = Audio_PlaySoundEffect(D_800FC6AC, seq, species, 0x80, 0x80, -1);
+#endif
+    Audio_QueueVoiceVolume(species, 0x6A);
+    D_80078A18 = species;
+    return species;
+#else
     temp_v0 = Audio_PlaySoundEffect(D_800FC6AC, seq, species, 0x80, 0x80, -1);
     D_80078A18 = temp_v0;
     return temp_v0;
+#endif
 }
 
 void Audio_FadeStoredSound(void) {

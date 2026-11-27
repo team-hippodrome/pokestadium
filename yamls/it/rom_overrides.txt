@@ -519,7 +519,9 @@
 # audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
 # libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
 - [0x7DA10, rodata, audio_commands]
--> - [0x7DA10, rodata, audio_commands]
+-> - [0x7DA10, .rodata, audio_commands]
+-> - [0x7DB20, .rodata, audio_loop_point]
+-> - [0x7DD00, .rodata, cry]
 -> - [0x7DD70, .rodata, audio_channel]
 - [0x7EC90, rodata, libnaudio/n_env]
 -> - [0x7EC90, rodata, libnaudio/n_env]
@@ -582,21 +584,27 @@
 - {vram: 0x8861C510, type:  bss, name: fragments/lab_pc_icons/lab_pc_icons}
 -> - {vram: 0x8861C510, type: .bss, name: fragments/lab_pc_icons/lab_pc_icons}
 
-# credits: the porter merges the four credits files' text into one blob and the
+# credits: the porter merges the 159A00, 15A2A0, 15A2B0 and 15AD80 text into one blob and the
 # 15AD80 .data into the 15A2B0 .data, and leaves out the 15A2B0 .rodata.
 - [0x1591F0, asm, fragments/credits/credits_158A00]
 -> - [0x1591F0, c, fragments/credits/credits_158A00]
+- [0x15A1F0, asm, fragments/credits/credits_159A00]
+-> - [0x15A1F0, c, fragments/credits/credits_159A00]
 -> - [0x15AA90, c, fragments/credits/credits_15A2A0]
 -> - [0x15AAA0, c, fragments/credits/credits_15A2B0]
 -> - [0x15B570, c, fragments/credits/credits_15AD80]
 - [0x15B770, data, fragments/credits/credits_158A00]
 -> - [0x15B770, .data, fragments/credits/credits_158A00]
+- [0x15B8D0, data, fragments/credits/credits_159A00]
+-> - [0x15B8D0, .data, fragments/credits/credits_159A00]
 - [0x15C330, data, fragments/credits/credits_15A2B0]
 -> - [0x15C330, .data, fragments/credits/credits_15A2B0]
 -> - [0x15ED10, .data, fragments/credits/credits_15AD80]
 -> - [0x15F2F0, .rodata, fragments/credits/credits_15A2B0]
 - {vram: 0x86A06150, type:  bss, name: fragments/credits/credits_158A00}
 -> - {vram: 0x86A06150, type: .bss, name: fragments/credits/credits_158A00}
+- {vram: 0x86A061F0, type:  bss, name: fragments/credits/credits_159A00}
+-> - {vram: 0x86A061F0, type: .bss, name: fragments/credits/credits_159A00}
 - {vram: 0x86A06200, type:  bss, name: fragments/credits/credits_15A2B0}
 -> - {vram: 0x86A06200, type: .bss, name: fragments/credits/credits_15A2B0}
 
@@ -627,3 +635,30 @@
 -> - {vram: 0x8122C7A0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
 - {vram: 0x81231460, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
 -> - {vram: 0x81231460, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+
+# audio_stored_fade, audio_commands, audio_loop_point, cry and audio_bank_init: built from the
+# shared C. PAL links audio_loop_point and cry between the two halves of audio_commands, and the
+# porter merges all five files (plus audio_channel's .data) into one blob per section.
+- [0x37030, asm, audio_stored_fade]
+-> - [0x37030, c, audio_stored_fade]
+-> - [0x374D0, c, audio_commands]
+-> - [0x384E0, c, audio_loop_point]
+-> - [0x39300, c, cry]
+-> - [0x39780, c, audio_bank_init]
+- [0x78D10, data, audio_stored_fade]
+-> - [0x78D10, .data, audio_stored_fade]
+-> - [0x78D30, .data, audio_commands]
+-> - [0x79040, .data, audio_loop_point]
+-> - [0x790B0, .data, cry]
+-> - [0x793B0, .data, audio_bank_init]
+-> - [0x793C0, .data, audio_channel]
+- [0x7D9C0, rodata, text_7D9C0]
+-> - [0x7D9C0, .rodata, audio_stored_fade]
+
+# audio_loop_point and audio_bank_init .bss: built from the shared C. The porter merges them under
+# the audio_bank_init name, and names the libleo/leofunc .bss after audio_loop_point.
+- {vram: 0x800B3A40, type: bss, name: audio_bank_init}
+-> - {vram: 0x800B3A40, type: .bss, name: audio_loop_point}
+-> - {vram: 0x800B3A50, type: .bss, name: audio_bank_init}
+- {vram: 0x80100170, type: bss, name: audio_loop_point}
+-> - {vram: 0x80100170, type: bss, name: libleo/leofunc}

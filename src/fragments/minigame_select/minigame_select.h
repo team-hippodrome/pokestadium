@@ -77,7 +77,9 @@ typedef struct unk_D_8250A480 {
     /* 0x0A */ s16 unk_0A;
     /* 0x0C */ s16 unk_0C;
     /* 0x10 */ f32 unk_10;
+#if !defined(VERSION_JP)
     /* 0x14 */ char** unk_14;
+#endif
 } unk_D_8250A480; // size = 0x18
 
 typedef struct unk_D_8250A498 {
@@ -91,9 +93,13 @@ typedef struct unk_D_8250A498 {
     /* 0x0E */ s16 unk_0E;
     /* 0x10 */ s16 unk_10;
     /* 0x12 */ s16 unk_12;
+#if !defined(VERSION_JP)
     /* 0x14 */ char** unk_14;
+#endif
 } unk_D_8250A498; // size = 0x18
 
+extern u16 D_82508AF0;
+extern s16 D_8250A26C;
 extern FontContext* D_8250A304;
 
 s32 MiniGameSelect_DrawMenuBackdrop(s32 arg0, GraphNode* arg1);
@@ -146,7 +152,11 @@ void MiniGameSelect_MainLoop(s16 arg0, s16 arg1);
 void MiniGameSelect_LoadScene(void);
 s32 MiniGameSelect_Entry(s32 arg0, s32 arg1);
 
+#if defined(VERSION_JP)
+void KidsClub_InitMatchBanner(void);
+#else
 void KidsClub_InitMatchBanner(char** arg0);
+#endif
 s32 KidsClub_GetMatchBannerState(void);
 void KidsClub_SetMatchBannerState(s16 arg0);
 void KidsClub_AdvanceMatchBannerOpen(unk_D_8250A480* arg0);
@@ -156,8 +166,16 @@ void KidsClub_UpdateMatchBanner(void);
 void KidsClub_DrawRoundedFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7);
 void KidsClub_DrawWavyText(s16 arg0, s16 arg1, s8* arg2, f32 arg3, s16 arg4);
 void KidsClub_DrawMatchBanner(void);
+#if defined(VERSION_JP)
+void KidsClub_InitRoundBanner(void);
+#else
 void KidsClub_InitRoundBanner(char** arg0);
+#endif
+#if defined(VERSION_JP)
+s32 KidsClub_CountChars(s8* text);
+#else
 void func_825057A0(void);
+#endif
 void KidsClub_SetRoundBannerLabel(s16 arg0);
 void KidsClub_SetRoundBannerState(s16 arg0, s16 arg1);
 void KidsClub_AdvanceRoundBannerOpen(unk_D_8250A498* arg0);
