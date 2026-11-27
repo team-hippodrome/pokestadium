@@ -39,6 +39,15 @@ typedef struct unk_func_888044BC_038_02C_000 {
     /* 0x6C */ s32 unk_6C;
 } unk_func_888044BC_038_02C_000; // size = 0x70
 
+#if defined(VERSION_JP)
+// JP reads the species table directly and converts the row index when the list is sorted alphabetically.
+typedef struct unk_func_888044BC_038_02C {
+    /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
+    /* 0x70 */ unk_func_88201DA0_038 unk_70;
+    /* 0x80 */ s32 unk_88;
+    /* 0x84 */ s32 unk_8C;
+} unk_func_888044BC_038_02C; // size = 0x88
+#else
 typedef struct unk_func_888044BC_038_02C {
     /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
     /* 0x70 */ unk_func_88205880_A030 unk_70;
@@ -46,6 +55,7 @@ typedef struct unk_func_888044BC_038_02C {
     /* 0x88 */ s32 unk_88;
     /* 0x8C */ s32 unk_8C;
 } unk_func_888044BC_038_02C; // size = 0x90
+#endif
 
 typedef struct unk_func_888044BC_038 {
     /* 0x00 */ WidgetNode unk_00;
@@ -191,7 +201,11 @@ void Pokedex_UpdateAreaMapFrame(void);
 s32 Pokedex_GetCountTier(s32 arg0);
 s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0);
 s32 Pokedex_CheckAreaMapExit(void);
+#if defined(VERSION_JP)
+void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32 arg4);
+#else
 void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32 arg4, char* arg5, char** arg6);
+#endif
 void Pokedex_ExitAreaMapPool(void);
 
 #endif // _FRAGMENT28_H_

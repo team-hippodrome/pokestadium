@@ -3362,7 +3362,11 @@ s32 Pokedex_CheckAreaMapExit(void) {
     return 0;
 }
 
+#if defined(VERSION_JP)
+void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32 arg4) {
+#else
 void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32 arg4, char* arg5, char** arg6) {
+#endif
     s32 i;
     CameraNode* ptr;
     MemoryBlock* sp4C;
