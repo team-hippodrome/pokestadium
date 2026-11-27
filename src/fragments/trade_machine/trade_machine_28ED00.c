@@ -781,12 +781,6 @@ void Trade_UpdateBoxMachineFlowClose(unk_D_82F20A40* arg0) {
     }
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// The panel colours of the assembly Trade_DrawBoxMachineTopBar (its sp5C and sp58).
-Color_RGB8 D_82F138B4_jp = { 0x1E, 0x1E, 0x64 };
-Color_RGB8 D_82F138B8_jp = { 0x64, 0x64, 0xC8 };
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/trade_machine/trade_machine_28ED00/Trade_DrawBoxMachineTopBar.s")
-#else
 void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
     Color_RGB8* var_v0;
     unk_D_82F20A40_00E* temp_s4 = &arg0->unk_06;
@@ -829,7 +823,15 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
 #endif
 
         for (i = 0; i < 2; i++) {
+#if defined(VERSION_JP)
+            // JP skips empty slots with a continue, which changes register priorities.
+            if (D_82F210D8[i] == -1) {
+                continue;
+            }
+            {
+#else
             if (D_82F210D8[i] != -1) {
+#endif
                 if (i == 0) {
                     if (D_82F20A88[0].unk_004 == 0) {
                         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -862,7 +864,6 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
         Font_EndTexturedTextRendering();
     }
 }
-#endif
 
 #if defined(VERSION_JP) && !defined(NON_MATCHING)
 // The slot colours of the assembly Trade_DrawBoxMachineSlots (its sp88 and sp84).
