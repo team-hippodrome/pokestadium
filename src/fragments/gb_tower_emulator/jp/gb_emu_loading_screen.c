@@ -107,16 +107,16 @@ extern u16* D_81259A74;
 extern u32 D_81259A78;
 extern u8 D_81259A80;
 extern u8 D_81259A81;
-extern u16 D_811228C0[];
-extern u16 D_81124CC0[];
-extern u16 D_81124D40[];
-extern u16 D_81124DC0[];
-extern u16 D_811270E8[];
-extern u16 D_81127390[];
-extern u16 D_81127638[];
-extern u16 D_811278E0[];
-extern u16 D_81127B88[];
-extern u8 D_8112A938[];
+extern u16 D_812235C0[];
+extern u16 D_812259C0[];
+extern u16 D_81225A40[];
+extern u16 D_81225AC0[];
+extern u16 D_81227DE8[];
+extern u16 D_81228090[];
+extern u16 D_81228338[];
+extern u16 D_812285E0[];
+extern u16 D_81228888[];
+extern u8 D_8122B638[];
 void GbEmu_DrawTextCommands(u16*, u8*);
 void GbEmu_DrawFramedPanel(u16* arg0);
 u32 osGetCount(void);
@@ -128,7 +128,6 @@ u32 osGetCount(void);
  * @unverified Name from the code and Stadium 1.
  */
 void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 version);
-#ifdef NON_MATCHING
 void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 version) {
     s32 y;
     s32 x;
@@ -142,7 +141,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
     for (y = 0; y < 0x14000; y += step) {
         row = dst + y;
         for (j = 0; j != 320u; j += 64) {
-            GbEmu_BlitWithPixelOp(row, D_811228C0, 0xFFFF, 64, (y == 0xF000) ? 48 : 64);
+            GbEmu_BlitWithPixelOp(row, D_812235C0, 0xFFFF, 64, (y == 0xF000) ? 48 : 64);
             row += 64;
         }
     }
@@ -151,7 +150,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
     _bcopy(dst + 0x10540, D_81259A70, 0x2580);
     D_81259A74 = (u16*)GbEmu_AllocAligned64(0x2580, 0);
     bzero(D_81259A74, 0x2580);
-    GbEmu_DrawTextCommands(D_81259A74, D_8112A938);
+    GbEmu_DrawTextCommands(D_81259A74, D_8122B638);
 
     for (i = 0; i < 6; i++) {
         GbEmu_DrawFramedPanel(dst + 0xB916 + i * 46);
@@ -167,8 +166,8 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
     }
 
     for (i = 0; i < 320; i += 8) {
-        GbEmu_BlitWithPixelOp(dst + 33 * 320 + i, D_81124CC0, 0xFFFF, 8, 8);
-        GbEmu_BlitWithPixelOp(dst + 113 * 320 + i, D_81124D40, 0xFFFF, 8, 8);
+        GbEmu_BlitWithPixelOp(dst + 33 * 320 + i, D_812259C0, 0xFFFF, 8, 8);
+        GbEmu_BlitWithPixelOp(dst + 113 * 320 + i, D_81225A40, 0xFFFF, 8, 8);
     }
 
     for (j = 0; j < 72; j++) {
@@ -192,21 +191,21 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
             break;
     }
 
-    GbEmu_BlitWithPixelOp(dst + 0x4E38, D_81127B88, 0, 0x56, 0x21);
-    GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x61E0), D_81124DC0, 0, 0x3C, 0x4B);
+    GbEmu_BlitWithPixelOp(dst + 0x4E38, D_81228888, 0, 0x56, 0x21);
+    GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x61E0), D_81225AC0, 0, 0x3C, 0x4B);
 
     switch (version) {
         case 0:
-            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_811270E8, 0, 0x13, 0x11);
+            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_81227DE8, 0, 0x13, 0x11);
             break;
         case 1:
-            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_81127390, 0, 0x13, 0x11);
+            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_81228090, 0, 0x13, 0x11);
             break;
         case 2:
-            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_81127638, 0, 0x13, 0x11);
+            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_81228338, 0, 0x13, 0x11);
             break;
         case 3:
-            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_811278E0, 0, 0x13, 0x11);
+            GbEmu_BlitWithPixelOp((u16*)(D_81259A64 + 0x7608), D_812285E0, 0, 0x13, 0x11);
             break;
     }
 
@@ -218,11 +217,6 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
     D_81259A68 = osGetCount();
     D_81259A6C = 0;
 }
-#else
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/gb_tower_emulator/jp/gb_emu_loading_screen/GbEmu_DrawLoadingScreen.s")
-// clang-format on
-#endif
 
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
