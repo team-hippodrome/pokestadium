@@ -1467,24 +1467,24 @@
     - [0x29EC40, asm, fragments/trade_machine/trade_machine_289240]
     - [0x2A2BF0, asm, fragments/trade_machine/trade_machine_28D1A0]
     - [0x2A44E0, asm, fragments/trade_machine/trade_machine_28ED00]
-    - [0x2A7310, asm, fragments/trade_machine/trade_machine_291D60]
+    - [0x2A7310, c, fragments/trade_machine/trade_machine_291D60]
     - [0x2A96C0, asm, fragments/trade_machine/trade_machine_2942C0]
     - [0x2B0EC0, data, fragments/trade_machine/trade_machine_289240]
     - [0x2B0F30, data, fragments/trade_machine/trade_machine_28D1A0]
     - [0x2B0FE0, data, fragments/trade_machine/trade_machine_28ED00]
-    - [0x2B12A0, data, fragments/trade_machine/trade_machine_291D60]
+    - [0x2B12A0, .data, fragments/trade_machine/trade_machine_291D60]
     - [0x2B12E0, data, fragments/trade_machine/trade_machine_2942C0]
     - [0x2B1420, rodata, fragments/trade_machine/trade_machine_287ED0]
     - [0x2B1540, rodata, fragments/trade_machine/trade_machine_289240]
     - [0x2B1580, rodata, fragments/trade_machine/trade_machine_28D1A0]
     - [0x2B1640, rodata, fragments/trade_machine/trade_machine_28ED00]
-    - [0x2B17E0, rodata, fragments/trade_machine/trade_machine_291D60]
+    - [0x2B17E0, .rodata, fragments/trade_machine/trade_machine_291D60]
     - [0x2B19D0, rodata, fragments/trade_machine/trade_machine_2942C0]
     - {vram: 0x82F14170, type:  bss, name: fragments/trade_machine/trade_machine_287ED0}
     - {vram: 0x82F14220, type:  bss, name: fragments/trade_machine/trade_machine_289240}
     - {vram: 0x82F20520, type:  bss, name: fragments/trade_machine/trade_machine_28D1A0}
     - {vram: 0x82F20550, type:  bss, name: fragments/trade_machine/trade_machine_28ED00}
-    - {vram: 0x82F20BF0, type:  bss, name: fragments/trade_machine/trade_machine_291D60}
+    - {vram: 0x82F20BF0, type:  .bss, name: fragments/trade_machine/trade_machine_291D60}
     - {vram: 0x82F20C50, type:  bss, name: fragments/trade_machine/trade_machine_2942C0}
   - name: fragment41_relocs
     type: code

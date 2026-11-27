@@ -12,11 +12,17 @@ typedef struct unk_func_82F00838_sp30_00C {
     /* 0x10 */ char unk10[0x14];
     /* 0x24 */ u8 unk_24;
     /* 0x25 */ char unk25[0xB];
+#if defined(VERSION_JP)
+    /* 0x30 */ char unk_30[0x10];
+    /* 0x40 */ char unk_3B[0xC];
+    /* 0x4C */ s32 force_align;
+#else
     /* 0x30 */ char unk_30[11];
     /* 0x3B */ char unk_3B[11];
     /* 0x46 */ char unk46[0xA];
     /* 0x50 */ s32 force_align;
-} unk_func_82F00838_sp30_00C; // size = 0x54
+#endif
+} unk_func_82F00838_sp30_00C; // size = 0x54 (0x50 in JP)
 
 typedef struct unk_D_82F144D0_0CA8 {
     /* 0x000 */ s16 unk_000;
@@ -229,6 +235,13 @@ extern char** gTradeStrings;
 extern char** sTradePokemonDetailText;
 
 char* Trade_GetSpeciesName(s32 arg0);
+
+// JP reads species names straight from the species data table.
+#if defined(VERSION_JP)
+#define TRADE_SPECIES_NAME(id) (*(char**)gSpeciesDataById[id])
+#else
+#define TRADE_SPECIES_NAME(id) Trade_GetSpeciesName(id)
+#endif
 char* Trade_GetMoveName(s32 arg0);
 char* Trade_GetTypeName(s32 arg0);
 void Trade_SetFadeRect(s16 arg0);

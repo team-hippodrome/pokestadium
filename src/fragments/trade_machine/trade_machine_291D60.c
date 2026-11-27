@@ -480,6 +480,18 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
         if (sp74[i] != 0) {
             temp_s3 = D_82F21120[i];
             var_s0 = &arg0->unk_14[i];
+#if defined(VERSION_JP)
+            Font_SetActive(4, -4);
+            Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "No.");
+            Font_SetActive(4, -3);
+            Font_Printf(var_s0->unk_00 + 0x26, var_s0->unk_02 + 0x4A, "%03d", temp_s3->unk_00);
+            Font_SetActive(8, -2);
+            Font_Printf(var_s0->unk_00 + 0x62, var_s0->unk_02 + 0x46, TRADE_SPECIES_NAME(temp_s3->unk_00));
+            Font_SetActive(8, -2);
+            Font_Printf(var_s0->unk_00 + 0x10, var_s0->unk_02 + 0x5E, "なまえ／%s", temp_s3->unk_30);
+            Font_Printf(var_s0->unk_00 + 0x10, var_s0->unk_02 + 0x74, "おや ／%s", temp_s3->unk_3B);
+            Font_Printf(var_s0->unk_00 + 0x10, var_s0->unk_02 + 0x8A, "ID%05d", temp_s3->unk_0E);
+#else
             Font_SetActive(4, 0);
 #if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "%s%03d",
@@ -497,6 +509,7 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
             Font_Printf(var_s0->unk_00 + 0x10, var_s0->unk_02 + 0x74, Text_GetString(NULL, 0, gTradeStrings, 0x15));
             Font_Printf(var_s0->unk_00 + 0x46, var_s0->unk_02 + 0x74, "/%s", temp_s3->unk_3B);
             Font_Printf(var_s0->unk_00 + 0x10, var_s0->unk_02 + 0x8A, "ID%05d", temp_s3->unk_0E);
+#endif
         }
     }
 
@@ -550,6 +563,31 @@ void Trade_DrawSaveSeqMenuPanel(unk_D_82F210E0* arg0) {
         }
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+
+        if (arg0->unk_04 & 1) {
+            for (i = 0; i < 3; i++) {
+                char* sp54[3] = { "レポートしてやめる", "レポートしてつづける", "レポートしないでやめる" };
+
+                Font_Printf(var_s4->unk_00 + 0x38, var_s4->unk_02 + i * 0x1C + 0x10, sp54[i]);
+            }
+        } else {
+            Font_Printf(var_s4->unk_00 + 0x10, var_s4->unk_02 + 0x10, "こうかんしますか？");
+
+            for (i = 0; i < 2; i++) {
+                char* sp48[2] = { "はい", "いいえ" };
+
+                if (i != D_82F21128) {
+                    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+                } else {
+                    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+                }
+                Font_Printf(var_s4->unk_00 + 0x46, var_s4->unk_02 + i * 0x1C + 0x2C, sp48[i]);
+            }
+        }
+#else
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
 
@@ -581,6 +619,7 @@ void Trade_DrawSaveSeqMenuPanel(unk_D_82F210E0* arg0) {
                             sp48[i]);
             }
         }
+#endif
 
         Font_EndTexturedTextRendering();
         D_82F13F78 += 0x1000;
@@ -596,11 +635,17 @@ void Trade_DrawSaveSeqBannerPanel(unk_D_82F210E0* arg0) {
                                     0x82, 0xFF);
         if ((temp_s0->unk_04 == 0x210) && (temp_s0->unk_06 == 0x28)) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(temp_s0->unk_00 + 0x62, temp_s0->unk_02 + 8, "こうかんが、ぶじにおわりました");
+#else
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             sp34 = Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, gTradeStrings, 0x1D)) / 2;
             Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - sp34, temp_s0->unk_02 + 8,
                         Text_GetString(NULL, 0, gTradeStrings, 0x1D));
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -608,8 +653,10 @@ void Trade_DrawSaveSeqBannerPanel(unk_D_82F210E0* arg0) {
 
 void Trade_DrawSaveSeqSubBanner(unk_D_82F210E0* arg0) {
     unk_D_82F20A40_00E* temp_s0 = &arg0->unk_34;
+#if !defined(VERSION_JP)
     char* sp40;
     UNUSED s32 pad;
+#endif
     Color_RGB8 sp38 = { 0x64, 0x1E, 0x1E };
 
     if ((arg0->unk_34.unk_04 != 0xE8) || (arg0->unk_34.unk_06 != 0)) {
@@ -619,11 +666,17 @@ void Trade_DrawSaveSeqSubBanner(unk_D_82F210E0* arg0) {
 
         if ((temp_s0->unk_04 == 0xE8) && (temp_s0->unk_06 == 0x38)) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(temp_s0->unk_00 + 0x10, temp_s0->unk_02 + 0x10, "レポートちゅうです");
+#else
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             sp40 = Text_GetString(NULL, 0, gTradeStrings, 0x1E);
             Font_Printf((temp_s0->unk_00 + (temp_s0->unk_04 / 2)) - (Font_MeasureTextExtent(0, 0, sp40) / 2),
                         temp_s0->unk_02 + 0x10, sp40);
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -640,7 +693,76 @@ void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 // which this function needs to match.
 #define U64_NOP(x) ((u32)((u64)(x) | 0ULL))
 
-#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
+#if defined(VERSION_JP)
+void func_82F0BEF8(unk_D_82F210E0* arg0) {
+    static s16 D_82F13F88 = 0;
+
+    UNUSED s32 pad;
+    s16 alpha;
+    unk_func_82F00838_sp30 sp20;
+
+    if (arg0->unk_08 < 2) {
+        Trade_GetPickScreenSnapshot(arg0->unk_08, &sp20);
+    } else {
+        Trade_GetPickScreenSnapshot(arg0->unk_0A, &sp20);
+    }
+
+    if (arg0->unk_10 == -1) {
+        return;
+    }
+
+    Trade_DrawSaveSeqMessageBackdrop(0x6E, 0x72, 0x1A4, 0x114);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(0x10, 0);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+
+    switch (arg0->unk_10) {
+        case 0:
+            Font_EnableTwoCycleTexturing();
+            Gfx_SetPrimColor(0xFF, 0xF1, 0x78, 0xFF);
+            Font_Printf(0xEC, 0xA8, "レポートちゅう");
+            Font_DisableTwoCycleTexturing();
+            break;
+
+        case 2:
+            alpha = 128.0f - SINS(D_82F13F88) * 128.0f;
+            if (alpha > 255) {
+                alpha = 255;
+            }
+            Font_EnableTwoCycleTexturing();
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, alpha);
+            Gfx_SetPrimColor(0xFF, 0xF1, 0x78, alpha);
+            Font_Printf(0xB0, 0x90, "%dＰ", sp20.unk_02 + 1);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xF1, 0x78, 0xFF);
+            Font_Printf(0xB0, 0x90, "  のカートリッジが\nレポートできませんでした");
+            Font_DisableTwoCycleTexturing();
+            break;
+
+        case 3:
+            Font_EnableTwoCycleTexturing();
+            Gfx_SetPrimColor(0xFF, 0xF1, 0x78, 0xFF);
+            Font_Printf(0x80, 0x90, "カートリッジがちがいます または\nデータが かわってしまいました");
+            Font_DisableTwoCycleTexturing();
+            break;
+    }
+
+    if (arg0->unk_10 != 0) {
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0xFF, 0xF1, 0x78, 0xFF);
+        Font_Printf(0x128, 0xF0, "でんげんをきらずに");
+        Font_DisableTwoCycleTexturing();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_SetLineHeight(0x24);
+        Font_Printf(0x80, 0xF0,
+                    "６４ほんたいの\nゲームボーイのカートリッジをぬき\n コネクタをきれいにしてから\n "
+                    "もういちどセットしてください");
+    }
+
+    Font_EndTexturedTextRendering();
+    D_82F13F88 += 0x800;
+}
+#elif defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
 // Rev 2 centres each message. As in the US version below, the U64_NOP casts only spend IDO temp
 // registers: case 2 needs four extra, and the longer chains in case 3 and the last block put the
 // temp-register ring back in the order the later code expects.
