@@ -100,18 +100,18 @@
     - [0x45C80, c, audio_stored_fade]  # move effects code
     - [0x460C0, c, audio_sound_state]  # audio functions to 0x50C00
     - [0x461B0, hasm, libgsm]
-    - [0x467B0, asm, text_467B0]
+    - [0x467B0, c, audio_sfx]
     - [0x46A60, c, libnaudio/n_synallocvoice]
     - [0x46C80, c, libnaudio/n_synthesizer]
     - [0x47220, c, libnaudio/n_synsetpan]
     - [0x472A0, c, gb_audio_render]
     - [0x48800, c, rom_device]
     - [0x48950, c, audio_channel]
-    - [0x48C80, asm, text_48C80]
+    - [0x48C80, c, audio_loop_point]
     - [0x499B0, c, cry]
     - [0x49D90, c, libnaudio/n_synsetpitch]
     - [0x49E10, c, libnaudio/n_drvrNew]
-    - [0x4A350, asm, libnaudio/n_drvrNew_4A350]
+    - [0x4A350, c, audio_commands_category2]
     - [0x4CA20, c, libnaudio/n_auxbus]
     - [0x4CAD0, c, libnaudio/n_synsetfxmix]
     - [0x4CB60, c, libnaudio/n_synaddplayer]
@@ -303,11 +303,11 @@
     - [0x7CE50, .data, libnaudio/n_env]
     - [0x7CF50, .data, audio_fade]
     - [0x7D260, .data, audio_stored_fade]
-    - [0x7D280, data, text_7D280]
+    - [0x7D280, .data, audio_sfx]
     - [0x7D2A0, .data, gb_audio_render]
     - [0x7D720, .data, cry]
     - [0x7DA20, .data, libnaudio/n_drvrNew]
-    - [0x7DBB0, data, audio_commands_category2]
+    - [0x7DBB0, .data, audio_commands_category2]
     - [0x7DD20, .data, libnaudio/n_reverb]
     - [0x7DD30, .data, libleo/leofunc]
     - [0x7DD40, .data, libleo/leocmdex]
@@ -370,14 +370,14 @@
     - [0x844D0, .rodata, libnaudio/n_env]
     - [0x84520, .rodata, audio_fade]
     - [0x84BD0, .rodata, audio_stored_fade]
-    - [0x84C20, rodata, audio_sfx]
+    - [0x84C20, .rodata, audio_sfx]
     - [0x84D10, .rodata, libnaudio/n_synthesizer]
     - [0x84D20, .rodata, gb_audio_render]
     - [0x84D30, .rodata, audio_channel]
-    - [0x84D60, rodata, text_84D60]
+    - [0x84D60, .rodata, audio_loop_point]
     - [0x84F30, .rodata, cry]
     - [0x84FA0, .rodata, libnaudio/n_drvrNew]
-    - [0x84FC0, rodata, audio_commands_category2]
+    - [0x84FC0, .rodata, audio_commands_category2]
     - [0x85200, .rodata, libnaudio/n_resample]
     - [0x85210, .rodata, libnaudio/n_reverb]
     - [0x85240, .rodata, libleo/leofunc]
@@ -450,7 +450,7 @@
     - {vram: 0x80103490, type: .bss, name: audio_stream}
     - {vram: 0x80103520, type: .bss, name: gb_audio_render}
     - {vram: 0x80105F50, type: .bss, name: rom_device}
-    - {vram: 0x80105F70, type: bss, name: audio_loop_point}
+    - {vram: 0x80105F70, type: .bss, name: audio_loop_point}
     - {vram: 0x80105F80, type: .bss, name: audio_data}
     - {vram: 0x80105F90, type: .bss, name: libleo/leofunc}
     - {vram: 0x80106C80, type: .bss, name: libleo/leocmdex}

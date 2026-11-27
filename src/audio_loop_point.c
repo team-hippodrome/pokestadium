@@ -58,15 +58,25 @@ void Audio_SetMusicLoopPoint(s32 arg0) {
 #define TRACK_VOLUME(volume) (volume)
 #endif
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// JP has its own track table; not matched yet.
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio_loop_point/Audio_StartMusicTrack.s")
+#else
 s32 Audio_StartMusicTrack(s32 track_id) {
     u32 file_index;
     s32 file_size;
+#if !defined(VERSION_JP)
     UNUSED s32 pad;
+#endif
     s32 volume_scale;
+#if !defined(VERSION_JP)
     s32 voice_volume;
+#endif
 
+#if !defined(VERSION_JP)
     volume_scale = track_id;
     voice_volume = 0x80;
+#endif
     AudioStream_SetEnabled(1);
     Audio_SetVoiceStartTimingMode(1);
     D_800FF9B4 = track_id;
@@ -269,7 +279,7 @@ s32 Audio_StartMusicTrack(s32 track_id) {
             D_80078E78 = 0;
             D_80078E7C = 0;
             volume_scale = 0x78;
-#if !defined(VERSION_PAL)
+#if !defined(VERSION_PAL) && !defined(VERSION_JP)
             voice_volume = 0x87;
 #endif
             break;
@@ -509,9 +519,11 @@ s32 Audio_StartMusicTrack(s32 track_id) {
     D_80078EC8 = -1;
     Audio_QueueVoiceVolumeScale(D_80078E70, volume_scale);
 
+#if !defined(VERSION_JP)
     if (voice_volume != 0x80) {
         Audio_QueueVoiceVolume(D_80078E70, voice_volume);
     }
+#endif
 
     if (track_id == 0x1D) {
         D_800FF9B0 = D_80078E70;
@@ -519,6 +531,7 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
     return D_80078E70;
 }
+#endif
 
 void Audio_FadeOutAll(s32 arg0) {
     s32 i;
@@ -532,7 +545,9 @@ void Audio_FadeOutAll(s32 arg0) {
     Audio_QueueFadeSoundCommand(D_80078ECC, arg0);
     D_80078ED0 = 0;
     D_8007840C = 0;
+#if !defined(VERSION_JP)
     Audio_QueueFadeSoundCommand(D_80078FA8, arg0);
+#endif
     AudioStream_SetEnabled(0);
     AudioFrameUpdate(0);
 
@@ -688,6 +703,7 @@ s32 Audio_UpdateSpecialSequence(s32 arg0, u32 arg1) {
                     break;
             }
 
+#if !defined(VERSION_JP)
             switch (arg1) {
                 case 0:
                     Audio_DispatchSoundBankCommand(0x9000D, 0, 0);
@@ -709,6 +725,8 @@ s32 Audio_UpdateSpecialSequence(s32 arg0, u32 arg1) {
                     Audio_DispatchSoundBankCommand(0x90011, 0, 0);
                     break;
             }
+
+#endif
 
             Audio_SetMusicLoopPoint(var_a3);
             D_80078ED8 = Audio_StartMusicTrack(0x1F);
