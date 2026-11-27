@@ -1793,6 +1793,8 @@ void Battle_QueueMessage(s8* arg0, s8 arg1, const char* fmt, ...);
 #define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id, gBattleQueuedMessageTexts[id], a, b)
 // JP passes message arguments directly, so it sets no text tokens.
 #define BATTLE_SET_MESSAGE_TOKEN(token, string)
+// Queues an empty message (JP passes "" as the format; other versions use text table entry 0).
+#define BATTLE_QUEUE_EMPTY_MESSAGE(text) Battle_QueueMessage(text, 0, "")
 #else
 void Battle_QueueMessage(s8* text, s8 file_number_index);
 // Queues message `id` from the battle message text file; %s values come from the
@@ -1801,6 +1803,7 @@ void Battle_QueueMessage(s8* text, s8 file_number_index);
 #define BATTLE_QUEUE_MESSAGE1(text, id, a) Battle_QueueMessage(text, id)
 #define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id)
 #define BATTLE_SET_MESSAGE_TOKEN(token, string) Text_SetStringToken(token, string)
+#define BATTLE_QUEUE_EMPTY_MESSAGE(text) Battle_QueueMessage(text, 0)
 #endif
 void Battle_QueueStatusText(char* text, s32 side);
 void func_84317B38(void);
