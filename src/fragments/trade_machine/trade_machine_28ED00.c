@@ -83,16 +83,24 @@ static s16 D_82F13F04[] = {
     0x013E,
     0x0038,
 };
+// The panel for the "not saved at a Pokémon Center" message is narrower in JP.
+#if defined(VERSION_JP)
+#define BOX_MACHINE_BANNER3_X 0x00B5
+#define BOX_MACHINE_BANNER3_W 0x0116
+#else
+#define BOX_MACHINE_BANNER3_X 0x007D
+#define BOX_MACHINE_BANNER3_W 0x0186
+#endif
 static s16 D_82F13F0C[] = {
-    0x007D,
+    BOX_MACHINE_BANNER3_X,
     0x0149,
-    0x0186,
+    BOX_MACHINE_BANNER3_W,
     0x0000,
 };
 static s16 D_82F13F14[] = {
-    0x007D,
+    BOX_MACHINE_BANNER3_X,
     0x0120,
-    0x0186,
+    BOX_MACHINE_BANNER3_W,
     0x0052,
 };
 static s16 D_82F13F1C[] = {
@@ -773,6 +781,12 @@ void Trade_UpdateBoxMachineFlowClose(unk_D_82F20A40* arg0) {
     }
 }
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// The panel colours of the assembly Trade_DrawBoxMachineTopBar (its sp5C and sp58).
+Color_RGB8 D_82F138B4_jp = { 0x1E, 0x1E, 0x64 };
+Color_RGB8 D_82F138B8_jp = { 0x64, 0x64, 0xC8 };
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/trade_machine/trade_machine_28ED00/Trade_DrawBoxMachineTopBar.s")
+#else
 void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
     Color_RGB8* var_v0;
     unk_D_82F20A40_00E* temp_s4 = &arg0->unk_06;
@@ -804,9 +818,15 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
 
         Trade_DrawBoxMachineTransferArrows(temp_s4->unk_00 + 0xE0, temp_s4->unk_02 + 0x28);
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(temp_s4->unk_00 + 0x5A, temp_s4->unk_02 + 8, "ポケモンこうかんするカートリッジ");
+#else
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetActive(0x10, 0);
         Font_Printf(temp_s4->unk_00 + 0x5A, temp_s4->unk_02 + 8, Text_GetString(NULL, 0, gTradeStrings, 1));
+#endif
 
         for (i = 0; i < 2; i++) {
             if (D_82F210D8[i] != -1) {
@@ -821,28 +841,48 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
                 }
 
                 ptr = &D_82F14450[D_82F210D8[i]];
+#if !defined(VERSION_JP)
                 if (ptr) {}
+#endif
 
+#if defined(VERSION_JP)
+                Font_SetActive(0x10, -2);
+                Font_Printf(temp_s4->unk_00 + (i * 0x110) + 0x18, temp_s4->unk_02 + 0x3C, ptr->unk_08);
+                Font_SetActive(8, -4);
+                Font_Printf(temp_s4->unk_00 + (i * 0x110) + 0x18, temp_s4->unk_02 + 0x54, "ID%05d", ptr->unk_06);
+#else
                 Font_SetActive(0x10, 0);
                 Font_Printf(temp_s4->unk_00 + (i * 0x110) + 0x24, temp_s4->unk_02 + 0x3C, ptr->unk_08);
                 Font_SetActive(8, 0);
                 Font_Printf(temp_s4->unk_00 + (i * 0x110) + 0x24, temp_s4->unk_02 + 0x54, "ID%05d", ptr->unk_06);
+#endif
             }
         }
 
         Font_EndTexturedTextRendering();
     }
 }
+#endif
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// The slot colours of the assembly Trade_DrawBoxMachineSlots (its sp88 and sp84).
+Color_RGB8 D_82F138BC_jp = { 0x1E, 0x1E, 0x82 };
+Color_RGB8 D_82F138C0_jp = { 0x64, 0x1E, 0x1E };
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/trade_machine/trade_machine_28ED00/Trade_DrawBoxMachineSlots.s")
+#else
 void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
     s32 i;
     Color_RGB8* var_v0;
     s32 var_v1;
+#if !defined(VERSION_JP)
     char* var_s0_2;
+#endif
     unk_D_82F14450* var_s2;
     Color_RGB8 sp88 = { 0x1E, 0x1E, 0x82 };
     Color_RGB8 sp84 = { 0x64, 0x1E, 0x1E };
+#if !defined(VERSION_JP)
     char sp68[28];
+#endif
     unk_D_82F20A40_00E* ptr;
 
     for (i = 0; i < 3; i++) {
@@ -888,6 +928,21 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
         }
 
         if ((arg0->unk_0E[i].unk_04 == 0x78) && (ptr->unk_06 == 0x38)) {
+#if defined(VERSION_JP)
+            Font_SetActive(8, 0);
+            if (var_s2 != NULL) {
+                Font_Printf(ptr->unk_00 + 0xA, ptr->unk_02 + 8, var_s2->unk_08);
+            } else {
+                Font_Printf(ptr->unk_00 + 0xA, ptr->unk_02 + 8, "?????");
+            }
+
+            Font_SetActive(4, -2);
+            if (var_s2 != NULL) {
+                Font_Printf(ptr->unk_00 + 8, ptr->unk_02 + 0x20, "ID%05d", var_s2->unk_06);
+            } else {
+                Font_Printf(ptr->unk_00 + 8, ptr->unk_02 + 0x20, "ID*****");
+            }
+#else
             Font_SetActive(8, 0);
             if (var_s2 != NULL) {
                 var_s0_2 = var_s2->unk_08;
@@ -908,36 +963,52 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
 
             Font_Printf(((ptr->unk_04 - Font_MeasureTextExtent(0, 0, var_s0_2)) / 2) + ptr->unk_00, ptr->unk_02 + 0x20,
                         var_s0_2);
+#endif
         }
     }
 
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void Trade_DrawBoxMachineTitle(unk_D_82F20A40* arg0) {
     unk_D_82F20A40_00E* temp_s1 = &arg0->unk_26;
+#if !defined(VERSION_JP)
     char* temp_v0;
+#endif
 
     Trade_DrawRoundedFrameLarge(arg0->unk_26.unk_00, arg0->unk_26.unk_02, arg0->unk_26.unk_04, arg0->unk_26.unk_06,
                                 0x1E, 0x1E, 0x82, 0xFF);
     if ((temp_s1->unk_04 == 0x210) && (temp_s1->unk_06 == 0x28)) {
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(temp_s1->unk_00 + 0x14, temp_s1->unk_02 + 8, "こうかんをするカートリッジをえらんでください");
+#else
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         temp_v0 = Text_GetString(NULL, 0, gTradeStrings, 2);
         Font_Printf((temp_s1->unk_00 - (Font_MeasureTextExtent(0, 0, temp_v0) / 2)) + 0x108, temp_s1->unk_02 + 8,
                     temp_v0);
+#endif
         Font_EndTexturedTextRendering();
     }
 }
 
 void Trade_DrawBoxMachineConfirm(unk_D_82F20A40* arg0) {
+#if !defined(VERSION_JP)
     char* temp_v0;
+#endif
     unk_D_82F20A40_00E* temp_s3 = &arg0->unk_2E;
     s32 i;
+#if !defined(VERSION_JP)
     s32 tmp;
+#endif
     Color_RGB8 sp54 = { 0x1E, 0x1E, 0x82 };
+#if !defined(VERSION_JP)
     char* sp4C[2];
+#endif
 
     if ((temp_s3->unk_04 == 0xE8) && (temp_s3->unk_06 == 0)) {
         return;
@@ -952,6 +1023,22 @@ void Trade_DrawBoxMachineConfirm(unk_D_82F20A40* arg0) {
     }
 
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_Printf(temp_s3->unk_00 + 0x10, temp_s3->unk_02 + 0x10, "これでいいですか？");
+
+    for (i = 0; i < 2; i++) {
+        char* sp4C[2] = { "はい", "いいえ" };
+
+        if (i != D_82F210D4) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        } else {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+        }
+        Font_Printf(temp_s3->unk_00 + 0x46, temp_s3->unk_02 + (i * 0x1C) + 0x2C, sp4C[i]);
+    }
+#else
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     temp_v0 = Text_GetString(NULL, 0, gTradeStrings, 3);
@@ -970,15 +1057,21 @@ void Trade_DrawBoxMachineConfirm(unk_D_82F20A40* arg0) {
         tmp = (temp_s3->unk_00 - (Font_MeasureTextExtent(0, 0, sp4C[i]) / 2)) + 0x74; Font_Printf(tmp, temp_s3->unk_02 + (i * 0x1C) + 0x2C, sp4C[i]);
         // clang-format on
     }
+#endif
 
     Font_EndTexturedTextRendering();
 }
 
 void Trade_DrawBoxMachineBanner(unk_D_82F20A40* arg0) {
+#if defined(VERSION_JP)
+    unk_D_82F20A40_00E* temp_s0 = &arg0->unk_36;
+    Color_RGB8 sp40 = { 0x64, 0x1E, 0x1E };
+#else
     UNUSED s32 pad;
     char* sp48;
     unk_D_82F20A40_00E* temp_s0 = &arg0->unk_36;
     Color_RGB8 sp40 = { 0x64, 0x1E, 0x1E };
+#endif
 
     if (arg0->unk_04 == 0) {
         return;
@@ -996,10 +1089,34 @@ void Trade_DrawBoxMachineBanner(unk_D_82F20A40* arg0) {
 
         if ((temp_s0->unk_04 >= arg0->unk_44->unk_04) && (temp_s0->unk_06 >= arg0->unk_44->unk_06)) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+#else
             Font_SetActive(0x10, 0);
+#endif
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetLineHeight(0x1A);
 
+#if defined(VERSION_JP)
+            switch (arg0->unk_04) {
+                case 1:
+                    Font_Printf(temp_s0->unk_00 + 0x10, temp_s0->unk_02 + 0x10, "このカートリッジは つかえません");
+                    break;
+
+                case 2:
+                    Font_Printf(temp_s0->unk_00 + 0x10, temp_s0->unk_02 + 0x10, "レポートが みつかりません");
+                    break;
+
+                case 3:
+                    Font_Printf(temp_s0->unk_00 + 0x10, temp_s0->unk_02 + 0x10,
+                                "ポケモンセンターで\nレポートされていません");
+                    break;
+
+                case 4:
+                    Font_Printf(temp_s0->unk_00 + 0x10, temp_s0->unk_02 + 0x10, "ずかんがありません");
+                    break;
+            }
+#else
             switch (arg0->unk_04) {
                 case 1:
                     sp48 = Text_GetString(NULL, 0, gTradeStrings, 6);
@@ -1025,6 +1142,7 @@ void Trade_DrawBoxMachineBanner(unk_D_82F20A40* arg0) {
                                 temp_s0->unk_02 + 0x10, sp48);
                     break;
             }
+#endif
 
             Font_EndTexturedTextRendering();
         }

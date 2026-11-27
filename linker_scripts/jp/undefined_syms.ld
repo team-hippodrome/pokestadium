@@ -2063,3 +2063,7 @@ D_8780F618_jp = 0x8780F618; // D_8780FDF8
 D_8780F61C_jp = 0x8780F61C; // D_8780FDFC
 D_8780F620_jp = 0x8780F620; // D_8780FE00
 D_8780F621_jp = 0x8780F621; // D_8780FE01
+
+// trade_machine_28ED00: C statics used by the functions that are still assembly on JP
+D_82F20598_jp = 0x82F20598; // &D_82F20A88[0].unk_004
+D_82F20BE8_jp = 0x82F20BE8; // D_82F210D8
