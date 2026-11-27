@@ -87,12 +87,12 @@ typedef struct ExtendedRosterInfo {
     /* 0x028 */ BattleMon battleMon[1];
 #if defined(VERSION_JP)
     /* 0x078 */ char unk078[0x190];
-    /* 0x208 */ char unk_208[0x4];
+    /* 0x208 */ char playerLabel[0x4];
     /* 0x20C */ char unk20C[0x24];
 } ExtendedRosterInfo; // size = 0x230
 #else
     /* 0x07C */ char unk07C[0x1A4];
-    /* 0x220 */ char unk_220[0x4];
+    /* 0x220 */ char playerLabel[0x4];
     /* 0x224 */ char unk224[0x24];
 } ExtendedRosterInfo; // size = 0x248
 #endif

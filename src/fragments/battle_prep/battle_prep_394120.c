@@ -332,7 +332,7 @@ void BattlePrep_RenderTrainerPortrait(DepthBuffer* image, s16 side, u8* portrait
     } else {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-        BattlePrep_DrawPortraitCaption(side, 6, battle_side->tagTeamMember[0]->rosterInfo->unk_220);
+        BattlePrep_DrawPortraitCaption(side, 6, battle_side->tagTeamMember[0]->rosterInfo->playerLabel);
     }
 }
 
