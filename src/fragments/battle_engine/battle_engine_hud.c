@@ -8,9 +8,51 @@
 #include "src/gfx_buffer.h"
 #include "src/gfx_rect.h"
 #include "src/matrix.h"
+#include "string.h"
 #include "src/controller.h"
 #include "src/memmap.h"
 #include "src/memory.h"
+#include "src/gb_data.h"
+
+// Size of the demo-mode Stadium logo (RGBA32) and its drop shadow.
+#if defined(VERSION_JP)
+#define STADIUM_LOGO_WIDTH 132
+#define STADIUM_LOGO_HEIGHT 28
+#define STADIUM_LOGO_SHADOW_WIDTH 134
+#define STADIUM_LOGO_SHADOW_HEIGHT 31
+#else
+#define STADIUM_LOGO_WIDTH 88
+#define STADIUM_LOGO_HEIGHT 48
+#define STADIUM_LOGO_SHADOW_WIDTH 94
+#define STADIUM_LOGO_SHADOW_HEIGHT 52
+#endif
+
+// Letter spacing for the timer digits.
+#if defined(VERSION_JP)
+#define TIMER_FONT_SPACING -2
+#else
+#define TIMER_FONT_SPACING 0
+#endif
+
+// Name of move id `move` (1-based).
+#if defined(VERSION_JP)
+#define BATTLE_HUD_MOVE_NAME(move) gMoveDisplayInfo[(move) - 1].unk_04
+#else
+#define BATTLE_HUD_MOVE_NAME(move) Text_GetString(NULL, 0, sMoveNameTable, (move) - 1)
+#endif
+
+// Roster row layout: C button and nickname x offsets, and the status icon (JP icons are 24x11 and
+// sStatusIcons starts with an empty entry).
+#if defined(VERSION_JP)
+#define ROSTER_BUTTON_X 8
+#define ROSTER_NAME_X 24
+#define ROSTER_DRAW_STATUS_ICON(x, y, icon) Gfx_DrawTextureRgba16((x) + 73, (y) + 2, 24, 11, sStatusIcons[icon], 24, 0)
+#else
+#define ROSTER_BUTTON_X 2
+#define ROSTER_NAME_X 0x1D
+#define ROSTER_DRAW_STATUS_ICON(x, y, icon) \
+    Gfx_DrawTextureRgba16((x) + 0x11, (y) + 0x14, 0x14, 9, sStatusIcons[(icon) - 1], 0x14, 0)
+#endif
 
 // X offset of the trainer names in the roster panels.
 #if defined(VERSION_ES) || defined(VERSION_IT) || defined(VERSION_EU_REV1)
@@ -19,7 +61,16 @@
 #define TRAINER_NAME_X_OFFSET 50
 #endif
 
+#if defined(VERSION_JP)
+UNUSED static s32 sUnusedHudBss[2];
+#endif
 Vec3f sEndBattleBannerPos;
+
+// JP takes the status names and colors from gb_data instead.
+#if defined(VERSION_JP)
+#define BATTLE_HUD_STATUS_LABEL(status) ((StatusConditionLabel*)&sStatusDisplayLabels[status])
+#else
+#define BATTLE_HUD_STATUS_LABEL(status) (&sStatusLabelConfigs[status])
 
 static StatusConditionLabel sStatusLabelConfigs[] = {
     { 0, { 0xFF, 0xFF, 0xFF, 0xFF } }, // #FFFFFF OK
@@ -30,6 +81,7 @@ static StatusConditionLabel sStatusLabelConfigs[] = {
     { 5, { 0x85, 0xD5, 0xF1, 0xFF } }, // #85D5F1 ice
     { 6, { 0xFF, 0xFF, 0x00, 0xFF } }, // #FFFF00 paralyze
 };
+#endif
 static u8* sTypeLabels[] = {
     gTypeLabelNormal,  gTypeLabelFighting, gTypeLabelFlying, gTypeLabelPoison,
     gTypeLabelGround,  gTypeLabelRock,     gTypeLabelNormal, gTypeLabelBug,
@@ -37,9 +89,15 @@ static u8* sTypeLabels[] = {
     gTypeLabelNormal,  gTypeLabelNormal,   gTypeLabelNormal, gTypeLabelNormal,
     gTypeLabelNormal,  gTypeLabelNormal,   gTypeLabelNormal, gTypeLabelNormal,
     gTypeLabelFire,    gTypeLabelWater,    gTypeLabelGrass,  gTypeLabelElectric,
-    gTypeLabelPsychic, gTypeLabelIce,      gTypeLabelDragon, NULL,
+    gTypeLabelPsychic, gTypeLabelIce,      gTypeLabelDragon,
+#if !defined(VERSION_JP)
+    NULL,
+#endif
 };
 static u8* sStatusIcons[] = {
+#if defined(VERSION_JP)
+    NULL,
+#endif
     gStatusIconFainted, gStatusIconSleep, gStatusIconPoison, gStatusIconBurn, gStatusIconIce, gStatusIconParalyze,
 };
 static u8* sPlayerLabels[] = {
@@ -337,13 +395,24 @@ void BattleHud_DrawHpFractionText(s32 x, s32 y, s32 current_hp, s32 max_hp) {
     see Battle_MarkIllegalMoves in @src/fragments/battle_engine/battle_engine_move_animation.c
 */
 void BattleHud_DrawTrainerNameLabel(s16 x, s16 y, s32 port, char* name, s32 has_illegal_move) {
+#if defined(VERSION_JP)
+    s32 char_count;
+#endif
+
     Battle_DrawGradientRectWrapper(x, y, 70, 17, &sPlayerNameTagStartColor[port], &sPlayerNameTagEndColor[port]);
     Font_BeginTranslucentTextRendering();
     if (has_illegal_move != 0) {
         Gfx_SetEnvColor(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
     }
+#if defined(VERSION_JP)
+    // Center the name, assuming two-byte characters 10 pixels wide.
+    char_count = strlen(name) / 2;
+    Font_SetActive(2, 0);
+    Font_Printf(x - char_count * 5 + 30, y + 2, name);
+#else
     Font_SetActive(2, 0);
     Font_Printf((x - (Font_MeasureTextExtent(2, 0, name) / 2)) + 0x23, y + 2, name);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -354,7 +423,11 @@ void BattleHud_DrawTrainerNameLabel(s16 x, s16 y, s32 port, char* name, s32 has_
     see Battle_MarkIllegalMoves in @src/fragments/battle_engine/battle_engine_move_animation.c
 */
 void BattleHud_DrawTrainerNameLabelBlink(s16 x, s16 y, s32 port, u8* name, s32 blink_phase, s32 has_illegal_move) {
+#if defined(VERSION_JP)
+    s32 char_count;
+#else
     s32 ready_message_text_length;
+#endif
     s16 blink_value;
     s16 alpha;
 
@@ -374,6 +447,14 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 x, s16 y, s32 port, u8* name, s32 b
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, (s8)alpha); // #FFFFFF
     }
 
+#if defined(VERSION_JP)
+    char_count = strlen(name) / 2;
+    if (blink_value > 0) {
+        Font_Printf(x + 14, y + 2, "OK!");
+    } else {
+        Font_Printf(x - char_count * 5 + 30, y + 2, name);
+    }
+#else
     if (blink_value > 0) {
         // READY!
         ready_message_text_length =
@@ -382,6 +463,7 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 x, s16 y, s32 port, u8* name, s32 b
     } else {
         Font_Printf((x - (Font_MeasureTextExtent(2, 0, name) / 2)) + 35, y + 2, name);
     }
+#endif
 
     Font_EndTexturedTextRendering();
 }
@@ -408,7 +490,9 @@ void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* pokemon, TeamRoster* poke
 void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemon_info,
                                 StatusConditionLabel* status_label, s32 x, s32 y, s32 width, s32 length, s32 r, s32 g,
                                 s32 b, s32 alpha) {
+#if !defined(VERSION_JP)
     s32 name_length;
+#endif
     s32 adjusted_width;
 
     if (x < 0) {
@@ -429,6 +513,13 @@ void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemo
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
 
+#if defined(VERSION_JP)
+    adjusted_width = strlen(pokemon_info->nickname) / 2;
+    Font_Printf(x - adjusted_width * 5 + 29, y + 2, pokemon_info->nickname);
+    Font_SetActive(1, 0);
+    Gfx_SetEnvColor(status_label->color.r, status_label->color.g, status_label->color.b, 0xFF);
+    Font_Printf(x + 31, y + 14, status_label->name);
+#else
     name_length = Font_MeasureTextExtent(2, 0, Battle_GetActiveMonNickname(active_pokemon)) / 2;
     Font_Printf((x - name_length) + 35, y + 2, Battle_GetActiveMonNickname(active_pokemon));
     name_length =
@@ -444,6 +535,7 @@ void BattleHud_DrawMonInfoPanel(ActivePokemon* active_pokemon, BattleMon* pokemo
 
     Gfx_SetEnvColor(status_label->color.r, status_label->color.g, status_label->color.b, 0xFF);
     Font_Printf(name_length, y + 14, Text_GetString(NULL, 0, sStatusConditionNameTable, status_label->stringIndex));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -535,8 +627,12 @@ void BattleHud_DrawParticipantTimer(s16 x, s16 y) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
-    Font_SetActive(1, 0);
+    Font_SetActive(1, TIMER_FONT_SPACING);
+#if defined(VERSION_JP)
+    Font_Printf(x, y, string_buffer);
+#else
     Font_Printf(x + 3, y, string_buffer);
+#endif
     Font_EndTexturedTextRendering();
     BattleHud_DrawTranslucentShadowRect(x - 3, y - 3, 0x19, 0x12, 0);
 }
@@ -552,12 +648,21 @@ void BattleHud_DrawBattleTimer(s16 x, s16 y) {
     Font_SetActive(2, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
     sprintf(string_buffer, "%02d", (s32)(time_left / 60.0f));
+#if defined(VERSION_JP)
+    Font_SetActive(1, TIMER_FONT_SPACING);
+    Font_Printf(x, y, string_buffer);
+    Font_Printf(x + 15, y, ":");
+    sprintf(string_buffer, "%02d", (s32)time_left % 60);
+    Font_SetActive(1, TIMER_FONT_SPACING);
+    Font_Printf(x + 20, y, string_buffer);
+#else
     Font_SetActive(1, 0);
     Font_Printf(x + 3, y, string_buffer);
     Font_Printf(x + 16, y, ":");
     sprintf(string_buffer, "%02d", (s32)time_left % 60);
     Font_SetActive(1, 0);
     Font_Printf(x + 23, y, string_buffer);
+#endif
     Font_EndTexturedTextRendering();
     BattleHud_DrawTranslucentShadowRect(x - 3, y - 3, 44, 17, 0);
 }
@@ -674,7 +779,7 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* active_pokemon, s16 x, s16 
     }
 
     port_color = &sPlayerNameTagStartColor[roster->controllerPort];
-    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, &sStatusLabelConfigs[status], x + 1, y + 18, 70, 40,
+    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, BATTLE_HUD_STATUS_LABEL(status), x + 1, y + 18, 70, 40,
                                port_color->r, port_color->g, port_color->b, 0xB2);
     BattleHud_DrawTrainerNameLabelAuto(active_pokemon, roster, x + 1, y + 1, roster->controllerPort, blink_phase,
                                        selected_move);
@@ -765,7 +870,7 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* active_pokemon, s16 x, s1
     }
 
     port_color = &sPlayerNameTagStartColor[roster->controllerPort];
-    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, &sStatusLabelConfigs[status], x, y + 40, 70, 40,
+    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, BATTLE_HUD_STATUS_LABEL(status), x, y + 40, 70, 40,
                                port_color->r, port_color->g, port_color->b, 0xB2);
     BattleHud_DrawTrainerNameLabelAuto(active_pokemon, roster, x, y + 80, roster->controllerPort, blink_phase,
                                        selected_move);
@@ -853,9 +958,15 @@ void BattleHud_DrawThreeOptionLabelBar(UNUSED ActivePokemon* pokemon, s16 x, s16
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
+#if defined(VERSION_JP)
+    Font_Printf(x + 22, y + 4, "たたかう"); // Fight
+    Font_Printf(x + 86, y + 4, "ポケモン"); // Pokémon
+    Font_Printf(x + 150, y + 4, "にげる");  // Run
+#else
     Font_Printf(x + 24, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0x9E));
     Font_Printf(x + 88, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0x9F));
     Font_Printf(x + 152, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA0));
+#endif
     Font_EndTexturedTextRendering();
     BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 204, 22, 0);
 }
@@ -875,8 +986,13 @@ void BattleHud_DrawTwoOptionLabelBar(UNUSED ActivePokemon* pokemon, s16 x, s16 y
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
+#if defined(VERSION_JP)
+    Font_Printf(x + 24, y + 4, "もどる");   // Back
+    Font_Printf(x + 81, y + 4, "かくにん"); // Confirm
+#else
     Font_Printf(x + 24, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA9));
     Font_Printf(x + 81, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA8));
+#endif
     Font_EndTexturedTextRendering();
     BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 131, 22, 0);
 }
@@ -896,13 +1012,22 @@ void BattleHud_DrawOneOptionLabelBar(UNUSED ActivePokemon* pokemon, s16 x, s16 y
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
+#if defined(VERSION_JP)
+    Font_Printf(x + 24, y + 4, "かくにん"); // Confirm
+#else
     Font_Printf(x + 24, y + 3, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA8));
+#endif
     Font_EndTexturedTextRendering();
     BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 74, 22, 0);
 }
 
 void Battle_DrawRightAlignedText(s32 x, s32 y, char* string) {
+#if defined(VERSION_JP)
+    // Two-byte characters, 10 pixels wide.
+    Font_Printf(x - (strlen(string) / 2) * 10, y, string);
+#else
     Font_Printf(x - (strlen(string) * 6), y, string);
+#endif
 }
 
 s32 BattleHud_DrawMovePpTextLTR(s32 x, s32 y, s32 current_pp, s32 max_pp) {
@@ -1121,7 +1246,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Battle_DrawRightAlignedText(x + 90, y + 4, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[0] - 1));
+            Battle_DrawRightAlignedText(x + 90, y + 4, BATTLE_HUD_MOVE_NAME(runtime->moves[0]));
         }
 
         if ((runtime->moves[1] != 0) && (runtime->moves[1] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1130,7 +1255,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Font_Printf(x + 124, y + 17, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[1] - 1));
+            Font_Printf(x + 124, y + 17, BATTLE_HUD_MOVE_NAME(runtime->moves[1]));
         }
 
         if ((runtime->moves[2] != 0) && (runtime->moves[2] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1139,7 +1264,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Font_Printf(x + 110, y + 37, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[2] - 1));
+            Font_Printf(x + 110, y + 37, BATTLE_HUD_MOVE_NAME(runtime->moves[2]));
         }
 
         if ((runtime->moves[3] != 0) && (runtime->moves[3] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1148,7 +1273,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Battle_DrawRightAlignedText(x + 76, y + 24, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[3] - 1));
+            Battle_DrawRightAlignedText(x + 76, y + 24, BATTLE_HUD_MOVE_NAME(runtime->moves[3]));
         }
     } else {
         if ((runtime->moves[0] != 0) && (runtime->moves[0] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1157,7 +1282,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Battle_DrawRightAlignedText(x + 90, y + 4, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[0] - 1));
+            Battle_DrawRightAlignedText(x + 90, y + 4, BATTLE_HUD_MOVE_NAME(runtime->moves[0]));
         }
 
         if ((runtime->moves[1] != 0) && (runtime->moves[1] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1166,7 +1291,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Font_Printf(x + 124, y + 17, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[1] - 1));
+            Font_Printf(x + 124, y + 17, BATTLE_HUD_MOVE_NAME(runtime->moves[1]));
         }
 
         if ((runtime->moves[2] != 0) && (runtime->moves[2] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1175,7 +1300,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Font_Printf(x + 110, y + 37, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[2] - 1));
+            Font_Printf(x + 110, y + 37, BATTLE_HUD_MOVE_NAME(runtime->moves[2]));
         }
 
         if ((runtime->moves[3] != 0) && (runtime->moves[3] < NUMBER_OF_MOVES_IN_GAME)) {
@@ -1184,7 +1309,7 @@ void BattleHud_DrawMoveSelectMenu(ActivePokemon* active_pokemon, s16 x, s16 y, s
             } else {
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
             }
-            Battle_DrawRightAlignedText(x + 76, y + 24, Text_GetString(NULL, 0, sMoveNameTable, runtime->moves[3] - 1));
+            Battle_DrawRightAlignedText(x + 76, y + 24, BATTLE_HUD_MOVE_NAME(runtime->moves[3]));
         }
     }
 
@@ -1259,34 +1384,37 @@ void BattleHud_DrawDoublesRosterRow(ActivePokemon* active_pokemon, TeamRoster* r
     gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
 
     if (party_slot == 0) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCUp, gButtonCUpMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCUp, gButtonCUpMask, 0x10, 0x100000);
     }
 
     if (party_slot == 1) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCLeft, gButtonCLeftMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCLeft, gButtonCLeftMask, 0x10,
+                                 0x100000);
     }
 
     if (party_slot == 2) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xC, gButtonB, gButtonBMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xC, gButtonB, gButtonBMask, 0x10, 0x100000);
     }
 
     if (party_slot == 3) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCRight, gButtonCRightMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCRight, gButtonCRightMask, 0x10,
+                                 0x100000);
     }
 
     if (party_slot == 4) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCDown, gButtonCDownMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCDown, gButtonCDownMask, 0x10,
+                                 0x100000);
     }
 
     if (party_slot == 5) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xC, gButtonA, gButtonAMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xC, gButtonA, gButtonAMask, 0x10, 0x100000);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(x + 0x1D, y + 2, party_pokemon->nickname);
+    Font_Printf(x + ROSTER_NAME_X, y + 2, party_pokemon->nickname);
     Font_EndTexturedTextRendering();
 
     if (roster->pokemonPicked[party_slot].hp == 0) {
@@ -1298,7 +1426,7 @@ void BattleHud_DrawDoublesRosterRow(ActivePokemon* active_pokemon, TeamRoster* r
     if (status_icon != 0) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(x + 0x11, y + 0x14, 0x14, 9, sStatusIcons[status_icon - 1], 0x14, 0);
+        ROSTER_DRAW_STATUS_ICON(x, y, status_icon);
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
@@ -1314,22 +1442,24 @@ void BattleHud_DrawPartyRosterRow(ActivePokemon* active_pokemon, TeamRoster* ros
     gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
 
     if (party_slot == 0) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCUp, gButtonCUpMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCUp, gButtonCUpMask, 0x10, 0x100000);
     }
 
     if (party_slot == 1) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCRight, gButtonCRightMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCRight, gButtonCRightMask, 0x10,
+                                 0x100000);
     }
 
     if (party_slot == 2) {
-        Gfx_DrawTextureRgba16Ia8(x + 2, y + 0xD, 0x10, 0xE, gButtonCDown, gButtonCDownMask, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x + ROSTER_BUTTON_X, y + 0xD, 0x10, 0xE, gButtonCDown, gButtonCDownMask, 0x10,
+                                 0x100000);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(x + 0x1D, y + 2, party_pokemon->nickname);
+    Font_Printf(x + ROSTER_NAME_X, y + 2, party_pokemon->nickname);
     Font_EndTexturedTextRendering();
 
     if (roster->pokemonPicked[party_slot].hp == 0) {
@@ -1341,14 +1471,18 @@ void BattleHud_DrawPartyRosterRow(ActivePokemon* active_pokemon, TeamRoster* ros
     if (status_icon != 0) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(x + 0x11, y + 0x14, 0x14, 9, sStatusIcons[status_icon - 1], 0x14, 0);
+        ROSTER_DRAW_STATUS_ICON(x, y, status_icon);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
 
 void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roster, s16 x, s16 y, s32 port) {
+#if defined(VERSION_JP)
+    UNUSED TeamRoster* roster = team_roster;
+#else
     UNUSED s32 pad[2];
+#endif
     Color_RGB8* dark_colors[] = {
         sPlayer1DarkColor,
         sPlayer2DarkColor,
@@ -1361,15 +1495,23 @@ void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roste
         sPlayer3LightColor,
         sPlayer4LightColor,
     };
+#if defined(VERSION_JP)
+    UNUSED s32 pad2[5];
+#else
     UNUSED s32 pad2[4];
+#endif
 
     Battle_DrawGradientRectWrapper(x + 1, y + 1, 99, 15, &dark_colors[port][0], &light_colors[port][0]);
     Battle_DrawGradientRectWrapper(x + 1, y + 16, 99, 29, &dark_colors[port][1], &light_colors[port][1]);
     Battle_DrawGradientRectWrapper(x + 1, y + 45, 99, 29, &dark_colors[port][2], &light_colors[port][2]);
     Battle_DrawGradientRectWrapper(x + 1, y + 74, 99, 29, &dark_colors[port][3], &light_colors[port][3]);
 
+#if defined(VERSION_JP)
+    BattleHud_DrawPlainText(x + 44, y + 3, team_roster->trainerName);
+#else
     BattleHud_DrawPlainText((x - (Font_MeasureTextExtent(1, 0, team_roster->trainerName) / 2)) + TRAINER_NAME_X_OFFSET, y + 3,
                             team_roster->trainerName);
+#endif
 
     if (team_roster->numberOfPokemonBrought > 0) {
         BattleHud_DrawPartyRosterRow(pokemon, team_roster, &team_roster->pokemonPicked[0], x + 1, y + 16, 0);
@@ -1396,7 +1538,9 @@ void BattleHud_DrawTeamStatusList(ActivePokemon* pokemon, TeamRoster* team_roste
 void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s32 port) {
     TeamRoster* teammate_roster;
     TeamRoster* self_roster;
+#if !defined(VERSION_JP)
     BattleMon* ptr = &pokemon->teamRoster->pokemonPicked[0];
+#endif
     s32 i;
     Color_RGB8* dark_colors[] = {
         sPlayer1DarkColor,
@@ -1410,7 +1554,7 @@ void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s
         sPlayer3LightColor,
         sPlayer4LightColor,
     };
-    s32 trainer_name_text_width;
+    UNUSED s32 trainer_name_text_width;
     BattleMon* pokemon_in_battle[6];
 
     teammate_roster = pokemon->sessionTeams->tagTeamMember[pokemon->thumbnail.tagTeam];
@@ -1428,8 +1572,12 @@ void BattleHud_DrawDoublesTeamStatusList(ActivePokemon* pokemon, s16 x, s16 y, s
     Battle_DrawGradientRectWrapper(x + 1, y + 16, 200, 29, &dark_colors[port][1], &light_colors[port][1]);
     Battle_DrawGradientRectWrapper(x + 1, y + 45, 200, 29, &dark_colors[port][2], &light_colors[port][2]);
     Battle_DrawGradientRectWrapper(x + 1, y + 74, 200, 29, &dark_colors[port][3], &light_colors[port][3]);
+#if defined(VERSION_JP)
+    BattleHud_DrawPlainText(x + 44, y + 3, teammate_roster->trainerName);
+#else
     trainer_name_text_width = Font_MeasureTextExtent(1, 0, teammate_roster->trainerName) / 2;
     BattleHud_DrawPlainText((x - trainer_name_text_width) + TRAINER_NAME_X_OFFSET, y + 3, teammate_roster->trainerName);
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -1494,8 +1642,8 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* active_pokemon, s16 x, s16
         player_color = &sPlayerFlashColor[port];
     }
 
-    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, &sStatusLabelConfigs[status_icon], x + 1, y + 1, 70, 40,
-                               player_color->r, player_color->g, player_color->b, 0xB2);
+    BattleHud_DrawMonInfoPanel(active_pokemon, party_pokemon, BATTLE_HUD_STATUS_LABEL(status_icon), x + 1, y + 1, 70,
+                               40, player_color->r, player_color->g, player_color->b, 0xB2);
     BattleHud_DrawBoxBorder(x, y, 70, 40);
     BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 76, 45, 0);
 }
@@ -1637,17 +1785,25 @@ void BattleHud_DrawTextBox(s32 port, s16 x, s16 y, char* text) {
 // International forfeit box
 void BattleHud_DrawTwoOptionCursorMenu(ActivePokemon* pokemon, s16 x, s16 y, s32 port) {
     UNUSED s32 pad;
+#if !defined(VERSION_JP)
     s32 text_length;
+#endif
     UNUSED s32 pad2[2];
 
     Battle_DrawGradientRectWrapper(x + 1, y + 1, 200, 36, &sPlayerNameTagStartColor[port],
                                    &sPlayerNameTagEndColor[port]);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
+#if defined(VERSION_JP)
+    Font_Printf(x + 40, y + 5, "こうさんしますか?"); // Do you surrender?
+    Font_Printf(x + 50, y + 20, "いいえ");           // No
+    Font_Printf(x + 122, y + 20, "はい");            // Yes
+#else
     text_length = Font_MeasureTextExtent(2, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1)) / 2;
     Font_Printf((x - text_length) + 97, y + 5, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA1));
     Font_Printf(x + 50, y + 20, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA3));
     Font_Printf(x + 122, y + 20, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA2));
+#endif
     Font_EndTexturedTextRendering();
 
     gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
@@ -1696,7 +1852,11 @@ void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* textu
                        0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                        G_TX_NOLOD);
 
+#ifdef VERSION_JP
+    Battle_DrawScrollingTextureRect(x, y, width, height, 0, 0, 0x400, 0x400);
+#else
     Battle_DrawScrollingTextureRect(x, y, width, height, 0, 0, 0x400, 0);
+#endif
 }
 
 /*
@@ -1704,16 +1864,27 @@ void Battle_DrawTiledStripSegment(s32 x, s32 y, s32 width, s32 height, u8* textu
 */
 void Battle_DrawDemoStadiumLogo(void) {
     s32 i;
+#if defined(VERSION_JP)
+    s32 y;
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    for (i = 0; i < 48; i++) {
-        Battle_DrawTiledStripSegment(30, i + 23, 88, 1, &gStadiumLogo[i * 352], 88);
+#if defined(VERSION_JP)
+    for (i = 0, y = 23; i < STADIUM_LOGO_HEIGHT; i++, y++) {
+        Battle_DrawTiledStripSegment(30, y, STADIUM_LOGO_WIDTH, 1, &gStadiumLogo[i * STADIUM_LOGO_WIDTH * 4],
+                                     STADIUM_LOGO_WIDTH);
     }
+#else
+    for (i = 0; i < STADIUM_LOGO_HEIGHT; i++) {
+        Battle_DrawTiledStripSegment(30, i + 23, STADIUM_LOGO_WIDTH, 1, &gStadiumLogo[i * STADIUM_LOGO_WIDTH * 4],
+                                     STADIUM_LOGO_WIDTH);
+    }
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-    BattleHud_DrawTranslucentShadowRect(28, 22, 94, 52, 0);
+    BattleHud_DrawTranslucentShadowRect(28, 22, STADIUM_LOGO_SHADOW_WIDTH, STADIUM_LOGO_SHADOW_HEIGHT, 0);
 }
 
 void Battle_DrawGradientTextureRect(u8* texture, s32 x, s32 y, s32 width, s32 height, u8 texture_width,
@@ -1771,6 +1942,7 @@ void Battle_DrawEndBattleBanner(void) {
                                    0x20, 0xD8, 0x20, 0x6C, 0, 0xD8, 0x20, 0xD7, 0x6C);
 }
 
+#if !defined(VERSION_JP)
 void Battle_DrawDemoControllerWarning(void) {
     static s32 sScrollOffset = 0;
 
@@ -1801,135 +1973,9 @@ void Battle_DrawDemoControllerWarning(void) {
         }
     }
 }
+#endif
 
-void BattleHud_DrawOwnSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state) {
-    TeamRoster* roster = active_pokemon->sessionTeams->tagTeamMember[active_pokemon->thumbnail.tagTeam];
-    UNUSED s32 pad;
-    s32 higher_port_member;
-
-    if (gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) {
-        if (state->selectedCommandOption == 3) {
-            BattleHud_DrawMonStatusBoxPlayer(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 2,
-                                             active_pokemon->thumbnail.camera->viewport.y - 0x3A,
-                                             state->actionDelayTimer, 1);
-        } else {
-            BattleHud_DrawMonStatusBoxPlayer(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 2,
-                                             active_pokemon->thumbnail.camera->viewport.y - 0x3A,
-                                             state->actionDelayTimer, 0);
-        }
-
-        if ((state->selectedCommandOption != 3) && (active_pokemon->thumbnail.camera->viewport.x == 0x17)) {
-            switch (state->selectedCommandOption) {
-                case 2:
-                    if (state->showingCommandOptions == 1) {
-                        if (active_pokemon->sessionTeams->tagTeamSize == 2) {
-                            if (active_pokemon->sessionTeams->tagTeamMember[1]->controllerPort <
-                                active_pokemon->sessionTeams->tagTeamMember[0]->controllerPort) {
-                                higher_port_member = 0;
-                            } else {
-                                higher_port_member = 1;
-                            }
-                            BattleHud_DrawTeamStatusList(
-                                active_pokemon, active_pokemon->sessionTeams->tagTeamMember[higher_port_member], 96, 0xF,
-                                active_pokemon->sessionTeams->tagTeamMember[higher_port_member]->controllerPort);
-                            BattleHud_DrawTeamStatusList(
-                                active_pokemon, active_pokemon->sessionTeams->tagTeamMember[higher_port_member == 0], 198,
-                                0xF, active_pokemon->sessionTeams->tagTeamMember[higher_port_member == 0]->controllerPort);
-                        } else if (active_pokemon->teamRoster->numberOfPokemonBrought < 4) {
-                            BattleHud_DrawTeamStatusList(active_pokemon, active_pokemon->sessionTeams->tagTeamMember[0],
-                                                         96, 0xF, roster->controllerPort);
-                        } else {
-                            BattleHud_DrawDoublesTeamStatusList(active_pokemon, 96, 0xF, roster->controllerPort);
-                        }
-                    } else if (state->replacementState == 0x10) {
-                        BattleHud_DrawOneOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
-                    } else {
-                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
-                    }
-                    break;
-
-                case 1:
-                    if (state->showingCommandOptions == 1) {
-                        BattleHud_DrawMoveSelectMenu(active_pokemon, 96, 0xF, roster->controllerPort);
-                    } else {
-                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
-                    }
-                    break;
-
-                case 4:
-                    BattleHud_DrawTwoOptionCursorMenu(active_pokemon, 0x5F, 14, roster->controllerPort);
-                    break;
-
-                default:
-                    BattleHud_DrawThreeOptionLabelBar(active_pokemon, 96, 0xF, roster->controllerPort);
-                    break;
-            }
-        }
-    }
-}
-
-void BattleHud_DrawOpponentSideStatus(ActivePokemon* active_pokemon, ActivePokemonState* state) {
-    TeamRoster* roster = active_pokemon->sessionTeams->tagTeamMember[active_pokemon->thumbnail.tagTeam];
-    s32 higher_port_member;
-
-    if (gSessionContext.mode != SESSION_MODE_ATTRACT_DEMO_BATTLE) {
-        if (state->selectedCommandOption == 3) {
-            BattleHud_DrawMonStatusBoxOpponent(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 0x20,
-                                               active_pokemon->thumbnail.camera->viewport.y - 2,
-                                               state->actionDelayTimer, 1);
-        } else {
-            BattleHud_DrawMonStatusBoxOpponent(active_pokemon, active_pokemon->thumbnail.camera->viewport.x - 0x20,
-                                               active_pokemon->thumbnail.camera->viewport.y - 2,
-                                               state->actionDelayTimer, 0);
-        }
-
-        if ((state->selectedCommandOption != 3) && (active_pokemon->thumbnail.camera->viewport.x == 0x103)) {
-            switch (state->selectedCommandOption) {
-                case 2:
-                    if (state->showingCommandOptions == 1) {
-                        if (active_pokemon->sessionTeams->tagTeamSize == 2) {
-                            if (active_pokemon->sessionTeams->tagTeamMember[1]->controllerPort <
-                                active_pokemon->sessionTeams->tagTeamMember[0]->controllerPort) {
-                                higher_port_member = 0;
-                            } else {
-                                higher_port_member = 1;
-                            }
-                            BattleHud_DrawTeamStatusList(
-                                active_pokemon, active_pokemon->sessionTeams->tagTeamMember[higher_port_member == 0], 0x16,
-                                0x79,
-                                active_pokemon->sessionTeams->tagTeamMember[higher_port_member == 0]->controllerPort);
-                            BattleHud_DrawTeamStatusList(
-                                active_pokemon, active_pokemon->sessionTeams->tagTeamMember[higher_port_member], 0x7C,
-                                0x79, active_pokemon->sessionTeams->tagTeamMember[higher_port_member]->controllerPort);
-                        } else if (active_pokemon->teamRoster->numberOfPokemonBrought < 4) {
-                            BattleHud_DrawTeamStatusList(active_pokemon, active_pokemon->sessionTeams->tagTeamMember[0],
-                                                         0x7C, 0x79, roster->controllerPort);
-                        } else {
-                            BattleHud_DrawDoublesTeamStatusList(active_pokemon, 0x18, 0x79, roster->controllerPort);
-                        }
-                    } else if (state->replacementState == 0x10) {
-                        BattleHud_DrawOneOptionLabelBar(active_pokemon, 0x98, 0xCE, roster->controllerPort);
-                    } else {
-                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 0x62, 0xCE, roster->controllerPort);
-                    }
-                    break;
-
-                case 1:
-                    if (state->showingCommandOptions == 1) {
-                        BattleHud_DrawMoveSelectMenu(active_pokemon, 0x19, 0xA6, roster->controllerPort);
-                    } else {
-                        BattleHud_DrawTwoOptionLabelBar(active_pokemon, 0x62, 0xCE, roster->controllerPort);
-                    }
-                    break;
-
-                case 4:
-                    BattleHud_DrawTwoOptionCursorMenu(active_pokemon, 0x17, 0xBB, roster->controllerPort);
-                    break;
-
-                default:
-                    BattleHud_DrawThreeOptionLabelBar(active_pokemon, 0x18, 0xCE, roster->controllerPort);
-                    break;
-            }
-        }
-    }
-}
+// JP builds these two functions as a separate file.
+#if !defined(VERSION_JP)
+#include "battle_engine_hud_side_status.inc.c"
+#endif

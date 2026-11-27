@@ -59,6 +59,11 @@ typedef struct unk_D_80071D88 {
     /* 0x00 */ char* type_name;
     /* 0x04 */ Color_RGBA8 color;
 } ColoredString; // size = 0x8
+extern ColoredString sStatusDisplayInfo[8];
+#if defined(VERSION_JP)
+// JP's battle HUD indexes the status entries from here, one past sStatusDisplayInfo's empty first entry.
+extern ColoredString sStatusDisplayLabels[];
+#endif
 extern ColoredString D_80071D88[];
 
 typedef struct GbPokemonRecord {
