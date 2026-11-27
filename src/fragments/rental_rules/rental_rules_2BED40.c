@@ -24,6 +24,26 @@ static char* D_83003C9C;
 static s16* D_83003CA0;
 static s16 D_83003CA4;
 static s16 D_83003CA6;
+#if defined(VERSION_JP)
+static u8 D_830039C8[] = {
+    6, 0x07, 0x08, 9, 10, 11, 12, 13, 0x0F,
+};
+// JP has no message tables here: the labels and rule texts are inline strings.
+static char* sStadiumModeLabel = "ポケモンスタジアム";
+static char* sFreeBattleModeLabel = "フリーバトル";
+static char* sEventBattleModeLabel = "イベントバトル";
+static char* sGymLeaderCastleModeLabel = "ジムリーダーのしろ";
+static char* sVsMewtwoModeLabel = "ミュウツーをたおせ";
+static char* sAnythingGoesLabel = "なんでもあり";
+static char* sNintendoCup97Label = "ニンテンドウカップ‘９７";
+static char* sNintendoCup98Label = "ニンテンドウカップ‘９８";
+static char* sNintendoCup99Label = "ニンテンドウカップ‘９９";
+static char* sPetitCupLabel = "ファンシーカップ";
+static char* sPikaCupLabel = "イエローカップ";
+static char* sPrimeCupLabel = "ウルトラカップ";
+static char* sGymLeaderCastleLabel = "ジムリーダーのしろ";
+static char* sVsMewtwoLabel = "ミュウツーをたおせ";
+#else
 static char* sStadiumModeLabel;
 static char* sFreeBattleModeLabel;
 static char* sEventBattleModeLabel;
@@ -46,6 +66,7 @@ static char** sRentalRulesPokemonNames = NULL;
 static u8 D_830039C8[] = {
     6, 0x07, 0x08, 9, 10, 11, 12, 13, 0x0F,
 };
+#endif
 static s16 D_830039D4[] = {
     0x0007, 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 5, 6, 35, 0xFFFF,
 };
@@ -103,9 +124,120 @@ static s16 D_83003B54[] = {
     21, 28, 27, 20, 35, 0xFFFF,
 };
 
+#if defined(VERSION_JP)
+unk_D_83003CE0 D_83003CE0 = {
+    {
+        "６ぴきのポケモンをエントリー",
+        "６ぴきから３びきをえらぶ",
+        "ポケモンのレベルは５０から５５",
+        "３びきのレベルをたしたすうじは１５５いか",
+        "２ひきどうじには　ねむらない　こおらない",
+        "ミュウはしゅつじょうきんし",
+        "パーフェクトがちで　コンティニューゲット",
+        "エントリーできるポケモンは１４９しゅるい",
+        "じかんせいげんあり",
+        "せいげんじかんを　せっていできる",
+        "レベルは３０いか",
+        "エントリーできるポケモンは３３しゅるい",
+        "レベルは５０いか",
+        "ぜんこくたいかいに　でたポケモンはきんし",
+        "エントリーできるポケモンは１２６しゅるい",
+        "レベルは２５から３０",
+        "３びきのレベルをたしたすうじは８０いか",
+        "たかさ２メートルいか　おもさ２０キロいか",
+        "しんかしていないポケモンのみ",
+        "エントリーできるポケモンは４５しゅるい",
+        "レベルせいげんなし",
+        "すべてのポケモンがエントリーできる",
+        "レベルは１５から２０",
+        "３びきのレベルをたしたすうじは５０いか",
+        "エントリーできるポケモンは１０１しゅるい",
+        "たいせんあいてのポケモンのレベル",
+        "ひとりから４にんまで　あそべます",
+        "すきなかずでエントリー",
+        "あいては　ミュウツーいったいのみ",
+    },
+    "ポケモンのレベルは５０から５５",
+    "レベルは３０いか",
+    "レベルは５０いか",
+    "レベルは２５から３０",
+    "レベルは１５から２０",
+    "すきなかずでエントリー",
+    "さいごの１ぴきで「じばく」するとまけ",
+    "レベルせいげんなし",
+    "２ひきどうじには　ねむらない　こおらない",
+    "タッグバトルについて",
+};
+unk_D_83003CE0 D_83003DE0 = {
+    {
+        "バトルにでるまえに６ぴきのポケモンをえらびます。\nおなじしゅるいのポケモンをふくすう　えらぶ\nことはできません"
+        "。",
+        "さいしょにえらんだ６ぴきのなかから、そのバトルに\nつかう３びきをえらびます。\nあいてのポケモンとの　あいしょう"
+        "をかんがえて\nつかう３びきを　えらびましょう。",
+        "つかえるポケモンのレベルは５０から５５まで。\n６ぴきそろわないときはレンタルポケモンで\nしゅつじょうできます"
+        "。",
+        "じっさいにバトルをする３びきの\nレベルの　ごうけいが１５５をこえてはいけません。",
+        "３びきのうち１ぴきが「ねむり」のじょうたいのとき、\nほかのポケモンをねむらせることはできません。\n「こおり」も"
+        "おなじです。\n１ぴきが「ねむり」で、もう１ぴきが「こおり」という\nじょうたいは　あります。",
+        "ミュウはジムリーダーのしろ、ウルトラカップ、\nフリーバトルにのみ　しゅつじょうできます。",
+        "１ぴきも　たおされずにバトルに　かったかずだけ\nコンティニューが　できるようになります。\nまけても　もういちど"
+        "　ちょうせんできます。",
+        NULL,
+        "バトルのじかんは１５ふん\nコマンドにゅうりょくのじかんは３０びょう\nひきわけは　「まけ」とおなじ",
+        "メニューにある「イベントバトルせってい」で　しあい\nじかんや　わざをきめるじかんを　かえることが\nできます。せ"
+        "いげんじかん「なし」にも　できます。",
+        "つかえるポケモンのレベルは３０までです。\nすべてのポケモンがレベル３０でもかまいません。\n６ぴきそろわないとき"
+        "はレンタルポケモンで\nしゅつじょうできます。",
+        NULL,
+        "つかえるポケモンのレベルは５０までです。\nすべてのポケモンがレベル５０でもかまいません。\n６ぴきそろわないとき"
+        "はレンタルポケモンで\nしゅつじょうできます。",
+        "９７ねん、９８ねんにおこなわれたニンテンドウ\nポケモンリーグで　ちくたいかいのチャンピオンが\nつかったポケモン"
+        "は　しゅつじょうできません。",
+        NULL,
+        "つかえるポケモンのレベルは２５から３０まで。\n６ぴきそろわないときはレンタルポケモンで\nしゅつじょうできます"
+        "。",
+        "じっさいにバトルをする３びきの\nレベルの　ごうけいが８０をこえてはいけません。",
+        "たかさ２メートルまで、おもさが\n２０キログラムまでという　せいげんがあります。",
+        "しんかしていないポケモンだけが　しゅつじょう\nできます。",
+        NULL,
+        "レベル１００まで、どんなポケモンでも　しゅつじょう\nすることができます。",
+        "１５１ぴきすべてのポケモンがしゅつじょうできます。",
+        "レベル１５から２０までであれば\nほとんどのポケモンがエントリーできます。\n６ぴきそろわないときはレンタルポケモ"
+        "ンで\nしゅつじょうできます。",
+        "じっさいにバトルをする３びきの\nレベルの　ごうけいが５０をこえてはいけません。",
+        NULL,
+        "ジムリーダーとなかまたちは　レベル５０のポケモンで\nいどんできます。しかし、きみがレベル５０よりたかい\nレベル"
+        "のポケモンをエントリーしたときは、\nいちばんたかいレベルにあわせて　くりだしてきます。",
+        "コントローラは　にんずうぶん　ひつようです。\nふたつのくみにわかれて　たたかうこともできます。\nコンピュータに"
+        "　ひとのかわりをさせることも\nできます。コンピュータのつよさは　３だんかい。",
+        "１ぴきから６ぴきの　すきなかずでバトルができます。\nポケモンをエントリーするときに　すきなかずになった\nところ"
+        "でスタートボタンを　おしてください。\nエントリーしたポケモンは　すべて　しゅつじょう\nしなければ　なりません。"
+        "\nおなじしゅるいのポケモンを　ふくすうえらぶことは\nできません。",
+        "ポケモンのなかで　いちばんつよいといわれている\nミュウツーをたおせ。ミュウツーのレベルは１００。\nきみがそだて"
+        "たポケモンで　たおすことはできるか？",
+    },
+    "つかえるポケモンのレベルは５０から５５まで。",
+    "つかえるポケモンのレベルは３０までです。\nすべてのポケモンがレベル３０でもかまいません。",
+    "つかえるポケモンのレベルは５０までです。\nすべてのポケモンがレベル５０でもかまいません。",
+    "つかえるポケモンのレベルは２５から３０まで。",
+    "レベル１５から２０までであれば\nほとんどのポケモンがエントリーできます。",
+    "１ぴきから６ぴきの　すきなかずでバトルができます。\nポケモンをエントリーするときに　すきなかずになった\nところでス"
+    "タートボタンを　おしてください。\nエントリーしたポケモンは　すべて　しゅつじょう\nしなければ　なりません。",
+    "さいごにのこった１ぴきが「じばく」「だいばくはつ」\nを　すると、あいてのポケモンを　たおしたとしても\nばくはつした"
+    "ほうの「まけ」になります。",
+    "レベル１００まで、どんなポケモンでも　しゅつじょう\nすることができます。あいてトレーナーは　すべて\nレベル１００の"
+    "ポケモンを　だしてきます。",
+    "１ぴきが「ねむり」のじょうたいのとき、\nほかのポケモンをねむらせることはできません。\n「こおり」もおなじです。\n１"
+    "ぴきが「ねむり」で、もう１ぴきが「こおり」という\nじょうたいは　あります。",
+    "「なんでもあり」ルールではタッグバトルができます。\nふたりが１くみになって　きょうりょくして　たたかい\nます。　そ"
+    "れぞれ６ぴきまでのポケモンをエントリー、\nそのなかから　３びきまでのポケモンを　しゅつじょう\nさせます。　じぶんが"
+    "　だしたポケモンにのみ　しじを\nだすことが　できます。",
+};
+#else
 char* RentalRules_GetPokemonName(s32 file_number) {
     return Text_GetString(NULL, 0, sRentalRulesPokemonNames, file_number - 1);
 }
+#endif
 
 void RentalRules_LoadBackgroundArchive(void) {
     ModeSettings var_sp20;
@@ -166,6 +298,18 @@ s16* RentalRules_GetRuleIdList(SessionContext* session_context) {
 
         case 3:
             switch (session_context->mode) {
+#if defined(VERSION_JP)
+                // JP Nintendo Cup '99 rules are the extra lists packed after the '98 free battle list.
+                case 3:
+                    var_v1 = &D_83003A38[8];
+                    break;
+                case 10:
+                    var_v1 = &D_83003A38[18];
+                    break;
+                case 0:
+                    var_v1 = &D_83003A38[28];
+                    break;
+#else
                 case 3:
                     var_v1 = D_830039D4;
                     break;
@@ -175,6 +319,7 @@ s16* RentalRules_GetRuleIdList(SessionContext* session_context) {
                 case 0:
                     var_v1 = D_830039FC;
                     break;
+#endif
             }
             break;
 
@@ -497,6 +642,16 @@ void RentalRules_DrawHeaderBanner(void) {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+
+        if (D_83003C98 != 0) {
+            Gfx_SetEnvColor(0, 0, 0, 0xFF);
+            Font_Printf(106, var_s1 + 4, "%s ルールをみる", D_83003C98);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
+            Font_Printf(104, var_s1 + 2, "%s ルールをみる", D_83003C98);
+        }
+#else
         Font_SetActive(0x10, 0);
 
         if (D_83003C98 != 0) {
@@ -510,6 +665,7 @@ void RentalRules_DrawHeaderBanner(void) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
             Font_Printf(104, var_s1 + 2, var_v0_21);
         }
+#endif
 
         Font_EndTexturedTextRendering();
     }
@@ -560,6 +716,20 @@ void RentalRules_DrawBulletIcon(s16 x, s16 y) {
     Gfx_DrawTexturedRectClipped(x, y, 20, 20, 0, 0, 0x400, 0x400, 0);
 }
 
+#if defined(VERSION_JP)
+void RentalRules_DrawRuleListText(s16 x, s16 y) {
+    s16 tmp;
+    s32 i;
+
+    Font_SetActive(0x10, -3);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+
+    if (D_83003C9C != NULL) {
+        Font_Printf(x + 16, y + 4, "%sのルール", D_83003C9C);
+    }
+
+    Font_Printf(x + 48, y + 308, "もっとくわしくみる");
+#else
 void RentalRules_DrawRuleListText(s16 x, s16 y) {
     s16 tmp;
     s32 i;
@@ -578,6 +748,7 @@ void RentalRules_DrawRuleListText(s16 x, s16 y) {
     }
 
     Font_Printf(x + 48, y + 308, Text_GetString(NULL, 0, sBattleModeLabels, 2));
+#endif
     Font_SetActive(8, 0);
 
     for (i = 0; i < D_83003CA4; i++) {
@@ -658,6 +829,7 @@ void RentalRules_DrawFrame(void) {
     BgStage_AdvanceFrame();
 }
 
+#if !defined(VERSION_JP)
 void RentalRules_LoadCategoryStrings(void) {
     s32 i;
 
@@ -698,6 +870,7 @@ void RentalRules_LoadDescriptionStrings(void) {
         }
     }
 }
+#endif
 
 void RentalRules_Init(void) {
     D_83003C80 = 0;
@@ -720,6 +893,7 @@ void RentalRules_Init(void) {
         }
     }
 
+#if !defined(VERSION_JP)
     RentalRules_LoadCategoryStrings();
     RentalRules_LoadDescriptionStrings();
 
@@ -738,6 +912,7 @@ void RentalRules_Init(void) {
 
     sGymLeaderCastleLabel = sGymLeaderCastleModeLabel;
     sVsMewtwoLabel = sVsMewtwoModeLabel;
+#endif
 
     D_83003C98 = RentalRules_GetModeLabel(gSessionContext.mode);
     D_83003C9C = RentalRules_GetCategoryLabel(gSessionContext.ruleCategory);
@@ -812,9 +987,11 @@ s32 RentalRules_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     RentalRules_LoadBackgroundArchive();
     PokeIcon_OpenModelArchive();
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sBattleModeLabels = Text_GetStringTable(0x20);
     sRentalRulesPokemonNames = Text_GetStringTable(36);
+#endif
     StageLoader_UpdateSegments();
     RentalRules_Loop();
     StageLoader_WaitForRetrace();

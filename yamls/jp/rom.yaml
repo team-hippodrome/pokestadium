@@ -1595,11 +1595,14 @@
     vram: 0x83000000
     subsegments:
     - [0x2BCEA0, textbin,   fragments/rental_rules/rental_rules_header]
-    - [0x2BCEC0, asm, fragment55_2BCEC0]
+    - [0x2BCEC0, c, fragments/rental_rules/rental_rules_2BED40]
     - [0x2BED10, c, fragments/rental_rules/rental_rules_2C0F90]
     - [0x2BF170, asm, fragments/rental_rules/rental_rules_tail_2BF170]
-    - [0x2C0470, data, fragments/rental_rules/rental_rules_2BED40]
-    - {vram: 0x83005100, type:  bss, name: fragments/rental_rules/rental_rules_2BED40}
+    - [0x2C0440, .data, fragments/rental_rules/rental_rules_2BED40]
+    - [0x2C0750, data, fragments/rental_rules/rental_rules_tail_2BF170]
+    - [0x2C0760, .rodata, fragments/rental_rules/rental_rules_2BED40]
+    - [0x2C1F40, rodata, fragments/rental_rules/rental_rules_tail_2BF170]
+    - {vram: 0x83005100, type:  .bss, name: fragments/rental_rules/rental_rules_2BED40}
     - {vram: 0x83005130, type:  .bss, name: fragments/rental_rules/rental_rules_2C0F90}
     - {vram: 0x83005140, type:  bss, name: fragments/rental_rules/rental_rules_2C13F0}
   - name: fragment55_relocs
