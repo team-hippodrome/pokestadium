@@ -1927,7 +1927,7 @@
     - [0x3AB130, .data, fragments/battle_prep/battle_prep_3A0010]
     - [0x3AB640, .data, fragments/battle_prep/battle_prep_3A1970]
     - [0x3ABC90, .data, fragments/battle_prep/battle_prep_3A1C30]
-    - [0x3ABE00, data, fragments/battle_prep/battle_prep_data]
+    - [0x3ABE00, .data, fragments/battle_prep/battle_prep_data]
     - [0x3ADF40, .rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3ADF90, .rodata, fragments/battle_prep/battle_prep_3974E0]
     - [0x3ADFA0, .rodata, fragments/battle_prep/battle_prep_399860]
