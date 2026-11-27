@@ -1593,9 +1593,6 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     }
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/Widget_PauseMenuDrawIconQuad.s")
-#else
 void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
                                   f32 arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD, f32 argE) {
     u8 i;
@@ -1630,6 +1627,9 @@ void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg
 
     for (i = 0; i <= arg0; i++) {
         if (i == 0) {
+#if defined(VERSION_JP)
+            gDPPipeSync(gDisplayListHead++);
+#endif
             gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0,
                               0, ENVIRONMENT, 0);
         } else if (i == 1) {
@@ -1642,7 +1642,6 @@ void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg
         gSP2Triangles(gDisplayListHead++, 0, 2, 3, 0, 0, 3, 1, 0);
     }
 }
-#endif
 
 void func_87803EAC(u32* arg0, u16 arg1, UNUSED u16 arg2, u16 arg3, u16 arg4, u8 arg5, u8 arg6) {
     u8 j;
