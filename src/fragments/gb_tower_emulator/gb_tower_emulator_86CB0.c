@@ -199,11 +199,11 @@ extern volatile u32 D_812346FC;
 void GbAudio_RenderMenuSounds(s32 sample_count, s16* out);
 
 #if defined(VERSION_JP)
-// Japanese-only audio code linked between osGbSetNextBuffer and this file
-// (asm/jp/fragments/gb_tower_emulator/gb_tower_emulator_96DA0.s; its .data holds the
-// "Audio: setvol" and "Dim voice-Alloc" debug strings). The first argument of
-// func_8121036C_jp / func_81210390_jp is a packed command word. D_81287B08_jp is that code's
-// 0x15C-byte channel table (func_81209D64_jp walks it with the same stride).
+// The Japanese build carries its own sound driver in this fragment
+//@src/fragments/gb_tower_emulator/jp/audio_thread.c
+// The first argument of AudioThread_QueueCmdS32 / AudioThread_QueueCmdS8 is a packed command
+// word. D_81287B08 is the driver's 0x15C-byte channel table (AudioHeap_DiscardSequence walks it
+// with the same stride).
 typedef struct unk_D_81287B08_jp {
     /* 0x000 */ u8 unk_000;
     /* 0x001 */ u8 unk_001;
@@ -216,11 +216,11 @@ typedef struct unk_D_81287B08_jp {
     /* 0x028 */ char unk028[0x134];
 } unk_D_81287B08_jp; // size = 0x15C
 
-extern unk_D_81287B08_jp D_81287B08_jp[];
-extern OSMesgQueue* D_812896A0_jp;
-void func_8121036C_jp(s32 cmd, s32 arg1);
-void func_81210390_jp(s32 cmd, s8 arg1);
-void func_812103F0_jp(void);
+extern unk_D_81287B08_jp D_81287B08[];
+extern OSMesgQueue* D_812896A0;
+void AudioThread_QueueCmdS32(s32 cmd, s32 arg1);
+void AudioThread_QueueCmdS8(s32 cmd, s8 arg1);
+void AudioThread_ScheduleProcessCmds(void);
 #endif
 
 s32 D_8120EA60 = 0;
@@ -282,17 +282,17 @@ u32 sGbApuNoiseDividerSteps[9] = {
 
 #if defined(VERSION_JP)
 /**
- * Empty in the international builds; in JP flushes the Japanese sound driver (func_812103F0_jp). No callers found.
+ * Empty in the international builds; in JP flushes the Japanese sound driver (AudioThread_ScheduleProcessCmds). No callers found.
  */
 void func_81207330(void) {
-    func_812103F0_jp();
+    AudioThread_ScheduleProcessCmds();
 }
 
 /**
  * Sets D_8120EA60 (JP: also sends command 0xF1000000 to the Japanese sound driver). No callers found.
  */
 void GbApu_SetActiveFlag(void) {
-    func_8121036C_jp(0xF1000000, 0);
+    AudioThread_QueueCmdS32(0xF1000000, 0);
     D_8120EA60 = 1;
 }
 
@@ -300,7 +300,7 @@ void GbApu_SetActiveFlag(void) {
  * Clears D_8120EA60 (JP: also sends command 0xF2000000). No callers found.
  */
 void GbApu_ClearActiveFlag(void) {
-    func_8121036C_jp(0xF2000000, 0);
+    AudioThread_QueueCmdS32(0xF2000000, 0);
     D_8120EA60 = 0;
 }
 
@@ -310,7 +310,7 @@ void GbApu_ClearActiveFlag(void) {
  * the change.
  */
 void func_81215C14_jp(s32 channel_index, s32 ramp_steps, u8 percent) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[channel_index];
+    unk_D_81287B08_jp* ch = &D_81287B08[channel_index];
     f32 target;
 
     ch->unk_012 = 0;
@@ -330,7 +330,7 @@ void func_81215C14_jp(s32 channel_index, s32 ramp_steps, u8 percent) {
  * as a ramp over ramp_steps steps.
  */
 void func_81215C9C_jp(s32 channel_index, s32 ramp_steps) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[channel_index];
+    unk_D_81287B08_jp* ch = &D_81287B08[channel_index];
 
     ch->unk_012 = 0;
     if (ramp_steps == 0) {
@@ -352,36 +352,36 @@ void func_81207354(void) {
  * Sends the Japanese sound driver command 0x08 with byte arguments arg0 and arg1, and arg2.
  */
 void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_81210390_jp(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
+    AudioThread_QueueCmdS8(((arg0 & 0xFF) << 16) | 0x08000000 | ((arg1 & 0xFF) << 8), arg2);
 }
 
 /**
  * Sends Japanese sound driver commands 0x82020100 and 0xF8000000 around a flush.
  */
 void func_81215D50_jp(void) {
-    func_8121036C_jp(0x82020100, 0);
-    func_812103F0_jp();
-    func_8121036C_jp(0xF8000000, 0);
+    AudioThread_QueueCmdS32(0x82020100, 0);
+    AudioThread_ScheduleProcessCmds();
+    AudioThread_QueueCmdS32(0xF8000000, 0);
 }
 
 /**
  * Sends Japanese sound driver commands 0x06020002/1/0 with arg1, arg0 and arg2.
  */
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    func_81210390_jp(0x06020002, arg1);
-    func_81210390_jp(0x06020001, arg0);
-    func_81210390_jp(0x06020000, arg2);
+    AudioThread_QueueCmdS8(0x06020002, arg1);
+    AudioThread_QueueCmdS8(0x06020001, arg0);
+    AudioThread_QueueCmdS8(0x06020000, arg2);
 }
 
 /**
  * Sends Japanese sound driver command 0x06020004 with -1.
  */
 void func_81215DDC_jp(void) {
-    func_81210390_jp(0x06020004, -1);
+    AudioThread_QueueCmdS8(0x06020004, -1);
 }
 #else
 /**
- * Empty in the international builds; in JP flushes the Japanese sound driver (func_812103F0_jp). No callers found.
+ * Empty in the international builds; in JP flushes the Japanese sound driver (AudioThread_ScheduleProcessCmds). No callers found.
  */
 void func_81207330(void) {
 }
@@ -6981,7 +6981,7 @@ s32 GbAudio_UpdateFrame(void) {
 
     sGbAudioFrameCount++;
 #if defined(VERSION_JP)
-    osSendMesg(D_812896A0_jp, (OSMesg)sGbAudioFrameCount, OS_MESG_NOBLOCK);
+    osSendMesg(D_812896A0, (OSMesg)sGbAudioFrameCount, OS_MESG_NOBLOCK);
 #endif
     D_812346D0 ^= 1;
     sGbAudioBufferIndex++;

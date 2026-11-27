@@ -502,9 +502,17 @@
     vram: 0x81200000
     subsegments:
     - [0x86590,  textbin,   fragments/gb_tower_emulator/gb_tower_emulator_header]
-    - [0x865B0, asm, fragment1_865B0]
+    - [0x865B0, c, fragments/gb_tower_emulator/jp/gb_emu_screen]
+    - [0x88530, c, fragments/gb_tower_emulator/jp/gb_emu_pak]
+    - [0x8D430, c, fragments/gb_tower_emulator/jp/gb_emu_loading_screen]
+    - [0x8DF20, c, fragments/gb_tower_emulator/jp/audio_synthesis]
+    - [0x90170, c, fragments/gb_tower_emulator/jp/audio_heap]
+    - [0x92410, c, fragments/gb_tower_emulator/jp/audio_load]
+    - [0x967C0, c, fragments/gb_tower_emulator/jp/audio_thread]
     - [0x96D20, c, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
-    - [0x96DA0, asm, fragments/gb_tower_emulator/gb_tower_emulator_96DA0]
+    - [0x96DA0, c, fragments/gb_tower_emulator/jp/audio_playback]
+    - [0x987B0, c, fragments/gb_tower_emulator/jp/audio_effects]
+    - [0x991E0, c, fragments/gb_tower_emulator/jp/audio_seqplayer]
     - [0x9C130, c, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
     - [0x9E6A0, asm, fragments/gb_tower_emulator/gb_tower_emulator_9E6A0]
     - [0xA4500, data, fragments/gb_tower_emulator/gb_tower_emulator_data_asm]
@@ -512,9 +520,17 @@
     - [0xC1D60, data, fragments/gb_tower_emulator/gb_tower_emulator_data_C1D60]
     - [0xC2470, .data, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
     - [0xDC0B0, data, fragments/1/fragment1_89010]
+    - [0xDDB80, .rodata, fragments/gb_tower_emulator/jp/gb_emu_screen]
+    - [0xDDBF0, .rodata, fragments/gb_tower_emulator/jp/gb_emu_pak]
+    - [0xDDCB0, .rodata, fragments/gb_tower_emulator/jp/audio_heap]
+    - [0xDDCD0, .rodata, fragments/gb_tower_emulator/jp/audio_load]
+    - [0xDDD00, .rodata, fragments/gb_tower_emulator/jp/audio_playback]
+    - [0xDDD20, .rodata, fragments/gb_tower_emulator/jp/audio_effects]
+    - [0xDDD50, .rodata, fragments/gb_tower_emulator/jp/audio_seqplayer]
     - [0xDE2F0, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
     - {vram: 0x81257FC0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_7F9A0}
-    - {vram: 0x81259570, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_bss_81259570}
+    - {vram: 0x81258100, type: .bss, name: fragments/gb_tower_emulator/jp/gb_emu_pak}
+    - {vram: 0x81259A60, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_bss_81259A60}
     - {vram: 0x8125E230, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
     - {vram: 0x81283BA0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
     - {vram: 0x812875A0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_bss_812875A0}
