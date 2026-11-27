@@ -1505,12 +1505,12 @@ void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
 
 extern s32 D_812599F0;
 extern u8 D_8121E908;
-extern u8 D_811221C0[];
-extern u8 D_81121B30[];
-extern u8 D_811220D0[];
-extern u8 D_81122010[];
-extern u8 D_81122070[];
-extern u8 D_81121DA0[];
+extern u8 D_812227C0[];
+extern u8 D_81222130[];
+extern u8 D_812226D0[];
+extern u8 D_81222610[];
+extern u8 D_81222670[];
+extern u8 D_812223A0[];
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
 
 /**
@@ -1520,7 +1520,6 @@ void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
  * D_8121E908 to 2); called from GbEmu_DrawStatusBar.
  */
 void GbEmu_DrawSpeedIndicator(s32 fb);
-#ifdef NON_MATCHING
 void GbEmu_DrawSpeedIndicator(s32 fb) {
     s32 sp2C;
     s32 mode;
@@ -1530,24 +1529,19 @@ void GbEmu_DrawSpeedIndicator(s32 fb) {
 
     if (mode == 1) {
         fb += 0xA8;
-        GbEmu_BlitWithPixelOp(fb + 0x16BE, D_811221C0, 0, 0x10, 5);
-        GbEmu_BlitWithPixelOp(fb + 0x506, D_81121B30, 0, 0x18, 0xD);
+        GbEmu_BlitWithPixelOp(fb + 0x16BE, D_812227C0, 0, 0x10, 5);
+        GbEmu_BlitWithPixelOp(fb + 0x506, D_81222130, 0, 0x18, 0xD);
     } else if (mode == 2) {
         fb += 0x94;
-        GbEmu_BlitWithPixelOp(fb + 0x16BE, D_811220D0, 0, 0x18, 5);
-        GbEmu_BlitWithPixelOp(fb + 0x55A, (sp2C >= 3) ? D_81122010 : D_81122070, 0, 8, 6);
-        GbEmu_BlitWithPixelOp(fb + 0x506, D_81121DA0, 0, 0x18, 0xD);
+        GbEmu_BlitWithPixelOp(fb + 0x16BE, D_812226D0, 0, 0x18, 5);
+        GbEmu_BlitWithPixelOp(fb + 0x55A, (sp2C >= 3) ? D_81222610 : D_81222670, 0, 8, 6);
+        GbEmu_BlitWithPixelOp(fb + 0x506, D_812223A0, 0, 0x18, 0xD);
     }
     if (D_8121E908 != 0) {
-        GbEmu_BlitWithPixelOp(fb + 0x53A, D_81122010, 0, 8, 6);
-        GbEmu_BlitWithPixelOp(fb + 0x54A, (sp2C >= 2) ? D_81122010 : D_81122070, 0, 8, 6);
+        GbEmu_BlitWithPixelOp(fb + 0x53A, D_81222610, 0, 8, 6);
+        GbEmu_BlitWithPixelOp(fb + 0x54A, (sp2C >= 2) ? D_81222610 : D_81222670, 0, 8, 6);
     }
 }
-#else
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/gb_tower_emulator/jp/gb_emu_pak/GbEmu_DrawSpeedIndicator.s")
-// clang-format on
-#endif
 
 extern s32 D_81259A30;
 extern u16 D_81222A5C[];
@@ -2499,51 +2493,28 @@ s32 GbPak_IsCartridgeInserted(void) {
     return D_81259668[D_81259A40].status & 0x80;
 }
 
-extern M2C_UNK D_8115623C;
-extern u8 D_811565A1;
-
 /**
- * Returns 1 when D_811565A1 is set or any of the 128 cartridge RAM blocks is still waiting to be
- * written back; the menu then goes to the 「レポートできませんでした」 ("Couldn't save") recovery instead of failing.
- * Seen in play (2026-11-14) ran when the emulator result D_81154C40 was poked to -1 from the GB
- * Player menu; the game went to 「レポートできませんでした」 ("Couldn't save"); called from GbEmu_RunFrame.
+ * Returns 1 when a save is already flagged (D_81259A41) or any of the first 128 cartridge RAM
+ * blocks of the active channel is still waiting to be written back. Blocks 0-4 are first marked
+ * dirty and copied into the block state, so they always count as pending.
  */
-s32 GbPak_HasUnsavedSramBlocks(void);
-#ifdef NON_MATCHING
 s32 GbPak_HasUnsavedSramBlocks(void) {
-    s32 var_v0;
-    u8 *var_v1;
+    s32 i;
 
-    var_v0 = 0;
-    if (D_811565A1 != 0) {
+    if (D_81259A41 != 0) {
         return 1;
     }
-    var_v1 = *((M2C_UNK*)((u8*)&D_8115623C + (D_81259A40 * 0xA4))); // FAKE: cast chain
-loop_3:
-    var_v0 += 4;
-    if (M2C_FIELD(var_v1, u8 *, 0) == 0) {
-        return 1;
+    for (i = 0; i < 5; i++) {
+        D_81259668[D_81259A40].blockDirty[i] = 0xFF;
+        D_81259668[D_81259A40].blockState[i] = D_81259668[D_81259A40].blockDirty[i];
     }
-    if (M2C_FIELD(var_v1, u8 *, 1) == 0) {
-        return 1;
+    for (; i < 0x80; i++) {
+        if (D_81259668[D_81259A40].blockState[i] == 0) {
+            return 1;
+        }
     }
-    if (M2C_FIELD(var_v1, u8 *, 2) == 0) {
-        return 1;
-    }
-    if (M2C_FIELD(var_v1, u8 *, 3) == 0) {
-        return 1;
-    }
-    var_v1 += 4;
-    if (var_v0 == 0x80) {
-        return 0;
-    }
-    goto loop_3; // FAKE: m2c loop
+    return 0;
 }
-#else
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/gb_tower_emulator/jp/gb_emu_pak/GbPak_HasUnsavedSramBlocks.s")
-// clang-format on
-#endif
 
 extern u8 D_81259701[];
 extern OSMesgQueue D_812598F8;

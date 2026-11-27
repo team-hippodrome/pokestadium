@@ -2,6 +2,10 @@
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
+#include "src/memory.h"
+#include "src/gfx_rect.h"
+#include "src/jpeg_stream.h"
+#include "src/game_state.h"
 
 void GbAudio_SetMenuSoundMode(s32);
 void GbEmu_PauseEmulation(void);
@@ -280,112 +284,102 @@ typedef struct GbPlayerTask {
     /* 0x4C */ u8 unk_4C[0x1C];
 } GbPlayerTask; // size = 0x68
 
-extern u8 D_000DA9B0[];
+extern u8 fragment1_misc_yay0_ROM_START[];
 extern u8 D_00129D00_jp[];
-extern u8 D_80077F40[];
-extern u8 D_800AAFE0[];
 extern u8 D_8121E908;
-extern s16 D_8111E30C;
-extern s16 D_8111E310;
+extern s16 D_8121E90C;
+extern s16 D_8121E910;
 extern u8 D_8121E914[2];
-extern u8 D_8112A960[];
-extern GbPlayerTask D_81154B20[2];
-extern u8 D_81154B24[];
-extern u8 D_81154B88[];
-extern u8 D_81154B8C[];
-extern s32 D_81154C38;
-extern s32 D_81154C40;
-extern s32 D_81154C44;
+extern u8 D_8122B660[];
+extern GbPlayerTask sGbPlayerTasks[2];
+extern u8* sGbEmuHeapStart;
+extern s32 gGbPakServiceThread;
+extern s32 D_812580E4;
 extern s32 D_812580E8;
-extern u8 D_81154C4C;
-extern u8 D_81154C4D;
-extern u8 D_81154C4E;
-extern s8 D_81154C4F;
-extern u8 D_811565F0[];
-s8* func_800051F0(s32, s32, s32, s32, s32);
-s32 func_800023C4(s32, s32, u32);
-void func_80003824(s32, u8*, u8*, s32);
-void func_800093E0(u8*, u8*);
-s32 func_80025BD8(void);
-void func_800535A0(u8*);
-void func_80058FB0(s32);
-void GbPak_StartIoThread(s32, s32, u8*);
-s32 GbEmu_LoadCartridge(s32, s32, s32, s32, s8*);
+extern u8 D_812580EC;
+extern u8 D_812580ED;
+extern u8 D_812580EE;
+extern u8 D_812580EF;
+extern u8 D_81259A90[];
+void GbPak_StartIoThread(s32, s32, OSMesgQueue*);
+s32 GbEmu_LoadCartridge(s32, u8*, s32, s32, s8*);
 void AudioLoad_Init(void);
-void func_811171DC(void);
-void func_81117288(s32);
+void GbApu_Reset(u8*);
+void GbApu_ResetChannels(void);
+
 /**
  * GB Player entry: allocates both framebuffers and the emulator heap, decompresses the emulator
  * data, inits the sound driver, the GB APU and the video mode, starts the Transfer Pak I/O thread
  * and loads the cartridge, then reads the speed-up level and the START/SELECT bindings from the
  * Stadium save.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
  */
-void GbEmu_Init(s8* params);
-#ifdef NON_MATCHING
 void GbEmu_Init(s8* params) {
-
-    sRenderTaskPending[0] = func_800051F0(0, 2, 0x140, 0xF0, 1);
-    sRenderTaskPending[1] = func_800051F0(0, 2, 0x140, 0xF0, 1);
-    D_81154C38 = func_800023C4((u32) D_00129D00_jp - (u32) D_000DA9B0 + 0x158000, 0, (u32) D_000DA9B0);
-    if (D_81154C38 == 0) {
-        D_81154C4E = 1;
+    sRenderTaskPending[0] = (s8*)GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
+    sRenderTaskPending[1] = (s8*)GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
+    sGbEmuHeapStart = main_pool_alloc(0x1D8000, 0);
+    if (sGbEmuHeapStart == NULL) {
+        D_812580EE = 1;
         D_812580E8 = 3;
         return;
     }
     sGbEmuExitCode = 0;
     AudioLoad_Init();
-    func_80003824(D_81154C38, D_000DA9B0, D_00129D00_jp, 0);
-    func_81117288(D_81154C38);
-    D_81154C38 = (D_81154C38 + (u32) D_00129D00_jp) - (u32) D_000DA9B0;
-    func_811171DC();
-    osCreateMesgQueue(D_81154B24, (u8*)D_81154B20, 1);
-    osCreateMesgQueue(D_81154B8C, D_81154B88, 1);
-    func_800535A0(D_80077F40);
-    func_80058FB0(0x2A);
-    func_80058FB0(0x80);
+    Dma_WriteChunks((u32)sGbEmuHeapStart + 0x80000, (u32)fragment1_misc_yay0_ROM_START,
+                    ((u32)D_00129D00_jp + 1) & ~1, 0);
+    Yay0_Decompress(sGbEmuHeapStart + 0x80000, sGbEmuHeapStart);
+    GbApu_Reset(sGbEmuHeapStart);
+    sGbEmuHeapStart += 0x80000;
+    GbApu_ResetChannels();
+    osCreateMesgQueue(&sGbPlayerTasks[0].queue, sGbPlayerTasks[0].mesg, 1);
+    osCreateMesgQueue(&sGbPlayerTasks[1].queue, sGbPlayerTasks[1].mesg, 1);
+    osViSetMode(&osViModeNtscLpn1);
+    osViSetSpecialFeatures(0x2A);
+    osViSetSpecialFeatures(0x80);
     GbEmu_PauseAndBlankScreen();
-    func_800093E0(D_8112A960, D_811565F0);
-    GbPak_StartIoThread(0xC, 0x12, D_800AAFE0);
-    D_8121E908 = *(u8*)(params + 0x2202);
+    Yay0_Decompress(D_8122B660, D_81259A90);
+    GbPak_StartIoThread(0xC, 0x12, &gSIEventMesgQueue);
+    D_8121E908 = *(u8*)(params + 0x2206);
     if (D_8121E908 >= 3) {
         D_8121E908 = 0;
     }
-    D_81154C4F = D_8121E908;
-    switch (GbEmu_LoadCartridge(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C38, 0x158000, func_80025BD8(), params)) {
+    D_812580EF = D_8121E908;
+    switch (GbEmu_LoadCartridge(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), sGbEmuHeapStart, 0x158000,
+                                GbSave_GetActivePort(), params)) {
         case 1:
         default:
-            D_81154C4E = 1;
+            D_812580EE = 1;
             D_812580E8 = 1;
             break;
         case 2:
-            D_81154C4E = 1;
+            D_812580EE = 1;
             D_812580E8 = 2;
             break;
         case 0:
-            D_81154C4E = 0;
+            D_812580EE = 0;
             D_812580E8 = 0;
             break;
     }
-    D_81154C4C = 0;
-    D_81154C4D = 0;
-    D_81154C40 = 0;
-    D_81154C44 = 0;
-    D_8121E914[0] = ((*(s16*)(params + 0x2200)) & 0xFF00) >> 8;
-    D_8121E914[1] = ((*(s16*)(params + 0x2200)) & 0xFF) + 1;
+    D_812580EC = 0;
+    D_812580ED = 0;
+    gGbPakServiceThread = 0;
+    D_812580E4 = 0;
+    D_8121E914[0] = ((*(s16*)(params + 0x2204)) & 0xFF00) >> 8;
+    D_8121E914[1] = ((*(s16*)(params + 0x2204)) & 0xFF) + 1;
     if ((D_8121E914[0] >= 5) || (D_8121E914[1] >= 5) || (D_8121E914[0] == D_8121E914[1])) {
         D_8121E914[0] = 0;
         D_8121E914[1] = 1;
     }
-    D_8111E30C = (D_8121E914[0] == 1) ? 0x20 : (D_8121E914[0] == 2) ? 0x10 : (D_8121E914[0] == 3) ? 2 : (D_8121E914[0] == 4) ? 4 : 0x1000;
-    D_8111E310 = (D_8121E914[1] == 0) ? 0x1000 : (D_8121E914[1] == 2) ? 0x10 : (D_8121E914[1] == 3) ? 2 : (D_8121E914[1] == 4) ? 4 : 0x20;
+    D_8121E90C = (D_8121E914[0] == 1)   ? 0x20
+                 : (D_8121E914[0] == 2) ? 0x10
+                 : (D_8121E914[0] == 3) ? 2
+                 : (D_8121E914[0] == 4) ? 4
+                                        : 0x1000;
+    D_8121E910 = (D_8121E914[1] == 0)   ? 0x1000
+                 : (D_8121E914[1] == 2) ? 0x10
+                 : (D_8121E914[1] == 3) ? 2
+                 : (D_8121E914[1] == 4) ? 4
+                                        : 0x20;
 }
-#else
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/gb_tower_emulator/jp/gb_emu_screen/GbEmu_Init.s")
-// clang-format on
-#endif
 
 extern s16 D_800AD928_jp;
 extern u8* D_800603C0;
@@ -428,70 +422,70 @@ void GbEmu_RunFrame(s8* params) {
     u8* fade;
     s32 keep;
     GbPlayerTask* task;
-    static u8 D_81154C50;
-    static u8 D_81154C51;
-    static u8 D_81154C52;
-    static u8 D_81154C53;
-    static s32 D_81154C54;
+    static u8 D_812580F0;
+    static u8 D_812580F1;
+    static u8 D_812580F2;
+    static u8 D_812580F3;
+    static s32 D_812580F4;
 
     if (D_800AD928_jp != 0) {
-        if (D_81154C4D != 6) {
-            D_81154C4D = 6;
-            D_81154C50 = 20;
+        if (D_812580ED != 6) {
+            D_812580ED = 6;
+            D_812580F0 = 20;
         }
         goto fade_out;
     }
-    if (D_81154C4E != 0) {
+    if (D_812580EE != 0) {
         goto shutdown;
     }
-    if (D_81154C40 == 0) {
-        D_81154C40 = GbEmu_UpdateFrame();
+    if (gGbPakServiceThread == 0) {
+        gGbPakServiceThread = GbEmu_UpdateFrame();
     }
     GbAudio_FrameStub();
-    _bcopy(D_81154BF0, D_81154B20[sGbEmuExitCode].task, 0x40);
-    D_81154B20[sGbEmuExitCode].unk_48 = *(s32*)(sRenderTaskPending[sGbEmuExitCode ^ 1] + 8);
-    if (D_81154C4C != 0) {
-        osRecvMesg(&D_81154B20[sGbEmuExitCode ^ 1].queue, 0, 1);
+    _bcopy(D_81154BF0, sGbPlayerTasks[sGbEmuExitCode].task, 0x40);
+    sGbPlayerTasks[sGbEmuExitCode].unk_48 = *(s32*)(sRenderTaskPending[sGbEmuExitCode ^ 1] + 8);
+    if (D_812580EC != 0) {
+        osRecvMesg(&sGbPlayerTasks[sGbEmuExitCode ^ 1].queue, 0, 1);
     }
-    if ((D_81154C40 == -1) || (D_81154C40 == -2)) {
-        if ((D_81154C4D < 20) && (GbPak_HasUnsavedSramBlocks() != 0)) {
-            D_81154C40 = 1;
-            D_81154C4D = 20;
+    if ((gGbPakServiceThread == -1) || (gGbPakServiceThread == -2)) {
+        if ((D_812580ED < 20) && (GbPak_HasUnsavedSramBlocks() != 0)) {
+            gGbPakServiceThread = 1;
+            D_812580ED = 20;
         } else {
         error:
             GbEmu_BlackScreenAndFail(1);
             goto shutdown;
         }
-    } else if (D_81154C40 == -3) {
+    } else if (gGbPakServiceThread == -3) {
         GbEmu_BlackScreenAndFail(2);
         goto shutdown;
-    } else if (D_81154C40 == -100) {
+    } else if (gGbPakServiceThread == -100) {
         GbEmu_BlackScreenAndFail(3);
         goto shutdown;
     }
 
-    fade = D_81154B20[sGbEmuExitCode].unk_3C;
-    switch (D_81154C4D) {
+    fade = sGbPlayerTasks[sGbEmuExitCode].unk_3C;
+    switch (D_812580ED) {
         case 0:
             fade[3] = 0xFF;
-            D_81154C50 = 30;
-            D_81154C4D = 1;
+            D_812580F0 = 30;
+            D_812580ED = 1;
             break;
 
         case 1:
-            if (--D_81154C50 != 0) {
-                fade[3] = (s32)((D_81154C50 / 30.0f) * 63.0f) + 0xC0;
+            if (--D_812580F0 != 0) {
+                fade[3] = (s32)((D_812580F0 / 30.0f) * 63.0f) + 0xC0;
             } else {
                 fade[3] = 0;
-                D_81154C4D = 2;
+                D_812580ED = 2;
             }
             break;
 
         case 2:
-            if (D_81154C40 == 1) {
+            if (gGbPakServiceThread == 1) {
                 GbEmu_ClearStatusBar();
-                D_81154C4D = 3;
-                D_81154C50 = 15;
+                D_812580ED = 3;
+                D_812580F0 = 15;
                 GbAudio_SetMenuSoundMode(1);
                 func_811177DC(1);
             }
@@ -500,18 +494,18 @@ void GbEmu_RunFrame(s8* params) {
         case 3:
             Cont_StartReadInputs();
             Cont_ReadInputs();
-            if (--D_81154C50 != 0) {
+            if (--D_812580F0 != 0) {
                 if (GbPak_CheckConnectionBlocking() != 0) {
                     goto error;
                 }
-                fade[3] = 0xBF - (s32)((D_81154C50 / 15.0f) * 63.0f);
+                fade[3] = 0xBF - (s32)((D_812580F0 / 15.0f) * 63.0f);
             } else {
                 fade[3] = 0xBF;
                 if (GbPak_CheckConnectionBlocking() != 0) {
                     goto error;
                 }
-                D_81154C4D = 4;
-                D_81154C51 = 0;
+                D_812580ED = 4;
+                D_812580F1 = 0;
             }
             break;
 
@@ -523,33 +517,33 @@ void GbEmu_RunFrame(s8* params) {
                 goto error;
             }
             keep = 1;
-            if (D_81154C51 & 4) {
-                sel = D_81154C51 & 3;
+            if (D_812580F1 & 4) {
+                sel = D_812580F1 & 3;
                 if (*(u16*)(D_800603C0 + 6) == 0) {
                     if (sel == 0) {
-                        D_8111E30C = (D_8121E914[0] == 1)   ? 0x20
+                        D_8121E90C = (D_8121E914[0] == 1)   ? 0x20
                                      : (D_8121E914[0] == 2) ? 0x10
                                      : (D_8121E914[0] == 3) ? 2
                                      : (D_8121E914[0] == 4) ? 4
                                                             : 0x1000;
-                        D_8111E310 = (D_8121E914[1] == 0)   ? 0x1000
+                        D_8121E910 = (D_8121E914[1] == 0)   ? 0x1000
                                      : (D_8121E914[1] == 2) ? 0x10
                                      : (D_8121E914[1] == 3) ? 2
                                      : (D_8121E914[1] == 4) ? 4
                                                             : 0x20;
-                        D_81154C40 = 0;
-                        D_81154C4D = 2;
+                        gGbPakServiceThread = 0;
+                        D_812580ED = 2;
                         func_811177DC(1);
                         GbAudio_SetMenuSoundMode(0);
                         GbEmu_DrawStatusBar();
                         keep = 0;
                     } else if (sel == 1) {
-                        D_81154C51 = 1;
-                        D_81154C4D = 11;
+                        D_812580F1 = 1;
+                        D_812580ED = 11;
                     } else {
-                        D_81154C51 = 2;
-                        D_81154C4D = 7;
-                        D_81154C52 = 0;
+                        D_812580F1 = 2;
+                        D_812580ED = 7;
+                        D_812580F2 = 0;
                     }
                 }
             } else {
@@ -557,25 +551,25 @@ void GbEmu_RunFrame(s8* params) {
                 if (sel & 0xC00) {
                     func_811177DC(7);
                     if (*(u16*)(D_800603C0 + 8) & 0x400) {
-                        if ((D_81154C51 & 3) >= 2) {
-                            D_81154C51 &= 0xFC;
+                        if ((D_812580F1 & 3) >= 2) {
+                            D_812580F1 &= 0xFC;
                         } else {
-                            D_81154C51++;
+                            D_812580F1++;
                         }
                     } else {
-                        if (D_81154C51 & 3) {
-                            D_81154C51--;
+                        if (D_812580F1 & 3) {
+                            D_812580F1--;
                         } else {
-                            D_81154C51 = (D_81154C51 & 0xFC) + 2;
+                            D_812580F1 = (D_812580F1 & 0xFC) + 2;
                         }
                     }
                 } else if (!(*(u16*)(D_800603C0 + 6) & 8) && (sel & 0xD000)) {
                     if (sel & 0x4000) {
-                        D_81154C51 = 4;
+                        D_812580F1 = 4;
                     } else {
-                        D_81154C51 |= 4;
-                        if (D_81154C51 != 4) {
-                            if (D_81154C51 == 5) {
+                        D_812580F1 |= 4;
+                        if (D_812580F1 != 4) {
+                            if (D_812580F1 == 5) {
                                 func_811177DC(2);
                             } else {
                                 func_811177DC(6);
@@ -585,13 +579,13 @@ void GbEmu_RunFrame(s8* params) {
                 }
             }
             if (keep) {
-                GbEmu_DrawPauseMenu(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C51 & 3);
+                GbEmu_DrawPauseMenu(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F1 & 3);
             }
             break;
 
         case 5:
-            if (--D_81154C50 != 0) {
-                fade[3] = 0xFF - (s32)((D_81154C50 / 30.0f) * 63.0f);
+            if (--D_812580F0 != 0) {
+                fade[3] = 0xFF - (s32)((D_812580F0 / 30.0f) * 63.0f);
                 break;
             }
         shutdown:
@@ -601,11 +595,11 @@ void GbEmu_RunFrame(s8* params) {
         GbEmu_Delay(20);
         GbEmu_ClearStatusBar();
         osWritebackDCacheAll();
-        task = &D_81154B20[sGbEmuExitCode ^ 1];
+        task = &sGbPlayerTasks[sGbEmuExitCode ^ 1];
         if (task->queue.validCount != 0) {
             osRecvMesg(&task->queue, 0, 1);
         }
-        task = &D_81154B20[sGbEmuExitCode];
+        task = &sGbPlayerTasks[sGbEmuExitCode];
         if (task->queue.validCount != 0) {
             osRecvMesg(&task->queue, 0, 1);
         }
@@ -617,16 +611,16 @@ void GbEmu_RunFrame(s8* params) {
         case 6:
         fade_out:
             osViBlack(1);
-            if (D_81154C50 != 0) {
+            if (D_812580F0 != 0) {
                 u8 a;
 
-                D_81154C50--;
-                fade = D_81154B20[sGbEmuExitCode].unk_3C;
-                a = 0xFF - (s32)((D_81154C50 / 20.0f) * 63.0f);
+                D_812580F0--;
+                fade = sGbPlayerTasks[sGbEmuExitCode].unk_3C;
+                a = 0xFF - (s32)((D_812580F0 / 20.0f) * 63.0f);
                 if ((a & 0x3F) >= (fade[3] & 0x3F)) {
                     fade[3] = a;
                 }
-                fade = D_81154B20[sGbEmuExitCode].unk_34;
+                fade = sGbPlayerTasks[sGbEmuExitCode].unk_34;
                 fade[0] = 0;
                 break;
             }
@@ -642,15 +636,15 @@ void GbEmu_RunFrame(s8* params) {
             sel = *(u16*)(D_800603C0 + 8);
             if (sel & 0xC00) {
                 func_811177DC(7);
-                D_81154C52 ^= 8;
+                D_812580F2 ^= 8;
             } else if (sel & 0x8000) {
                 func_811177DC(6);
-                D_81154C4D = 8;
-                D_81154C54 = 0;
-                D_81154C52 = (D_8121E914[(D_81154C52 & 8) ? 1 : 0] & 7) | (D_81154C52 & 0xF8);
+                D_812580ED = 8;
+                D_812580F4 = 0;
+                D_812580F2 = (D_8121E914[(D_812580F2 & 8) ? 1 : 0] & 7) | (D_812580F2 & 0xF8);
             } else if (sel & 0x4000) {
                 func_811177DC(8);
-                D_81154C4D = 4;
+                D_812580ED = 4;
             } else {
                 switch (sel) {
                     case 0x1000:
@@ -668,16 +662,16 @@ void GbEmu_RunFrame(s8* params) {
                     case 4:
                         sel = 4;
                     set7:
-                        if (sel == D_8121E914[(D_81154C52 & 8) ? 0 : 1]) {
+                        if (sel == D_8121E914[(D_812580F2 & 8) ? 0 : 1]) {
                             func_811177DC(3);
                         } else {
-                            D_8121E914[(D_81154C52 & 8) ? 1 : 0] = sel;
+                            D_8121E914[(D_812580F2 & 8) ? 1 : 0] = sel;
                             func_811177DC(6);
                         }
                         break;
                 }
             }
-            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C52, 0);
+            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F2, 0);
             break;
 
         case 8:
@@ -685,11 +679,11 @@ void GbEmu_RunFrame(s8* params) {
             if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
-            if (--D_81154C54 < -6) {
-                D_81154C54 = -6;
-                D_81154C4D = 9;
+            if (--D_812580F4 < -6) {
+                D_812580F4 = -6;
+                D_812580ED = 9;
             }
-            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F2, D_812580F4);
             break;
 
         case 9:
@@ -701,25 +695,25 @@ void GbEmu_RunFrame(s8* params) {
             }
             sel = *(u16*)(D_800603C0 + 8);
             if (sel & 0x4000) {
-                D_81154C4D = 10;
+                D_812580ED = 10;
                 func_811177DC(8);
             } else if (sel & 0x300) {
                 func_811177DC(5);
                 if (*(u16*)(D_800603C0 + 8) & 0x200) {
-                    if (D_81154C52 & 7) {
-                        D_81154C52--;
+                    if (D_812580F2 & 7) {
+                        D_812580F2--;
                         goto call9;
                     }
-                } else if ((D_81154C52 & 7) < 4) {
-                    D_81154C52++;
+                } else if ((D_812580F2 & 7) < 4) {
+                    D_812580F2++;
                 }
             } else if (sel & 0x8000) {
-                if ((D_81154C52 & 7) == D_8121E914[(D_81154C52 & 8) ? 0 : 1]) {
+                if ((D_812580F2 & 7) == D_8121E914[(D_812580F2 & 8) ? 0 : 1]) {
                     func_811177DC(3);
                 } else {
                     func_811177DC(6);
-                    D_8121E914[(D_81154C52 & 8) ? 1 : 0] = D_81154C52 & 7;
-                    D_81154C4D = 10;
+                    D_8121E914[(D_812580F2 & 8) ? 1 : 0] = D_812580F2 & 7;
+                    D_812580ED = 10;
                 }
             } else {
                 switch (sel) {
@@ -738,18 +732,18 @@ void GbEmu_RunFrame(s8* params) {
                     case 4:
                         sel = 4;
                     set9:
-                        if (sel == D_8121E914[(D_81154C52 & 8) ? 0 : 1]) {
+                        if (sel == D_8121E914[(D_812580F2 & 8) ? 0 : 1]) {
                             func_811177DC(3);
                         } else {
-                            D_8121E914[(D_81154C52 & 8) ? 1 : 0] = sel;
-                            D_81154C4D = 10;
+                            D_8121E914[(D_812580F2 & 8) ? 1 : 0] = sel;
+                            D_812580ED = 10;
                             func_811177DC(6);
                         }
                         break;
                 }
             }
         call9:
-            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F2, D_812580F4);
             break;
 
         case 10:
@@ -757,10 +751,10 @@ void GbEmu_RunFrame(s8* params) {
             if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
-            if (++D_81154C54 == 0) {
-                D_81154C4D = 7;
+            if (++D_812580F4 == 0) {
+                D_812580ED = 7;
             }
-            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F2, D_812580F4);
             break;
 
         case 11:
@@ -770,25 +764,25 @@ void GbEmu_RunFrame(s8* params) {
             if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
-            GbEmu_DrawQuitConfirm(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_81154C51 & 1);
-            if (!(D_81154C51 & 2)) {
+            GbEmu_DrawQuitConfirm(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_812580F1 & 1);
+            if (!(D_812580F1 & 2)) {
                 sel = *(u16*)(D_800603C0 + 8);
                 if (sel & 0x4000) {
                     func_811177DC(8);
                 back4:
-                    D_81154C4D = 4;
-                    D_81154C51 = 0;
+                    D_812580ED = 4;
+                    D_812580F1 = 0;
                 } else if (sel & 0x300) {
                     func_811177DC(5);
-                    D_81154C51 ^= 1;
+                    D_812580F1 ^= 1;
                 } else if (sel & 0x9000) {
                     func_811177DC(6);
-                    D_81154C51 |= 2;
+                    D_812580F1 |= 2;
                 }
-            } else if (D_81154C51 == 3) {
+            } else if (D_812580F1 == 3) {
                 GbEmu_ClearPalettes();
-                D_81154C50 = 30;
-                D_81154C4D = 5;
+                D_812580F0 = 30;
+                D_812580ED = 5;
             } else {
                 goto back4;
             }
@@ -798,7 +792,7 @@ void GbEmu_RunFrame(s8* params) {
             fade[3] = 0xFF;
             GbAudio_SetMenuSoundMode(1);
             GbPak_PowerOff();
-            D_81154C4D = 21;
+            D_812580ED = 21;
             break;
 
         case 21:
@@ -806,8 +800,8 @@ void GbEmu_RunFrame(s8* params) {
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4D0);
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4E4);
             if (GbPak_IsCartridgeInserted() == 0) {
-                D_81154C53 = 30;
-                D_81154C4D = 22;
+                D_812580F3 = 30;
+                D_812580ED = 22;
             }
             break;
 
@@ -817,23 +811,23 @@ void GbEmu_RunFrame(s8* params) {
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4E4);
             if (GbPak_IsCartridgeInserted() != 0) {
-                if (D_81154C53 == 0) {
+                if (D_812580F3 == 0) {
                     if (GbPak_ReidentifyCartridge() == 0) {
-                        D_81154C4D = 23;
+                        D_812580ED = 23;
                     } else {
-                        D_81154C4D = 25;
+                        D_812580ED = 25;
                     }
                 }
-                D_81154C53 = 30;
-            } else if (D_81154C53 != 0) {
-                D_81154C53--;
+                D_812580F3 = 30;
+            } else if (D_812580F3 != 0) {
+                D_812580F3--;
             }
             break;
 
         case 23:
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4E4);
-            D_81154C4D = 24;
+            D_812580ED = 24;
             break;
 
         case 24:
@@ -841,13 +835,13 @@ void GbEmu_RunFrame(s8* params) {
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4E4);
             if (GbPak_VerifyRamBlocks(D_81259A40) == 0) {
                 GbAudio_SetMenuSoundMode(0);
-                D_81154C40 = 0;
-                D_81154C4D = 2;
+                gGbPakServiceThread = 0;
+                D_812580ED = 2;
                 D_811565A1 = 10;
                 D_812580E8 = 0;
             } else {
                 GbPak_PowerOff();
-                D_81154C4D = 25;
+                D_812580ED = 25;
             }
             break;
 
@@ -856,8 +850,8 @@ void GbEmu_RunFrame(s8* params) {
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E540);
             GbEmu_DrawTextCommands(*(s8**)(sRenderTaskPending[sGbEmuExitCode] + 8), D_8111E4E4);
             if (GbPak_IsCartridgeInserted() == 0) {
-                D_81154C53 = 30;
-                D_81154C4D = 26;
+                D_812580F3 = 30;
+                D_812580ED = 26;
             }
             break;
     }
@@ -866,8 +860,8 @@ void GbEmu_RunFrame(s8* params) {
     osViSwapBuffer(*(void**)(sRenderTaskPending[sGbEmuExitCode] + 8));
     crash_screen_set_draw_info(*(s32*)(sRenderTaskPending[sGbEmuExitCode] + 8), 0x140, 0x10);
     if (D_800AD928_jp == 0) {
-        func_80004F34(&D_81154B20[sGbEmuExitCode], 0);
-        D_81154C4C = 1;
+        func_80004F34(&sGbPlayerTasks[sGbEmuExitCode], 0);
+        D_812580EC = 1;
         sGbEmuExitCode ^= 1;
     }
 }
