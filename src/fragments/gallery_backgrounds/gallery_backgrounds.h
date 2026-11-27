@@ -71,7 +71,11 @@ s32 Gallery_CountValidPhotos(unk_D_83403C60* arg0, s32 arg1, s32 arg2);
 s32 Gallery_FindNthEmptySlot(unk_D_83403C60* arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 Gallery_FindFirstEmptySlot(unk_D_83403C60* arg0, s32 arg1);
 void Gallery_DrawBluePanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+#if defined(VERSION_PAL)
+void Gallery_DrawRoundedFrame(s32 arg0, s32 arg1);
+#else
 void Gallery_DrawRoundedFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7);
+#endif
 void Gallery_DrawHeaderBar(s32 arg0, s32 arg1, s32 arg2, Color_RGBA8* arg3, Color_RGBA8* arg4);
 void Gallery_DrawImageStrips(u16* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 void Gallery_FillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

@@ -481,7 +481,7 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
             temp_s3 = D_82F21120[i];
             var_s0 = &arg0->unk_14[i];
             Font_SetActive(4, 0);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "%s%03d",
                         Text_GetString(NULL, 0, sTradePokemonDetailText, 0x16), temp_s3->unk_00);
 #else
@@ -640,7 +640,7 @@ void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 // which this function needs to match.
 #define U64_NOP(x) ((u32)((u64)(x) | 0ULL))
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
 #pragma GLOBAL_ASM("asm/us/nonmatchings/fragments/trade_machine/trade_machine_291D60/func_82F0BEF8.s")
 #else
 void func_82F0BEF8(unk_D_82F210E0* arg0) {
@@ -793,7 +793,7 @@ void Trade_UpdateSaveSeq(void) {
 }
 
 void Trade_DrawSaveSeq(void) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     static s32 D_82F13F8C_us_rev2 = 0;
 #endif
     static s16 D_82F13F8C[] = { 0x32, 0x14A };

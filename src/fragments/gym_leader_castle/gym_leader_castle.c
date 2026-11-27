@@ -418,7 +418,7 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
     gDPLoadTextureBlock(gDisplayListHead++, D_300C290, G_IM_FMT_IA, G_IM_SIZ_16b, 16, 76, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     Gfx_DrawTexturedRectClipped(314, 372, 16, 76, 0, 0, 0x400, 0x400, 0);
     Gfx_DrawTexturedRectClipped(330, 372, 140, 76, 480, 0, 0, 0x400, 0);
 #else
@@ -442,7 +442,7 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
         string = " ";
     }
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     Font_Printf((156 - Font_MeasureTextExtent(16, 0, string)) / 2 + 314, 406, string);
 #else
     Font_Printf(408 - (Font_MeasureTextExtent(16, 0, string) / 2), 406, string);

@@ -39,9 +39,9 @@ void Widget_CountdownComputeScale(s16 arg0, s16 arg1, f32* arg2, f32* arg3) {
     s32 temp_ft1;
     s32 var_v0;
 
-    if (arg1 >= 0x12) {
+    if (arg1 >= NTSC_PAL(18, 15)) {
         var_v0 = 0;
-    } else if (arg1 >= 8) {
+    } else if (arg1 >= NTSC_PAL(8, 7)) {
         var_v0 = 1;
     } else if (arg1 > 0) {
         var_v0 = 2;
@@ -55,7 +55,7 @@ void Widget_CountdownComputeScale(s16 arg0, s16 arg1, f32* arg2, f32* arg3) {
     switch (var_v0) {
         case 0:
             var_fv0 = 0.5f;
-            temp_ft1 = (1.0f - ((0x1B - arg1) / 10.0f)) * (0, 81920.0f);
+            temp_ft1 = (1.0f - ((NTSC_PAL(27, 22) - arg1) / NTSC_PAL(10.0f, (f32)8))) * (0, 81920.0f);
             if (temp_ft1 <= 0x10000) {
                 if (temp_ft1 > 0x10000) {
                     var_fv0 *= .5f;
@@ -77,7 +77,7 @@ void Widget_CountdownComputeScale(s16 arg0, s16 arg1, f32* arg2, f32* arg3) {
 
         case 2:
             if (arg0 == 0) {
-                *arg2 = arg1 / 7.0f;
+                *arg2 = arg1 / NTSC_PAL(7.0f, 6.0f);
                 if (0.001f < *arg2) {
                     *arg3 = 1.0f / *arg2;
                 } else {
@@ -128,7 +128,7 @@ void Widget_CountdownUpdate(void) {
         case 1:
             D_8780FAC2 -= 1;
             if (D_8780FAC2 <= 0) {
-                D_8780FAC2 = 0x1B;
+                D_8780FAC2 = NTSC_PAL(27, 22);
                 D_8780FAC0 -= 1;
             }
 
@@ -141,13 +141,13 @@ void Widget_CountdownUpdate(void) {
 
             if (D_8780FAC0 < 0) {
                 D_8780FAC4 = 2;
-                D_8780FAC2 = 0x1B;
+                D_8780FAC2 = NTSC_PAL(27, 22);
                 D_8780FAC8.node.flags &= ~1;
             }
             break;
 
         case 2:
-            if (D_8780FAC2 == 0x1B) {
+            if (D_8780FAC2 == NTSC_PAL(27, 22)) {
                 D_8780FAC2 = 0;
             }
             break;
@@ -162,7 +162,7 @@ void Widget_CountdownUpdate(void) {
         gSPTexture(&temp_v0[1], 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
         gDPPipeSync(&temp_v0[2]);
         gDPSetCombineMode(&temp_v0[3], G_CC_DECALRGBA, G_CC_PASS2);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE))
         gDPSetTextureFilter(&temp_v0[4], G_TF_BILERP);
         gSPVertex(&temp_v0[5], D_878063E0, 16, 0);
 
@@ -195,7 +195,7 @@ s32 Widget_CountdownGetState(void) {
 
     if (D_8780FAC4 == 2) {
         var_v1 = -2;
-    } else if ((D_8780FAC2 == 0x1B) && (D_8780FAC4 == 1)) {
+    } else if ((D_8780FAC2 == NTSC_PAL(27, 22)) && (D_8780FAC4 == 1)) {
         var_v1 = D_8780FAC0;
     }
 

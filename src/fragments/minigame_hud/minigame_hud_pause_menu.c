@@ -49,6 +49,14 @@ u32 D_87806730[] = {
     0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE, 0xFFFEFFFE,
 };
 
+#if defined(VERSION_FR)
+#include "minigame_hud_pause_menu_player_icons_fr.inc.c"
+#else
+#if defined(VERSION_ES)
+#include "minigame_hud_pause_menu_player_icons_es.inc.c"
+#elif defined(VERSION_IT)
+#include "minigame_hud_pause_menu_player_icons_it.inc.c"
+#else
 u32 D_878067F0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -476,6 +484,7 @@ u32 D_878093D0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
+#endif
 
 u32 D_8780A270[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
@@ -1011,6 +1020,7 @@ u32 D_8780DCF0[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
+#endif
 
 static Vp D_8780EB90 = {
     {
@@ -1311,7 +1321,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FCA7 = 0;
     D_8780FDF8 = 0;
     D_8780FE01 = 0;
-    D_8780FE00 = 0xC;
+    D_8780FE00 = NTSC_PAL(12, 10);
 
     D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, gMinigameText, 0x51);
 
@@ -1646,6 +1656,17 @@ void func_87803EAC(u32* arg0, u16 arg1, UNUSED u16 arg2, u16 arg3, u16 arg4, u8 
     }
 }
 
+// The Spanish pause menu places its player icon strip differently.
+#if defined(VERSION_ES)
+#define PAUSE_ICON_ARG 0x68
+#define PAUSE_ICON_X0 0x20
+#define PAUSE_ICON_X1 0x68
+#else
+#define PAUSE_ICON_ARG 0x23
+#define PAUSE_ICON_X0 -0x63
+#define PAUSE_ICON_X1 -0x1B
+#endif
+
 typedef struct Vtx4 {
     /* 0x00 */ Vtx vtx1;
     /* 0x10 */ Vtx vtx2;
@@ -1744,7 +1765,7 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
         D_8780FCCC[1] = 0x1A;
         D_8780FCCC[2] = 0x34;
 
-        func_87803EAC(&D_3010000, 0x88, 0x34, 0x23, 0x1A, 5, 3);
+        func_87803EAC(&D_3010000, 0x88, 0x34, PAUSE_ICON_ARG, 0x1A, 5, 3);
 
         spAC = Gfx_AllocDisplayList(sizeof(Vtx) * 4 * temp_s2);
 
@@ -1772,11 +1793,11 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
             s32 k = var_s4;
 
             if (spA0[i] == 1) {
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx1, -0x63, spA4[var_s4], 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx2, -0x1B, spA4[var_s4], 0, 0x480, 0, 0xFF, 0xFF, 0xFF, 0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, -0x63, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF,
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx1, PAUSE_ICON_X0, spA4[var_s4], 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx2, PAUSE_ICON_X1, spA4[var_s4], 0, 0x480, 0, 0xFF, 0xFF, 0xFF, 0xFF);
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx3, PAUSE_ICON_X0, spA4[var_s4] + 0x34, 0, 0, 0x340, 0xFF, 0xFF, 0xFF,
                                         0xFF);
-                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, -0x1B, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF,
+                Gfx_SetVertexAttributes(&spAC[var_s4].vtx4, PAUSE_ICON_X1, spA4[var_s4] + 0x34, 0, 0x480, 0x340, 0xFF, 0xFF,
                                         0xFF, 0xFF);
 
                 gSPVertex(gDisplayListHead++, &spAC[var_s4].vtx1, 4, 0);
@@ -1810,7 +1831,7 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
                 gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 
                 if ((D_8780FA48 == i) && ((D_8780FC40 == 4) || (((D_8780FC40 == 5) || (D_8780FC40 == 6)) &&
-                                                                ((D_8780FCA8 >= 0x28) || ((D_8780FCA8 % 10) < 5))))) {
+                                                                ((D_8780FCA8 >= NTSC_PAL(40, 32)) || ((D_8780FCA8 % NTSC_PAL(10, 8)) < NTSC_PAL(5, 4)))))) {
                     var_a0 = 1;
                 }
             }
@@ -1922,7 +1943,7 @@ s32 Widget_PauseMenuUpdate(void) {
                 D_8780FC60 = 1;
                 D_8780FC40 = 1;
                 D_8780FC94 = 0;
-                D_8780FE44 = 0xB4;
+                D_8780FE44 = NTSC_PAL(180, 150);
                 if (D_8780FA2A != 0) {
                     if ((D_8780FC50[0] + D_8780FC50[1] + D_8780FC50[2] + D_8780FC50[3]) != 0) {
                         for (i = 0; i < 4; i++) {
@@ -1989,7 +2010,7 @@ s32 Widget_PauseMenuUpdate(void) {
                     Audio_PlayPersistentSoundCommand(0x12, 0);
                     D_8780FC40 = 2;
                     D_8780FC64 = 1;
-                    D_8780FCAA = 0x190;
+                    D_8780FCAA = NTSC_PAL(400, 408);
                     Widget_PauseMenuCheckTournamentEnd();
                     if (D_8780FC4C != 0) {
                         D_8780FC5D = 2;
@@ -2013,7 +2034,7 @@ s32 Widget_PauseMenuUpdate(void) {
 
                         if (i == 4) {
                             D_8780FC68 = 1;
-                            D_8780FCA4 = 0xF0;
+                            D_8780FCA4 = NTSC_PAL(240, 200);
                             D_8780FCA6 = 0xA;
                         }
                     }
@@ -2034,7 +2055,7 @@ s32 Widget_PauseMenuUpdate(void) {
                                 if (Widget_PauseMenuCheckHyperUnlock() != 0) {
                                     Audio_StartMusicTrack(0x13);
                                     D_8780FC6C = 1;
-                                    D_8780FE44 = 0xB4;
+                                    D_8780FE44 = NTSC_PAL(180, 150);
                                 } else {
                                     D_8780FC40 = 3;
                                     D_8780FC70 = 1;
@@ -2049,7 +2070,7 @@ s32 Widget_PauseMenuUpdate(void) {
                                     D_8780FC70 = 1;
                                     D_8780FC6C = 0;
                                 }
-                            } else if ((D_8780FE44 < 0xAB) && (D_8780FCA7 == 0)) {
+                            } else if ((D_8780FE44 < NTSC_PAL(171, 141)) && (D_8780FCA7 == 0)) {
                                 D_8780FA28 |= 1;
                                 Save_SetOptionsField1E(D_8780FA28 & 0xFF);
                                 Save_CommitTypedRecord(0x14, 0);
@@ -2086,10 +2107,10 @@ s32 Widget_PauseMenuUpdate(void) {
                     D_8780FC74 = 1;
                     if (D_8780FC78 == 1) {
                         D_8780FC40 = 5;
-                        D_8780FCA8 = 0x2F;
+                        D_8780FCA8 = NTSC_PAL(47, 38);
                     } else {
                         D_8780FC40 = 4;
-                        D_8780FE3C = 0x60 - Rand_Range(0x20);
+                        D_8780FE3C = NTSC_PAL(96, 80) - Rand_Range(0x20);
                         D_8780FC90 = 0;
                     }
                 } else {
@@ -2117,13 +2138,13 @@ s32 Widget_PauseMenuUpdate(void) {
 
             if (D_8780FE3C <= 0) {
                 D_8780FC40 = 5;
-                D_8780FCA8 = 0x2A;
+                D_8780FCA8 = NTSC_PAL(42, 34);
             }
             break;
 
         case 5:
             D_8780FCA8--;
-            if (D_8780FCA8 == 0x29) {
+            if (D_8780FCA8 == NTSC_PAL(41, 33)) {
                 Audio_PlaySoundEffectById(0x11);
             } else if (D_8780FCA8 <= 0) {
                 D_8780FC40 = 6;
@@ -2170,7 +2191,7 @@ s32 Widget_PauseMenuUpdate(void) {
         }
 
         if (D_8780FC64 != 0) {
-            D_8780FCAA -= 0x14;
+            D_8780FCAA -= NTSC_PAL(20, 24);
             if (D_8780FCAA <= 0) {
                 D_8780FCAA = 0;
                 if (D_8780FDF8 == 0) {
@@ -2208,7 +2229,7 @@ s32 Widget_PauseMenuUpdate(void) {
             switch (D_8780FCA3) {
                 case 0:
                     D_8780FCA4 -= D_8780FCA0;
-                    if (D_8780FCA4 < 0xB4) {
+                    if (D_8780FCA4 < NTSC_PAL(180, 150)) {
                         Audio_StartMusicTrack(0x2C);
                         D_8780FCA3 = 1;
                     }

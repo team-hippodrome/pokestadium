@@ -421,7 +421,7 @@ s32 Diorama_SlideModelsForward(s32 arg0) {
     s32 var_a1 = 1;
 
     while (var_v1->modelId != 0x98) {
-        var_v0->displayObject.position.z += 20.0f;
+        var_v0->displayObject.position.z += NTSC_PAL(20.0f, 22.0f);
         if (var_v0->displayObject.position.z <= 650.0f) {
             var_a1 = 0;
         }

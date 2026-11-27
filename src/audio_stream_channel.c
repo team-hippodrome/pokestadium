@@ -46,7 +46,7 @@ void AudioStream_RefillAndDecode(unk_D_800FCED8* arg0) {
         }
 
         arg0->unk_25C4 += 0x400;
-        if (arg0->unk_259C >= 0x100) {
+        if (arg0->unk_259C >= NTSC_PAL(0x100, 0x101)) {
             arg0->unk_259C -= 0x100;
         } else {
             arg0->unk_259C = 0;

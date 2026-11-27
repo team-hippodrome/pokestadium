@@ -11,7 +11,7 @@ typedef struct CreditsBackgroundSegment {
     /* 0x00 */ s8 endMarker; // 0 for a timed segment; -1 ends the arena sequence
     /* 0x01 */ s8 unk_01;    // 0-7 in order; no reader in this fragment
     /* 0x02 */ u16 duration; // frames; rewritten at runtime to absorb frame-delta overshoot
-} CreditsBackgroundSegment; // size = 0x4
+} CreditsBackgroundSegment;  // size = 0x4
 
 /**
  * One centered line of the staff roll. Credits_InitRoleList fills text[0] from textdata
@@ -19,8 +19,8 @@ typedef struct CreditsBackgroundSegment {
  * sRoleTextColumn selects which column Credits_DrawRoleList prints.
  */
 typedef struct CreditsRoleLine {
-    /* 0x00 */ s32 style;   // 0 = role heading, 1 = staff name, 2 = 10-pixel blank spacer
-    /* 0x04 */ char* text[2];
+    /* 0x00 */ s32 style; // 0 = role heading, 1 = staff name, 2 = 10-pixel blank spacer
+    /* 0x04 */ const char* text[2];
 } CreditsRoleLine; // size = 0xC
 
 /**
@@ -29,12 +29,12 @@ typedef struct CreditsRoleLine {
  * with duration 0 ends the roll and switches to the Pokemon Stadium logo.
  */
 typedef struct CreditsRolePage {
-    /* 0x00 */ u16 timer;       // frames elapsed on this page, advanced by sFrameDelta
-    /* 0x02 */ u16 duration;    // frames before the next page starts
-    /* 0x04 */ u8 blankFrames;  // trailing frames of the page with no text drawn
+    /* 0x00 */ u16 timer;      // frames elapsed on this page, advanced by sFrameDelta
+    /* 0x02 */ u16 duration;   // frames before the next page starts
+    /* 0x04 */ u8 blankFrames; // trailing frames of the page with no text drawn
     /* 0x05 */ u8 lineCount;
     /* 0x08 */ CreditsRoleLine* lines; // only page 0 is static; later pages are chained at runtime
-} CreditsRolePage; // size = 0xC
+} CreditsRolePage;                     // size = 0xC
 
 /**
  * Orbit camera move used by Credits_InitCameraOrbitBlend. The camera keeps a fixed
@@ -46,9 +46,9 @@ typedef struct CreditsOrbitShot {
     /* 0x02 */ s16 rotationYEnd;
     /* 0x04 */ s8 rotationYDirection; // 1 = increasing rotationY, -1 = decreasing (wraps through 0x10000)
     /* 0x06 */ s16 rotationX;
-    /* 0x08 */ s16 distance;          // eye distance from the orbit center
-    /* 0x0C */ f32 fieldOfView;       // vertical field of view, degrees
-    /* 0x10 */ f32 targetHeight;      // y of the look-at point (x and z are 0 for shots 0-5)
+    /* 0x08 */ s16 distance;     // eye distance from the orbit center
+    /* 0x0C */ f32 fieldOfView;  // vertical field of view, degrees
+    /* 0x10 */ f32 targetHeight; // y of the look-at point (x and z are 0 for shots 0-5)
     /* 0x14 */ f32 nearPlane;
     /* 0x18 */ f32 farPlane;
 } CreditsOrbitShot; // size = 0x1C
@@ -82,6 +82,358 @@ extern u16 sLogoHoldTimer;
 // empty string in US builds. Credits_InitRoleList replaces each text[0] with a string from
 // textdata table 45; text[1] keeps its placeholder. Other regions place these at other addresses.
 //@src/fragments/credits/credits_15AD80.c
+#ifdef VERSION_JP
+extern const char gCreditsLine000En[];
+extern const char gCreditsLine000Jp[];
+extern const char gCreditsLine001En[];
+extern const char gCreditsLine001Jp[];
+extern const char gCreditsLine002En[];
+extern const char gCreditsLine002Jp[];
+extern const char gCreditsLine003En[];
+extern const char gCreditsLine003Jp[];
+extern const char gCreditsLine004En[];
+extern const char gCreditsLine004Jp[];
+extern const char gCreditsLine005En[];
+extern const char gCreditsLine005Jp[];
+extern const char gCreditsLine006En[];
+extern const char gCreditsLine006Jp[];
+extern const char gCreditsLine007En[];
+extern const char gCreditsLine007Jp[];
+extern const char gCreditsLine008En[];
+extern const char gCreditsLine008Jp[];
+extern const char gCreditsLine009En[];
+extern const char gCreditsLine009Jp[];
+extern const char gCreditsLine010En[];
+extern const char gCreditsLine010Jp[];
+extern const char gCreditsLine011En[];
+extern const char gCreditsLine011Jp[];
+extern const char gCreditsLine012En[];
+extern const char gCreditsLine012Jp[];
+extern const char gCreditsLine013En[];
+extern const char gCreditsLine013Jp[];
+extern const char gCreditsLine014En[];
+extern const char gCreditsLine014Jp[];
+extern const char gCreditsLine015En[];
+extern const char gCreditsLine015Jp[];
+extern const char gCreditsLine016En[];
+extern const char gCreditsLine016Jp[];
+extern const char gCreditsLine017En[];
+extern const char gCreditsLine017Jp[];
+extern const char gCreditsLine018En[];
+extern const char gCreditsLine018Jp[];
+extern const char gCreditsLine019En[];
+extern const char gCreditsLine019Jp[];
+extern const char gCreditsLine020En[];
+extern const char gCreditsLine020Jp[];
+extern const char gCreditsLine021En[];
+extern const char gCreditsLine021Jp[];
+extern const char gCreditsLine022En[];
+extern const char gCreditsLine022Jp[];
+extern const char gCreditsLine023En[];
+extern const char gCreditsLine023Jp[];
+extern const char gCreditsLine024En[];
+extern const char gCreditsLine024Jp[];
+extern const char gCreditsLine025En[];
+extern const char gCreditsLine025Jp[];
+extern const char gCreditsLine026En[];
+extern const char gCreditsLine026Jp[];
+extern const char gCreditsLine027En[];
+extern const char gCreditsLine027Jp[];
+extern const char gCreditsLine028En[];
+extern const char gCreditsLine028Jp[];
+extern const char gCreditsLine029En[];
+extern const char gCreditsLine029Jp[];
+extern const char gCreditsLine030En[];
+extern const char gCreditsLine030Jp[];
+extern const char gCreditsLine031En[];
+extern const char gCreditsLine031Jp[];
+extern const char gCreditsLine032En[];
+extern const char gCreditsLine032Jp[];
+extern const char gCreditsLine033En[];
+extern const char gCreditsLine033Jp[];
+extern const char gCreditsLine034En[];
+extern const char gCreditsLine034Jp[];
+extern const char gCreditsLine035En[];
+extern const char gCreditsLine035Jp[];
+extern const char gCreditsLine036En[];
+extern const char gCreditsLine036Jp[];
+extern const char gCreditsLine037En[];
+extern const char gCreditsLine037Jp[];
+extern const char gCreditsLine038En[];
+extern const char gCreditsLine038Jp[];
+extern const char gCreditsLine039En[];
+extern const char gCreditsLine039Jp[];
+extern const char gCreditsLine040En[];
+extern const char gCreditsLine040Jp[];
+extern const char gCreditsLine041En[];
+extern const char gCreditsLine041Jp[];
+extern const char gCreditsLine042En[];
+extern const char gCreditsLine042Jp[];
+extern const char gCreditsLine043En[];
+extern const char gCreditsLine043Jp[];
+extern const char gCreditsLine044En[];
+extern const char gCreditsLine044Jp[];
+extern const char gCreditsLine045En[];
+extern const char gCreditsLine045Jp[];
+extern const char gCreditsLine046En[];
+extern const char gCreditsLine046Jp[];
+extern const char gCreditsLine047En[];
+extern const char gCreditsLine047Jp[];
+extern const char gCreditsLine048En[];
+extern const char gCreditsLine048Jp[];
+extern const char gCreditsLine049En[];
+extern const char gCreditsLine049Jp[];
+extern const char gCreditsLine050En[];
+extern const char gCreditsLine050Jp[];
+extern const char gCreditsLine051En[];
+extern const char gCreditsLine051Jp[];
+extern const char gCreditsLine052En[];
+extern const char gCreditsLine052Jp[];
+extern const char gCreditsLine053En[];
+extern const char gCreditsLine053Jp[];
+extern const char gCreditsLine054En[];
+extern const char gCreditsLine054Jp[];
+extern const char gCreditsLine055En[];
+extern const char gCreditsLine055Jp[];
+extern const char gCreditsLine056En[];
+extern const char gCreditsLine056Jp[];
+extern const char gCreditsLine057En[];
+extern const char gCreditsLine057Jp[];
+extern const char gCreditsLine058En[];
+extern const char gCreditsLine058Jp[];
+extern const char gCreditsLine059En[];
+extern const char gCreditsLine059Jp[];
+extern const char gCreditsLine060En[];
+extern const char gCreditsLine060Jp[];
+extern const char gCreditsLine061En[];
+extern const char gCreditsLine061Jp[];
+extern const char gCreditsLine062En[];
+extern const char gCreditsLine062Jp[];
+extern const char gCreditsLine063En[];
+extern const char gCreditsLine063Jp[];
+extern const char gCreditsLine064En[];
+extern const char gCreditsLine064Jp[];
+extern const char gCreditsLine065En[];
+extern const char gCreditsLine065Jp[];
+extern const char gCreditsLine066En[];
+extern const char gCreditsLine066Jp[];
+extern const char gCreditsLine067En[];
+extern const char gCreditsLine067Jp[];
+extern const char gCreditsLine068En[];
+extern const char gCreditsLine068Jp[];
+extern const char gCreditsLine069En[];
+extern const char gCreditsLine069Jp[];
+extern const char gCreditsLine070En[];
+extern const char gCreditsLine070Jp[];
+extern const char gCreditsLine071En[];
+extern const char gCreditsLine071Jp[];
+extern const char gCreditsLine072En[];
+extern const char gCreditsLine072Jp[];
+extern const char gCreditsLine073En[];
+extern const char gCreditsLine073Jp[];
+extern const char gCreditsLine074En[];
+extern const char gCreditsLine074Jp[];
+extern const char gCreditsLine075En[];
+extern const char gCreditsLine075Jp[];
+extern const char gCreditsLine076En[];
+extern const char gCreditsLine076Jp[];
+extern const char gCreditsLine077En[];
+extern const char gCreditsLine077Jp[];
+extern const char gCreditsLine078En[];
+extern const char gCreditsLine078Jp[];
+extern const char gCreditsLine079En[];
+extern const char gCreditsLine079Jp[];
+extern const char gCreditsLine080En[];
+extern const char gCreditsLine080Jp[];
+extern const char gCreditsLine081En[];
+extern const char gCreditsLine081Jp[];
+extern const char gCreditsLine082En[];
+extern const char gCreditsLine082Jp[];
+extern const char gCreditsLine083En[];
+extern const char gCreditsLine083Jp[];
+extern const char gCreditsLine084En[];
+extern const char gCreditsLine084Jp[];
+extern const char gCreditsLine085En[];
+extern const char gCreditsLine085Jp[];
+extern const char gCreditsLine086En[];
+extern const char gCreditsLine086Jp[];
+extern const char gCreditsLine087En[];
+extern const char gCreditsLine087Jp[];
+extern const char gCreditsLine088En[];
+extern const char gCreditsLine088Jp[];
+extern const char gCreditsLine089En[];
+extern const char gCreditsLine089Jp[];
+extern const char gCreditsLine090En[];
+extern const char gCreditsLine090Jp[];
+extern const char gCreditsLine091En[];
+extern const char gCreditsLine091Jp[];
+extern const char gCreditsLine092En[];
+extern const char gCreditsLine092Jp[];
+extern const char gCreditsLine093En[];
+extern const char gCreditsLine093Jp[];
+extern const char gCreditsLine094En[];
+extern const char gCreditsLine094Jp[];
+extern const char gCreditsLine095En[];
+extern const char gCreditsLine095Jp[];
+extern const char gCreditsLine096En[];
+extern const char gCreditsLine096Jp[];
+extern const char gCreditsLine097En[];
+extern const char gCreditsLine097Jp[];
+extern const char gCreditsLine098En[];
+extern const char gCreditsLine098Jp[];
+extern const char gCreditsLine099En[];
+extern const char gCreditsLine099Jp[];
+extern const char gCreditsLine100En[];
+extern const char gCreditsLine100Jp[];
+extern const char gCreditsLine101En[];
+extern const char gCreditsLine101Jp[];
+extern const char gCreditsLine102En[];
+extern const char gCreditsLine102Jp[];
+extern const char gCreditsLine103En[];
+extern const char gCreditsLine103Jp[];
+extern const char gCreditsLine104En[];
+extern const char gCreditsLine104Jp[];
+extern const char gCreditsLine105En[];
+extern const char gCreditsLine105Jp[];
+extern const char gCreditsLine106En[];
+extern const char gCreditsLine106Jp[];
+extern const char gCreditsLine107En[];
+extern const char gCreditsLine107Jp[];
+extern const char gCreditsLine108En[];
+extern const char gCreditsLine108Jp[];
+extern const char gCreditsLine109En[];
+extern const char gCreditsLine109Jp[];
+extern const char gCreditsLine110En[];
+extern const char gCreditsLine110Jp[];
+extern const char gCreditsLine111En[];
+extern const char gCreditsLine111Jp[];
+extern const char gCreditsLine112En[];
+extern const char gCreditsLine112Jp[];
+extern const char gCreditsLine113En[];
+extern const char gCreditsLine113Jp[];
+extern const char gCreditsLine114En[];
+extern const char gCreditsLine114Jp[];
+extern const char gCreditsLine115En[];
+extern const char gCreditsLine115Jp[];
+extern const char gCreditsLine116En[];
+extern const char gCreditsLine116Jp[];
+extern const char gCreditsLine117En[];
+extern const char gCreditsLine117Jp[];
+extern const char gCreditsLine118En[];
+extern const char gCreditsLine118Jp[];
+extern const char gCreditsLine119En[];
+extern const char gCreditsLine119Jp[];
+extern const char gCreditsLine120En[];
+extern const char gCreditsLine120Jp[];
+extern const char gCreditsLine121En[];
+extern const char gCreditsLine121Jp[];
+extern const char gCreditsLine122En[];
+extern const char gCreditsLine122Jp[];
+extern const char gCreditsLine123En[];
+extern const char gCreditsLine123Jp[];
+extern const char gCreditsLine124En[];
+extern const char gCreditsLine124Jp[];
+extern const char gCreditsLine125En[];
+extern const char gCreditsLine125Jp[];
+extern const char gCreditsLine126En[];
+extern const char gCreditsLine126Jp[];
+extern const char gCreditsLine127En[];
+extern const char gCreditsLine127Jp[];
+extern const char gCreditsLine128En[];
+extern const char gCreditsLine128Jp[];
+extern const char gCreditsLine129En[];
+extern const char gCreditsLine129Jp[];
+extern const char gCreditsLine130En[];
+extern const char gCreditsLine130Jp[];
+extern const char gCreditsLine131En[];
+extern const char gCreditsLine131Jp[];
+extern const char gCreditsLine132En[];
+extern const char gCreditsLine132Jp[];
+extern const char gCreditsLine133En[];
+extern const char gCreditsLine133Jp[];
+extern const char gCreditsLine134En[];
+extern const char gCreditsLine134Jp[];
+extern const char gCreditsLine135En[];
+extern const char gCreditsLine135Jp[];
+extern const char gCreditsLine136En[];
+extern const char gCreditsLine136Jp[];
+extern const char gCreditsLine137En[];
+extern const char gCreditsLine137Jp[];
+extern const char gCreditsLine138En[];
+extern const char gCreditsLine138Jp[];
+extern const char gCreditsLine139En[];
+extern const char gCreditsLine139Jp[];
+extern const char gCreditsLine140En[];
+extern const char gCreditsLine140Jp[];
+extern const char gCreditsLine141En[];
+extern const char gCreditsLine141Jp[];
+extern const char gCreditsLine142En[];
+extern const char gCreditsLine142Jp[];
+extern const char gCreditsLine143En[];
+extern const char gCreditsLine143Jp[];
+extern const char gCreditsLine144En[];
+extern const char gCreditsLine144Jp[];
+extern const char gCreditsLine145En[];
+extern const char gCreditsLine145Jp[];
+extern const char gCreditsLine146En[];
+extern const char gCreditsLine146Jp[];
+extern const char gCreditsLine147En[];
+extern const char gCreditsLine147Jp[];
+extern const char gCreditsLine148En[];
+extern const char gCreditsLine148Jp[];
+extern const char gCreditsLine149En[];
+extern const char gCreditsLine149Jp[];
+extern const char gCreditsLine150En[];
+extern const char gCreditsLine150Jp[];
+extern const char gCreditsLine151En[];
+extern const char gCreditsLine151Jp[];
+extern const char gCreditsLine152En[];
+extern const char gCreditsLine152Jp[];
+extern const char gCreditsLine153En[];
+extern const char gCreditsLine153Jp[];
+extern const char gCreditsLine154En[];
+extern const char gCreditsLine154Jp[];
+extern const char gCreditsLine155En[];
+extern const char gCreditsLine155Jp[];
+extern const char gCreditsLine156En[];
+extern const char gCreditsLine156Jp[];
+extern const char gCreditsLine157En[];
+extern const char gCreditsLine157Jp[];
+extern const char gCreditsLine158En[];
+extern const char gCreditsLine158Jp[];
+extern const char gCreditsLine159En[];
+extern const char gCreditsLine159Jp[];
+extern const char gCreditsLine160En[];
+extern const char gCreditsLine160Jp[];
+extern const char gCreditsLine161En[];
+extern const char gCreditsLine161Jp[];
+extern const char gCreditsLine162En[];
+extern const char gCreditsLine162Jp[];
+extern const char gCreditsLine163En[];
+extern const char gCreditsLine163Jp[];
+extern const char gCreditsLine164En[];
+extern const char gCreditsLine164Jp[];
+extern const char gCreditsLine165En[];
+extern const char gCreditsLine165Jp[];
+extern const char gCreditsLine166En[];
+extern const char gCreditsLine166Jp[];
+extern const char gCreditsLine167En[];
+extern const char gCreditsLine167Jp[];
+extern const char gCreditsLine168En[];
+extern const char gCreditsLine168Jp[];
+extern const char gCreditsLine169En[];
+extern const char gCreditsLine169Jp[];
+extern const char gCreditsLine170En[];
+extern const char gCreditsLine170Jp[];
+extern const char gCreditsLine171En[];
+extern const char gCreditsLine171Jp[];
+extern const char gCreditsLine172En[];
+extern const char gCreditsLine172Jp[];
+extern const char gCreditsLine173En[];
+extern const char gCreditsLine173Jp[];
+extern const char gCreditsLine174En[];
+extern const char gCreditsLine174Jp[];
+#else
 extern char D_86A05B60;
 extern char D_86A05B64;
 extern char D_86A05B68;
@@ -454,14 +806,27 @@ extern char D_86A06120;
 extern char D_86A06124;
 extern char D_86A06128;
 extern char D_86A0612C;
+#if !defined(VERSION_IT)
 extern char D_86A06130;
 extern char D_86A06134;
+#endif
+#if defined(VERSION_ES)
+extern char D_86A06138;
+extern char D_86A0613C;
+#endif
+#endif
 
 // Retrace (video frame) count since the previous Credits_UpdateFrameDelta; every timer steps by it.
 extern u8 sFrameDelta;
 // Selects CreditsRoleLine.text[0] or text[1]; cleared by Credits_InitRoleList and not written
 // elsewhere in this fragment. While 0, Credits_SelectNextScene forces pick 2 to arena 6.
 extern u8 sRoleTextColumn;
+extern u8 sFrameDeltaPrimed;
+extern CreditsRolePage* sCurrentRolePage;
+extern u32 sLastRetraceCount;
+extern FontContext* sFontContext;
+
+extern CreditsRolePage sRolePages[];
 
 // Center for orbit shots 6-8: (0, targetHeight, 0) from sPivotOrbitShots.
 extern Vec3f sOrbitPivot;
@@ -471,7 +836,9 @@ void Credits_InitRoleList(u8 initial_frame_delta, u8 is_round_1, CreditsRolePage
 void Credits_UpdateFrameDelta(void);
 void Credits_DrawRoleList(void);
 
+#ifndef VERSION_JP
 u16 Credits_GetRoleLineCount(void);
+#endif
 
 void Credits_InitCameraKeyframeBlend(CameraNode* camera, u16 duration, s8 arena_index, u8 shot);
 void Credits_StepCameraKeyframeBlend(void);
@@ -482,5 +849,19 @@ void Credits_SelectNextScene(s8* arena_index, u8* shot);
 
 s32 Credits_RandomRange(s32 range);
 void Credits_DrawStadiumLogo(u8 fade_in);
+
+#ifdef VERSION_JP
+extern Mtx sRoleTextProjection;
+extern Vp sRoleTextViewport;
+extern Gfx sRoleTextSetupDL[];
+
+s32 Credits_GetKerning(s32 prev, s32 cur);
+void Credits_GetGlyphTrim(s32 prev, s32 cur, s8* left, s8* right);
+s32 Credits_MeasureText(FontContext* ctx, u8* str);
+void Credits_DrawGlyphQuad(s16 x, s16 y, s16 width, s16 height);
+s32 Credits_DrawGlyph(s32 x, s32 y, s16 c);
+char* Credits_CopyPrintfBytes(char* buffer, const char* data, u32 size);
+void Credits_Printf(s32 x, s32 y, const char* fmt, ...);
+#endif
 
 #endif // _FRAGMENT16_H_

@@ -5,8 +5,18 @@
 // so they differ per version.
 #if defined(VERSION_US_REV2)
 #define TRAINER_DATA_ROM_START 0x895000
+#elif defined(VERSION_PAL_LATE)
+#define TRAINER_DATA_ROM_START 0x876000
 #else
 #define TRAINER_DATA_ROM_START 0x898000
+#endif
+
+// Values the European releases (50 Hz) change from the 60 Hz releases: frame counts and
+// per-frame speeds. Gives `pal` in every VERSION_PAL build and `ntsc` otherwise.
+#if defined(VERSION_PAL)
+#define NTSC_PAL(ntsc, pal) (pal)
+#else
+#define NTSC_PAL(ntsc, pal) (ntsc)
 #endif
 
 #endif

@@ -26,6 +26,98 @@ extern s32 gSoftResetRed;
 extern s32 gSoftResetGreen;
 extern s32 gSoftResetBlue;
 
+#if defined(VERSION_JP)
+/**
+ * Japanese wipe for a 320x240 screen: 30 steps, of which only the even ones clear a line in
+ * each of 16 bands 15 lines apart.
+ */
+void SoftReset_ClearLines320(u16* buf) {
+    int i, j;
+
+    if ((gSoftResetLineNum < 30) && !(gSoftResetLineNum & 1)) {
+        u16* ptr = buf + (gSoftResetLineNum >> 1) * 320;
+
+        for (j = 0; j < 16; j++) {
+            for (i = 0; i < 320; i++) {
+                *ptr++ = 1;
+            }
+            ptr += (320 * 14);
+        }
+        osWritebackDCacheAll();
+    }
+}
+
+/**
+ * Japanese wipe for a 640x480 screen: 30 steps, each clearing one line in each of 16 bands
+ * 30 lines apart.
+ */
+void SoftReset_ClearLines640(u16* buf) {
+    int i, j;
+
+    if (gSoftResetLineNum < 30) {
+        u16* ptr = buf + gSoftResetLineNum * 640;
+
+        for (j = 0; j < 16; j++) {
+            for (i = 0; i < 640; i++) {
+                *ptr++ = 1;
+            }
+            ptr += (640 * 29);
+        }
+        osWritebackDCacheAll();
+    }
+}
+
+/**
+ * Japanese version of the clear-color fade: 30 steps, scaling the color by (29 - step) / 30.
+ */
+void func_8000559C(void) {
+    if (gSoftResetLineNum < 30) {
+        if (gSoftResetLineNum == 0) {
+            s32 color = Display_GetFramebufferClearColor();
+            gSoftResetRed = (color >> 11) & 31;
+            gSoftResetGreen = (color >> 6) & 31;
+            gSoftResetBlue = (color >> 1) & 31;
+        }
+        Display_ClearFramebufferLine(((((gSoftResetRed * (29 - gSoftResetLineNum)) / 30) << 11) |
+                                      (((gSoftResetGreen * (29 - gSoftResetLineNum)) / 30) << 6) |
+                                      (((gSoftResetBlue * (29 - gSoftResetLineNum)) / 30) << 1) | 1) &
+                                         0xFFFF,
+                                     gSoftResetLineNum);
+    }
+}
+
+/**
+ * Japanese soft reset thread: runs the wipe for 30 steps and leaves the screen as it is
+ * afterwards (no osViBlack).
+ */
+void SoftReset_Thread(void* unused) {
+    __osSetFpcCsr(0x01000C01);
+    Sched_AddClient(&D_800A6D20.client);
+
+    while (1) {
+        Sched_WaitClientQueue(&D_800A6D20.client);
+        if (D_800A62E0.unk_A38 == 0) {
+            continue;
+        }
+
+        if (D_800A6D20.gSoftResetLineNum < 30U) {
+            UnkStruct4* temp_v0 = Display_GetWorkerStatus();
+            if (temp_v0 != NULL) {
+                if (temp_v0->unk_04 == 320) {
+                    SoftReset_ClearLines320(temp_v0->unk_08);
+                } else {
+                    SoftReset_ClearLines640(temp_v0->unk_08);
+                }
+            } else if (Display_IsCurrentFramebuffer() != 0) {
+                func_8000559C();
+            } else {
+                SoftReset_ClearLines320(osViGetCurrentFramebuffer());
+            }
+            D_800A6D20.gSoftResetLineNum++;
+        }
+    }
+}
+#else
 /**
  * Perform the horizontal framebuffer wipe across 15 different lines for a
  * screen with 320x240 resolution.
@@ -135,6 +227,8 @@ void SoftReset_Thread(void* unused) {
         D_800A6D20.gSoftResetLineNum++;
     }
 }
+
+#endif
 
 /**
  * Create the soft reset effect thread.

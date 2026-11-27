@@ -44,7 +44,7 @@ const char D_8007C5A4[0x4] = "";
 const char D_8007C5A8[0x4] = "";
 const char D_8007C5AC[0x4] = "";
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE))
 // Prints an Mtx as 8 rows of 2 hex words via rmonPrintf.
 void Debug_PrintMtx(s32 arg0) {
     s32 i;

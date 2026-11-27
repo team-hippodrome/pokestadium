@@ -1053,9 +1053,11 @@ void BattleAnim_SetupSwiftHitEffect1(Particle* arg0) {
     Vec3s sp28;
 
     Particle_Scale_SetScaled(arg0, 0.1f);
+#if !defined(VERSION_JP)
     if (arg0->origin.y < 0.0f) {
         arg0->origin.y = 0.0f;
     }
+#endif
     sp28.x = ParticleMath_RandomRange(0x10000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = 0;
@@ -1154,9 +1156,11 @@ void BattleAnim_SetupSparkleUse(Particle* arg0) {
             break;
 
         case 1:
+#if !defined(VERSION_JP)
             if (arg0->origin.y < 0) {
                 arg0->origin.y = 0;
             }
+#endif
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x28, 0xA));
             Particle_SetScaleParameter20(arg0, 0.3f);
             Particle_SetScaleParameter24(arg0, 0.04f);

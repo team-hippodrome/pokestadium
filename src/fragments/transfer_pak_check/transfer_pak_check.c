@@ -1382,33 +1382,73 @@ void PakUi_DrawTitleHeader(s16 arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+// The German, Italian and Spanish releases keep the party card badges and header at other
+// segment 3 offsets.
+#if defined(VERSION_DE) || defined(VERSION_IT)
+extern u8 D_300CA60[];
+extern u8 D_300DC60[];
+extern u8 D_300EE60[];
+extern u8 D_3010060[];
+extern u8 D_3011260[];
+extern u8 D_3007C40[];
+#define PARTY_BADGE_0 D_3010060
+#define PARTY_BADGE_1 D_300EE60
+#define PARTY_BADGE_2 D_300DC60
+#define PARTY_BADGE_3 D_300CA60
+#define PARTY_BADGE_7 D_3011260
+#define PARTY_CARD_HEADER D_3007C40
+#elif defined(VERSION_ES)
+extern u8 D_3005840[];
+extern u8 D_3006A40[];
+extern u8 D_3007C40[];
+extern u8 D_3008E40[];
+extern u8 D_300A040[];
+extern u8 D_3000A20[];
+#define PARTY_BADGE_0 D_3008E40
+#define PARTY_BADGE_1 D_3007C40
+#define PARTY_BADGE_2 D_3006A40
+#define PARTY_BADGE_3 D_3005840
+#define PARTY_BADGE_7 D_300A040
+#define PARTY_CARD_HEADER D_3000A20
+#elif defined(VERSION_JP)
+// Segment 3 holds a different asset at 0x3004E20 than the one fragment17 names D_3004E20.
+#define PARTY_BADGE_0 D_3008420
+#define PARTY_BADGE_1 D_3007220
+#define PARTY_BADGE_2 D_3006020
+#define PARTY_BADGE_3 D_03004E20_jp
+#define PARTY_BADGE_7 D_3009620
+#define PARTY_CARD_HEADER D_3000000
+#else
+#define PARTY_BADGE_0 D_3008420
+#define PARTY_BADGE_1 D_3007220
+#define PARTY_BADGE_2 D_3006020
+#define PARTY_BADGE_3 D_3004E20
+#define PARTY_BADGE_7 D_3009620
+#define PARTY_CARD_HEADER D_3000000
+#endif
+
 void PakUi_DrawPartyCardBadge(s32 arg0) {
     u8* var_t0;
 
     switch (D_82D0AB38[arg0].unk_01) {
         default:
-            var_t0 = D_3008420;
+            var_t0 = PARTY_BADGE_0;
             break;
 
         case 1:
-            var_t0 = D_3007220;
+            var_t0 = PARTY_BADGE_1;
             break;
 
         case 2:
-            var_t0 = D_3006020;
+            var_t0 = PARTY_BADGE_2;
             break;
 
         case 3:
-#if defined(VERSION_JP)
-            // Segment 3 holds a different asset at 0x3004E20 than the one fragment17 names D_3004E20.
-            var_t0 = D_03004E20_jp;
-#else
-            var_t0 = D_3004E20;
-#endif
+            var_t0 = PARTY_BADGE_3;
             break;
 
         case 7:
-            var_t0 = D_3009620;
+            var_t0 = PARTY_BADGE_7;
             break;
     }
 
@@ -1424,7 +1464,7 @@ void PakUi_DrawPartyCardList(u8 arg0) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, arg0);
 
-    Gfx_DrawTextureRgba16(0xC, 0x60, 0x64, 0x14, D_3000000, 0x64, 0);
+    Gfx_DrawTextureRgba16(0xC, 0x60, 0x64, 0x14, PARTY_CARD_HEADER, 0x64, 0);
     Gfx_DrawTextureRgba16(0xC, 0x74, 0x64, 0x14, D_3000FA0, 0x64, 0);
     Gfx_DrawTextureRgba16(0xC, 0x88, 0x64, 0x14, D_3001F40, 0x64, 0);
     Gfx_DrawTextureRgba16(0xC, 0x9C, 0x64, 0x14, D_3002EE0, 0x64, 0);
@@ -2493,6 +2533,14 @@ static unk_D_82D09F1C D_82D09F1C[] = {
     { 56, 180, 160, 80, 0xFF, 0xFF, 0xFF, 0x00 },   { 56, 224, 160, 36, 0xFF, 0x06, 0xFF, 0xFF },
     { 56, 276, 160, 36, 0x05, 0xFF, 0xFF, 0xFF },
 };
+#elif defined(VERSION_PAL)
+// PAL takes the first three entries from JP (menu icon 2 sits below icon 0) and entry 3 from US.
+static unk_D_82D09F1C D_82D09F1C[] = {
+    { 240, 120, 160, 140, 0xFF, 0x02, 0x04, 0x01 }, { 424, 180, 160, 80, 0xFF, 0xFF, 0x00, 0xFF },
+    { 240, 284, 160, 36, 0x00, 0xFF, 0xFF, 0xFF },  { 240, 276, 160, 52, 0x00, 0xFF, 0xFF, 0x02 },
+    { 56, 180, 160, 80, 0xFF, 0xFF, 0xFF, 0x00 },   { 56, 224, 160, 36, 0xFF, 0x06, 0xFF, 0xFF },
+    { 56, 276, 160, 36, 0x05, 0xFF, 0xFF, 0xFF },
+};
 #else
 static unk_D_82D09F1C D_82D09F1C[] = {
     {
@@ -3078,7 +3126,14 @@ void TransferPak_MenuIconsInit(void) {
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[0].position, -84.0f, 48.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[1].position, 100.0f, 18.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[3].position, -84.0f, -64.0f, -579.0f);
+#if defined(VERSION_PAL)
+    // PAL draws slot 2 (string 0x41) at slot 3's position and clears bit 0 of slot 3's node flags,
+    // as ModelRenderer_AttachDisplayObject does. //@src/model_renderer.c
+    Vec3f_SetComponentsDuplicate(&D_82D09FF8[2].position, -84.0f, -64.0f, -579.0f);
+    D_82D09FF8[3].node.flags &= ~1;
+#else
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[2].position, 100.0f, -64.0f, -579.0f);
+#endif
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[4].position, -268.0f, 18.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[5].position, -268.0f, -4.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_82D09FF8[6].position, -268.0f, -56.0f, -579.0f);

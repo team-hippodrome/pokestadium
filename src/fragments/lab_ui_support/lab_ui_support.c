@@ -9,10 +9,18 @@
 #include "src/memory.h"
 
 s32 LabUI_ConfirmDialogHandleInput(unk_func_889000C4*, Controller*);
+#if defined(VERSION_JP)
+void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044*, MemoryPool*);
+#else
 void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044*, char**, unk_func_889000C4*, MemoryPool*);
+#endif
 void LabUI_SetSavingStatusMessage(unk_func_889000C4_044*, s32);
 void LabUI_ShowSavingStatusWidget(unk_func_889000C4_044*);
 void LabUI_HideSavingStatusWidget(unk_func_889000C4_044*);
+
+#if defined(VERSION_JP)
+typedef void (*LabUIBuildSavingStatusWidgetFunc)(unk_func_889000C4_044*, MemoryPool*);
+#endif
 
 typedef struct unk_D_88901178 {
     /* 0x00 */ u16 unk_00;
@@ -21,6 +29,16 @@ typedef struct unk_D_88901178 {
 
 static Color_RGBA8 D_88901170[] = { { 0xF0, 0xF0, 0xF0, 0xFF }, { 0xF0, 0xF0, 0xF0, 0x4D } };
 
+#if defined(VERSION_JP)
+static char* sConfirmDialogOptions[] = {
+    // "Save and quit"
+    "レポートしてやめる",
+    // "Quit without saving"
+    "レポートしないでやめる",
+    // "Cancel"
+    "キャンセル",
+};
+#else
 static unk_D_88901178 D_88901178[] = {
     {
         0x0003,
@@ -47,6 +65,7 @@ static unk_D_88901178 D_88901178[] = {
         0x00000010,
     },
 };
+#endif
 
 static Color_RGBA8 D_889011A8 = { 0x64, 0x96, 0xB4, 0xFF };
 static Color_RGBA8 D_889011AC = { 0x3C, 0x64, 0x78, 0xFF };
@@ -58,8 +77,10 @@ static Color_RGBA8 D_889011C0 = { 0x74, 0x87, 0xB2, 0xFF };
 static Color_RGBA8 D_889011C4 = { 0x58, 0x08, 0x00, 0xFF };
 static Color_RGBA8 D_889011C8 = { 0xFF, 0xFF, 0xFF, 0xFF };
 static Color_RGBA8 D_889011CC = { 0xFF, 0xF1, 0x78, 0xFF };
+#if !defined(VERSION_JP)
 static char D_889011D0[] = "";
 static char D_889011D4[] = "";
+#endif
 
 void LabUI_DrawConfirmOptionLabel(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4,
                                   UNUSED unk_func_88200FA0_030_030* arg5) {
@@ -76,6 +97,98 @@ void LabUI_DrawConfirmOptionLabel(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg
     Font_EndTexturedTextRendering();
 }
 
+#if defined(VERSION_JP)
+void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 x, s32 y, s32 hide_cancel, WidgetNode* arg4,
+                              MemoryPool* arg5) {
+    s32 option_count;
+    UNUSED s32 pad[4];
+    s32 height;
+    unk_func_8850B254* border;
+    unk_func_8850878C* changed_label;
+    unk_func_8850878C* no_party_label;
+    unk_func_8850878C* saving_label;
+    unk_func_885012A4* options_background;
+    unk_func_88503298* gate_bridge;
+
+    if (hide_cancel != 0) {
+        option_count = 2;
+    } else {
+        option_count = 3;
+    }
+
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_889000C4));
+    arg0->unk_00.unk_20 = LabUI_ConfirmDialogHandleInput;
+    arg0->unk_00.unk_10.unk_00 = x;
+    arg0->unk_00.unk_10.unk_02 = y;
+
+    arg0->unk_2C = mem_pool_alloc(arg5, sizeof(unk_func_889000C4_02C));
+    height = (option_count * 0x1C) + 0x38;
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(&arg0->unk_2C->unk_00, 0, 0, 236, height);
+    arg0->unk_2C->unk_00.unk_28 |= 0x200;
+    arg0->unk_2C->unk_00.unk_28 |= 0x400;
+    arg0->unk_2C->unk_00.unk_28 &= ~1;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00);
+
+    border = mem_pool_alloc(arg5, sizeof(unk_func_8850B254));
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(border, 0, 0, 236, 0x2C, D_889011A8,
+                                                                              D_889011AC);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &border->unk_00.unk_00);
+
+    arg0->unk_40 = mem_pool_alloc(arg5, sizeof(unk_func_88500994));
+    ((func88500994)Memmap_GetFragmentVaddr(WidgetTree_InitPagedContainer))(arg0->unk_40, 0, 0);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&border->unk_00.unk_00,
+                                                                    &arg0->unk_40->unk_00.unk_00);
+
+    changed_label = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
+    // "The contents\nhave been changed"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(changed_label, 8, 0,
+                                                                      "ないようが\nへんこうされています", 8);
+    changed_label->unk_3C = 0x18;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &changed_label->unk_00);
+
+    no_party_label = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
+    // "There are no Pokémon\nin your party"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(no_party_label, 8, 0,
+                                                                      "てもちにポケモンが\nいっぴきもいません", 8);
+    no_party_label->unk_3C = 0x18;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &no_party_label->unk_00);
+
+    saving_label = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
+    // "Saving..."
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(saving_label, 26, 10, "レポートちゅう", 0x10);
+    saving_label->unk_30 = (0, D_889011B0);
+    saving_label->unk_44 = saving_label->unk_44;
+    saving_label->unk_34 = (0, D_889011B4);
+    saving_label->unk_44 = 1;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_40, &saving_label->unk_00);
+
+    options_background = mem_pool_alloc(arg5, sizeof(unk_func_885012A4));
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(options_background, 0, 0x30, 236, height - 0x30,
+                                                                       D_889011B8);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &options_background->unk_00.unk_00);
+
+    arg0->unk_30 = mem_pool_alloc(arg5, sizeof(unk_func_88200FA0_030_030));
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabUI_DrawConfirmOptionLabel,
+                                                                      236, 0x1C, option_count, 1, arg5);
+    PointerList_Initialize(&arg0->unk_34, (void**)sConfirmDialogOptions, option_count, option_count);
+    ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_34, arg5);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&options_background->unk_00.unk_00,
+                                                                    &arg0->unk_30->unk_00.unk_00);
+
+    if (arg4 != NULL) {
+        gate_bridge = mem_pool_alloc(arg5, sizeof(unk_func_88503298));
+        ((func88503298)Memmap_GetFragmentVaddr(WidgetTree_InitVisibilityGateBridge))(gate_bridge, arg0->unk_2C, arg4);
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00,
+                                                                        &gate_bridge->unk_00.unk_00);
+    }
+
+    arg0->unk_44 = mem_pool_alloc(arg5, sizeof(unk_func_889000C4_044));
+    ((LabUIBuildSavingStatusWidgetFunc)Memmap_GetFragmentVaddr(LabUI_BuildSavingStatusWidget))(arg0->unk_44, arg5);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_44->unk_00.unk_00);
+}
+#else
 void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 arg1, WidgetAnimatedPanel* arg2, WidgetNode* arg3,
                               char** arg4, MemoryPool* arg5) {
     UNUSED s32 pad[3];
@@ -180,6 +293,7 @@ void LabUI_BuildConfirmDialog(unk_func_889000C4* arg0, s32 arg1, WidgetAnimatedP
     LabUI_BuildSavingStatusWidget(arg0->unk_44, arg4, arg0, arg5);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_44->unk_00.unk_00);
 }
+#endif
 
 void LabUI_OpenConfirmDialog(unk_func_889000C4* arg0, s32 arg1) {
     if (arg1 != 0) {
@@ -291,6 +405,95 @@ void LabUI_ShowSavingPrompt(unk_func_889000C4* arg0, s32 arg1) {
     GbSave_RequirePakPresent(arg1);
 }
 
+#if defined(VERSION_JP)
+void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, MemoryPool* arg3) {
+    UNUSED s32 pad[4];
+    unk_func_885012A4* sp4C;
+    unk_func_8850878C* sp48;
+    unk_func_8850878C* sp44;
+    unk_func_8850878C* sp40;
+    unk_func_8850878C* sp3C;
+
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_889000C4_044));
+    // FAKE: the comma expression keeps the original store order.
+    arg0->unk_00.unk_10.unk_00 = -0x56, arg0->unk_00.unk_10.unk_02 = -0x35;
+
+    arg0->unk_2C = mem_pool_alloc(arg3, sizeof(unk_func_889000C4_044_02C));
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, 0x198, 0x108);
+    arg0->unk_2C->unk_00.unk_28 |= 0x200;
+    arg0->unk_2C->unk_00.unk_28 |= 0x400;
+    arg0->unk_2C->unk_00.unk_28 &= ~1;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00);
+
+    sp4C = mem_pool_alloc(arg3, sizeof(unk_func_885012A4));
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(sp4C, 0, 0, 0x198, 0x108, D_889011C4);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00, &sp4C->unk_00.unk_00);
+
+    arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_88500994));
+    ((func88500994)Memmap_GetFragmentVaddr(WidgetTree_InitPagedContainer))(arg0->unk_30, 0, 0);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp4C->unk_00.unk_00, &arg0->unk_30->unk_00.unk_00);
+
+    sp48 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    // "Saving..."
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp48, 0x78, 0x30, "レポートちゅう", 0x10);
+    sp48->unk_30 = (0, D_889011C8);
+    sp48->unk_44 = sp48->unk_44;
+    sp48->unk_34 = (0, D_889011CC);
+    sp48->unk_44 = 1;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_30, &sp48->unk_00);
+
+    sp44 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp44, 0, 0x30, "", 0x10);
+    sp44->unk_30 = (0, D_889011C8);
+    sp44->unk_44 = sp44->unk_44;
+    sp44->unk_34 = (0, D_889011CC);
+    sp44->unk_44 = 1;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_30, &sp44->unk_00);
+
+    sp40 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    // "Could not save"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp40, 0x3C, 0x30, "レポートできませんでした",
+                                                                      0x10);
+    sp40->unk_30 = (0, D_889011C8);
+    sp40->unk_44 = sp40->unk_44;
+    sp40->unk_34 = (0, D_889011CC);
+    sp40->unk_44 = 1;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_30, &sp40->unk_00);
+
+    sp3C = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    // "The Game Pak is different, or\nthe data has changed"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        sp3C, 0xC, 0xC, "カートリッジがちがいます または\nデータが かわってしまいました", 0x10);
+    sp3C->unk_3C = 0x1C;
+    sp3C->unk_30 = (0, D_889011C8);
+    sp3C->unk_44 = sp3C->unk_44;
+    sp3C->unk_34 = (0, D_889011CC);
+    sp3C->unk_44 = 1;
+    ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_30, &sp3C->unk_00);
+
+    arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    // "Without turning off the power,"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_34, 0xB4, 0x78, "でんげんをきらずに",
+                                                                      0x10);
+    arg0->unk_34->unk_30 = (0, D_889011C8);
+    arg0->unk_34->unk_44 = arg0->unk_34->unk_44;
+    arg0->unk_34->unk_34 = (0, D_889011CC);
+    arg0->unk_34->unk_44 = 1;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &arg0->unk_34->unk_00.unk_00);
+
+    arg0->unk_38 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    // "remove the Game Boy Game Pak from the N64,\n clean its connector, and\n insert it again"
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        arg0->unk_38, 0xC, 0x78,
+        "６４ほんたいの\nゲームボーイのカートリッジをぬき\n コネクタぶをきれいにしてから\n "
+        "もういちどセットしてください",
+        0x10);
+    arg0->unk_38->unk_3C = 0x24;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
+                                                                    &arg0->unk_38->unk_00.unk_00);
+}
+#else
 void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk_func_889000C4* arg2,
                                    MemoryPool* arg3) {
     UNUSED s32 pad[2];
@@ -373,6 +576,7 @@ void LabUI_BuildSavingStatusWidget(unk_func_889000C4_044* arg0, char** arg1, unk
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00.unk_00,
                                                                     &arg0->unk_38->unk_00.unk_00);
 }
+#endif
 
 void LabUI_ShowSavingStatusWidget(unk_func_889000C4_044* arg0) {
     arg0->unk_2C->unk_00.unk_28 |= 1;

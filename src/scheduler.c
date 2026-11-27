@@ -222,9 +222,13 @@ void Sched_HandleRetrace(void) {
     if ((D_800A62E0.unk_A38 > 0) && (D_800A62E0.unk_A38 < 0x1E)) {
         D_800A62E0.unk_A38++;
         if (D_800A62E0.unk_A38 == 0x1A) {
+#if defined(VERSION_JP)
+            osAfterPreNMI();
+#else
             while (osAfterPreNMI() != 0) {
                 IO_WRITE(SP_STATUS_REG, 0x8000);
             }
+#endif
         }
     }
 

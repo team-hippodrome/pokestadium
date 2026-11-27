@@ -139,8 +139,8 @@ void GbAudio_InitOutput(void) {
             ++bss_cursor;
         } while ((s32)remaining >= 0);
     }
-    D_812346D8 = 16.713f;
-    sGbAudioFrameRate = 0x3C;
+    D_812346D8 = NTSC_PAL(16.713f, 20.03042f);
+    sGbAudioFrameRate = NTSC_PAL(60, 50);
     do {
     } while (0);
     sGbAudioOutputConfig.frequency = 0xBB80;

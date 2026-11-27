@@ -1,0 +1,54 @@
+#include "dynamo_game.h"
+#include "src/fragments/minigame_shared_library/minigame_shared_library.h"
+
+s8 DynamoGame_RollAIChargeBias(s32 arg0, s32 arg1) {
+    static u16 D_86502EA0[4][8] = {
+        { 0x0001, 0x0001, 0x0001, 0x0032, 0x0032, 0x0005, 0x0000, 0x0000 },
+        { 0x0000, 0x0001, 0x0001, 0x0005, 0x0032, 0x0032, 0x0001, 0x0000 },
+        { 0x0000, 0x0000, 0x0001, 0x0001, 0x0005, 0x005A, 0x001E, 0x0005 },
+        { 0x0000, 0x0000, 0x0000, 0x0000, 0x0005, 0x001E, 0x005A, 0x000A },
+    };
+
+    static u16 D_86502EE0[4][13] = {
+        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x0005, 0x0003, 0x0001, 0x0000, 0x0000, 0x0000 },
+        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x0005, 0x0003, 0x0001, 0x0000, 0x0000 },
+        { 0x0003, 0x0006, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x000A, 0x0007, 0x0005, 0x0003, 0x0001 },
+        { 0x0000, 0x0003, 0x0006, 0x000A, 0x0014, 0x0014, 0x0014, 0x0014, 0x000A, 0x000A, 0x0007, 0x0005, 0x0003 },
+    };
+
+    u8 i;
+    u16 var_a0;
+    u16 var_a2;
+    u16* sp24;
+    s8 sp23;
+    u8 sp22;
+    u16 temp_v0;
+
+    if (arg1 == 0) {
+        sp24 = D_86502EA0[arg0];
+        sp23 = -1;
+        sp22 = 8;
+    } else if (arg1 == 1) {
+        sp24 = D_86502EE0[arg0];
+        sp23 = -8;
+        sp22 = 0xD;
+    }
+
+    var_a0 = 0;
+
+    for (i = 0; i < sp22; i++) {
+        var_a0 += sp24[i];
+    }
+
+    temp_v0 = MiniGame_RandomRange(var_a0);
+
+    var_a2 = 0;
+    for (i = 0; i < sp22; i++) {
+        if ((temp_v0 >= var_a2) && (temp_v0 < (sp24[i] + var_a2))) {
+            return i + sp23;
+        }
+        var_a2 += sp24[i];
+    }
+
+    return 0;
+}

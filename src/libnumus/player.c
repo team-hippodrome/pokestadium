@@ -482,6 +482,12 @@ u8* Audio_AllocateSubVoiceFromCommand(channel_t* cp, u8* ptr) {
             sp->fx_bank = cp->fx_bank;
             sp->duration = cp->duration;
             sp->duration_scale = cp->duration_scale;
+#if defined(VERSION_PAL)
+            // PAL voices also inherit the tempo scale, tempo and pitch offset.
+            sp->temscale = cp->temscale;
+            sp->channel_tempo = cp->channel_tempo;
+            sp->freqoffset = cp->freqoffset;
+#endif
             sp->pdata = sp->pbase = fx_data[num];
             break;
         }
@@ -525,6 +531,12 @@ u8* Audio_AllocateVoiceFromCommand(channel_t* cp, u8* ptr) {
             sp->fx_bank = cp->fx_bank;
             sp->duration = cp->duration;
             sp->duration_scale = cp->duration_scale;
+#if defined(VERSION_PAL)
+            // PAL voices also inherit the tempo scale, tempo and pitch offset.
+            sp->temscale = cp->temscale;
+            sp->channel_tempo = cp->channel_tempo;
+            sp->freqoffset = cp->freqoffset;
+#endif
             sp->pdata = sp->pbase = fx_data[num];
             break;
         }
@@ -559,11 +571,15 @@ s32 Audio_InitializeVoiceManager(musConfig* config) {
 
     sp4C.outputRate = osAiSetFrequency(config->syn_output_rate);
     max_channels = config->channels;
+#if defined(VERSION_PAL)
+    mus_vsyncs_per_second = 50;
+#else
     if (osTvType == OS_TV_PAL) {
         mus_vsyncs_per_second = 50;
     } else {
         mus_vsyncs_per_second = 60;
     }
+#endif
     mus_next_frame_time = 1000000 / mus_vsyncs_per_second;
 
     Audio_FillBytes(config->heap, 0, config->heap_length);
@@ -1885,6 +1901,12 @@ s32 Audio_ComputeVoiceVolume(channel_t* cp) {
     u32 volume = cp->volume * cp->env_current_vol * cp->velocity * cp->volume_scale;
 
     volume >>= 0xD;
+#if defined(VERSION_PAL)
+    // PAL also clamps the volume before the master volume is applied.
+    if (volume >= 0x8000) {
+        volume = 0x7FFF;
+    }
+#endif
     if (cp->IsFX == 0) {
         volume *= mus_master_volume_songs;
     } else {

@@ -65,6 +65,7 @@ static s16 D_82608552;
 static s16 D_82608554;
 static s16 D_82608556;
 static CameraNode* D_82608558;
+static FontContext* sHallOfFameFont;
 static s32 pad_D_82608560[2];
 static u16 D_82608568[151][0x640];
 static s16 D_8267E4E8;
@@ -76,55 +77,79 @@ static f32 D_8267E4F8[150];
 static s32 D_8267E750;
 static s32 D_8267E754;
 static s32 D_8267E758;
+#if !defined(VERSION_JP)
 static char** sHallOfFameText;
 char** gVictoryPokemonNames;
+#endif
 
-static u32 D_82603E80[] = {
-    0xA4CAA4DE, 0xA4A80000, 0xA5ECA5D9, 0xA5EB0000, 0xA4AAA4E4, 0x00000000, 0xA4C7A4F3, 0xA4C9A4A6, 0xA4A4A4EA,
-    0x00000000, 0xA1D6A5A4, 0xA5A8A5ED, 0xA1BCA5AB, 0xA5C3A5D7, 0xA1D70000, 0xA5C0A5DF, 0xA1BCA4AF, 0xA4F30000,
-    0xA5C0A5DF, 0xA1BCA4AA, 0xA4E40000, 0xA5C0A5DF, 0xA1BCA5C7, 0xA1BCA5BF, 0xA4F2A1A2, 0xA4ABA4AD, 0xA4B3A4DF,
-    0xA4DEA4B9, 0xA4ABA1A9, 0x0AA1CAA4, 0xCFA4A4A1, 0xA6A1A641, 0xA1A1A4A4, 0xA4A4A4A8, 0xA1A6A1A6, 0x42A1CB00,
-    0xA5C7A1BC, 0xA5BFA4F2, 0xA1A2A4B1, 0xA4B7A4DE, 0xA4B9A4AB, 0xA1A90AA1, 0xCAA4CFA4, 0xA4A1A6A1, 0xA641A1A1,
-    0xA4A4A4A4, 0xA4A8A1A6, 0xA1A642A1, 0xCB000000, 0xA4D4A4AD, 0xA4BDA4ED, 0xA4A4A4DE, 0xA4B7A4BF, 0xA1A30000,
-    0xA4AAA4E1, 0xA4C7A4C8, 0xA4A6A4B4, 0xA4B6A4A4, 0xA4DEA4B9, 0xA1A30000, 0xA5C8A5EC, 0xA1BCA5CA, 0xA1BC0000,
-    0xA5ECA5F3, 0xA5BFA5EB, 0x00000000, 0xA3B1A3B5, 0xA3B1A4D4, 0xA4ADA4CE, 0xA5C0A5DF, 0xA1BCA5C7, 0xA1BCA5BF,
-    0xA4F2A1A2, 0xA4ABA4AD, 0xA4B3A4DF, 0xA4DEA4B9, 0xA4ABA1A9, 0x0AA1CAA4, 0xCFA4A4A1, 0xA6A1A641, 0xA1A1A4A4,
-    0xA4A4A4A8, 0xA1A6A1A6, 0x42A1CB00, 0xA3B1A3B5, 0xA3B1A4D4, 0xA4ADA4CE, 0xA5C7A1BC, 0xA5BFA4F2, 0xA1A2A4B1,
-    0xA4B7A4DE, 0xA4B9A4AB, 0xA1A90AA1, 0xCAA4CFA4, 0xA4A1A6A1, 0xA641A1A1, 0xA4A4A4A4, 0xA4A8A1A6, 0xA1A642A1,
-    0xCB000000, 0x64756D6D, 0x792D6B75, 0x6E6E0000, 0x64756D6D, 0x792D6F79, 0x61000000, 0x77696C6C, 0x20796F75,
-    0x20777269, 0x74652064, 0x756D6D79, 0x20646174, 0x613F0A28, 0x7965732E, 0x2E2E4120, 0x6E6F2E2E, 0x2E422900,
-    0x77696C6C, 0x20796F75, 0x20657261, 0x73652064, 0x6174613F, 0x0A287965, 0x732E2E2E, 0x41206E6F, 0x2E2E2E42,
-    0x29000000, 0x77696C6C, 0x20796F75, 0x20777269, 0x74652031, 0x35312064, 0x756D6D79, 0x20646174, 0x613F0A28,
-    0x7965732E, 0x2E2E4120, 0x6E6F2E2E, 0x2E422900, 0x77696C6C, 0x20796F75, 0x20657261, 0x73652031, 0x35312064,
-    0x6174613F, 0x0A287965, 0x732E2E2E, 0x41206E6F, 0x2E2E2E42, 0x29000000, 0x74726169, 0x6E657200,
-};
-static u32 D_826040E0[] = {
-    0xA5CBA5F3, 0xA5C6A5F3, 0xA5C9A5A6, 0xA5ABA5C3, 0xA5D7A1A1, 0xA3B9A3B7, 0x00000000,
-};
-static u32 D_826040FC[] = {
-    0xA5CBA5F3, 0xA5C6A5F3, 0xA5C9A5A6, 0xA5ABA5C3, 0xA5D7A1A1, 0xA3B9A3B8, 0x00000000,
-};
-static u32 D_82604118[] = {
-    0xA5CBA5F3, 0xA5C6A5F3, 0xA5C9A5A6, 0xA5ABA5C3, 0xA5D7A1A1, 0xA3B9A3B9, 0x00000000,
-};
-static u32 D_82604134[] = {
-    0xA5D5A5A1, 0xA5F3A5B7, 0xA1BCA5AB, 0xA5C3A5D7, 0x00000000,
-};
-static u32 D_82604148[] = {
-    0xA5A4A5A8,
-    0xA5EDA1BC,
-    0xA5ABA5C3,
-    0xA5D70000,
-};
-static u32 D_82604158[] = {
-    0xA5A6A5EB,
-    0xA5C8A5E9,
-    0xA5ABA5C3,
-    0xA5D70000,
-};
-static u32 D_82604168[] = {
-    0xA5B8A5E0, 0xA5EAA1BC, 0xA5C0A1BC, 0xA4CEA4B7, 0xA4ED0000, 0xA1C70000,
-};
+#if defined(VERSION_JP)
+#define VICTORY_PALACE_DISPLAY_LIST_SIZE 0x10000
+#define VICTORY_PALACE_GRID_PANEL_BOTTOM 0xDA
+#define VICTORY_PALACE_LETTER_SPACING -2
+#else
+#define VICTORY_PALACE_DISPLAY_LIST_SIZE 0x20000
+#define VICTORY_PALACE_GRID_PANEL_BOTTOM 0xDC
+#define VICTORY_PALACE_LETTER_SPACING 0
+#endif
+
+// Hall of Fame labels, prompts and cup names. JP prints these directly; the other versions keep
+// them as unused data and take their text from message file 0x1F.
+// "Name"
+static char sHallOfFameNameLabel[] = "なまえ";
+// "Level"
+static char sHallOfFameLevelLabel[] = "レベル";
+// "OT"
+static char sHallOfFameTrainerLabel[] = "おや";
+// "Hall of Fame"
+static char sHallOfFameInductedLabel[] = "でんどういり";
+// "Yellow Cup" (in brackets)
+static char sHallOfFameDummyCupName[] = "「イエローカップ」";
+// "Dummy-kun"
+static char sHallOfFameDummyNickname[] = "ダミーくん";
+// "Dummy OT"
+static char sHallOfFameDummyTrainer[] = "ダミーおや";
+// "Write dummy data?\n(Yes...A  No...B)"
+static char sHallOfFameWriteDummyPrompt[] = "ダミーデータを、かきこみますか？\n（はい・・A　いいえ・・B）";
+// "Erase the data?\n(Yes...A  No...B)"
+static char sHallOfFameEraseDataPrompt[] = "データを、けしますか？\n（はい・・A　いいえ・・B）";
+// "Pokémon collected." (follows the count)
+static char sHallOfFameCaughtCountSuffix[] = "ぴきそろいました。";
+// "Congratulations."
+static char sHallOfFameCongratulations[] = "おめでとうございます。";
+// "Trainer"
+static char sHallOfFamePlayerTrainerName[] = "トレーナー";
+// "Rental"
+static char sHallOfFameRentalLabel[] = "レンタル";
+// "Write dummy data for all 151?\n(Yes...A  No...B)"
+static char sHallOfFameWrite151DummyPrompt[] =
+    "１５１ぴきのダミーデータを、かきこみますか？\n（はい・・A　いいえ・・B）";
+// "Erase the data for all 151?\n(Yes...A  No...B)"
+static char sHallOfFameErase151Prompt[] = "１５１ぴきのデータを、けしますか？\n（はい・・A　いいえ・・B）";
+#if !defined(VERSION_JP)
+static char sHallOfFameDummyNicknameEn[] = "dummy-kunn";
+static char sHallOfFameDummyTrainerEn[] = "dummy-oya";
+static char sHallOfFameWriteDummyPromptEn[] = "will you write dummy data?\n(yes...A no...B)";
+static char sHallOfFameEraseDataPromptEn[] = "will you erase data?\n(yes...A no...B)";
+static char sHallOfFameWrite151DummyPromptEn[] = "will you write 151 dummy data?\n(yes...A no...B)";
+static char sHallOfFameErase151PromptEn[] = "will you erase 151 data?\n(yes...A no...B)";
+static char sHallOfFamePlayerTrainerNameEn[] = "trainer";
+#endif
+// "Nintendo Cup 97"
+static char D_826040E0[] = "ニンテンドウカップ　９７";
+// "Nintendo Cup 98"
+static char D_826040FC[] = "ニンテンドウカップ　９８";
+// "Nintendo Cup 99"
+static char D_82604118[] = "ニンテンドウカップ　９９";
+// "Fancy Cup"
+static char D_82604134[] = "ファンシーカップ";
+// "Yellow Cup"
+static char D_82604148[] = "イエローカップ";
+// "Ultra Cup"
+static char D_82604158[] = "ウルトラカップ";
+// "Gym Leader Castle"
+static char D_82604168[] = "ジムリーダーのしろ";
+// Apostrophe printed before the year of the Nintendo Cups.
+static char sHallOfFameCupYearApostrophe[] = "’";
 static unk_D_82604180 D_82604180[] = {
     {
         4.5f,
@@ -1623,7 +1648,7 @@ static u32 D_82606F80[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000,
 };
-static u8* D_82607180[] = {
+static char* D_82607180[] = {
     D_826040E0, D_826040FC, D_82604118, D_82604134, D_82604148, D_82604158, D_82604168,
 };
 static s32 D_8260719C[] = {
@@ -1716,6 +1741,13 @@ s32 VictoryPalace_StringsEqual(s8* arg0, s8* arg1) {
 s32 VictoryPalace_IsCurrentSpeciesOwnedByPlayer(void) {
     s32 sp44 = 0;
     unk_func_800228F0 sp20;
+#if defined(VERSION_JP)
+
+    VictoryPalace_LoadSpeciesRecord(&sp20, (D_82607B54 % D_8267E4F0) + 1);
+    if ((sp20.unk_02 == 0) && (VictoryPalace_StringsEqual(&sp20.unk_14, (s8*)sHallOfFamePlayerTrainerName) == 1)) {
+        sp44 = 1;
+    }
+#else
     char* tmp;
 
     VictoryPalace_LoadSpeciesRecord(&sp20, (D_82607B54 % D_8267E4F0) + 1);
@@ -1723,6 +1755,7 @@ s32 VictoryPalace_IsCurrentSpeciesOwnedByPlayer(void) {
     if ((sp20.unk_02 == 0) && (VictoryPalace_StringsEqual(&sp20.unk_14, tmp) == 1)) {
         sp44 = 1;
     }
+#endif
     return sp44;
 }
 
@@ -1852,7 +1885,9 @@ void VictoryPalace_InitCamera(void) {
     D_82608558->view.targetPosition.z = 0.0f;
     Camera_ComputeEyeFromAngles(&D_82608558->view.targetPosition, &D_82608558->view.eyePosition, D_82608540, D_8260853C,
                                 D_8260853E);
+#if !defined(VERSION_JP)
     D_8006F088 = D_82608558;
+#endif
 }
 
 void func_82600CFC(void) {
@@ -1950,7 +1985,9 @@ void VictoryPalace_DrawOverlay(void) {
         Ui_DrawBorderedPanelNoFill(0x19, 0x87, 0xB4, 0x5F);
     } else if (D_82608542 == 1) {
         unk_func_800228F0 sp158;
+#if !defined(VERSION_JP)
         UNUSED s32 pad2[1];
+#endif
 
         VictoryPalace_LoadSpeciesRecord(&sp158, (D_82607B54 % D_8267E4F0) + 1);
 
@@ -1975,13 +2012,26 @@ void VictoryPalace_DrawOverlay(void) {
         gDisplayListHead = VictoryPalace_DrawFrameBorder(gDisplayListHead);
 
         if (sp158.unk_00 & 0x80) {
+#if defined(VERSION_JP)
+            s32 cup = ((sp158.unk_00 & 0x7F) - 1) % 7;
+#else
             s32 temp_v0_2;
+#endif
 
             gDPPipeSync(gDisplayListHead++);
 
             gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
             gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
+#if defined(VERSION_JP)
+            gDPLoadTextureBlock(gDisplayListHead++, D_3010210, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
+                                G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+
+            // JP places the badge after the cup name using the name's stored width.
+            gSPTextureRectangle(gDisplayListHead++, (D_8260719C[cup] + 0x47) << 2, 0x0264,
+                                (D_8260719C[cup] + 0x57) << 2, 0x02A4, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+#else
             gDPLoadTextureBlock(gDisplayListHead++, D_3008200, G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 16, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
@@ -1991,6 +2041,7 @@ void VictoryPalace_DrawOverlay(void) {
 
             gSPTextureRectangle(gDisplayListHead++, (temp_v0_2 + 0x49) << 2, 0x0264, (temp_v0_2 + 0x59) << 2, 0x02A4,
                                 G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
+#endif
         }
     } else if (D_82608544 == 1) {
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 0, 0, 0, 180);
@@ -2009,15 +2060,17 @@ void VictoryPalace_DrawOverlay(void) {
         gDPLoadTextureBlock(gDisplayListHead++, D_82607328, G_IM_FMT_IA, G_IM_SIZ_16b, 2, 2, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, 0x0080, 0x0058, 0x0480, 0x0370, G_TX_RENDERTILE, 0, 0, 0, 0);
+        gSPTextureRectangle(gDisplayListHead++, 0x0080, 0x0058, 0x0480, VICTORY_PALACE_GRID_PANEL_BOTTOM << 2,
+                            G_TX_RENDERTILE, 0, 0, 0, 0);
 
-        Ui_DrawBorderedPanelNoFill(0x1E, 0x14, 0x104, 0xCA);
+        Ui_DrawBorderedPanelNoFill(0x1E, 0x14, 0x104, VICTORY_PALACE_GRID_PANEL_BOTTOM - 0x12);
     }
 
     if (D_82608544 == 1) {
         VictoryPalace_DrawSpeciesGrid();
 
-        gSPTextureRectangle(gDisplayListHead++, 0x0080, 0x0058, 0x0480, 0x0370, G_TX_RENDERTILE, 0, 0, 0, 0);
+        gSPTextureRectangle(gDisplayListHead++, 0x0080, 0x0058, 0x0480, VICTORY_PALACE_GRID_PANEL_BOTTOM << 2,
+                            G_TX_RENDERTILE, 0, 0, 0, 0);
     }
 
     Font_BeginTranslucentTextRendering();
@@ -2025,7 +2078,7 @@ void VictoryPalace_DrawOverlay(void) {
     if (D_82608548 == 1) {
         unk_D_82604180* sp7C = &D_82604180[D_82607B54 % D_8267E4F0];
 
-        Font_SetActive(2, 0);
+        Font_SetActive(2, VICTORY_PALACE_LETTER_SPACING);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_Printf(0x1E, 0x8C, " --- No.%03d ---", (D_82607B54 % D_8267E4F0) + 1);
         Font_Printf(0x1E, 0x98, " SCALE %3.1f", sp7C->unk_00);
@@ -2033,6 +2086,71 @@ void VictoryPalace_DrawOverlay(void) {
         Font_Printf(0x1E, 0xBC, " POS-X %3.1f", sp7C->unk_08);
         Font_Printf(0x1E, 0xC8, " POS-Y %3.1f", sp7C->unk_0C);
         Font_Printf(0x1E, 0xD4, " POS-Z %3.1f", sp7C->unk_10);
+#if defined(VERSION_JP)
+    } else if ((D_82608542 == 1) && (VictoryPalace_SpeciesObtained((D_82607B54 % D_8267E4F0) + 1) != 0)) {
+        unk_func_800228F0 sp58;
+
+        VictoryPalace_LoadSpeciesRecord(&sp58, (D_82607B54 % D_8267E4F0) + 1);
+        Font_SetActive(2, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(0x58, 0x2E, "%s", sHallOfFameNameLabel);
+        Font_Printf(0x58, 0x42, "%s", sHallOfFameLevelLabel);
+        Font_Printf(0x58, 0x56, "%s", sHallOfFameTrainerLabel);
+        Font_Printf(0x58, 0x6A, "ID");
+        Font_Printf(0x4C, 0x86, "%s", sHallOfFameInductedLabel);
+
+        if (VictoryPalace_IsCurrentSpeciesOwnedByPlayer() > 0) {
+            Gfx_SetEnvColor(0x64, 0x64, 0xC8, 0xFF);
+            Font_Printf(0xD4, 0x6C, "%s", sHallOfFameRentalLabel);
+        }
+
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+
+        if (VictoryPalace_IsCurrentSpeciesOwnedByPlayer() == 0) {
+            Gfx_SetPrimColor(0xC8, 0xC8, 0, 0xFF);
+        } else {
+            Gfx_SetPrimColor(0x64, 0x64, 0xC8, 0xFF);
+        }
+
+        Font_SetActive(8, -2);
+        Font_Printf(0x84, 0x2A, "%s", sp58.unk_04);
+        Font_SetActive(4, -2);
+        Font_Printf(0x8C, 0x42, "%d", sp58.unk_01);
+        Font_Printf(0x8C, 0x56, "%s", sp58.unk_14);
+        Font_Printf(0x8C, 0x6A, "%05d", sp58.unk_02);
+        Font_Printf(0x46, 0x98, "%s", D_82607180[((sp58.unk_00 & 0x7F) - 1) % 7]);
+        // The three Nintendo Cups also get an apostrophe before their year.
+        if ((((sp58.unk_00 & 0x7F) - 1) % 7) < 3) {
+            Font_Printf(0xCB, 0x98, "%s", sHallOfFameCupYearApostrophe);
+        }
+        Font_DisableTwoCycleTexturing();
+    }
+
+    if (D_82608544 == 1) {
+        Font_SetActive(2, -2);
+        Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF);
+        Font_Printf(0xAA, 0xC3, "%d", D_8267E4EA);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
+        Font_Printf(0xC8, 0xC3, "%s", sHallOfFameCaughtCountSuffix);
+        Font_Printf(0x2A, 0xC3, "%s", sHallOfFameCongratulations);
+    } else if ((D_8267E4E8 == 1) && (D_82608542 == 0) && (D_82608552 == 2) && (D_82608550 == 5)) {
+        u16 temp_v1_70 = D_8267E758 % 32;
+
+        D_8267E758++;
+        Font_SetActive(2, -2);
+        if (temp_v1_70 < 0x10) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0x64, (temp_v1_70 * 0xFF) / 15);
+        } else {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0x64, ((-temp_v1_70 * 0xFF) + 0x1EE1) / 15);
+        }
+        // FAKE: the count is passed to a format string that does not use it.
+        Font_Printf(0x6E, 0xA2, "PUSH START", D_8267E4EA);
+    } else if (D_8267E4E8 == 1) {
+        D_8267E758 = 0;
+    }
+
+#else
     } else if ((D_82608542 == 1) && (VictoryPalace_SpeciesObtained((D_82607B54 % D_8267E4F0) + 1) != 0)) {
         unk_func_800228F0 sp58;
 
@@ -2096,6 +2214,7 @@ void VictoryPalace_DrawOverlay(void) {
         D_8267E758 = 0;
     }
 
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -2528,7 +2647,9 @@ void HallOfFame_RunGallery(void) {
 
     D_82608552 = tmp;
 
+#if !defined(VERSION_JP)
     StageLoader_RunFrames(0xA);
+#endif
     StageFade_StartFromOpaque(0x10);
     VictoryPalace_CheckAllCaught();
 
@@ -2603,6 +2724,10 @@ void HallOfFame_SpawnPokeIcon(s32 arg0, f32 arg1) {
         temp_s0->position.x = arg1;
         temp_s0->position.y = 0.0f;
         temp_s0->position.z = 0.0f;
+#if defined(VERSION_JP)
+        ModelAnim_SetAnimation(temp_s0, 0);
+        ModelAnim_ClearEventTrack(temp_s0);
+#endif
         temp_s0->transformAnim.speedFixed = 0;
         *(u8*)Util_ConvertAddrToVirtAddr(&D_800AF770[arg0]) = D_82607420[arg0].unk_000 - 1;
     }
@@ -2614,6 +2739,7 @@ void HallOfFame_InitGallery(void) {
     MemoryBlock* temp_v0;
     unk_D_86002F30* temp_s0;
     DisplayObject* ptr;
+    unk_D_86002F30* temp_s0_2;
 
     D_82608546 = 0;
     D_82608548 = 0;
@@ -2664,12 +2790,16 @@ void HallOfFame_InitGallery(void) {
     ptr->rotation.x = 0;
     ptr->rotation.y = 0;
     ptr->rotation.z = 0;
+#if defined(VERSION_JP)
+    ModelAnim_SetAnimation(ptr, 0);
+    ModelAnim_ClearEventTrack(ptr);
+#endif
     ptr->transformAnim.speedFixed = 0;
 
-    temp_s0 = Model_LoadByArchiveIndex(0xB7);
+    temp_s0_2 = Model_LoadByArchiveIndex(0xB7);
     ptr = &D_826083D0;
     ModelRenderer_AttachDisplayObject(&D_826083D0);
-    Model_InitDisplayObject(&D_826083D0, 0, 0xB7, temp_s0->nodes[1]);
+    Model_InitDisplayObject(&D_826083D0, 0, 0xB7, temp_s0_2->nodes[1]);
 
     ptr->node.renderFlags &= ~0x40;
     ptr->position.x = 0.0f;
@@ -2681,6 +2811,10 @@ void HallOfFame_InitGallery(void) {
     ptr->rotation.x = 0;
     ptr->rotation.y = 0;
     ptr->rotation.z = 0;
+#if defined(VERSION_JP)
+    ModelAnim_SetAnimation(ptr, 0);
+    ModelAnim_ClearEventTrack(ptr);
+#endif
     ptr->transformAnim.speedFixed = 0;
 
     for (j = 0; j < 5; j++) {
@@ -2724,9 +2858,13 @@ s32 HallOfFame_Main(s32 arg0, s32 arg1) {
 
     main_pool_push_state('VICH');
 
-    Gfx_InitDisplayListBuffers(0x20000, 0);
+    Gfx_InitDisplayListBuffers(VICTORY_PALACE_DISPLAY_LIST_SIZE, 0);
     sp24 = StageContext_Allocate(0, 1, 2, 1, 3, 1);
+#if defined(VERSION_JP)
+    sHallOfFameFont = Font_Init(0xE, 0);
+#else
     Font_Init(0xE, 0);
+#endif
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, victory_palace_plate_text, 0);
@@ -2734,9 +2872,11 @@ s32 HallOfFame_Main(s32 arg0, s32 arg1) {
 
     Save_EnsureBankLoaded(2);
     HallOfFame_InitGallery();
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sHallOfFameText = Text_GetStringTable(0x1F);
     gVictoryPokemonNames = Text_GetStringTable(0x24);
+#endif
     StageContext_Activate(sp24);
     HallOfFame_RunGallery();
     StageContext_Deactivate();

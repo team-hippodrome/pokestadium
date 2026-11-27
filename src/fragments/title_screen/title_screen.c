@@ -15,9 +15,16 @@
 #include "src/math_util.h"
 #include "src/memory.h"
 #include "src/stage_loader.h"
+#if defined(VERSION_JP)
+#include "src/leo.h"
+#include "src/audio_category_fade.h"
+#include "include/string.h"
+#endif
 
+#if !defined(VERSION_JP)
 static char** sControllerErrorText;
 static s32 pad_D_82100EA4;
+#endif
 static ModeSettings gTitleModeSettings;
 static BinArchive* gTitleBackgroundArchive;
 static u8* gTitleBackgroundImage;
@@ -25,7 +32,26 @@ static void* gTitleAssetBuffer;
 static void* gTitleAudioBuffer;
 static u16 gTitleStartPressMode;
 static s16* gTitleAttractDemoProgress;
+#if !defined(VERSION_JP)
 static s32 gTitleInputReady;
+#endif
+
+#if defined(VERSION_JP)
+#define TITLE_BLINK_START_FRAME 0
+// Cleared-mode mask that selects the all-clear title background.
+#define TITLE_ALL_MODES_CLEARED 0x1FE
+#define TITLE_BOOT_STATE_PARAM s32 boot_state
+#define TITLE_BOOT_STATE_IS_IDLE(boot_state) Title_IsBootStateIdle(boot_state)
+#define TITLE_POLL_INPUTS() Title_PollInputs()
+#define TITLE_DRAW_FRAME() Title_DrawFrame(0)
+#else
+#define TITLE_BLINK_START_FRAME 0x40
+#define TITLE_ALL_MODES_CLEARED 0x1F8
+#define TITLE_BOOT_STATE_PARAM void
+#define TITLE_BOOT_STATE_IS_IDLE(boot_state) 1
+#define TITLE_POLL_INPUTS() Controller_PollInputs()
+#define TITLE_DRAW_FRAME() Title_DrawFrame()
+#endif
 
 void func_82100020(void) {
 }
@@ -67,17 +93,97 @@ s32 Title_ResolveStartPressState(void) {
                 var_v1 = 0x25;
                 break;
 
+#if !defined(VERSION_JP)
             case 6:
                 var_v1 = 0x11;
                 break;
+#endif
         }
     }
 
     return var_v1;
 }
 
+#if defined(VERSION_JP)
+// "Controller 1 is not connected. Turn off the power and insert a controller into Controller Socket 1."
+static char sNoControllerScrollText[] = "　　　コントローラ１がせつぞくされていません。でんげんをきって、コントローラを"
+                                        "コントローラコネクタ１にさしこんでください。　　　　　";
+
+/* Draws the 64DD disk error panel; the high byte of the status selects the message and the low byte is the code. */
+void Title_DrawDiskErrorMessage(s32 disk_status) {
+    // FAKE: unused stack slot retained for matching.
+    UNUSED s32 pad;
+    s32 message = (disk_status >> 8) & 0xFF;
+
+    if (message != 0) {
+        Gfx_FillRectWithDisplayState(30, 93, 260, 90, 0, 0, 0, 150);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(2, -2);
+
+        switch (message) {
+            case 1:
+                // "Error: %2d"
+                Font_Printf(50, 96, "エラー：%2d", disk_status & 0xFF);
+                // "Please read the instruction manual."
+                Font_Printf(60, 131, "とりあつかいせつめいしょをおよみください。");
+                break;
+
+            case 2:
+                // "Error: %2d"
+                Font_Printf(50, 96, "エラー：%2d", disk_status & 0xFF);
+                // "Caution: Do not remove the disk"
+                Font_Printf(60, 111, "ちゅうい：アクセスランプてんめつちゅうに");
+                // "while the access lamp is blinking."
+                Font_Printf(110, 123, "ディスクをぬかないでください。");
+                // "For details, please read"
+                Font_Printf(65, 139, "くわしくは、とりあつかいせつめいしょを");
+                // "the instruction manual."
+                Font_Printf(125, 151, "およみください。");
+                // "Please insert the disk again."
+                Font_Printf(65, 166, "もういちどディスクをさしこんでください。");
+                break;
+
+            case 3:
+                // "Error: %2d"
+                Font_Printf(50, 96, "エラー：%2d", disk_status & 0xFF);
+                // "The eject button may have been pressed."
+                Font_Printf(45, 121, "イジェクトボタンがおされているかもしれません。");
+                // "Remove the disk once"
+                Font_Printf(105, 146, "いちどディスクをぬいて");
+                // "and insert it properly."
+                Font_Printf(90, 161, "きちんと さしこんでください。");
+                break;
+
+            case 4:
+                // "Error: %2d"
+                Font_Printf(50, 96, "エラー：%2d", disk_status & 0xFF);
+                // "Is the Expansion Pak"
+                Font_Printf(95, 111, "メモリーかくちょうパックが");
+                // "inserted correctly?"
+                Font_Printf(80, 126, "ただしく さしこんでありますか？");
+                // "For details, please read"
+                Font_Printf(65, 151, "くわしくは、とりあつかいせつめいしょを");
+                // "the instruction manual."
+                Font_Printf(125, 166, "およみください。");
+                break;
+
+            case 5:
+                // "The wrong disk may"
+                Font_Printf(70, 111, "まちがった ディスクが そうにゅう");
+                // "have been inserted."
+                Font_Printf(80, 126, "されているかのうせいがあります。");
+                // "Please check."
+                Font_Printf(105, 161, "かくにんしてください。");
+                break;
+        }
+
+        Font_EndTexturedTextRendering();
+    }
+}
+
+#endif
 void Title_DrawPressStartBlink(s16 arg0, s16 arg1) {
-    static s32 titlePressStartBlinkFrame = 0x40;
+    static s32 titlePressStartBlinkFrame = TITLE_BLINK_START_FRAME;
 
     s32 temp_v0 = titlePressStartBlinkFrame - 0x30;
     s32 var_s0 = 0;
@@ -100,15 +206,64 @@ void Title_DrawPressStartBlink(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, var_s0);
 
+#if defined(VERSION_JP)
+    // The JP "Press Start" image is 88x16, drawn in four strips.
+    Gfx_DrawTextureIa16(arg0, arg1, 88, 4, D_2000000, 88, 0);
+    Gfx_DrawTextureIa16(arg0, arg1 + 4, 88, 4, D_20002C0, 88, 0);
+    Gfx_DrawTextureIa16(arg0, arg1 + 8, 88, 4, D_2000580, 88, 0);
+    Gfx_DrawTextureIa16(arg0, arg1 + 12, 88, 4, D_2000840, 88, 0);
+#else
     gDPLoadTextureTile(gDisplayListHead++, D_2000000, G_IM_FMT_IA, G_IM_SIZ_8b, 100, 0, 0, 0, 100 - 1, 15 - 1, 0,
                        G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                        G_TX_NOLOD);
 
     Gfx_DrawTexturedRectClipped(arg0, arg1, 100, 15, 0, 0, 0x400, 0x400, 0);
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+#if defined(VERSION_JP)
+void Title_DrawNoControllerWarning(void) {
+    static s32 titleNoControllerWarningFrame = 0;
+
+    // FAKE: unused stack slot retained for matching.
+    UNUSED s32 pad;
+    s32 length;
+    s32 x;
+    s32 char_index;
+    s32 i;
+
+    if (!(Cont_GetControllerBits() & 1)) {
+        length = strlen(sNoControllerScrollText) / 2;
+        x = 16 - (titleNoControllerWarningFrame % 16);
+        char_index = titleNoControllerWarningFrame / 16;
+
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 16, 0, 304, 240);
+
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(4, 0);
+
+        for (i = 0; i < 19; i++) {
+            Font_DrawCharAt(x, 184, ((s16*)sNoControllerScrollText)[char_index]);
+            char_index++;
+            if (char_index > length - 1) {
+                char_index = 0;
+            }
+            x += 16;
+        }
+
+        Font_EndTexturedTextRendering();
+
+        gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 320, 240);
+
+        titleNoControllerWarningFrame++;
+        if (titleNoControllerWarningFrame >= length * 16) {
+            titleNoControllerWarningFrame = 0;
+        }
+    }
+}
+#else
 void Title_DrawNoControllerWarning(void) {
     static s32 titleNoControllerWarningFrame = 0;
 
@@ -140,6 +295,7 @@ void Title_DrawNoControllerWarning(void) {
         }
     }
 }
+#endif
 
 void Title_DrawBackgroundImage(u8* arg0) {
     s32 i;
@@ -162,6 +318,19 @@ void Title_DrawBackgroundImage(u8* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+#if defined(VERSION_JP)
+void Title_DrawFrame(s32 disk_status) {
+    BgStage_DrawFrame();
+    Title_DrawBackgroundImage(gTitleBackgroundImage);
+    if (Cont_GetControllerBits() & 1) {
+        Title_DrawPressStartBlink(0x74, 0xB9);
+    }
+    Title_DrawNoControllerWarning();
+    func_82100028(0x64, 0x6E);
+    Title_DrawDiskErrorMessage(disk_status);
+    BgStage_AdvanceFrame();
+}
+#else
 void Title_DrawFrame(void) {
     BgStage_DrawFrame();
     Title_DrawBackgroundImage(gTitleBackgroundImage);
@@ -172,6 +341,7 @@ void Title_DrawFrame(void) {
     func_82100028(0x64, 0x50);
     BgStage_AdvanceFrame();
 }
+#endif
 
 static u8 gTitleDemoEligibilityMasks[] = {
     0x21, 0x22, 0x18, 0x21, 0x22, 0x14, 0x21, 0x22, 0x14, 0x21, 0x22, 0x24, 0x21, 0x22, 0x14, 0x21, 0x22, 0x24, 0x21,
@@ -265,13 +435,20 @@ s32 Title_StartAttractDemo(void) {
     return 2;
 }
 
-s32 Title_ShouldStartAttractDemo(void) {
+#if defined(VERSION_JP)
+/* Returns whether the 64DD boot state machine is in a state that allows leaving the title screen. */
+s32 Title_IsBootStateIdle(s32 boot_state) {
+    return (boot_state == 5) || (boot_state == 0) || (boot_state == 1) || (boot_state == 3);
+}
+#endif
+
+s32 Title_ShouldStartAttractDemo(TITLE_BOOT_STATE_PARAM) {
     static u32 titleAttractIdleTimer = 0;
 
     s32 sp1C = 0;
 
     if (titleAttractIdleTimer >= 0x259) {
-        if (Audio_GetActivityScore() == 0) {
+        if ((Audio_GetActivityScore() == 0) && TITLE_BOOT_STATE_IS_IDLE(boot_state)) {
             sp1C = 1;
         }
     } else {
@@ -280,10 +457,57 @@ s32 Title_ShouldStartAttractDemo(void) {
     return sp1C;
 }
 
+#if defined(VERSION_JP)
+void Title_PollInputs(void) {
+    Cont_StartReadInputs();
+    Cont_ReadInputs();
+    Input_ResetRepeatState();
+}
+#endif
+
 s32 func_821009AC(void) {
     return 0;
 }
 
+#if defined(VERSION_JP)
+s32 Title_Loop(void) {
+    s32 var_s0 = 0;
+    s32 boot_status;
+    s32 boot_state;
+    u16 disk_status;
+
+    Input_SetRepeatController(gPlayer1Controller);
+
+    while (var_s0 == 0) {
+        Title_PollInputs();
+
+        boot_status = Leo_RunBootStateMachine(gTitleAssetBuffer);
+        boot_state = (boot_status >> 16) & 0xFFFF;
+        disk_status = boot_status;
+
+        if (boot_state == 10) {
+            Audio_FadeCategoriesAndStreams(16);
+            var_s0 = 3;
+        } else if (gPlayer1Controller->buttonPressed & 0x9000) {
+            if (Title_IsBootStateIdle(boot_state)) {
+                Audio_PlaySoundEffectById(SFX_TITLE_START);
+                var_s0 = Title_ResolveStartPressState();
+            }
+        } else if (Title_ShouldStartAttractDemo(boot_state) != 0) {
+            var_s0 = Title_StartAttractDemo();
+        } else {
+            var_s0 = func_821009AC();
+            if (var_s0 == 0) {
+                Title_PollDPad();
+            }
+        }
+
+        Title_DrawFrame(disk_status);
+    }
+
+    return var_s0;
+}
+#else
 s32 Title_Loop(void) {
     s32 var_s0 = 0;
     s32 var_s2 = 30;
@@ -317,13 +541,14 @@ s32 Title_Loop(void) {
 
     return var_s0;
 }
+#endif
 
 void Title_FadeIn(void) {
     if (StageContext_GetFadeMode() == 1) {
         StageFade_StartFromOpaque(0xA);
         while (StageContext_GetFadeMode() != 0) {
-            Controller_PollInputs();
-            Title_DrawFrame();
+            TITLE_POLL_INPUTS();
+            TITLE_DRAW_FRAME();
         }
     }
 }
@@ -338,8 +563,8 @@ void Title_FadeOut(s32 arg0) {
     StageFade_StartFromTransparent(8);
 
     while (StageContext_GetFadeMode() != 1) {
-        Controller_PollInputs();
-        Title_DrawFrame();
+        TITLE_POLL_INPUTS();
+        TITLE_DRAW_FRAME();
     }
 }
 
@@ -353,13 +578,15 @@ void Title_LoadAssets(void) {
 
     gTitleBackgroundArchive = ASSET_LOAD2(backgrounds, 1, 1);
 
-    if (gTitleModeSettings.clearedModes == 0x1F8) {
+    if (gTitleModeSettings.clearedModes == TITLE_ALL_MODES_CLEARED) {
         gTitleBackgroundImage = BinArchive_GetFile(gTitleBackgroundArchive, 0x11);
     } else {
         gTitleBackgroundImage = BinArchive_GetFile(gTitleBackgroundArchive, 0);
     }
 
+#if !defined(VERSION_JP)
     gTitleInputReady = 0;
+#endif
 }
 
 s32 Title_Main(UNUSED s32 arg0, s16* arg1) {
@@ -380,13 +607,18 @@ s32 Title_Main(UNUSED s32 arg0, s16* arg1) {
     Save_GetModeSettings(&gTitleModeSettings, 0);
     Font_Init(6, 0);
     Title_LoadAssets();
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sControllerErrorText = Text_GetStringTable(0x14);
+#endif
     Audio_LoadWaveTablesAndMusic(gTitleAudioBuffer);
     Title_FadeIn();
     sp24 = Title_Loop();
     Title_FadeOut(sp24);
     StageContext_Deactivate();
+#if defined(VERSION_JP)
+    Leo_AbortPendingBootRequest();
+#endif
     Audio_WaitForIdle(0);
     Audio_ClearWaveDataLoaded();
     Gfx_FreeDisplayListBuffers();

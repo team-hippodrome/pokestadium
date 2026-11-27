@@ -579,8 +579,13 @@ typedef struct TagTeamPartners {
 
 typedef struct unk_D_84390178 {
     /* 0x00 */ s32 timeLeft;
+#if defined(VERSION_JP)
+    // The Japanese action_selection .bss ends 0x10 bytes earlier, right after this field.
+    /* 0x04 */ char unk04[0x4];
+#else
     /* 0x04 */ char unk04[0x14];
-} unk_D_84390178; // size >= 0x18
+#endif
+} unk_D_84390178; // size >= 0x18 (0x8 in the Japanese version)
 
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
@@ -1791,7 +1796,14 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y);
 s32 BattleBox_SelectMessage(BattleBox* box);
 void BattleBox_Update(s16 x, s16 y);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
+#if defined(VERSION_JP)
+// Battle message strings, built into the Japanese ROM instead of loaded from a text file.
+// Indexed by the same message numbers as the other versions' text file.
+extern char* gBattleMessageTexts[];
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, char* format, ...);
+#else
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number);
+#endif
 void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon);
 void BattleScene_TickHudTimers(void);
 void Battle_InitMessageQueues(void);
@@ -3085,6 +3097,11 @@ void BattleAnim_RenderEffectsFrame(CameraNode*);
 
 //@src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c
 void BattleAnim_NoopUpdateHook(void);
+#if defined(VERSION_JP)
+// Japanese-only empty hook that BattleAnim_UpdateFrame calls before BattleAnim_UpdateEffects. It
+// follows battle_engine_shared_move_effects in the Japanese fragment, which US 1.0 does not have.
+void func_84359274_jp(void);
+#endif
 void func_843592E8(void);
 void func_843592F0(void);
 void func_843592F8(void);

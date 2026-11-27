@@ -306,6 +306,13 @@ void Gallery_DrawBluePanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
 
+#if defined(VERSION_PAL)
+void Gallery_DrawRoundedFrame(s32 arg0, s32 arg1) {
+}
+
+void Gallery_DrawHeaderBar(s32 arg0, s32 arg1, s32 arg2, Color_RGBA8* arg3, Color_RGBA8* arg4) {
+}
+#else
 void Gallery_DrawRoundedFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7) {
     s16 var_s2;
     s16 var_s3;
@@ -383,6 +390,7 @@ void Gallery_DrawHeaderBar(s32 arg0, s32 arg1, s32 arg2, Color_RGBA8* arg3, Colo
     Gfx_DrawTexturedRectClipped((arg0 + arg2) - 0x10, arg1, 0x10, 0x20, 0, 0, 0x400, 0x400, 0);
     Gfx_DrawTexturedRectClipped(arg0 + 0x10, arg1, arg2 - 0x20, 0x20, 0, 0, 0, 0x400, 0);
 }
+#endif
 
 void Gallery_DrawImageStrips(u16* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 temp_v0;
@@ -449,6 +457,13 @@ void Gallery_DrawPhotoThumbnail(u16* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg
     }
 }
 
+#if defined(VERSION_PAL)
+void Gallery_DrawSelectionCorners(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+}
+
+void Gallery_DrawStatusIcon(s32 arg0, s32 arg1, s32 arg2) {
+}
+#else
 void Gallery_DrawSelectionCorners(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     static s16 D_83402E38 = 0;
 
@@ -476,6 +491,7 @@ void Gallery_DrawStatusIcon(s32 arg0, s32 arg1, s32 arg2) {
 
     Gfx_DrawTextureRgba16(arg0, arg1, 0x40, 0x20, var_v0, 0x40, 0);
 }
+#endif
 
 void Gallery_InitSceneGrid(unk_D_83407B38* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, ModelLoadContext* arg5,
                            BinArchive* arg6, unk_D_83403C60* arg7, s32 arg8, s32 arg9) {
