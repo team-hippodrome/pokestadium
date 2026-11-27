@@ -568,18 +568,19 @@
     subsegments:
     - [0x13A560, textbin, fragments/minigame_actor_framework/minigame_actor_framework_header]
     - [0x13A580, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
-    - [0x13AFB0, asm, fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
+    - [0x13AFB0, c,       fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x13BA60, c,       fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x13D6A0, c, fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
     - [0x13DA60, c,       fragments/minigame_actor_framework/minigame_actor_framework_11BF90]
     - [0x13E200, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
     - [0x13E240, data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0_13E240]
-    - [0x13E2C0, data, fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
+    - [0x13E2C0, .data, fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x13E2E0, .data, fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
     - [0x140360, data, fragments/minigame_actor_framework/minigame_actor_framework_11BBF0_b]
+    - [0x1404E0, .rodata, fragments/minigame_actor_framework/minigame_actor_framework_1193E0]
     - [0x140630, .rodata,  fragments/minigame_actor_framework/minigame_actor_framework_119FB0]
     - [0x140680, .rodata, fragments/minigame_actor_framework/minigame_actor_framework_11BBF0]
-    - {vram: 0x87906150, type:  bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
+    - {vram: 0x87906150, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
     - {vram: 0x87906200, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
   - name: fragment3_relocs
     type: code

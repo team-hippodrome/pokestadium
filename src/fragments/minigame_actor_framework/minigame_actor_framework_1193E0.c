@@ -12,7 +12,9 @@ s16 D_8790604A;
 s32 pad_D_8790604C; //	unused?
 CameraNode* D_87906050;
 CameraNode* D_87906054;
+#if !defined(VERSION_JP)
 s32 pad_D_87906058[2]; //	unused?
+#endif
 s16 miniCameraXRot;
 s16 miniCameraYRot;
 s16 miniCameraDistance;
@@ -28,6 +30,9 @@ f32 D_8790607C;
 f32 D_87906080;
 s32 pad_D_87906084;
 Vec3f D_87906088;
+#if !defined(VERSION_JP)
+// Offsets that miniApplyCameraDebugOffset adds to the camera; JP's debug mode edits
+// the camera variables directly and has no offset block.
 s16 D_87906094;
 s16 D_87906096;
 s16 D_87906098;
@@ -40,6 +45,7 @@ s16 D_879060A8;
 Vec3s D_879060AC;
 s32 pad_D_879060B4;
 s32 pad_D_879060B8;
+#endif
 Controller* miniControllerPtr;
 s16 D_879060C0;
 s16 miniEkansCountdown;
@@ -52,6 +58,7 @@ Vec3f pad_D_879060F0;
 Vec3f D_87906100;
 Vec3f D_87906110;
 
+#if !defined(VERSION_JP)
 void miniApplyCameraDebugOffset(void) {
     miniCameraXRot = D_879060A2 + D_87906094;
     miniCameraYRot = D_879060A4 + D_87906096;
@@ -73,6 +80,7 @@ void miniApplyCameraDebugOffset(void) {
         D_8790609A = miniCameraFov - D_879060A8;
     }
 }
+#endif
 
 void miniUpdateCamera(void) {
     D_87906054->perspective.verticalFieldOfView = miniCameraFov;
@@ -87,6 +95,86 @@ void miniUpdateCamera(void) {
                                 miniCameraXRot, miniCameraYRot);
 }
 
+#if defined(VERSION_JP)
+#define MINI_DEBUG_CAMERA_MOVE 0
+#define MINI_DEBUG_CAMERA_ROTATE 1
+#define MINI_DEBUG_CAMERA_ZOOM 2
+
+// L and R cycle the edit mode; the Control Pad moves, rotates or zooms the camera.
+s32 minigameDebuggModeControl(void) {
+    if (miniDebugMode == 0) {
+        return;
+    }
+
+    if (BTN_IS_PRESSED(gPlayer1Controller, BTN_L)) {
+        D_87903DB8++;
+        if (D_87903DB8 == 3) {
+            D_87903DB8 = MINI_DEBUG_CAMERA_MOVE;
+        }
+    }
+
+    if (BTN_IS_PRESSED(gPlayer1Controller, BTN_R)) {
+        D_87903DB8--;
+        if (D_87903DB8 < 0) {
+            D_87903DB8 = MINI_DEBUG_CAMERA_ZOOM;
+        }
+    }
+
+    switch (D_87903DB8) {
+        case MINI_DEBUG_CAMERA_MOVE:
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DUP)) {
+                miniCameraCoords.y += 2;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DDOWN)) {
+                miniCameraCoords.y -= 2;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DLEFT)) {
+                miniCameraCoords.x -= 2;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DRIGHT)) {
+                miniCameraCoords.x += 2;
+            }
+            break;
+
+        case MINI_DEBUG_CAMERA_ROTATE:
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DUP)) {
+                miniCameraXRot += 0x100;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DDOWN)) {
+                miniCameraXRot -= 0x100;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DLEFT)) {
+                miniCameraYRot -= 0x100;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DRIGHT)) {
+                miniCameraYRot += 0x100;
+            }
+            break;
+
+        case MINI_DEBUG_CAMERA_ZOOM:
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DUP)) {
+                miniCameraDistance -= 10;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DDOWN)) {
+                miniCameraDistance += 10;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DLEFT)) {
+                miniCameraFov--;
+            }
+            if (BTN_IS_DOWN(gPlayer1Controller, BTN_DRIGHT)) {
+                miniCameraFov++;
+            }
+            break;
+    }
+
+    if (miniCameraDistance < 50) {
+        miniCameraDistance = 50;
+    }
+    if (miniCameraFov < 10) {
+        miniCameraFov = 10;
+    }
+}
+#else
 s32 minigameDebuggModeControl(void) {
     s16 sp6;
 
@@ -169,7 +257,39 @@ s32 minigameDebuggModeControl(void) {
         }
     }
 }
+#endif
 
+#if defined(VERSION_JP)
+void showDebuggCameraInfo(void) {
+    u8 sp2C[3] = { 0, 0, 30 };
+    u8 sp28[3] = { 0, 0, 250 };
+
+    Ui_DrawBorderedPanel(0x1E, 0x14, 0x118, 0x3C, 0x141);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, -2);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+
+    switch (D_87903DB8) {
+        case MINI_DEBUG_CAMERA_MOVE:
+            Font_Printf(0x23, 0x1C, "TRANSRATE");
+            break;
+        case MINI_DEBUG_CAMERA_ROTATE:
+            Font_Printf(0x23, 0x1C, "ROTATION");
+            break;
+        case MINI_DEBUG_CAMERA_ZOOM:
+            Font_Printf(0x23, 0x1C, "DISTANCE");
+            break;
+    }
+
+    Font_Printf(0x23, 0x28, "CAMERA X:%d", miniCameraCoords.x);
+    Font_Printf(0x23, 0x34, "CAMERA Y:%d", miniCameraCoords.y);
+    Font_Printf(0x23, 0x40, "CAMERA Z:%d", miniCameraCoords.z);
+    Font_Printf(0x9B, 0x28, "CAMERA D:%d", miniCameraDistance);
+    Font_Printf(0x9B, 0x34, "CAMERA F:%d", miniCameraFov);
+    Font_Printf(0x9B, 0x40, "X:%04hX Y:%04hX", miniCameraXRot, miniCameraYRot);
+    Font_EndTexturedTextRendering();
+}
+#else
 void showDebuggCameraInfo(void) {
     u8 sp24[3] = { 0, 0, 30 };  // D_87903DE0
     u8 sp20[3] = { 0, 0, 250 }; // D_87903DE4
@@ -191,6 +311,7 @@ void showDebuggCameraInfo(void) {
     Font_Printf(0xA7, 0x40, "X:%04hX Y:%04hX", miniCameraXRot, miniCameraYRot);
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void showDebuggJoystickInfo(void) {
     u8 sp2C[3] = { 0, 0, 30 };  // D_87903DE8
