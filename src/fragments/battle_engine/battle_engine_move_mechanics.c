@@ -1175,15 +1175,13 @@ void BattleEffect_Heal(void) {
 }
 
 /* Copy the target's battle form, moves, stats and stages while preserving the user's HP. */
-// JP: register allocation differs; the C below is otherwise equivalent.
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/battle_engine/battle_engine_move_mechanics/BattleEffect_Transform.s")
-#else
 void BattleEffect_Transform(void) {
     s32 i;
     ActivePokemonState* pokemon1_state;
     ActivePokemonState* pokemon2_state;
+#if !defined(VERSION_JP)
     BattleMonRuntime* user;
+#endif
 
     pokemon1_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     pokemon2_state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
@@ -1198,9 +1196,16 @@ void BattleEffect_Transform(void) {
         return;
     }
 
+#if defined(VERSION_JP)
+    // FAKE: JP reads sBattleUser directly; the dead check keeps it loaded first.
+    if (sBattleUser) {}
+    if (!(sBattleUser->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) &&
+#else
     user = sBattleUser;
     if (!(user->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) &&
-        ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleTarget->moves[0] != TRANSFORM) || (sBattleTarget->moves[1] != 0))) {
+#endif
+        ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleTarget->moves[0] != TRANSFORM) ||
+         (sBattleTarget->moves[1] != 0))) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TRANSFORM;
         BATTLE_SET_MESSAGE_TOKEN(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[4], -0x31, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
@@ -1245,7 +1250,6 @@ void BattleEffect_Transform(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
     BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_FAILED);
 }
-#endif
 
 /* Set the appropriate independent screen bit, or queue the already-active response. */
 void BattleEffect_ReflectLightScreen(void) {
