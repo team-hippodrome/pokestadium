@@ -9,6 +9,17 @@
 #include "src/memory.h"
 #include "src/controller.h"
 
+// Player labels: JP uses inline strings, the other versions read the text table.
+#if defined(VERSION_JP)
+#define SESSION_LABEL_TRAINER "トレーナー" // "Trainer"
+#define SESSION_LABEL_DEMO "デモ"          // "Demo"
+#define SESSION_LABEL_COM "コンピュータ"   // "Computer"
+#else
+#define SESSION_LABEL_TRAINER Text_GetPlayerLabel(1)
+#define SESSION_LABEL_DEMO Text_GetPlayerLabel(2)
+#define SESSION_LABEL_COM Text_GetPlayerLabel(3)
+#endif
+
 u8 gEventBattleSettings[3] = { 1, 15, 30 };
 static s16 D_80075684 = 0;
 
@@ -111,7 +122,7 @@ TeamRoster* Trainer_Create(s32 port, UNUSED s16 arg1, char* trainer_name, char* 
 
         HAL_Strcpy(roster->trainerName, trainer_name);
         HAL_Strcpy(roster_info->unk_014, trainer_name);
-        HAL_Strcpy(roster_info->unk_220, player_label);
+        HAL_Strcpy(roster_info->playerLabel, player_label);
     }
     return roster;
 }
@@ -138,6 +149,12 @@ void Trainer_AddPokemon(TeamRoster* arg0, BattleMon* arg1) {
         ptr->numberOfPokemonCanBePicked = tmp + 1;
     }
 }
+
+#if defined(VERSION_JP)
+typedef struct Str9 {
+    char str[9];
+} Str9;
+#endif
 
 BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
     arg0->species.id = arg1;
@@ -168,8 +185,8 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
     arg0->pp[2] = 5;
     arg0->pp[3] = 5;
 
-    arg0->unk_52 = 0;
-    arg0->unk_53 = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_10 = Pokemon_ExpForLevel(arg1, arg2);
 
     Pokemon_RecalcStats(arg0);
@@ -177,7 +194,12 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
     arg0->hp = arg0->maxHp;
 
     Text_CopySpeciesName(arg0->nickname, arg1);
+#if defined(VERSION_JP)
+    // Copied as a 9-byte struct, not with HAL_Strcpy. The default trainer name is "Ninten".
+    *(Str9*)arg0->unk_40 = *(Str9*)"ニンテン";
+#else
     HAL_Strcpy(arg0->unk_3B, Text_GetPlayerLabel(0));
+#endif
     return arg0;
 }
 
@@ -216,8 +238,8 @@ void Session_SetupDemoBattle(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 
     Session_SetMode(0x10, arg0, arg1);
 
-    spD0 = Trainer_Create(0, 0, Text_GetPlayerLabel(1), Text_GetPlayerLabel(2));
-    spCC = Trainer_Create(1, 0, Text_GetPlayerLabel(1), Text_GetPlayerLabel(2));
+    spD0 = Trainer_Create(0, 0, SESSION_LABEL_TRAINER, SESSION_LABEL_DEMO);
+    spCC = Trainer_Create(1, 0, SESSION_LABEL_TRAINER, SESSION_LABEL_DEMO);
 
     Trainer_AddPokemon(spD0, Pokemon_CreateDefault(&sp78, arg2, spD6));
     Trainer_AddPokemon(spCC, Pokemon_CreateDefault(&sp24, arg3, spD6));
@@ -236,7 +258,11 @@ void Team_AddDeckTrainer(s32 arg0, s32 arg1, s32 arg2) {
     GbSave_EnsureMainDataLoaded(arg2);
     GbSave_GetPlayerName(arg2, &sp34);
 
+#if defined(VERSION_JP)
+    temp_s4 = Trainer_Create(arg1, 0, &sp34, "トレーナ");
+#else
     temp_s4 = Trainer_Create(arg1, 0, &sp34, Text_GetPlayerLabel(1));
+#endif
     temp_v0 = Deck_Open(0x20, arg2, 0, 0);
 
     if (temp_v0 != NULL) {
@@ -378,8 +404,13 @@ typedef struct PresetTrainer {
 typedef struct PresetTrainerSlot {
     /* 0x000 */ s32 unk_00;
     /* 0x004 */ PresetTrainer unk_004;
+#if defined(VERSION_JP)
+    /* 0x08C */ char unk08C[0x18C];
+} PresetTrainerSlot; // size = 0x218
+#else
     /* 0x090 */ char unk090[0x1A0];
 } PresetTrainerSlot; // size = 0x230
+#endif
 
 void Team_LoadPresetTrainer(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
@@ -412,7 +443,7 @@ void Team_LoadPresetTrainer(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
     HAL_Strcpy(temp_s3->trainerName, temp_s2->unk_00);
     HAL_Strcpy(temp_s3->rosterInfo->unk_014, temp_s2->unk_00);
-    HAL_Strcpy(temp_s3->rosterInfo->unk_220, temp_s2->unk_0C);
+    HAL_Strcpy(temp_s3->rosterInfo->playerLabel, temp_s2->unk_0C);
 
     temp_s3->rosterInfo->unk_003 = (temp_s2->unk_34 >> 8) & 0xFF;
 
@@ -507,11 +538,11 @@ void Team_BuildQuickBattleTeams(s16 arg0) {
     Session_SetMode(9, 6, 0);
 
     if (arg0 == 1) {
-        Team_AddTrainer(0, Trainer_Create(0, 0, "1P", Text_GetPlayerLabel(1)));
-        Team_AddTrainer(1, Trainer_Create(-1, 0, "COM", Text_GetPlayerLabel(3)));
+        Team_AddTrainer(0, Trainer_Create(0, 0, "1P", SESSION_LABEL_TRAINER));
+        Team_AddTrainer(1, Trainer_Create(-1, 0, "COM", SESSION_LABEL_COM));
     } else {
-        Team_AddTrainer(0, Trainer_Create(0, 0, "1P", Text_GetPlayerLabel(1)));
-        Team_AddTrainer(1, Trainer_Create(1, 0, "2P", Text_GetPlayerLabel(1)));
+        Team_AddTrainer(0, Trainer_Create(0, 0, "1P", SESSION_LABEL_TRAINER));
+        Team_AddTrainer(1, Trainer_Create(1, 0, "2P", SESSION_LABEL_TRAINER));
     }
 
     if (D_80075684 == 0) {
@@ -567,7 +598,7 @@ s32 Session_LoadContinueData(void) {
 
         Text_UntranscodeNameWrapper(sp44, sp250.unk_10);
         Team_AddTrainer(0, Trainer_Create(0, tmp, sp44, sp44));
-        Team_AddTrainer(1, Trainer_Create(-1, tmp, "COM", Text_GetPlayerLabel(3)));
+        Team_AddTrainer(1, Trainer_Create(-1, tmp, "COM", SESSION_LABEL_COM));
 
         for (i = 0; i < temp_v0; i++) {
             Trainer_AddPokemon(gSessionContext.battleSides[0].tagTeamMember[0], &sp58[i]);

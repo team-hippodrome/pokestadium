@@ -218,7 +218,8 @@ else
   # with iconv before invoking the compile command, so asm-processor's input
   # is already EUC-JP. Passing --input-enc=utf-8 here makes it fail with a
   # UnicodeDecodeError on any source containing Japanese text.
-  ASM_PROC_FLAGS := --input-enc=euc-jp --output-enc=euc-jp --convert-statics=global-with-filename
+  # GLOBAL_ASM .s files are still UTF-8.
+  ASM_PROC_FLAGS := --input-enc=euc-jp --asm-input-enc=utf-8 --output-enc=euc-jp --convert-statics=global-with-filename
 endif
 
 SPLAT           := $(PYTHON) -m splat split

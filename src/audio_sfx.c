@@ -11,10 +11,141 @@ static s32 back_sfx = 0;
 static s32 confirm_sfx = 0;
 static s32 D_80078A40 = 0;
 static s32 D_80078A44 = 0;
+#if !defined(VERSION_JP)
+// JP has no Snap camera sounds to track.
 static s32 D_80078A48 = 0;
 static s32 D_80078A4C = 0;
 static u8 D_80078A50 = 0;
+#endif
 
+#if defined(VERSION_JP)
+// JP stores the new voice handle in a second switch placed after the first.
+s32 Audio_PlaySoundEffectById(u32 sfx) {
+    u32 temp_v0_3;
+    s32 sp28;
+
+    temp_v0_3 = sfx & 0xFFFF0000;
+    sp28 = 0x80;
+    if (temp_v0_3 == 0x01200000) {
+        return Audio_PlayCategory12SoundCommand(sfx, 0, 0);
+    }
+    if (temp_v0_3 == 0x01100000) {
+        return Audio_PlayCategory11SoundCommand(sfx, 0, 0);
+    }
+    if (sfx == SFX_TITLE_START) {
+        if (!(D_800FC820 & 0x80000000)) {
+            return 0;
+        }
+        D_80078A30 = Audio_PlaySoundEffect(D_800FF9C0, D_800FC688, SFX_TITLE_START, 0x70, 0x80, -1);
+        Audio_QueueFadeSoundCommand(D_80078E70, 0x28);
+        return D_80078A30;
+    }
+
+    switch (sfx) {
+        case SFX_MENU_SCROLL:
+            Audio_QueueFadeSoundCommand(scroll_sfx, 1);
+        case 0x5:
+        case 0x6:
+        case 0x7:
+        case 0x9:
+        case 0xD:
+        case 0xE:
+        case 0x10:
+        case 0x11:
+        case 0x12:
+        case 0x13:
+        case 0x14:
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        case SFX_MOVE_SWAP:
+        case SFX_ZOOM_IN:
+        case SFX_ZOOM_OUT:
+        case 0x1B:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+        case 0x20:
+        case 0x21:
+        case 0x22:
+        case SFX_PAUSE:
+        case SFX_RESUME:
+        case SFX_PAK_CURSOR:
+        case 0x26:
+        case SFX_PAGE_CHANGE:
+        case SFX_TROPHY_APPEAR:
+        case 0x29:
+        play:
+            D_80078A30 = Audio_PlaySoundEffect(D_800FC68C, D_800FC688, sfx, sp28, 0x80, -1);
+            break;
+
+        case SFX_MENU_CONFIRM:
+            Audio_QueueFadeSoundCommand(confirm_sfx, 1);
+            goto play;
+
+        case SFX_MENU_BACK:
+            Audio_QueueFadeSoundCommand(back_sfx, 1);
+            goto play;
+
+        case SFX_PANEL_OPEN:
+            Audio_QueueFadeSoundCommand(D_80078A40, 0x14);
+            goto play;
+
+        case SFX_MENU_ERROR:
+            Audio_QueueFadeSoundCommand(D_80078A44, 2);
+            goto play;
+
+        case SFX_N64_LOGO:
+            sp28 = 0xE0;
+            goto play;
+
+        case 0xB:
+        case 0xC:
+            sp28 = 0xD0;
+            goto play;
+
+        case SFX_PAK_LAB_SELECT:
+        case SFX_PAK_TOWER_SELECT:
+            Audio_PlaySoundEffectById(0x1B);
+            goto play;
+
+        case SFX_AREA_CURSOR:
+            D_80078A30 = Audio_PlayDirectSoundCommand(0x01000001, 0, 0);
+            return D_80078A30;
+
+        case 0x33:
+            D_80078A30 = Audio_PlayDirectSoundCommand(0x01000002, 0, 0);
+            return D_80078A30;
+
+        default:
+            return 0;
+    }
+
+    switch (sfx) {
+        case SFX_MENU_SCROLL:
+            scroll_sfx = D_80078A30;
+            break;
+
+        case SFX_MENU_CONFIRM:
+            confirm_sfx = D_80078A30;
+            break;
+
+        case SFX_MENU_BACK:
+            back_sfx = D_80078A30;
+            break;
+
+        case SFX_PANEL_OPEN:
+            D_80078A40 = D_80078A30;
+            break;
+
+        case SFX_MENU_ERROR:
+            D_80078A44 = D_80078A30;
+            break;
+    }
+    return D_80078A30;
+}
+#else
 s32 Audio_PlaySoundEffectById(u32 sfx) {
     u32 temp_v0_3;
     s32 sp28;
@@ -211,3 +342,4 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
 
     return D_80078A30;
 }
+#endif

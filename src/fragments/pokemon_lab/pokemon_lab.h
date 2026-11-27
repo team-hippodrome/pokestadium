@@ -22,8 +22,14 @@ typedef struct unk_func_88000830 {
 typedef struct unk_func_88000C18 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ Color_RGBA8 unk_2C;
+#if defined(VERSION_JP)
+    /* 0x30 */ char* label; // Name of the menu item, never drawn.
+    /* 0x34 */ s32 unk_30;
+} unk_func_88000C18; // size = 0x38
+#else
     /* 0x30 */ s32 unk_30;
 } unk_func_88000C18; // size = 0x34
+#endif
 
 typedef struct unk_func_88000CC8 {
     /* 0x00 */ WidgetNode unk_00;
@@ -44,8 +50,16 @@ s32 Lab_DrawDualLayerIconWidget(WidgetNode* arg0, s32 arg1, s32 arg2);
 void Lab_InitLoopAnimWidget(unk_func_88000830* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u8** arg6);
 s32 Lab_UpdateLoopAnimWidget(WidgetNode* arg0);
 s32 Lab_DrawLoopAnimWidget(unk_func_88000830* arg0, s32 arg1, s32 arg2);
+#if defined(VERSION_JP)
+void Lab_InitFrameTimerWidget(unk_func_88000C18* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5,
+                              char* label);
+#else
 void Lab_InitFrameTimerWidget(unk_func_88000C18* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5);
+#endif
 void Lab_UpdateFrameTimerWidget(WidgetNode* arg0);
+#if defined(VERSION_JP)
+s32 Lab_DrawFrameTimerWidget(WidgetNode* arg0, s32 arg1, s32 arg2);
+#endif
 void Lab_SetFrameTimerState(WidgetMainMenu* arg0, s32 arg1);
 void Lab_InitAnimatedIconWidget(unk_func_88000CC8* arg0, s32 arg1, s32 arg2, unk_func_88500020* arg3, u8* arg4,
                                 u8* arg5, u8* arg6, u8* arg7, u8* arg8, WidgetTextList* arg9);

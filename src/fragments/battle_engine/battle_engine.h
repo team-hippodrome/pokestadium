@@ -202,6 +202,18 @@ typedef struct PokemonBattleCues {
 // sBattleMessagesTableFileNumbers and select string table 30 entry (index - 72);
 // strings quoted below are the US text for that entry (the table is loaded by
 // Text_GetStringTable(30) in //@src/fragments/battle_engine/battle_engine_move_animation.c).
+#if defined(VERSION_JP)
+// JP numbers the Ditto message last.
+#define BATTLE_MSG_TRANSFORM_FAILED 208
+#define BATTLE_MSG_LIGHT_SCREEN_SET 209
+#define BATTLE_MSG_LIGHT_SCREEN_FAILED 210
+#define BATTLE_MSG_REFLECT_SET 211
+#define BATTLE_MSG_REFLECT_FAILED 212
+#define BATTLE_MSG_SUBSTITUTE_EXISTS 213
+#define BATTLE_MSG_SUBSTITUTE_LOW_HP 214
+#define BATTLE_MSG_SUBSTITUTE_CREATED 215
+#define BATTLE_MSG_TRANSFORM_DITTO_BLOCKED 216
+#else
 #define BATTLE_MSG_TRANSFORM_FAILED 208        // "But, it failed!"
 #define BATTLE_MSG_TRANSFORM_DITTO_BLOCKED 209 // "It couldn't transform into DITTO!"
 #define BATTLE_MSG_LIGHT_SCREEN_SET 210        // "It's protected from SPECIAL attacks!"
@@ -211,6 +223,7 @@ typedef struct PokemonBattleCues {
 #define BATTLE_MSG_SUBSTITUTE_EXISTS 214       // "It has a SUBSTITUTE!"
 #define BATTLE_MSG_SUBSTITUTE_LOW_HP 215       // "Not enough HP!"
 #define BATTLE_MSG_SUBSTITUTE_CREATED 216      // "It created a SUBSTITUTE!"
+#endif
 
 // BattleScene.moveEffectKind selects presentation, not moveCache.unk_01's
 // gameplay effect. Producers: BattleEffect_* and Battle_CheckMonCanAct.
@@ -662,7 +675,11 @@ typedef struct unk_D_843901A0 {
 } BattleMessageQueue; // size = 0x4F4
 
 typedef struct StatusConditionLabel {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* name;
+#else
     /* 0x00 */ s32 stringIndex;
+#endif
     /* 0x04 */ Color_RGBA8 color;
 } StatusConditionLabel; // size = 0x8
 
@@ -1284,6 +1301,13 @@ extern s16 gBattleAnimDefaultAnchor;
 extern ActivePokemon* gBattleAnimCurrentOwner;
 extern ActivePokemon* gBattleAnimSecondaryOwner;
 extern ActivePokemon* gBattleAnimTertiaryOwner;
+typedef struct unk_D_84392040 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ char unk14[0x4];
+} unk_D_84392040; // size = 0x18
+
 extern s32 D_843902F4;
 extern s32 D_843902F8;
 extern func_D_84390300 gBattleAnimEffectUpdateFuncs[8];
@@ -1780,8 +1804,29 @@ void Battle_SimpleStringFormat(s8* buffer, s8* format, ...);
 #if defined(VERSION_JP)
 // The Japanese build formats the message: %s in fmt copies the next char* argument.
 void Battle_QueueMessage(s8* arg0, s8 arg1, const char* fmt, ...);
+// Queue message `id` from gBattleQueuedMessageTexts, formatted with N %s arguments.
+// Message ids 0x80 and up (negative as s8) have their text at index id - 0x52.
+#define BATTLE_QUEUED_TEXT(id) gBattleQueuedMessageTexts[((id) & 0x80) ? (((id) & 0xFF) - 0x52) : (id)]
+#define BATTLE_QUEUE_MESSAGE0(text, id) Battle_QueueMessage(text, id, BATTLE_QUEUED_TEXT(id))
+#define BATTLE_QUEUE_MESSAGE1(text, id, a) Battle_QueueMessage(text, id, BATTLE_QUEUED_TEXT(id), a)
+#define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id, BATTLE_QUEUED_TEXT(id), a, b)
+// Queues message id (offset + base_id), where base_id is 0x80 or higher.
+#define BATTLE_QUEUE_OFFSET_MESSAGE1(text, offset, base_id, a) \
+    Battle_QueueMessage(text, (offset) + (base_id), gBattleQueuedMessageTexts[(offset) + ((base_id) - 0x52)], a)
+// JP passes message arguments directly, so it sets no text tokens.
+#define BATTLE_SET_MESSAGE_TOKEN(token, string)
+// Queues an empty message (JP passes "" as the format; other versions use text table entry 0).
+#define BATTLE_QUEUE_EMPTY_MESSAGE(text) Battle_QueueMessage(text, 0, "")
 #else
 void Battle_QueueMessage(s8* text, s8 file_number_index);
+// Queues message `id` from the battle message text file; %s values come from the
+// text tokens set with BATTLE_SET_MESSAGE_TOKEN, so the arguments are unused here.
+#define BATTLE_QUEUE_MESSAGE0(text, id) Battle_QueueMessage(text, id)
+#define BATTLE_QUEUE_MESSAGE1(text, id, a) Battle_QueueMessage(text, id)
+#define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id)
+#define BATTLE_SET_MESSAGE_TOKEN(token, string) Text_SetStringToken(token, string)
+#define BATTLE_QUEUE_EMPTY_MESSAGE(text) Battle_QueueMessage(text, 0)
+#define BATTLE_QUEUE_OFFSET_MESSAGE1(text, offset, base_id, a) Battle_QueueMessage(text, (offset) + (base_id))
 #endif
 void Battle_QueueStatusText(char* text, s32 side);
 void func_84317B38(void);
@@ -1798,8 +1843,10 @@ void BattleBox_Update(s16 x, s16 y);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
 #if defined(VERSION_JP)
 // Battle message strings, built into the Japanese ROM instead of loaded from a text file.
-// Indexed by the same message numbers as the other versions' text file.
+// gBattleMessageTexts: the five action-selection refusals (no usable moves, no PP, ...).
 extern char* gBattleMessageTexts[];
+// Indexed by the message number passed to Battle_QueueMessage.
+extern char* gBattleQueuedMessageTexts[];
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, char* format, ...);
 #else
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number);
@@ -3101,6 +3148,8 @@ void BattleAnim_NoopUpdateHook(void);
 // Japanese-only empty hook that BattleAnim_UpdateFrame calls before BattleAnim_UpdateEffects. It
 // follows battle_engine_shared_move_effects in the Japanese fragment, which US 1.0 does not have.
 void func_84359274_jp(void);
+void BattleAnim_SetupUnusedRingScatterParticle(Particle* arg0);
+void BattleAnim_RunUnusedRingScatterParticle(Particle* arg0);
 #endif
 void func_843592E8(void);
 void func_843592F0(void);

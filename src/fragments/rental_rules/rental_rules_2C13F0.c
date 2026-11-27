@@ -41,7 +41,11 @@ s32 RentalRules_SpeciesMatchesCategory(s16 species, s16 ruleset) {
             break;
 
         case RULE_CATEGORY_NINTENDO_CUP_99:
+#if defined(VERSION_JP)
+            eligibility_mask = 4;
+#else
             eligibility_mask = 1;
+#endif
             break;
 
         case RULE_CATEGORY_PETIT_CUP:
@@ -298,11 +302,20 @@ void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+#if defined(VERSION_JP)
+    if (1) {}
+#endif
 
     for (i = 0; i < 6; i++) {
         species = node->speciesListed[i].species;
         if (species != NULL) {
+#if defined(VERSION_JP)
+            Font_Printf(x + (i * 84) + 2, y + 42, D_8006FF00[species - 1].name);
+            // FAKE: makes IDO color the loop bound 6 before the table base and its 28-byte stride, giving it s2.
+            if (i == 6) {}
+#else
             Font_Printf(x + (i * 84) + 2, y + 42, RentalRules_GetPokemonName(species));
+#endif
         }
     }
 
@@ -381,6 +394,12 @@ void RentalRules_QualifyingSpeciesWindowDraw(void) {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(x + 44, y + 8, "あおパネルがエントリーできるポケモン %3dしゅるい", display->eligibleCount);
+        if (1) {}
+#else
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetActive(8, 0);
         Text_SetNumberToken(3, display->eligibleCount);
@@ -388,6 +407,7 @@ void RentalRules_QualifyingSpeciesWindowDraw(void) {
             char var_sp4C[64];
             Font_Printf(x + 44, y + 8, Text_GetString(var_sp4C, sizeof(var_sp4C), sBattleModeLabels, 3));
         }
+#endif
         Font_EndTexturedTextRendering();
 
         if (display->rowDrawBudget == 0) {

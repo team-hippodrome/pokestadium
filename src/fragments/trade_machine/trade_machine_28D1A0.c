@@ -205,13 +205,22 @@ s32 Trade_IsMoveInvalid(s32 arg0) {
     return var_v1;
 }
 
+#if defined(VERSION_JP)
+static Color_RGBA8 D_82F13C48 = { 0xFF, 0xFF, 0xFF, 0xFF };
+#endif
+
 void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
+#if !defined(VERSION_JP)
     static Color_RGBA8 D_82F13C48 = { 0xFF, 0xFF, 0xFF, 0xFF };
+#endif
     static Color_RGB8 D_82F13C4C = { 0x82, 0x1E, 0x1E };
     static Color_RGB8 D_82F13C50 = { 0x96, 0x64, 0x1E };
     static s16 D_82F13C54[] = { 0x122, 0x136, 0x1C, 8 };
     static s16 D_82F13C5C[] = { 0xD3, 0xED, 0x107, 0xED };
     static s16 D_82F13C64[] = { 0x15E, 0x1BA };
+#if defined(VERSION_JP)
+    static char* sp8C[2] = { "はい", "いいえ" };
+#endif
     static u8* D_82F13C68[] = {
         D_303E330, D_303FC30, D_3040590, D_3040270, D_303F910, D_303F5F0, D_3040590, D_303FF50,
         D_3040BD0, D_303E650, D_303E970, D_303EFB0, D_303F2D0, D_30408B0, D_303EC90, D_3040EF0,
@@ -221,9 +230,18 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
     Color_RGB8* var_v0;
     s16 temp_s0;
     s16 temp_s1_2;
+#if !defined(VERSION_JP)
     s32 temp_s1_3;
+#endif
+#if defined(VERSION_JP)
+    UNUSED s32 pad;
+#endif
     BattleMon* sp11C;
     MoveData* ptr;
+#if defined(VERSION_JP)
+    s32 var_t0;
+    s32 sp80;
+#else
     UNUSED s32 pad;
     char sp94[128];
     char* sp8C[2];
@@ -233,6 +251,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
 
     sp8C[0] = Text_GetString(NULL, 0, gTradeStrings, 0x12);
     sp8C[1] = Text_GetString(NULL, 0, gTradeStrings, 0x13);
+#endif
     sp11C = arg0->unk_14;
     Trade_DrawPickScreenFrame(arg0->unk_04, arg0->unk_06, arg0->unk_0C, arg0->unk_0E);
 
@@ -298,6 +317,51 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         }
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, 0);
+        Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 6, sp11C->nickname);
+        Font_SetActive(0x10, -3);
+        Font_Printf(arg0->unk_04 + 0xA0, arg0->unk_06 + 6, "L%d", sp11C->level);
+        Font_SetActive(8, -5);
+        Font_Printf(arg0->unk_04 + 0x12E, arg0->unk_06 + 8, "No.%03d", sp11C->species.id);
+        Font_SetActive(8, 0);
+        Font_Printf(arg0->unk_04 + 0x19C, arg0->unk_06 + 8, TRADE_SPECIES_NAME(sp11C->species.id));
+
+        temp_s0 = PokemonType_ToDisplayIndex(sp11C->type1);
+        temp_s1_2 = PokemonType_ToDisplayIndex(sp11C->type2);
+
+        Font_SetActive(8, -2);
+        Font_Printf(arg0->unk_04 + 0xE4, arg0->unk_06 + 0x28, "タイプ");
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(arg0->unk_04 + 0x120, arg0->unk_06 + 0x28, "1/");
+        Gfx_SetEnvColor(D_80071D88[temp_s0].color.r, D_80071D88[temp_s0].color.g, D_80071D88[temp_s0].color.b, 0xFF);
+        Font_Printf(arg0->unk_04 + 0x120, arg0->unk_06 + 0x28, "  %s", D_80071D88[temp_s0].type_name);
+
+        if (sp11C->type1 != sp11C->type2) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(arg0->unk_04 + 0x19E, arg0->unk_06 + 0x28, "2/");
+            Gfx_SetEnvColor(D_80071D88[temp_s1_2].color.r, D_80071D88[temp_s1_2].color.g, D_80071D88[temp_s1_2].color.b,
+                            0xFF);
+            Font_Printf(arg0->unk_04 + 0x19E, arg0->unk_06 + 0x28, "  %s", D_80071D88[temp_s1_2].type_name);
+        }
+
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_SetActive(8, 0);
+        Font_Printf(arg0->unk_04 + 0x108, arg0->unk_06 + 0x44, "HP");
+        Font_SetActive(8, -2);
+        Font_Printf(arg0->unk_04 + 0x14A, arg0->unk_06 + 0x44, "%3d/%3d", sp11C->hp, sp11C->maxHp);
+        Font_SetActive(8, 0);
+        Font_Printf(arg0->unk_04 + 0x140, arg0->unk_06 + 0x6A, "こうげき");
+        Font_Printf(arg0->unk_04 + 0x140, arg0->unk_06 + 0x80, "ぼうぎょ");
+        Font_Printf(arg0->unk_04 + 0x140, arg0->unk_06 + 0x96, "すばやさ");
+        Font_Printf(arg0->unk_04 + 0x140, arg0->unk_06 + 0xAC, "とくしゅ");
+        Font_SetActive(8, -4);
+        Font_Printf(arg0->unk_04 + 0x1A4, arg0->unk_06 + 0x6A, "%3d", sp11C->attack);
+        Font_Printf(arg0->unk_04 + 0x1A4, arg0->unk_06 + 0x80, "%3d", sp11C->defense);
+        Font_Printf(arg0->unk_04 + 0x1A4, arg0->unk_06 + 0x96, "%3d", sp11C->speed);
+        Font_Printf(arg0->unk_04 + 0x1A4, arg0->unk_06 + 0xAC, "%3d", sp11C->special);
+        Font_SetActive(8, -2);
+#else
         Font_SetActive(0x10, 0);
         Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 6, sp11C->nickname);
         Font_SetActive(0x10, 0);
@@ -357,11 +421,15 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
         Font_Printf((arg0->unk_04 - Font_MeasureTextExtent(0, 0, sp94)) + 0x1D0, arg0->unk_06 + 0xAC, sp94);
         Font_SetActive(8, 0);
 
+#endif
+
         {
             char* sp74;
             Color_RGB8* sp70;
             Color_RGBA8 sp6C;
+#if !defined(VERSION_JP)
             s32 j;
+#endif
 
             for (i = 0; i < 4; i++) {
                 sp6C = D_82F13C48;
@@ -372,6 +440,13 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
 
                 if (Trade_IsMoveInvalid(sp11C->moves[i]) == 0) {
                     sp70 = &D_80071D88[gMoveDisplayInfo[sp11C->moves[i] - 1].type].color;
+#if defined(VERSION_JP)
+                    sp74 = gMoveDisplayInfo[sp11C->moves[i] - 1].unk_04;
+                } else {
+                    sp70 = &sp6C;
+                    sp74 = "？？？？？？？";
+                }
+#else
                     sp74 = Trade_GetMoveName(sp11C->moves[i]);
                 } else {
                     // "？？？？？？？"
@@ -380,13 +455,20 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                     sp70 = &sp6C;
                     sp74 = D_29C080;
                 }
+#endif
                 Gfx_SetEnvColor(sp70->r, sp70->g, sp70->b, 0xFF);
                 Font_Printf(D_82F13C54[i] + arg0->unk_04 + 0x18, D_82F13C5C[i] + arg0->unk_06, sp74);
             }
 
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -3);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 0x12A, "このポケモンをこうかんする");
+#else
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_Printf(arg0->unk_04 + 0x10, arg0->unk_06 + 0x12A, Text_GetString(NULL, 0, gTradeStrings, 0x11));
+#endif
 
             for (i = 0; i < 2; i++) {
                 Font_Printf(arg0->unk_04 + D_82F13C64[i], arg0->unk_06 + 0x12A, sp8C[i]);
@@ -396,6 +478,15 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
 
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
+#if defined(VERSION_JP)
+            {
+                // Widths of the はい / いいえ choices.
+                s16 sp5C[2] = { 0x35, 0x4A };
+
+                Trade_DrawSelectionCorners((D_82F13C64[D_82F20A38] + arg0->unk_04) - 4, arg0->unk_06 + 0x12A,
+                                           sp5C[D_82F20A38], 0x1C);
+            }
+#else
             {
                 s16 sp60[2];
 
@@ -406,6 +497,7 @@ void Trade_DrawInfoBox(unk_D_82F20A10* arg0) {
                 Trade_DrawSelectionCorners((D_82F13C64[D_82F20A38] + arg0->unk_04) - 8, arg0->unk_06 + 0x128,
                                            sp60[D_82F20A38] + 0x10, 0x1E);
             }
+#endif
         }
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

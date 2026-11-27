@@ -860,6 +860,7 @@ void BattlePrepTeamIcons_HpDrainStepDoubleNTSC(BattlePrepTeamIcons* team_icons, 
     }
 }
 
+#if !defined(VERSION_JP)
 /**
  * PAL timing of BattlePrepTeamIcons_HpDrainStepSingleNTSC: frames 0-20 drain 5 points per frame, then frames 21-50
  * stamp the next faint order every 5 frames.
@@ -877,7 +878,9 @@ void BattlePrepTeamIcons_HpDrainStepSinglePAL(BattlePrepTeamIcons* team_icons, s
         }
     }
 }
+#endif
 
+#if !defined(VERSION_JP)
 /**
  * PAL timing of BattlePrepTeamIcons_HpDrainStepDoubleNTSC: frames 0-20 drain 5 points per frame, then frames 21-56
  * stamp the next faint order every 3 frames.
@@ -895,6 +898,7 @@ void BattlePrepTeamIcons_HpDrainStepDoublePAL(BattlePrepTeamIcons* team_icons, s
         }
     }
 }
+#endif
 
 /**
  * Turns fainted Pokémon's cards over. Frame 0 sets up the fainted faces; frames 0-15 spin each fainted Pokémon's
@@ -1064,6 +1068,7 @@ void BattlePrepTeamIcons_FlipFaintedStepDouble(BattlePrepTeamIcons* team_icons, 
  * from frame 12, and fainted cards turn over from frame 74 (62 on PAL). Returns to state 0 at frame 96 (80 on PAL).
  */
 void BattlePrepTeamIcons_UpdateAnimationStep(BattlePrepTeamIcons* team_icons) {
+#if !defined(VERSION_JP)
     if (osTvType == OS_TV_PAL) {
         if (team_icons->isDoubleLayout == 1) {
             if (team_icons->timer >= 0) {
@@ -1095,7 +1100,9 @@ void BattlePrepTeamIcons_UpdateAnimationStep(BattlePrepTeamIcons* team_icons) {
         if (team_icons->timer == 0x50) {
             team_icons->state = 0;
         }
-    } else {
+    } else
+#endif
+    {
         if (team_icons->isDoubleLayout == 1) {
             if (team_icons->timer >= 0) {
                 BattlePrepTeamIcons_FlipInStepDouble(team_icons, team_icons->timer);

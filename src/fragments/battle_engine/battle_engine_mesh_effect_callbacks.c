@@ -24,7 +24,7 @@ static s16 D_843925DA;
 #if !(defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE)))
 static const char D_8438D3D0[] = "calc_vector_ATtoDM() normal error!!!\n";
 #endif
-#if !(defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE)))
+#if !(defined(VERSION_US_REV2) || (defined(VERSION_PAL_LATE) && !defined(VERSION_DE)) || defined(VERSION_JP))
 static const char D_8438D3F8[] = "calc_vector_ATtoDM2() normal error!!!\n";
 #endif
 
@@ -165,6 +165,7 @@ void BattleAnim_CalcMoveAimingVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3
     *arg5 = sp1C;
 }
 
+#if !defined(VERSION_JP)
 /*
     Moves: Swift (use)
     TODO: Human contributor add screenshot
@@ -214,6 +215,8 @@ void BattleAnim_CalcSwiftAimVectors(f32* arg0, f32* arg1, f32* arg2, f32* arg3, 
     *arg4 = sp20;
     *arg5 = sp1C;
 }
+
+#endif
 
 void BattleAnim_ResetSharedEffectMatrix(void) {
     guRotateRPY(&D_84392588, 0.0f, 0.0f, 0.0f);
@@ -439,6 +442,32 @@ void BattleAnim_EndEffect9Radial20_Draw(void) {
     gDisplayListHead = LassoHit_Draw(gDisplayListHead);
 }
 
+#if defined(VERSION_JP)
+void BattleAnim_EmitSwiftUseRibbonSheet(void) {
+    Vec3f sp5C;
+    f32 sp58;
+    f32 sp54;
+    f32 sp50;
+    f32 sp4C;
+    UNUSED s32 pad[2];
+    f32 sp40;
+
+    sp40 = BattleAnim_EffectSecondaryOwnerModelScale();
+    BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp5C);
+    sp58 = sp5C.x;
+    sp54 = sp5C.y;
+    sp50 = sp5C.z;
+    sp4C = 20.0f;
+    if (sp58 > 0.0) {
+        sp4C = -sp4C;
+    }
+    sp58 += sp40 * (30.0f - (guRandom() % 60));
+    sp54 += sp40 * (30.0f - (guRandom() % 60));
+    sp50 += sp40 * (30.0f - (guRandom() % 60));
+    SwiftRibbonSheet_Start(sp58, sp54, sp50, sp4C, 0.0f, 0.0f, 0xFF, 0xFF, 0, 0x3C, 0.3f, 0x1E);
+}
+
+#else
 void BattleAnim_EmitSwiftUseRibbonSheet(void) {
     UNUSED s32 pad[3];
     f32 sp58;
@@ -459,6 +488,7 @@ void BattleAnim_EmitSwiftUseRibbonSheet(void) {
     sp50 += sp40 * (30.0f - (guRandom() % 60));
     SwiftRibbonSheet_Start(sp58, sp54, sp50, sp4C, sp48, sp44, 0xFF, 0xFF, 0, 0x3C, 0.3f, 0x1E);
 }
+#endif
 
 void BattleAnim_SetupSwiftUseRibbonSheet(void) {
     D_843925D0 = 0;

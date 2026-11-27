@@ -202,11 +202,7 @@ void Trainer_RequestPokeIcon(BattleSessionTeams* arg0) {
         temp_a1 = arg0->unk_04;
         if ((temp_a1 != NULL) && (sp2A == arg0->unk_04->species.id)) {
             Model_ComputeNicknameColorVariant(&sp2C, (BattleMon*)arg0->unk_04);
-#if defined(VERSION_JP)
-            if ((sp2A == 0x19) && (arg0->unk_04->unk_3C & 0x80)) {
-#else
-            if ((sp2A == 0x19) && (arg0->unk_04->unk_52 & 0x80)) {
-#endif
+            if ((sp2A == 0x19) && (arg0->unk_04->rentalInfo & 0x80)) {
                 sp2A = 0x99;
             }
         }

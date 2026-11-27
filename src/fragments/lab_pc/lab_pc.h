@@ -8,6 +8,41 @@
 #include "src/gb_data.h"
 #include "src/gb_save.h"
 
+// JP has no text tables: the Lab PC strings sit at the use site.
+#if defined(VERSION_JP)
+#define LABPC_TEXT(table, id, jpText) (jpText)
+#else
+#define LABPC_TEXT(table, id, jpText) Text_GetString(NULL, 0, table, id)
+#endif
+
+// JP fonts draw with tighter letter spacing.
+#if defined(VERSION_JP)
+#define LETTER_SPACING(jpSpacing) (jpSpacing)
+#else
+#define LETTER_SPACING(jpSpacing) 0
+#endif
+
+// A value that differs on JP.
+#if defined(VERSION_JP)
+#define LABPC_JP(jp, other) (jp)
+#else
+#define LABPC_JP(jp, other) (other)
+#endif
+
+// A text-table argument that JP functions don't take.
+// The _LAST forms are for a trailing parameter.
+#if defined(VERSION_JP)
+#define LAB_PC_TEXT_PARAM(param)
+#define LAB_PC_TEXT_ARG(arg)
+#define LAB_PC_TEXT_PARAM_LAST(param)
+#define LAB_PC_TEXT_ARG_LAST(arg)
+#else
+#define LAB_PC_TEXT_PARAM(param) param,
+#define LAB_PC_TEXT_ARG(arg) arg,
+#define LAB_PC_TEXT_PARAM_LAST(param) , param
+#define LAB_PC_TEXT_ARG_LAST(arg) , arg
+#endif
+
 struct unk_func_8821421C_038_04C_000;
 struct unk_func_8820B12C_02C;
 struct unk_func_8821421C_034;
@@ -40,18 +75,24 @@ typedef struct unk_func_88200FA0 {
 typedef struct unk_func_88205880 {
     /* 0x0000 */ WidgetNode unk_0000;
     /* 0x002C */ unk_func_88203ED8* unk_002C;
+#if defined(VERSION_JP)
+    /* 0x0030 */ char unk0030[0x60];
+#else
     /* 0x0030 */ char unk0030[0x64];
+#endif
+    // The offsets below are the US ones; JP has 8 GB boxes of 30 Pokémon and a smaller unk_0098.
     /* 0x0094 */ unk_func_88201DA0* unk_0094;
     /* 0x0098 */ unk_func_88205880_0098 unk_0098;
-    /* 0x00D0 */ unk_func_88205880_00D0 unk_00D0[12];
-    /* 0x5050 */ unk_func_88205880_00D0 unk_5050[12];
-    /* 0x9FD0 */ unk_func_88205880_00D0* unk_9FD0[12];
-    /* 0xA000 */ unk_func_88205880_00D0* unk_A000[12];
+    /* 0x00D0 */ unk_func_88205880_00D0 unk_00D0[SAVE_BOX_COUNT];
+    /* 0x5050 */ unk_func_88205880_00D0 unk_5050[SAVE_BOX_COUNT];
+    /* 0x9FD0 */ unk_func_88205880_00D0* unk_9FD0[SAVE_BOX_COUNT];
+    /* 0xA000 */ unk_func_88205880_00D0* unk_A000[SAVE_BOX_COUNT];
     /* 0xA030 */ unk_func_88205880_A030 unk_A030[2];
-} unk_func_88205880; // size = 0xA048
+} unk_func_88205880; // size = 0xA048, 0x9808 on JP
 
+// One BattleMon-sized record (0x50 on JP, 0x54 elsewhere).
 typedef struct unk_func_882062E4 {
-    /* 0x0000 */ char unk_00[0x54];
+    /* 0x0000 */ char unk_00[sizeof(BattleMon)];
 } unk_func_882062E4; // size = 0x54
 
 typedef struct unk_func_88208C5C {
@@ -188,15 +229,20 @@ typedef struct unk_func_8820BE14_02C {
     /* 0x78 */ unk_func_8820BE14_02C_078* unk_78[2];
     /* 0x80 */ unk_func_88509F48* unk_80;
     /* 0x84 */ unk_func_889000C4* unk_84;
+#if defined(VERSION_JP)
+    /* 0x88 */ unk_func_8850878C* unk_88_jp[1]; // "Can't save with an empty party" message.
+#endif
     /* 0x88 */ unk_func_8850878C* unk_88;
     /* 0x8C */ unk_func_8820BE14_06C* unk_8C;
     /* 0x90 */ char unk90[0x10];
-} unk_func_8820BE14_02C; // size = 0xA0
+} unk_func_8820BE14_02C; // size = 0xA0 (0xA4 on JP)
 
 typedef struct unk_func_8820BE14 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8820BE14_02C* unk_2C;
     /* 0x30 */ unk_func_8820BE14_030 unk_30;
+#if !defined(VERSION_JP)
+    // Text tables; JP has none (its strings are inline), so later offsets drop by 0x1C there.
     /* 0x4C */ char** unk_4C;
     /* 0x50 */ char** unk_50;
     /* 0x54 */ char** unk_54;
@@ -204,11 +250,12 @@ typedef struct unk_func_8820BE14 {
     /* 0x5C */ char** unk_5C;
     /* 0x60 */ char** unk_60;
     /* 0x64 */ char** unk_64;
+#endif
     /* 0x68 */ unk_func_88509F48* unk_68;
     /* 0x6C */ unk_func_8820BE14_06C unk_6C;
     /* 0x7C */ unk_func_8820BE14_06C unk_7C;
     /* 0x8C */ unk_func_8820BE14_06C unk_8C;
-} unk_func_8820BE14; // size = 0x9C
+} unk_func_8820BE14; // size = 0x9C (0x80 on JP)
 
 typedef struct unk_func_882170A8 {
     /* 0x00 */ WidgetNode unk_00;
@@ -354,6 +401,9 @@ typedef struct unk_func_8821421C_02C {
     /* 0x6C */ unk_func_8821421C_02C_06C* unk_6C;
     /* 0x70 */ unk_func_8821421C_02C_070* unk_70[2];
     /* 0x78 */ struct unk_func_8821421C_03C* unk_78;
+#if defined(VERSION_JP)
+    /* 0x7C */ char unk_7C_jp[0x54]; // item description
+#endif
     /* 0x7C */ struct unk_func_8821421C_03C* unk_7C;
     /* 0x80 */ s32 unk_80;
     /* 0x84 */ struct unk_func_8821421C_038* unk_84;
@@ -362,7 +412,7 @@ typedef struct unk_func_8821421C_02C {
     /* 0x90 */ struct unk_func_8821421C_07C* unk_90;
     /* 0x94 */ unk_func_882025E0_03C unk_94[1];
     /* 0xA0 */ unk_func_889000C4* unk_A0;
-} unk_func_8821421C_02C; // size = 0xA4
+} unk_func_8821421C_02C; // size = 0xA4 (0xF8 on JP)
 
 typedef void (*unk_func_8821421C_038_04C_000_014)(struct unk_func_8821421C_038_04C_000*, Controller*);
 
@@ -411,8 +461,11 @@ typedef struct unk_func_8821421C_038 {
     /* 0x54 */ char unk54[0xC];
     /* 0x60 */ s32 unk_60;
     /* 0x64 */ unk_func_8820BE14_06C unk_64;
+#if defined(VERSION_JP)
+    /* 0x74 */ char unk_74_jp[0x54]; // item description
+#endif
     /* 0x74 */ char unk74[0x4];
-} unk_func_8821421C_038; // size = 0x78
+} unk_func_8821421C_038; // size = 0x78 (0xCC on JP)
 
 typedef struct unk_func_8821421C {
     /* 0x00 */ WidgetNode unk_00;
@@ -469,7 +522,12 @@ s32 LabPC_Dispatch(s32 arg0, s32 arg1);
 
 void LabPC_BuildMenuTitleLabel(unk_func_88503298* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 void LabPC_MenuTitleLabel_SetText(unk_func_88503298* arg0, s8* arg1);
+#if defined(VERSION_JP)
+void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, s32 arg3, WidgetNode* arg4,
+                               MemoryPool* arg5);
+#else
 void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+#endif
 void LabPC_MenuGridWidget_RefreshTitle(unk_func_88200FA0_030* arg0, s32 arg1);
 void LabPC_DrawMenuGridCell(s32 arg0, s32 arg1, char* arg2, s32 arg3);
 s32 LabPC_MenuGridWidget_HandleInput(unk_func_88200FA0_030* arg0, Controller* arg1);
@@ -515,7 +573,14 @@ s32 LabPC_BoxPairSelector_IsInitialStage(unk_func_882025E0_1A9780* arg0);
 void LabPC_BoxPairSelector_ReorderSwap(unk_func_882025E0_1A9780* arg0);
 void LabPC_BoxPairSelector_ExchangeSwap(unk_func_882025E0_1A9780* arg0);
 s32 LabPC_BoxPairSelector_HandleInput(unk_func_882025E0_1A9780* arg0, Controller* arg1);
+#if defined(VERSION_JP)
+// JP's box label tabs keep their own size, so they don't take the frame they sit in.
+void LabPC_BuildBoxLabelTab(unk_func_8820399C* arg0, s32 arg1);
+#define BOX_LABEL_TAB_FRAME(frame)
+#else
 void LabPC_BuildBoxLabelTab(unk_func_8820399C* arg0, s32 arg1, unk_func_8850143C* arg2);
+#define BOX_LABEL_TAB_FRAME(frame) , frame
+#endif
 s32 LabPC_DrawBoxLabelTab(unk_func_8820399C* arg0, s32 arg1, s32 arg2);
 s32 LabPC_BoxMenu_OnShow(unk_func_88203ED8* arg0);
 void LabPC_BoxMenu_SetVisible(unk_func_88203ED8* arg0, s32 arg1);
@@ -545,8 +610,18 @@ void LabPC_BoxTypeSelector_SetSlotASelection(unk_func_8820BE14_02C_078* arg0, u3
 void LabPC_BoxTypeSelector_SetSlotBSelection(unk_func_8820BE14_02C_078* arg0, u32 arg1);
 s32 LabPC_BoxTypeSelectorInput(unk_func_8820BE14_02C_078* arg0, Controller* arg1);
 s32 LabPC_RunBoxTypeSelectorModal(unk_func_8820BE14_02C_078* arg0, Controller* arg1);
+// JP draws the level at a fixed x, so it takes no width.
+#if defined(VERSION_JP)
+#define MON_NAME_LEVEL_WIDTH(width)
+#define MON_NAME_LEVEL_WIDTH_PARAM(param)
+void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2);
+#else
+#define MON_NAME_LEVEL_WIDTH(width) , width
+#define MON_NAME_LEVEL_WIDTH_PARAM(param) param,
 void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s32 arg3);
-void LabPC_InitMonNameLevelWidget(unk_func_882079D8* arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4);
+#endif
+void LabPC_InitMonNameLevelWidget(unk_func_882079D8* arg0, s32 arg1, s32 arg2,
+                                  MON_NAME_LEVEL_WIDTH_PARAM(s32 arg3) unk_func_88205880_00D0* arg4);
 void LabPC_MonNameLevelWidget_SetMon(unk_func_882079D8* arg0, unk_func_88205880_00D0* arg1);
 s32 LabPC_MonNameLevelWidget_Draw(unk_func_882079D8* arg0, s32 arg1, s32 arg2);
 void LabPC_SwapMenu_NotifyModeChanged(unk_func_8820B12C_02C* arg0, s32 arg1);
@@ -621,9 +696,16 @@ void LabItem_DropdownMenu_Open(unk_func_8821421C_02C_070* arg0);
 void LabItem_DropdownMenu_Close(unk_func_8821421C_02C_070* arg0);
 s32 LabItem_RunDropdownMenuModal(unk_func_8821421C_02C_070* arg0, Controller* arg1);
 void LabItem_DropdownMenu_SetDisabledIndex(unk_func_8821421C_02C_070* arg0, s32 arg1);
+// JP draws the quantity at a fixed x, so it takes no width.
+#if defined(VERSION_JP)
+#define ITEM_ROW_WIDTH(width)
+s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2);
+#else
+#define ITEM_ROW_WIDTH(width) , width
 s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2, s32 arg3);
+#endif
 void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, unk_func_8820BE14_02C_038* arg5);
-void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2, s32 arg3);
+void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2 ITEM_ROW_WIDTH(s32 arg3));
 void LabItem_ItemRowWidget_SetItem(unk_func_8821421C_02C_06C_02C_060* arg0,
                                    unk_func_8821421C_02C_06C_02C_060_02C_000 arg1);
 s32 LabItem_ItemRowWidget_Draw(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2);
@@ -691,7 +773,8 @@ s32 LabItem_CheckDirtyDecks(unk_func_8821421C_02C* arg0);
 void LabItem_CommitChanges(unk_func_8821421C_02C* arg0, s32 arg1);
 s32 LabItem_RunConfirmSaveFlow(unk_func_8821421C_02C* arg0, Controller* arg1);
 s32 LabItem_BoxPairMenu_HandleInput(unk_func_8821421C_02C_06C* arg0, Controller* arg1);
-void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3, s32 arg4, char** arg5);
+void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3,
+                                 s32 arg4 LAB_PC_TEXT_PARAM_LAST(char** arg5));
 void LabPC_ItemScreen_DrawLoop(unk_func_8821421C* arg0);
 void LabPC_ItemScreen_InputThread(unk_func_8821421C* arg0);
 void LabPC_ShowItems(FontContext* arg0);

@@ -50,6 +50,22 @@ static s32 pad_D_82F144AC;
 static unk_D_82F144B0 D_82F144B0;
 static s32 D_82F144BC;
 static s32 D_82F144C0;
+#if defined(VERSION_JP)
+// JP has inline text and no name tables.
+static unk_D_82F13B78 D_82F13B78[2] = {
+    { 0x0064, 0x0168, "ポケモンこうかんサービスにようこそ。" },
+    { 0x0000, 0x0000, NULL },
+};
+static unk_D_82F13B78 sTradeInProgressText[2] = {
+    { 0x0050, 0x0168, "こうかんちゅう。しばらくおまちください。" },
+    { 0x0000, 0x0000, NULL },
+};
+static unk_D_82F13B78 sTradeFinishedText[2] = {
+    { 0x008C, 0x0168, "こうかんしゅうりょう。\nごりようありがとうございました。" },
+    { 0x0000, 0x0000, NULL },
+};
+static u16 D_82F13B88 = 0;
+#else
 static char** sPokemonNameTable;
 static char** sMoveNameTable;
 static char** sTypeNameTable;
@@ -73,6 +89,7 @@ char* Trade_GetMoveName(s32 arg0) {
 char* Trade_GetTypeName(s32 arg0) {
     return Text_GetString(NULL, 0, sTypeNameTable, PokemonType_ToDisplayIndex(arg0));
 }
+#endif
 
 void Trade_SetFadeRect(s16 arg0) {
     unk_D_82F144B0* ptr = &D_82F144B0;
@@ -225,6 +242,51 @@ s32 Trade_GetTextPrinterState(void) {
     return var_v1;
 }
 
+#if defined(VERSION_JP)
+void Trade_DrawTextPrinter(void) {
+    // JP has a smaller line buffer and prints from the text's left edge.
+    s32 i;
+    s32 a;
+    u8 arg;
+    s8 sp38[0xF8];
+    s8* p_sp38;
+    s8* other;
+
+    if (D_82F1444C->unk_10 != NULL) {
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+
+        if (D_82F1444C->unk_0C & 1) {
+            a = D_82F13B88;
+            arg = a & 0xF;
+            arg = (arg * 0xFF) / 15;
+            if (a & 0x10) {
+                arg = 0xFF - arg;
+            }
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, arg);
+        } else {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        }
+
+        Font_SetLineHeight(0x1E);
+        if (D_82F1444C->unk_00 == -1) {
+            Font_Printf(D_82F1444C->unk_04, D_82F1444C->unk_06, D_82F1444C->unk_10);
+        } else {
+            p_sp38 = sp38;
+            other = D_82F1444C->unk_10;
+
+            for (i = 0; i < D_82F1444C->unk_00; i++) {
+                *p_sp38++ = *other++;
+            }
+
+            *p_sp38 = '\x00';
+            Font_Printf(D_82F1444C->unk_04, D_82F1444C->unk_06, &sp38);
+        }
+        Font_EndTexturedTextRendering();
+        D_82F13B88++;
+    }
+}
+#else
 void Trade_DrawTextPrinter(void) {
     s32 i;
     s32 temp_t0;
@@ -266,6 +328,7 @@ void Trade_DrawTextPrinter(void) {
         D_82F13B88++;
     }
 }
+#endif
 
 void Trade_ReadInput(void) {
     Cont_StartReadInputs();
@@ -319,6 +382,7 @@ void func_82F00960(void) {
 
 void Trade_Init(void) {
     ModelRenderer_InitDisplayRoots();
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     gTradeStrings = Text_GetStringTable(0x21);
     sTradePokemonDetailText = Text_GetStringTable(6);
@@ -326,6 +390,7 @@ void Trade_Init(void) {
     sMoveNameTable = Text_GetStringTable(0x25);
     sTypeNameTable = Text_GetStringTable(0x26);
     D_82F13B78[0].unk_04 = Text_GetString(NULL, 0, gTradeStrings, 0);
+#endif
     D_82F14428 = 0;
     Trade_ResetTextMenu();
     D_82F14424 = 0;

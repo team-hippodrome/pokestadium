@@ -1289,12 +1289,17 @@ s32 WidgetTree_DrawTextList(WidgetTextList* arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
-#if defined(NON_MATCHING)
-// Matches except that IDO keeps the string pointer in v1 instead of a3.
-void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1) {
+/**
+ * FAKE: JP's definition takes two extra parameters and reuses them as the loop's character and
+ * pointer (callers pass two arguments; lab_widget_tree.h declares it without a prototype for JP).
+ * uopt never gives v0/v1 to a parameter that is live on entry, which is what keeps the pointer
+ * out of v1. The empty ifs make both parameters live on entry so they stay in a2/a3.
+ */
+void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1, s32 val, u8* arg) {
     s32 var_v0;
-    s32 val;
-    u8* arg;
+
+    if (val) {}
+    if (arg) {}
 
     arg0->unk_2C = (WidgetAnimatedPanel*)arg1;
     arg0->unk_40 = 0;
@@ -1311,9 +1316,6 @@ void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1) {
     }
     arg0->unk_30 = var_v0;
 }
-#else
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/lab_widget_tree/lab_widget_tree/WidgetTree_SetTextList.s")
-#endif
 #else
 s32 WidgetTree_UpdateTextList(WidgetTextList* arg0) {
     if ((((arg0->unk_40 * 0xF) / 5) + 1) <= arg0->unk_30) {

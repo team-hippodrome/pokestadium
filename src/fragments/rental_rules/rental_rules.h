@@ -16,8 +16,10 @@ typedef struct unk_D_83003CE0 {
     /* 0x90 */ char* unk_90;
     /* 0x94 */ char* unk_94;
     /* 0x98 */ char* unk_98;
+#if !defined(VERSION_JP)
     /* 0x9C */ char unk_9C[100];
-} unk_D_83003CE0; // size = 0x100
+#endif
+} unk_D_83003CE0; // size = 0x100, 0x9C on JP
 
 typedef struct SpeciesQualificationStatus {
     /* 0x00 */ s16 species;

@@ -10,6 +10,15 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+#if defined(VERSION_JP)
+// Defined after LabPC_BuildMenuGridWidget, so that its string comes first in .rodata.
+static Color_RGBA8 D_88217BF8;
+static Color_RGBA8 D_88217C04;
+static Color_RGBA8 D_88217C08;
+static char* sPcMenuItems[4];
+static Color_RGBA8 D_88217C0C;
+static char* sPcMenuDescriptions[4];
+#else
 static char** sIdLabelText;
 static char** sPcMenuText;
 
@@ -19,7 +28,35 @@ static u16 D_88217BFC[4] = { 2, 3, 4, 5 };
 static Color_RGBA8 D_88217C04 = { 0x64, 0x96, 0xB4, 0xFF };
 static Color_RGBA8 D_88217C08 = { 0x3C, 0x64, 0x78, 0xFF };
 static Color_RGBA8 D_88217C0C = { 0xA0, 0x96, 0x64, 0xFF };
+#endif
 
+#if defined(VERSION_JP)
+void LabPC_BuildMenuTitleLabel(unk_func_88503298* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
+    UNUSED s32 pad[4];
+    unk_func_885012A4* temp_s0;
+
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88503298));
+    arg0->unk_00.unk_10.unk_00 = arg1;
+    arg0->unk_00.unk_10.unk_02 = arg2;
+
+    arg0->unk_2C = mem_pool_alloc(arg3, sizeof(WidgetAnimatedPanel));
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, 0x19C, 0x68);
+    arg0->unk_2C->unk_00.unk_28 |= 0x200;
+    arg0->unk_2C->unk_00.unk_28 |= 0x400;
+    arg0->unk_2C->unk_00.unk_28 &= ~1;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
+
+    temp_s0 = mem_pool_alloc(arg3, sizeof(unk_func_885012A4));
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(temp_s0, 0, 0, 0x19C, 0x68, D_88217BF8);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s0);
+
+    arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_30, 8, 8, 0, 0x10);
+    arg0->unk_30->unk_38 = -2;
+    arg0->unk_30->unk_3C = 0x20;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0, arg0->unk_30);
+}
+#else
 void LabPC_BuildMenuTitleLabel(unk_func_88503298* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
     s32 i;
     s32 temp_v0;
@@ -55,11 +92,73 @@ void LabPC_BuildMenuTitleLabel(unk_func_88503298* arg0, s32 arg1, s32 arg2, Memo
     arg0->unk_30->unk_3C = 0x20;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0, arg0->unk_30);
 }
+#endif
 
 void LabPC_MenuTitleLabel_SetText(unk_func_88503298* arg0, s8* arg1) {
     arg0->unk_30->unk_40 = arg1;
 }
 
+#if defined(VERSION_JP)
+void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, s32 arg3, WidgetNode* arg4,
+                               MemoryPool* arg5) {
+    UNUSED s32 pad[4];
+    unk_func_8850B254* sp6C;
+    unk_func_8850878C* temp_s1;
+    unk_func_885012A4* temp_s0_2;
+    unk_func_88503298* temp_s0_3;
+
+    if ((arg3 <= 0) || (arg3 >= 5)) {
+        arg3 = 0;
+    } else {
+        arg3--;
+    }
+
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88200FA0_030));
+    arg0->unk_00.unk_20 = LabPC_MenuGridWidget_HandleInput;
+    arg0->unk_00.unk_10.unk_00 = arg1;
+    arg0->unk_00.unk_10.unk_02 = arg2;
+
+    arg0->unk_2C = mem_pool_alloc(arg5, sizeof(WidgetAnimatedPanel));
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, 0xC0, 0xA4);
+    arg0->unk_2C->unk_00.unk_28 |= 0x200;
+    arg0->unk_2C->unk_00.unk_28 |= 0x400;
+    arg0->unk_2C->unk_00.unk_28 &= ~1;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
+
+    sp6C = mem_pool_alloc(arg5, sizeof(unk_func_8850B254));
+    ((func8850B254)Memmap_GetFragmentVaddr(WidgetTree_InitDashedBorderFrame))(sp6C, 0, 0, 0xC0, 0x18, D_88217C04,
+                                                                              D_88217C08);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp6C);
+
+    temp_s1 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s1, 8, 0, "えらんでください", 0x10);
+    temp_s1->unk_38 = -2;
+    temp_s1->unk_3C = 0x1C;
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp6C, temp_s1);
+
+    temp_s0_2 = mem_pool_alloc(arg5, sizeof(unk_func_885012A4));
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(temp_s0_2, 0, 0x1C, 0xC0, 0x88, D_88217C0C);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, temp_s0_2);
+
+    PointerList_Initialize(&arg0->unk_38, (void**)sPcMenuItems, 4, 4);
+
+    arg0->unk_30 = mem_pool_alloc(arg5, sizeof(unk_func_88200FA0_030_030));
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 4, LabPC_DrawMenuGridCell, 0xC0,
+                                                                      0x20, 4, 1, arg5);
+    ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_38, arg5);
+    ((func88506BFC)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelection))(arg0->unk_30, arg3);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0_2, arg0->unk_30);
+
+    arg0->unk_34 = mem_pool_alloc(arg5, sizeof(unk_func_88503298));
+    LabPC_BuildMenuTitleLabel(arg0->unk_34, -0x6E, 0xB4, arg5);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_34);
+    LabPC_MenuGridWidget_RefreshTitle(arg0, arg3);
+
+    temp_s0_3 = mem_pool_alloc(arg5, sizeof(unk_func_88503298));
+    ((func88503298)Memmap_GetFragmentVaddr(WidgetTree_InitVisibilityGateBridge))(temp_s0_3, arg0->unk_2C, arg4);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, temp_s0_3);
+}
+#else
 void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4) {
     s32 i;
     s32 j;
@@ -138,9 +237,28 @@ void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, 
     ((func88503298)Memmap_GetFragmentVaddr(WidgetTree_InitVisibilityGateBridge))(temp_s0_3, arg0->unk_2C, arg3);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, temp_s0_3);
 }
+#endif
+
+#if defined(VERSION_JP)
+static Color_RGBA8 D_88217BF8 = { 0xA0, 0x96, 0x64, 0xFF };
+static Color_RGBA8 D_88217C04 = { 0x64, 0x96, 0xB4, 0xFF };
+static Color_RGBA8 D_88217C08 = { 0x3C, 0x64, 0x78, 0xFF };
+static char* sPcMenuItems[] = { "ポケモンのせいり", "どうぐのせいり", "ボックスのせいり", "いちらん" };
+static Color_RGBA8 D_88217C0C = { 0xA0, 0x96, 0x64, 0xFF };
+static char* sPcMenuDescriptions[] = {
+    "ポケモンを　ならべかえる。\nポケモンを　６４カセットに　うつす。\nＧＢカートリッジに　もどす。",
+    "てもちのどうぐを　ならべかえる。\nどうぐを　６４カセットに　うつす。\nＧＢカートリッジに　もどす。",
+    "ボックスを　ならべかえる。\nポケモンを　ボックスごと　６４に\nうつす。ＧＢカートリッジに　もどす。",
+    "もっている　すべての　ポケモンを\nひょうでみながら　レベルをしらべたり\nわざを　おぼえさせたり　できる。",
+};
+#endif
 
 void LabPC_MenuGridWidget_RefreshTitle(unk_func_88200FA0_030* arg0, s32 arg1) {
+#if defined(VERSION_JP)
+    LabPC_MenuTitleLabel_SetText(arg0->unk_34, sPcMenuDescriptions[arg1]);
+#else
     LabPC_MenuTitleLabel_SetText(arg0->unk_34, Text_GetString(NULL, 0, sPcMenuText, arg1 + 6));
+#endif
 }
 
 void LabPC_DrawMenuGridCell(s32 arg0, s32 arg1, char* arg2, s32 arg3) {
@@ -148,7 +266,7 @@ void LabPC_DrawMenuGridCell(s32 arg0, s32 arg1, char* arg2, s32 arg3) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88217C10.r, D_88217C10.g, D_88217C10.b, D_88217C10.a);
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
     Font_Printf(arg0 + 8, arg1 + 4, arg2);
     Font_EndTexturedTextRendering();
 }
@@ -237,17 +355,25 @@ void LabPC_BuildMenuWidget(unk_func_88200FA0* arg0, s32 arg1, s32 arg2, s32 arg3
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp4C, arg0->unk_2C);
 
     sp44 = mem_pool_alloc(arg4, sizeof(unk_func_88509A2C));
+#if defined(VERSION_JP)
+    ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp44, 0x38, 0x22, GbSave_GetActivePort());
+#else
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp44, 0x38, 0x22, GbSave_GetActivePort(),
                                                                           Text_GetString(NULL, 0, sIdLabelText, 0));
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp44);
 
     sp40 = mem_pool_alloc(arg4, sizeof(unk_func_88509E34));
     ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp40, 0, 0,
-                                                                        Text_GetString(NULL, 0, sPcMenuText, 0));
+                                                                        LABPC_TEXT(sPcMenuText, 0, "　パソコン"));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp40);
 
     arg0->unk_30 = mem_pool_alloc(arg4, sizeof(unk_func_88200FA0_030));
+#if defined(VERSION_JP)
+    LabPC_BuildMenuGridWidget(arg0->unk_30, 0xE0, 0x78, arg3, sp4C, arg4);
+#else
     LabPC_BuildMenuGridWidget(arg0->unk_30, 0x78, arg3, sp4C, arg4);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_30);
 
     arg0->unk_00.unk_24(&arg0->unk_00, 1);
@@ -288,7 +414,9 @@ void LabPC_MenuThreadEntry(unk_func_88200FA0* arg0) {
     }
     Ui_SendMessageAndPollInput(sp24);
 
+#if !defined(VERSION_JP)
     osStopThread(NULL);
+#endif
 }
 
 s32 LabPC_ShowMenu(s32 arg0, UNUSED s32 arg1) {
@@ -304,9 +432,11 @@ s32 LabPC_ShowMenu(s32 arg0, UNUSED s32 arg1) {
     sp2C = main_pool_alloc(0x1000, 0);
     sp34 = mem_pool_try_init(0x8000, 0);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sIdLabelText = Text_GetStringTable(0x2A);
     sPcMenuText = Text_GetStringTable(1);
+#endif
 
     sp30 = mem_pool_alloc(sp34, sizeof(unk_func_88200FA0));
     LabPC_BuildMenuWidget(sp30, 0, 0, arg0, sp34);

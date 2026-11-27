@@ -73,6 +73,9 @@ typedef struct unk_func_8830867C_034_03C_038_02C {
 
 // Seems to be >= 0x58 in other places?
 typedef struct unk_func_8830867C_02C_144_000 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_jp_00; // Label string, set from a table in LabPCList_InitDeckSlots.
+#endif
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ char unk08[0x4];
@@ -83,10 +86,17 @@ typedef struct unk_func_8830867C_02C_144_000 {
 } unk_func_8830867C_02C_144_000; // size = 0x20
 
 typedef struct unk_func_8830867C_02C_144_000_alt {
+#if defined(VERSION_JP)
+    /* 0x00 */ char unk00[0x34];
+    /* 0x34 */ unk_func_8830867C_034_03C_038_02C unk_2C;
+    /* 0x40 */ char unk_38[0x18];
+    /* 0x58 */ unk_func_8830867C_034_03C_038_02C unk_4C;
+#else
     /* 0x00 */ char unk00[0x2C];
     /* 0x2C */ unk_func_8830867C_034_03C_038_02C unk_2C;
     /* 0x38 */ char unk_38[0x14];
     /* 0x4C */ unk_func_8830867C_034_03C_038_02C unk_4C;
+#endif
 } unk_func_8830867C_02C_144_000_alt; // size >= 0x58
 
 typedef struct unk_func_8830867C_02C_144 {
@@ -202,12 +212,18 @@ typedef struct unk_func_8830867C_03C {
     /* 0x54 */ unk_func_8821421C_038_034* unk_54;
     /* 0x58 */ unk_func_8830867C_03C_058 unk_58[15];
     /* 0xD0 */ unk_func_8830867C_03C_0D0 unk_D0;
-    /* 0xE0 */ u16 unk_E0;
-} unk_func_8830867C_03C; // size = 0xE4
+#if !defined(VERSION_JP)
+    /* 0xE0 */ u16 unk_E0; // Width of the widest type name; JP uses fixed widths.
+#endif
+} unk_func_8830867C_03C; // size = 0xE4 (JP: 0xE0)
 
 typedef struct unk_func_8830867C_040_030 {
     /* 0x00 */ unk_func_8850878C* unk_00;
+#if defined(VERSION_JP)
+    /* 0x04 */ s32 unk_04; // position in D_88315634_jp, or -1 for an empty slot
+#else
     /* 0x04 */ u8* unk_04;
+#endif
 } unk_func_8830867C_040_030; // size = 0x8
 
 typedef struct unk_func_8830867C_040 {
@@ -258,8 +274,12 @@ typedef struct unk_func_8830867C_048 {
     /* 0x44 */ unk_func_88500994* unk_44;
     /* 0x48 */ unk_func_8830867C_048_048* unk_48;
     /* 0x4C */ unk_func_8830867C_048_04C* unk_4C;
+#if defined(VERSION_JP)
+    /* 0x50 */ char unk_50[0x14];
+#else
     /* 0x50 */ char unk_50[0x80];
-} unk_func_8830867C_048; // size = 0xD0
+#endif
+} unk_func_8830867C_048; // size = 0xD0, 0x64 on JP
 
 typedef struct unk_func_8830867C_04C_030_02C_000_000 {
     /* 0x00 */ u8 unk_00;
@@ -338,7 +358,11 @@ typedef struct unk_func_8830867C_04C {
     /* 0x30 */ unk_func_8830867C_04C_030* unk_30;
     /* 0x34 */ unk_func_88500994* unk_34;
     /* 0x38 */ char unk_38[4];
+#if defined(VERSION_JP)
+    /* 0x3C */ char unk3C[0x18];
+#else
     /* 0x3C */ char unk3C[0x3C];
+#endif
     /* 0x78 */ unk_func_8830867C_04C_078* unk_78;
     /* 0x7C */ unk_func_8830867C_030* unk_7C;
     /* 0x80 */ unk_func_8830867C_04C_080* unk_80;
@@ -346,7 +370,7 @@ typedef struct unk_func_8830867C_04C {
     /* 0x88 */ BattleMon* unk_88; // maybe unk_func_8830867C_02C_0CC_000_008
     /* 0x8C */ s32 unk_8C;
     /* 0x90 */ unk_func_88503298* unk_90;
-} unk_func_8830867C_04C; // size = 0x94
+} unk_func_8830867C_04C; // size = 0x94, 0x70 on JP (offsets from unk_78 are 0x24 lower)
 
 typedef struct unk_func_8830867C_02C_C54_014 {
     /* 0x00 */ s32 unk_00;
@@ -386,7 +410,18 @@ typedef struct unk_func_8830867C_054 {
     /* 0x14 */ WidgetNode* unk_14;
 } unk_func_8830867C_054; // size = 0x18
 
+#if defined(VERSION_JP)
+typedef struct LabPCListSortMenu {
+    /* 0x00 */ char** labels;
+    /* 0x04 */ s32 count;
+} LabPCListSortMenu; // size = 0x8
+extern LabPCListSortMenu D_88318400_jp[];
+#endif
+
 typedef struct unk_func_8830867C_02C_0E4 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_jp_00; // Label string, set from a table in LabPCList_InitDeckSlots.
+#endif
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
@@ -464,11 +499,19 @@ typedef struct unk_func_8830867C_02C {
     /* 0xCC4 */ s32 unk_CC4;
     /* 0xCC8 */ s32 unk_CC8;
     /* 0xCCC */ unk_func_8850878C* unk_CCC;
+#if defined(VERSION_JP)
+    // JP has a second message label; each label carries two layout values.
+    /* 0xCDC */ s32 unk_CCC_jp_04;
+    /* 0xCE0 */ s32 unk_CCC_jp_08;
+    /* 0xCE4 */ unk_func_8850878C* unk_CCC_jp_0C;
+    /* 0xCE8 */ s32 unk_CCC_jp_10;
+    /* 0xCEC */ s32 unk_CCC_jp_14;
+#endif
     /* 0xCD0 */ s32 unk_CD0;
     /* 0xCD4 */ s32* unk_CD4;
     /* 0xCD8 */ FragmentEntry unk_CD8;
     /* 0xCDC */ unk_func_8830867C_054* unk_CDC;
-} unk_func_8830867C_02C; // size = 0xCE0
+} unk_func_8830867C_02C; // size = 0xCE0 (JP 0xD00)
 
 typedef struct unk_func_8830867C {
     /* 0x00 */ WidgetNode unk_00;
@@ -484,6 +527,7 @@ typedef struct unk_func_8830867C {
     /* 0x50 */ unk_func_889000C4* unk_50;
     /* 0x54 */ unk_func_8830867C_054 unk_54;
     /* 0x6C */ s32 unk_6C;
+#if !defined(VERSION_JP)
     /* 0x70 */ char** unk_70;
     /* 0x74 */ char** unk_74;
     /* 0x78 */ char** unk_78;
@@ -491,7 +535,8 @@ typedef struct unk_func_8830867C {
     /* 0x80 */ char** unk_80;
     /* 0x84 */ char** unk_84;
     /* 0x88 */ char** unk_88;
-} unk_func_8830867C; // size = 0x8C
+#endif
+} unk_func_8830867C; // size = 0x8C (JP 0x70)
 
 typedef struct unk_func_88302D98 {
     /* 0x00 */ WidgetNode unk_00;
@@ -511,10 +556,15 @@ typedef struct unk_func_88304850_arg2 {
     /* 0x32 */ s16 unk_32;
     /* 0x34 */ s16 unk_34;
     /* 0x36 */ s16 unk_36;
+#if defined(VERSION_JP)
+    /* 0x38 */ char unk_38[0x10]; // Nickname
+    /* 0x48 */ char unk_43[1];    // OT name
+#else
     /* 0x38 */ char unk_38[4];
     /* 0x3C */ char unk3C[0x4];
     /* 0x40 */ char unk_40[3];
     /* 0x43 */ char unk_43[1];
+#endif
 } unk_func_88304850_arg2; // size >= 0x44
 
 typedef struct unk_func_88309C38_arg2_004 {
@@ -539,6 +589,30 @@ typedef struct unk_func_88309C38_arg2 {
     /* 0x18 */ s32 unk_18;
 } unk_func_88309C38_arg2; // size >= 0x1C
 
+#if defined(VERSION_JP)
+// JP code appends fixed strings with struct copies: *(JpStrN*)(strlen(buf) + buf) = *(JpStrN*)"...",
+// where N is the string's size in bytes including the terminator.
+#define JP_STR_TYPE(n)        \
+    typedef struct JpStr##n { \
+        char c[n];            \
+    } JpStr##n
+JP_STR_TYPE(3);
+JP_STR_TYPE(6);
+JP_STR_TYPE(7);
+JP_STR_TYPE(9);
+JP_STR_TYPE(13);
+JP_STR_TYPE(15);
+JP_STR_TYPE(84);
+#endif
+
+#if defined(VERSION_JP)
+// JP box descriptors start with a label string (see unk_func_8830867C_02C_0E4).
+typedef struct unk_func_88309C38_arg2_jp {
+    /* 0x00 */ char* label;
+    /* 0x04 */ unk_func_88309C38_arg2 base;
+} unk_func_88309C38_arg2_jp;
+#endif
+
 typedef struct unk_func_88309160_arg2 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
@@ -548,6 +622,13 @@ typedef struct unk_func_88309160_arg2 {
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ s32 unk_18;
 } unk_func_88309160_arg2; // size >= 0x1C
+
+#if defined(VERSION_JP)
+typedef struct unk_func_88309160_arg2_jp {
+    /* 0x00 */ char* label;
+    /* 0x04 */ unk_func_88309160_arg2 base;
+} unk_func_88309160_arg2_jp;
+#endif
 
 typedef struct unk_func_88310CA4_arg2 {
     /* 0x00 */ u8* unk_00;
@@ -563,9 +644,16 @@ typedef struct unk_func_88310B70 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8830867C_04C_030* unk_2C;
     /* 0x30 */ unk_func_8850878C* unk_30;
-} unk_func_88310B70; // size = 0x34
+#if defined(VERSION_JP)
+    /* 0x34 */ char unk_34_jp[0x4C]; // item name, filled in when drawn
+#endif
+} unk_func_88310B70; // size = 0x34, 0x80 on JP
 
+// The JP version of this box descriptor starts with a label string, which moves every field 4 bytes up.
 typedef struct unk_func_88313894_020 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* label_jp;
+#endif
     /* 0x00 */ char unk00[0xC];
     /* 0x0C */ unk_func_8830867C_02C_0CC_000_000* unk_0C;
     /* 0x10 */ char unk10[0x4];
@@ -587,8 +675,13 @@ typedef struct unk_func_88316128 {
     /* 0x34 */ u16 unk_34;
     /* 0x36 */ u16 unk_36;
     /* 0x38 */ u8 unk_38;
+#if defined(VERSION_JP)
+    /* 0x39 */ char unk39[0xF];
+    /* 0x48 */ u8 unk_43; // OT name (BattleMon at 0x08)
+#else
     /* 0x39 */ char unk39[0xA];
-    /* 0x43 */ u8 unk_43;
+    /* 0x43 */ u8 unk_43; // OT name (BattleMon at 0x08)
+#endif
 } unk_func_88316128; // size >= 0x44
 
 extern char** sIdLabelText;
@@ -647,12 +740,20 @@ void LabPCList_InitDeckSlots(unk_func_8830867C_02C* arg0, MemoryPool* arg1);
 void LabPCList_InitPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2, unk_func_8830867C_02C* arg3);
 s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2);
 void LabPCList_SwitchColumnPage(unk_func_8830867C_02C* arg0);
+#if defined(VERSION_JP)
+void LabPCList_DrawTypeName(s32 arg0, s32 arg1, u8* arg3, s32 arg4);
+void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, u8* arg3, s32 arg4);
+void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg3);
+void LabPCList_DrawPlainText(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
+void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, u8* arg5);
+#else
 void LabPCList_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
 void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
 void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, s32 arg2, unk_func_88304850_arg2* arg3);
 void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3);
 void LabPCList_DrawFormattedNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3);
 void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, u8* arg4);
+#endif
 s32 LabPCList_CheckStatFilterRange(unk_func_8830867C_02C* arg0, unk_func_88304850_arg2* arg1);
 void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s32 arg4,
                    unk_func_8830867C_02C_034* arg5);
@@ -833,19 +934,35 @@ void BattleInfoWidget_DrawSaveConfirmLabel(s32 arg0, s32 arg1, s8* arg2, s32 arg
 void BattleInfoWidget_BuildSaveConfirmDialog(unk_func_8830867C_02C_0B4* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 s32 BattleInfoWidget_HandleSaveConfirmInput(unk_func_8830867C_02C_0B4* arg0, Controller* arg1);
 s32 BattleInfoWidget_RunSaveConfirmModal(unk_func_8830867C_02C_0B4* arg0, Controller* arg1);
+#if defined(VERSION_JP)
+void LabPCList_InitTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
+#else
 void LabPCList_InitTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+#endif
 s32 LabPCList_TextFadeWidget_Update(unk_func_882173EC* arg0);
 s32 LabPCList_DrawTextFadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
 void LabPCList_TextFadeWidget_Start(unk_func_882173EC* arg0, s32 arg1, s32 arg2, WidgetPoint arg3);
+#if defined(VERSION_JP)
+void LabPCList_InitPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2);
+#else
 void LabPCList_InitPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+#endif
 s32 LabPCList_PpUpAnimWidget_Update(unk_func_8830867C_02C_0C0* arg0);
 s32 LabPCList_DrawPpUpAnimWidget(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2);
 void LabPCList_PpUpAnimWidget_Start(unk_func_8830867C_02C_0C0* arg0, s32 arg1, s32 arg2, s32 arg3, WidgetPoint arg4);
+#if defined(VERSION_JP)
+void LabPCList_InitVitaminAnimWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
+#else
 void LabPCList_InitVitaminAnimWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+#endif
 s32 LabPCList_VitaminAnimWidget_Update(unk_func_882173EC* arg0);
 s32 LabPCList_DrawVitaminAnimWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
 void LabPCList_TextCrossfadeWidget_Start(unk_func_882173EC* arg0, char* arg1, char* arg2, WidgetPoint arg3);
+#if defined(VERSION_JP)
+void LabPCList_InitLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);
+#else
 void LabPCList_InitLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+#endif
 s32 LabPCList_LocationCrossfadeWidget_Update(unk_func_882173EC* arg0);
 void LabPCList_DrawLocationCaption(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 s32 LabPCList_DrawLocationCrossfadeWidget(unk_func_882173EC* arg0, s32 arg1, s32 arg2);

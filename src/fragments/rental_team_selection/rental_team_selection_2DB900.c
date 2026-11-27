@@ -272,6 +272,54 @@ void TeamSelection_TrainerSlots_DrawCursorPrompt(void) {
     }
 }
 
+#if defined(VERSION_JP)
+void TeamSelection_TrainerSlots_DrawEntry(s32 arg0) {
+    if (D_84210DA0[arg0].unk_00 != 0) {
+        if (D_84210DA0[arg0].unk_01 == 0) {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_SetActive(8, 0);
+            Font_Printf((arg0 * 128) + 80, 0x5C, D_8423E518[arg0].unk_06);
+            Gfx_SetEnvColor(0xFF, 0xBE, 0xFF, 0xFF);
+            Font_SetActive(4, -4);
+            Font_Printf((arg0 * 128) + 108, 0x73, "%05d", D_8423E518[arg0].unk_04);
+        } else {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_SetActive(8, 0);
+            Font_Printf((arg0 * 128) + 80, 0x5C, "？？？？？");
+            Gfx_SetEnvColor(0xFF, 0xBE, 0xFF, 0xFF);
+            Font_SetActive(4, -4);
+            Font_Printf((arg0 * 128) + 108, 0x73, "＊＊＊＊＊");
+        }
+        Font_SetActive(4, -8);
+        Font_Printf((arg0 * 128) + 80, 0x73, "ID");
+    }
+}
+
+void TeamSelection_TrainerSlots_DrawEntries(void) {
+    Font_BeginTranslucentTextRendering();
+    TeamSelection_TrainerSlots_DrawEntry(0);
+    TeamSelection_TrainerSlots_DrawEntry(1);
+    TeamSelection_TrainerSlots_DrawEntry(2);
+    TeamSelection_TrainerSlots_DrawEntry(3);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_SetActive(0x10, -2);
+    Font_Printf(200, 408, "どこからえらびますか？");
+    Font_SetActive(8, -2);
+
+    if (D_8423E56A == 0) {
+        Font_Printf(340, 258, "レンタルのみでエントリー");
+    } else {
+        Font_Printf(349, 258, "レンタルのみでとうろく");
+    }
+
+    if (D_8423E56A == 0) {
+        Font_Printf(94, 246, "とうろくしたポケモン");
+        Gfx_SetEnvColor(0xFF, 0xBA, 0xCC, 0xFF);
+        Font_Printf(94, 270, "とうろくすう%2dセット", D_8423E578);
+    }
+    Font_EndTexturedTextRendering();
+}
+#else
 void TeamSelection_TrainerSlots_DrawEntry(s32 arg0) {
     UNUSED s32 pad;
 
@@ -335,6 +383,7 @@ void TeamSelection_TrainerSlots_DrawEntries(void) {
     }
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void TeamSelection_TrainerSlots_DrawEntryFrame(s32 arg0, s16 arg1, s16 arg2) {
     Color_RGBA8 sp2C;

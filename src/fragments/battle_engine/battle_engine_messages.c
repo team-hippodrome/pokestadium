@@ -98,6 +98,39 @@ void Battle_SimpleStringFormat(s8* buffer, s8* format, ...) {
     buffer[len] = 0;
 }
 
+#if defined(VERSION_JP)
+// Stores the message number in text[0] and formats fmt into text[1..]; like
+// Battle_SimpleStringFormat, %s copies the next char* argument.
+void Battle_QueueMessage(s8* text, s8 message_id, const char* fmt, ...) {
+    va_list args;
+    s8* src;
+    s8* p;
+    s32 len;
+
+    *text = message_id;
+    len = 1;
+    va_start(args, fmt);
+    p = (s8*)fmt;
+
+    while (*p != 0) {
+        if (*p != '%') {
+            text[len++] = *p;
+        } else {
+            p++;
+            if (*p == 's') {
+                src = va_arg(args, s8*);
+                while (*src != 0) {
+                    text[len] = *src;
+                    src++;
+                    len++;
+                }
+            }
+        }
+        p++;
+    }
+    text[len] = 0;
+}
+#else
 void Battle_QueueMessage(s8* text, s8 file_number_index) {
     u8 overflow_helper = file_number_index;
     *text = file_number_index;
@@ -112,6 +145,7 @@ void Battle_QueueMessage(s8* text, s8 file_number_index) {
         Text_GetString(text + 1, 0x40, sBattleMessagesTable, sBattleMessagesTableFileNumbers[file_number_index]);
     }
 }
+#endif
 
 void Battle_QueueStatusText(char* text, s32 side) {
     UNUSED s32 pad[3];
@@ -160,53 +194,63 @@ void Battle_QueueMoveCategoryUsedMessage(void) {
     }
 
     if ((runtime->moveCache.moveId == METRONOME) || (runtime->moveCache.moveId == MIRROR_MOVE)) {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
         switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
         switch (file_number_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -229,28 +273,33 @@ void Battle_QueueMoveCategoryMessage(void) {
         file_number_offset = 4;
     }
 
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-    Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_SET_MESSAGE_TOKEN(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
     switch (file_number_offset) {
         case 0:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+            BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case 1:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+            BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case 2:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+            BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case 3:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+            BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case 4:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+            BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
     }
 }
@@ -282,80 +331,95 @@ void Battle_QueueMetronomeMoveMessage(void) {
 
         runtime->usedMove = metronome_selected_move;
 
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Text_SetStringToken(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(0x1D, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
 
         runtime->usedMove = METRONOME;
 
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x14);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x15);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x16);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x17);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[13], 0x18);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[13], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     } else {
-        Text_SetStringToken(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Text_SetStringToken(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(25, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_SET_MESSAGE_TOKEN(29, Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
 
         switch (file_name_offset) {
             case 0:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x14);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x14, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 1:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x15);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x15, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 2:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x16);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x16, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 3:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x17);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x17, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
 
             case 4:
-                Battle_QueueMessage(sBattleMessageQueues->buffer[2], 0x18);
+                BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[2], 0x18, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                                      Battle_GetActiveMoveName(sActivePokemon[sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -381,16 +445,25 @@ void BattleBox_Close(void) {
  * messages have dedicated sounds, and every other index plays (index & 127) + 100.
  */
 void BattleBox_PlayTextBlip(s8* message) {
+#if !defined(VERSION_JP)
     s32 message_index;
+#endif
 
     if (message[1] == '\x00') {
         return;
     }
 
+#if !defined(VERSION_JP)
     message_index = message[0] & 0x7F;
+#endif
 
     if ((message[0] & 0x80) == '\x00') {
         Audio_QueuePendingSoundId(message[0]);
+#if defined(VERSION_JP)
+    } else {
+        Audio_QueuePendingSoundId((message[0] & 0x7F) + 100);
+    }
+#else
     } else if (message_index == (BATTLE_MSG_TRANSFORM_DITTO_BLOCKED & 0x7F)) {
         Audio_QueuePendingSoundId(0xBC);
     } else if (message_index == (BATTLE_MSG_LIGHT_SCREEN_SET & 0x7F)) {
@@ -410,127 +483,141 @@ void BattleBox_PlayTextBlip(s8* message) {
     } else {
         Audio_QueuePendingSoundId(message_index + 100);
     }
+#endif
 }
 
+#if defined(VERSION_JP)
+#define BATTLE_BOX_TEXT_X x + 3
+#else
+#define BATTLE_BOX_TEXT_X x + 4
+#endif
+
 void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
+#if !defined(VERSION_JP)
     UNUSED s32 pad;
     s32 time_limit_text_length;
+#endif
 
     if (1) {} // karodo
 
     switch (box->openingProgress) {
         case 0:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[13][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[2][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[5][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 3:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 1:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[14][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if ((box->lineCount < 3) && (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4,
+            if ((box->lineCount < 3) && (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], BATTLE_BOX_TEXT_X,
                                                                    y + (box->lineCount * 12) + 3) != 0)) {
                 box->lineCount += 1;
             }
             break;
 
         case 2:
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[4][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
 
-            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], x + 4, y + (box->lineCount * 12) + 3) !=
+            if (Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[7][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 12) + 3) !=
                 0) {
                 box->lineCount += 1;
             }
             break;
 
         case 4:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[8][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[8][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 5:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[9][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[9][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 6:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[15][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[15][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 7:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[12][1], x + 4, y + 3);
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[10][1], x + 4, y + 0x10);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[12][1], BATTLE_BOX_TEXT_X, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[10][1], BATTLE_BOX_TEXT_X, y + 0x10);
             break;
 
         case 8:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[16 + box->side][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[16 + box->side][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 9:
         case 10:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[6][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[6][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 11:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 12:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + 3);
             break;
 
         case 13:
+#if defined(VERSION_JP)
+            // "Time's up!"
+            Battle_DrawTextIfNonEmpty("じかんぎれです", 124, 113);
+#else
             time_limit_text_length =
                 Font_MeasureTextExtent(1, 0, Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4)) / 2;
             Battle_DrawTextIfNonEmpty(Text_GetString(NULL, 0, sBattleMessagesTable, 0xA4), 161 - time_limit_text_length,
                                       113);
+#endif
             break;
 
         case 14:
@@ -538,7 +625,7 @@ void BattleBox_DrawMessage(BattleBox* box, s16 x, s16 y) {
             break;
 
         case 15:
-            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], x + 4, y + (box->lineCount * 0xC) + 3);
+            Battle_DrawTextIfNonEmpty(&sBattleMessageQueues->buffer[1][1], BATTLE_BOX_TEXT_X, y + (box->lineCount * 0xC) + 3);
             break;
     }
 
@@ -727,6 +814,14 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
     active_pokemon->captionState.unk_08[0] = 0;
 }
 
+#if defined(VERSION_JP)
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, char* format, ...) {
+    sBattleMessageQueues->controllerPort =
+        pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    pokemon->captionState.active = 1;
+    Battle_SimpleStringFormat(pokemon->captionState.unk_48, format);
+}
+#else
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
     sBattleMessageQueues->controllerPort =
         pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
@@ -734,10 +829,36 @@ void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number
     Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
     Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
 }
+#endif
 
 void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
     TeamRoster* team_member_index = pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex];
 
+#if defined(VERSION_JP)
+    // Reveal one character per call. Newlines and spaces are revealed together with the following character;
+    // ASCII '!' through '?' are single bytes, everything else is a two-byte EUC-JP character.
+    if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
+        if ((pokemon->captionState.unk_48[pokemon->captionState.unk_04] == '\n') ||
+            (pokemon->captionState.unk_48[pokemon->captionState.unk_04] == ' ')) {
+            pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
+                pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+            pokemon->captionState.unk_04++;
+        }
+
+        if ((pokemon->captionState.unk_48[pokemon->captionState.unk_04] > ' ') &&
+            (pokemon->captionState.unk_48[pokemon->captionState.unk_04] < '@')) {
+            pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
+                pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+            pokemon->captionState.unk_04++;
+        } else {
+            pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
+                pokemon->captionState.unk_48[pokemon->captionState.unk_04];
+            pokemon->captionState.unk_08[pokemon->captionState.unk_04 + 1] =
+                pokemon->captionState.unk_48[pokemon->captionState.unk_04 + 1];
+            pokemon->captionState.unk_04 += 2;
+        }
+    }
+#else
     if (pokemon->captionState.unk_48[pokemon->captionState.unk_04] != '\x00') {
         pokemon->captionState.unk_08[pokemon->captionState.unk_04] =
             pokemon->captionState.unk_48[pokemon->captionState.unk_04];
@@ -749,6 +870,7 @@ void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
             pokemon->captionState.unk_48[pokemon->captionState.unk_04];
         pokemon->captionState.unk_04++;
     }
+#endif
 
     pokemon->captionState.unk_08[pokemon->captionState.unk_04] = '\x00';
 
@@ -795,12 +917,16 @@ void Battle_RenderHud(void) {
     ActivePokemonState* side1_state = &sActivePokemon[0]->state;
     ActivePokemonState* side2_state = &sActivePokemon[1]->state;
 
+#if !defined(VERSION_JP)
     if (1) {}
+#endif
 
     BattleBox_Update(160, 200);
 
     if (gSessionContext.mode == SESSION_MODE_ATTRACT_DEMO_BATTLE) {
+#if !defined(VERSION_JP)
         Battle_DrawDemoControllerWarning();
+#endif
         Battle_DrawDemoStadiumLogo();
     }
 

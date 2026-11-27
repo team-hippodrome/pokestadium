@@ -1101,9 +1101,11 @@
     - [0x1CF1A0, c,      fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1D82E0, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E4E50, c, fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E5640, c, fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E6350, .data,   fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E64E0, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E6850, .data, fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E93D0, .data, fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E93E0, .rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E9550, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - {vram: 0x8831A4C0, type:  .bss, name: fragments/lab_pc_list/lab_pc_list_1CEA00}
@@ -1733,8 +1735,9 @@
     vram: 0x82800000 # unknown vram due to being unused, but based on the patterns before hand, this is probably 82900000.
     subsegments:
     - [0x2AFAC0, textbin,  fragments/minigame_sample2_viewer/minigame_sample2_viewer_header]
-    - [0x2AFF90, data, fragments/minigame_sample2_viewer/minigame_sample2_viewer]
-    - {vram: 0x82800530, type:  bss, name: fragments/minigame_sample2_viewer/minigame_sample2_viewer}
+    - [0x2AFAE0, c, fragments/minigame_sample2_viewer/minigame_sample2_viewer]
+    - [0x2AFF90, .data, fragments/minigame_sample2_viewer/minigame_sample2_viewer]
+    - {vram: 0x82800530, type:  .bss, name: fragments/minigame_sample2_viewer/minigame_sample2_viewer}
   - name: fragment52_relocs
     type: code
     bss_size: 0x0
@@ -2118,6 +2121,7 @@
     - [0x386B80, c, fragments/battle_prep/battle_prep_394120]
     - [0x389F40, c,      fragments/battle_prep/battle_prep_3974E0]
     - [0x38A570, c,      fragments/battle_prep/battle_prep_397B10]
+    - [0x38C2C0, c,      fragments/battle_prep/battle_prep_399860]
     - [0x38D6B0, c,      fragments/battle_prep/battle_prep_39AC50]
     - [0x38EA10, c,      fragments/battle_prep/battle_prep_39BFB0]
     - [0x3917C0, c,      fragments/battle_prep/battle_prep_39ED60]
@@ -2126,6 +2130,7 @@
     - [0x394690, c, fragments/battle_prep/battle_prep_3A1C30]
     - [0x396660, .data, fragments/battle_prep/battle_prep_394120]
     - [0x396790, .data,   fragments/battle_prep/battle_prep_397B10]
+    - [0x398720, .data,   fragments/battle_prep/battle_prep_399860]
     - [0x398770, .data,   fragments/battle_prep/battle_prep_39AC50]
     - [0x39B760, .data,   fragments/battle_prep/battle_prep_39BFB0]
     - [0x39CEE0, .data,   fragments/battle_prep/battle_prep_39ED60]
@@ -2135,7 +2140,7 @@
     - [0x39E170, data, fragments/battle_prep/battle_prep_data]
     - [0x3A02B0, .rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3A0300, .rodata, fragments/battle_prep/battle_prep_3974E0]
-    - [0x3A0310, .rodata, fragments/battle_prep/battle_prep_397B10]
+    - [0x3A0310, .rodata, fragments/battle_prep/battle_prep_399860]
     - [0x3A0340, .rodata, fragments/battle_prep/battle_prep_39AC50]
     - [0x3A0350, .rodata, fragments/battle_prep/battle_prep_39BFB0]
     - [0x3A0370, .rodata, fragments/battle_prep/battle_prep_39ED60]

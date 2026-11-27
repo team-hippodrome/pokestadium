@@ -1216,12 +1216,14 @@ static s32 D_8780F990[] = { 3, 1, 0 };
 static s32 D_8780F99C[] = { 1, 4, 0 };
 static s32 D_8780F9A8[] = { 4, 0 };
 
+#if !defined(VERSION_JP)
 static u8 D_8780F9B0[] = {
     6,
     5,
     4,
     3,
 };
+#endif
 
 static s32 D_8780FC40;
 static u8 D_8780FC44;
@@ -1278,6 +1280,7 @@ static u8 D_8780FDF8;
 static u8 D_8780FDFC[4];
 static s8 D_8780FE00;
 static u8 D_8780FE01;
+#if !defined(VERSION_JP)
 static char* D_8780FE08[4];
 static char* D_8780FE18[4];
 static char* D_8780FE28[2];
@@ -1285,6 +1288,7 @@ static u16 D_8780FE30;
 static u16 D_8780FE32;
 static u16 D_8780FE34;
 static u16 D_8780FE36;
+#endif
 
 void Widget_PauseMenuInit(void) {
     u8 i;
@@ -1323,6 +1327,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FE01 = 0;
     D_8780FE00 = NTSC_PAL(12, 10);
 
+#if !defined(VERSION_JP)
     D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, gMinigameText, 0x51);
 
     D_8780FE08[1] = Text_GetString(NULL, 0, gMinigameText, 0x52);
@@ -1341,6 +1346,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FE36 = MAX(Font_MeasureTextExtent(0, 0, D_8780FE28[0]), Font_MeasureTextExtent(0, 0, D_8780FE28[1]));
 
     if (D_8780FE32) {}
+#endif
 
     Save_EnsureBankLoaded(2);
 }
@@ -1465,10 +1471,12 @@ s32 Widget_PauseMenuGetResult(void) {
     return sp1C;
 }
 
+#if !defined(VERSION_JP)
 void Widget_DrawPanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5) {
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, arg4, arg5);
     Widget_FillRect(arg0 - 1, arg1 - 1, arg2 + 2, arg3 + 2);
 }
+#endif
 
 void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
                                 f32 arg8, f32 arg9, f32 argA) {
@@ -1508,6 +1516,9 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     spC8 = (Mtx*)Gfx_AllocDisplayList(sizeof(Mtx) * 36);
     temp_s2 = (LookAt*)Gfx_AllocDisplayList(sizeof(LookAt) * 1);
 
+#if defined(VERSION_JP)
+    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+#else
     if (arg0 == 0) {
         for (x = 0; x < 4; x++) {
             GfxImage_ClearDepthRectangle(&gDisplayListHead, (x * 0x36) + 0x44, 0, 0x16, 0xC0);
@@ -1515,6 +1526,7 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     } else {
         GfxImage_ClearDepthRectangle(&gDisplayListHead, 0x44, 0, 0xFC, 0xC0);
     }
+#endif
 
     guLookAtReflect(&spD0, temp_s2, 0.0f, 0.0f, 320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
@@ -1615,6 +1627,9 @@ void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg
 
     for (i = 0; i <= arg0; i++) {
         if (i == 0) {
+#if defined(VERSION_JP)
+            gDPPipeSync(gDisplayListHead++);
+#endif
             gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0,
                               0, ENVIRONMENT, 0);
         } else if (i == 1) {
@@ -1684,7 +1699,9 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
     temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
     temp_s2 = arg1 + arg2 + arg3 + arg4;
 
+#if !defined(VERSION_JP)
     gSPDisplayList(gDisplayListHead++, D_8780EBA0);
+#endif
 
     if (temp_s2 == -4) {
         var_fv1 = D_8780F8DC[arg0];
@@ -1704,6 +1721,10 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
 
     guOrtho(temp_v0, -320.0f / (2.0f * var_fv1), 320.0f / (2.0f * var_fv1), 240.0f / (2.0f * var_fv1),
             -240.0f / (2.0f * var_fv1), -2.0f, 2.0f, 1.0f);
+
+#if defined(VERSION_JP)
+    gSPDisplayList(gDisplayListHead++, D_8780EBA0);
+#endif
 
     gSPMatrix(gDisplayListHead++, (u32)temp_v0 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, (u32)&gIdentityMtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1816,6 +1837,12 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
     }
 }
 
+#if defined(VERSION_JP)
+#define PAUSE_MENU_SCORE_X 0x49
+#else
+#define PAUSE_MENU_SCORE_X 0x4C
+#endif
+
 void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
     s32 var_a0;
     u8 i;
@@ -1873,12 +1900,29 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
         }
 
         if (D_8780FDFC[i] == 1) {
-            Font_Printf((i * 0x36) + arg0 + 0x4C, 0xD8, "%d", D_8780FA40[i] - 1);
+            Font_Printf((i * 0x36) + arg0 + PAUSE_MENU_SCORE_X, 0xD8, "%d", D_8780FA40[i] - 1);
         } else {
-            Font_Printf((i * 0x36) + arg0 + 0x4C, 0xD8, "%d", D_8780FA40[i]);
+            Font_Printf((i * 0x36) + arg0 + PAUSE_MENU_SCORE_X, 0xD8, "%d", D_8780FA40[i]);
         }
     }
 
+#if defined(VERSION_JP)
+    Font_SetActive(4, -2);
+    Font_EnableTwoCycleTexturing();
+    Gfx_SetEnvColor(0xF0, 0xF0, 0xF0, 0xFF);
+    Gfx_SetPrimColor(0x8C, 0x8C, 0x8C, 0xFF);
+
+    if ((D_8780FA30[0] + D_8780FA30[1] + D_8780FA30[2] + D_8780FA30[3]) == 0) {
+        Font_Printf(arg0 + 0x3F, 0x10, "%dかい かったらチャンピオン", D_8780FA3A);
+    } else {
+        static char* D_8780F9B0[] = { "よわい", "ふつう", "つよい", "すごい" };
+
+        Font_Printf(arg0 + 0x1C, 0x10, "%dかい かったらチャンピオン ／%s", D_8780FA3A, D_8780F9B0[D_8780FA38]);
+    }
+
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+#else
     Font_SetActive(4, 0);
     Font_EnableTwoCycleTexturing();
     Gfx_SetEnvColor(0xF0, 0xF0, 0xF0, 0xFF);
@@ -1900,6 +1944,7 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
+#endif
 }
 
 s32 Widget_PauseMenuUpdate(void) {
@@ -1913,10 +1958,17 @@ s32 Widget_PauseMenuUpdate(void) {
     u8 sp68[] = {
         0x35, 0x34, 0x00, 0x7A, 0x78, 0x00,
     };
+#if defined(VERSION_JP)
+    // JP has the menu labels in the ROM instead of the message bank.
+    static char* D_8780FE08[] = { "もういちどする", "べつのゲームをする", "やめる" };
+    static char* D_8780FE18[] = { "つづける", "やりなおす", "やめる" };
+    static char* D_8780FE28[] = { "もういちどする", "やめる" };
+#endif
     u8 sp67;
     u8 sp66;
     u8 temp_t0;
     u8 i;
+#if !defined(VERSION_JP)
     char* sp60;
     char* sp5C;
     s32 tmp;
@@ -1924,6 +1976,7 @@ s32 Widget_PauseMenuUpdate(void) {
     UNUSED u8 pad2;
     u8 sp55;
     u8 sp44;
+#endif
 
     sp67 = 0;
     sp66 = 0;
@@ -2157,9 +2210,15 @@ s32 Widget_PauseMenuUpdate(void) {
     }
 
     if (D_8780FC94 != 0) {
+#if defined(VERSION_JP)
+        Ui_DrawGradientPanel(0x7A, 0x61, 0x4C, 0x30, &sp70[0], &sp70[3]);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(4, -2);
+#else
         Widget_DrawPanel(((0x140 - D_8780FE30) / 2) - 0xA, 0x61, D_8780FE30 + 0x14, 0x30, &sp70[0], &sp70[3]);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
+#endif
 
         for (i = 0; i < D_8780FC5D; i++) {
             if (D_8780FC5C == i) {
@@ -2174,7 +2233,11 @@ s32 Widget_PauseMenuUpdate(void) {
                 temp_t0 = i;
             }
 
+#if defined(VERSION_JP)
+            Font_Printf(0x84, (i * 0x12) + 0x68, "%s", D_8780FE18[temp_t0]);
+#else
             Font_Printf((0x140 - D_8780FE30) / 2, (i * 0x12) + 0x68, "%s", D_8780FE18[temp_t0]);
+#endif
         }
 
         Font_EndTexturedTextRendering();
@@ -2252,6 +2315,20 @@ s32 Widget_PauseMenuUpdate(void) {
         }
 
         if (D_8780FC6C != 0) {
+#if defined(VERSION_JP)
+            Ui_DrawGradientPanel(0x18, 0x4F, 0x110, 0x54, &sp68[0], &sp68[3]);
+            Font_BeginTranslucentTextRendering();
+            Font_EnableTwoCycleTexturing();
+            Font_SetActive(4, -2);
+            Gfx_SetEnvColor(0xFF, 0xFD, 0xD4, 0xFF);
+            Gfx_SetPrimColor(0xBA, 0xB7, 0, 0xFF);
+            Font_Printf(0x22, 0x56, "「つよい」で %dれんしょう たっせい", 5); // "5 wins in a row on Strong!"
+            Font_Printf(0x22, 0x68, "おめでとう！");                          // "Congratulations!"
+            Font_Printf(0x22, 0x7A, "コンピュータのつよさに 「すごい」が");   // "Super has been added to the"
+            Font_Printf(0x22, 0x8C, "ついかされました。");                    // "computer strength levels."
+            Font_DisableTwoCycleTexturing();
+            Font_EndTexturedTextRendering();
+#else
             sp60 = Text_GetString(0, 0, gMinigameText, 0x57);
             sp5C = Text_GetString(0, 0, gMinigameText, 0x58);
             sp44 = Text_CountLines(sp60);
@@ -2273,9 +2350,23 @@ s32 Widget_PauseMenuUpdate(void) {
             Font_Printf(0x28, sp55 & 0xFF, sp5C);
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
+#endif
         }
 
         if (D_8780FC70 != 0) {
+#if defined(VERSION_JP)
+            if (D_8780FC4C == 0) {
+                if (D_8780FA2A == 0) {
+                    Ui_DrawGradientPanel(0x57, 0x58, 0x92, 0x42, &sp70[0], &sp70[3]);
+                } else {
+                    Ui_DrawGradientPanel(0x73, 0x58, 0x5A, 0x42, &sp70[0], &sp70[3]);
+                }
+            } else {
+                Ui_DrawGradientPanel(0x65, 0x61, 0x76, 0x30, &sp70[0], &sp70[3]);
+            }
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(4, -2);
+#else
             if (D_8780FC4C == 0) {
                 if (D_8780FA2A == 0) {
                     Widget_DrawPanel(((0x140 - D_8780FE32) / 2) - 0xA, 0x58, D_8780FE32 + 0x14, 0x42, &sp70[0],
@@ -2289,6 +2380,7 @@ s32 Widget_PauseMenuUpdate(void) {
             }
             Font_BeginTranslucentTextRendering();
             Font_SetActive(4, 0);
+#endif
 
             for (i = 0; i < D_8780FC5D; i++) {
                 if (D_8780FC5C == i) {
@@ -2297,6 +2389,17 @@ s32 Widget_PauseMenuUpdate(void) {
                     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
                 }
 
+#if defined(VERSION_JP)
+                if (D_8780FC4C == 0) {
+                    if (D_8780FA2A == 0) {
+                        Font_Printf(0x61, (i * 0x12) + 0x5F, "%s", D_8780FE08[i]);
+                    } else {
+                        Font_Printf(0x7D, (i * 0x12) + 0x5F, "%s", D_8780FE18[i]);
+                    }
+                } else {
+                    Font_Printf(0x6F, (i * 0x12) + 0x68, "%s", D_8780FE28[i]);
+                }
+#else
                 if (D_8780FC4C == 0) {
                     if (D_8780FA2A == 0) {
                         Font_Printf((0x140 - D_8780FE32) / 2, (i * 0x12) + 0x5F, "%s", D_8780FE08[i]);
@@ -2306,6 +2409,7 @@ s32 Widget_PauseMenuUpdate(void) {
                 } else {
                     Font_Printf((0x140 - D_8780FE36) / 2, (i * 0x12) + 0x68, "%s", D_8780FE28[i]);
                 }
+#endif
             }
 
             Font_EndTexturedTextRendering();
@@ -2317,8 +2421,13 @@ s32 Widget_PauseMenuUpdate(void) {
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+#if defined(VERSION_JP)
+            Font_Printf(0x4D, 0x68, "つぎのゲームを"); // "The one who picks"
+            Font_Printf(0x59, 0x80, "えらぶひとは");   // "the next game is"
+#else
             Font_Printf(0xA0 - (Text_MeasureStringWidth(NULL, Text_GetString(0, 0, gMinigameText, 0x56)) / 2), 0x6C,
                         Text_GetString(0, 0, gMinigameText, 0x56));
+#endif
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         }

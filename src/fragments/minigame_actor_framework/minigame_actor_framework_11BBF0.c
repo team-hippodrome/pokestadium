@@ -12,14 +12,6 @@ extern u32 D_87904E80[];
 extern u32 D_87905280[];
 extern u32 D_87905680[];
 
-#if defined(VERSION_JP)
-// Entry 26 of the 30-entry string pointer table at 0x87903CE0 in the Japanese
-// minigame_actor_framework_1189B0 .data. It points to the EUC-JP string
-// A4CE A4AB A4C1 ("no kachi", "wins"); miniDrawResultIcons prints it at (158, 110)
-// before drawing the winners' player icons.
-extern char* D_87903D48_jp;
-#endif
-
 unk_D_87903E00 MiniFxParticleDescriptorPayloadI4Frame = {
     0x00000001,
     ParticleGfx_LoadTextureCallbackI4ParticleFrame_32x32,
@@ -373,7 +365,7 @@ void miniDrawResultIcons(MiniActor* arg0) {
     var_s2 = 0;
 
 #if defined(VERSION_JP)
-    Font_Printf(158, 110, "%s", D_87903D48_jp);
+    Font_Printf(158, 110, "%s", gMinigameStrings[MINIGAME_STR_WINS]);
 #endif
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);

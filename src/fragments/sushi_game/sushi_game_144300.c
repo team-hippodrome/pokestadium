@@ -264,6 +264,11 @@ void SushiGame_DrawDishIcon(s32 arg0, s16 arg1, s16 arg2, f32 arg3) {
 #define SUSHI_LETTER_SPACING 0
 #endif
 
+// JP: the stack frame is 8 bytes smaller and a few instructions are scheduled differently; the C below
+// is otherwise equivalent.
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/sushi_game/sushi_game_144300/func_86800B38.s")
+#else
 void func_86800B38(void) {
     s32 pad1;
     s32 pad2;
@@ -533,6 +538,7 @@ void func_86800B38(void) {
         Widget_DrawSplitBanner(0, 0x19, 0xA6);
     }
 }
+#endif
 
 void SushiGame_DrawFrame(void) {
     BgStage_DrawFrame();

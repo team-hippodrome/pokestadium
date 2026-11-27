@@ -25,7 +25,7 @@ char** sPcListTypeNames;
 char** sItemNameTable;
 s32 pad_D_8831A4DC[8];
 
-static Color_RGBA8 D_883171D0[] = {
+Color_RGBA8 D_883171D0[] = {
     { 0x31, 0x48, 0x6B, 0xFF },
     { 0x47, 0x5E, 0x80, 0xFF },
     { 0x2B, 0x40, 0x5F, 0xFF },
@@ -82,14 +82,16 @@ void LabPCList_DrawHeaderPokemon(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x5C; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x50, 0x5C); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderPokemon_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171E0 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -107,10 +109,15 @@ s32 LabPCList_HeaderPokemon_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171E0.r, D_883171E0.g, D_883171E0.b, D_883171E0.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 8, arg2 + 2, "ポケモン"); // "Pokémon"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 3);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
 
     return 0;
@@ -129,7 +136,9 @@ void LabPCList_DrawHeaderNickname(WidgetNode* arg0, s32 arg1, s32 arg2) {
 s32 LabPCList_HeaderNickname_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171E4 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -147,10 +156,15 @@ s32 LabPCList_HeaderNickname_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171E4.r, D_883171E4.g, D_883171E4.b, D_883171E4.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, -1);
+    Font_Printf(arg1 + 1, arg2 + 2, "ニックネーム"); // "Nickname"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 4);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -168,7 +182,9 @@ void LabPCList_DrawHeaderID(WidgetNode* arg0, s32 arg1, s32 arg2) {
 s32 LabPCList_HeaderID_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171E8 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -186,10 +202,15 @@ s32 LabPCList_HeaderID_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171E8.r, D_883171E8.g, D_883171E8.b, D_883171E8.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 10, arg2 + 2, "ID"); // "ID"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 5);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -200,14 +221,16 @@ void LabPCList_DrawHeaderOT(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x4C; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x58, 0x4C); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderOT_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171EC = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -225,10 +248,15 @@ s32 LabPCList_HeaderOT_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171EC.r, D_883171EC.g, D_883171EC.b, D_883171EC.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 12);
+    Font_Printf(arg1 + 22, arg2 + 2, "おや"); // "OT"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 6);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -246,7 +274,9 @@ void LabPCList_DrawHeaderArea(WidgetNode* arg0, s32 arg1, s32 arg2) {
 s32 LabPCList_HeaderArea_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171F0 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -264,10 +294,15 @@ s32 LabPCList_HeaderArea_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171F0.r, D_883171F0.g, D_883171F0.b, D_883171F0.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "ばしょ"); // "Location"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 7);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -285,7 +320,9 @@ void LabPCList_DrawHeaderTypes(WidgetNode* arg0, s32 arg1, s32 arg2) {
 s32 LabPCList_HeaderTypes_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171F4 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp54;
+#endif
 
     gDPPipeSync(gDisplayListHead++);
 
@@ -311,6 +348,11 @@ s32 LabPCList_HeaderTypes_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171F4.r, D_883171F4.g, D_883171F4.b, D_883171F4.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "タイプ１");    // "Type 1"
+    Font_Printf(arg1 + 0x4C, arg2 + 2, "タイプ２"); // "Type 2"
+#else
     Font_SetActive(4, 0);
 
     sp54 = Text_GetString(NULL, 0, sPcListText, 8);
@@ -319,6 +361,7 @@ s32 LabPCList_HeaderTypes_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     sp54 = Text_GetString(NULL, 0, sPcListText, 9);
     Font_Printf(((0x48 - Font_MeasureTextExtent(0, 0, sp54)) / 2) + arg1 + 0x48, arg2 + 2, sp54);
 
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -329,14 +372,16 @@ void LabPCList_DrawHeaderMoves(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x1A4; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x1B0, 0x1A4); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171F8 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* temp_v0_16;
+#endif
 
     gDPPipeSync(gDisplayListHead++);
 
@@ -349,7 +394,7 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
         // clang-format on
 
         gDPSetFillColor(gDisplayListHead++, (temp_t3 << 0x10) | temp_t3);
-        gDPFillRectangle(gDisplayListHead++, arg1, arg2, arg1 + 0x68, (arg2 + arg0->unk_14.unk_02) - 1);
+        gDPFillRectangle(gDisplayListHead++, arg1, arg2, arg1 + JP_INTL(0x6B, 0x68), (arg2 + arg0->unk_14.unk_02) - 1);
     }
 
     {
@@ -358,7 +403,8 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
         // clang-format on
 
         gDPSetFillColor(gDisplayListHead++, (sp5C << 0x10) | sp5C);
-        gDPFillRectangle(gDisplayListHead++, arg1 + 0x69, arg2, arg1 + 0xD1, (arg2 + arg0->unk_14.unk_02) - 1);
+        gDPFillRectangle(gDisplayListHead++, arg1 + JP_INTL(0x6C, 0x69), arg2, arg1 + JP_INTL(0xD7, 0xD1),
+                         (arg2 + arg0->unk_14.unk_02) - 1);
     }
 
     {
@@ -367,7 +413,8 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
         // clang-format on
 
         gDPSetFillColor(gDisplayListHead++, (temp_a2 << 0x10) | temp_a2);
-        gDPFillRectangle(gDisplayListHead++, arg1 + 0xD2, arg2, arg1 + 0x13A, (arg2 + arg0->unk_14.unk_02) - 1);
+        gDPFillRectangle(gDisplayListHead++, arg1 + JP_INTL(0xD8, 0xD2), arg2, arg1 + JP_INTL(0x143, 0x13A),
+                         (arg2 + arg0->unk_14.unk_02) - 1);
     }
 
     {
@@ -376,11 +423,20 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
         // clang-format on
 
         gDPSetFillColor(gDisplayListHead++, (temp_a0 << 0x10) | temp_a0);
-        gDPFillRectangle(gDisplayListHead++, arg1 + 0x13B, arg2, arg1 + 0x1A3, (arg2 + arg0->unk_14.unk_02) - 1);
+        gDPFillRectangle(gDisplayListHead++, arg1 + JP_INTL(0x144, 0x13B), arg2, arg1 + JP_INTL(0x1AF, 0x1A3),
+                         (arg2 + arg0->unk_14.unk_02) - 1);
     }
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171F8.r, D_883171F8.g, D_883171F8.b, D_883171F8.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    // "Move 1" .. "Move 4"
+    Font_Printf(arg1 + 0x16, arg2 + 2, "わざ　１");
+    Font_Printf(arg1 + 0x82, arg2 + 2, "わざ　２");
+    Font_Printf(arg1 + 0xEE, arg2 + 2, "わざ　３");
+    Font_Printf(arg1 + 0x15A, arg2 + 2, "わざ　４");
+#else
     Font_SetActive(4, 0);
 
     temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xA);
@@ -395,6 +451,7 @@ s32 LabPCList_HeaderMoves_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     temp_v0_16 = Text_GetString(NULL, 0, sPcListText, 0xD);
     Font_Printf(((0x69 - Font_MeasureTextExtent(0, 0, temp_v0_16)) / 2) + arg1 + 0x13B, arg2 + 2, temp_v0_16);
 
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -405,14 +462,16 @@ void LabPCList_DrawHeaderLevel(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderLevel_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_883171FC = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -430,10 +489,15 @@ s32 LabPCList_HeaderLevel_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_883171FC.r, D_883171FC.g, D_883171FC.b, D_883171FC.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 12, arg2 + 2, "レベル"); // "Level"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 0xE);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
 
     Font_EndTexturedTextRendering();
     return 0;
@@ -445,14 +509,16 @@ void LabPCList_DrawHeaderHp(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderHp_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88317200 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -470,10 +536,15 @@ s32 LabPCList_HeaderHp_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317200.r, D_88317200.g, D_88317200.b, D_88317200.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 12);
+    Font_Printf(arg1 + 14, arg2 + 2, "HP"); // "HP"
+#else
     Font_SetActive(4, 0);
 
     sp1C = Text_GetString(NULL, 0, sPcListText, 0xF);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
 
     Font_EndTexturedTextRendering();
     return 0;
@@ -485,7 +556,7 @@ void LabPCList_DrawHeaderAttack(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
@@ -509,8 +580,13 @@ s32 LabPCList_HeaderAttack_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317204.r, D_88317204.g, D_88317204.b, D_88317204.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "こうげき"); // "Attack"
+#else
     Font_SetActive(4, 0);
     Font_Printf(arg1 + 4, arg2 + 2, Text_GetString(NULL, 0, sPcListText, 0x10));
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -521,14 +597,16 @@ void LabPCList_DrawHeaderDefense(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderDefense_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88317208 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -546,9 +624,14 @@ s32 LabPCList_HeaderDefense_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317208.r, D_88317208.g, D_88317208.b, D_88317208.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "ぼうぎょ"); // "Defense"
+#else
     Font_SetActive(4, 0);
     sp1C = Text_GetString(NULL, 0, sPcListText, 0x11);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -559,14 +642,16 @@ void LabPCList_DrawHeaderSpeed(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderSpeed_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_8831720C = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -584,9 +669,14 @@ s32 LabPCList_HeaderSpeed_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_8831720C.r, D_8831720C.g, D_8831720C.b, D_8831720C.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "すばやさ"); // "Speed"
+#else
     Font_SetActive(4, 0);
     sp1C = Text_GetString(NULL, 0, sPcListText, 0x12);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -597,14 +687,16 @@ void LabPCList_DrawHeaderSpecial(WidgetNode* arg0, s32 arg1, s32 arg2) {
     arg0->unk_10.unk_00 = arg1;
     arg0->unk_10.unk_02 = arg2;
     // clang-format off
-    arg0->unk_14.unk_00 = 0x46; arg0->unk_14.unk_02 = 0x14;
+    arg0->unk_14.unk_00 = JP_INTL(0x48, 0x46); arg0->unk_14.unk_02 = 0x14;
     // clang-format on
 }
 
 s32 LabPCList_HeaderSpecial_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88317210 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if !defined(VERSION_JP)
     char* sp1C;
+#endif
     s32 temp_t2;
 
     gDPPipeSync(gDisplayListHead++);
@@ -622,9 +714,14 @@ s32 LabPCList_HeaderSpecial_Draw(WidgetNode* arg0, s32 arg1, s32 arg2) {
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_88317210.r, D_88317210.g, D_88317210.b, D_88317210.a);
+#if defined(VERSION_JP)
+    Font_SetActive(4, 0);
+    Font_Printf(arg1 + 4, arg2 + 2, "とくしゅ"); // "Special"
+#else
     Font_SetActive(4, 0);
     sp1C = Text_GetString(NULL, 0, sPcListText, 0x13);
     Font_Printf(((arg0->unk_14.unk_00 - Font_MeasureTextExtent(0, 0, sp1C)) / 2) + arg1, arg2 + 2, sp1C);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -661,7 +758,8 @@ s32 LabPCList_DrawColumnDivider(unk_func_8830867C_02C_050* arg0, s32 arg1, s32 a
         s32 temp_t7 = ((D_88317214.r << 8) & 0xF800) | ((D_88317214.g << 3) & 0x7C0) | ((D_88317214.b >> 2) & 0x3E) | 1;
         gDPPipeSync(gDisplayListHead++);
         gDPSetFillColor(gDisplayListHead++, (temp_t7 << 0x10) | temp_t7);
-        gDPFillRectangle(gDisplayListHead++, arg1 + 0x82, arg2, arg1 + 0x83, arg2 + 0x12D);
+        gDPFillRectangle(gDisplayListHead++, arg1 + JP_INTL(0x76, 0x82), arg2, arg1 + JP_INTL(0x77, 0x83),
+                         arg2 + 0x12D);
     }
 
     return 0;
@@ -717,7 +815,13 @@ void LabPCList_SaveDirtyDecks(unk_func_8830867C_02C* arg0) {
 }
 
 void LabPCList_InitDeckSlots(unk_func_8830867C_02C* arg0, MemoryPool* arg1) {
+#if defined(VERSION_JP)
+    // "Party", "Game Boy box", "N64 Game Pak box"
+    static char* D_88315408_jp[] = { "てもち", "ゲームボーイのボックス", "６４カセットのボックス" };
+    s32 i;
+#else
     UNUSED s32 pad;
+#endif
 
     arg0->unk_0E4[0].unk_00 = 0x20;
     arg0->unk_0E4[0].unk_04 = GbSave_GetActivePort();
@@ -729,18 +833,24 @@ void LabPCList_InitDeckSlots(unk_func_8830867C_02C* arg0, MemoryPool* arg1) {
     arg0->unk_0E4[1].unk_00 = 0x21;
     arg0->unk_0E4[1].unk_04 = arg0->unk_0E4[0].unk_04;
     arg0->unk_0E4[1].unk_08 = 1;
-    arg0->unk_0E4[1].unk_1C = 0x14;
-    ByteMatrix_Allocate(&arg0->unk_0E4[1].unk_0C, 0x1C, 0xC, arg1);
-    LabPCList_AllocateBoxSlots(&arg0->unk_0E4[1], 0x14, 0, arg1);
+    arg0->unk_0E4[1].unk_1C = JP_INTL(0x1E, 0x14);
+    ByteMatrix_Allocate(&arg0->unk_0E4[1].unk_0C, 0x1C, JP_INTL(8, 0xC), arg1);
+    LabPCList_AllocateBoxSlots(&arg0->unk_0E4[1], JP_INTL(0x1E, 0x14), 0, arg1);
 
     arg0->unk_0E4[2].unk_00 = 0x11;
     arg0->unk_0E4[2].unk_04 = 0;
     arg0->unk_0E4[2].unk_08 = 2;
-    arg0->unk_0E4[2].unk_1C = 0x14;
-    ByteMatrix_Allocate(&arg0->unk_0E4[2].unk_0C, 0x1C, 0xC, arg1);
-    LabPCList_AllocateBoxSlots(&arg0->unk_0E4[2], 0x14, 0, arg1);
+    arg0->unk_0E4[2].unk_1C = JP_INTL(0x1E, 0x14);
+    ByteMatrix_Allocate(&arg0->unk_0E4[2].unk_0C, 0x1C, JP_INTL(8, 0xC), arg1);
+    LabPCList_AllocateBoxSlots(&arg0->unk_0E4[2], JP_INTL(0x1E, 0x14), 0, arg1);
 
-    TableView_Initialize(&arg0->unk_144, arg0->unk_0E4, 0x20, 3, 3);
+#if defined(VERSION_JP)
+    for (i = 0; i < 3; i++) {
+        arg0->unk_0E4[i].unk_jp_00 = D_88315408_jp[i];
+    }
+#endif
+
+    TableView_Initialize(&arg0->unk_144, arg0->unk_0E4, sizeof(unk_func_8830867C_02C_0E4), 3, 3);
 }
 
 void LabPCList_InitPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2, unk_func_8830867C_02C* arg3) {
@@ -754,6 +864,14 @@ void LabPCList_InitPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2, unk_f
 s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88317218 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if defined(VERSION_JP)
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(D_88317218.r, D_88317218.g, D_88317218.b, D_88317218.a);
+    Font_SetActive(8, 0);
+    Font_Printf(arg1 + 0x22, arg2 + 5, "タテ／ヨコきりかえ"); // "Switch rows/columns"
+    // "Page %d/3"
+    Font_Printf(arg1 + 0x152, arg2 + 5, "ページおくり%d/3", arg0->unk_2C->unk_CD0 + 1);
+#else
     UNUSED s32 pad[4];
     char spF0[0x10];
     char* spEC;
@@ -770,6 +888,7 @@ s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2) {
     Font_Printf(arg1 + 0x22, arg2 + 5, spEC);
     spE4 = 0x206 - Font_MeasureTextExtent(0, 0, spF0);
     Font_Printf(arg1 + spE4, arg2 + 5, spF0);
+#endif
     Font_EndTexturedTextRendering();
 
     gDPPipeSync(gDisplayListHead++);
@@ -788,14 +907,24 @@ s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2) {
     gDPLoadTextureBlock(gDisplayListHead++, D_88317F28, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 24, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
+#if defined(VERSION_JP)
+    gSPTextureRectangle(gDisplayListHead++, (arg1 + 0xDA) << 2, (arg2 + 3) << 2, (arg1 + 0xF3) << 2, (arg2 + 0x1A) << 2,
+                        G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+#else
     gSPTextureRectangle(gDisplayListHead++, ((arg1 + spE8) + 0x26) << 2, (arg2 + 3) << 2, ((arg1 + spE8) + 0x3F) << 2,
                         (arg2 + 0x1A) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+#endif
 
     gDPLoadTextureBlock(gDisplayListHead++, D_4005570, G_IM_FMT_RGBA, G_IM_SIZ_16b, 28, 26, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
+#if defined(VERSION_JP)
+    gSPTextureRectangle(gDisplayListHead++, (arg1 + 0x134) << 2, (arg2 + 2) << 2, (arg1 + 0x14D) << 2,
+                        (arg2 + 0x1B) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+#else
     gSPTextureRectangle(gDisplayListHead++, ((arg1 + spE4) - 0x1E) << 2, (arg2 + 2) << 2, ((arg1 + spE4) - 5) << 2,
                         (arg2 + 0x1B) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+#endif
 
     gDPLoadTextureBlock(gDisplayListHead++, D_4004A00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 28, 26, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -894,14 +1023,20 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
                                unk_func_8830867C_03C* arg7, unk_func_8830867C_040* arg8, unk_func_8830867C_044* arg9,
                                unk_func_8830867C_048* argA, unk_func_8830867C_04C* argB, unk_func_889000C4* argC,
                                FragmentEntry argD, unk_func_8830867C_054* argE, MemoryPool* argF, FontContext* arg10) {
+    // Column widths of each page.
     static s32 D_8831721C[] = {
         0x0000005C,
         0x00000034,
-        0x0000004C,
+        JP_INTL(0x58, 0x4C),
     };
     static s32 D_88317228[] = { 0x38, 0x48, 0x48 };
+#if defined(VERSION_JP)
+    static s32 D_88317234[] = { 0x6C, 0x6C, 0x6C, 0x6C };
+    static s32 D_88317244[] = { 0x48, 0x48, 0x48, 0x48, 0x48, 0x48 };
+#else
     static s32 D_88317234[] = { 0x69, 0x69, 0x69, 0x69 };
     static s32 D_88317244[] = { 0x46, 0x46, 0x46, 0x46, 0x46, 0x46 };
+#endif
     static s32 D_8831725C[] = {
         0x00000000,
         0x00000006,
@@ -1018,15 +1153,15 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_038, sp68);
 
     arg0->unk_058 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderNickname(arg0->unk_058, 0x84, 0);
+    LabPCList_DrawHeaderNickname(arg0->unk_058, JP_INTL(0x78, 0x84), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp68, arg0->unk_058);
 
     arg0->unk_05C = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderID(arg0->unk_05C, 0xE0, 0);
+    LabPCList_DrawHeaderID(arg0->unk_05C, JP_INTL(0xD4, 0xE0), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp68, arg0->unk_05C);
 
     arg0->unk_060 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderOT(arg0->unk_060, 0x114, 0);
+    LabPCList_DrawHeaderOT(arg0->unk_060, JP_INTL(0x108, 0x114), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp68, arg0->unk_060);
 
     arg0->unk_064 = mem_pool_alloc(argF, sizeof(WidgetNode));
@@ -1038,7 +1173,7 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp68, arg0->unk_068);
 
     arg0->unk_06C = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderMoves(arg0->unk_06C, 0x84, 0);
+    LabPCList_DrawHeaderMoves(arg0->unk_06C, JP_INTL(0x78, 0x84), 0);
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_038, arg0->unk_06C);
 
     sp64 = mem_pool_alloc(argF, sizeof(WidgetNode));
@@ -1048,27 +1183,27 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_038, sp64);
 
     arg0->unk_070 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderLevel(arg0->unk_070, 0x84, 0);
+    LabPCList_DrawHeaderLevel(arg0->unk_070, JP_INTL(0x78, 0x84), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_070);
 
     arg0->unk_074 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderHp(arg0->unk_074, 0xCA, 0);
+    LabPCList_DrawHeaderHp(arg0->unk_074, JP_INTL(0xC0, 0xCA), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_074);
 
     arg0->unk_078 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderAttack(arg0->unk_078, 0x110, 0);
+    LabPCList_DrawHeaderAttack(arg0->unk_078, JP_INTL(0x108, 0x110), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_078);
 
     arg0->unk_07C = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderDefense(arg0->unk_07C, 0x156, 0);
+    LabPCList_DrawHeaderDefense(arg0->unk_07C, JP_INTL(0x150, 0x156), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_07C);
 
     arg0->unk_080 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderSpeed(arg0->unk_080, 0x19C, 0);
+    LabPCList_DrawHeaderSpeed(arg0->unk_080, JP_INTL(0x198, 0x19C), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_080);
 
     arg0->unk_084 = mem_pool_alloc(argF, sizeof(WidgetNode));
-    LabPCList_DrawHeaderSpecial(arg0->unk_084, 0x1E2, 0);
+    LabPCList_DrawHeaderSpecial(arg0->unk_084, JP_INTL(0x1E0, 0x1E2), 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, arg0->unk_084);
 
     sp60 = mem_pool_alloc(argF, sizeof(WidgetAnimatedFrame));
@@ -1085,7 +1220,7 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     arg0->unk_034->unk_70 = arg0;
     arg0->unk_034->unk_00.unk_50 = 0x22;
     arg0->unk_034->unk_00.unk_52 = -4;
-    arg0->unk_034->unk_00.unk_44->unk_00.unk_14.unk_00 = 0x64;
+    arg0->unk_034->unk_00.unk_44->unk_00.unk_14.unk_00 = JP_INTL(0x58, 0x64);
     arg0->unk_034->unk_00.unk_44->unk_00.unk_14.unk_02 = 0x1C;
 
     sp5C = mem_pool_alloc(argF, sizeof(unk_func_8850BD40));
@@ -1110,7 +1245,7 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, sp50);
 
     arg0->unk_0B4 = mem_pool_alloc(argF, sizeof(unk_func_8830867C_02C_0B4));
-    BattleInfoWidget_BuildSaveConfirmDialog(arg0->unk_0B4, 0x65, 0x228, argF);
+    BattleInfoWidget_BuildSaveConfirmDialog(arg0->unk_0B4, JP_INTL(0x9E, 0x65), JP_INTL(0x65, 0x228), argF);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_0B4);
 
     BattleInfoWidget_BindMoveDestinationData(arg0->unk_0A8, &arg0->unk_144);
@@ -1123,32 +1258,64 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
                                                                          arg10);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_090);
 
+#if defined(VERSION_JP)
+    arg0->unk_CCC = mem_pool_alloc(argF, sizeof(unk_func_8850878C));
+    // "There are no Pokémon in your party,\nso you can't save."
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        arg0->unk_CCC, 0, 0, "「てもち」にポケモンが１ぴきもいないので\nレポートできません。", 0x10);
+    arg0->unk_CCC_jp_04 = 2;
+    arg0->unk_CCC_jp_08 = 0x14;
+
+    arg0->unk_CCC_jp_0C = mem_pool_alloc(argF, sizeof(unk_func_8850878C));
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_CCC_jp_0C, 0, 0,
+                                                                      mem_pool_alloc(argF, sizeof(char) * 0xD2), 0x10);
+    arg0->unk_CCC_jp_0C->unk_3C = 0x20;
+    arg0->unk_CCC_jp_10 = 5;
+    arg0->unk_CCC_jp_14 = 0x14;
+#else
     arg0->unk_CCC = mem_pool_alloc(argF, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_CCC, 0, 0,
                                                                       mem_pool_alloc(argF, sizeof(char) * 0x140), 0x10);
     arg0->unk_CCC->unk_3C = 0x20;
+#endif
 
     arg0->unk_0B8 = mem_pool_alloc(argF, sizeof(unk_func_8850CD44));
     ((func8850CD44)Memmap_GetFragmentVaddr(WidgetTree_InitChildWidgetGroup))(arg0->unk_0B8, 4, argF);
 
     arg0->unk_0BC = mem_pool_alloc(argF, sizeof(unk_func_882173EC));
+#if defined(VERSION_JP)
+    LabPCList_InitTextFadeWidget(arg0->unk_0BC, 0, 0);
+#else
     LabPCList_InitTextFadeWidget(arg0->unk_0BC, 0, 0, D_88317234[0], 0x14);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_034, arg0->unk_0BC);
     arg0->unk_0B8->unk_1C[0] = arg0->unk_0BC;
 
     arg0->unk_0C0 = mem_pool_alloc(argF, sizeof(unk_func_8830867C_02C_0C0));
+#if defined(VERSION_JP)
+    LabPCList_InitPpUpAnimWidget(arg0->unk_0C0, 0, 0);
+#else
     LabPCList_InitPpUpAnimWidget(arg0->unk_0C0, 0, 0, D_88317234[0], 0x14);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_034, arg0->unk_0C0);
     arg0->unk_0B8->unk_1C[1] = &arg0->unk_0C0->unk_00;
 
     arg0->unk_0C4 = mem_pool_alloc(argF, sizeof(unk_func_882173EC));
+#if defined(VERSION_JP)
+    LabPCList_InitVitaminAnimWidget(arg0->unk_0C4, 0, 0);
+#else
     LabPCList_InitVitaminAnimWidget(arg0->unk_0C4, 0, 0, D_88317244[0], 0x14);
+#endif
 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_034, arg0->unk_0C4);
     arg0->unk_0B8->unk_1C[2] = arg0->unk_0C4;
 
     arg0->unk_0C8 = mem_pool_alloc(argF, sizeof(unk_func_882173EC));
+#if defined(VERSION_JP)
+    LabPCList_InitLocationCrossfadeWidget(arg0->unk_0C8, 0, 0);
+#else
     LabPCList_InitLocationCrossfadeWidget(arg0->unk_0C8, 0, 0, D_88317228[0], 0x14);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_034, arg0->unk_0C8);
     arg0->unk_0B8->unk_1C[3] = arg0->unk_0C8;
     arg0->unk_CB8 = 0;
@@ -1158,6 +1325,127 @@ void LabPCList_BuildListScreen(unk_func_8830867C_02C* arg0, s32 arg1, s32 arg2, 
     LabPCList_ApplyFiltersAndSort(arg0);
 }
 
+#if defined(VERSION_JP)
+void LabPCList_DrawTypeName(s32 arg0, s32 arg1, u8* arg3, s32 arg4) {
+    Color_RGBA8 sp2C;
+    s32 sp28;
+    unk_D_88400138* type;
+    char* sp20;
+
+    if ((*arg3 <= 0) || (*arg3 >= 0x98)) {
+        if (arg4 != 1) {
+            sp2C = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(0)->unk_04;
+            sp20 = "????";
+        } else {
+            return;
+        }
+    } else {
+        sp28 = Species_GetMoveSlot(arg3, arg4);
+        if (sp28 != -1) {
+            type = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(sp28);
+
+            sp2C = type->unk_04;
+            sp20 = type->unk_00;
+        } else {
+            return;
+        }
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(4, 0);
+    Gfx_SetEnvColor(sp2C.r, sp2C.g, sp2C.b, sp2C.a);
+    Font_Printf(arg0, arg1, sp20);
+    Font_EndTexturedTextRendering();
+}
+
+void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, u8* arg3, s32 arg4) {
+    static Color_RGBA8 D_88317278 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    char* sp2C;
+    Color_RGBA8 sp28;
+    ret_func_8002ED08* sp24;
+    u8* sp18 = &arg3[arg4];
+
+    if (arg4 < BattleMon_CountMoves(arg3)) {
+        sp24 = Move_GetDisplayInfo(sp18[9]);
+        if (sp24 == NULL) {
+            sp28 = D_88317278;
+            sp2C = " ????? ";
+        } else {
+            sp28 = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(sp24->unk_00[1])->unk_04;
+            sp2C = *(char**)&sp24->unk_00[4];
+        }
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(4, -1);
+        Gfx_SetEnvColor(sp28.r, sp28.g, sp28.b, sp28.a);
+        Font_Printf(arg0, arg1, sp2C);
+        Font_EndTexturedTextRendering();
+    }
+}
+
+Color_RGBA8 D_8831727C = { 0xF0, 0x96, 0x96, 0xFF };
+Color_RGBA8 D_88317280 = { 0xF0, 0xD2, 0x8C, 0xFF };
+Color_RGBA8 D_88317284 = { 0x96, 0xDC, 0xB4, 0xFF };
+
+void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg3) {
+    static Color_RGBA8 D_88315484_jp = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    Color_RGBA8 sp1C;
+
+    Font_BeginTranslucentTextRendering();
+    switch (((unk_func_8830867C_02C_0E4*)arg3->unk_00[0])->unk_00) {
+        case 0x20:
+            Font_SetActive(4, 0);
+            sp1C = (0, D_8831727C);
+            Gfx_SetEnvColor(sp1C.r, sp1C.g, sp1C.b, sp1C.a);
+            Font_Printf(arg0, arg1, "てもち"); // "Party"
+            break;
+
+        case 0x21:
+            Font_SetActive(4, -1);
+            Gfx_SetEnvColor(D_88315484_jp.r, D_88315484_jp.g, D_88315484_jp.b, D_88315484_jp.a);
+            Font_DrawCharAt(arg0 + 0x22, arg1, arg3->unk_00[1] + '1');
+            sp1C = (0, D_88317280);
+            Gfx_SetEnvColor(sp1C.r, sp1C.g, sp1C.b, sp1C.a);
+            Font_Printf(arg0 - 2, arg1, "GB");
+            break;
+
+        case 0x11:
+            Font_SetActive(4, -1);
+            Gfx_SetEnvColor(D_88315484_jp.r, D_88315484_jp.g, D_88315484_jp.b, D_88315484_jp.a);
+            Font_DrawCharAt(arg0 + 0x22, arg1, arg3->unk_00[1] + '1');
+            sp1C = (0, D_88317284);
+            Gfx_SetEnvColor(sp1C.r, sp1C.g, sp1C.b, sp1C.a);
+            Font_Printf(arg0 - 2, arg1, "64");
+            break;
+    }
+    Font_EndTexturedTextRendering();
+}
+
+void LabPCList_DrawPlainText(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+    static Color_RGBA8 D_88317288 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(D_88317288.r, D_88317288.g, D_88317288.b, D_88317288.a);
+    Font_SetActive(4, arg4);
+    Font_Printf(arg0, arg1, arg2, arg3);
+    Font_EndTexturedTextRendering();
+}
+
+void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, u8* arg5) {
+    static Color_RGBA8 D_88317290 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    if ((*arg5 <= 0) || (*arg5 >= 0x98)) {
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_88317290.r, D_88317290.g, D_88317290.b, D_88317290.a);
+        Font_SetActive(4, arg4);
+        Font_Printf(arg0, arg1, "　　？");
+        Font_EndTexturedTextRendering();
+    } else {
+        LabPCList_DrawPlainText(arg0, arg1, arg2, arg3, arg4);
+    }
+}
+#else
 void LabPCList_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4) {
     Color_RGBA8 sp2C;
     s32 sp28;
@@ -1260,6 +1548,8 @@ void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, u8* arg4
     }
 }
 
+#endif
+
 typedef struct unk_D_88317298 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
@@ -1284,6 +1574,144 @@ s32 LabPCList_CheckStatFilterRange(unk_func_8830867C_02C* arg0, unk_func_8830485
     return sp18;
 }
 
+#if defined(VERSION_JP)
+void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s32 arg4,
+                   unk_func_8830867C_02C_034* arg5) {
+    static Color_RGBA8 D_883172C0[] = { { 0xF0, 0xF0, 0xF0, 0xFF },
+                                        { 0xB2, 0xFF, 0xC3, 0xFF },
+                                        { 0xFF, 0xB2, 0xC3, 0xFF } };
+    static Color_RGBA8 D_883172CC[][2] = { { { 0x50, 0x51, 0x54, 0xFF }, { 0x59, 0x5B, 0x5E, 0xFF } },
+                                           { { 0x43, 0x44, 0x46, 0xFF }, { 0x4B, 0x4C, 0x4F, 0xFF } } };
+    Color_RGBA8 spBC;
+    Color_RGBA8(*row)[2];
+    Color_RGBA8(*tbl)[2];
+    s32 var_s1;
+    s32 temp_a0;
+    s32 temp_a3;
+    s32 var_s7;
+    unk_func_8830867C_02C* temp_s5;
+
+    temp_s5 = arg5->unk_70;
+    tbl = (Color_RGBA8(*)[2])D_883171D0;
+    temp_a0 = (arg3 & 1) * 8;
+    var_s7 = ((temp_s5->unk_0AC->unk_2C->unk_30 & 2)
+                  ? (temp_s5->unk_0AC->unk_00.unk_10.unk_00 - temp_s5->unk_000.unk_10.unk_00)
+                  : (arg5->unk_00.unk_00.unk_14.unk_00)) +
+             arg0;
+    var_s1 = arg0 + 0x78;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, 3 << 20);
+    gDPSetRenderMode(gDisplayListHead++, (((0 << 30) | (0 << 26)) | (0 << 22)) | (0 << 18),
+                     (((0 << 28) | (0 << 24)) | (0 << 20)) | (0 << 16));
+    row = (Color_RGBA8(*)[2])(((u8*)tbl) + ((arg3 & 1) * 8));
+    temp_a3 = ((((row[0][0].r << 8) & 0xF800) | ((row[0][0].g << 3) & 0x7C0)) | ((row[0][0].b >> 2) & 0x3E)) | 1;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetFillColor(gDisplayListHead++, (temp_a3 << 0x10) | temp_a3);
+    gDPFillRectangle(gDisplayListHead++, arg0, arg1, arg0 + 0x25, arg1 + 0x13);
+    temp_a0 = ((((row[0][1].r << 8) & 0xF800) | ((row[0][1].g << 3) & 0x7C0)) | ((row[0][1].b >> 2) & 0x3E)) | 1;
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetFillColor(gDisplayListHead++, (temp_a0 << 0x10) | temp_a0);
+    gDPFillRectangle(gDisplayListHead++, arg0 + 0x26, arg1, arg0 + 0x75, arg1 + 0x13);
+
+    // FAKE: IDO gives each local a stack slot in declaration order, and the target's slots only line up
+    // when var_s6 and temp_a0_2 are declared after the column backgrounds above.
+    {
+        s32 var_s6;
+
+        // Keep the assignment and loop header on one line for IDO matching.
+        // clang-format off
+        var_s6 = temp_s5->unk_CD4[temp_s5->unk_CD0]; for (var_s1 = arg0 + 0x78; var_s1 < var_s7; var_s1 += ((s32*)temp_s5->unk_0DC)[var_s6], var_s6++) {
+            // clang-format on
+            s32 temp_a0_2;
+
+            temp_a0_2 = ((((((Color_RGBA8*)(((u8*)D_883172CC) + ((arg3 & 1) * 8)))[var_s6 & 1].r << 8) & 0xF800) |
+                          ((((Color_RGBA8*)(((u8*)D_883172CC) + ((arg3 & 1) * 8)))[var_s6 & 1].g << 3) & 0x7C0)) |
+                         ((((Color_RGBA8*)(((u8*)D_883172CC) + ((arg3 & 1) * 8)))[var_s6 & 1].b >> 2) & 0x3E)) |
+                        1;
+            gDPPipeSync(gDisplayListHead++);
+            gDPSetFillColor(gDisplayListHead++, (temp_a0_2 << 0x10) | temp_a0_2);
+            gDPFillRectangle(gDisplayListHead++, var_s1, arg1, (((s32*)temp_s5->unk_0DC)[var_s6] + var_s1) - 1,
+                             arg1 + 0x13);
+        }
+
+        if (arg2 == NULL) {
+            return;
+        }
+        Gfx_DrawNumberDigits(arg0 + 6, arg1 + 4, arg3 + 1, 3);
+        spBC = D_883172C0[LabPCList_CheckStatFilterRange(temp_s5, arg2)];
+        if (arg4 & 4) {
+            spBC.a = 0x4D;
+        } else {
+            spBC.a = 0xFF;
+        }
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(spBC.r, spBC.g, spBC.b, spBC.a);
+        Font_SetActive(4, -1);
+        if ((arg2->unk_08 <= 0) || (arg2->unk_08 >= 0x98)) {
+            Font_Printf(arg0 + 0x28, arg1 + 2, "？？？？？");
+        } else {
+            Font_Printf(arg0 + 0x28, arg1 + 2, D_8006FF00[arg2->unk_08 - 1].name);
+        }
+        Font_EndTexturedTextRendering();
+        var_s6 = temp_s5->unk_CD4[temp_s5->unk_CD0];
+        for (var_s1 = arg0 + 0x78; var_s1 < var_s7; var_s1 += ((s32*)temp_s5->unk_0DC)[var_s6], var_s6++) {
+            switch (var_s6) {
+                case 0:
+                    LabPCList_DrawPlainText(var_s1 + 6, arg1 + 2, arg2->unk_38, 0, 0);
+                    break;
+
+                case 1:
+                    Gfx_DrawNumberDigits(var_s1 + 4, arg1 + 4, (u16)arg2->unk_16, 5);
+                    break;
+
+                case 2:
+                    LabPCList_DrawPlainText(var_s1 + 4, arg1 + 2, arg2->unk_43, 0, 0);
+                    break;
+
+                case 3:
+                    LabPCList_DrawAreaCell(var_s1 + 4, arg1 + 2, arg2);
+                    break;
+
+                case 4:
+                case 5:
+                    LabPCList_DrawTypeName(var_s1 + 4, arg1 + 2, &arg2->unk_08, var_s6 - 4);
+                    break;
+
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    LabPCList_DrawMoveNameCell(var_s1 + 1, arg1 + 2, &arg2->unk_08, var_s6 - 6);
+                    break;
+
+                case 10:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", arg2->unk_2C, 0, &arg2->unk_08);
+                    break;
+
+                case 11:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", (u16)arg2->unk_2E, 0, &arg2->unk_08);
+                    break;
+
+                case 12:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", (u16)arg2->unk_30, 0, &arg2->unk_08);
+                    break;
+
+                case 13:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", (u16)arg2->unk_32, 0, &arg2->unk_08);
+                    break;
+
+                case 14:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", (u16)arg2->unk_34, 0, &arg2->unk_08);
+                    break;
+
+                case 15:
+                    LabPCList_DrawStatNumber(var_s1 + 0xC, arg1 + 2, "%3d", (u16)arg2->unk_36, 0, &arg2->unk_08);
+                    break;
+            }
+        }
+    }
+}
+#else
 void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s32 arg4,
                    unk_func_8830867C_02C_034* arg5) {
     static Color_RGBA8 D_883172C0[] = { { 0xF0, 0xF0, 0xF0, 0xFF },
@@ -1440,6 +1868,7 @@ void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s
         }
     }
 }
+#endif
 
 void LabPCList_SaveFilterState(unk_func_8830867C_02C* arg0) {
     arg0->unk_C84 = arg0->unk_C54;
@@ -1573,6 +2002,76 @@ s32 LabPCList_FindEntryIndex(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_
     return -1;
 }
 
+#if defined(VERSION_JP)
+void LabPCList_PerformMoveMon(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C_0CC_000* arg1, Controller* arg2) {
+    func88500A6C temp_v0_4;
+    s32 sp90;
+    s32 sp8C;
+    s32 sp88;
+    s32 sp84;
+    s32 sp80;
+    s32 sp7C;
+    WidgetPoint sp78;
+    unk_func_8830867C_02C_0CC_000* sp74;
+    s32 sp70;
+    char* buf;
+
+    sp84 = 0;
+    sp80 = (arg1->unk_00->unk_00->unk_08 << 0x10) | arg1->unk_00->unk_04;
+    sp88 = arg0->unk_0A8->unk_34->unk_38;
+
+    if (sp88 != 0) {
+        sp84 = arg0->unk_0A8->unk_38[arg0->unk_0A8->unk_4C->unk_1C]->unk_38;
+    }
+
+    sp90 = arg0->unk_034->unk_00.unk_38;
+    sp8C = arg0->unk_034->unk_00.unk_38 - (arg0->unk_034->unk_58 / arg0->unk_034->unk_00.unk_3E);
+    sp74 = arg0->unk_034->unk_00.unk_2C->unk_00[sp90];
+
+    LabPCList_MoveEntryToBox(arg0, sp74, sp88, sp84);
+    sp7C = (arg1->unk_00->unk_00->unk_08 << 0x10) | arg1->unk_00->unk_04;
+
+    LabPCList_FlattenEntries(&arg0->unk_03C, &arg0->unk_144);
+    LabPCList_ApplyFiltersAndSort(arg0);
+    LabPCList_DiscardFilterBackup(arg0);
+
+    temp_v0_4 = ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage));
+    temp_v0_4(arg0->unk_038, arg0->unk_CD0 = 0);
+
+    LabPCList_SwitchColumnPage(arg0);
+
+    sp70 = LabPCList_FindEntryIndex(arg0->unk_034->unk_00.unk_2C, sp74);
+    if (sp70 == -1) {
+        buf = arg0->unk_CCC_jp_0C->unk_40;
+        ((func88507C0C)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelectionWithOffset))(arg0->unk_034, sp90, sp8C);
+        // "<nickname> was moved from <box> to <box>. It is moved to a location that is not selected, so it will no
+        // longer be shown."
+        HAL_Strcpy(buf, arg1->unk_38);
+        *(JpStr6*)(strlen(buf) + buf) = *(JpStr6*)"　を\n";
+        BattleInfoWidget_FormatLocationName(strlen(buf) + buf, sp80 >> 0x10, sp80 & 0xFFFF);
+        *(JpStr9*)(strlen(buf) + buf) = *(JpStr9*)"　から　";
+        BattleInfoWidget_FormatLocationName(strlen(buf) + buf, sp88, sp84);
+        *(JpStr84*)(strlen(buf) + buf) =
+            *(JpStr84*)"\nへ　いどうしました。\nえらばれていない　ばしょへ\nいどうしたので　みえなくなります。";
+        ((func8850A10C)Memmap_GetFragmentVaddr(WidgetTree_SetMessagePanelText))(
+            arg0->unk_090, arg0->unk_CCC_jp_0C, arg0->unk_CCC_jp_10, arg0->unk_CCC_jp_14);
+        ((func8850A3CC)Memmap_GetFragmentVaddr(WidgetTree_RunMessagePanelSilent))(arg0->unk_090, arg2);
+        Audio_PlaySoundEffectById(0x29);
+    } else {
+        ((func88507C0C)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelectionWithOffset))(arg0->unk_034, sp70, sp8C);
+
+        sp78.unk_00 = 0x160;
+        sp78.unk_02 = arg0->unk_034->unk_5C - arg0->unk_034->unk_58;
+
+        LabPCList_LocationCrossfadeWidget_Start(arg0->unk_0C8, sp80, sp7C, sp78);
+        Audio_PlaySoundEffectById(0x0120000D);
+
+        ((func8850CF00)Memmap_GetFragmentVaddr(WidgetTree_RunChildWidgetGroup))(arg0->unk_0B8, arg2);
+
+        Audio_PlaySoundEffectById(0x29);
+    }
+}
+#else
 void LabPCList_PerformMoveMon(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C_0CC_000* arg1, Controller* arg2) {
     func88500A6C temp_v0_4;
     s32 sp90;
@@ -1638,6 +2137,7 @@ void LabPCList_PerformMoveMon(unk_func_8830867C_02C* arg0, unk_func_8830867C_02C
         ((func88507C0C)Memmap_GetFragmentVaddr(WidgetTree_SetPagedGridSelectionWithOffset))(arg0->unk_034, sp70, sp8C);
     }
 }
+#endif
 
 void LabPCList_ReindexBoxSlots(unk_func_8830867C_02C_0CC_000_000* arg0) {
     unk_func_8830867C_02C_0CC_000_000_010_000* ptr = arg0->unk_10.unk_00;
@@ -1844,6 +2344,90 @@ void LabPCList_RunPartySelectionModal(unk_func_8830867C_02C* arg0, Controller* a
     arg0->unk_02C->unk_2C = 0xB;
 }
 
+#if defined(VERSION_JP)
+void func_88305F28(unk_func_8830867C_02C* arg0) {
+    unk_func_8830867C_04C_030_02C_000_000* spDC;
+    unk_func_8830867C_02C_0CC_000* spD8;
+    WidgetPoint spC8;
+    func88500A6C temp_v0_4;
+    s32 spC0;
+    s32 spBC;
+    WidgetPoint spB8;
+    // JP has no separate pointer for the move slot; it reuses spB4 (from the PP Up branch).
+    s32 spB4;
+    s32 spB0;
+    s32 spAC;
+    WidgetPoint spA8;
+    unk_func_8830867C_02C_0CC_000 sp4C;
+    char* sp48;
+    char* sp44;
+    s32 sp40;
+
+    spDC = arg0->unk_0AC->unk_30->unk_2C->unk_00->unk_00[arg0->unk_0AC->unk_30->unk_38];
+    spD8 = arg0->unk_034->unk_00.unk_2C->unk_00[arg0->unk_034->unk_00.unk_38];
+    LabPCList_DiscardFilterBackup(arg0);
+
+    if (spDC->unk_08 >= 0x64) {
+        spB4 = (s32)&spD8->unk_08;
+        spC0 = BattleMon_CountMoves((unk_func_8830867C_02C_0CC_000_008*)spB4);
+        if (spC0 < 4) {
+            LabPCList_ClearMovesFrom((unk_func_8830867C_02C_0CC_000_008*)spB4, spC0);
+            spBC = -1;
+            spB4 = (s32)((u8*)spD8 + spC0);
+        } else {
+            do {
+                spC0 = arg0->unk_0AC->unk_78->unk_30->unk_38;
+            } while (0);
+            spB4 = (s32)((u8*)spD8 + spC0);
+            spBC = ((unk_func_8830867C_02C_0CC_000_008*)spB4)->unk_11;
+        }
+        LabPCList_TeachTmMove(spD8, spDC, spC0);
+
+        temp_v0_4 = ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage));
+        arg0->unk_CD0 = 1;
+        temp_v0_4(arg0->unk_038, 1);
+
+        spC8.unk_00 = (spC0 * 0x6C) + 0x78;
+        spC8.unk_02 = arg0->unk_034->unk_5C - arg0->unk_034->unk_58;
+
+        LabPCList_TextFadeWidget_Start(arg0->unk_0BC, spBC, ((unk_func_8830867C_02C_0CC_000_008*)spB4)->unk_11, spC8);
+        LabPCList_SwitchColumnPage(arg0);
+        ((func8850CF00)Memmap_GetFragmentVaddr(WidgetTree_RunChildWidgetGroup))(arg0->unk_0B8, gPlayer1Controller);
+    } else if (spDC->unk_08 >= 0x32) {
+        spB4 = arg0->unk_0AC->unk_78->unk_30->unk_38;
+        LabPCList_ApplyPpUpItem(spD8, spDC, spB4, &spB0, &spAC);
+
+        temp_v0_4 = ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage));
+        arg0->unk_CD0 = 1;
+        temp_v0_4(arg0->unk_038, 1);
+
+        spB8.unk_00 = (spB4 * 0x6C) + 0x78;
+        spB8.unk_02 = arg0->unk_034->unk_5C - arg0->unk_034->unk_58;
+        LabPCList_PpUpAnimWidget_Start(arg0->unk_0C0, spD8->unk_08.unk_09[spB4], spB0, spAC, spB8);
+        LabPCList_SwitchColumnPage(arg0);
+        if (spD8) {}
+        ((func8850CF00)Memmap_GetFragmentVaddr(WidgetTree_RunChildWidgetGroup))(arg0->unk_0B8, gPlayer1Controller);
+    } else {
+        sp4C = *spD8;
+
+        sp40 = LabPCList_ApplyVitaminItem(&sp4C, spDC, &sp48, &sp44);
+
+        temp_v0_4 = ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage));
+        arg0->unk_CD0 = 2;
+        temp_v0_4(arg0->unk_038, 2);
+
+        spA8.unk_00 = (sp40 * 0x48) + 0x78;
+        spA8.unk_02 = arg0->unk_034->unk_5C - arg0->unk_034->unk_58;
+
+        LabPCList_TextCrossfadeWidget_Start(arg0->unk_0C4, sp48, sp44, spA8);
+        LabPCList_SwitchColumnPage(arg0);
+        ((func8850CF00)Memmap_GetFragmentVaddr(WidgetTree_RunChildWidgetGroup))(arg0->unk_0B8, gPlayer1Controller);
+
+        *spD8 = sp4C;
+    }
+    LabPCList_BuildTmHmList(&arg0->unk_C48, arg0->unk_1A8, arg0->unk_154, 3, 0xAA);
+}
+#else
 void func_88305F28(unk_func_8830867C_02C* arg0) {
     unk_func_8830867C_04C_030_02C_000_000* spDC;
     unk_func_8830867C_02C_0CC_000* spD8;
@@ -1964,8 +2548,22 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
     }
     LabPCList_BuildTmHmList(&arg0->unk_C48, arg0->unk_1A8, arg0->unk_154, 3, 0xAA);
 }
+#endif
 
 s32 LabPCList_OpenListMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
+#if defined(VERSION_JP)
+    static char* D_883154D4_jp[] = {
+        "アイウエオじゅんにならべる",     // "Sort alphabetically"
+        "ポケモンばんごうでならべる",     // "Sort by Pokédex number"
+        "カップべつにポケモンをあつめる", // "Gather Pokémon by Cup"
+        "どうぐをつかう",                 // "Use an item"
+        "いちらんするポケモンをえらぶ",   // "Choose which Pokémon to list"
+        "すべてのせんたくをやめる",       // "Clear all selections"
+    };
+    u32 sp24;
+
+    BattleInfoWidget_SetLabels(arg0->unk_08C, D_883154D4_jp, 6);
+#else
     char* sp28[6];
     u32 sp24;
 
@@ -1977,6 +2575,7 @@ s32 LabPCList_OpenListMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
     sp28[5] = Text_GetString(NULL, 0, sPcListText, 0x1C);
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp28, 6);
+#endif
 
     arg0->unk_08C->unk_30 = arg0->unk_054->unk_10;
     arg0->unk_08C->unk_34 = arg0->unk_054->unk_14;
@@ -2043,6 +2642,35 @@ s32 LabPCList_OpenListMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
 }
 
 s32 LabPCList_OpenRowMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
+#if defined(VERSION_JP)
+    static char D_88318DA0_jp[2][0x42];
+    static char* D_883154EC_jp[] = {
+        "をあつめる",     // "Gather <...>"
+        "をかいじょする", // "Release <...>"
+    };
+    static char* D_883154F4_jp[] = {
+        D_88318DA0_jp[0], D_88318DA0_jp[1],
+        "いどうする",     // "Move"
+        "どうぐをつかう", // "Use an item"
+        "つよさをみる",   // "Check stats"
+    };
+
+    u32 sp40;
+    unk_func_8830867C_02C_0CC_000* sp3C;
+    s32 sp34;
+    s32 sp30;
+    s32 sp2C;
+
+    sp3C = arg0->unk_034->unk_00.unk_2C->unk_00[arg0->unk_034->unk_00.unk_38];
+
+    // "<species>" + "Gather"/"Release", then "Same type" + "Gather"/"Release".
+    HAL_Strcpy(D_88318DA0_jp[0], D_8006FF00[sp3C->unk_08.unk_00 - 1].name);
+    HAL_Strcpy(strlen(D_88318DA0_jp[0]) + D_88318DA0_jp[0], D_883154EC_jp[(arg0->unk_C54.unk_04 & 8) ? 1 : 0]);
+    *(JpStr13*)D_88318DA0_jp[1] = *(JpStr13*)"おなじタイプ";
+    HAL_Strcpy(strlen(D_88318DA0_jp[1]) + D_88318DA0_jp[1], D_883154EC_jp[(arg0->unk_C54.unk_04 & 0x10) ? 1 : 0]);
+
+    BattleInfoWidget_SetLabels(arg0->unk_08C, D_883154F4_jp, 5);
+#else
     static char D_8831A500[0x20];
 
     char* sp44[5];
@@ -2071,6 +2699,7 @@ s32 LabPCList_OpenRowMenu(unk_func_8830867C_02C* arg0, Controller* arg1) {
     sp44[4] = Text_GetString(NULL, 0, sPcListText, 0x29);
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp44, 5);
+#endif
 
     arg0->unk_08C->unk_30.unk_00 = 0x26;
     arg0->unk_08C->unk_30.unk_02 = (arg0->unk_034->unk_5C - arg0->unk_034->unk_58) + 0x16;
@@ -2159,6 +2788,12 @@ typedef struct unk_D_883172F4 {
 } unk_D_883172F4; // size = 0x8
 
 s32 LabPCList_HandleColumnHeaderClick(unk_func_8830867C_02C* arg0, WidgetNode* arg1, s32 arg2, Controller* arg3) {
+#if defined(VERSION_JP)
+    u32 var_s0;
+    s32 sp50;
+
+    BattleInfoWidget_SetLabels(arg0->unk_08C, D_88318400_jp[arg2 - 2].labels, D_88318400_jp[arg2 - 2].count);
+#else
     static s16 D_883172DC[] = {
         0x001E,
         0x001F,
@@ -2242,6 +2877,7 @@ s32 LabPCList_HandleColumnHeaderClick(unk_func_8830867C_02C* arg0, WidgetNode* a
     }
 
     BattleInfoWidget_SetLabels(arg0->unk_08C, sp40, D_883172F4[arg2 - 2].unk_04);
+#endif
 
     arg0->unk_08C->unk_30 = arg1->unk_10;
     arg0->unk_08C->unk_34 = arg1->unk_14;
@@ -2451,6 +3087,9 @@ s32 LabPCList_ConfirmExit(unk_func_8830867C_02C* arg0, Controller* arg1, s32 arg
 
         temp_v0_2 = ((func88900808)Memmap_GetFragmentVaddr(LabUI_RunConfirmDialog))(arg0->unk_0B0, arg1, 1);
         if (temp_v0_2 == 0) {
+#if defined(VERSION_JP)
+            Audio_PlaySoundEffectById(0x1D);
+#endif
             LabPCList_SaveAll(arg0, sp30);
             ((func889007AC)Memmap_GetFragmentVaddr(LabUI_CloseConfirmDialog))(arg0->unk_0B0);
         } else if (temp_v0_2 == 1) {
@@ -2981,8 +3620,12 @@ s32 LabPCList_HandleTopLevelInput(unk_func_8830867C_02C_048* arg0, Controller* a
     return var_a2;
 }
 
+#if defined(VERSION_JP)
+void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3, FontContext* arg4) {
+#else
 void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3, FontContext* arg4,
                            char** arg5, char** arg6, char** arg7, char** arg8, char** arg9) {
+#endif
     static Color_RGBA8 D_88317354 = { 0x1E, 0x50, 0x50, 0xFF };
     static Color_RGBA8 D_88317358 = { 0x00, 0x0A, 0x0A, 0xFF };
 
@@ -3015,13 +3658,21 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp8C->unk_00, &sp7C->unk_00.unk_00);
 
     sp78 = mem_pool_alloc(arg3, sizeof(unk_func_88509A2C));
+#if defined(VERSION_JP)
+    ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp78, 0x38, 0x22, GbSave_GetActivePort());
+#else
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp78, 0x38, 0x22, GbSave_GetActivePort(),
                                                                           Text_GetString(NULL, 0, sIdLabelText, 0));
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp7C->unk_00.unk_00, &sp78->unk_00.unk_00);
 
     sp74 = mem_pool_alloc(arg3, sizeof(unk_func_88509E34));
+#if defined(VERSION_JP)
+    ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp74, 0, 0, "　いちらん"); // "List"
+#else
     ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp74, 0, 0,
                                                                         Text_GetString(NULL, 0, sPcListText, 0));
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp7C->unk_00.unk_00, &sp74->unk_00.unk_00);
 
     sp88 = mem_pool_alloc(arg3, sizeof(WidgetNode));
@@ -3032,7 +3683,7 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     BattleInfoWidget_InitDropdownMenu(arg0->unk_30, sp88, arg3);
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_8830867C_034));
-    BattleInfoWidget_Build(arg0->unk_34, 0x56, 0x78, sp88, arg3);
+    BattleInfoWidget_Build(arg0->unk_34, 0x56, JP_INTL(0x96, 0x78), sp88, arg3);
 
     arg0->unk_38 = mem_pool_alloc(arg3, sizeof(unk_func_8830867C_038));
     BattleInfoWidget_BuildStatusMenu(arg0->unk_38, 0x56, 0x96, sp88, arg3);
@@ -3054,7 +3705,11 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
 
     arg0->unk_50 = mem_pool_alloc(arg3, sizeof(unk_func_889000C4));
 
+#if defined(VERSION_JP)
+    ((func889000C4)Memmap_GetFragmentVaddr(LabUI_BuildConfirmDialog))(arg0->unk_50, 0xCA, 0xAD, 0, NULL, arg3);
+#else
     ((func889000C4)Memmap_GetFragmentVaddr(LabUI_BuildConfirmDialog))(arg0->unk_50, 0, 0, 0, arg5, arg3);
+#endif
 
     sp84 = FRAGMENT_LOAD(FRAGMENT_LAB_PC_ICONS);
 
@@ -3064,6 +3719,7 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     // clang-format on
     arg0->unk_54.unk_14 = sp88;
     arg0->unk_6C = 0;
+#if !defined(VERSION_JP)
     arg0->unk_70 = arg6;
     arg0->unk_74 = sPcListPokemonNames;
     arg0->unk_78 = sPcListMoveNames;
@@ -3071,6 +3727,7 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     arg0->unk_80 = arg7;
     arg0->unk_84 = arg8;
     arg0->unk_88 = arg9;
+#endif
 
     sp84(0, &arg0->unk_54);
 
@@ -3101,12 +3758,14 @@ void LabPCList_BuildWidget(unk_func_8830867C* arg0, s32 arg1, s32 arg2, MemoryPo
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_50->unk_00.unk_00);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_00.unk_00, &arg0->unk_54.unk_08->unk_00);
 
+#if !defined(VERSION_JP)
     arg0->unk_50->unk_00.unk_10.unk_00 =
         arg0->unk_2C->unk_000.unk_10.unk_00 +
         ((arg0->unk_2C->unk_02C->unk_00.unk_14.unk_00 - arg0->unk_50->unk_2C->unk_00.unk_14.unk_00) / 2);
     arg0->unk_50->unk_00.unk_10.unk_02 =
         arg0->unk_2C->unk_000.unk_10.unk_02 +
         ((arg0->unk_2C->unk_02C->unk_00.unk_14.unk_02 - arg0->unk_50->unk_2C->unk_00.unk_14.unk_02) / 2);
+#endif
 }
 
 void LabPCList_RunWidgetLoop(unk_func_8830867C* arg0) {
@@ -3132,7 +3791,9 @@ void LabPCList_ScreenThreadEntry(unk_func_8830867C* arg0) {
     }
 
     Ui_SendMessageAndPollInput(1);
+#if !defined(VERSION_JP)
     osStopThread(NULL);
+#endif
 }
 
 s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1) {
@@ -3141,11 +3802,13 @@ s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1) {
     void* sp4C;
     u8* sp48;
     func_88002628_sp38* sp44;
+#if !defined(VERSION_JP)
     char** sp40;
     char** sp3C;
     char** sp38;
     char** sp34;
     char** sp30;
+#endif
 
     main_pool_push_state('PCHK');
 
@@ -3156,6 +3819,7 @@ s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1) {
     FRAGMENT_LOAD(FRAGMENT_POKEMON_LAB_SUPPORT);
     FRAGMENT_LOAD(FRAGMENT_LAB_UI_SUPPORT);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
 
     sIdLabelText = Text_GetStringTable(0x2A);
@@ -3171,13 +3835,18 @@ s32 LabPCList_ShowListScreen(UNUSED s32 arg0, UNUSED s32 arg1) {
     sp38 = Text_GetStringTable(0x28);
     sp34 = Text_GetStringTable(0x29);
     sp30 = Text_GetStringTable(0xB);
+#endif
 
     sp48 = main_pool_alloc(0x1000, 0);
 
     sp50 = mem_pool_try_init(0x18000, 0);
 
     sp4C = mem_pool_alloc(sp50, sizeof(unk_func_8830867C));
+#if defined(VERSION_JP)
+    LabPCList_BuildWidget(sp4C, 0, 0, sp50, sp54);
+#else
     LabPCList_BuildWidget(sp4C, 0, 0, sp50, sp54, sp40, sp3C, sp38, sp34, sp30);
+#endif
 
     sp44 = ALIGN16((u32)mem_pool_alloc(sp50, sizeof(func_88002628_sp38)));
 

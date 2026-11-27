@@ -56,18 +56,22 @@ s16 sSmokePuffSetOrder[18] = {
     0x0011, 0x0007, 0x0006, 0x0005, 0x0004, 0x0003, 0x0002, 0x0001, 0x0000,
     0x0010, 0x000F, 0x000E, 0x000D, 0x000C, 0x000B, 0x000A, 0x0009, 0x0008,
 };
+#if !defined(VERSION_JP)
 // Grow-then-shrink scale curve for Vaporeon and Articuno sparkles, indexed by age % 12.
 f32 sSparkleScaleCurve[12] = {
     0.5f,          0.6499999762f, 0.8000000119f, 0.9499999881f, 0.875f,        0.8000000119f,
     0.7250000238f, 0.6499999762f, 0.5749999881f, 0.5f,          0.4250000119f, 0.349999994f,
 };
+#endif
 Vec3f D_8100410C = { 0.0f, 0.0f, 0.0f };
 Vec3f D_81004118 = { 0.0f, 0.0f, 0.0f };
 Vec3f D_81004124 = { 1.0f, 1.0f, 1.0f };
+#if !defined(VERSION_JP)
 Vec3f D_81004130 = { 2.0f, 2.0f, 2.0f };
 Vec3f D_8100413C = { 0.0f, 10.0f, 0.0f };
 Vec3f D_81004148 = { 10000.0f, 10000.0f, 10000.0f };
 Vec3f D_81004154 = { -10000.0f, -10000.0f, -10000.0f };
+#endif
 Vec3f D_81004160 = { 1.0f, 1.0f, 1.0f };
 static u32 pad_D_8100416C = 0;
 
@@ -83,6 +87,21 @@ static s32 sEffectCallbackCount;
  * Clears species particle arg1 on the side given by the object's effectSlot (0xFF and 0xFE use
  * side 0): inactive, age 0, zero position and velocity, unit scale.
  */
+#if defined(VERSION_JP)
+void Particle31_ResetSlot(s32 arg0, s32 arg1) {
+    s32 pad[2];
+    Vec3f sp1C = D_8100410C;
+    Vec3f sp10 = D_81004118;
+    Vec3f sp4 = D_81004124;
+    s32 pad2;
+
+    sSpeciesParticles[arg0][arg1].active = 0;
+    sSpeciesParticles[arg0][arg1].age = 0;
+    sSpeciesParticles[arg0][arg1].position = sp1C;
+    sSpeciesParticles[arg0][arg1].velocity = sp10;
+    sSpeciesParticles[arg0][arg1].scale = sp4;
+}
+#else
 void Particle31_ResetSlot(DisplayObject* arg0, s32 arg1) {
     u8 var_v0 = arg0->effectSlot;
     s32 pad[2];
@@ -106,13 +125,18 @@ void Particle31_ResetSlot(DisplayObject* arg0, s32 arg1) {
     sSpeciesParticles[var_v0 & 1][arg1].velocity = sp44;
     sSpeciesParticles[var_v0 & 1][arg1].scale = sp38;
 }
+#endif
 
 /**
  * Clears all 10 species particles of the object's side. Called through a virtual pointer from
  * battle_hud.c when a display object's animation starts (objectType < 0x98). In the debugger's
  * Metronome run it fired only for Transform, which swaps the user's model.
  */
+#if defined(VERSION_JP)
+void Particle31_ResetAllSlots(s32 arg0) {
+#else
 void Particle31_ResetAllSlots(DisplayObject* arg0) {
+#endif
     s32 i;
 
     for (i = 0; i < 10; i++) {
@@ -136,6 +160,12 @@ void Particle31_ResetCounters(void) {
  * and Vaporeon (134) sparkles, Gastly (92) gas. The debugger hit it for all of these except Rapidash,
  * whose model has a slot-0xE0 material that no geometry node uses.
  */
+#if defined(VERSION_JP)
+#define SPARKLE_START_SCALE 0.5f
+#else
+#define SPARKLE_START_SCALE sSparkleScaleCurve[0]
+#endif
+
 void Particle31_SpawnSpeciesEffect(SpeciesParticle* arg0) {
     s32 var_v0;
     Vec3f sp90;
@@ -160,9 +190,11 @@ void Particle31_SpawnSpeciesEffect(SpeciesParticle* arg0) {
         case 0x6D:
         case 0x6E:
             var_fs0 = 0.5f;
+#if !defined(VERSION_JP)
             sp64.x = 1.0f;
             sp64.y = 1.0f;
             sp64.z = 1.0f;
+#endif
             break;
         case 0x92:
             var_fs0 = 1.0f;
@@ -184,27 +216,33 @@ void Particle31_SpawnSpeciesEffect(SpeciesParticle* arg0) {
             break;
         case 0x4E:
             var_fs0 = 0.5f;
+#if defined(VERSION_JP)
+            sp64.x = 0.05f;
+            sp64.y = 0.05f;
+            sp64.z = 0.05f;
+#else
             sp64.x = 0.002f;
             sp64.y = 0.002f;
             sp64.z = 0.002f;
+#endif
             sp84.x += (f32)((guRandom() % 20) - 0xA) * sp60;
             sp84.y += (f32)((guRandom() % 10) - 5) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 0xA) * sp58;
             break;
         case 0x90:
             var_fs0 = 0.0f;
-            sp64.x = sSparkleScaleCurve[0];
-            sp64.y = sSparkleScaleCurve[0];
-            sp64.z = sSparkleScaleCurve[0];
+            sp64.x = SPARKLE_START_SCALE;
+            sp64.y = SPARKLE_START_SCALE;
+            sp64.z = SPARKLE_START_SCALE;
             sp84.x += (f32)((guRandom() % 20) - 0xA) * sp60;
             sp84.y += (f32)((guRandom() % 20) - 0xA) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 0xA) * sp58;
             break;
         case 0x86:
             var_fs0 = 0.0f;
-            sp64.x = sSparkleScaleCurve[0];
-            sp64.y = sSparkleScaleCurve[0];
-            sp64.z = sSparkleScaleCurve[0];
+            sp64.x = SPARKLE_START_SCALE;
+            sp64.y = SPARKLE_START_SCALE;
+            sp64.z = SPARKLE_START_SCALE;
             sp84.x += (f32)((guRandom() % 60) - 0x1E) * sp60;
             sp84.y += (f32)((guRandom() % 40) - 0xA) * sp5C;
             sp84.z += (f32)((guRandom() % 60) - 0x1E) * sp58;
@@ -346,15 +384,34 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
     s16 temp_v1;
     MtxF sp14C;
     MtxF sp10C;
+#if defined(VERSION_JP)
+    DisplayObject* ptr;
+#else
     f32 temp_f0;
+#endif
     f32 sp104;
     f32 sp100;
     f32 spFC;
+#if !defined(VERSION_JP)
     DisplayObject* ptr;
+#endif
 
     sp294 = Gfx_AllocDisplayList(0x40);
     MtxF_ExtractScale(&sp14C, &D_8006F088->view.floatMatrix);
     guMtxF2L(sp14C.mf, &sp1D0);
+#if defined(VERSION_JP)
+    guScale(&sp250, D_8006F09C->scale.x * arg1->scale.x * 0.1f, D_8006F09C->scale.y * arg1->scale.y * 0.1f,
+            D_8006F09C->scale.z * arg1->scale.z * 0.1f);
+    if (D_8006F09C->objectType == 0x5C) {
+        MtxF_Copy(&sp10C, GeoRender_GetRelativeMatrix(0));
+        guMtxXFMF(sp10C.mf, 0, 0, 0, &spFC, &sp100, &sp104);
+        guTranslate(&sp190, spFC, sp100, sp104);
+        guMtxCatL(&sp250, &sp190, sp294);
+    } else {
+        guTranslate(&sp210, arg1->position.x, arg1->position.y, arg1->position.z);
+        guMtxCatL(&sp250, &sp210, sp294);
+    }
+#else
     if (D_8006F09C->effectSlot == 0xFE) {
         guScale(&sp250, D_8006F09C->scale.x * arg1->scale.x * 0.1f, D_8006F09C->scale.y * arg1->scale.y * 0.1f,
                 D_8006F09C->scale.z * arg1->scale.z * 0.1f);
@@ -381,6 +438,7 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
         guTranslate(&sp210, arg1->position.x, arg1->position.y, arg1->position.z);
         guMtxCatL(&sp250, &sp210, sp294);
     }
+#endif
     guMtxCatL(&sp1D0, sp294, sp294);
     gSPMatrix(gfx++, sp294, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, arg2->setupDisplayList);
@@ -436,6 +494,16 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
         switch (ptr->objectType) {
             case 0x6D:
             case 0x6E:
+#if defined(VERSION_JP)
+                arg1->position.y += 0.5f * ptr->scale.y;
+                arg1->age++;
+                arg1->scale.x += 0.1f;
+                arg1->scale.y += 0.1f;
+                arg1->scale.z += 0.1f;
+                if (arg1->age >= 0x10) {
+                    arg1->active = 0;
+                }
+#else
                 if (ptr->effectSlot != 0xFF) {
                     arg1->position.y += 0.5f * ptr->scale.y;
                     arg1->age++;
@@ -446,6 +514,7 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
                         arg1->active = 0;
                     }
                 }
+#endif
                 break;
             case 0x5C:
                 if (ptr->effectSlot == 0xFF) {
@@ -489,6 +558,21 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
                 break;
             case 0x90:
                 arg1->position.y -= 0.5f * ptr->scale.y;
+#if defined(VERSION_JP)
+                if (arg1->age < 4) {
+                    arg1->scale.x += 0.15f;
+                    arg1->scale.y += 0.15f;
+                    arg1->scale.z += 0.15f;
+                } else {
+                    arg1->scale.x -= 0.075f;
+                    arg1->scale.y -= 0.075f;
+                    arg1->scale.z -= 0.075f;
+                }
+                arg1->age++;
+                if ((arg1->age >= 0xC) || (arg1->position.y < 0.0f)) {
+                    arg1->active = 0;
+                }
+#else
                 arg1->age++;
                 temp_v1 = arg1->age;
                 temp_f0 = sSparkleScaleCurve[temp_v1 % 12];
@@ -498,8 +582,24 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
                 if ((temp_v1 >= 0xC) || (arg1->position.y < 0.0f)) {
                     arg1->active = 0;
                 }
+#endif
                 break;
             case 0x86:
+#if defined(VERSION_JP)
+                if (arg1->age < 4) {
+                    arg1->scale.x += 0.15f;
+                    arg1->scale.y += 0.15f;
+                    arg1->scale.z += 0.15f;
+                } else {
+                    arg1->scale.x -= 0.075f;
+                    arg1->scale.y -= 0.075f;
+                    arg1->scale.z -= 0.075f;
+                }
+                arg1->age++;
+                if ((arg1->age >= 0xC) || (arg1->position.y < 0.0f)) {
+                    arg1->active = 0;
+                }
+#else
                 arg1->age++;
                 temp_v1 = arg1->age;
                 temp_f0 = sSparkleScaleCurve[temp_v1 % 12];
@@ -509,6 +609,7 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
                 if ((temp_v1 >= 0xC) || (arg1->position.y < 0.0f)) {
                     arg1->active = 0;
                 }
+#endif
                 break;
             default:
                 arg1->age++;
@@ -524,7 +625,9 @@ Gfx* Particle31_DrawParticle(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticleGfx
         arg1->velocity.y *= 0.9f;
         arg1->velocity.z *= 0.9f;
     }
+#if !defined(VERSION_JP)
     sParticleDrawCount += 1;
+#endif
     return gfx;
 }
 
@@ -537,6 +640,9 @@ Gfx* Particle31_BuildDisplayList(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticl
     for (i = 0; i < 10; i++, arg1++) {
         if (arg1->active == 1) {
             gfx = Particle31_DrawParticle(gfx, arg1, arg2, arg3);
+#if defined(VERSION_JP)
+            sParticleDrawCount += 1;
+#endif
         }
     }
     return gfx;
@@ -551,6 +657,52 @@ Gfx* Particle31_BuildDisplayList(Gfx* gfx, SpeciesParticle* arg1, SpeciesParticl
  * within 15 frames of a puff frame. Referenced by the Ponyta, Rapidash, Gastly, Koffing, Weezing,
  * Vaporeon, Articuno and Moltres models. Lapras' model does not reference it.
  */
+#if defined(VERSION_JP)
+void Particle31_SpeciesEffectCallback(s32 arg0, DisplayListState* state) {
+    s32 pad[2];
+    s32 sp5C;
+    s32 pad3[4];
+    SpeciesParticle* sp1C;
+    s32 sp18;
+    SpeciesParticle* temp_a1_3;
+    u8 temp_v1;
+    Gfx* gfx;
+    s32 pad2[1];
+
+    sp5C = state->addresses;
+    if (arg0 == 0) {
+    } else if (arg0 == 2) {
+        if (sEffectCallbackCount == 0) {
+            state->gfx = Gfx_AllocDisplayList(0x418);
+        } else {
+            state->gfx = Gfx_AllocDisplayList(8);
+        }
+        gfx = state->gfx;
+        temp_v1 = D_8006F09C->effectSlot;
+        if (temp_v1 == 0xFF) {
+            switch (D_8006F09C->objectType) {
+                case 0x5C:
+                    Particle31_UpdateSpeciesEffectTrigger(&sSpeciesParticles);
+                    if (sEffectCallbackCount == 0) {
+                        gfx = Particle31_BuildDisplayList(gfx, &sSpeciesParticles, sp5C, 0);
+                    }
+                    break;
+            }
+        } else if (((s32)temp_v1 < 2) && (sParticleDrawCount >= 0) && (sParticleDrawCount < 0xB)) {
+            temp_a1_3 = sSpeciesParticles[temp_v1];
+            sp1C = temp_a1_3;
+            sp18 = (s32)temp_v1;
+            Particle31_UpdateSpeciesEffectTrigger(temp_a1_3);
+            if (sEffectCallbackCount == 0) {
+                gfx = Particle31_BuildDisplayList(gfx, temp_a1_3, sp5C, (s16)temp_v1);
+            }
+        }
+        if (1) {}
+        gSPEndDisplayList(gfx++);
+    }
+    sEffectCallbackCount += 1;
+}
+#else
 void Particle31_SpeciesEffectCallback(s32 arg0, DisplayListState* state) {
     s32 pad[2];
     s32 sp5C;
@@ -646,7 +798,9 @@ void Particle31_SpeciesEffectCallback(s32 arg0, DisplayListState* state) {
     }
     sEffectCallbackCount += 1;
 }
+#endif
 
+#if !defined(VERSION_JP)
 /**
  * Packs side 0's 10 particles into 7 bytes each (active bit and age, then position * 10 as
  * little-endian s16s) for a gallery snapshot; called by gallery_camera.
@@ -770,3 +924,4 @@ void Particle31_UnpackSlotData(ParticleSnapshotObject* arg0, u8* arg1) {
         var_v1->position.z = var_t0 / 10.0f;
     };
 }
+#endif

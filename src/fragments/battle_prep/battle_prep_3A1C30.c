@@ -124,6 +124,71 @@ static BattlePrepRuleWindowLayout gBattlePrepRuleWindowLayouts[] = {
     },
 };
 
+#if defined(VERSION_JP)
+// Width in pixels of an EUC-JP string drawn with 14-pixel-wide characters.
+#define BATTLE_PREP_TEXT_WIDTH(str) (strlen(str) * 14 / 2)
+
+// JP draws rule-window names from these tables instead of BattlePrep_GetString(0..40).
+// They are five separate arrays, laid out back to back: each function loads every
+// element from its own array symbol (e.g. sCupNames - 4 for `mode - 1`), which a
+// single 41-entry table does not reproduce under IDO.
+static char* sCupNames[] = {
+    "ニンテンドウカップ‘９７", // Nintendo Cup '97
+    "ニンテンドウカップ‘９８", // Nintendo Cup '98
+    "ニンテンドウカップ‘９９", // Nintendo Cup '99
+    "ファンシーカップ",         // Fancy Cup
+    "イエローカップ",           // Yellow Cup
+    "ウルトラカップ",           // Ultra Cup
+    "ジムリーダーのしろ",       // Gym Leader Castle
+};
+
+static char* sBallNames[] = {
+    "モンスターボール",         // Poké Ball
+    "スーパーボール",           // Great Ball
+    "ハイパーボール",           // Ultra Ball
+    "マスターボール",           // Master Ball
+};
+
+static char* sRoundNames[] = {
+    "バトル１",                 // Battle 1
+    "バトル２",                 // Battle 2
+    "バトル３",                 // Battle 3
+    "バトル４",                 // Battle 4
+    "バトル５",                 // Battle 5
+    "バトル６",                 // Battle 6
+    "セミファイナル",           // Semifinal
+    "ファイナルバトル",         // Final Battle
+};
+
+static char* sGymNames[] = {
+    "ニビジム",                 // Pewter Gym
+    "ハナダジム",               // Cerulean Gym
+    "クチバジム",               // Vermilion Gym
+    "タマムシジム",             // Celadon Gym
+    "セキチクジム",             // Fuchsia Gym
+    "ヤマブキジム",             // Saffron Gym
+    "グレンジム",               // Cinnabar Gym
+    "トキワジム",               // Viridian Gym
+    "してんのう",               // Elite Four
+    "ライバル",                 // Rival
+};
+
+static char* sLeaderNames[] = {
+    "タケシ",                   // Brock
+    "カスミ",                   // Misty
+    "マチス",                   // Lt. Surge
+    "エリカ",                   // Erika
+    "キョウ",                   // Koga
+    "ナツメ",                   // Sabrina
+    "カツラ",                   // Blaine
+    "サカキ",                   // Giovanni
+    "カンナ",                   // Lorelei
+    "シバ",                     // Bruno
+    "キクコ",                   // Agatha
+    "ワタル",                   // Lance
+};
+#endif
+
 /**
  * Draws the rule window's selection arrow beside the selected row, bobbing
  * horizontally on a 12-frame cycle.
@@ -169,6 +234,25 @@ void BattlePrep_DrawRuleOption(BattlePrepRuleWindow* text_window, s16 x, s16 y, 
  * Texts window kinds 1 and 2: "Keep battling?" Continue / Save and Quit. Kind 1 (cups) also
  * shows "Continue = N".
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 12, window_layout->y + 24);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    Font_Printf(window_layout->x + 16, window_layout->y + 6, "バトルをつづけますか？"); // Keep battling?
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 34, window_layout->y + 24, 0, 1, "つづける"); // Continue
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 34, window_layout->y + 24, 1, 1, "ちゅうだんする"); // Suspend
+
+    if (window_layout->restingHeight == 72) {
+        Font_SetActive(1, -1);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+        // Continue = %d
+        Font_Printf(window_layout->x + 74, window_layout->y + 54, "コンティニュー＝%d", gSessionContext.continueCount);
+    }
+
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 12, window_layout->y + 24);
     Font_BeginTranslucentTextRendering();
@@ -186,10 +270,34 @@ void BattlePrep_DrawKeepBattlingPrompt(BattlePrepRuleWindow* text_window, Battle
 
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 3: cup loss menu (Continue / Save / Re-enter / From the start / Quit).
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    s32 has_continues;
+    s32 on_first_trainer;
+
+    has_continues = gSessionContext.continueCount > 0;
+    on_first_trainer = !((gSessionContext.sessionFlags & 0x2) != 0);
+
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, has_continues, "コンティニューする"); // Continue
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, has_continues, "ちゅうだんする"); // Suspend
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, on_first_trainer, "エントリーしなおす"); // Re-enter
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 3, 1, "さいしょから"); // From the start
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 4, 1, "やめる"); // Quit
+    Font_SetActive(1, -1);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+    // Continue = %d
+    Font_Printf(window_layout->x + 74, window_layout->y + 76, "コンティニュー＝%d", gSessionContext.continueCount);
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 has_continues;
     s32 on_first_trainer;
@@ -213,10 +321,24 @@ void BattlePrep_DrawCupLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRul
                 gSessionContext.continueCount);
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 4: castle loss menu (Re-enter / Re-start at this GYM / Quit).
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    s32 can_reenter = !((gSessionContext.sessionFlags & 0x2) != 0);
+
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, can_reenter, "エントリーしなおす"); // Re-enter
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, "このジムのさいしょから"); // From the start of this Gym
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, "やめる"); // Quit
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     // FAKE: triple Negation
     // TODO: find out what sets this to true, it's not:
@@ -234,10 +356,24 @@ void BattlePrep_DrawCastleLossMenu(BattlePrepRuleWindow* text_window, BattlePrep
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 5: Free Battle menu (Try once more / Change team combination / Quit).
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    s32 one_player_has_99_wins = gSessionContext.battleSides[0].winCount < 99 && gSessionContext.battleSides[1].winCount < 99;
+
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, one_player_has_99_wins, "もういちどする"); // Try once more
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, "くみあわせをかえる"); // Change team combination
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, "やめる"); // Quit
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 one_player_has_99_wins = gSessionContext.battleSides[0].winCount < 99 && gSessionContext.battleSides[1].winCount < 99;
 
@@ -249,10 +385,21 @@ void BattlePrep_DrawFreeBattleMenu(BattlePrepRuleWindow* text_window, BattlePrep
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 2, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 6: Mewtwo loss menu (Battle again / Quit).
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 0, 1, "もういちど　たたかう"); // Battle again
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, "やめる"); // Quit
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawCursorArrow(text_window, window_layout->x + 5, window_layout->y + 6);
     Font_BeginTranslucentTextRendering();
@@ -261,11 +408,37 @@ void BattlePrep_DrawMewtwoLossMenu(BattlePrepRuleWindow* text_window, BattlePrep
     BattlePrep_DrawRuleOption(text_window, window_layout->x + 26, window_layout->y + 6, 1, 1, BattlePrep_GetString(49));
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 7: cup name, ball class and BATTLE N label.
  * Displays upon loading a suspending run from the pre-area select menu
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
+
+    if ((gSessionContext.mode == RULE_CATEGORY_NINTENDO_CUP_99) || (gSessionContext.mode == RULE_CATEGORY_PRIME_CUP)) {
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sCupNames[gSessionContext.mode - 1]) / 2)) + 100,
+                    window_layout->y + 6, sCupNames[gSessionContext.mode - 1]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBallNames[gSessionContext.modeSelection]) / 2)) + 100,
+                    window_layout->y + 24, sBallNames[gSessionContext.modeSelection]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sRoundNames[gSessionContext.roundOrDemoId - 1]) / 2)) + 100,
+                    window_layout->y + 42, sRoundNames[gSessionContext.roundOrDemoId - 1]);
+    } else {
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sCupNames[gSessionContext.mode - 1]) / 2)) + 100,
+                    window_layout->y + 10, sCupNames[gSessionContext.mode - 1]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sRoundNames[gSessionContext.roundOrDemoId - 1]) / 2)) + 100,
+                    window_layout->y + 38, sRoundNames[gSessionContext.roundOrDemoId - 1]);
+    }
+
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     char* string;
 
@@ -291,11 +464,40 @@ void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* text_window, BattleP
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 8: gym name with BATTLE, TRAINER N / GYM LEADER / ELITE FOUR N.
  * Displays upon loading a suspending run from the pre-area select menu
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
+
+    // "%s Battle", centered with the 42-pixel width of "バトル"
+    Font_Printf((window_layout->x - ((s32)(BATTLE_PREP_TEXT_WIDTH(sGymNames[gSessionContext.modeSelection]) + 42) / 2)) + 100,
+                window_layout->y + 10, "%sバトル", sGymNames[gSessionContext.modeSelection]);
+
+    if (gSessionContext.modeSelection < SESSION_MODE_BATTLE_NOW) {
+        if (gSessionContext.modeSelection == SESSION_MODE_VS_MEWTWO) {
+            // Elite Four %d
+            Font_Printf(window_layout->x + 58, window_layout->y + 38, "してんのう%d", gSessionContext.roundOrDemoId);
+        } else if (gSessionContext.roundOrDemoId < 4) {
+            // Trainer %d
+            Font_Printf(window_layout->x + 58, window_layout->y + 38, "トレーナー%d", gSessionContext.roundOrDemoId);
+        } else {
+            Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sLeaderNames[gSessionContext.modeSelection]) / 2)) + 100,
+                        window_layout->y + 38, sLeaderNames[gSessionContext.modeSelection]);
+        }
+    }
+
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     s32 text_length;
     char buffer[256];
@@ -334,6 +536,7 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, Batt
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Draws the COM (gComIconSmall) or 1P-4P controller tag for a battle side.
@@ -392,6 +595,30 @@ void BattlePrep_SetWinCountColor(BattleSessionTeams* session_teams) {
 /**
  * Rule window kind 9: Free Battle "Record" with each side's win(s) count.
  */
+#if defined(VERSION_JP)
+void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 20, 168, 0x20, 0, 0, 0, 0xFF);
+    BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 68, 168, 0x20, 0, 0, 0, 0xFF);
+    BattlePrep_DrawPlayerTag(window_layout->x + 8, window_layout->y + 20, gSessionContext.battleSides);
+    BattlePrep_DrawPlayerTag(window_layout->x + 8, window_layout->y + 68, &gSessionContext.battleSides[1]);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
+    Font_Printf(window_layout->x + 64, window_layout->y + 2, "かちすう"); // Wins
+    Font_DisableTwoCycleTexturing();
+    Font_SetActive(16, -8);
+    BattlePrep_SetWinCountColor(&gSessionContext.battleSides[0]);
+    Font_Printf(window_layout->x + 92, window_layout->y + 24, "%2d", gSessionContext.battleSides[0].winCount);
+    BattlePrep_SetWinCountColor(&gSessionContext.battleSides[1]);
+    Font_Printf(window_layout->x + 92, window_layout->y + 72, "%2d", gSessionContext.battleSides[1].winCount);
+    Font_SetActive(4, -4);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+    Font_Printf(window_layout->x + 130, window_layout->y + 31, "しょう"); // win(s)
+    Font_Printf(window_layout->x + 130, window_layout->y + 79, "しょう"); // win(s)
+    Font_EndTexturedTextRendering();
+}
+#else
 void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 20, 168, 0x20, 0, 0, 0, 0xFF);
     BattlePrep_DrawBorderedRect(window_layout->x + 8, window_layout->y + 68, 168, 0x20, 0, 0, 0, 0xFF);
@@ -415,12 +642,79 @@ void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* text_window, BattlePrepRuleW
     Font_Printf(window_layout->x + 130, window_layout->y + 79, BattlePrep_GetString(57));
     Font_EndTexturedTextRendering();
 }
+#endif
 
 /**
  * Rule window kind 10: over write suspended battle data prompt
  */
 
 // better name: BattlePrep_DrawOverwriteSuspendDataPrompt
+#if defined(VERSION_JP)
+void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
+    SessionContinueData suspend_record;
+
+    Session_LoadContinueRecord(&suspend_record, NULL);
+    BattlePrep_DrawBorderedRect(window_layout->x + 16, window_layout->y + 20, 168, 60, 0, 0, 0, 0xFF);
+    BattlePrep_DrawBorderedRect(window_layout->x + 16, window_layout->y + 96, 168, 34, 0, 0, 0, 0xFF);
+    BattlePrep_DrawCursorArrow(text_window, window_layout->x + 20, window_layout->y + 100);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, -2);
+    Font_Printf(window_layout->x + 16, window_layout->y + 6, "ちゅうだんデータがあります"); // There is suspended data.
+    Font_Printf(window_layout->x + 16, window_layout->y + 82, "ちゅうだんしますか？"); // Suspend?
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 42, window_layout->y + 100, 0, 1, "ちゅうだんする"); // Suspend
+    // Continue without suspending
+    BattlePrep_DrawRuleOption(text_window, window_layout->x + 42, window_layout->y + 100, 1, 1, "ちゅうだんせずに　つづける");
+    Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF); // #ff6464
+
+    if (suspend_record.sessionMode == SESSION_MODE_GYM_LEADER_CASTLE) {
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sGymNames[suspend_record.cupOrGymIndex]);
+        if (suspend_record.cupOrGymIndex < 8) {
+            if (suspend_record.trainerIndex < 4) {
+                // Trainer %d
+                Font_Printf(window_layout->x + 30, window_layout->y + 53, "トレーナー%d", suspend_record.trainerIndex);
+            } else {
+                Font_Printf(window_layout->x + 30, window_layout->y + 53, "ジムリーダー"); // Gym Leader
+            }
+        } else {
+            // Elite Four %d
+            Font_Printf(window_layout->x + 30, window_layout->y + 53, "してんのう%d", suspend_record.trainerIndex);
+        }
+    } else if ((suspend_record.sessionMode == SESSION_MODE_NINTENDO_CUP_99) || (suspend_record.sessionMode == SESSION_MODE_PRIME_CUP)) {
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sBallNames[suspend_record.cupOrGymIndex]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 53, sRoundNames[suspend_record.trainerIndex - 1]);
+    } else {
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sRoundNames[suspend_record.trainerIndex - 1]);
+    }
+
+    if (suspend_record.sessionMode != SESSION_MODE_GYM_LEADER_CASTLE) {
+        Font_SetActive(1, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+        // Continue = %d
+        Font_Printf(window_layout->x + 100, window_layout->y + 67, "コンティニュー＝%d", suspend_record.continueCount);
+    }
+
+    Font_SetActive(1, -1);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #ffff00
+    // "If you choose to suspend, the previous continue data will be erased."
+    Font_Printf(window_layout->x + 10, window_layout->y + 134, "ちゅうだんをえらぶと　ぜんかいのつづきの");
+    Font_Printf(window_layout->x + 10, window_layout->y + 146, "データがきえてしまいます。");
+    Font_EndTexturedTextRendering();
+
+    if (suspend_record.inRound2 == 1) {
+        u32 len = strlen(sCupNames[suspend_record.sessionMode - 1]);
+
+        gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+
+        Gfx_DrawTextureRgba16(window_layout->x + (len / 2) * 10 + 32,
+                              window_layout->y + 21, 16, 16, gSmallRound2Icon, 0x10, 0);
+
+        gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    }
+}
+#else
 void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     SessionContinueData suspend_record;
 #if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
@@ -496,6 +790,7 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
+#endif
 
 // Better name: BattlePrep_DrawTextWindow
 /**

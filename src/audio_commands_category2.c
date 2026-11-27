@@ -94,6 +94,34 @@ s32 Audio_PlayCategory3SoundCommand(s32 arg0, s32 arg1, s32 arg2) {
     switch (arg0) {
         case 0x30003:
             sp38 = 0x50;
+#if defined(VERSION_JP)
+            if (Audio_IsSoundPlaying(D_80078F00[arg1]) == 0) {
+                var_fv0 += D_80078EF0[arg1];
+                var_v0 += D_80078EE0[arg1];
+                break;
+            }
+
+            if ((arg2 >= 0) && (arg2 < 0x14)) {
+                var_fv0 += D_80078EF0[arg1];
+                var_fv0 += 0.5f * arg2;
+
+                Audio_QueueVoiceDetune(D_80078F00[arg1], var_fv0);
+                return 0;
+            }
+
+            if (arg2 < 0) {
+                Audio_QueueFadeSoundCommand(D_80078F00[arg1], 0xA);
+                return 0;
+            }
+
+            if (arg2 >= 0x14) {
+                var_fv0 += D_80078EF0[arg1];
+                var_fv0 += (0, 0.5f) * 22.5;
+
+                Audio_QueueVoiceDetune(D_80078F00[arg1], var_fv0);
+                return 0;
+            }
+#else
             if (arg2 >= 0) {
                 if (Audio_IsSoundPlaying(D_80078F00[arg1]) == 0) {
                     var_fv0 += D_80078EF0[arg1];
@@ -122,6 +150,7 @@ s32 Audio_PlayCategory3SoundCommand(s32 arg0, s32 arg1, s32 arg2) {
                 Audio_QueueFadeSoundCommand(D_80078F00[arg1], 0xA);
                 return 0;
             }
+#endif
 
         case 0x30004:
             Audio_QueueFadeSoundCommand(D_80078F00[0], 0x14);
@@ -679,8 +708,78 @@ void Audio_StopCategory8SoundCommand(s32 arg0, s32 arg1, UNUSED s32 arg2) {
     }
 }
 
+#if !defined(VERSION_JP)
 s32 D_80078FA8 = 0;
+#endif
 
+#if defined(VERSION_JP)
+s32 Audio_PlayCategory9SoundCommand(s32 arg0, s32 arg1, UNUSED s32 arg2) {
+    static s32 D_80078FAC = 0;
+
+    s32 sp3C;
+    s32 sp38;
+    UNUSED s32 pad;
+    UNUSED s32 sp30;
+    f32 var_fv1;
+    UNUSED s32 pad2;
+
+    var_fv1 = 0.0f;
+    sp38 = arg0 & 0xFFFF;
+
+    switch (arg0) {
+        case 0x90001:
+            if (D_80078FAC == 0) {
+                D_80078ED4 = 0;
+                D_80078ED8 = 0;
+                D_80078EDC = 0;
+                sp38 = 2;
+                D_80078FAC++;
+                Audio_UpdateSpecialSequence(0x1E, 0);
+            } else if (D_80078FAC == 1) {
+                D_80078FAC++;
+                var_fv1 -= 4.0f;
+            } else if (D_80078FAC == 2) {
+                D_80078FAC++;
+                var_fv1 -= 2.0f;
+            } else if (D_80078FAC == 3) {
+                D_80078FAC = 0;
+                var_fv1 -= 9.0f;
+            }
+            break;
+
+        case 0x90002:
+        case 0x90003:
+        case 0x90004:
+        case 0x90005:
+        case 0x90006:
+        case 0x90007:
+        case 0x90008:
+        case 0x90009:
+            break;
+
+        case 0x9000A:
+            Audio_StartMusicTrack(0x1A);
+            break;
+
+        case 0x9000B:
+            Audio_StartMusicTrack(0x1B);
+            break;
+
+        case 0x9000C:
+            if (arg1 & 1) {
+                break;
+            }
+            return 0;
+
+        default:
+            return 0;
+    }
+
+    sp3C = Audio_PlaySoundEffect(D_800FC6A4, D_800FC6A8, sp38, 0x80, 0x7F, -1);
+    Audio_QueueVoiceDetune(sp3C, var_fv1);
+    return sp3C;
+}
+#else
 s32 Audio_PlayCategory9SoundCommand(s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     static s32 D_80078FAC = 0;
 
@@ -779,6 +878,7 @@ s32 Audio_PlayCategory9SoundCommand(s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) 
 
     return sp3C;
 }
+#endif
 
 void Audio_StopCategory9SoundCommand(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
 }
@@ -800,12 +900,22 @@ s32 Audio_PlayCategoryASoundCommand(s32 arg0, s32 arg1, s32 arg2) {
         0.8000000119f,
         0.6000000238f,
     };
+#if defined(VERSION_JP)
+    static f32 D_80078FD8[4] = {
+        -0.3000000119f,
+        0.8999999762f,
+        0.3000000119f,
+        -0.8999999762f,
+    };
+#else
     static f32 D_80078FD8[4] = {
         -0.6000000238f,
         1.0f,
         -1.0f,
         0.6000000238f,
     };
+#endif
+#if !defined(VERSION_JP)
     static f32 D_80078FE8[4] = {
         0.0f,
         0.0f,
@@ -827,6 +937,7 @@ s32 Audio_PlayCategoryASoundCommand(s32 arg0, s32 arg1, s32 arg2) {
         8.0f,
         12.0f,
     };
+#endif
 #endif
 
     s32 sp34;
@@ -869,10 +980,14 @@ s32 Audio_PlayCategoryASoundCommand(s32 arg0, s32 arg1, s32 arg2) {
             }
 
             var_fv0 += D_80078FD8[arg1];
+#if !defined(VERSION_JP)
             var_fv0 += D_80078FE8[arg2];
+#endif
             var_t0 = D_80078FB0[arg1] + 0x7F;
             var_a3 = 240.0f;
+#if !defined(VERSION_JP)
             var_a3 += D_80078FF8[arg2];
+#endif
 
             if (var_t0 >= 0x100) {
                 var_t0 = 0xFF;
@@ -1484,12 +1599,14 @@ s32 Audio_PlayCategory12SoundCommand(s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2)
             sp4C = Audio_PlaySoundEffect(D_800FC6A4, D_800FC6A8, 9, 0x80, 0x80, -1);
             break;
 
+#if !defined(VERSION_JP)
         case 0x120000E:
             Audio_QueueFadeSoundCommand(D_8007904C, 1);
             sp4C = Audio_PlaySoundEffect(D_800FC6A4, D_800FC6A8, 7, 0x80, 0x80, -1);
             Audio_QueueVoiceDetune(sp4C, -5.0f);
             D_8007904C = sp4C;
             break;
+#endif
 
         default:
             return 0;

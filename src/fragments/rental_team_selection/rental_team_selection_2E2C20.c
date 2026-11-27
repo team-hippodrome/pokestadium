@@ -13,6 +13,13 @@
 #include "src/matrix.h"
 #include "src/dp_intro.h"
 #include "src/hal_libc.h"
+#include "string.h"
+
+#if defined(VERSION_JP)
+#define RENTAL_GROUP_SPECIAL 9
+#else
+#define RENTAL_GROUP_SPECIAL 0xD
+#endif
 
 typedef struct unk_D_842115F0 {
     /* 0x00 */ Color_RGB8 unk_00[4];
@@ -181,26 +188,26 @@ void TeamSelection_Preview_DrawHeader(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     if (arg2 != 0) {
         Ui_DrawAnimatedTextureMarker(arg0 + 0x19C, arg1 + (arg3 * 0x16) + 0x3A);
         Font_BeginTranslucentTextRendering();
-        Font_SetActive(8, 0);
+        Font_SetActive(8, LETTER_SPACING(-2));
         Font_SetLineHeight(0x16);
 
         switch (arg2) {
             case 1:
-                Font_Printf(arg0 + 0x19C, arg1 + 0x20, TeamSelection_GetLabelText(0));
+                Font_Printf(arg0 + 0x19C, arg1 + 0x20, LABEL_TEXT(0, "エントリーする"));
                 break;
 
             case 2:
-                Font_Printf(arg0 + 0x19C, arg1 + 0x20, TeamSelection_GetLabelText(1));
+                Font_Printf(arg0 + 0x19C, arg1 + 0x20, LABEL_TEXT(1, "とりかえる"));
                 break;
 
             case 3:
-                Font_Printf(arg0 + 0x19C, arg1 + 0xA, TeamSelection_GetLabelText(2));
+                Font_Printf(arg0 + 0x19C, arg1 + 0xA, LABEL_TEXT(2, "このポケモン\nにする"));
                 break;
         }
 
         Font_SetActive(8, 0);
-        TeamSelection_Preview_DrawOptionText(arg0 + 0x1CE, arg1 + 0x3A, 0, arg3, TeamSelection_GetLabelText(3));
-        TeamSelection_Preview_DrawOptionText(arg0 + 0x1CE, arg1 + 0x50, 1, arg3, TeamSelection_GetLabelText(4));
+        TeamSelection_Preview_DrawOptionText(arg0 + 0x1CE, arg1 + 0x3A, 0, arg3, LABEL_TEXT(3, "はい"));
+        TeamSelection_Preview_DrawOptionText(arg0 + 0x1CE, arg1 + 0x50, 1, arg3, LABEL_TEXT(4, "いいえ"));
         Font_EndTexturedTextRendering();
     }
 }
@@ -236,13 +243,19 @@ void TeamSelection_Preview_DrawMovePanel(s16 arg0, s16 arg1, s32 arg2) {
 
 s16 TeamSelection_Preview_CenterMoveText(s16 arg0, s16 arg1, char* arg2) {
     if (arg0 >= 2) {
+#if defined(VERSION_JP)
+        arg1 -= (strlen(arg2) / 2) * 22;
+#else
         arg1 -= Font_MeasureTextExtent(8, 0, arg2, arg1);
+#endif
     }
     return arg1;
 }
 
 void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
+#if !defined(VERSION_JP)
     UNUSED s32 pad[2];
+#endif
     s16 i;
     s16 temp_s4;
     s16 temp_s5;
@@ -285,7 +298,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Gfx_DrawTextureRgba16(temp_s4 + 0x11C, temp_s5 + 0x90, 0x1C, 0x1A, D_2016010, 0x1C, 0);
             Gfx_DrawTextureRgba16(temp_s4 + 0x108, temp_s5 + 0xA9, 0x1C, 0x1A, D_2015A60, 0x1C, 0);
 
-            if ((arg0->unk_2C->unk_000 != 4) && (arg0->unk_2C->unk_001 == 0xD)) {
+            if ((arg0->unk_2C->unk_000 != 4) && (arg0->unk_2C->unk_001 == RENTAL_GROUP_SPECIAL)) {
                 Gfx_DrawTextureRgba16(temp_s4 + 0x14, temp_s5 + 0x78, 0x40, 0x14, D_2016D40, 0x40, 0);
             }
 
@@ -305,6 +318,40 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0xC, temp_s5 + 8, temp_s6->nickname);
+#if defined(VERSION_JP)
+            Font_SetActive(8, -4);
+            Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "L%d", temp_s6->level);
+            Font_SetActive(4, -4);
+            Font_Printf(temp_s4 + 0xE8, temp_s5 + 0xC, "No.%03d", temp_s6->species.id);
+            Font_SetActive(4, 0);
+            Font_Printf(temp_s4 + 0x13C, temp_s5 + 0xC, D_8006FF00[temp_s6->species.id - 1].name);
+            Font_SetActive(8, 0);
+            Font_Printf(temp_s4 + 0x76, temp_s5 + 0x5A, "HP");
+            Font_SetActive(8, -4);
+            Font_Printf(temp_s4 + 0xA4, temp_s5 + 0x5A, "%3d", temp_s6->maxHp);
+            Font_SetActive(4, 0);
+            Font_Printf(temp_s4 + 0x116, temp_s5 + 0x25, "こうげき");
+            Font_Printf(temp_s4 + 0x116, temp_s5 + 0x38, "ぼうぎょ");
+            Font_Printf(temp_s4 + 0x116, temp_s5 + 0x4B, "すばやさ");
+            Font_Printf(temp_s4 + 0x116, temp_s5 + 0x5E, "とくしゅ");
+            Font_SetActive(4, -4);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x25, "%3d", temp_s6->attack);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x38, "%3d", temp_s6->defense);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x4B, "%3d", temp_s6->speed);
+            Font_Printf(temp_s4 + 0x15E, temp_s5 + 0x5E, "%3d", temp_s6->special);
+            Font_SetActive(4, 0);
+            Font_Printf(temp_s4 + 0x72, temp_s5 + 0x26, "タイプ１");
+            Font_Printf(temp_s4 + 0x72, temp_s5 + 0x3A,
+                        D_80071D88[PokemonType_ToDisplayIndex(temp_s6->type1)].type_name);
+
+            if (temp_s6->type1 != temp_s6->type2) {
+                Font_Printf(temp_s4 + 0xC2, temp_s5 + 0x26, "タイプ２");
+                Font_Printf(temp_s4 + 0xC2, temp_s5 + 0x3A,
+                            D_80071D88[PokemonType_ToDisplayIndex(temp_s6->type2)].type_name);
+            }
+
+            Font_SetActive(8, 2);
+#else
             Font_SetActive(8, 0);
             Font_Printf(temp_s4 + 0x84, temp_s5 + 8, "%s %d", TeamSelection_GetInstructionText(0x15), temp_s6->level);
             Font_SetActive(4, 0);
@@ -342,23 +389,33 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
             }
 
             Font_SetActive(8, 0);
+#endif
 
             {
                 s16 sp80;
                 Color_RGB8* color;
+#if defined(VERSION_JP)
+                s32 temp_a0;
+#else
                 u8 temp_a0;
+#endif
 
                 for (i = 0; i < 4; i++) {
+#if defined(VERSION_JP)
+                    if (temp_s6->moves[i] == 0) {
+                        break;
+                    }
+                    temp_a0 = temp_s6->moves[i];
+#else
                     temp_a0 = temp_s6->moves[i];
                     if (temp_a0 == 0) {
                         break;
                     }
+#endif
                     color = &D_842115F0[gMoveDisplayInfo[temp_a0 - 1].type].unk_00[2];
-                    sp80 =
-                        TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], TeamSelection_GetTextFromSetB(temp_a0));
+                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], MOVE_NAME(temp_a0));
                     Gfx_SetEnvColor(color->r, color->g, color->b, 0xFF);
-                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5,
-                                TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
+                    Font_Printf(temp_s4 + sp80, D_842116F8[i] + temp_s5, MOVE_NAME(temp_s6->moves[i]));
                 }
 
                 Font_EndTexturedTextRendering();
@@ -370,8 +427,7 @@ void TeamSelection_Preview_DrawPokemonDetails(unk_D_8423D3A8* arg0, s32 arg1) {
                         break;
                     }
 
-                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i],
-                                                                TeamSelection_GetTextFromSetB(temp_s6->moves[i]));
+                    sp80 = TeamSelection_Preview_CenterMoveText(i, D_842116F0[i], MOVE_NAME(temp_s6->moves[i]));
                     Gfx_DrawTextureRgba16((temp_s4 + sp80) - 0x18, D_842116F8[i] + temp_s5, 0x14, 0x14,
                                           D_842115F0[gMoveDisplayInfo[temp_s6->moves[i] - 1].type].unk_0C, 0x14, 0);
                 }

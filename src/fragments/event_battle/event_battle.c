@@ -1682,13 +1682,13 @@ void EventBattle_MarkPartnerPikachu(BattleMon* pokemon, s16 controller_port) {
         _bcopy(pokemon->unk_4D, pokemon_trainer_identity.unk_02 + 3, 3);
         pokemon_trainer_identity.unk_00 = pokemon->unk_0E;
         if (*(u64*)&pokemon_trainer_identity == *(u64*)&cartridge_player_identity) {
-            pokemon->unk_3C |= 0x80;
+            pokemon->rentalInfo |= 0x80;
         }
 #else
         _bcopy(pokemon->unk_46, pokemon_trainer_identity.unk_02, 11);
         pokemon_trainer_identity.unk_00 = pokemon->unk_0E;
         if (GbSave_PlayerIdentityMatches(&pokemon_trainer_identity, &cartridge_player_identity)) {
-            pokemon->unk_52 |= 0x80;
+            pokemon->rentalInfo |= 0x80;
         }
 #endif
     }

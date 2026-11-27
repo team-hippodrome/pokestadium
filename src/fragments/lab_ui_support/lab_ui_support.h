@@ -4,7 +4,11 @@
 #include "global.h"
 #include "src/fragments/lab_widget_tree/lab_widget_tree.h"
 
+#if defined(VERSION_JP)
+typedef void (*func889000C4)(unk_func_889000C4*, s32, s32, s32, WidgetNode*, MemoryPool*);
+#else
 typedef void (*func889000C4)(unk_func_889000C4*, s32, WidgetAnimatedPanel*, s32, char**, MemoryPool*);
+#endif
 typedef void (*func889006D4)(unk_func_889000C4*, s32);
 typedef void (*func889007AC)(unk_func_889000C4*);
 typedef s32 (*func88900808)(unk_func_889000C4*, Controller*, s32);

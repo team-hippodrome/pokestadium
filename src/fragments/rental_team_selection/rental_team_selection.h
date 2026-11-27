@@ -74,6 +74,10 @@ typedef struct RentalRoster {
     /* 0x04 */ BattleMon unk_04[1];
 } RentalRoster; // size >= 0x58
 
+// Carousel sources: 0 is the party, 1 to SAVE_BOX_COUNT are the GB boxes, then the rental Pokémon.
+#define RENTAL_SOURCE_RENTALS (SAVE_BOX_COUNT + 1)
+#define RENTAL_SOURCE_COUNT (SAVE_BOX_COUNT + 2)
+
 typedef struct RentalCarouselState {
     /* 0x00000 */ u8 unk_00000;
     /* 0x00001 */ u8 unk_00001;
@@ -94,8 +98,7 @@ typedef struct RentalCarouselState {
     /* 0x00016 */ s16 unk_00016;
     /* 0x00018 */ s16 unk_00018;
     /* 0x0001A */ s16 unk_0001A;
-    /* 0x0001C */ unk_D_838067F0_003C unk_0001C[13];
-    /* 0x0013A */ char unk0013A[0x2];
+    /* 0x0001C */ unk_D_838067F0_003C unk_0001C[RENTAL_SOURCE_RENTALS];
     /* 0x0013C */ RentalRoster* unk_0013C;
     /* 0x00140 */ unk_D_838067F0_0168* unk_00140;
     /* 0x00144 */ char unk00144[0x4];
@@ -160,6 +163,17 @@ char* TeamSelection_GetTextFromSetA(s32 arg0);
 char* TeamSelection_GetTextFromSetB(s32 arg0);
 char* TeamSelection_GetModeText(s32 arg0);
 char* TeamSelection_GetLabelText(s32 arg0);
+
+// The Japanese version has no text tables: each label is a literal at its use site.
+#if defined(VERSION_JP)
+#define LABEL_TEXT(id, jpText) (jpText)
+#define MOVE_NAME(move) gMoveDisplayInfo[(move) - 1].unk_04
+#define LETTER_SPACING(jpSpacing) (jpSpacing)
+#else
+#define LABEL_TEXT(id, jpText) TeamSelection_GetLabelText(id)
+#define MOVE_NAME(move) TeamSelection_GetTextFromSetB(move)
+#define LETTER_SPACING(jpSpacing) 0
+#endif
 char* TeamSelection_GetInstructionText(s32 arg0);
 char* TeamSelection_FormatText(char* arg0, s32 arg1, s32 arg2);
 void TeamSelection_DrawCornerFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3);

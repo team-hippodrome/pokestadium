@@ -2264,8 +2264,8 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
     Pokemon_RecalcStats(arg0);
 
-    arg0->unk_3C = 0;
-    arg0->unk_4C = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_25 = 0;
 
     _bcopy(ptr2->unk_110[arg2], arg0->unk_3D, 3);
@@ -2280,8 +2280,8 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     Pokemon_FromGbRecordExt(arg0, &ptr2->unk_008[arg2]);
     Pokemon_RecalcStats(arg0);
 
-    arg0->unk_52 = 0;
-    arg0->unk_53 = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_25 = 0;
 
     _bcopy(ptr2->unk_110[arg2], arg0->unk_46, 0xB);
@@ -2319,8 +2319,8 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
         Pokemon_FromGbRecord(arg0, &sp2C->unk_020[arg3]);
         Pokemon_RecalcStats(arg0);
 
-        arg0->unk_3C = 0;
-        arg0->unk_4C = 0;
+        arg0->rentalInfo = 0;
+        arg0->rentalSlot = 0;
         arg0->unk_25 = 0;
 
         _bcopy(sp2C->unk_3FE[arg3], arg0->unk_3D, 3);
@@ -2337,8 +2337,8 @@ void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
         Pokemon_FromGbRecord(arg0, &sp2C->unk_016[arg3]);
         Pokemon_RecalcStats(arg0);
 
-        arg0->unk_52 = 0;
-        arg0->unk_53 = 0;
+        arg0->rentalInfo = 0;
+        arg0->rentalSlot = 0;
         arg0->unk_25 = 0;
 
         _bcopy(sp2C->unk_2AA[arg3], arg0->unk_46, 0xB);

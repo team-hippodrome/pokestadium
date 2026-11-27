@@ -13,12 +13,21 @@
 #include "src/matrix.h"
 #include "src/dp_intro.h"
 #include "src/hal_libc.h"
+#include "string.h"
 
 u8* D_84211850[] = {
     D_202C080, D_202C500, D_202C980, D_202CE00, D_202D280, D_202D700, D_202DB80, D_202E000,
 };
 s16 D_84211870[] = { 0x74, 0xF8, 0x17C, 0x74, 0xF8, 0x17C };
 s16 D_8421187C[] = { 0, 0, 0, 0x2C, 0x2C, 0x2C };
+
+#if defined(VERSION_JP)
+static char* sRuleCategoryNames[] = {
+    "なんでもあり",       "ニンテンドウカップ‘９７", "ニンテンドウカップ‘９８", "ニンテンドウカップ‘９９",
+    "ファンシーカップ",   "イエローカップ",          "ウルトラカップ",          "ジムリーダーのしろ",
+    "ミュウツーをたおせ",
+};
+#endif
 
 s32 func_8420DBA0(unk_D_84229EB0_00024* arg0) {
     s16 temp_v0;
@@ -27,7 +36,7 @@ s32 func_8420DBA0(unk_D_84229EB0_00024* arg0) {
     DeckHandle* temp_s3;
 
     temp_v0 = Deck_FindFirstFreeTeamSlot();
-    if (temp_v0 < 0xA) {
+    if (temp_v0 < REGISTERED_TEAM_SLOTS) {
         temp_s3 = Deck_OpenAndSetName(0x10, 0, temp_v0, &arg0->unk_4D12, &arg0->unk_4D12, arg0->unk_4D10);
 
         for (i = 0; i < arg0->unk_4D20; i++) {
@@ -46,17 +55,17 @@ void RegisteredTeam_DeleteAndCompact(unk_D_84229EB0_00024* arg0) {
     s16 tmp = arg0->unk_4D1E;
     s16 i;
 
-    if (tmp >= 0xA) {
+    if (tmp >= REGISTERED_TEAM_SLOTS) {
         return;
     }
 
-    for (i = tmp; i < 9; i++) {
+    for (i = tmp; i < REGISTERED_TEAM_SLOTS - 1; i++) {
         RegisteredTeam_ReadSlot(&sp30, i + 1);
         RegisteredTeam_WriteSlot(&sp30, i);
         Save_CommitTypedRecord(0x10, i);
     }
 
-    Save_ResetAndCommitTypedRecord(0x10, 9);
+    Save_ResetAndCommitTypedRecord(0x10, REGISTERED_TEAM_SLOTS - 1);
     Save_FlushDirtyBanks();
 }
 
@@ -136,13 +145,13 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(8, 0);
+    Font_SetActive(8, LETTER_SPACING(-4));
     Font_Printf(arg1 + 2, arg2 + 2, "%d", arg3->unk_4D1E + 1);
 
     if (arg3->unk_4D20 > 0) {
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 8, arg2 + 0x2B, &arg3->unk_4D12);
-        Font_SetActive(4, 0);
+        Font_SetActive(4, LETTER_SPACING(-4));
         Font_Printf(arg1 + 8, arg2 + 0x42, "ID %05d", arg3->unk_4D10);
     }
 
@@ -157,14 +166,21 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
         }
     }
 
-    Font_SetActive(4, 0);
+    Font_SetActive(4, LETTER_SPACING(-4));
 
     for (var_s1 = 0; var_s1 < 6; var_s1++) {
         if (arg3->unk_0000[var_s1].unk_004.species.id != 0) {
+#if defined(VERSION_JP)
+            s16 tmp1 = D_84211870[var_s1] + arg1 + 0x2C;
+            s16 tmp2 = D_8421187C[var_s1] + arg2 + 0x17;
+
+            Font_Printf(tmp1, tmp2, "L%d", arg3->unk_0000[var_s1].unk_004.level);
+#else
             temp_s2 = D_84211870[var_s1] + arg1 + 0x2C;
             temp_s3 = D_8421187C[var_s1] + arg2 + 0x17;
             Font_Printf(temp_s2, temp_s3, "%s%d", TeamSelection_GetInstructionText(0x15),
                         arg3->unk_0000[var_s1].unk_004.level);
+#endif
         }
     }
 
@@ -172,8 +188,13 @@ void TeamSelection_RegisteredTeam_DrawCard(unk_D_84229EB0* arg0, s16 arg1, s16 a
 }
 
 void TeamSelection_RegisteredTeam_DrawHeader(s16 arg0, s16 arg1) {
+#if defined(VERSION_JP)
+    char* sp54 = sRuleCategoryNames[gSessionContext.ruleCategory];
+    s32 sp50 = strlen(sp54) / 2;
+#else
     char* sp54 = TeamSelection_GetLabelText(gSessionContext.ruleCategory + 0x3F);
     s32 sp50 = Font_MeasureTextExtent(8, 0, sp54);
+#endif
 
     gSPDisplayList(gDisplayListHead++, D_8006F558);
 
@@ -188,8 +209,12 @@ void TeamSelection_RegisteredTeam_DrawHeader(s16 arg0, s16 arg1) {
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 8, arg1 + 3, TeamSelection_GetLabelText(0xE));
+    Font_Printf(arg0 + 8, arg1 + 3, LABEL_TEXT(0xE, "とうろくしたポケモン"));
+#if defined(VERSION_JP)
+    Font_Printf((arg0 - (sp50 * 20)) + 0x20E, arg1 + 3, sp54);
+#else
     Font_Printf((arg0 - sp50) + 0x20E, arg1 + 3, sp54);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -317,9 +342,13 @@ void TeamSelection_RegisteredTeam_DrawVisibleCards(unk_D_84229EB0* arg0) {
 }
 
 void TeamSelection_RegisteredTeam_Render(unk_D_84229EB0* arg0, s32 arg1) {
+#if !defined(VERSION_JP)
     UNUSED s32 pad;
+#endif
     s32 i;
+#if !defined(VERSION_JP)
     char* temp_v0_3;
+#endif
     unk_D_84229EB0_00024* var_s0;
     s16 tmp1;
     s16 tmp2;
@@ -360,18 +389,28 @@ void TeamSelection_RegisteredTeam_Render(unk_D_84229EB0* arg0, s32 arg1) {
         if ((arg1 != 0) && (arg0->unk_00000 == 1)) {
             TeamSelection_DrawTexturedPanel(0x38, 0x190, 0x210, 0x28, 0x1E, 0x1E, 0x82, 0x96);
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            Font_Printf(100, 0x198, "つよさをみたいポケモンをえらんでください");
+#else
             Font_SetActive(0x10, 0);
             temp_v0_3 = TeamSelection_GetLabelText(0x10);
             Font_Printf(0x140 - (Font_MeasureTextExtent(0x10, 0, temp_v0_3) / 2), 0x198, temp_v0_3);
+#endif
             Font_EndTexturedTextRendering();
         }
 
         if ((arg1 != 0) && (arg0->unk_00000 == 2)) {
             TeamSelection_DrawTexturedPanel(0x38, 0x190, 0x210, 0x28, 0x64, 0x1E, 0x1E, 0x96);
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            Font_Printf(133, 0x198, "けしたいポケモンをえらんでください");
+#else
             Font_SetActive(0x10, 0);
             temp_v0_3 = TeamSelection_GetLabelText(0x11);
             Font_Printf(0x140 - (Font_MeasureTextExtent(0x10, 0, temp_v0_3) / 2), 0x198, temp_v0_3);
+#endif
             Font_EndTexturedTextRendering();
         }
 
@@ -552,7 +591,7 @@ void TeamSelection_RegisteredTeam_MoveListDown(unk_D_84229EB0* arg0) {
             arg0->unk_00002 = 2;
             arg0->unk_00001 = 0xB;
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-        } else if ((arg0->unk_0000C < 7) &&
+        } else if ((arg0->unk_0000C < REGISTERED_TEAM_SLOTS - 3) &&
                    ((TeamSelection_RegisteredTeam_Load(TeamSelection_RegisteredTeam_GetPrevious(arg0->unk_00024, 3),
                                                        arg0->unk_0000D + 1) != 0) ||
                     (arg0->unk_00000 != 0))) {
@@ -929,7 +968,7 @@ void RegisteredTeam_SaveFromTray(unk_D_84229EB0* arg0) {
         }
         arg0->unk_00006++;
     } else if (TeamSelection_RulePrompt_TryFinish(0xB) >= 0) {
-        if (Deck_FindFirstFreeTeamSlot() >= 0xA) {
+        if (Deck_FindFirstFreeTeamSlot() >= REGISTERED_TEAM_SLOTS) {
             Rental_TeamTrayResume(arg0->unk_134E8);
             arg0->unk_00006 = 0;
             arg0->unk_00001 = 4;
@@ -1098,7 +1137,7 @@ s32 TeamSelection_RegisteredTeam_Initialize(unk_D_84229EB0* arg0, RentalTeamTray
     arg0->unk_00012 = arg5 + 0x280;
     arg0->unk_00014 = arg6;
     arg0->unk_00016 = 0x110;
-    arg0->unk_0001C = 0xA;
+    arg0->unk_0001C = REGISTERED_TEAM_SLOTS;
     arg0->unk_0001E = 0;
     arg0->unk_0001F = 8;
     arg0->unk_134E8 = arg1;
@@ -1176,8 +1215,8 @@ s32 RegisteredTeam_LoadSelected(unk_D_84229EB0* arg0, unk_D_84229EB0_00024** arg
         var_t0 = (*arg1)->unk_4D20;
 
         for (i = 0; i < 6; i++) {
-            (*arg1)->unk_0000[i].unk_004.unk_52 = 0x40;
-            (*arg1)->unk_0000[i].unk_004.unk_53 = arg0->unk_0000D;
+            (*arg1)->unk_0000[i].unk_004.rentalInfo = 0x40;
+            (*arg1)->unk_0000[i].unk_004.rentalSlot = arg0->unk_0000D;
         }
     }
     return var_t0;

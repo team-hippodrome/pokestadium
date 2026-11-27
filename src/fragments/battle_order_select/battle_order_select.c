@@ -16,13 +16,24 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+// JP has the text inline; the other versions read it from the team select text table.
+#if defined(VERSION_JP)
+#define TEAM_SELECT_TEXT(index, jpText) (jpText)
+#define ORDER_SELECT_STAR "＊"
+#else
+#define TEAM_SELECT_TEXT(index, jpText) Text_GetString(NULL, 0, sTeamSelectText, index)
+#define ORDER_SELECT_STAR "*"
+#endif
+
 static TeamOrderState sTeamOrderStates[2];
 static BinArchive* sBackgroundArchive;
 static void* sBackgroundImage;
+#if !defined(VERSION_JP)
 static char** sMoveNameTable;
 static char** sTypeNameTable;
 static char** sTeamSelectText;
 static char** sPokemonDetailText;
+#endif
 static s16 sFullRedrawFrames;
 static s16 sScrollingTextProgress;
 static s32 sOrderSelectPanelCount;
@@ -34,6 +45,13 @@ static s32 sComSelectionTimer;
 static s16 sCursorOscillationPhases[4];
 
 static u16 sBorderPortColors[] = { 0x1D, 0x341, 0x6947, 0x6A41 }; // #000073, #006B00, #6B2918, #6B4A00
+#if defined(VERSION_JP)
+// Vertical help text, 53 two-byte characters each: for most cups, and for Anything Goes and VS Mewtwo.
+static char* sHelpTexts[] = {
+    "ポケモンを　３びき　えらんでください＞　どのポケモンを　えらぶかは　おしたボタンで　きまります＞　　　　",
+    "ポケモンの　じゅんばんを　きめてください＞　どのポケモンを　えらぶかは　おしたボタンで　きまります＞　　",
+};
+#endif
 static ComSelectionButtonPresses sComButtonPressesForSinglePokemon[] = {
     { 30, 0 },
     { 30, BTN_B },
@@ -139,12 +157,12 @@ void BattleMenu_DrawBottomActionButtons(void) {
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(90, 426, "*");
-    Font_Printf(329, 426, "*");
+    Font_Printf(90, 426, ORDER_SELECT_STAR);
+    Font_Printf(329, 426, ORDER_SELECT_STAR);
     // (L) Button to cancel
-    Font_Printf(145, 424, Text_GetString(NULL, 0, sTeamSelectText, 2));
+    Font_Printf(145, 424, TEAM_SELECT_TEXT(2, "ボタンでもどる"));
     // (R) Button to Check
-    Font_Printf(384, 424, Text_GetString(NULL, 0, sTeamSelectText, 3));
+    Font_Printf(384, 424, TEAM_SELECT_TEXT(3, "ボタンでかくにん"));
     Font_EndTexturedTextRendering();
 }
 
@@ -153,8 +171,10 @@ void BattleMenu_DrawScrollingHelpText(void) {
     s32 i;
     s32 char_index;
     s32 y;
+#if !defined(VERSION_JP)
     s8 pad[1];
     s8* scrolling_text;
+#endif
     DepthBuffer* depth_buffer;
     Color_RGB8 help_text_gradient_start;
     Color_RGB8 help_text_gradient_end;
@@ -172,6 +192,21 @@ void BattleMenu_DrawScrollingHelpText(void) {
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0xA5, 0xDE, 0x8C, 0xFF); // #A5DE8C
 
+#if defined(VERSION_JP)
+    for (i = 0; i < 16; i++) {
+        if ((sSessionContext->ruleCategory == RULE_CATEGORY_ANYTHING_GOES) ||
+            (sSessionContext->ruleCategory == RULE_CATEGORY_VS_MEWTWO)) {
+            Font_DrawCharAt(563, y, ((s16*)sHelpTexts[1])[char_index]);
+        } else {
+            Font_DrawCharAt(563, y, ((s16*)sHelpTexts[0])[char_index]);
+        }
+        char_index += 1;
+        if (char_index >= 53) {
+            char_index = 0;
+        }
+        y += 24;
+    }
+#else
     if ((sSessionContext->ruleCategory == RULE_CATEGORY_ANYTHING_GOES) ||
         (sSessionContext->ruleCategory == RULE_CATEGORY_VS_MEWTWO)) {
         scrolling_text = Text_GetString(NULL, 0, sTeamSelectText, 1);
@@ -188,15 +223,23 @@ void BattleMenu_DrawScrollingHelpText(void) {
         }
         y += 24;
     }
+#endif
     Font_EndTexturedTextRendering();
 
     gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, depth_buffer->width * 4.0f,
                       depth_buffer->height * 4.0f);
 
+#if defined(VERSION_JP)
+    sScrollingTextProgress += 1;
+    if (sScrollingTextProgress >= 53 * 24) {
+        sScrollingTextProgress = 0;
+    }
+#else
     sScrollingTextProgress += 2;
     if (sScrollingTextProgress >= ((strlen(scrolling_text) * 24) + 24)) {
         sScrollingTextProgress = 0;
     }
+#endif
 }
 
 /* Initializes a side's selection icons and controller-port labels. */
@@ -396,8 +439,13 @@ void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 port) {
 /* Draws the six slot buttons, Pokemon icons, names, and levels. */
 void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_state) {
     s32 i;
+#if defined(VERSION_JP)
+    s32 x;
+    s32 y;
+#else
     s16 x;
     s16 y;
+#endif
     s32 pokemon_x;
     s32 pokemon_y;
     s32 is_slot_selected;
@@ -435,14 +483,23 @@ void BattleMenu_DrawOrderSelectPanel_PartyGrid(BattleOrderInputState* input_stat
         if ((input_state->rButtonHeld != 0) && (is_slot_selected != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
         }
+#if defined(VERSION_JP)
+        pokemon_x = x + 76 + ((i % 3) * 154);
+        pokemon_y = y + 8 + ((i / 3) * 42);
+#else
         pokemon_x = x + ((i % 3) * 154) + 76;
         pokemon_y = y + ((i / 3) * 42) + 8;
+#endif
         Font_Printf(pokemon_x, pokemon_y, input_state->pokemon[i].nickname);
         if ((input_state->rButtonHeld != 0) && (is_slot_selected != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         }
+#if defined(VERSION_JP)
+        Font_Printf(pokemon_x, pokemon_y + 20, "L%d", input_state->pokemon[i].level);
+#else
         Font_Printf(pokemon_x, pokemon_y + 20, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21),
                     input_state->pokemon[i].level);
+#endif
     }
 
     Font_EndTexturedTextRendering();
@@ -494,9 +551,14 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
+#if defined(VERSION_JP)
+        Font_Printf(x + 31, y + 11, "これで いいですか？");
+        Font_Printf(x + 79, y + 48, "はい  えらびなおす");
+#else
         Font_Printf(x + 31, y + 11, Text_GetString(NULL, 0, sTeamSelectText, 4));
         Font_Printf(x + 79, y + 48, Text_GetString(NULL, 0, sTeamSelectText, 5));
         Font_Printf(x + 175, y + 48, Text_GetString(NULL, 0, sTeamSelectText, 6));
+#endif
         Font_EndTexturedTextRendering();
         input_state->overlayClearFrames = 2;
     } else {
@@ -513,22 +575,24 @@ void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(BattleOrderInputState* input_
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
-        Font_Printf(x + 80, y + 20, Text_GetString(NULL, 0, sTeamSelectText, 4));
-        Font_Printf(x + 128, y + 60, Text_GetString(NULL, 0, sTeamSelectText, 5));
-        Font_Printf(x + 224, y + 60, Text_GetString(NULL, 0, sTeamSelectText, 6));
+        Font_Printf(x + 80, y + 20, TEAM_SELECT_TEXT(4, "これで いいですか？"));
+        Font_Printf(x + 128, y + 60, TEAM_SELECT_TEXT(5, "はい"));
+        Font_Printf(x + 224, y + 60, TEAM_SELECT_TEXT(6, "えらびなおす"));
         Font_EndTexturedTextRendering();
     }
 }
 
 /* Draws the current rules' total-level-limit warning. */
 void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(BattleOrderInputState* input_state) {
+#if !defined(VERSION_JP)
     char message_buffer[256];
+#endif
     s32 x;
     s32 y;
     s32 level_cap;
 
     switch (sSessionContext->ruleCategory) {
-        case 3:
+        case LEVEL_CAP_CUP:
             level_cap = 155;
             break;
 
@@ -554,9 +618,14 @@ void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(BattleOrderInputState* input
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
+#if defined(VERSION_JP)
+        Font_Printf(x + 16, y + 11, "レベルの ごうけいが");
+        Font_Printf(x + 16, y + 48, "%dを こえてしまいます", level_cap);
+#else
         Font_SetLineHeight(37);
         Text_SetNumberToken(3, level_cap);
         Font_Printf(x + 16, y + 11, Text_GetString(message_buffer, sizeof(message_buffer), sTeamSelectText, 7));
+#endif
         Font_EndTexturedTextRendering();
         input_state->overlayClearFrames = 2;
     } else {
@@ -568,9 +637,14 @@ void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(BattleOrderInputState* input
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
         Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
+#if defined(VERSION_JP)
+        Font_Printf(x + 80, y + 20, "レベルの ごうけいが");
+        Font_Printf(x + 80, y + 60, "%dを こえてしまいます", level_cap);
+#else
         Font_SetLineHeight(40);
         Text_SetNumberToken(3, level_cap);
         Font_Printf(x + 80, y + 20, Text_GetString(NULL, 0, sTeamSelectText, 7));
+#endif
         Font_EndTexturedTextRendering();
     }
 }
@@ -594,11 +668,18 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
         BattleMenu_DrawOrderSelectPanel_PartyGrid(input_state);
         BattleMenu_DrawPanelBorder(x, y, 351, 83, input_state->controllerPort);
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x20, -4);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF); // #1C74FF
+        Font_Printf(x + 20, y + 25, "じゅんび かんりょう！");
+#else
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();
         Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF); // #1C74FF
         text = Text_GetString(NULL, 0, sTeamSelectText, 8);
         Font_Printf((x - (Font_MeasureTextExtent(0x20, 0, text) / 2)) + 175, y + 25, text);
+#endif
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     } else {
@@ -627,8 +708,12 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
         Font_EnableTwoCycleTexturing();
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, alpha);  // #FFFFFF
         Gfx_SetPrimColor(0x1C, 0x74, 0xFF, alpha); // #1C74FF
+#if defined(VERSION_JP)
+        Font_Printf(x + 57, y + 37, "じゅんび かんりょう！");
+#else
         text = Text_GetString(NULL, 0, sTeamSelectText, 8);
         Font_Printf((x - (Font_MeasureTextExtent(32, 0, text) / 2)) + 235, y + 37, text);
+#endif
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
@@ -658,6 +743,54 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(4, -2);
+    Font_Printf(x + 50, y + 7, input_state->pokemon[slot_to_summarize].nickname);
+    Font_Printf(x + 50, y + 27, "HP");
+    Font_Printf(x + 190, y + 7, "こうげき");
+    Font_Printf(x + 190, y + 27, "ぼうぎょ");
+    Font_Printf(x + 190, y + 47, "すばやさ");
+    Font_Printf(x + 190, y + 67, "とくしゅ");
+    Font_Printf(x + 50, y + 47, "タイプ１／");
+
+    if (pokemon_to_summarize->type1 != pokemon_to_summarize->type2) {
+        Font_Printf(x + 50, y + 67, "タイプ２／");
+    }
+
+    type_index = PokemonType_ToDisplayIndex(pokemon_to_summarize->type1);
+    Gfx_SetEnvColor(sPokemonTypeStyles[type_index].color.r, sPokemonTypeStyles[type_index].color.g,
+                    sPokemonTypeStyles[type_index].color.b, 0xFF);
+    Font_Printf(x + 122, y + 47, D_80071D88[PokemonType_ToDisplayIndex(pokemon_to_summarize->type1)].type_name);
+
+    if (pokemon_to_summarize->type1 != pokemon_to_summarize->type2) {
+        type_index = PokemonType_ToDisplayIndex(pokemon_to_summarize->type2);
+        Gfx_SetEnvColor(sPokemonTypeStyles[type_index].color.r, sPokemonTypeStyles[type_index].color.g,
+                        sPokemonTypeStyles[type_index].color.b, 0xFF);
+        Font_Printf(x + 122, y + 67, D_80071D88[PokemonType_ToDisplayIndex(pokemon_to_summarize->type2)].type_name);
+    }
+
+    Font_SetActive(4, -4);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Font_Printf(x + 125, y + 7, "L%d", input_state->pokemon[slot_to_summarize].level);
+    Font_Printf(x + 82, y + 27, "%3d", pokemon_to_summarize->maxHp);
+    Font_Printf(x + 250, y + 7, "%3d", pokemon_to_summarize->attack);
+    Font_Printf(x + 250, y + 27, "%3d", pokemon_to_summarize->defense);
+    Font_Printf(x + 250, y + 47, "%3d", pokemon_to_summarize->speed);
+    Font_Printf(x + 250, y + 67, "%3d", pokemon_to_summarize->special);
+
+    for (i = 0; i < 4; i++) {
+        if (pokemon_to_summarize->moves[i] == 0) {
+            break;
+        }
+        move_type_style = &sPokemonTypeStyles[gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].type];
+        Font_SetActive(4, -2);
+        Gfx_SetEnvColor(move_type_style->color.r, move_type_style->color.g, move_type_style->color.b, 0xFF);
+        Font_Printf(x + 332, (i * 20) + y + 7, gMoveDisplayInfo[pokemon_to_summarize->moves[i] - 1].unk_04);
+        Font_SetActive(4, -4);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+        Font_Printf(x + 435, (i * 20) + y + 7, "%2d", pokemon_to_summarize->pp[i] & 0x3F);
+    }
+#else
     Font_SetActive(4, 0);
     Font_Printf(x + 50, y + 7, input_state->pokemon[slot_to_summarize].nickname);
     Font_Printf(x + 50, y + 27, "%s", Text_GetString(NULL, 0, sPokemonDetailText, 8));
@@ -706,6 +839,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         Font_Printf(x + 435, (i * 20) + y + 7, "%2d", pokemon_to_summarize->pp[i] & 0x3F);
     }
+#endif
 
     Font_EndTexturedTextRendering();
 
@@ -721,6 +855,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
+#if !defined(VERSION_JP)
     if (input_state->overlayClearFrames > 0) {
         if (input_state->sideIndex == 0) {
             Gfx_DrawRgba16ImageRegion(sBackgroundImage, 200, 129, 351, 83);
@@ -729,6 +864,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
         }
         input_state->overlayClearFrames--;
     }
+#endif
 }
 
 /* Draws the trainer name in a controller-colored panel. */
@@ -748,8 +884,12 @@ void BattleMenu_DrawTrainerLabel(BattleOrderInputState* input_state) {
     BattleMenu_DrawPanelBorder(x, y, 118, 32, input_state->controllerPort);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
+#if defined(VERSION_JP)
+    Font_Printf(x + 9, y + 5, input_state->roster->trainerName);
+#else
     Font_Printf((x - (Font_MeasureTextExtent(8, 0, input_state->roster->trainerName) / 2)) + 59, y + 5,
                 input_state->roster->trainerName);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -851,7 +991,7 @@ s32 BattleMenu_PicksExceedLevelCap(BattleOrderInputState* input_state) {
             level_sum += input_state->pokemon[input_state->pickedSlots[i]].level;
         }
 
-        if (sSessionContext->ruleCategory == RULE_CATEGORY_NINTENDO_CUP_99) {
+        if (sSessionContext->ruleCategory == LEVEL_CAP_CUP) {
             if ((input_state->numberOfPokemonPicked == 2) && (level_sum >= 106)) {
                 return 1;
             }
@@ -1240,7 +1380,7 @@ void BattleMenu_CommitOrderSelection(void) {
         roster = input_state->roster;
         if (roster->isHuman & 0x2) {
             roster->numberOfPokemonBrought = roster->rosterInfo->numberOfPokemonCanBePicked;
-            _bcopy(roster->rosterInfo->battleMon, roster->pokemonPicked, 504);
+            _bcopy(roster->rosterInfo->battleMon, roster->pokemonPicked, 6 * sizeof(BattleMon));
         } else {
             BattleMenu_AppendUnpickedSlots(input_state->pickedSlots, input_state->numberOfPokemonPicked);
             roster->numberOfPokemonBrought = input_state->numberOfPokemonPicked;
@@ -1341,7 +1481,9 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     Gfx_InitDisplayListBuffers(0x10000, 0);
 #endif
     stage_context = StageContext_Allocate(1, 1, 2, 0, 2, 1);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
+#endif
     Font_Init(60, 0);
     PokeIcon_OpenModelArchive();
     sBackgroundArchive = ASSET_LOAD2(backgrounds, 1, 1);
@@ -1351,10 +1493,12 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_3000000, order_select_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
+#if !defined(VERSION_JP)
     sMoveNameTable = Text_GetStringTable(37);
     sTypeNameTable = Text_GetStringTable(38);
     sTeamSelectText = Text_GetStringTable(18);
     sPokemonDetailText = Text_GetStringTable(6);
+#endif
 
     BattleMenu_InitOrderSelectPanels(&gSessionContext);
     Audio_PlayMusicIfChanged(7);

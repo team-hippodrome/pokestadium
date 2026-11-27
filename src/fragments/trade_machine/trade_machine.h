@@ -5,6 +5,15 @@
 #include "src/poke_icon.h"
 #include "src/game_state.h"
 
+// The party plus the cartridge's boxes: JP Red and Green have 8 boxes of 30, the others 12 boxes of 20.
+#if defined(VERSION_JP)
+#define TRADE_BOX_COUNT 9
+#define TRADE_BOX_CAPACITY 30
+#else
+#define TRADE_BOX_COUNT 13
+#define TRADE_BOX_CAPACITY 20
+#endif
+
 typedef struct unk_func_82F00838_sp30_00C {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ char unk01[0xD];
@@ -12,18 +21,24 @@ typedef struct unk_func_82F00838_sp30_00C {
     /* 0x10 */ char unk10[0x14];
     /* 0x24 */ u8 unk_24;
     /* 0x25 */ char unk25[0xB];
+#if defined(VERSION_JP)
+    /* 0x30 */ char unk_30[0x10];
+    /* 0x40 */ char unk_3B[0xC];
+    /* 0x4C */ s32 force_align;
+#else
     /* 0x30 */ char unk_30[11];
     /* 0x3B */ char unk_3B[11];
     /* 0x46 */ char unk46[0xA];
     /* 0x50 */ s32 force_align;
-} unk_func_82F00838_sp30_00C; // size = 0x54
+#endif
+} unk_func_82F00838_sp30_00C; // size = 0x54 (0x50 in JP)
 
 typedef struct unk_D_82F144D0_0CA8 {
     /* 0x000 */ s16 unk_000;
     /* 0x004 */ struct unk_D_82F144D0_0CA8* unk_004;
     /* 0x008 */ struct unk_D_82F144D0_0CA8* unk_008;
-    /* 0x00C */ unk_func_82F00838_sp30_00C unk_00C[20];
-} unk_D_82F144D0_0CA8; // size = 0x69C
+    /* 0x00C */ unk_func_82F00838_sp30_00C unk_00C[TRADE_BOX_CAPACITY];
+} unk_D_82F144D0_0CA8; // size = 0x69C (0x96C in JP)
 
 typedef struct unk_D_82F144D0 {
     /* 0x0000 */ s16 unk_0000;
@@ -45,9 +60,9 @@ typedef struct unk_D_82F144D0 {
     /* 0x0020 */ s16 unk_0020;
     /* 0x0022 */ char unk0022[0x6];
     /* 0x0028 */ u16 unk_0028[0x640];
-    /* 0x0CA8 */ unk_D_82F144D0_0CA8 unk_0CA8[13];
+    /* 0x0CA8 */ unk_D_82F144D0_0CA8 unk_0CA8[TRADE_BOX_COUNT];
     /* 0x6294 */ char unk6294[0x4];
-} unk_D_82F144D0; // size = 0x6298
+} unk_D_82F144D0; // size = 0x6298 (0x6178 in JP)
 
 typedef struct unk_func_82F00838_sp30 {
     /* 0x00 */ s16 unk_00;
@@ -229,6 +244,13 @@ extern char** gTradeStrings;
 extern char** sTradePokemonDetailText;
 
 char* Trade_GetSpeciesName(s32 arg0);
+
+// JP reads species names straight from the species data table.
+#if defined(VERSION_JP)
+#define TRADE_SPECIES_NAME(id) (*(char**)gSpeciesDataById[id])
+#else
+#define TRADE_SPECIES_NAME(id) Trade_GetSpeciesName(id)
+#endif
 char* Trade_GetMoveName(s32 arg0);
 char* Trade_GetTypeName(s32 arg0);
 void Trade_SetFadeRect(s16 arg0);
@@ -383,7 +405,13 @@ void TradeEvo_CreatePreviewModel(unk_D_82F21238* arg0, s32 arg1);
 void TradeEvo_BeginSequence(s16 arg0);
 void TradeEvo_UpdatePreviewModel(unk_D_82F21238* arg0);
 void TradeEvo_UpdateOpenPreview(unk_D_82F21238* arg0);
+#if defined(VERSION_JP)
+s32 Trade_SpeciesEvolvesOnTransfer(BattleMon* arg0);
+#define TRADE_EVOLVE_CHECK_ARG(mon) (mon)
+#else
 s32 Trade_SpeciesEvolvesOnTransfer(s32 arg0);
+#define TRADE_EVOLVE_CHECK_ARG(mon) ((mon)->species.id)
+#endif
 void TradeEvo_UpdateWaitForConfirm(unk_D_82F21238* arg0);
 void TradeEvo_UpdateFlashIn(unk_D_82F21238* arg0);
 s32 Trade_NicknameIsSpeciesDefault(s16 arg0, s8* arg1);

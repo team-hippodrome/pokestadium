@@ -117,17 +117,25 @@ void BattlePrep_AdvanceGbTowerUnlock(void) {
     }
 }
 
+// JP counts two more modes toward unlocking Mewtwo.
+#if defined(VERSION_JP)
+#define ALL_MODES_CLEARED 0xFE
+#else
+#define ALL_MODES_CLEARED 0xF8
+#endif
+
 /**
  * Marks the current mode as cleared: sets clearedModes bit (1 << mode) unless the player is in an earlier
  * selection of mode 3/6/7 (below the last division or the rival). Mewtwo (mode 8) sets bit 0x100. When
- * clearedModes reaches exactly 0xF8, unlocks Mewtwo and sets SESSION_FLAG_REVEAL_MEWTWO. Saves sModeSettings.
+ * clearedModes reaches exactly ALL_MODES_CLEARED, unlocks Mewtwo and sets SESSION_FLAG_REVEAL_MEWTWO. Saves
+ * sModeSettings.
  */
 void BattlePrep_MarkModeCleared(void) {
     if (((gSessionContext.mode != 3) || (gSessionContext.modeSelection >= 3)) &&
         ((gSessionContext.mode != 6) || (gSessionContext.modeSelection >= 3)) &&
         ((gSessionContext.mode != 7) || (gSessionContext.modeSelection >= 9))) {
         sModeSettings.clearedModes |= (1 << gSessionContext.mode);
-        if (sModeSettings.clearedModes == 0xF8) {
+        if (sModeSettings.clearedModes == ALL_MODES_CLEARED) {
             sModeSettings.mewtwoUnlocked = 1;
             gSessionContext.sessionFlags |= SESSION_FLAG_REVEAL_MEWTWO;
         }
@@ -159,6 +167,7 @@ void BattlePrep_UpdateClearProgress(void) {
     Save_SetModeSettings(&sModeSettings, gSessionContext.inRound2);
 }
 
+#if !defined(VERSION_JP)
 /**
  * Returns string file_number from the battle_prep text table (table 0x1B).
  */
@@ -172,6 +181,7 @@ char* BattlePrep_GetString(s32 file_number) {
 char* BattlePrep_FormatString(char* buffer, s32 buffer_size, u32 string_id) {
     return Text_GetString(buffer, buffer_size, sBattlePrepText, string_id);
 }
+#endif
 
 /**
  * Geo layout callback in sSceneGeoLayout: on event 5 (draw) draws the starfield stored in the node's
@@ -210,6 +220,13 @@ void BattlePrep_ResetAllDisplayObjects(void) {
  * side is unused.
  */
 void BattlePrep_DrawPortraitCaption(s16 side, s16 y, char* text) {
+#if defined(VERSION_JP)
+    Font_BeginTranslucentTextRendering();
+    Font_SetLineHeight(0xC);
+    Font_SetActive(2, -1);
+    Font_Printf(4, y, text);
+    Font_EndTexturedTextRendering();
+#else
     s32 text_width = Font_MeasureTextExtent(2, 0, text);
 
     Font_BeginTranslucentTextRendering();
@@ -217,6 +234,7 @@ void BattlePrep_DrawPortraitCaption(s16 side, s16 y, char* text) {
     Font_SetActive(2, 0);
     Font_Printf(0x20 - (text_width / 2), y, text);
     Font_EndTexturedTextRendering();
+#endif
 }
 
 /**
@@ -332,7 +350,7 @@ void BattlePrep_RenderTrainerPortrait(DepthBuffer* image, s16 side, u8* portrait
     } else {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
-        BattlePrep_DrawPortraitCaption(side, 6, battle_side->tagTeamMember[0]->rosterInfo->unk_220);
+        BattlePrep_DrawPortraitCaption(side, 6, battle_side->tagTeamMember[0]->rosterInfo->playerLabel);
     }
 }
 
@@ -489,8 +507,16 @@ void BattlePrep_InitRoundIntroScene(void) {
  * Phase 1: cup or Gym Leader Castle round intro. Shows the battle_headers banner (cup or gym name,
  * BATTLE N / SEMI-FINAL / FINAL BATTLE label), the opponent ladder, then the roster. Plays music 0x33.
  */
+// JP has no PAL release, so the round intro always holds for 90 frames.
+#if defined(VERSION_JP)
+#define ROUND_INTRO_HOLD_FRAMES 0x5A
+#else
+#define ROUND_INTRO_HOLD_FRAMES hold_frames
+#endif
+
 s32 BattlePrep_ShowRoundIntro(void) {
     s32 i;
+#if !defined(VERSION_JP)
     s32 hold_frames;
 
     if (osTvType == OS_TV_PAL) {
@@ -498,6 +524,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
     } else {
         hold_frames = 0x5A;
     }
+#endif
 
     Team_LoadOpponentPreset();
     BattlePrep_InitRoundIntroScene();
@@ -517,7 +544,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
     OpponentLadder_Start(&sOpponentLadder, sBattlePrepState.displayObjects, 0);
     Audio_PlayMusicIfChanged(0x33);
 
-    for (i = 0; i < hold_frames; i++) {
+    for (i = 0; i < ROUND_INTRO_HOLD_FRAMES; i++) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
@@ -532,7 +559,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
-    for (i = 0; i < hold_frames; i++) {
+    for (i = 0; i < ROUND_INTRO_HOLD_FRAMES; i++) {
         BattlePrep_UpdateRoundIntroFrame();
     }
 
@@ -553,9 +580,10 @@ s32 BattlePrep_ShowRoundIntro(void) {
     return 4;
 }
 
+#if !defined(VERSION_JP)
 /**
  * In round 2 mode 6 at modeSelection 3 (session flag 0x2 clear), if every roster Pokémon passes the
- * unk_52 limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
+ * rentalInfo limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
  */
 void BattlePrep_CheckPikachuNeedsSurf(void) {
     s32 i;
@@ -569,10 +597,10 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         roster_info = trainer_roster->rosterInfo;
 
         for (i = 0; i < roster_info->numberOfPokemonCanBePicked; i++) {
-            s32 unk_52_high = (roster_info->battleMon[i].unk_52 & 0x70) >> 4;
-            s32 unk_52_low = roster_info->battleMon[i].unk_52 & 0xF;
+            s32 rental_group = (roster_info->battleMon[i].rentalInfo & 0x70) >> 4;
+            s32 rental_entry = roster_info->battleMon[i].rentalInfo & 0xF;
 
-            if ((unk_52_high >= 4) || (unk_52_low >= 13)) {
+            if ((rental_group >= 4) || (rental_entry >= 13)) {
                 return;
             }
         }
@@ -594,6 +622,7 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         }
     }
 }
+#endif
 
 /**
  * Advances one frame of the result scene objects and rule windows, then renders.
@@ -1023,7 +1052,9 @@ s32 BattlePrep_ShowCupResult(void) {
             Save_FlushBank(2);
             BattlePrep_ScatterTeamPanelsExit();
             BattlePrep_FadeOutScene();
+#if !defined(VERSION_JP)
             BattlePrep_CheckPikachuNeedsSurf();
+#endif
             gSessionContext.transitionFlags |= 3;
         } else if (BattlePrep_PromptKeepBattling() == 1) {
             BattlePrep_ScatterTeamPanelsExit();
@@ -1418,8 +1449,10 @@ s32 BattlePrep_Main(s32 phase, UNUSED s32 unused_arg) {
     ASSET_LOAD(D_2000000, badge_ui, 0);
     ASSET_LOAD(D_3000000, common_menu0_ui, 0);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sBattlePrepText = Text_GetStringTable(0x1B);
+#endif
     PokeIcon_OpenModelArchive();
 
     sBattlePrepState.trainerDataArchive = BinArchive_Open(TRAINER_DATA_ROM_START, NULL, 1, 1);

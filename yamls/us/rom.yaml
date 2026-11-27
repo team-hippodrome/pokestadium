@@ -1240,9 +1240,11 @@
     - [0x1CEA00, c,      fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1D7B40, c,      fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E46B0, c,      fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E4EA0, c,      fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E5BB0, .data,   fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E5D40, .data,   fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E60B0, .data,   fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E8C30, .data,   fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E8C40, .rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E8DB0, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 
@@ -2359,6 +2361,7 @@
     - [0x394120, c,      fragments/battle_prep/battle_prep_394120]
     - [0x3974E0, c,      fragments/battle_prep/battle_prep_3974E0]
     - [0x397B10, c,      fragments/battle_prep/battle_prep_397B10]
+    - [0x399860, c,      fragments/battle_prep/battle_prep_399860]
     - [0x39AC50, c,      fragments/battle_prep/battle_prep_39AC50]
     - [0x39BFB0, c,      fragments/battle_prep/battle_prep_39BFB0]
     - [0x39ED60, c,      fragments/battle_prep/battle_prep_39ED60]
@@ -2369,6 +2372,7 @@
     
     - [0x3A3C10, .data,   fragments/battle_prep/battle_prep_394120]
     - [0x3A3D40, .data,   fragments/battle_prep/battle_prep_397B10]
+    - [0x3A5CD0, .data,   fragments/battle_prep/battle_prep_399860]
     - [0x3A5D20, .data,   fragments/battle_prep/battle_prep_39AC50]
     - [0x3A8D10, .data,   fragments/battle_prep/battle_prep_39BFB0]
     - [0x3AA490, .data,   fragments/battle_prep/battle_prep_39ED60]
@@ -2379,7 +2383,7 @@
     
     - [0x3AD860, .rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3AD8B0, .rodata, fragments/battle_prep/battle_prep_3974E0]
-    - [0x3AD8C0, .rodata, fragments/battle_prep/battle_prep_397B10]
+    - [0x3AD8C0, .rodata, fragments/battle_prep/battle_prep_399860]
     - [0x3AD8F0, .rodata, fragments/battle_prep/battle_prep_39AC50]
     - [0x3AD900, .rodata, fragments/battle_prep/battle_prep_39BFB0]
     - [0x3AD920, .rodata, fragments/battle_prep/battle_prep_39ED60]

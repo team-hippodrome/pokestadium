@@ -41,7 +41,11 @@ typedef struct ParticleSnapshotObject {
 
 extern const Gfx D_810041D0[];
 
+#if defined(VERSION_JP)
+void Particle31_ResetAllSlots(s32);
+#else
 void Particle31_ResetAllSlots(DisplayObject*);
+#endif
 void Particle31_ResetCounters(void);
 void Particle31_PackSlotData(u8*);
 void Particle31_UnpackSlotData(ParticleSnapshotObject*, u8*);

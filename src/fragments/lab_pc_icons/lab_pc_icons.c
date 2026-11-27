@@ -16,6 +16,27 @@
 #include "fragments/lab_widget_tree/lab_widget_tree.h"
 #include "fragments/pokemon_lab_support/pokemon_lab_support.h"
 
+// Original trainer name of a BattleMon.
+#if defined(VERSION_JP)
+#define LAB_OT_NAME(mon) ((mon)->unk_40)
+// Width of a centered label: JP stores its character count, each 20 pixels wide.
+#define LAB_LABEL_WIDTH(n) ((n) * 20)
+// JP prints its labels from inline strings with tighter spacing; the others read the lab string table.
+#define LAB_TEXT(id, jp) (jp)
+#define LAB_TITLE_SPACING -2
+#define LAB_RELEASE_PROMPT_X 0x46
+// The move name widget is 6 pixels narrower on JP.
+#define LAB_MOVE_X(x) ((x) - 6)
+#else
+#define LAB_OT_NAME(mon) ((mon)->unk_3B)
+#define LAB_LABEL_WIDTH(n) (n)
+#define LAB_TEXT(id, jp) Text_GetString(NULL, 0, D_8861C510, id)
+#define LAB_TITLE_SPACING 0
+#define LAB_RELEASE_PROMPT_X 0x14
+#define LAB_MOVE_X(x) (x)
+#endif
+
+#if !defined(VERSION_JP)
 static char** D_8861C510;
 static char** D_8861C514;
 static char** D_8861C518;
@@ -23,6 +44,7 @@ static char** D_8861C51C;
 static char** D_8861C520;
 static char** D_8861C524;
 static char** D_8861C528;
+#endif
 
 extern u8 D_88606E10[];
 extern u8 D_88606E58[];
@@ -119,10 +141,10 @@ s32 LabPC_DrawDualArrowHeader(UNUSED WidgetNode* arg0, s32 arg1, s32 arg2) {
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LAB_TITLE_SPACING);
     Gfx_SetEnvColor(D_88605AC0.r, D_88605AC0.g, D_88605AC0.b, D_88605AC0.a);
-    Font_Printf(arg1 + 0x2C, arg2 + 6, Text_GetString(NULL, 0, D_8861C510, 0));
-    Font_Printf(arg1 + 0x118, arg2 + 6, Text_GetString(NULL, 0, D_8861C510, 1));
+    Font_Printf(arg1 + 0x2C, arg2 + 6, LAB_TEXT(0, "わざをみる"));
+    Font_Printf(arg1 + 0x118, arg2 + 6, LAB_TEXT(1, "わざのならびかえ"));
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -153,9 +175,9 @@ s32 LabPC_DrawArrowLabelA(UNUSED WidgetNode* arg0, s32 arg1, s32 arg2) {
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LAB_TITLE_SPACING);
     Gfx_SetEnvColor(D_88605AC4.r, D_88605AC4.g, D_88605AC4.b, D_88605AC4.a);
-    Font_Printf(arg1 + 0x2C, arg2 + 6, Text_GetString(NULL, 0, D_8861C510, 2));
+    Font_Printf(arg1 + 0x2C, arg2 + 6, LAB_TEXT(2, "くわしくみたいわざを　えらぶ"));
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -189,9 +211,9 @@ s32 LabPC_DrawArrowLabelB(UNUSED WidgetNode* arg0, s32 arg1, s32 arg2) {
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LAB_TITLE_SPACING);
     Gfx_SetEnvColor(D_88605AC8.r, D_88605AC8.g, D_88605AC8.b, D_88605AC8.a);
-    Font_Printf(arg1 + 0x2C, arg2 + 6, Text_GetString(NULL, 0, D_8861C510, 3));
+    Font_Printf(arg1 + 0x2C, arg2 + 6, LAB_TEXT(3, "ならびかえるわざを　えらぶ"));
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -205,7 +227,12 @@ void LabPC_InitCenteredLabel(unk_func_8860439C_sp64* arg0, s32 arg1, s32 arg2, s
     arg0->unk_00.unk_14.unk_00 = arg3;
     arg0->unk_00.unk_14.unk_02 = arg4;
     arg0->unk_2C = arg5;
+#if defined(VERSION_JP)
+    // JP labels are two-byte characters, so this is the character count.
+    arg0->unk_30 = strlen(arg5) / 2;
+#else
     arg0->unk_30 = Font_MeasureTextExtent(8, 0, arg5);
+#endif
     arg0->unk_34 = arg6;
     arg0->unk_38 = arg7;
 }
@@ -216,7 +243,7 @@ s32 LabPC_DrawCenteredLabel(unk_func_8860439C_sp64* arg0, s32 arg1, s32 arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Gfx_SetEnvColor(D_88605AD8.r, D_88605AD8.g, D_88605AD8.b, D_88605AD8.a);
-    Font_Printf(((arg0->unk_00.unk_14.unk_00 - arg0->unk_30) / 2) + arg1,
+    Font_Printf(((arg0->unk_00.unk_14.unk_00 - LAB_LABEL_WIDTH(arg0->unk_30)) / 2) + arg1,
                 ((arg0->unk_00.unk_14.unk_02 - 0x14) / 2) + arg2, arg0->unk_2C);
     Font_EndTexturedTextRendering();
     return 0;
@@ -261,7 +288,11 @@ void LabPC_InitMoveNameWidget(unk_func_88205880_0098_008_040_03C* arg0, s32 arg1
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
     // clang-format off
+#if defined(VERSION_JP)
+    arg0->unk_00.unk_14.unk_00 = 0x92; arg0->unk_00.unk_14.unk_02 = 0x14;
+#else
     arg0->unk_00.unk_14.unk_00 = Font_MeasureTextExtent(8, 0, "WWWWWWWWWWWW") + 0x16; arg0->unk_00.unk_14.unk_02 = 0x14;
+#endif
     // clang-format on
     LabPC_SetMoveNameId(arg0, 0);
 }
@@ -300,16 +331,26 @@ s32 LabPC_DrawMoveNameWidget(unk_func_88205880_0098_008_040_03C* arg0, s32 arg1,
 
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(sp68->unk_04.r, sp68->unk_04.g, sp68->unk_04.b, sp68->unk_04.a);
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        Font_Printf(arg1 + 0x14, arg2, *(char**)&sp6C->unk_00[4]);
+#else
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 0x16, arg2, Text_GetString(NULL, 0, D_8861C518, sp6C->unk_00[0] - 1));
+#endif
         Font_EndTexturedTextRendering();
     } else {
         unk_D_88400138* sp1C = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(0);
 
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(sp1C->unk_04.r, sp1C->unk_04.g, sp1C->unk_04.b, sp1C->unk_04.a);
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        Font_Printf(arg1 + 0x14, arg2, "？？？？？？？");
+#else
         Font_SetActive(8, 0);
         Font_Printf(arg1 + 0x16, arg2, "???????");
+#endif
         Font_EndTexturedTextRendering();
     }
     return 0;
@@ -444,6 +485,32 @@ void LabPC_SetSummaryMon(unk_func_88205880_0098_008_044* arg0, BattleMon* arg1) 
 s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88605AF0 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if defined(VERSION_JP)
+    if (arg0->unk_2C == NULL) {
+        return 0;
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(0x10, 0);
+    Gfx_SetEnvColor(D_88605AF0.r, D_88605AF0.g, D_88605AF0.b, D_88605AF0.a);
+    Font_Printf(arg1 + 0x10, arg2 + 6, (char*)arg0->unk_2C->nickname);
+    Font_DrawCharAt(arg1 + 0x9B, arg2 + 6, 'L');
+    Font_SetActive(8, 0);
+    Font_Printf(arg1 + 0x11E, arg2 + 0xA, "No.");
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
+        Font_SetActive(0x10, 0);
+        Font_Printf(arg1 + 0xAE, arg2 + 6, "？");
+        Font_SetActive(8, 0);
+        Font_Printf(arg1 + 0x150, arg2 + 0xA, "？？？");
+        Font_Printf(arg1 + 0x1A0, arg2 + 0xA, "？？？？？");
+    } else {
+        Font_SetActive(0x10, 0);
+        Font_Printf(arg1 + 0xAE, arg2 + 6, "%d", arg0->unk_2C->level);
+        Font_SetActive(8, 0);
+        Font_Printf(arg1 + 0x150, arg2 + 0xA, "%03d", arg0->unk_2C->species.id);
+        Font_Printf(arg1 + 0x1A0, arg2 + 0xA, *(char**)gSpeciesDataById[arg0->unk_2C->species.id]);
+    }
+#else
     char* sp34;
     char* sp30;
 
@@ -471,18 +538,25 @@ s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s
         Font_Printf(arg1 + 0x11E, arg2 + 0xA, "%s%03d", sp30, arg0->unk_2C->species.id);
         Font_Printf(arg1 + 0x1A0, arg2 + 0xA, Text_GetString(NULL, 0, D_8861C514, arg0->unk_2C->species.id - 1));
     }
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
 
+#if defined(VERSION_JP)
+void LabPC_InitTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2) {
+#else
 void LabPC_InitTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2, unk_func_8850182C* arg3) {
+#endif
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00,
                                                                    sizeof(unk_func_88205880_0098_008_048));
     arg0->unk_00.unk_18 = LabPC_DrawTypeListWidget;
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
+#if !defined(VERSION_JP)
     arg0->unk_00.unk_14.unk_00 = arg3->unk_00.unk_14.unk_00;
     arg0->unk_00.unk_14.unk_02 = arg3->unk_00.unk_14.unk_02;
+#endif
     arg0->unk_2C = 0;
 }
 
@@ -493,6 +567,45 @@ void LabPC_SetTypeListMon(unk_func_88205880_0098_008_048* arg0, BattleMon* arg1)
 s32 LabPC_DrawTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88605AF4 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if defined(VERSION_JP)
+    s32 var_s4 = 0x3E;
+    Color_RGBA8 sp60;
+    unk_D_88400138* temp_v0_3;
+    s32 tmp;
+
+    if (arg0->unk_2C == NULL) {
+        return 0;
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, -2);
+    Gfx_SetEnvColor(D_88605AF4.r, D_88605AF4.g, D_88605AF4.b, D_88605AF4.a);
+    Font_Printf(arg1 + 8, arg2 + 4, "タイプ");
+
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
+        Gfx_SetEnvColor(D_88605AF4.r, D_88605AF4.g, D_88605AF4.b, D_88605AF4.a);
+        Font_Printf(arg1 + var_s4, arg2 + 4, "１／");
+        temp_v0_3 = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(0);
+        sp60 = temp_v0_3->unk_04;
+        Gfx_SetEnvColor(sp60.r, sp60.g, sp60.b, sp60.a);
+        Font_Printf(arg1 + var_s4 + 0x24, arg2 + 4, "？？？？");
+    } else {
+        s32 i;
+
+        for (i = 0; i < 2; i++) {
+            tmp = Species_GetMoveSlot(arg0->unk_2C, i);
+            if (tmp != -1) {
+                temp_v0_3 = ((func884000C4)Memmap_GetFragmentVaddr(LabPC_GetTypeColor))(tmp);
+                sp60 = temp_v0_3->unk_04;
+                Gfx_SetEnvColor(D_88605AF4.r, D_88605AF4.g, D_88605AF4.b, D_88605AF4.a);
+                Font_Printf(arg1 + var_s4, arg2 + 4, "%d/", i + 1);
+                Gfx_SetEnvColor(sp60.r, sp60.g, sp60.b, sp60.a);
+                Font_Printf(arg1 + var_s4 + 0x24, arg2 + 4, "%s", temp_v0_3->unk_00);
+            }
+            var_s4 += 0x7E;
+        }
+    }
+#else
     s32 var_s4;
     Color_RGBA8 sp68;
     char* temp_v0;
@@ -540,18 +653,25 @@ s32 LabPC_DrawTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32
             }
         }
     }
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
 
+#if defined(VERSION_JP)
+void LabPC_InitStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2) {
+#else
 void LabPC_InitStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2, unk_func_8850182C* arg3) {
+#endif
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00,
                                                                    sizeof(unk_func_88205880_0098_008_04C));
     arg0->unk_00.unk_18 = LabPC_DrawStatWidget;
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
+#if !defined(VERSION_JP)
     arg0->unk_00.unk_14.unk_00 = arg3->unk_00.unk_14.unk_00;
     arg0->unk_00.unk_14.unk_02 = arg3->unk_00.unk_14.unk_02;
+#endif
     arg0->unk_2C = NULL;
 }
 
@@ -561,6 +681,38 @@ void LabPC_SetStatMon(unk_func_88205880_0098_008_04C* arg0, BattleMon* arg1) {
 
 s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88605AF8 = { 0xF0, 0xF0, 0xF0, 0xFF };
+#if defined(VERSION_JP)
+    if (arg0->unk_2C == NULL) {
+        return 0;
+    }
+
+    if ((arg0->unk_2C->species.id > 0) && (arg0->unk_2C->species.id < 0x98)) {
+        BattleHud_DrawHpBarTexture(arg1 + 0x60, arg2 + 0x18, 0x90, arg0->unk_2C->hp, arg0->unk_2C->maxHp);
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, -2);
+    Gfx_SetEnvColor(D_88605AF8.r, D_88605AF8.g, D_88605AF8.b, D_88605AF8.a);
+    Font_Printf(arg1 + 0x3C, arg2 + 4, "ＨＰ");
+    Font_Printf(arg1 + 0x60, arg2 + 0x2A, "こうげき");
+    Font_Printf(arg1 + 0x60, arg2 + 0x40, "ぼうぎょ");
+    Font_Printf(arg1 + 0x60, arg2 + 0x56, "すばやさ");
+    Font_Printf(arg1 + 0x60, arg2 + 0x6C, "とくしゅ");
+
+    if ((arg0->unk_2C->species.id <= 0) || (arg0->unk_2C->species.id >= 0x98)) {
+        Font_Printf(arg1 + 0x72, arg2 + 4, "　　？／　　？");
+        Font_Printf(arg1 + 0xBA, arg2 + 0x2A, "　　？");
+        Font_Printf(arg1 + 0xBA, arg2 + 0x40, "　　？");
+        Font_Printf(arg1 + 0xBA, arg2 + 0x56, "　　？");
+        Font_Printf(arg1 + 0xBA, arg2 + 0x6C, "　　？");
+    } else {
+        Font_Printf(arg1 + 0x72, arg2 + 4, "%3d/%3d", arg0->unk_2C->hp, arg0->unk_2C->maxHp);
+        Font_Printf(arg1 + 0xBA, arg2 + 0x2A, "%3d", arg0->unk_2C->attack);
+        Font_Printf(arg1 + 0xBA, arg2 + 0x40, "%3d", arg0->unk_2C->defense);
+        Font_Printf(arg1 + 0xBA, arg2 + 0x56, "%3d", arg0->unk_2C->speed);
+        Font_Printf(arg1 + 0xBA, arg2 + 0x6C, "%3d", arg0->unk_2C->special);
+    }
+#else
     static char D_88605AFC[] = "?";
 
     s32 sp54 = ((arg0->unk_00.unk_14.unk_00 - 0x90) / 2) + arg1;
@@ -607,6 +759,7 @@ s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg
         sprintf(sp4C, "%d", arg0->unk_2C->special);
         Font_Printf((sp54 - Font_MeasureTextExtent(0, 0, sp4C)) + 0x8C, arg2 + 0x6C, sp4C);
     }
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -680,7 +833,7 @@ void LabPC_InitMovesPanel(unk_func_88205880_0098_008_040* arg0, s32 arg1, s32 ar
     static unk_D_88605B00 D_88605B00[] = {
         { 0x00F7, 0x0007 },
         { 0x0111, 0x0021 },
-        { 0x001E, 0x003B },
+        { LAB_MOVE_X(0x001E), 0x003B },
         { 0x0004, 0x0021 },
     };
     static Color_RGBA8 D_88605B10 = { 0x2D, 0x2D, 0x61, 0xFF };
@@ -692,14 +845,14 @@ void LabPC_InitMovesPanel(unk_func_88205880_0098_008_040* arg0, s32 arg1, s32 ar
     };
     static unk_D_88605B00 D_88605B24[] = {
         { 0x01BF, 0x0010 },
-        { 0x01D9, 0x002A },
-        { 0x00C1, 0x0044 },
+        { LAB_MOVE_X(0x01D9), 0x002A },
+        { LAB_MOVE_X(0x00C1), 0x0044 },
         { 0x00A7, 0x002A },
     };
     static unk_D_88605B00 D_88605B34[] = {
         { 0x0120, 0x000C },
-        { 0x013A, 0x0026 },
-        { 0x0022, 0x0040 },
+        { LAB_MOVE_X(0x013A), 0x0026 },
+        { LAB_MOVE_X(0x0022), 0x0040 },
         { 0x0008, 0x0026 },
     };
 
@@ -824,6 +977,39 @@ s32 LabPC_DrawTrainerInfoWidget(unk_func_88205880_0098_008_054* arg0, s32 arg1, 
     static Color_RGBA8 D_88605B44 = { 0xF0, 0xF0, 0xF0, 0xFF };
     UNUSED static Color_RGBA8 D_88605B48 = { 0xD2, 0xBE, 0x32, 0xFF };
 
+#if defined(VERSION_JP)
+    unk_D_88400100* sp44;
+
+    if (arg0->unk_2C == NULL) {
+        return 0;
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, -2);
+    Gfx_SetEnvColor(D_88605B44.r, D_88605B44.g, D_88605B44.b, D_88605B44.a);
+    Font_Printf(arg1 + 0x18, arg2 + 0x2C, "ＩＤ／");
+    Font_Printf(arg1 + 0x18, arg2 + 0x44, "おや／");
+    Font_Printf(arg1 + 0xE8, arg2 + 0x2C, "けいけんち／");
+    Font_Printf(arg1 + 0x4E, arg2 + 0x2C, "%05d", arg0->unk_2C->unk_0E);
+    Font_Printf(arg1 + 0x4E, arg2 + 0x44, (char*)LAB_OT_NAME(arg0->unk_2C));
+    Font_Printf(arg1 + 0x154, arg2 + 0x2C, "%7d", arg0->unk_2C->unk_10);
+
+    if ((arg0->unk_2C->species.id > 0) && (arg0->unk_2C->species.id < 0x98)) {
+        s32 sp40 = (arg0->unk_2C->level == 0x64) ? 0x64 : arg0->unk_2C->level + 1;
+        s32 sp3C = LabPC_ComputeExpForLevel(arg0->unk_2C->species.id, sp40) - arg0->unk_2C->unk_10;
+
+        Font_Printf(arg1 + 0xE8, arg2 + 0x44, "あと");
+        Font_Printf(arg1 + 0x178, arg2 + 0x44, "で");
+        Font_Printf(arg1 + 0x19C, arg2 + 0x44, "L");
+        Font_Printf(arg1 + 0x11E, arg2 + 0x44, "%5d", sp3C);
+        Font_Printf(arg1 + 0x1AE, arg2 + 0x44, "%d", sp40);
+        Font_Printf(arg1 + 0x18, arg2 + 8, "じょうたい／");
+        sp44 = ((func8840007C)Util_ConvertAddrToVirtAddr((uintptr_t)LabPC_GetMonStatusIcon))(arg0->unk_2C);
+        Gfx_SetEnvColor(sp44->unk_04.r, sp44->unk_04.g, sp44->unk_04.b, sp44->unk_04.a);
+        Font_Printf(arg1 + 0x84, arg2 + 8, sp44->unk_00);
+    }
+
+#else
     unk_D_88400100* sp74;
     char* sp70;
 
@@ -839,7 +1025,7 @@ s32 LabPC_DrawTrainerInfoWidget(unk_func_88205880_0098_008_054* arg0, s32 arg1, 
     Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0x18, arg2 + 0x2C, "%05d", arg0->unk_2C->unk_0E);
     sp70 = Text_GetString(NULL, 0, D_8861C510, 0xE);
     Font_Printf(arg1 + 0x18, arg2 + 0x44, sp70);
-    Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0x18, arg2 + 0x44, (char*)arg0->unk_2C->unk_3B);
+    Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0x18, arg2 + 0x44, (char*)LAB_OT_NAME(arg0->unk_2C));
     sp70 = Text_GetString(NULL, 0, D_8861C510, 0xF);
     Font_Printf(arg1 + 0xE8, arg2 + 0x2C, sp70);
     Font_Printf(Font_MeasureTextExtent(0, 0, sp70) + arg1 + 0xE8, arg2 + 0x2C, "%d", arg0->unk_2C->unk_10);
@@ -864,6 +1050,7 @@ s32 LabPC_DrawTrainerInfoWidget(unk_func_88205880_0098_008_054* arg0, s32 arg1, 
                     Text_GetString(NULL, 0, D_8861C524, sp74->unk_00));
     }
 
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -891,9 +1078,11 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
     ret_func_8002ED08* sp134;
     MoveData* sp130;
     unk_D_88400138* sp12C;
+#if !defined(VERSION_JP)
     char* sp128;
     char* sp124;
     char* sp120;
+#endif
 
     // clang-format off
     sp13C = arg1 + 6; sp138 = arg2 + 8;
@@ -946,6 +1135,53 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
                         G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
 
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(4, -1);
+    Gfx_SetEnvColor(D_88605B4C.r, D_88605B4C.g, D_88605B4C.b, D_88605B4C.a);
+    Font_Printf(sp13C + 0x90, sp138 + 8, "タイプ／");
+    Font_Printf(sp13C + 0xE, sp138 + 0x1C, "いりょく／");
+    Font_Printf(sp13C + 0x90, sp138 + 0x1C, "めいちゅう／");
+    Font_Printf(sp13C + 0x10F, sp138 + 0x1C, "％");
+
+    if (sp130 == NULL) {
+        Gfx_SetEnvColor(sp12C->unk_04.r, sp12C->unk_04.g, sp12C->unk_04.b, sp12C->unk_04.a);
+        Font_SetActive(8, -2);
+        Font_Printf(sp13C + 8, sp138 + 4, "？？？？？？？");
+        Font_SetActive(4, -1);
+        Font_Printf(sp13C + 0xCC, sp138 + 8, "？？？？");
+        Font_SetActive(4, -3);
+        Font_Printf(sp13C + 0x57, sp138 + 0x1C, "　　？");
+        Font_Printf(sp13C + 0xE8, sp138 + 0x1C, "　？　");
+    } else {
+        s32 sp3C;
+        s32 sp38;
+
+        sp3C = ((((sp130->accuracy * 0x64) / 255) + 2) / 5) * 5;
+        Gfx_SetEnvColor(sp12C->unk_04.r, sp12C->unk_04.g, sp12C->unk_04.b, sp12C->unk_04.a);
+        Font_SetActive(8, -2);
+        Font_Printf(sp13C + 8, sp138 + 4, *(char**)&sp134->unk_00[4]);
+        Font_SetActive(4, -1);
+        Font_Printf(sp13C + 0xCC, sp138 + 8, sp12C->unk_00);
+        Font_SetLineHeight(0x12);
+        Font_Printf(sp13C + 0xE, sp138 + 0x3A, *(char**)&sp134->unk_00[8]);
+        Gfx_SetEnvColor(D_88605B4C.r, D_88605B4C.g, D_88605B4C.b, D_88605B4C.a);
+        Font_SetActive(4, -3);
+
+        sp38 = sp130->power;
+        if (arg0->unk_2C == 0x78) {
+            sp38 = 200;
+        } else if (arg0->unk_2C == 0x99) {
+            sp38 = 250;
+        }
+
+        if (sp38 >= 2) {
+            Font_Printf(sp13C + 0x57, sp138 + 0x1C, "%3d", sp38);
+        } else {
+            Font_Printf(sp13C + 0x57, sp138 + 0x1C, "---");
+        }
+        Font_Printf(sp13C + 0xE8, sp138 + 0x1C, "%3d", sp3C);
+    }
+#else
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(D_88605B4C.r, D_88605B4C.g, D_88605B4C.b, D_88605B4C.a);
     sp128 = Text_GetString(NULL, 0, D_8861C510, 0x12);
@@ -991,6 +1227,7 @@ s32 LabPC_DrawMoveDetailWidget(unk_func_88205880_0098_008_058* arg0, s32 arg1, s
         }
         Font_Printf(Font_MeasureTextExtent(0, 0, sp120) + sp13C + 0x90, sp138 + 0x1C, " %d%%", sp38);
     }
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -1104,7 +1341,11 @@ void LabPC_BuildMonDetailPanel(unk_func_88205880_0098_008* arg0, s32 arg1, s32 a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_30->unk_00.unk_00, &sp8C->unk_00.unk_00);
 
     arg0->unk_48 = mem_pool_alloc(arg5, sizeof(unk_func_88205880_0098_008_048));
+#if defined(VERSION_JP)
+    LabPC_InitTypeListWidget(arg0->unk_48, 0, 0);
+#else
     LabPC_InitTypeListWidget(arg0->unk_48, 0, 0, sp8C);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp8C->unk_00.unk_00, &arg0->unk_48->unk_00.unk_00);
 
     arg0->unk_34 = mem_pool_alloc(arg5, sizeof(WidgetDelayedNode));
@@ -1123,7 +1364,11 @@ void LabPC_BuildMonDetailPanel(unk_func_88205880_0098_008* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_5C, &sp88->unk_00);
 
     arg0->unk_4C = mem_pool_alloc(arg5, sizeof(unk_func_88205880_0098_008_04C));
+#if defined(VERSION_JP)
+    LabPC_InitStatWidget(arg0->unk_4C, 0, 0);
+#else
     LabPC_InitStatWidget(arg0->unk_4C, 0, 0, sp88);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp88->unk_00.unk_00, &arg0->unk_4C->unk_00.unk_00);
 
     arg0->unk_58 = mem_pool_alloc(arg5, sizeof(unk_func_88205880_0098_008_058));
@@ -1204,8 +1449,8 @@ void LabPC_BuildMonDetailPanel(unk_func_88205880_0098_008* arg0, s32 arg1, s32 a
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_64, &sp6C->unk_00);
 
     sp68 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp68, 0x14, 5,
-                                                                      Text_GetString(NULL, 0, D_8861C510, 4), 0x10);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp68, LAB_RELEASE_PROMPT_X, 5,
+                                                                      LAB_TEXT(4, "にがしますか？"), 0x10);
     sp68->unk_30 = (0, D_88605B6C);
     sp68->unk_44 = sp68->unk_44;
     sp68->unk_34 = (0, D_88605B70);
@@ -1213,15 +1458,13 @@ void LabPC_BuildMonDetailPanel(unk_func_88205880_0098_008* arg0, s32 arg1, s32 a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp6C->unk_00.unk_00, &sp68->unk_00.unk_00);
 
     sp64 = mem_pool_alloc(arg5, sizeof(unk_func_8860439C_sp64));
-    LabPC_InitCenteredLabel(sp64, 0x126, 2, 0x6E, 0x1E, Text_GetString(NULL, 0, D_8861C510, 5), D_88605B74, D_88605B78,
-                            arg5);
+    LabPC_InitCenteredLabel(sp64, 0x126, 2, 0x6E, 0x1E, LAB_TEXT(5, "はい"), D_88605B74, D_88605B78, arg5);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp6C->unk_00.unk_00, &sp64->unk_00.unk_00);
     tmp = arg0->unk_6C;
     tmp->unk_18[0] = &sp64->unk_00;
 
     sp64 = mem_pool_alloc(arg5, sizeof(unk_func_8860439C_sp64));
-    LabPC_InitCenteredLabel(sp64, 0x19A, 2, 0x6E, 0x1E, Text_GetString(NULL, 0, D_8861C510, 6), D_88605B74, D_88605B78,
-                            arg5);
+    LabPC_InitCenteredLabel(sp64, 0x19A, 2, 0x6E, 0x1E, LAB_TEXT(6, "いいえ"), D_88605B74, D_88605B78, arg5);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp6C->unk_00.unk_00, &sp64->unk_00.unk_00);
     tmp = arg0->unk_6C;
     tmp->unk_18[1] = &sp64->unk_00;
@@ -1252,6 +1495,9 @@ void LabPC_SetDetailPanelMon(unk_func_88205880_0098_008* arg0, BattleMon* arg1, 
                                         { 0x90, 0x60, 0x18, 0xFF },
                                         { 0x30, 0x60, 0x60, 0xFF } };
     UNUSED static Gfx D_88605B90[] = {
+#if defined(VERSION_JP)
+        gsDPNoOp(),
+#endif
         gsSPEndDisplayList(),
     };
 
@@ -1496,6 +1742,7 @@ unk_func_88205880_0098_008* LabPC_CreateMonDetailPanel(unk_func_88205880_0098* a
     PokeIcon_OpenModelArchives();
     FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
 
+#if !defined(VERSION_JP)
     D_8861C510 = arg0->unk_1C;
     D_8861C514 = arg0->unk_20;
     D_8861C518 = arg0->unk_24;
@@ -1503,6 +1750,7 @@ unk_func_88205880_0098_008* LabPC_CreateMonDetailPanel(unk_func_88205880_0098* a
     D_8861C520 = arg0->unk_2C;
     D_8861C524 = arg0->unk_30;
     D_8861C528 = arg0->unk_34;
+#endif
 
     sp34 = mem_pool_alloc(arg0->unk_04, sizeof(unk_func_88205880_0098_008));
     LabPC_BuildMonDetailPanel(sp34, arg0->unk_00, arg0->unk_02, sp38, arg0->unk_14, arg0->unk_04);
@@ -1955,7 +2203,9 @@ static Gfx D_88607730[] = {
     gsSPEndDisplayList(),
 };
 // Type name icons, which carry the type names in each language.
-#if defined(VERSION_ES)
+#if defined(VERSION_JP)
+#include "lab_pc_icons_type_icons_jp.inc.c"
+#elif defined(VERSION_ES)
 #include "lab_pc_icons_type_icons_es.inc.c"
 #elif defined(VERSION_DE)
 #include "lab_pc_icons_type_icons_de.inc.c"

@@ -17,10 +17,14 @@ extern u32 D_87806670[];
 extern u32 D_878065B0[];
 extern u32 D_87806730[];
 
+#if !defined(VERSION_JP)
 char** gMinigameText = NULL;
+#endif
 
 static s32 D_8780FA20;
+#if !defined(VERSION_JP)
 static char** sControllerErrorText;
+#endif
 u16 D_8780FA28;
 s16 D_8780FA2A;
 s16 D_8780FA2C;
@@ -36,6 +40,11 @@ static s32 pad_D_8780FA4C;
 s16 D_8780FA50[9];
 s16 D_8780FA68[4];
 
+#if defined(VERSION_JP)
+void* func_87800020_jp(void) {
+    return func_87800020_jp;
+}
+#else
 void Widget_Init(void) {
     Text_InitStringTables();
     gMinigameText = Text_GetStringTable(0x1D);
@@ -73,6 +82,7 @@ void Widget_DrawControllerDisconnectBanner(void) {
         }
     }
 }
+#endif
 
 void Rand_Advance(void) {
     D_8780FA20++;
@@ -218,9 +228,12 @@ void Minigame_InitSharedState(s16 arg0) {
         D_8780FA68[i] = 0;
         i++;
     } while (i < 4);
+#if !defined(VERSION_JP)
     Widget_Init();
+#endif
 }
 
+#if !defined(VERSION_JP)
 void Widget_FillRect(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetRenderMode(gDisplayListHead++,
@@ -296,10 +309,31 @@ void Widget_MeasureLabelBox(s32* arg0, s32* arg1, char* arg2, char* arg3, s32 ar
         *arg1 = arg4 * sp30;
     }
 }
+#endif
 
+#if defined(VERSION_JP)
+// JP fonts are fixed-width, so the width is the cell width plus the letter spacing per character
+// (two-byte EUC-JP characters count once).
+s32 Text_MeasureStringWidth(FontContext* arg0, char* arg1) {
+    s32 width = 0;
+    FontSet* set = &arg0->unk_00[arg0->setIndex];
+
+    while (*(s8*)arg1 != '\x00') {
+        width += set->cellWidth + arg0->letterSpacing;
+        if (*(s8*)arg1 < 0) {
+            arg1 += 2;
+        } else {
+            arg1++;
+        }
+    }
+    width += arg0->letterSpacing;
+    return width;
+}
+#else
 s32 Text_MeasureStringWidth(UNUSED FontContext* arg0, char* arg1) {
     return Font_MeasureTextExtent(0, 0, arg1);
 }
+#endif
 
 void Widget_DrawPlayerIconScaled(s32 arg0, s16 arg1, s16 arg2, f32 arg3, f32 arg4) {
     static u32* D_8780FA70;
@@ -548,15 +582,27 @@ void Widget_DrawSplitBanner(s16 arg0, s16 arg1, s16 arg2) {
     Gfx_DrawTexturedRectClipped(arg1, arg2 + 0x1A, 0x34, 0x1A, 0, 0, 0x400, 0x400, 0);
 }
 
+// The JP bar texture is 132x28, drawn in four 7-row strips; the others are 100x56, in seven 8-row strips.
+#if defined(VERSION_JP)
+#define STRIPED_BAR_W 132
+#define STRIPED_BAR_STRIP_H 7
+#define STRIPED_BAR_STRIPS 4
+#else
+#define STRIPED_BAR_W 100
+#define STRIPED_BAR_STRIP_H 8
+#define STRIPED_BAR_STRIPS 7
+#endif
+
 void Widget_DrawStripedBar(s16 arg0, s16 arg1) {
     u32* ptr = D_304F120;
     s32 i;
 
-    for (i = 0; i < 7; i++, ptr += 800) {
-        gDPLoadTextureTile(gDisplayListHead++, ptr, G_IM_FMT_RGBA, G_IM_SIZ_32b, 100, 0, 0, 0, 99, 7, 0,
-                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
-                           G_TX_NOLOD);
+    for (i = 0; i < STRIPED_BAR_STRIPS; i++, ptr += STRIPED_BAR_W * STRIPED_BAR_STRIP_H) {
+        gDPLoadTextureTile(gDisplayListHead++, ptr, G_IM_FMT_RGBA, G_IM_SIZ_32b, STRIPED_BAR_W, 0, 0, 0,
+                           STRIPED_BAR_W - 1, STRIPED_BAR_STRIP_H - 1, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                           G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-        Gfx_DrawTexturedRectClipped(arg0, arg1 + (i * 8), 0x64, 8, 0, 0, 0x400, 0x400, 0);
+        Gfx_DrawTexturedRectClipped(arg0, arg1 + (i * STRIPED_BAR_STRIP_H), STRIPED_BAR_W, STRIPED_BAR_STRIP_H, 0, 0,
+                                    0x400, 0x400, 0);
     }
 }

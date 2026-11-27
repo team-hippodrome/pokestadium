@@ -254,11 +254,12 @@ void TeamSelection_RulePrompt_DrawOption(s16 arg0, s16 arg1, s16 arg2, char* arg
 
 void TeamSelection_RulePrompt_DrawOptionSetFour(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x15));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x16));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, TeamSelection_GetLabelText(0x17));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 3, TeamSelection_GetLabelText(0x18));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x15, "けってい"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1,
+                                        LABEL_TEXT(0x16, "けってい（とうろくしておく）"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, LABEL_TEXT(0x17, "ちょっとえらびなおす"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 3, LABEL_TEXT(0x18, "ぜんぶえらびなおす"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -268,10 +269,10 @@ void TeamSelection_RulePrompt_DrawOptionSetFour(unk_D_84211704* arg0) {
 
 void TeamSelection_RulePrompt_DrawOptionSetThreeA(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x19));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x1A));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, TeamSelection_GetLabelText(0x1B));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x19, "けってい"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, LABEL_TEXT(0x1A, "えらびなおす"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, LABEL_TEXT(0x1B, "つよさをみる"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -281,10 +282,10 @@ void TeamSelection_RulePrompt_DrawOptionSetThreeA(unk_D_84211704* arg0) {
 
 void TeamSelection_RulePrompt_DrawOptionSetThreeB(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x15));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x17));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, TeamSelection_GetLabelText(0x18));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x15, "けってい"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, LABEL_TEXT(0x17, "ちょっとえらびなおす"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, LABEL_TEXT(0x18, "ぜんぶえらびなおす"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -294,10 +295,10 @@ void TeamSelection_RulePrompt_DrawOptionSetThreeB(unk_D_84211704* arg0) {
 
 void TeamSelection_RulePrompt_DrawOptionSetThreeC(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x1C));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x1D));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, TeamSelection_GetLabelText(0x1E));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x1C, "このポケモンをけす"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, LABEL_TEXT(0x1D, "つよさをみる"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 2, LABEL_TEXT(0x1E, "やめる"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -307,9 +308,9 @@ void TeamSelection_RulePrompt_DrawOptionSetThreeC(unk_D_84211704* arg0) {
 
 void TeamSelection_RulePrompt_DrawOptionSetTwo(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x1F));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x20));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x1F, "つづけてけす"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, LABEL_TEXT(0x20, "おわる"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -319,8 +320,8 @@ void TeamSelection_RulePrompt_DrawOptionSetTwo(unk_D_84211704* arg0) {
 
 void TeamSelection_RulePrompt_DrawSingleLabel(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    Font_Printf(arg0->unk_00 + 0x2D, arg0->unk_02 + 0x38, TeamSelection_GetLabelText(0x21));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    Font_Printf(arg0->unk_00 + 0x2D, arg0->unk_02 + 0x38, LABEL_TEXT(0x21, "どのポケモンをとりかえる？"));
     Font_EndTexturedTextRendering();
 }
 
@@ -334,8 +335,8 @@ void TeamSelection_RulePrompt_DrawThreeRowPanel(unk_D_84211704* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    Font_Printf(arg0->unk_00 + 0x78, arg0->unk_02 + 0x38, TeamSelection_GetLabelText(0x22));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    Font_Printf(arg0->unk_00 + 0x78, arg0->unk_02 + 0x38, LABEL_TEXT(0x22, "とうろくしました"));
     Font_EndTexturedTextRendering();
 }
 
@@ -349,9 +350,14 @@ void TeamSelection_RulePrompt_DrawOffsetThreeRowPanel(unk_D_84211704* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+#if defined(VERSION_JP)
+    Font_Printf(arg0->unk_00 + 0x78, arg0->unk_02 + arg0->unk_08 + 0x29, "ファィルがいっぱいで");
+    Font_Printf(arg0->unk_00 + 0x78, arg0->unk_02 + arg0->unk_08 + 0x47, "とうろくできません");
+#else
     Font_SetLineHeight(0x1E);
     Font_Printf(arg0->unk_00 + 0x78, arg0->unk_02 + arg0->unk_08 + 0x29, TeamSelection_GetLabelText(0x23));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -365,9 +371,14 @@ void TeamSelection_RulePrompt_DrawSmallThreeRowPanel(unk_D_84211704* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+#if defined(VERSION_JP)
+    Font_Printf(arg0->unk_00 + 0x68, arg0->unk_02 + 0x14, "へんしんしていたメタモンが");
+    Font_Printf(arg0->unk_00 + 0x68, arg0->unk_02 + 0x30, "もとのすがたにもどりました");
+#else
     Font_SetLineHeight(0x1C);
     Font_Printf(arg0->unk_00 + 0x68, arg0->unk_02 + 0x14, TeamSelection_GetLabelText(0x24));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -381,16 +392,16 @@ void TeamSelection_RulePrompt_DrawSmallThreeRowVariant(unk_D_84211704* arg0) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    Font_Printf(arg0->unk_00 + 0x68, arg0->unk_02 + 0x22, TeamSelection_GetLabelText(0x25));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    Font_Printf(arg0->unk_00 + 0x68, arg0->unk_02 + 0x22, LABEL_TEXT(0x25, "メタモンのへんしんがおわりました。"));
     Font_EndTexturedTextRendering();
 }
 
 void TeamSelection_RulePrompt_DrawOptionSetTwoB(unk_D_84211704* arg0) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, TeamSelection_GetLabelText(0x26));
-    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, TeamSelection_GetLabelText(0x20));
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 0, LABEL_TEXT(0x26, "つづけてとうろくする"));
+    TeamSelection_RulePrompt_DrawOption(arg0->unk_00, arg0->unk_02, 1, LABEL_TEXT(0x20, "おわる"));
     Font_EndTexturedTextRendering();
 
     if (D_8423E58A >= 0) {
@@ -398,13 +409,23 @@ void TeamSelection_RulePrompt_DrawOptionSetTwoB(unk_D_84211704* arg0) {
     }
 }
 
+#if defined(VERSION_JP)
+void TeamSelection_RulePrompt_DrawNumberAndLabel(unk_D_84211704* arg0, s16 arg1) {
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(0x10, LETTER_SPACING(-2));
+    Font_Printf(arg0->unk_00 + 0x14, arg0->unk_02 + 0x14, "さいていレベル　３びきのごうけいが");
+    Font_Printf(arg0->unk_00 + 0x14, arg0->unk_02 + 0x30, "%dをこえてしまいます。", arg1);
+    Font_Printf(arg0->unk_00 + 0x30, arg0->unk_02 + 0x56, "ポケモンをとりかえてください。");
+    Font_EndTexturedTextRendering();
+}
+#else
 void TeamSelection_RulePrompt_DrawNumberAndLabel(unk_D_84211704* arg0, s16 arg1) {
     char sp28[0x100];
     s32 tmp;
     char* sp20;
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
     Font_SetLineHeight(0x1C);
     Text_SetNumberToken(2, arg1);
     sp20 = TeamSelection_FormatText(sp28, sizeof(sp28), 0x27);
@@ -415,14 +436,15 @@ void TeamSelection_RulePrompt_DrawNumberAndLabel(unk_D_84211704* arg0, s16 arg1)
     Font_Printf(arg0->unk_00 + tmp, arg0->unk_02 + 0x56, sp20);
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void TeamSelection_RulePrompt_DrawBinaryLabel(unk_D_84211704* arg0, s16 arg1) {
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
     if (arg1 == 0) {
-        Font_Printf(arg0->unk_00 + 0x18, arg0->unk_02 + 0x14, TeamSelection_GetLabelText(0x29));
+        Font_Printf(arg0->unk_00 + 0x18, arg0->unk_02 + 0x14, LABEL_TEXT(0x29, "このカートリッジは　つかえません"));
     } else {
-        Font_Printf(arg0->unk_00 + 0x39, arg0->unk_02 + 0x14, TeamSelection_GetLabelText(0x2A));
+        Font_Printf(arg0->unk_00 + 0x39, arg0->unk_02 + 0x14, LABEL_TEXT(0x2A, "レポートが　みつかりません"));
     }
     Font_EndTexturedTextRendering();
 }

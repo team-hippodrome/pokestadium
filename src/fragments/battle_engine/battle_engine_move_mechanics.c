@@ -156,32 +156,31 @@ void BattleEffect_Sleep(void) {
     if (was_recharging == 0) {
         if (sBattleTarget->pendingStatusCondition & STATUS_SLEEP_MASK) {
             sConfused = 0;
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x80);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x80, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             return;
         }
 
         if (sBattleTarget->pendingStatusCondition == 0) {
             HandleMoveEffectFlags();
-            if ((sBattleMoveFailed == 0) &&
-                ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) ||
-                 (sBattleMechanicsSetting[0] == 2))) {
-                goto block_9;
-            }
+            // clang-format off
+            // Retail scheduling needs the condition and its goto on one line.
+            if ((sBattleMoveFailed == 0) && ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) || (sBattleMechanicsSetting[0] == 2))) { goto block_9; }
+            // clang-format on
         }
         sBattleDamage = 0;
         sBattleMoveFailed = 1;
         sConfused = 0;
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x7F);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x7F, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         return;
     }
 
 block_9:
     if ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) != 0) && (sBattleMechanicsSetting[0] != 2)) {
         sConfused = 0;
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x7F);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x7F, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         if ((was_recharging != 0) && (sBattleMechanicsSetting[0] == 1)) {
             sBattleTarget->volatileStatusFlags |= VOLATILE_STATUS_RECHARGE;
         }
@@ -195,8 +194,8 @@ block_9:
         } while (sleep_turns == 0);
         sBattleMoveFailed = 0;
         sBattleTarget->pendingStatusCondition = sleep_turns;
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x7E);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x7E, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
 
@@ -233,9 +232,8 @@ void BattleEffect_Poison(void) {
                 sTypeEffectiveness = 0xA;
                 HandleMoveEffectFlags();
                 if (sBattleMoveFailed != 0) {
-                    Text_SetStringToken(0x19,
-                                        Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                    Battle_QueueMessage(buffer, -0x7D);
+                    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                    BATTLE_QUEUE_MESSAGE1(buffer, -0x7D, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                     return;
                 }
                 break;
@@ -245,11 +243,11 @@ void BattleEffect_Poison(void) {
         if (sBattleUser->moveCache.moveId == TOXIC) {
             sBattleTarget->uniqueStatusFlags |= UNIQUE_STATUS_TOXIC;
             sBattleTarget->toxicCounter = 0;
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(buffer, -0x7C);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(buffer, -0x7C, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         } else {
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(buffer, -0x7B);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(buffer, -0x7B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         }
     } else if (sBattleUser->moveCache.effect == EFFECT_POISON) {
         if (sBattleScene.scene->moveEffectKind != MOVE_PRESENTATION_MULTI_HIT) {
@@ -257,8 +255,8 @@ void BattleEffect_Poison(void) {
             sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TARGET_STATUS;
             sConfused = 0;
         }
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(buffer, -0x7A);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(buffer, -0x7A, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
 
@@ -276,11 +274,11 @@ void BattleEffect_DrainHP(void) {
     }
 
     if (sBattleUser->moveCache.effect == EFFECT_DREAM_EATER) {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x79);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x79, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     } else {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x78);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x78, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
 
@@ -311,9 +309,9 @@ void BattleEffect_SecondaryStatusChance(void) {
                 state->selectedMoveIndex = 0;
                 runtime->usedMove = STRUGGLE;
             }
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             // The Ice melted!
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x77);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x77, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         }
         return;
     }
@@ -334,8 +332,8 @@ void BattleEffect_SecondaryStatusChance(void) {
             case EFFECT_BURN_30_PERCENT:
                 sBattleTarget->pendingStatusCondition = STATUS_BURN;
                 ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x76);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x76, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;
 
             case EFFECT_FREEZE_10_PERCENT:
@@ -343,9 +341,8 @@ void BattleEffect_SecondaryStatusChance(void) {
                 if (Battle_FreezeClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
                     sBattleTarget->volatileStatusFlags &= ~VOLATILE_STATUS_RECHARGE;
                     sBattleTarget->pendingStatusCondition = STATUS_FREEZE;
-                    Text_SetStringToken(0x19,
-                                        Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                    Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x75);
+                    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x75, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 }
                 break;
 
@@ -353,8 +350,8 @@ void BattleEffect_SecondaryStatusChance(void) {
             case EFFECT_PARALYZE_30_PERCENT:
                 sBattleTarget->pendingStatusCondition = STATUS_PARALYSIS;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x74);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x74, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;
         }
     }
@@ -429,11 +426,11 @@ void BattleEffect_ApplyStatBoost(void) {
         }
 
         if (increase_amount == 2) {
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[10], move_effect_index + 0x8D);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[10], move_effect_index, 0x8D, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         } else {
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[10], move_effect_index + 0x93);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[10], move_effect_index, 0x93, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         }
 
         if ((speed_modified != 0) || (sBattleMechanicsSetting[0] != 1)) {
@@ -446,7 +443,7 @@ void BattleEffect_ApplyStatBoost(void) {
     } else {
     nothing_happens:
         // Nothing Happened!
-        Battle_QueueMessage(sBattleMessageQueues->buffer[10], -0x67);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[10], -0x67);
     }
 }
 
@@ -522,11 +519,11 @@ void BattleEffect_RaiseOwnStat(void) {
         }
 
         if (increase_amount == 2) {
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], move_effect_index + 0x8D);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[1], move_effect_index, 0x8D, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], move_effect_index + 0x93);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[1], move_effect_index, 0x93, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
 
         if ((speed_modified != 0) || (sBattleMechanicsSetting[0] != 1)) {
@@ -540,7 +537,7 @@ void BattleEffect_RaiseOwnStat(void) {
     nothing_happened:
         sStatCanBeChangedFurther = 0;
         // Nothing Happened!
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x67);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x67);
     }
 }
 
@@ -635,11 +632,11 @@ void BattleEffect_LowerStat(void) {
             }
 
             if (amount == 2) {
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], move_effect_index + 0x9A);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[7], move_effect_index, 0x9A, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             } else {
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[7], move_effect_index + 0xA0);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_OFFSET_MESSAGE1(sBattleMessageQueues->buffer[7], move_effect_index, 0xA0, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             }
 
             if ((speed_modified != 0) || (sBattleMechanicsSetting[0] != 1)) {
@@ -658,7 +655,7 @@ nothing_happened:
         sConfused = 0;
         sStatCanBeChangedFurther = 0;
         // Nothing happened!
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x5A);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x5A);
         return;
     }
 
@@ -668,7 +665,7 @@ move_failed:
         sStatCanBeChangedFurther = 0;
         if (D_843C4DA9 == 0) {
             // But, it failed!
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x59);
+            BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x59);
         }
     } else {
         sStatCanBeChangedFurther = 0;
@@ -698,13 +695,13 @@ void BattleEffect_Thrash(void) {
 void BattleEffect_WildBattleOnlyMoves(void) {
     if (sBattleUser->moveCache.moveId == TELEPORT) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TELEPORT;
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x53);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x53);
         return;
     }
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_FAILED;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     // But, it failed!
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x52);
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x52, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
 }
 
 /* Initialize total/remaining hits; Twineedle then uses the secondary poison effect. */
@@ -790,31 +787,31 @@ void BattleEffect_TwoTurnMove(void) {
         }
     }
 
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 
     switch (sBattleUser->moveCache.moveId) {
         case RAZOR_WIND:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], -0x51);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[2], -0x51, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case SOLARBEAM:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], -0x50);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[2], -0x50, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case SKULL_BASH:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], -0x4F);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[2], -0x4F, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case SKY_ATTACK:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[2], -0x4E);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[2], -0x4E, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case FLY:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[4], -0x4D);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[4], -0x4D, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
 
         case DIG:
-            Battle_QueueMessage(sBattleMessageQueues->buffer[4], -0x4C);
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[4], -0x4C, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             break;
     }
 }
@@ -841,25 +838,25 @@ void BattleEffect_Mist(void) {
     if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_MIST) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
         // But, it failed!
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x4B);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x4B);
         return;
     }
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_MIST;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x4A);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x4A, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 }
 
 /* Set Focus Energy on the user, or queue failure when it is already active. */
 void BattleEffect_FocusEnergy(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
     if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_FOCUS_ENERGY) {
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x49);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x49);
         return;
     }
     sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_FOCUS_ENERGY;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x48);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x48, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 }
 
 /* Stage recoil HP loss: half damage for Struggle, otherwise one quarter, at least one HP. */
@@ -885,8 +882,8 @@ void BattleEffect_Recoil(void) {
     }
 
     sBattleTarget->currentHp = sBattleTarget->displayHp;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[15], -0x47);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[15], -0x47, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_RECOIL;
 }
 
@@ -897,8 +894,8 @@ void BattleEffect_ConfuseChance(void) {
         sStatCanBeChangedFurther = 0;
         sBattleTarget->immobilizedReason |= IMMOBILIZED_CONFUSED;
         sBattleTarget->confusionTurnsLeft = (Battle_Random() & 3) + 2;
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[7], -0x46);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[7], -0x46, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
 
@@ -913,15 +910,15 @@ void BattleEffect_Confuse(void) {
             sConfused = 1;
             sBattleTarget->immobilizedReason |= IMMOBILIZED_CONFUSED;
             sBattleTarget->confusionTurnsLeft = (Battle_Random() & 3) + 2;
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x45);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x45, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             return;
         }
     }
 
     if (D_843C4DA9 == 0) {
         // But, it failed!
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x44);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x44);
     }
 }
 
@@ -935,22 +932,22 @@ void BattleEffect_Paralyze(void) {
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->pendingStatusCondition |= STATUS_PARALYSIS;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x43);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x43, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 return;
             }
         } else {
             sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_FAILED;
             sConfused = 0;
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x42);
+            BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x42);
             return;
         }
     }
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_FAILED;
     sConfused = 0;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x41);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x41, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
 }
 
 /* Spend one quarter of maximum HP to create a Substitute when enough HP remains. */
@@ -959,14 +956,14 @@ void BattleEffect_Substitute(void) {
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
     if (sBattleUser->volatileStatusFlags & VOLATILE_STATUS_SUBSTITUTE) {
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_EXISTS);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_EXISTS, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         return;
     }
 
     substitute_health = sBattleUser->maxHp >> 2;
     if (substitute_health >= sBattleUser->displayHp) {
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_LOW_HP);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_LOW_HP);
         return;
     }
 
@@ -974,8 +971,8 @@ void BattleEffect_Substitute(void) {
     sBattleUser->substituteHp = substitute_health;
     sBattleUser->displayHp -= substitute_health;
     sBattleUser->volatileStatusFlags |= VOLATILE_STATUS_SUBSTITUTE;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_CREATED);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], BATTLE_MSG_SUBSTITUTE_CREATED, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
 }
 
 /* Mark the user as needing a recharge turn; Battle_CheckMonCanAct consumes the flag. */
@@ -1008,12 +1005,12 @@ void BattleEffect_Mimic(void) {
         } while (temp_v0 == 0);
 
         sBattleUser->moves[sp24->selectedMoveIndex] = temp_v0;
-        Text_SetStringToken(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->moves[var_t0] - 1));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x40);
+        BATTLE_SET_MESSAGE_TOKEN(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->moves[var_t0] - 1));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x40, gMoveDisplayInfo[sBattleTarget->moves[var_t0] - 1].unk_04);
         return;
     }
 
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3F);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x3F);
 }
 
 /* Seed a non-Grass target after move-success checks unless already seeded. */
@@ -1023,21 +1020,21 @@ void BattleEffect_LeechSeed(void) {
     if ((sBattleMoveFailed == 0) && (sBattleTarget->types[0] != GRASS) && (sBattleTarget->types[1] != GRASS)) {
         if (!(sBattleTarget->volatileStatusFlags & VOLATILE_STATUS_LEECH_SEED)) {
             sBattleTarget->volatileStatusFlags |= VOLATILE_STATUS_LEECH_SEED;
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3E);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x3E, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             return;
         }
     }
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_FAILED;
-    Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3D);
+    BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+    BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x3D, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
 }
 
 /* Select the self-target presentation and queue Splash's no-effect message. */
 void BattleEffect_Splash(void) {
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_SELF_TARGET;
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3C);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x3C);
 }
 
 /* Disable a random nonempty target move, packing its slot and duration into one byte. */
@@ -1056,19 +1053,19 @@ void BattleEffect_Disable(void) {
             disable_duration = (Battle_Random() & 7) + 1;
             sBattleTarget->disabledMoveState = (move_slot_to_disable * 0x10) + disable_duration;
             sBattleTarget->disabledMove = sBattleTarget->moves[move_slot_to_disable];
-            Text_SetStringToken(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->disabledMove - 1));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3B);
+            BATTLE_SET_MESSAGE_TOKEN(0x1E, Text_GetString(NULL, 0, sMoveNameTable, sBattleTarget->disabledMove - 1));
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x3B, gMoveDisplayInfo[sBattleTarget->disabledMove - 1].unk_04);
             return;
         }
     }
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_FAILED;
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x3A);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x3A);
 }
 
 /* Queue Pay Day's effect message; this handler does not update a money total. */
 void BattleEffect_PayDay(void) {
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x39);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x39);
 }
 
 /* Copy both target types to the user unless the target is semi-invulnerable. */
@@ -1077,10 +1074,10 @@ void BattleEffect_Conversion(void) {
     if (!(sBattleTarget->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE)) {
         sBattleUser->types[0] = sBattleTarget->types[0];
         sBattleUser->types[1] = sBattleTarget->types[1];
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x38);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x38, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     } else {
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x37);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x37);
     }
 }
 
@@ -1126,7 +1123,7 @@ void BattleEffect_Haze(void) {
     sBattleUser->scaleResize = 0;
     sBattleTarget->scaleResize = 0;
 
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x36);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x36);
 }
 
 /* Heal half maximum HP, or apply Rest's sleep and full heal, capped at maximum HP. */
@@ -1152,11 +1149,11 @@ void BattleEffect_Heal(void) {
                     BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedAttack, sBattleUser->unmodifiedAttack, sBattleUser->statChanges[0]);
                     BattleEffect_ApplyStatStageMultiplier(&sBattleUser->modifiedSpeed, sBattleUser->unmodifiedSpeed, sBattleUser->statChanges[2]);
                 }
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x35);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x35, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             } else {
-                Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-                Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x34);
+                BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+                BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x34, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             }
             sBattleUser->displayHp += sBattleUser->maxHp;
         } else {
@@ -1167,14 +1164,14 @@ void BattleEffect_Heal(void) {
             sBattleUser->displayHp = sBattleUser->maxHp;
         }
 
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[4], -0x33);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[4], -0x33, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         return;
     }
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
     sBattleMoveFailed = 1;
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], -0x32);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], -0x32);
 }
 
 /* Copy the target's battle form, moves, stats and stages while preserving the user's HP. */
@@ -1182,7 +1179,9 @@ void BattleEffect_Transform(void) {
     s32 i;
     ActivePokemonState* pokemon1_state;
     ActivePokemonState* pokemon2_state;
+#if !defined(VERSION_JP)
     BattleMonRuntime* user;
+#endif
 
     pokemon1_state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     pokemon2_state = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
@@ -1190,17 +1189,26 @@ void BattleEffect_Transform(void) {
     if ((sBattleMechanicsSetting[0] == STADIUM) && ((((sBattleTarget->uniqueStatusFlags & 8) == 0) && (sBattleTarget->id == 0x84)) ||
                                  (((sBattleTarget->uniqueStatusFlags & 8) != 0) && (pokemon2_state->transformedIntoSpecies == 0x84)))) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
-        Text_SetStringToken(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_DITTO_BLOCKED);
+        BATTLE_SET_MESSAGE_TOKEN(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE2(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_DITTO_BLOCKED,
+                              Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]),
+                              Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         return;
     }
 
+#if defined(VERSION_JP)
+    // FAKE: JP reads sBattleUser directly; the dead check keeps it loaded first.
+    if (sBattleUser) {}
+    if (!(sBattleUser->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) &&
+#else
     user = sBattleUser;
     if (!(user->immobilizedReason & IMMOBILIZED_SEMI_INVULNERABLE) &&
-        ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleTarget->moves[0] != TRANSFORM) || (sBattleTarget->moves[1] != 0))) {
+#endif
+        ((sBattleMechanicsSetting[0] != STADIUM) || (sBattleTarget->moves[0] != TRANSFORM) ||
+         (sBattleTarget->moves[1] != 0))) {
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_TRANSFORM;
-        Text_SetStringToken(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[4], -0x31);
+        BATTLE_SET_MESSAGE_TOKEN(0x1B, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[4], -0x31, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         sBattleUser->uniqueStatusFlags |= UNIQUE_STATUS_TRANSFORM;
 
         if (sBattleTarget->uniqueStatusFlags & UNIQUE_STATUS_TRANSFORM) {
@@ -1240,7 +1248,7 @@ void BattleEffect_Transform(void) {
     }
 
     sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_NO_ACTION;
-    Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_FAILED);
+    BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], BATTLE_MSG_TRANSFORM_FAILED);
 }
 
 /* Set the appropriate independent screen bit, or queue the already-active response. */
@@ -1249,17 +1257,17 @@ void BattleEffect_ReflectLightScreen(void) {
     if (sBattleUser->moveCache.effect == EFFECT_LIGHT_SCREEN) {
         if (!(sBattleUser->uniqueStatusFlags & UNIQUE_STATUS_LIGHT_SCREEN)) {
             sBattleUser->uniqueStatusFlags |= UNIQUE_STATUS_LIGHT_SCREEN;
-            Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_LIGHT_SCREEN_SET);
+            BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+            BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], BATTLE_MSG_LIGHT_SCREEN_SET, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
-            Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_LIGHT_SCREEN_FAILED);
+            BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], BATTLE_MSG_LIGHT_SCREEN_FAILED);
         }
     } else if (!(sBattleUser->uniqueStatusFlags & UNIQUE_STATUS_REFLECT)) {
         sBattleUser->uniqueStatusFlags |= UNIQUE_STATUS_REFLECT;
-        Text_SetStringToken(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_REFLECT_SET);
+        BATTLE_SET_MESSAGE_TOKEN(0x19, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
+        BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], BATTLE_MSG_REFLECT_SET, Battle_GetActiveMonNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     } else {
-        Battle_QueueMessage(sBattleMessageQueues->buffer[1], BATTLE_MSG_REFLECT_FAILED);
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[1], BATTLE_MSG_REFLECT_FAILED);
     }
 }
 

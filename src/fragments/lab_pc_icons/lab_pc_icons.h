@@ -37,10 +37,18 @@ void LabPC_StopFlyWidget(unk_func_88205880_0098_008_040_06C* arg0);
 void LabPC_InitMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s32 arg2);
 void LabPC_SetSummaryMon(unk_func_88205880_0098_008_044* arg0, BattleMon* arg1);
 s32 LabPC_DrawMonSummaryWidget(unk_func_88205880_0098_008_044* arg0, s32 arg1, s32 arg2);
+#if defined(VERSION_JP)
+void LabPC_InitTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2);
+#else
 void LabPC_InitTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2, unk_func_8850182C* arg3);
+#endif
 void LabPC_SetTypeListMon(unk_func_88205880_0098_008_048* arg0, BattleMon* arg1);
 s32 LabPC_DrawTypeListWidget(unk_func_88205880_0098_008_048* arg0, s32 arg1, s32 arg2);
+#if defined(VERSION_JP)
+void LabPC_InitStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2);
+#else
 void LabPC_InitStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2, unk_func_8850182C* arg3);
+#endif
 void LabPC_SetStatMon(unk_func_88205880_0098_008_04C* arg0, BattleMon* arg1);
 s32 LabPC_DrawStatWidget(unk_func_88205880_0098_008_04C* arg0, s32 arg1, s32 arg2);
 s32 LabPC_DrawMonPreviewWidget(unk_func_88205880_0098_008_050* arg0, s32 arg1, s32 arg2);

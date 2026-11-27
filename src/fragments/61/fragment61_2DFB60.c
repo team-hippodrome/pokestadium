@@ -7,6 +7,19 @@
 #include "src/audio_sfx.h"
 #include "src/gfx_rect.h"
 
+// One tab per carousel source: the party, each GB box, then the rental Pokémon.
+#if defined(VERSION_JP)
+#define BOX_TABS_X_OFFSET 40
+#define BOX_TAB_START 16
+#define BOX_TAB_WIDTH 48
+#else
+#define BOX_TABS_X_OFFSET 44
+#define BOX_TAB_START 8
+#define BOX_TAB_WIDTH 36
+#endif
+#define BOX_TAB_X(i) (BOX_TAB_START + ((i) * BOX_TAB_WIDTH))
+#define BOX_TAB_CURSOR_WIDTH (BOX_TAB_WIDTH + 8)
+
 void Rental_DrawBoxTabFrame(s16 arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, 255);
@@ -24,35 +37,39 @@ void Rental_DrawBoxTab(s16 arg0, s16 arg1, u8* arg2, s16 arg3) {
     } else {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     }
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x24, 0x14, arg2, 0x24, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1, BOX_TAB_WIDTH, 0x14, arg2, BOX_TAB_WIDTH, 0);
 }
 
 void Rental_DrawBoxTabs(RentalCarouselState* arg0) {
-    s16 temp_s0 = arg0->unk_00014 - 0x2C;
+    s16 temp_s0 = arg0->unk_00014 - BOX_TABS_X_OFFSET;
     s16 sp3C = arg0->unk_00016 - 0x20;
 
-    Rental_DrawBoxTabFrame(temp_s0, sp3C, 0x208);
+    Rental_DrawBoxTabFrame(temp_s0, sp3C, (BOX_TAB_START * 2) + (RENTAL_SOURCE_COUNT * BOX_TAB_WIDTH));
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    Rental_DrawBoxTab(temp_s0 + 8, sp3C + 4, D_2001A20, arg0->unk_0001C[0].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x2C, sp3C + 4, D_2002560, arg0->unk_0001C[1].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x50, sp3C + 4, D_2002B00, arg0->unk_0001C[2].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x74, sp3C + 4, D_20030A0, arg0->unk_0001C[3].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x98, sp3C + 4, D_2003640, arg0->unk_0001C[4].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0xBC, sp3C + 4, D_2003BE0, arg0->unk_0001C[5].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0xE0, sp3C + 4, D_2004180, arg0->unk_0001C[6].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x104, sp3C + 4, D_2004720, arg0->unk_0001C[7].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x128, sp3C + 4, D_2004CC0, arg0->unk_0001C[8].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x14C, sp3C + 4, D_2005260, arg0->unk_0001C[9].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x170, sp3C + 4, D_2005800, arg0->unk_0001C[10].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x194, sp3C + 4, D_2005DA0, arg0->unk_0001C[11].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x1B8, sp3C + 4, D_2006340, arg0->unk_0001C[12].unk_00);
-    Rental_DrawBoxTab(temp_s0 + 0x1DC, sp3C + 4, D_2001FC0, 0x97);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(0), sp3C + 4, D_2001A20, arg0->unk_0001C[0].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(1), sp3C + 4, D_2002560, arg0->unk_0001C[1].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(2), sp3C + 4, D_2002B00, arg0->unk_0001C[2].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(3), sp3C + 4, D_20030A0, arg0->unk_0001C[3].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(4), sp3C + 4, D_2003640, arg0->unk_0001C[4].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(5), sp3C + 4, D_2003BE0, arg0->unk_0001C[5].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(6), sp3C + 4, D_2004180, arg0->unk_0001C[6].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(7), sp3C + 4, D_2004720, arg0->unk_0001C[7].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(8), sp3C + 4, D_2004CC0, arg0->unk_0001C[8].unk_00);
+#if !defined(VERSION_JP)
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(9), sp3C + 4, D_2005260, arg0->unk_0001C[9].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(10), sp3C + 4, D_2005800, arg0->unk_0001C[10].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(11), sp3C + 4, D_2005DA0, arg0->unk_0001C[11].unk_00);
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(12), sp3C + 4, D_2006340, arg0->unk_0001C[12].unk_00);
+#endif
+    Rental_DrawBoxTab(temp_s0 + BOX_TAB_X(RENTAL_SOURCE_RENTALS), sp3C + 4, D_2001FC0, 0x97);
 
     if (arg0->unk_00001 != 7) {
-        Gfx_DrawTextureRgba16(temp_s0 + (arg0->unk_00005 * 0x24) + 4, sp3C, 0x2C, 0xE, D_2001080, 0x2C, 0);
-        Gfx_DrawTextureRgba16(temp_s0 + (arg0->unk_00005 * 0x24) + 4, sp3C + 0xE, 0x2C, 0xE, D_2001550, 0x2C, 0);
+        Gfx_DrawTextureRgba16(temp_s0 + (arg0->unk_00005 * BOX_TAB_WIDTH) + (BOX_TAB_START - 4), sp3C,
+                              BOX_TAB_CURSOR_WIDTH, 0xE, D_2001080, BOX_TAB_CURSOR_WIDTH, 0);
+        Gfx_DrawTextureRgba16(temp_s0 + (arg0->unk_00005 * BOX_TAB_WIDTH) + (BOX_TAB_START - 4), sp3C + 0xE,
+                              BOX_TAB_CURSOR_WIDTH, 0xE, D_2001550, BOX_TAB_CURSOR_WIDTH, 0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -62,7 +79,7 @@ s32 Rental_CountAvailableBoxes(RentalCarouselState* arg0) {
     s16 i;
     s16 var_v1 = 1;
 
-    for (i = 0; i < 13; i++) {
+    for (i = 0; i < RENTAL_SOURCE_RENTALS; i++) {
         if (arg0->unk_0001C[i].unk_00 != 0) {
             var_v1++;
         }
@@ -79,7 +96,7 @@ s32 Rental_GetBoxNameColorIndex(unk_D_838067F0_0168* arg0) {
             ret = 0;
             break;
 
-        case 13:
+        case RENTAL_SOURCE_RENTALS:
             ret = 2;
             break;
 
@@ -103,8 +120,10 @@ void Rental_DrawBoxNameBanner(s16 arg0, s16 arg1, unk_D_838067F0_0168* arg2) {
         { 0x50, 0x28, 0x3C },
     };
 
+#if !defined(VERSION_JP)
     char sp58[256];
     char* sp54;
+#endif
     s32 temp_v0;
 
     temp_v0 = Rental_GetBoxNameColorIndex(arg2);
@@ -123,12 +142,27 @@ void Rental_DrawBoxNameBanner(s16 arg0, s16 arg1, unk_D_838067F0_0168* arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
 
+#if defined(VERSION_JP)
+    switch (arg2->unk_2692) {
+        case 0:
+            Font_Printf(arg0 + 78, arg1 + 4, "てもちのつかえるポケモン");
+            break;
+
+        case RENTAL_SOURCE_RENTALS:
+            Font_Printf(arg0 + 118, arg1 + 4, "レンタルポケモン");
+            break;
+
+        default:
+            Font_Printf(arg0 + 38, arg1 + 4, "GBボックス%dのつかえるポケモン", arg2->unk_2692);
+            break;
+    }
+#else
     switch (arg2->unk_2692) {
         case 0:
             sp54 = TeamSelection_GetLabelText(0x12);
             break;
 
-        case 13:
+        case RENTAL_SOURCE_RENTALS:
             sp54 = TeamSelection_GetLabelText(0x13);
             break;
 
@@ -139,6 +173,7 @@ void Rental_DrawBoxNameBanner(s16 arg0, s16 arg1, unk_D_838067F0_0168* arg2) {
     }
 
     Font_Printf((arg0 - (Font_MeasureTextExtent(8, 0, sp54) / 2)) + 0xC6, arg1 + 4, sp54);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -151,7 +186,7 @@ void Rental_DrawCarouselScrollbar(s16 arg0, s16 arg1, RentalCarouselState* arg2)
 
     temp_a3 = arg2->unk_00006 + arg2->unk_0000E;
 
-    if (arg2->unk_00005 < 0xD) {
+    if (arg2->unk_00005 < RENTAL_SOURCE_RENTALS) {
         var_v1 = ((arg2->unk_0001C[arg2->unk_00005].unk_00 + 2) / 3);
     } else {
         var_v1 = ((arg2->unk_0013C->unk_00 + 2) / 3);
@@ -244,9 +279,14 @@ void Rental_DrawBoxMonRow(RentalCarouselState* arg0, s16 arg1, s16 arg2, unk_D_8
             }
             Font_SetActive(4, 0);
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 5, arg3->unk_0000[i].unk_004.nickname);
+#if defined(VERSION_JP)
+            Font_SetActive(4, -4);
+            Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 0x17, "L%d", arg3->unk_0000[i].unk_004.level);
+#else
             Font_SetActive(4, 0);
             Font_Printf(arg1 + (i * 0x84) + 0x2C, arg2 + 0x17, "%s%d", TeamSelection_GetInstructionText(0x15),
                         arg3->unk_0000[i].unk_004.level);
+#endif
         }
     }
 
@@ -393,11 +433,20 @@ void Rental_MarkMatchingPlayerPikachu(RentalCarouselState* arg0, BattleMon* arg1
 
     if ((arg0->unk_00004 < 4) && (GbSave_GetPortGame(arg0->unk_00004) == 7) && (arg1->species.id == 0x19)) {
         GbSave_CopyPlayerIdentity(arg0->unk_00004, &sp28);
+#if defined(VERSION_JP)
+        _bcopy(arg1->unk_3D, sp38.unk_02, 3);
+        _bcopy(arg1->unk_4D, sp38.unk_02 + 3, 3);
+        sp38.unk_00 = arg1->unk_0E;
+        if (*(u64*)&sp38 == *(u64*)&sp28) {
+            arg1->rentalInfo |= 0x80;
+        }
+#else
         _bcopy(arg1->unk_46, sp38.unk_02, 11);
         sp38.unk_00 = arg1->unk_0E;
         if (GbSave_PlayerIdentityMatches(&sp38, &sp28) != 0) {
-            arg1->unk_52 |= 0x80;
+            arg1->rentalInfo |= 0x80;
         }
+#endif
     }
 }
 
@@ -417,7 +466,7 @@ s32 Rental_FillPageFromRoster(RentalCarouselState* arg0, unk_D_838067F0_0168* ar
         arg1->unk_0000[i].raw = 0;
     }
 
-    if (arg0->unk_00005 < 0xD) {
+    if (arg0->unk_00005 < RENTAL_SOURCE_RENTALS) {
         temp_s5 = &arg0->unk_0001C[arg0->unk_00005];
 
         if (arg0->unk_00004 < 4) {
@@ -457,8 +506,8 @@ s32 Rental_FillPageFromRoster(RentalCarouselState* arg0, unk_D_838067F0_0168* ar
         arg1->unk_0000[i].unk_002 = (arg2 * 3) + i;
         arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.species.id;
 
-        arg1->unk_0000[i].unk_004.unk_53 = (arg2 * 3) + i;
-        arg1->unk_0000[i].unk_004.unk_52 = (arg0->unk_00004 * 0x10) | arg0->unk_00005;
+        arg1->unk_0000[i].unk_004.rentalSlot = (arg2 * 3) + i;
+        arg1->unk_0000[i].unk_004.rentalInfo = (arg0->unk_00004 * 0x10) | arg0->unk_00005;
 
         Rental_MarkMatchingPlayerPikachu(arg0, &arg1->unk_0000[i].unk_004);
     }
@@ -633,9 +682,9 @@ void Rental_CarouselNextBox(RentalCarouselState* arg0) {
     s16 i;
     unk_D_838067F0_0168* var_s1;
 
-    var_s0 = (arg0->unk_00005 + 1) % 14;
-    while ((var_s0 < 0xD) && (arg0->unk_0001C[var_s0].unk_00 == 0)) {
-        var_s0 = (var_s0 + 1) % 14;
+    var_s0 = (arg0->unk_00005 + 1) % RENTAL_SOURCE_COUNT;
+    while ((var_s0 < RENTAL_SOURCE_RENTALS) && (arg0->unk_0001C[var_s0].unk_00 == 0)) {
+        var_s0 = (var_s0 + 1) % RENTAL_SOURCE_COUNT;
     }
 
     if (var_s0 != arg0->unk_00005) {
@@ -661,9 +710,9 @@ void Rental_CarouselPrevBox(RentalCarouselState* arg0) {
     s16 i;
     unk_D_838067F0_0168* var_s1;
 
-    var_s0 = (arg0->unk_00005 + 0xD) % 14;
-    while ((var_s0 < 0xD) && (arg0->unk_0001C[var_s0].unk_00 == 0)) {
-        var_s0 = (var_s0 + 0xD) % 14;
+    var_s0 = (arg0->unk_00005 + RENTAL_SOURCE_RENTALS) % RENTAL_SOURCE_COUNT;
+    while ((var_s0 < RENTAL_SOURCE_RENTALS) && (arg0->unk_0001C[var_s0].unk_00 == 0)) {
+        var_s0 = (var_s0 + RENTAL_SOURCE_RENTALS) % RENTAL_SOURCE_COUNT;
     }
 
     if (var_s0 != arg0->unk_00005) {
@@ -792,7 +841,9 @@ s32 Rental_BuildBoxFilterIndex(RentalCarouselState* arg0, s16 arg1, s16 arg2) {
     BattleMon sp50;
     s32 var_s0;
     s16 var_s2;
+#if !defined(VERSION_JP)
     unk_D_838067F0_003C* temp_v0;
+#endif
     DeckHandle* var_v0;
 
     ptr->unk_00 = 0;
@@ -816,6 +867,15 @@ s32 Rental_BuildBoxFilterIndex(RentalCarouselState* arg0, s16 arg1, s16 arg2) {
                         var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 0x32, 0x37, 1);
                         break;
 
+#if defined(VERSION_JP)
+                    case 2:
+                        var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 1, 0x1E, 2);
+                        break;
+
+                    case 3:
+                        var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 1, 0x32, 4);
+                        break;
+#else
                     case 2:
                         var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 0x32, 0x37, 1);
                         break;
@@ -823,6 +883,7 @@ s32 Rental_BuildBoxFilterIndex(RentalCarouselState* arg0, s16 arg1, s16 arg2) {
                     case 3:
                         var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 0x32, 0x37, 1);
                         break;
+#endif
                     case 4:
                         var_s0 = Rental_MonMeetsCategoryFilter(&sp50, 0x19, 0x1E, 8);
                         break;
@@ -845,9 +906,14 @@ s32 Rental_BuildBoxFilterIndex(RentalCarouselState* arg0, s16 arg1, s16 arg2) {
                 }
 
                 if (var_s0 != 0) {
+#if defined(VERSION_JP)
+                    ptr->unk_02[ptr->unk_00] = var_s2;
+                    ptr->unk_00 += 1;
+#else
                     temp_v0 = ptr;
                     temp_v0->unk_02[temp_v0->unk_00] = var_s2;
                     temp_v0->unk_00 += 1;
+#endif
                 }
 
                 var_s2++;
@@ -867,7 +933,7 @@ s32 Rental_PrimeCarousel(RentalCarouselState* arg0, RentalTeamTray* arg1, unk_D_
     arg0->unk_00002 = 0;
     arg0->unk_00003 = arg6;
     arg0->unk_00004 = arg7;
-    arg0->unk_00005 = 0xD;
+    arg0->unk_00005 = RENTAL_SOURCE_RENTALS;
     arg0->unk_00006 = 0;
     arg0->unk_00007 = 0;
     arg0->unk_00008 = 8;
@@ -888,7 +954,7 @@ s32 Rental_PrimeCarousel(RentalCarouselState* arg0, RentalTeamTray* arg1, unk_D_
         arg0->unk_00148[i].unk_268C = &arg0->unk_00148[(i - 1) & 7];
     }
 
-    for (i = 12; i >= 0; i--) {
+    for (i = SAVE_BOX_COUNT; i >= 0; i--) {
         if (Rental_BuildBoxFilterIndex(arg0, i, gSessionContext.ruleCategory) > 0) {
             arg0->unk_00005 = i;
         }
