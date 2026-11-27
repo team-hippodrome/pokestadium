@@ -648,15 +648,12 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// The C below matches except that two register moves at the start are swapped.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/graphics_textures/Font_Printf.s")
-#elif defined(VERSION_JP)
+#if defined(VERSION_JP)
 // Bytes from 0x80 up start a two-byte EUC-JP character, drawn by its JIS code.
 void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     char sp58[0x100];
-    s32 var_s1 = x;
-    s32 temp_s5 = x;
+    UNUSED s32 pad;
+    s32 lineStartX = x;
     s32 temp_v0;
     s32 var_v0;
     u8* var_s0;
@@ -676,7 +673,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
             var_v0 = 1;
 
             if (!(gFontContext->flags & 4) && (chr == 0xA)) {
-                var_s1 = temp_s5;
+                x = lineStartX;
                 var_v0 = 0;
                 y += gFontContext->lineHeight;
             }
@@ -685,7 +682,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
                 if ((chr >= 0x80) && (*var_s0 != 0)) {
                     chr = (chr << 8) | *var_s0++;
                 }
-                var_s1 = Font_DrawChar(var_s1, y, chr & 0x7F7F);
+                x = Font_DrawChar(x, y, chr & 0x7F7F);
             }
 
             chr = *var_s0;
@@ -698,7 +695,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
 #else
 void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     char sp50[0x100];
-    s32 temp_s5 = x - 1;
+    s32 lineStartX = x - 1;
     s32 var_s1 = x - 1;
     s32 temp_v0;
     s32 var_v0;
@@ -719,7 +716,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
             var_v0 = 1;
 
             if (!(gFontContext->flags & 4) && (chr == 0xA)) {
-                var_s1 = temp_s5;
+                var_s1 = lineStartX;
                 var_v0 = 0;
                 y += gFontContext->lineHeight;
             }
