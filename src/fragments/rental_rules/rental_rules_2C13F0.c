@@ -265,13 +265,6 @@ void RentalRules_DrawEligibilityPanelLegend(s16 x, s16 y) {
     Gfx_DrawTextureI4(x, y, 32, 20, ELIGIBILITY_PANEL_LEGEND, 0x20, 0);
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// JP: the C below compiles with a few registers swapped. Its panel colors, as the asm's data.
-s32 D_830038B4_jp = 0x3C3CA000;
-s32 D_830038B8_jp = 0x641E1E00;
-s32 D_830038BC_jp = 0x1E1E6400;
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/rental_rules/rental_rules_2C13F0/RentalRules_DrawSpeciesPage.s")
-#else
 void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node) {
     UNUSED s32 pad;
     s32 i;
@@ -318,6 +311,8 @@ void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node
         if (species != NULL) {
 #if defined(VERSION_JP)
             Font_Printf(x + (i * 84) + 2, y + 42, D_8006FF00[species - 1].name);
+            // FAKE: makes IDO color the loop bound 6 before the table base and its 28-byte stride, giving it s2.
+            if (i == 6) {}
 #else
             Font_Printf(x + (i * 84) + 2, y + 42, RentalRules_GetPokemonName(species));
 #endif
@@ -326,7 +321,6 @@ void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node
 
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void RentalRules_QualifyingSpeciesWindowInit(s32 arg0) {
     QualifyingPokemonDisplay* ptr = &sQualifyingSpeciesDisplay;
