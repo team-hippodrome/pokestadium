@@ -2285,9 +2285,7 @@ void LabPCList_RunPartySelectionModal(unk_func_8830867C_02C* arg0, Controller* a
     arg0->unk_02C->unk_2C = 0xB;
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/lab_pc_list/lab_pc_list_1CEA00/func_88305F28.s")
-#elif defined(VERSION_JP)
+#if defined(VERSION_JP)
 void func_88305F28(unk_func_8830867C_02C* arg0) {
     unk_func_8830867C_04C_030_02C_000_000* spDC;
     unk_func_8830867C_02C_0CC_000* spD8;
@@ -2296,6 +2294,7 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
     s32 spC0;
     s32 spBC;
     WidgetPoint spB8;
+    // JP has no separate pointer for the move slot; it reuses spB4 (from the PP Up branch).
     s32 spB4;
     s32 spB0;
     s32 spAC;
@@ -2304,25 +2303,24 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
     char* sp48;
     char* sp44;
     s32 sp40;
-    unk_func_8830867C_02C_0CC_000_008* sp34;
 
     spDC = arg0->unk_0AC->unk_30->unk_2C->unk_00->unk_00[arg0->unk_0AC->unk_30->unk_38];
     spD8 = arg0->unk_034->unk_00.unk_2C->unk_00[arg0->unk_034->unk_00.unk_38];
     LabPCList_DiscardFilterBackup(arg0);
 
     if (spDC->unk_08 >= 0x64) {
-        sp34 = &spD8->unk_08;
-        spC0 = BattleMon_CountMoves(sp34);
+        spB4 = (s32)&spD8->unk_08;
+        spC0 = BattleMon_CountMoves((unk_func_8830867C_02C_0CC_000_008*)spB4);
         if (spC0 < 4) {
-            LabPCList_ClearMovesFrom(sp34, spC0);
+            LabPCList_ClearMovesFrom((unk_func_8830867C_02C_0CC_000_008*)spB4, spC0);
             spBC = -1;
-            sp34 = (u8*)spD8 + spC0;
+            spB4 = (s32)((u8*)spD8 + spC0);
         } else {
             do {
                 spC0 = arg0->unk_0AC->unk_78->unk_30->unk_38;
             } while (0);
-            sp34 = (u8*)spD8 + spC0;
-            spBC = sp34->unk_11;
+            spB4 = (s32)((u8*)spD8 + spC0);
+            spBC = ((unk_func_8830867C_02C_0CC_000_008*)spB4)->unk_11;
         }
         LabPCList_TeachTmMove(spD8, spDC, spC0);
 
@@ -2333,7 +2331,7 @@ void func_88305F28(unk_func_8830867C_02C* arg0) {
         spC8.unk_00 = (spC0 * 0x6C) + 0x78;
         spC8.unk_02 = arg0->unk_034->unk_5C - arg0->unk_034->unk_58;
 
-        LabPCList_TextFadeWidget_Start(arg0->unk_0BC, spBC, sp34->unk_11, spC8);
+        LabPCList_TextFadeWidget_Start(arg0->unk_0BC, spBC, ((unk_func_8830867C_02C_0CC_000_008*)spB4)->unk_11, spC8);
         LabPCList_SwitchColumnPage(arg0);
         ((func8850CF00)Memmap_GetFragmentVaddr(WidgetTree_RunChildWidgetGroup))(arg0->unk_0B8, gPlayer1Controller);
     } else if (spDC->unk_08 >= 0x32) {
