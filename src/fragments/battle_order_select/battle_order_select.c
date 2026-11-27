@@ -729,8 +729,9 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
 /* Draws a Pokemon's stats, types, moves, and remaining PP. */
 // JP: the C below keeps input_state on the stack instead of in s2; otherwise equivalent.
 #if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM( \
-    "asm/jp/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_DrawOrderSelectPanel_MonDetail.s")
+// clang-format off
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_DrawOrderSelectPanel_MonDetail.s")
+// clang-format on
 #else
 void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_state) {
     s32 i;
