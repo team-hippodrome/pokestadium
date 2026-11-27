@@ -30,6 +30,7 @@ typedef struct unk_D_86203CEC {
     /* 0x6 */ s16 unk_06;
 } unk_D_86203CEC; // size = 0x8
 
+// The first four words are unknown; EUC-JP strings that the Japanese tutorial prints follow them.
 static u32 D_862038C0[] = {
     0xFFFFFFD8, 0xFFFFFF65, 0x00000056, 0x00000097, 0xA4CFA4B7, 0xA4ECA5B3, 0xA5E9A5C3, 0xA5BF0000, 0xA1A1A1A1,
     0xA1A1A1A1, 0xA4F2A4EC, 0xA4F3A4C0, 0xA4B7A4C6, 0xA1A1A4CF, 0xA4B7A4ED, 0xA4A6A1A3, 0x00000000, 0xA5CFA1BC,
@@ -381,12 +382,14 @@ void RattataGame_DrawTutorialScreen(s32 arg0) {
     UNUSED s32 pad;
     UNUSED u8 sp50[3] = { 0, 0, 30 };
     UNUSED u8 sp4C[3] = { 0, 0, 150 };
+#if !defined(VERSION_JP)
     s32 sp48;
     s32 sp44;
     char* sp40;
     s32 sp3C;
     s32 sp38;
     char* sp34;
+#endif
 
     Font_BeginTranslucentTextRendering();
     Font_EndTexturedTextRendering();
@@ -406,6 +409,43 @@ void RattataGame_DrawTutorialScreen(s32 arg0) {
             break;
 
         case 0:
+#if defined(VERSION_JP)
+            Font_EnableTwoCycleTexturing();
+            Font_SetActive(2, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+            // "Run, Rattata!"
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86204714, (char*)&D_862038C0[4]) / 2), 0x20,
+                        (char*)&D_862038C0[4]);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            // "Mash [A Button] to run. Press up on the [Control Pad] to jump over the hurdles.
+            // The first to reach the goal wins."
+            Font_Printf(0x28, 0x34, (char*)&D_862038C0[8]);
+            Font_Printf(0x28, 0x4C, (char*)&D_862038C0[17]);
+            Font_Printf(0x28, 0x58, (char*)&D_862038C0[28]);
+            Font_Printf(0x28, 0x70, (char*)&D_862038C0[35]);
+            Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+            Font_Printf(0x28, 0x34, MINIGAME_SHARED_TEXT_A_BUTTON);
+            Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+            Font_Printf(0x64, 0x4C, MINIGAME_SHARED_TEXT_CONTROL_PAD);
+            Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+            Font_Printf(0x8C, 0xB0, MINIGAME_SHARED_TEXT_JUMP);
+            Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+            Font_Printf(0xFC, 0xB0, (char*)&D_862038C0[46]); // "Run"
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+            Font_Printf(0xA2, 0xC8, MINIGAME_SHARED_TEXT_START_GAME);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x6E, 0xB0, MINIGAME_SHARED_TEXT_ELLIPSIS);
+            Font_Printf(0xDE, 0xB0, MINIGAME_SHARED_TEXT_ELLIPSIS);
+            Font_Printf(0x84, 0xC8, MINIGAME_SHARED_TEXT_ELLIPSIS);
+#else
             Font_EnableTwoCycleTexturing();
             Font_SetActive(2, 0);
             Font_SetLineHeight(0xC);
@@ -450,6 +490,7 @@ void RattataGame_DrawTutorialScreen(s32 arg0) {
             Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_Printf(0xE5, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+#endif
             Font_DisableTwoCycleTexturing();
             break;
     }
@@ -493,9 +534,12 @@ void RattataGame_DrawFrame(s32 arg0) {
 
     if (D_86204718 == 0) {
         Widget_PauseMenuUpdate();
-    } else {
+    }
+#if !defined(VERSION_JP)
+    else {
         Widget_DrawControllerDisconnectBanner();
     }
+#endif
 
     BgStage_AdvanceFrame();
     D_86203E46++;

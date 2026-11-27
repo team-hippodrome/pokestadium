@@ -36,6 +36,9 @@ void BattleScene_InitializeBattleTimers(void) {
     sInitialOrderTimer = gSessionContext.orderLimitSeconds * NTSC_PAL(30, 25);
     sInitalBattleTimer = gSessionContext.battleLimitMinutes * NTSC_PAL(1800, 1500);
     sBattleTimer = gSessionContext.battleLimitMinutes * NTSC_PAL(1800, 1500);
+#if defined(VERSION_JP)
+    D_84390134 = 0;
+#endif
 }
 
 void BattleScene_QuantizeBattleTimer(void) {
@@ -717,14 +720,22 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
     }
 
     BattleScene_ClearParticipantMessageBuffer(arg0);
+#if defined(VERSION_JP)
+    BattleScene_BuildParticipantMessage(arg0, gBattleMessageTexts[3]);
+#else
     BattleScene_BuildParticipantMessage(arg0, 3);
+#endif
     BattleAnim_PlayMenuErrorSoundEffect();
     return 0;
 }
 
 void BattleScene_QueuePartySelectionConfirmMessage(ActivePokemon* arg0) {
     BattleScene_ClearParticipantMessageBuffer(arg0);
+#if defined(VERSION_JP)
+    BattleScene_BuildParticipantMessage(arg0, gBattleMessageTexts[4], Battle_GetActiveMonNickname(arg0));
+#else
     BattleScene_BuildParticipantMessage(arg0, 4);
+#endif
 }
 
 void BattleScene_AssignActiveCoopController(ActivePokemon* arg0, s32 arg1) {
@@ -913,7 +924,11 @@ s32 BattleScene_HandleNoUsableMoveSelection(ActivePokemon* pokemon) {
                 state->selectedCommandOption = 1;
             }
             BattleScene_ClearParticipantMessageBuffer(pokemon);
+#if defined(VERSION_JP)
+            BattleScene_BuildParticipantMessage(pokemon, gBattleMessageTexts[0], Battle_GetActiveMonNickname(pokemon));
+#else
             BattleScene_BuildParticipantMessage(pokemon, 0);
+#endif
         } else if (controller->buttonPressed & BTN_L) {
             BattleScene_ClearParticipantMessageBuffer(pokemon);
             state->selectedCommandOption = 0;
@@ -937,14 +952,22 @@ s32 BattleScene_ValidateSelectedMove(ActivePokemon* pokemon) {
     if (!(runtime->pp[state->moveIndex] & 0x3F)) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(pokemon);
+#if defined(VERSION_JP)
+        BattleScene_BuildParticipantMessage(pokemon, gBattleMessageTexts[1]);
+#else
         BattleScene_BuildParticipantMessage(pokemon, 1);
+#endif
         return 1;
     }
 
     if ((runtime->disabledMoveState & 0xF) && (state->moveIndex == (runtime->disabledMoveState >> 4))) {
         BattleAnim_PlayMenuErrorSoundEffect();
         BattleScene_ClearParticipantMessageBuffer(pokemon);
+#if defined(VERSION_JP)
+        BattleScene_BuildParticipantMessage(pokemon, gBattleMessageTexts[2]);
+#else
         BattleScene_BuildParticipantMessage(pokemon, 2);
+#endif
         return 1;
     }
 

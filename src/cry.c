@@ -1076,11 +1076,18 @@ static unk_D_80079070 D_80079070[151] = {
 
 u8 D_80079364 = 0;
 
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+extern s32 D_80078388;
+#endif
+
 void Cry_Play(u32 species, u32 cry_mode) {
     UNUSED s32 pad[2];
     u32 sp24;
     u32 var_a3;
     u8 is_partner_pikachu;
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    u8* seq_offset;
+#endif
 
     var_a3 = 0;
     is_partner_pikachu = 0;
@@ -1158,6 +1165,9 @@ void Cry_Play(u32 species, u32 cry_mode) {
                  (((D_800FCB18[0]->pendingStatusCondition & 7) == 0) && ((D_800FCB18[1]->pendingStatusCondition & 7) == 0) &&
                   !(D_800FCB18[0]->pendingStatusCondition & 0x20) && !(D_800FCB18[1]->pendingStatusCondition & 0x20)))) {
                 species = 0x9A;
+#if defined(VERSION_PAL)
+                var_a3 = 0xA;
+#endif
                 sp24 = 0x70;
             } else {
                 return;
@@ -1169,6 +1179,9 @@ void Cry_Play(u32 species, u32 cry_mode) {
                                               (!(D_800FCB18[0]->pendingStatusCondition & 7) && !(D_800FCB18[1]->pendingStatusCondition & 7) &&
                                                !(D_800FCB18[0]->pendingStatusCondition & 0x20) && !(D_800FCB18[1]->pendingStatusCondition & 0x20)))) {
                 species = 0x9B;
+#if defined(VERSION_PAL)
+                var_a3 = 0xA;
+#endif
                 sp24 = 0x70;
             } else {
                 return;
@@ -1178,6 +1191,9 @@ void Cry_Play(u32 species, u32 cry_mode) {
         case 1:
             if (is_partner_pikachu != 0) {
                 species = 0x98;
+#if defined(VERSION_PAL)
+                var_a3 = 0xA;
+#endif
                 sp24 = 0x70;
             } else {
                 sp24 = 0x60;
@@ -1185,6 +1201,68 @@ void Cry_Play(u32 species, u32 cry_mode) {
             }
             break;
 
+#if defined(VERSION_PAL)
+        case 10:
+            sp24 = 0x70;
+            switch (species) {
+                case 0x98:
+                    var_a3 = 0x24;
+                    break;
+
+                case 0x99:
+                    var_a3 = 0x1E;
+                    break;
+
+                case 0x9A:
+                    var_a3 = 0x32;
+                    break;
+
+                case 0x9B:
+                    var_a3 = 0x32;
+                    break;
+
+                case 0x9C:
+                    var_a3 = 0x38;
+                    break;
+
+                case 0x9D:
+                    var_a3 = 0x44;
+                    break;
+
+                case 0x9F:
+                    var_a3 = 0x1E;
+                    break;
+
+                case 0xA0:
+                    var_a3 = 0xF;
+                    break;
+
+                case 0xA1:
+                    var_a3 = 0xA;
+                    break;
+
+                case 0xA2:
+                    var_a3 = 0xF;
+                    break;
+
+                case 0xA3:
+                    var_a3 = 0x39;
+                    break;
+
+                case 0xA5:
+                    var_a3 = 0x30;
+                    break;
+
+                default:
+                    var_a3 = 0x1E;
+                    break;
+
+                case 0x9E:
+                case 0xA4:
+                    break;
+            }
+            break;
+#else
         case 10:
             sp24 = 0x70;
             switch (species) {
@@ -1228,6 +1306,8 @@ void Cry_Play(u32 species, u32 cry_mode) {
             }
             break;
 
+#endif
+
         default:
             if (is_partner_pikachu != 0) {
                 species = 0x9D;
@@ -1236,7 +1316,18 @@ void Cry_Play(u32 species, u32 cry_mode) {
             break;
     }
 
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    // The translated releases play cries at 3/4 volume while the battle music stream plays.
+    seq_offset = D_800FC708->seqArray[species - 1].offset;
+    if ((D_80078388 != 0) && (D_80078E78 == 0) && (sLoopPointTable[0] == 0)) {
+        sp24 = (sp24 * 3) / 4;
+        AudioStream_Start(0, seq_offset, sp24, var_a3);
+    } else {
+        AudioStream_Start(0, seq_offset, sp24, var_a3);
+    }
+#else
     AudioStream_Start(0, D_800FC708->seqArray[species - 1].offset, sp24, var_a3);
+#endif
 }
 
 void Cry_PlayVariant4(u32 arg0) {

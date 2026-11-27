@@ -64,8 +64,13 @@ static s16 sAreaSelectStateIds[] = {
 
 // Banner entries 8/9 are Doduo/Dodrio Tower variants, not selectable-area indices.
 static u8* sAreaSelectNameBannerTextures[] = {
+#if defined(VERSION_JP)
+    0x03006E60, 0x0300C060, 0x03011260, 0x03016460, 0x0301B660,
+    0x03020860, 0x03025A60, 0x0302AC60, 0x0302FE60, 0x03035060,
+#else
     0x03006E60, 0x0300D060, 0x03013260, 0x03019460, 0x0301F660,
     0x03025860, 0x0302BA60, 0x03031C60, 0x03037E60, 0x0303E060,
+#endif
 };
 
 #define AREA_STADIUM 0
@@ -110,9 +115,33 @@ static AreaSelectEntryConfig sAreaSelectEntryConfigs[9] = {
     { 300, 185, 10, AREA_NONE, AREA_NONE, AREA_NONE, AREA_NONE, { 0x32, 0x50, 0x96, 0x00 } },
 };
 
+#if defined(VERSION_JP)
+// JP shows a built-in description for each area instead of looking it up in a string table.
+static char* sAreaSelectDescriptions[] = {
+    // Stadium: "The central arena for battles. There are six rule sets. Battle with your prized Pokémon!"
+    "バトルのちゅうしんとなる　きょうぎじょう。ルールは\n６しゅるい。きみのじまんのポケモンで　バトルだ。",
+    // Free Battle: "When your friends get together, battle as a group! Free Battle for up to 4 players is here."
+    "ともだちが　あつまったら　みんなでバトルだ。\n４にんまで　あそべるフリーバトルは　ここ。",
+    // Gym Leader Castle: "Those Gym Leaders are waiting for you. The one who stands at the top of the castle is the strongest Trainer!"
+    "あのジムリーダーたちが　きみをまっている。しろの\nちょうてんにたつものが　さいきょうのトレーナーだ。",
+    // VS Mewtwo: "The ultimate Pokémon, Mewtwo, awaits. Can your Pokémon defeat it?"
+    "きゅうきょくのポケモン、ミュウツーがいる。\nきみのポケモンは　かれをたおすことができるか？",
+    // Kids Club: "Take a short break for a change of pace. You can play with cute Pokémon."
+    "きぶんをかえて　ちょっとひとやすみ。\nかわいい　ポケモンたちと　あそぶことが　できるよ。",
+    // Hall of Fame: "A hall lined with statues of Hall of Fame Pokémon. Join them yourself!"
+    "でんどういりした　ポケモンのぞうが　ならぶやかた。\nキミも　なかまいりしよう。",
+    // Professor Oak's Lab: "Professor Oak's lab. The Pokédex, the PC, Pokémon trades and more are here to help you."
+    "オーキドはかせのけんきゅうじょ。ずかん、パソコン、\nポケモンこうかんなど、きみのてだすけをしてくれる。",
+    // GB Tower: "You can play the Game Boy Pokémon games. Set a cartridge in the GB Pak."
+    "ゲームボーイのポケモンをプレイすることができる。\nＧＢパックにカートリッジをセットしてね。",
+};
+#endif
+
 static u8* sAreaSelectMagnemiteTextures[] = { 0x03005000, 0x03005A20, 0x03006440, 0x03005A20 };
 
+#if !defined(VERSION_JP)
 static char** sAreaSelectStrings;
+#endif
 static BinArchive* sAreaSelectBackgroundArchive;
 static Vp sAreaSelectViewport;
 static Mtx sAreaSelectProjectionMtx;
@@ -380,6 +409,36 @@ void AreaSelect_DrawAndAdvanceMagnemites(void) {
     }
 }
 
+#if defined(VERSION_JP)
+// JP banners are 164 pixels wide and are drawn in six strips.
+void AreaSelect_DrawNameBanner(s16 x, s16 y, s16 alpha, s16 area) {
+    u8* area_name_banner_texture;
+
+    if (area != AREA_NONE) {
+        if (area == AREA_GB_TOWER) {
+            area += sAreaSelectGameOptions.gbTowerUnlockTier;
+        }
+        area_name_banner_texture = sAreaSelectNameBannerTextures[area];
+
+        gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+        gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, alpha);
+
+        Gfx_DrawTextureRgba16(x, y, 164, 12, area_name_banner_texture, 164, 0);
+        Gfx_DrawTextureRgba16(x, y + 12, 164, 10, area_name_banner_texture + (164 * 12 * 2), 164, 0);
+        Gfx_DrawTextureRgba16(x, y + 22, 164, 10, area_name_banner_texture + (164 * 22 * 2), 164, 0);
+        Gfx_DrawTextureRgba16(x, y + 32, 164, 10, area_name_banner_texture + (164 * 32 * 2), 164, 0);
+        Gfx_DrawTextureRgba16(x, y + 42, 164, 10, area_name_banner_texture + (164 * 42 * 2), 164, 0);
+        Gfx_DrawTextureRgba16(x, y + 52, 164, 12, area_name_banner_texture + (164 * 52 * 2), 164, 0);
+
+        if ((gSessionContext.inRound2 != 0) &&
+            ((area == AREA_STADIUM) || (area == AREA_GYM_LEADER_CASTLE) || (area == AREA_VS_MEWTWO))) {
+            Gfx_DrawTextureRgba16(x - 32, y + 13, 36, 36, gRound2BadgeTexture, 36, 0);
+        }
+
+        gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+    }
+}
+#else
 void AreaSelect_DrawNameBanner(s16 x, s16 y, s16 alpha, s16 area) {
     s32 i;
     u8* area_name_banner_texture;
@@ -405,6 +464,8 @@ void AreaSelect_DrawNameBanner(s16 x, s16 y, s16 alpha, s16 area) {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
+
+#endif
 
 void func_822014C0(void) {
     // Empty function; purpose unknown.
@@ -441,9 +502,15 @@ void AreaSelect_DrawNameBannerCrossfade(s16 menu_state, s16 x, s16 y) {
 // Animate the Mewtwo silhouette when that battle has been unlocked.
 void AreaSelect_DrawMewtwoMarker(s16 x, s16 y) {
     static u32 sAreaSelectMarkerTextures[] = {
+#if defined(VERSION_JP)
+        0x0303AC60, 0x0303B020, 0x0303B3E0, 0x0303B7A0, 0x0303BB60, 0x0303BF20, 0x0303C2E0,
+        0x0303C6A0, 0x0303CA60, 0x0303CE20, 0x0303D1E0, 0x0303D5A0, 0x0303D960, 0x0303DD20,
+        0x0303E0E0, 0x0303E4A0, 0x0303E860, 0x0303F3A0, 0x0303EFE0, 0x0303EC20,
+#else
         0x03044C60, 0x03045020, 0x030453E0, 0x030457A0, 0x03045B60, 0x03045F20, 0x030462E0,
         0x030466A0, 0x03046A60, 0x03046E20, 0x030471E0, 0x030475A0, 0x03047960, 0x03047D20,
         0x030480E0, 0x030484A0, 0x03048860, 0x030493A0, 0x03048FE0, 0x03048C20,
+#endif
     };
     static s16 sAreaSelectMarkerFrame = 0;
 
@@ -554,9 +621,15 @@ void AreaSelect_DrawAreaInfoBox(s32 draw_text) {
 
     if (draw_text != 0) {
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        Font_SetLineHeight(24);
+        Font_Printf(91, 386, sAreaSelectDescriptions[sAreaSelectSelectedIndex]);
+#else
         Font_SetActive(8, 0);
         Font_SetLineHeight(24);
         Font_Printf(91, 386, Text_GetString(NULL, 0, sAreaSelectStrings, sAreaSelectSelectedIndex));
+#endif
         Font_EndTexturedTextRendering();
     }
 }
@@ -754,7 +827,11 @@ void AreaSelect_Draw(s16 menu_state) {
 
     AreaSelect_DrawMewtwoMarker(300, 65);
     AreaSelect_DrawAndAdvanceMagnemites();
+#if defined(VERSION_JP)
+    AreaSelect_DrawNameBannerCrossfade(menu_state, 420, 40);
+#else
     AreaSelect_DrawNameBannerCrossfade(menu_state, 404, 40);
+#endif
     AreaSelect_DrawGlowCircle(300, 65, sAreaSelectGlowDiameter);
     AreaSelect_DrawExitFade();
 
@@ -890,8 +967,10 @@ s32 AreaSelect_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_3000000, area_select_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sAreaSelectStrings = Text_GetStringTable(23);
+#endif
     Save_EnsureBankLoaded(2);
     Save_GetOptions(&sAreaSelectGameOptions);
     Save_GetModeSettings(&sAreaSelectModeSettings, gSessionContext.inRound2);

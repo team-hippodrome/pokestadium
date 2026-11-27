@@ -11,6 +11,7 @@
 static s32 D_800FF9B0;
 static s32 D_800FF9B4;
 
+// Interior aliases of sLoopPointTable and D_80078EBC, which IDO addresses separately.
 extern u8 D_80078E83;
 extern u8 D_80078E8B;
 extern u8 D_80078E93;
@@ -18,12 +19,44 @@ extern u8 D_80078E9B;
 extern u8 D_80078EA3;
 extern u8 D_80078EAB;
 extern u8 D_80078EB3;
-extern u8 D_80078EBC;
 extern u8 D_80078EBF;
+
+// JP still defines these in gb_audio_render.
+#if !defined(VERSION_JP)
+s32 D_80078E70 = 0;
+s32 D_80078E74 = 112;
+u8 D_80078E78 = 0x00;
+u8 D_80078E7C = 0x00;
+
+u8 sLoopPointTable[0x3C] = {
+    0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x05, 0x23, 0x23, 0x23,
+    0x25, 0x25, 0x25, 0x25, 0x0E, 0x23, 0x23, 0x23, 0x25, 0x25, 0x25, 0x0E, 0x0D, 0x06, 0x06,
+    0x06, 0x37, 0x37, 0x37, 0x3B, 0x39, 0x34, 0x34, 0x34, 0x2F, 0x2F, 0x2F, 0x2E, 0x35, 0x0B,
+    0x0B, 0x0B, 0x0C, 0x0C, 0x0C, 0x0C, 0x12, 0x0B, 0x0B, 0x0B, 0x0C, 0x0C, 0x0C, 0x12, 0x36,
+};
+u8 D_80078EBC[0xC] = {
+    0x22, 0x22, 0x22, 0x24, 0x24, 0x24, 0x24, 0x24, 0x26, 0x00, 0x00, 0x00,
+};
+s32 D_80078EC8 = -1;
+s32 D_80078ECC = 0;
+u8 D_80078ED0 = 0x00;
+s32 D_80078ED4 = 0;
+s32 D_80078ED8 = 0;
+s32 D_80078EDC = 0;
+#else
+extern u8 D_80078EBC[0xC];
+#endif
 
 void Audio_SetMusicLoopPoint(s32 arg0) {
     D_80078EC8 = arg0;
 }
+
+// The translated releases play these tracks 8 quieter.
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+#define TRACK_VOLUME(volume) ((volume) - 8)
+#else
+#define TRACK_VOLUME(volume) (volume)
+#endif
 
 s32 Audio_StartMusicTrack(s32 track_id) {
     u32 file_index;
@@ -101,13 +134,13 @@ s32 Audio_StartMusicTrack(s32 track_id) {
         case 0x0:
             D_80078E78 = 0;
             D_80078E7C = 0;
-            D_80078E80 = 1;
+            sLoopPointTable[0] = 1;
             volume_scale = 0x98;
             break;
 
         case 0x1:
             volume_scale = 0x68;
-            D_80078E80 = 1;
+            sLoopPointTable[0] = 1;
             Audio_SelectModeMusic(0, 0xF);
             break;
 
@@ -236,7 +269,9 @@ s32 Audio_StartMusicTrack(s32 track_id) {
             D_80078E78 = 0;
             D_80078E7C = 0;
             volume_scale = 0x78;
+#if !defined(VERSION_PAL)
             voice_volume = 0x87;
+#endif
             break;
 
         case 0x31:
@@ -253,10 +288,16 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
         case 0x32:
             volume_scale = 0x60;
+#if defined(VERSION_PAL)
+            voice_volume = 0x7C;
+#endif
             break;
 
         case 0x3C:
             volume_scale = 0x60;
+#if defined(VERSION_PAL)
+            voice_volume = 0x75;
+#endif
             break;
 
         case 0x3D:
@@ -265,6 +306,9 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
         case 0x3E:
             volume_scale = 0x60;
+#if defined(VERSION_PAL)
+            voice_volume = 0x75;
+#endif
             break;
 
         case 0x3F:
@@ -273,6 +317,9 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
         case 0x40:
             volume_scale = 0x50;
+#if defined(VERSION_PAL)
+            voice_volume = 0x78;
+#endif
             break;
 
         case 0x41:
@@ -281,6 +328,9 @@ s32 Audio_StartMusicTrack(s32 track_id) {
 
         case 0x45:
             volume_scale = 0x60;
+#if defined(VERSION_PAL)
+            voice_volume = 0x7C;
+#endif
             break;
 
         case 0x44:
@@ -334,104 +384,104 @@ s32 Audio_StartMusicTrack(s32 track_id) {
             break;
 
         case 0x22:
-            volume_scale = 0x48;
+            volume_scale = TRACK_VOLUME(0x48);
             break;
 
         case 0x24:
-            volume_scale = 0x48;
+            volume_scale = TRACK_VOLUME(0x48);
             break;
 
         case 0x26:
-            volume_scale = 0x40;
+            volume_scale = TRACK_VOLUME(0x40);
             break;
 
         case 0x23:
-            volume_scale = 0x50;
+            volume_scale = TRACK_VOLUME(0x50);
             break;
 
         case 0x25:
-            volume_scale = 0x50;
+            volume_scale = TRACK_VOLUME(0x50);
             break;
 
         case 0xE:
-            volume_scale = 0x64;
+            volume_scale = TRACK_VOLUME(0x64);
             break;
 
         case 0xD:
-            volume_scale = 0x48;
+            volume_scale = TRACK_VOLUME(0x48);
             break;
 
         case 0xB:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0xC:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x12:
-            volume_scale = 0x2E;
+            volume_scale = TRACK_VOLUME(0x2E);
             break;
 
         case 0x36:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x6:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x37:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x3B:
-            volume_scale = 0x3C;
+            volume_scale = TRACK_VOLUME(0x3C);
             break;
 
         case 0x39:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x34:
-            volume_scale = 0x60;
+            volume_scale = TRACK_VOLUME(0x60);
             break;
 
         case 0x2F:
-            volume_scale = 0x58;
+            volume_scale = TRACK_VOLUME(0x58);
             break;
 
         case 0x2E:
-            volume_scale = 0x54;
+            volume_scale = TRACK_VOLUME(0x54);
             break;
 
         case 0x35:
-            volume_scale = 0x54;
+            volume_scale = TRACK_VOLUME(0x54);
             break;
 
         case 0x14:
-            volume_scale = 0x58;
+            volume_scale = TRACK_VOLUME(0x58);
             break;
 
         case 0x2:
-            volume_scale = 0x34;
+            volume_scale = TRACK_VOLUME(0x34);
             break;
 
         case 0x3:
-            volume_scale = 0x44;
+            volume_scale = TRACK_VOLUME(0x44);
             break;
 
         case 0x4:
-            volume_scale = 0x38;
+            volume_scale = TRACK_VOLUME(0x38);
             break;
 
         case 0x5:
-            volume_scale = 0x34;
+            volume_scale = TRACK_VOLUME(0x34);
             break;
 
         case 0x5A:
-            volume_scale = 0x50;
-            D_80078E80 = 0;
+            volume_scale = TRACK_VOLUME(0x50);
+            sLoopPointTable[0] = 0;
             file_index = 2;
             break;
 
@@ -495,7 +545,7 @@ void Audio_FadeOutAll(s32 arg0) {
 
 s32 Audio_StartTrackForCategory(s32 arg0, s32 arg1) {
     s32 ret;
-    D_80078E80 = 0;
+    sLoopPointTable[0] = 0;
     if ((arg0 == 0) || (arg0 == 0xFF)) {
         arg0 = 1;
         if ((arg1 == 0xE)) {
@@ -554,7 +604,7 @@ s32 Audio_StartTrackForCategory(s32 arg0, s32 arg1) {
             if (arg0 >= 0x21U) {
                 return 0;
             }
-            ret = Audio_StartMusicTrack(*(&D_80078EBC + ((arg0 - 1) & 3)));
+            ret = Audio_StartMusicTrack(D_80078EBC[(arg0 - 1) & 3]);
             break;
         case 13:
             if (arg0 >= 6U) {
@@ -570,6 +620,17 @@ s32 Audio_StartTrackForCategory(s32 arg0, s32 arg1) {
     }
     return ret;
 }
+
+// PAL loops the special sequence's ending earlier and steps through it in smaller increments.
+#if defined(VERSION_PAL)
+#define SPECIAL_SEQ_LOOP_POINT 0x3A
+#define SPECIAL_SEQ_BASE 0xB2
+#define SPECIAL_SEQ_STEP 0x3C
+#else
+#define SPECIAL_SEQ_LOOP_POINT 0x46
+#define SPECIAL_SEQ_BASE 0xD6
+#define SPECIAL_SEQ_STEP 0x48
+#endif
 
 s32 Audio_UpdateSpecialSequence(s32 arg0, u32 arg1) {
     s32 var_a3;
@@ -603,27 +664,27 @@ s32 Audio_UpdateSpecialSequence(s32 arg0, u32 arg1) {
             D_80078ED4 = 2;
             switch (arg1) {
                 case 0:
-                    var_a3 = (arg1 * 0x48) + 0xD6;
+                    var_a3 = (arg1 * SPECIAL_SEQ_STEP) + SPECIAL_SEQ_BASE;
                     break;
 
                 case 1:
-                    var_a3 = (arg1 * 0x48) + 0xD6;
+                    var_a3 = (arg1 * SPECIAL_SEQ_STEP) + SPECIAL_SEQ_BASE;
                     break;
 
                 case 2:
-                    var_a3 = (arg1 * 0x48) + 0xD6;
+                    var_a3 = (arg1 * SPECIAL_SEQ_STEP) + SPECIAL_SEQ_BASE;
                     break;
 
                 case 3:
-                    var_a3 = (arg1 * 0x48) + 0xD6;
+                    var_a3 = (arg1 * SPECIAL_SEQ_STEP) + SPECIAL_SEQ_BASE;
                     break;
 
                 case 4:
-                    var_a3 = (arg1 * 0x48) + 0xD6;
+                    var_a3 = (arg1 * SPECIAL_SEQ_STEP) + SPECIAL_SEQ_BASE;
                     break;
 
                 default:
-                    var_a3 = 0xD6;
+                    var_a3 = SPECIAL_SEQ_BASE;
                     break;
             }
 
@@ -667,7 +728,7 @@ s32 Audio_UpdateSpecialSequence(s32 arg0, u32 arg1) {
                             D_80078ED4 = 3;
                             D_80078EDC = 0;
                         } else {
-                            Audio_SetMusicLoopPoint(0x46);
+                            Audio_SetMusicLoopPoint(SPECIAL_SEQ_LOOP_POINT);
                             D_80078ED4 = 3;
                             D_80078EDC = Audio_StartMusicTrack(0x20);
                             return D_80078EDC;

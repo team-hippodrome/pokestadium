@@ -452,6 +452,33 @@ static u32 D_86E04AE0[] = {
     0x00001999, 0x00001999, 0x05000000, 0x03000000, D_86E049F8, 0x06000000, 0x06000000, 0x01000000,
 };
 
+#if defined(VERSION_JP)
+// Tutorial body text. The run of ideographic spaces leaves room for the button name drawn over it.
+static char* sTutorialLines[] = {
+    // "Press [A Button] to Harden so you don't get crushed by the rocks flying at you."
+    "むこうからとんでくる　いわに　つぶされないように",
+    "　　　　をおして　かたくなろう。",
+    // "You stay hardened only while you hold the button."
+    "かたくなるのは　ボタンをおしている　あいだだけ。",
+    "",
+    // "Your stamina keeps dropping even while you are hardened, so don't waste it."
+    "かたくなっているときにも　たいりょくが　へって",
+    "いくので　たいりょくのムダづかいに　きをつけよう。",
+    "",
+    // "The trick is to watch the shadows of the flying rocks."
+    "とんでくる　いわのかげを　よくみるのが　コツだよ。",
+    "",
+};
+
+// Shouts: "Fire!", "Shoot!", "Clang", "Splat". Only "Shoot!" is used.
+static char* sShouts[] = {
+    "はっしゃ！",
+    "うてー！",
+    "キーン",
+    "グチャ",
+};
+#endif
+
 static s16 D_86E04B20 = 0;
 static s16 D_86E04B24 = 1;
 static s16 D_86E04B28 = 0;
@@ -1607,6 +1634,39 @@ void miniDrawMetapodHeads(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+#if defined(VERSION_JP)
+void MetapodGame_DrawTutorialText(void) {
+    s32 i;
+
+    Ui_DrawBorderedPanel(0x18, 0x16, 0x110, 0x90, 0x15);
+    Ui_DrawBorderedPanel(0x18, 0xA5, 0x110, 0x36, 0x14B);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(2, -2);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86E08E44, gMinigameStrings[MINIGAME_STR_METAPOD_TITLE]) / 2), 0x20,
+                gMinigameStrings[MINIGAME_STR_METAPOD_TITLE]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+    for (i = 0; i < ARRAY_COUNT(sTutorialLines); i++) {
+        Font_Printf(0x28, 0x34 + (i * 12), "%s", sTutorialLines[i]);
+    }
+    Font_Printf(0x84, 0xB2, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Font_Printf(0x84, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+    Font_Printf(0x28, 0x40, "%s", gMinigameStrings[MINIGAME_STR_A_BUTTON]);
+    Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+    Font_Printf(0xA2, 0xB2, "%s", gMinigameStrings[MINIGAME_STR_HARDEN]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+    Font_Printf(0xA2, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_START_GAME]);
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+}
+#else
 void MetapodGame_DrawTutorialText(void) {
     UNUSED s32 pad;
     s32 sp38;
@@ -1647,6 +1707,7 @@ void MetapodGame_DrawTutorialText(void) {
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void MetapodGame_DrawTutorialScreen(void) {
     switch (D_87903DCC) {
@@ -1669,6 +1730,21 @@ void MetapodGame_DrawTutorialScreen(void) {
 
     if (miniTutoScreenState == -2) {
         Font_SetActive(0x10, -2);
+#if defined(VERSION_JP)
+        switch (D_87903DD0) {
+            case 0x12:
+                Font_Printf(0x78, 0x64, "%s", sShouts[1]);
+                break;
+
+            case 0x18:
+                miniDrawResultIcons(miniMetapods);
+                break;
+
+            case 0x17:
+                Font_Printf(0x78, 0x64, "%s", gMinigameStrings[MINIGAME_STR_DRAW]);
+                break;
+        }
+#endif
         Font_SetActive(4, -2);
     }
 }
@@ -1718,7 +1794,11 @@ void MetapodGame_DrawFrame(s32 arg0) {
 
 void metapodMinigameInit(void) {
     initMetapodMinigameAssets();
+#if defined(VERSION_JP)
+    StageLoader_RunFrames(5);
+#else
     StageLoader_RunFrames(0xA);
+#endif
     StageFade_StartFromOpaque(0x10);
     miniTutoScreenState = 3;
     miniDifficulty = D_8780FA38;
