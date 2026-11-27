@@ -127,6 +127,10 @@ AMDMABuffer* dmaBuffs;
 OSIoMesg* audDMAIOMesgBuf;
 OSMesg* audDMAMessageBuf;
 u32 dmaBufferLen;
+#if defined(VERSION_PAL)
+u32 sAudioFrameTime;
+OSPiHandle* D_800FCB08[1];
+#else
 OSPiHandle* D_800FCB08[4];
 // s32 D_800FCB0C[3];
 BattleMonRuntime* D_800FCB18[4];
@@ -171,6 +175,7 @@ u8 D_800FCCD6[2];
 s8 D_800FCCD8[0x18];
 u32 D_800FCCF0[10];
 u8 D_800FCD18[0x28];
+#endif // !VERSION_PAL (PAL defines these in 3D140_2.c)
 
 // function prototypes
 void Audio_QueueSoundWithFallbackList(u16, u16*, u8*);
@@ -215,9 +220,26 @@ f32 D_80077DD8 = 0.0f;
 f32 D_80077DDC = 0.0f;
 f32 D_80077DE0 = 0.0f;
 u8 mus_sound_effect_blocked = 0x00;
+#if defined(VERSION_PAL)
+// Audio frame profiling: RSP command list build time and size, averaged over 300 frames.
+u32 D_80077DE8 = 0;
+u32 sAudioFrameEndTime = 0;
+u32 sAudioFrameTimeMax = 0;
+u32 sAudioFrameTimeAvg = 0;
+u32 sAudioFrameTimeSum = 0;
+s32 sAudioCmdLen = 0;
+s32 sAudioCmdLenMax = 0;
+s32 sAudioCmdLenAvg = 0;
+s32 sAudioCmdLenSum = 0;
+u32 sAudioProfileFrames = 0;
+#else
 u8 D_80077DE8[8] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+#endif
+#if defined(VERSION_PAL)
+Acmd* n_alAudioFrame(Acmd* cmdList, s32* cmdLen, s16* outBuf, s32 outLen);
+#endif
 // Defined in 3D140_2.c (the second half of this translation unit pair).
 void Audio_UpdateBattleAudioFrame(void);
 
@@ -247,7 +269,7 @@ void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 ar
 
     frameSize = ((frameSize / SAMPLES) + 1) * SAMPLES;
     minFrameSize = frameSize - SAMPLES;
-    maxFrameSize = frameSize + 0x100;
+    maxFrameSize = frameSize + NTSC_PAL(0x100, 0x88);
 
     alInit(&__am.g, c);
 
@@ -369,6 +391,9 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
     AudioInfo* info;
     AMAudioMgr* mgr;
 
+#if defined(VERSION_PAL)
+    D_80077DE8 = osGetCount();
+#endif
     info = __am.audioInfo[audFrameCt % 3];
     audioPtr = osVirtualToPhysical(info->data);
     samplesLeft = HW_REG(AI_LEN_REG, u32) >> 2;
@@ -377,6 +402,13 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
         osAiSetNextBuffer(lastInfo->data, lastInfo->frameSamples << 2);
     }
 
+#if defined(VERSION_PAL)
+    if (samplesLeft >= 0x131) {
+        info->frameSamples = minFrameSize;
+    } else {
+        info->frameSamples = frameSize;
+    }
+#else
     if ((samplesLeft >= 0x1A9) && (min_only_one != 0)) {
         info->frameSamples = minFrameSize;
         min_only_one = 0;
@@ -384,6 +416,7 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
         info->frameSamples = frameSize;
         min_only_one = 1;
     }
+#endif
 
     __clearAudioDMA();
 
@@ -391,7 +424,11 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
         D_800FC828 = LeoTestUnitReady(&D_800FC825);
     }
 
+#if defined(VERSION_PAL)
+    cmdp = n_alAudioFrame(__am.ACMDList[curAcmdList], &cmdLen, audioPtr, info->frameSamples);
+#else
     cmdp = alAudioFrame(__am.ACMDList[curAcmdList], &cmdLen, audioPtr, info->frameSamples);
+#endif
     sp38.t.data_ptr = __am.ACMDList[curAcmdList];
     sp38.t.data_size = (cmdp - __am.ACMDList[curAcmdList]) * sizeof(Acmd);
 
@@ -420,7 +457,11 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
     if (D_80077D90[0] != 0) {
         GbMusic_UpdateChannels();
         if (lastInfo != NULL) {
+#if defined(VERSION_PAL)
+            GbAudio_GenerateSamples(lastInfo->data, 0, 0x280, 0);
+#else
             GbAudio_GenerateSamples(lastInfo->data, 0, ((audFrameCt % 3) == 0) ? 0x216 : 0x215, 0);
+#endif
         }
     }
 
@@ -466,6 +507,27 @@ OSTask* Audio_CreateFrameTask(OSTask* arg0) {
         }
         Audio_QueueSetVolumeCommand(1, D_80077DDC);
     }
+
+#if defined(VERSION_PAL)
+    sAudioFrameEndTime = osGetCount();
+    sAudioFrameTime = sAudioFrameEndTime - D_80077DE8;
+    if (sAudioFrameTimeMax < sAudioFrameTime) {
+        sAudioFrameTimeMax = sAudioFrameTime;
+    }
+    sAudioFrameTimeSum += sAudioFrameTime;
+    sAudioCmdLen = cmdLen;
+    if (sAudioCmdLenMax < sAudioCmdLen) {
+        sAudioCmdLenMax = sAudioCmdLen;
+    }
+    sAudioCmdLenSum += sAudioCmdLen;
+    if (++sAudioProfileFrames >= 300) {
+        sAudioFrameTimeAvg = sAudioFrameTimeSum / 300;
+        sAudioFrameTimeSum = 0;
+        sAudioCmdLenAvg = sAudioCmdLenSum / 300;
+        sAudioCmdLenSum = 0;
+        sAudioProfileFrames = 0;
+    }
+#endif
 
     if (D_80077DA8 != 0) {
         sp38.t.data_size = 0;

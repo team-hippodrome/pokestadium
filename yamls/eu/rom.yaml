@@ -92,13 +92,14 @@
     - [0x39120, c, audio_bank_init]
     - [0x39D90, c, audio_sound_state]  # audio functions to 0x50C00
     - [0x39E80, c, audio_channel]
-    - [0x3A1B0, asm, audio_commands_category2]
+    - [0x3A1B0, c, audio_commands_category2]
     - [0x3CA60, c, audio_category_fade]
-    - [0x3CB90, asm, text_3CB90]
+    - [0x3CB90, c, audio_sfx]
     - [0x3CFD0, c, audio_data]
     - [0x3D110, c, audio_fade]
     - [0x3D830, c, 3D140_2]
-    - [0x42BE0, asm, 3D140]
+    - [0x42BE0, c, 3D140]
+    - [0x43CD0, c, libnumus/player]
     - [0x48280, c, libnaudio/n_auxbus]
     - [0x48330, asm, libnaudio/n_drvrNew]
     - [0x48870, asm, libnaudio/n_env]
@@ -123,7 +124,9 @@
     - [0x4B170, asm, text_4B170]
     - [0x4B1F0, c, libnaudio/n_synstartvoiceparam]
     - [0x4B2D0, c, libnaudio/n_synstopvoice]
-    - [0x4B340, asm, libnaudio/n_synthesizer]
+    - [0x4B340, c, libnaudio/n_synthesizer]
+    - [0x4B8E0, c, gb_audio_render]
+    - [0x4CE40, c, gb_audio]
     - [0x4F040, c, audio_stream]
     - [0x4FBF0, c, gsm_decoder]  # speech code
     - [0x51060, hasm, libgsm]
@@ -305,12 +308,15 @@
     - [0x789D0, .data, cry]
     - [0x78CD0, .data, audio_bank_init]
     - [0x78CE0, .data, audio_channel]
-    - [0x78CF0, data, audio_commands_category2]
+    - [0x78CF0, .data, audio_commands_category2]
+    - [0x78E80, .data, audio_sfx]
     - [0x78EB0, .data, audio_fade]
     - [0x791C0, .data, 3D140_2]
-    - [0x79950, data, 3D140]
-    - [0x79D80, data, gb_audio_render]
-    - [0x7A180, data, gb_audio]
+    - [0x79950, .data, 3D140]
+    - [0x799D0, .data, libnumus/player]
+    - [0x79AD0, data, libnaudio/n_drvrNew]
+    - [0x79D80, .data, gb_audio_render]
+    - [0x7A180, .data, gb_audio]
     - [0x7A1E0, .data, audio_stream]
     - [0x7A1F0, data, libleo/leofunc]
     - [0x7A200, .data, libleo/leocmdex]
@@ -374,12 +380,17 @@
     - [0x7D450, .rodata, audio_loop_point]
     - [0x7D630, .rodata, cry]
     - [0x7D6A0, .rodata, audio_channel]
-    - [0x7D6D0, rodata, audio_commands_category2]
+    - [0x7D6D0, .rodata, audio_commands_category2]
+    - [0x7D940, .rodata, audio_sfx]
     - [0x7DA30, .rodata, audio_fade]
     - [0x7E0E0, .rodata, 3D140_2]
-    - [0x7E500, rodata, 3D140]
-    - [0x7E520, rodata, libnumus/player]
+    - [0x7E500, .rodata, 3D140]
+    - [0x7E520, .rodata, libnumus/player]
+    - [0x7E5A0, rodata, libnaudio/n_drvrNew]
     - [0x7E5C0, rodata, libnaudio/n_env]
+    - [0x7E650, .rodata, libnaudio/n_synthesizer]
+    - [0x7E660, .rodata, gb_audio_render]
+    - [0x7E670, .rodata, gb_audio]
     - [0x7E6E0, .rodata, audio_stream]
     - [0x7E700, rodata, libleo/leofunc]
     - [0x7E710, .rodata, libleo/leocmdex]
@@ -452,10 +463,11 @@
     - {vram: 0x800B3370, type: .bss, name: audio_loop_point}
     - {vram: 0x800B3380, type: .bss, name: audio_bank_init}
     - {vram: 0x800FC880, type: .bss, name: audio_data}
-    - {vram: 0x800FC890, type: bss, name: 3D140}
-    - {vram: 0x800FCAC0, type: bss, name: gb_audio}
-    - {vram: 0x800FCDB0, type: bss, name: libnumus/player}
-    - {vram: 0x800FCE30, type: bss, name: gb_audio_render}
+    - {vram: 0x800FC890, type: .bss, name: 3D140_2}
+    - {vram: 0x800FCAC0, type: .bss, name: 3D140}
+    - {vram: 0x800FCDB0, type: .bss, name: libnumus/player}
+    - {vram: 0x800FCE30, type: .bss, name: gb_audio_render}
+    - {vram: 0x800FF860, type: .bss, name: gb_audio}
     - {vram: 0x800FF9F0, type: .bss, name: audio_stream}
     - {vram: 0x800FFA80, type: .bss, name: rom_device}
     - {vram: 0x800FFAA0, type: bss, name: libleo/leofunc}

@@ -630,3 +630,58 @@
 -> - {vram: 0x800B3930, type: .bss, name: audio_bank_init}
 - {vram: 0x80100050, type: bss, name: audio_loop_point}
 -> - {vram: 0x80100050, type: bss, name: libleo/leofunc}
+
+# 3D140 and libnumus/player: built from the shared C. PAL links player after 3D140 (US links it
+# before), and the porter merges the two into one blob per section. The 3D140 .bss holds only
+# 3D140.c's own variables in PAL; the rest belong to 3D140_2.c, which PAL links first.
+- [0x431A0, asm, 3D140]
+-> - [0x431A0, c, 3D140]
+-> - [0x44290, c, libnumus/player]
+- [0x79F10, data, 3D140]
+-> - [0x79F10, .data, 3D140]
+-> - [0x79F90, .data, libnumus/player]
+-> - [0x7A090, data, libnaudio/n_drvrNew]
+- [0x7EAB0, rodata, 3D140]
+-> - [0x7EAB0, .rodata, 3D140]
+- [0x7EAD0, rodata, libnumus/player]
+-> - [0x7EAD0, .rodata, libnumus/player]
+-> - [0x7EB50, rodata, libnaudio/n_drvrNew]
+- {vram: 0x800FCE40, type: bss, name: 3D140}
+-> - {vram: 0x800FCE40, type: .bss, name: 3D140_2}
+- {vram: 0x800FD070, type: bss, name: gb_audio}
+-> - {vram: 0x800FD070, type: .bss, name: 3D140}
+- {vram: 0x800FD360, type: bss, name: libnumus/player}
+-> - {vram: 0x800FD360, type: .bss, name: libnumus/player}
+
+# audio_commands_category2 and audio_sfx: built from the shared C. The porter merges the
+# audio_sfx .data and .rodata into the audio_commands_category2 blobs.
+- [0x3A6F0, asm, audio_commands_category2]
+-> - [0x3A6F0, c, audio_commands_category2]
+- [0x3D0D0, asm, text_3D0D0]
+-> - [0x3D0D0, c, audio_sfx]
+- [0x792B0, data, audio_commands_category2]
+-> - [0x792B0, .data, audio_commands_category2]
+-> - [0x79440, .data, audio_sfx]
+- [0x7DC80, rodata, audio_commands_category2]
+-> - [0x7DC80, .rodata, audio_commands_category2]
+-> - [0x7DEF0, .rodata, audio_sfx]
+
+# n_synthesizer, gb_audio_render and gb_audio: built from the shared C. PAL links the GB
+# synth and music player right after n_synthesizer, and the porter merges all three texts and
+# the n_resample, n_reverb, n_synthesizer, gb_audio_render and gb_audio .rodata into n_env's.
+- [0x4B900, asm, libnaudio/n_synthesizer]
+-> - [0x4B900, c, libnaudio/n_synthesizer]
+-> - [0x4BEA0, c, gb_audio_render]
+-> - [0x4D400, c, gb_audio]
+- [0x7A340, data, gb_audio_render]
+-> - [0x7A340, .data, gb_audio_render]
+- [0x7A740, data, gb_audio]
+-> - [0x7A740, .data, gb_audio]
+- [0x7EB70, rodata, libnaudio/n_env]
+-> - [0x7EB70, rodata, libnaudio/n_env]
+-> - [0x7EC00, .rodata, libnaudio/n_synthesizer]
+-> - [0x7EC10, .rodata, gb_audio_render]
+-> - [0x7EC20, .rodata, gb_audio]
+- {vram: 0x800FD3E0, type: bss, name: gb_audio_render}
+-> - {vram: 0x800FD3E0, type: .bss, name: gb_audio_render}
+-> - {vram: 0x800FFE10, type: .bss, name: gb_audio}

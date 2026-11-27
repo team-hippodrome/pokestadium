@@ -2,6 +2,10 @@
 #include "src/rom_device.h"
 #include "src/audio_commands.h"
 
+#if defined(VERSION_PAL)
+extern u8 sMoveSoundBankStale;
+#endif
+
 typedef struct unk_D_800FD008 {
     /* 0x00 */ u16 unk_00[20];
     /* 0x28 */ u8 unk_28;
@@ -716,6 +720,10 @@ s16 func_8004A89C(void) {
             D_800FCFD8.unk_04 = sampleId;
             ent = (unk_D_800FC6CC*)((u32*)D_800FC6CC + (D_800FCFD8.unk_04 << 1));
             Rom_DmaRead(ent->unk_00, (u32)D_800FC6D0, ent->unk_04);
+#if defined(VERSION_PAL)
+            // PAL loads noise samples into the move sound bank's buffer, so the bank must be reloaded.
+            sMoveSoundBankStale = 1;
+#endif
         }
 
         D_800FCFD8.unk_08 = 0;
