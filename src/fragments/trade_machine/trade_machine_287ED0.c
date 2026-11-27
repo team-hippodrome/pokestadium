@@ -242,9 +242,50 @@ s32 Trade_GetTextPrinterState(void) {
     return var_v1;
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// The C below matches JP except for an 8-byte larger stack frame.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/trade_machine/trade_machine_287ED0/Trade_DrawTextPrinter.s")
+#if defined(VERSION_JP)
+void Trade_DrawTextPrinter(void) {
+    // JP has a smaller line buffer and prints from the text's left edge.
+    s32 i;
+    s32 a;
+    u8 arg;
+    s8 sp38[0xF8];
+    s8* p_sp38;
+    s8* other;
+
+    if (D_82F1444C->unk_10 != NULL) {
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, 0);
+
+        if (D_82F1444C->unk_0C & 1) {
+            a = D_82F13B88;
+            arg = a & 0xF;
+            arg = (arg * 0xFF) / 15;
+            if (a & 0x10) {
+                arg = 0xFF - arg;
+            }
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, arg);
+        } else {
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        }
+
+        Font_SetLineHeight(0x1E);
+        if (D_82F1444C->unk_00 == -1) {
+            Font_Printf(D_82F1444C->unk_04, D_82F1444C->unk_06, D_82F1444C->unk_10);
+        } else {
+            p_sp38 = sp38;
+            other = D_82F1444C->unk_10;
+
+            for (i = 0; i < D_82F1444C->unk_00; i++) {
+                *p_sp38++ = *other++;
+            }
+
+            *p_sp38 = '\x00';
+            Font_Printf(D_82F1444C->unk_04, D_82F1444C->unk_06, &sp38);
+        }
+        Font_EndTexturedTextRendering();
+        D_82F13B88++;
+    }
+}
 #else
 void Trade_DrawTextPrinter(void) {
     s32 i;
@@ -269,12 +310,7 @@ void Trade_DrawTextPrinter(void) {
         }
 
         Font_SetLineHeight(0x1E);
-#if defined(VERSION_JP)
-        // JP prints from the text's left edge.
-        temp_t0 = 0;
-#else
         temp_t0 = Font_MeasureTextExtent(0, 0, D_82F1444C->unk_10) / 2;
-#endif
         if (D_82F1444C->unk_00 == -1) {
             Font_Printf(D_82F1444C->unk_04 - temp_t0, D_82F1444C->unk_06, D_82F1444C->unk_10);
         } else {
