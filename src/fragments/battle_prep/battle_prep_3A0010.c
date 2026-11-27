@@ -10,6 +10,75 @@
 #include "src/memmap.h"
 #include "src/memory.h"
 
+#if defined(VERSION_JP)
+// Second halves of the WIN and LOSE labels, and the two halves of each side's DRAW label.
+extern u8 D_301B080[];
+extern u8 D_301D900[];
+extern u8 D_3020180[];
+extern u8 D_3022A00[];
+extern u8 D_3024300[];
+extern u8 D_3025C00[];
+extern u8 D_3027500[];
+extern u8 D_3028E00[];
+#endif
+
+#if defined(VERSION_JP)
+// 72x72 WIN/LOSE label, drawn as three 72x24 strips.
+static Vtx D_84B16AA0[] = {
+    VTX(-36, 36, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),        VTX(-36, 12, 0, 0, 768, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(36, 12, 0, 2304, 768, 0xFF, 0xFF, 0xFF, 0xFF),    VTX(36, 36, 0, 2304, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(-36, 12, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),        VTX(-36, -12, 0, 0, 768, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(36, -12, 0, 2304, 768, 0xFF, 0xFF, 0xFF, 0xFF),   VTX(36, 12, 0, 2304, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(-36, -12, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),       VTX(-36, -36, 0, 0, 768, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(36, -36, 0, 2304, 768, 0xFF, 0xFF, 0xFF, 0xFF),   VTX(36, -12, 0, 2304, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+};
+static Gfx D_84B16BA0[] = {
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsDPSetCombineLERP(0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, COMBINED, COMBINED, 0, PRIM_LOD_FRAC, 0),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsSPVertex(D_84B16AA0, 12, 0),
+    gsDPLoadTextureBlock(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 72, 24, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsDPLoadTextureBlock(0x0F000D80, G_IM_FMT_RGBA, G_IM_SIZ_16b, 72, 24, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
+    gsDPLoadTextureBlock(0x0F001B00, G_IM_FMT_RGBA, G_IM_SIZ_16b, 72, 24, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
+    gsSPEndDisplayList(),
+};
+static u32 D_84B16CC8[] = {
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16AA0,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawWinOrLoseLabel,
+    D_84B16BA0, 0x06000000, 0x01000000, 0x00000000,
+};
+// 64x50 DRAW label, drawn as two 64x25 strips.
+static Vtx D_84B16CE8_jp[] = {
+    VTX(-32, 25, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),        VTX(-32, 0, 0, 0, 800, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(32, 0, 0, 2048, 800, 0xFF, 0xFF, 0xFF, 0xFF),     VTX(32, 25, 0, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(-32, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),         VTX(-32, -25, 0, 0, 800, 0xFF, 0xFF, 0xFF, 0xFF),
+    VTX(32, -25, 0, 2048, 800, 0xFF, 0xFF, 0xFF, 0xFF),   VTX(32, 0, 0, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF),
+};
+static Gfx D_84B16D68_jp[] = {
+    gsSPSetGeometryMode(G_CULL_BACK),
+    gsDPSetCombineLERP(0, 0, 0, TEXEL0, 0, 0, 0, TEXEL0, 0, 0, 0, COMBINED, COMBINED, 0, PRIM_LOD_FRAC, 0),
+    gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
+    gsSPVertex(D_84B16CE8_jp, 8, 0),
+    gsDPLoadTextureBlock(0x0F000000, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 25, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsDPLoadTextureBlock(0x0F000C80, G_IM_FMT_RGBA, G_IM_SIZ_16b, 64, 25, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                         G_TX_NOMIRROR | G_TX_CLAMP, 7, 5, G_TX_NOLOD, G_TX_NOLOD),
+    gsSP2Triangles(4, 5, 6, 0, 4, 6, 7, 0),
+    gsSPEndDisplayList(),
+};
+static u32 D_84B16CFC[] = {
+    0x17000000, 0x00000000, 0x00000000, 0x00000000, D_84B16CE8_jp,
+    0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawTieLabel,
+    D_84B16D68_jp, 0x06000000, 0x01000000, 0x00000000,
+};
+#else
 static Vtx D_84B16AA0[] = {
     VTX(-64, 32, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),        VTX(-64, -32, 0, 0, 2048, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-32, -32, 0, 1024, 2048, 0xFF, 0xFF, 0xFF, 0xFF), VTX(-32, 32, 0, 1024, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -49,6 +118,7 @@ static u32 D_84B16CFC[] = {
     0x05000000, 0x22050000, 0x00000000, 0x08000000, BattlePrepResultBanner_DrawTieLabel,
     D_84B16BA0, 0x06000000, 0x01000000,
 };
+#endif
 static Vtx D_84B16D30[] = {
     VTX(-16, 16, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
     VTX(-16, -16, 0, 0, 1024, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -81,8 +151,13 @@ static Gfx D_84B16E50[] = {
     gsDPSetCombineLERP(TEXEL0, 0, ENVIRONMENT, 0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, COMBINED, 0, 0, 0, COMBINED),
     gsSPTexture(0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON),
     gsSPVertex(D_84B16E10, 4, 0),
+#if defined(VERSION_JP)
+    gsDPLoadTextureBlock_4b(D_3028E00, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 5,
+                            5, G_TX_NOLOD, G_TX_NOLOD),
+#else
     gsDPLoadTextureBlock_4b(D_3024800, G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 5,
                             5, G_TX_NOLOD, G_TX_NOLOD),
+#endif
     gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
     gsSPEndDisplayList(),
 };
@@ -126,6 +201,37 @@ static Color_RGBA8 D_84B16EEC[] = { {
  * Geo draw callback (phase 5) for a WIN or LOSE banner: binds D_3018800 ("WIN") when the
  * banner's outcome is nonzero, else D_301C800 ("LOSE"), to segment 0x0F.
  */
+#if defined(VERSION_JP)
+// JP banners are two halves; each half binds its own part of the label.
+s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 callback_phase, unk_func_80011B94* node) {
+    ResultBanner* result_banner;
+    u8* texture;
+    s32 half;
+
+    if (callback_phase == 5) {
+        result_banner = (ResultBanner*)D_8006F09C->node.callbackArg;
+        half = D_8006F09C->effectSlot - result_banner->banner->effectSlot;
+        if (result_banner->outcome != 0) {
+            if (half == 0) {
+                texture = D_3018800;
+            } else {
+                texture = D_301B080;
+            }
+        } else if (half == 0) {
+            texture = D_301D900;
+        } else {
+            texture = D_3020180;
+        }
+
+        gDPPipeSync(gDisplayListHead++);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)Memmap_GetSegmentVaddr(texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
+
+        GeoRender_ApplyMaterialState();
+    }
+    return 0;
+}
+#else
 s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 callback_phase, unk_func_80011B94* node) {
     ResultBanner* result_banner;
     u8* texture;
@@ -146,10 +252,42 @@ s32 BattlePrepResultBanner_DrawWinOrLoseLabel(s32 callback_phase, unk_func_80011
     }
     return 0;
 }
+#endif
 
 /**
  * Geo draw callback (phase 5) for a DRAW banner: binds D_3020800 ("DRAW") to segment 0x0F.
  */
+#if defined(VERSION_JP)
+// JP draws a different two-part DRAW label for each side.
+s32 BattlePrepResultBanner_DrawTieLabel(s32 callback_phase, unk_func_80011B94* node) {
+    ResultBanner* result_banner;
+    u8* texture;
+    s32 half;
+
+    if (callback_phase == 5) {
+        result_banner = (ResultBanner*)D_8006F09C->node.callbackArg;
+        half = D_8006F09C->effectSlot - result_banner->banner->effectSlot;
+        if (result_banner->isPlayerSide != 0) {
+            if (half == 0) {
+                texture = D_3027500;
+            } else {
+                texture = D_3025C00;
+            }
+        } else if (half == 0) {
+            texture = D_3024300;
+        } else {
+            texture = D_3022A00;
+        }
+
+        gDPPipeSync(gDisplayListHead++);
+        gSPSegment(gDisplayListHead++, 0x0F, (u32)Memmap_GetSegmentVaddr(texture) & 0x1FFFFFFF);
+        gSPDisplayList(gDisplayListHead++, node->display_node_header.callbackArg);
+
+        GeoRender_ApplyMaterialState();
+    }
+    return 0;
+}
+#else
 s32 BattlePrepResultBanner_DrawTieLabel(s32 callback_phase, unk_func_80011B94* node) {
     UNUSED s32 pad;
 
@@ -162,6 +300,7 @@ s32 BattlePrepResultBanner_DrawTieLabel(s32 callback_phase, unk_func_80011B94* n
     }
     return 0;
 }
+#endif
 
 /**
  * Geo draw callback (phase 5) for a LOSE smoke puff: binds the puff's current smoke cloud frame
@@ -195,7 +334,12 @@ void BattlePrepResultBanner_InitSmokePuff(ResultBannerSmokePuff* smoke_puff, unk
     Model_InitDisplayObject(smoke_puff->displayObject, 0, 0, geo);
     Vec3f_SetComponentsDuplicate(&smoke_puff->displayObject->scale, 2.0f, 2.0f, 2.0f);
     smoke_puff->displayObject->node.callbackArg = smoke_puff;
+#if defined(VERSION_JP)
+    // JP releases the smoke puffs on a circle instead of a 2:1 ellipse.
+    smoke_puff->displayObject->position.x = (COSS(angle) * 26.0f) + center_x;
+#else
     smoke_puff->displayObject->position.x = (COSS(angle) * 52.0f) + center_x;
+#endif
     smoke_puff->displayObject->position.y = (SINS(angle) * 26.0f) + center_y;
     smoke_puff->displayObject->position.z = -289.0f;
 }
@@ -252,7 +396,12 @@ void BattlePrepResultBanner_InitStarParticle(ResultBannerStar* star, unk_D_86002
     star->angle = angle;
     Model_InitDisplayObject(star->displayObject, 2, 0, geo);
     star->displayObject->node.callbackArg = star;
+#if defined(VERSION_JP)
+    // JP throws the stars on a circle instead of a 2:1 ellipse.
+    star->displayObject->position.x = (COSS(angle) * 30.0f) + center_x;
+#else
     star->displayObject->position.x = (COSS(angle) * 60.0f) + center_x;
+#endif
     star->displayObject->position.y = (SINS(angle) * 30.0f) + center_y;
     star->displayObject->position.z = -289.0f;
 }
@@ -454,6 +603,75 @@ void BattlePrepResultBanner_UpdateParticleBurst(ResultBanner* result_banner) {
  * around (82, -2) for the player's banner and (-82, -98) for the opponent's. On frame 16 a WIN
  * banner throws 10 stars and a LOSE banner releases 10 smoke puffs around itself; then state 1.
  */
+#if defined(VERSION_JP)
+// JP swings the two banner halves in side by side; the first five particles come from banner[0]
+// and the rest from banner[1].
+void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* result_banner) {
+    s16 i;
+    s16 angle;
+
+    result_banner->timer++;
+    if (result_banner->timer > 0) {
+        result_banner->banner[0].node.flags |= 1;
+        result_banner->banner[1].node.flags |= 1;
+        result_banner->banner[0].position.z -= 8.0f;
+        result_banner->banner[1].position.z -= 8.0f;
+        if (result_banner->isPlayerSide != 0) {
+            result_banner->banner[0].rotation.z += 0x400;
+            result_banner->banner[1].rotation.z += 0x400;
+            result_banner->banner[0].position.x = (COSS(result_banner->banner[0].rotation.z + 0x6000) * 70.71f) + 46.0f;
+            result_banner->banner[0].position.y = (SINS(result_banner->banner[0].rotation.z + 0x6000) * 70.71f) + -2.0f;
+            result_banner->banner[1].position.x = (COSS(result_banner->banner[1].rotation.z + 0x6000) * 70.71f) + 118.0f;
+            result_banner->banner[1].position.y = (SINS(result_banner->banner[1].rotation.z + 0x6000) * 70.71f) + -2.0f;
+        } else {
+            result_banner->banner[0].rotation.z -= 0x400;
+            result_banner->banner[1].rotation.z -= 0x400;
+            result_banner->banner[0].position.x = (COSS(result_banner->banner[0].rotation.z + 0x2000) * 70.71f) + -118.0f;
+            result_banner->banner[0].position.y = (SINS(result_banner->banner[0].rotation.z + 0x2000) * 70.71f) + -98.0f;
+            result_banner->banner[1].position.x = (COSS(result_banner->banner[1].rotation.z + 0x2000) * 70.71f) + -46.0f;
+            result_banner->banner[1].position.y = (SINS(result_banner->banner[1].rotation.z + 0x2000) * 70.71f) + -98.0f;
+        }
+
+        if (result_banner->timer == 0x10) {
+            if (result_banner->outcome != 0) {
+                angle = 0x2000;
+                for (i = 0; i < 5; i++, angle += 0x3000) {
+                    BattlePrepResultBanner_InitStarParticle(&result_banner->stars[i], result_banner->starGeo, result_banner->banner[0].position.x,
+                                                            result_banner->banner[0].position.y, angle);
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[i]);
+                }
+
+                angle = 0x6000;
+                for (i = 5; i < 10; i++, angle -= 0x3000) {
+                    BattlePrepResultBanner_InitStarParticle(&result_banner->stars[i], result_banner->starGeo, result_banner->banner[1].position.x,
+                                                            result_banner->banner[1].position.y, angle);
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[i]);
+                }
+
+                result_banner->timer = 0;
+                result_banner->state = 1;
+            } else {
+                angle = 0x3000;
+                for (i = 0; i < 5; i++, angle += 0x2800) {
+                    BattlePrepResultBanner_InitSmokePuff(&result_banner->smokePuffs[i], result_banner->smokePuffGeo, result_banner->banner[0].position.x,
+                                                      result_banner->banner[0].position.y, angle);
+                    BattlePrepResultBanner_UpdateSmokePuff(&result_banner->smokePuffs[i]);
+                }
+
+                angle = 0x5000;
+                for (i = 5; i < 10; i++, angle -= 0x2800) {
+                    BattlePrepResultBanner_InitSmokePuff(&result_banner->smokePuffs[i], result_banner->smokePuffGeo, result_banner->banner[1].position.x,
+                                                      result_banner->banner[1].position.y, angle);
+                    BattlePrepResultBanner_UpdateSmokePuff(&result_banner->smokePuffs[i]);
+                }
+
+                result_banner->timer = 0;
+                result_banner->state = 1;
+            }
+        }
+    }
+}
+#else
 void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* result_banner) {
     s16 i;
     s16 angle;
@@ -511,6 +729,7 @@ void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* result_banner) {
         }
     }
 }
+#endif
 
 /**
  * Banner state 3: the player's WIN banner is thrown off screen. After 4 frames it flies left 20
@@ -518,6 +737,47 @@ void BattlePrepResultBanner_UpdateFlightArc(ResultBanner* result_banner) {
  * 8 scatter stars per frame for 10 frames. It is freed on frame 34 and the banner returns to
  * state 0.
  */
+#if defined(VERSION_JP)
+// JP throws the two banner halves apart, each shedding half of the scatter stars.
+void BattlePrepResultBanner_UpdateStarThrowExit(ResultBanner* result_banner) {
+    s32 i;
+    s32 j;
+
+    result_banner->timer++;
+    if (result_banner->timer >= 4) {
+        result_banner->banner[0].position.y += result_banner->velocityY;
+        result_banner->banner[1].position.y += result_banner->velocityY;
+        result_banner->velocityY -= 0.5f;
+        result_banner->banner[0].position.x -= 20.0f;
+        result_banner->banner[1].position.x -= 16.0f;
+        result_banner->banner[0].rotation.z += 0x400;
+        result_banner->banner[1].rotation.z -= 0x300;
+
+        if (result_banner->timer < 0xE) {
+            for (i = 0; i < 4; i++) {
+                BattlePrepResultBanner_SpawnScatterParticle(&result_banner->stars[result_banner->timer - 4][0 + i], result_banner->starGeo,
+                                                         &result_banner->banner[0].position);
+                BattlePrepResultBanner_SpawnScatterParticle(&result_banner->stars[result_banner->timer - 4][4 + i], result_banner->starGeo,
+                                                         &result_banner->banner[1].position);
+            }
+        }
+
+        for (j = 0; j < 10; j++) {
+            for (i = 0; i < 8; i++) {
+                if (result_banner->stars[j][i].timer >= 0) {
+                    BattlePrepResultBanner_UpdateStarParticle(&result_banner->stars[j][i]);
+                }
+            }
+        }
+
+        if (result_banner->timer == 0x22) {
+            BattlePrep_ResetDisplayObject(&result_banner->banner[0]);
+            BattlePrep_ResetDisplayObject(&result_banner->banner[1]);
+            result_banner->state = 0;
+        }
+    }
+}
+#else
 void BattlePrepResultBanner_UpdateStarThrowExit(ResultBanner* result_banner) {
     s32 i;
     s32 j;
@@ -552,12 +812,39 @@ void BattlePrepResultBanner_UpdateStarThrowExit(ResultBanner* result_banner) {
         }
     }
 }
+#endif
 
 /**
  * Banner state 4: the banner drops off screen. After 4 frames it moves by velocityY, which falls
  * by 1 per frame. A WIN banner also slides left 10 units per frame while spinning; a LOSE banner
  * spins the other way in place. It is freed on frame 32 and the banner returns to state 0.
  */
+#if defined(VERSION_JP)
+// JP banners are two halves (banner[0] and banner[1]) that fall and spin apart.
+void BattlePrepResultBanner_UpdateFallExit(ResultBanner* result_banner) {
+    result_banner->timer++;
+    if (result_banner->timer >= 4) {
+        result_banner->banner[0].position.y += result_banner->velocityY;
+        result_banner->banner[1].position.y += result_banner->velocityY;
+        result_banner->velocityY -= 1.0f;
+        if (result_banner->outcome != 0) {
+            result_banner->banner[0].position.x -= 10.0f;
+            result_banner->banner[1].position.x -= 8.0f;
+            result_banner->banner[0].rotation.z += 0x400;
+            result_banner->banner[1].rotation.z -= 0x300;
+        } else {
+            result_banner->banner[0].rotation.z -= 0x400;
+            result_banner->banner[1].rotation.z += 0x300;
+        }
+
+        if (result_banner->timer == 0x20) {
+            BattlePrep_ResetDisplayObject(&result_banner->banner[0]);
+            BattlePrep_ResetDisplayObject(&result_banner->banner[1]);
+            result_banner->state = 0;
+        }
+    }
+}
+#else
 void BattlePrepResultBanner_UpdateFallExit(ResultBanner* result_banner) {
     result_banner->timer++;
     if (result_banner->timer >= 4) {
@@ -576,12 +863,46 @@ void BattlePrepResultBanner_UpdateFallExit(ResultBanner* result_banner) {
         }
     }
 }
+#endif
 
 /**
  * Banner state 5: the DRAW banner slides in. The player's banner moves right 40 units per frame
  * for 7 frames, from x = -280 to the center; the opponent's banner stays off screen at x = -372.
  * Returns to state 0 on frame 44.
  */
+#if defined(VERSION_JP)
+// JP slides the two banner halves in one after the other, then lets them drift.
+void BattlePrepResultBanner_UpdateDrawSlideIn(ResultBanner* result_banner) {
+    if (result_banner->timer < 0x14) {
+        if (result_banner->isPlayerSide != 0) {
+            if (result_banner->timer < 7) {
+                result_banner->banner[0].position.x += 40.0f;
+            }
+            if (result_banner->timer < 9) {
+                result_banner->banner[1].position.x += 40.0f;
+            }
+        } else {
+            if (result_banner->timer < 0xB) {
+                result_banner->banner[0].position.x += 40.0f;
+            }
+            if (result_banner->timer < 0xD) {
+                result_banner->banner[1].position.x += 40.0f;
+            }
+        }
+    } else if (result_banner->isPlayerSide != 0) {
+        result_banner->banner[1].position.x -= 2.0f;
+    } else {
+        result_banner->banner[0].position.x -= 4.0f;
+        result_banner->banner[1].position.x -= 6.0f;
+    }
+
+    result_banner->timer++;
+    if (result_banner->timer == 0x2C) {
+        result_banner->timer = 0;
+        result_banner->state = 0;
+    }
+}
+#else
 void BattlePrepResultBanner_UpdateDrawSlideIn(ResultBanner* result_banner) {
     if ((result_banner->timer < 0x14) && (result_banner->isPlayerSide != 0) && (result_banner->timer < 7)) {
         result_banner->banner->position.x += 40.0f;
@@ -593,11 +914,38 @@ void BattlePrepResultBanner_UpdateDrawSlideIn(ResultBanner* result_banner) {
         result_banner->state = 0;
     }
 }
+#endif
 
 /**
  * Banner state 7: the player's DRAW banner slides off to the right, 40 units per frame, and the
  * banner returns to state 0 after 11 frames.
  */
+#if defined(VERSION_JP)
+// JP slides both banners off, each half two frames after the previous one.
+void BattlePrepResultBanner_UpdateDrawExit(ResultBanner* result_banner) {
+    if (result_banner->isPlayerSide != 0) {
+        if (result_banner->timer >= 0) {
+            result_banner->banner[0].position.x += 40.0f;
+        }
+        if (result_banner->timer >= 2) {
+            result_banner->banner[1].position.x += 40.0f;
+        }
+    } else {
+        if (result_banner->timer >= 4) {
+            result_banner->banner[0].position.x += 40.0f;
+        }
+        if (result_banner->timer >= 6) {
+            result_banner->banner[1].position.x += 40.0f;
+        }
+    }
+
+    result_banner->timer++;
+    if (result_banner->timer == 0xB) {
+        result_banner->timer = 0;
+        result_banner->state = 0;
+    }
+}
+#else
 void BattlePrepResultBanner_UpdateDrawExit(ResultBanner* result_banner) {
     s32 unused_timer; // FAKE: written in both branches and never read
 
@@ -616,6 +964,7 @@ void BattlePrepResultBanner_UpdateDrawExit(ResultBanner* result_banner) {
         result_banner->state = 0;
     }
 }
+#endif
 
 /**
  * Per-frame update for a result banner: 1 particle burst, 2 flight arc, 3 star throw exit,
@@ -656,6 +1005,65 @@ void BattlePrepResultBanner_Update(ResultBanner* result_banner) {
  * the opponent and enters the state 2 flight arc; LOSE starts 6 frames later. Both banners of a
  * result get the same particle objects; only a WIN uses stars and only a LOSE uses smoke puffs.
  */
+#if defined(VERSION_JP)
+// JP launches the two banner halves (banner_object[0] and [1]) side by side.
+void BattlePrepResultBanner_Launch(ResultBanner* result_banner, DisplayObject* banner_object, DisplayObject* particle_objects) {
+    s32 i;
+    s32 j;
+
+    result_banner->banner = banner_object;
+    result_banner->particleObjects = particle_objects;
+    Model_InitDisplayObject(banner_object, 1, 0, result_banner->bannerGeo);
+    Model_InitDisplayObject(&result_banner->banner[1], 1, 0, result_banner->bannerGeo);
+    result_banner->banner[0].node.callbackArg = result_banner;
+    result_banner->banner[1].node.callbackArg = result_banner;
+
+    if (result_banner->outcome == -1) {
+        result_banner->timer = 0;
+        result_banner->state = 5;
+        if (result_banner->isPlayerSide != 0) {
+            Vec3f_SetComponentsDuplicate(&result_banner->banner[0].position, -196.0f, 0.0f, -289.0f);
+            Vec3f_SetComponentsDuplicate(&result_banner->banner[1].position, -284.0f, 0.0f, -289.0f);
+        } else {
+            Vec3f_SetComponentsDuplicate(&result_banner->banner[0].position, -372.0f, 0.0f, -289.0f);
+            Vec3f_SetComponentsDuplicate(&result_banner->banner[1].position, -460.0f, 0.0f, -289.0f);
+        }
+        return;
+    }
+
+    if (result_banner->outcome != 0) {
+        result_banner->timer = 0;
+    } else {
+        result_banner->timer = -6;
+    }
+
+    result_banner->state = 2;
+    result_banner->banner[0].node.flags &= ~1;
+    result_banner->banner[1].node.flags &= ~1;
+    if (result_banner->isPlayerSide != 0) {
+        Vec3f_SetComponentsDuplicate(&result_banner->banner[0].position, -4.0f, 48.0f, -161.0f);
+        Vec3f_SetComponentsDuplicate(&result_banner->banner[1].position, 68.0f, 48.0f, -161.0f);
+        result_banner->banner[0].rotation.z = -0x4000;
+        result_banner->banner[1].rotation.z = -0x4000;
+    } else {
+        Vec3f_SetComponentsDuplicate(&result_banner->banner[0].position, -68.0f, -48.0f, -161.0f);
+        Vec3f_SetComponentsDuplicate(&result_banner->banner[1].position, 4.0f, -48.0f, -161.0f);
+        result_banner->banner[0].rotation.z = 0x4000;
+        result_banner->banner[1].rotation.z = 0x4000;
+    }
+
+    for (i = 0; i < 10; i++) {
+        result_banner->smokePuffs[i].displayObject = particle_objects++;
+    }
+
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 8; j++) {
+            result_banner->stars[i][j].displayObject = particle_objects++;
+            result_banner->stars[i][j].timer = -1;
+        }
+    }
+}
+#else
 void BattlePrepResultBanner_Launch(ResultBanner* result_banner, DisplayObject* banner_object, DisplayObject* particle_objects) {
     s32 i;
     s32 j;
@@ -703,6 +1111,7 @@ void BattlePrepResultBanner_Launch(ResultBanner* result_banner, DisplayObject* b
         }
     }
 }
+#endif
 
 /**
  * Starts the banner exit: state 7 for DRAW, the state 3 star throw for the player's WIN banner,
