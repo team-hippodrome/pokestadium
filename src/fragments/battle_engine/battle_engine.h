@@ -1805,8 +1805,10 @@ void BattleBox_Update(s16 x, s16 y);
 void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon);
 #if defined(VERSION_JP)
 // Battle message strings, built into the Japanese ROM instead of loaded from a text file.
-// Indexed by the same message numbers as the other versions' text file.
+// gBattleMessageTexts: the five action-selection refusals (no usable moves, no PP, ...).
 extern char* gBattleMessageTexts[];
+// Indexed by the message number passed to Battle_QueueMessage.
+extern char* gBattleQueuedMessageTexts[];
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, char* format, ...);
 #else
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number);

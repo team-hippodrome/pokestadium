@@ -98,6 +98,39 @@ void Battle_SimpleStringFormat(s8* buffer, s8* format, ...) {
     buffer[len] = 0;
 }
 
+#if defined(VERSION_JP)
+// Stores the message number in text[0] and formats fmt into text[1..]; like
+// Battle_SimpleStringFormat, %s copies the next char* argument.
+void Battle_QueueMessage(s8* text, s8 message_id, const char* fmt, ...) {
+    va_list args;
+    s8* src;
+    const char* p;
+    s32 len;
+
+    *text = message_id;
+    len = 1;
+    va_start(args, fmt);
+    p = fmt;
+
+    while (*p != 0) {
+        if (*p != '%') {
+            text[len++] = *p;
+        } else {
+            p++;
+            if (*p == 's') {
+                src = va_arg(args, s8*);
+                while (*src != 0) {
+                    text[len] = *src;
+                    src++;
+                    len++;
+                }
+            }
+        }
+        p++;
+    }
+    text[len] = 0;
+}
+#else
 void Battle_QueueMessage(s8* text, s8 file_number_index) {
     u8 overflow_helper = file_number_index;
     *text = file_number_index;
@@ -112,6 +145,7 @@ void Battle_QueueMessage(s8* text, s8 file_number_index) {
         Text_GetString(text + 1, 0x40, sBattleMessagesTable, sBattleMessagesTableFileNumbers[file_number_index]);
     }
 }
+#endif
 
 void Battle_QueueStatusText(char* text, s32 side) {
     UNUSED s32 pad[3];
@@ -727,6 +761,14 @@ void BattleScene_ClearParticipantMessageBuffer(ActivePokemon* active_pokemon) {
     active_pokemon->captionState.unk_08[0] = 0;
 }
 
+#if defined(VERSION_JP)
+void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, char* format, ...) {
+    sBattleMessageQueues->controllerPort =
+        pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
+    pokemon->captionState.active = 1;
+    Battle_SimpleStringFormat(pokemon->captionState.unk_48, format);
+}
+#else
 void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number) {
     sBattleMessageQueues->controllerPort =
         pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex]->controllerPort;
@@ -734,6 +776,7 @@ void BattleScene_BuildParticipantMessage(ActivePokemon* pokemon, s32 file_number
     Text_SetStringToken(25, pokemon->teamRoster->pokemonPicked[pokemon->state.rosterIndex].nickname);
     Text_GetString(pokemon->captionState.unk_48, 64, sBattleMessagesTable, file_number);
 }
+#endif
 
 void BattleScene_RevealParticipantMessageChars(ActivePokemon* pokemon) {
     TeamRoster* team_member_index = pokemon->sessionTeams->tagTeamMember[pokemon->state.ownerTeamMemberIndex];
