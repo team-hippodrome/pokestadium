@@ -100,11 +100,13 @@ u8 sFearow = FEAROW;
 u8 sFarfetchD = FARFETCH_D;
 u8 sDoduoEvoLine[] = { DODRIO, DODUO };
 
+#if !defined(VERSION_JP)
 char** sBattleMessagesTable;
 char** sPokemonNameTable;
 char** sMoveNameTable;
 char** sStatusConditionNameTable;
 char** sBattleControllerDisconnectedMessage; // Only one entry, hence not a table.
+#endif
 
 /**
  * Resets all seven state tick slots to the sentinel (no-op) callback.
@@ -521,7 +523,11 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
                       ->pokemonPicked[pokemon->state.actionChosen];
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[species] & 0xFFFFFF);
+#if defined(VERSION_JP)
+    if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_3C & 0x80)) {
+#else
     if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_52 & 0x80)) {
+#endif
         rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[PARTNER_PIKACHU_CUE_BANK] & 0xFFFFFF);
     }
     transform_end = ((u32)_70D3A0_ROM_START + ((u32)(D_6E910 + (species << 5)) & 0xFFFFFF)) + 0x20;
@@ -996,8 +1002,13 @@ void BattleScene_StartHitReactionAnim(ActivePokemon* active_pokemon) {
 
     sActivePokemon[target_side]->animationTimer = 0;
 
+    // JP also plays the hit reaction on airborne targets.
+#if defined(VERSION_JP)
+    if (!(target_state->flags & ACTIVE_UNDERGROUND) && !(target_state->flags & ACTIVE_FREEZE)) {
+#else
     if (!(target_state->flags & ACTIVE_AIRBORNE) && !(target_state->flags & ACTIVE_UNDERGROUND) &&
         !(target_state->flags & ACTIVE_FREEZE)) {
+#endif
         // no battle reaction for weak hits
         if (((sTypeEffectiveness < TYPE_EFFECTIVENESS_NEUTRAL) || (sBattleMoveFailed != 0)) &&
             ((runtime->pendingStatusCondition & 0x20) == 0)) {
@@ -2637,6 +2648,8 @@ void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, Activ
 void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
     s32 i;
 
+    // JP has its battle text built in.
+#if !defined(VERSION_JP)
     Text_InitStringTables();
 
     sBattleMessagesTable = Text_GetStringTable(30);
@@ -2644,6 +2657,7 @@ void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
     sMoveNameTable = Text_GetStringTable(37);
     sStatusConditionNameTable = Text_GetStringTable(41);
     sBattleControllerDisconnectedMessage = Text_GetStringTable(20);
+#endif
 
     for (i = 0; i < 7; i++) {
         sBattleSceneStateTickSlots[i].callback = sBattleSceneStateTickSentinel;
