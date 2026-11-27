@@ -1018,8 +1018,13 @@
     vram: 0x88000000
     subsegments:
     - [0x1AA000, textbin,   fragments/pokemon_lab/pokemon_lab_header]
-    - [0x1AA020, asm, fragments/pokemon_lab/pokemon_lab]
-    - [0x1AC6B0, data, fragments/pokemon_lab/pokemon_lab]
+    - [0x1AA020, c,      fragments/pokemon_lab/pokemon_lab]
+    - [0x1AC6B0, .data,   fragments/pokemon_lab/pokemon_lab]
+    - [0x1C0B30, .data,   fragments/pokemon_lab/pokemon_lab_descriptions]
+    - [0x1C0BB0, .rodata, fragments/pokemon_lab/pokemon_lab]
+    - [0x1C0E50, .rodata, fragments/pokemon_lab/pokemon_lab_descriptions]
+
+    - {vram: 0x88016FE0, type:  .bss, name: fragments/pokemon_lab/pokemon_lab}
   - name: fragment22_relocs
     type: code
     bss_size: 0x0
