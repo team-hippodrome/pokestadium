@@ -336,6 +336,17 @@ void TradeEvo_UpdateOpenPreview(unk_D_82F21238* arg0) {
     }
 }
 
+#if defined(VERSION_JP)
+s32 Trade_SpeciesEvolvesOnTransfer(BattleMon* arg0) {
+    s32 var_v1 = 0;
+
+    if ((arg0->species.id == 0x40) || (arg0->species.id == 0x43) || (arg0->species.id == 0x4B) ||
+        (arg0->species.id == 0x5D)) {
+        var_v1 = 1;
+    }
+    return var_v1;
+}
+#else
 s32 Trade_SpeciesEvolvesOnTransfer(s32 arg0) {
     s32 var_v1 = 0;
 
@@ -344,6 +355,7 @@ s32 Trade_SpeciesEvolvesOnTransfer(s32 arg0) {
     }
     return var_v1;
 }
+#endif
 
 void TradeEvo_UpdateWaitForConfirm(unk_D_82F21238* arg0) {
     TradeEvo_UpdatePreviewModel(arg0);
@@ -358,7 +370,7 @@ void TradeEvo_UpdateWaitForConfirm(unk_D_82F21238* arg0) {
     }
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        if (Trade_SpeciesEvolvesOnTransfer(arg0->unk_24->species.id) != 0) {
+        if (Trade_SpeciesEvolvesOnTransfer(TRADE_EVOLVE_CHECK_ARG(arg0->unk_24)) != 0) {
             arg0->unk_02 = 3;
             arg0->unk_08 = 1;
             arg0->unk_0C = 0x3C;
@@ -409,7 +421,7 @@ s32 Trade_NicknameIsSpeciesDefault(s16 arg0, s8* arg1) {
     char sp20[64];
 
     sp64 = 1;
-    Text_CopyString(sp20, Trade_GetSpeciesName(arg0));
+    Text_CopyString(sp20, TRADE_SPECIES_NAME(arg0));
 
     var_v1 = sp20;
     while (*var_v1 != '\x00') {
@@ -427,14 +439,26 @@ s32 Trade_NicknameIsSpeciesDefault(s16 arg0, s8* arg1) {
 void Trade_ApplyEvolution(s16 arg0, BattleMon* arg1) {
     s16 sp2E = 0;
 
+#if defined(VERSION_JP)
+    switch (arg1->species.id) {
+        case 0x40:
+        case 0x43:
+        case 0x4B:
+        case 0x5D:
+            sp2E = arg1->species.id;
+            arg1->species.id++;
+            break;
+    }
+#else
     if (Trade_SpeciesEvolvesOnTransfer(arg1->species.id) != 0) {
         sp2E = arg1->species.id;
         arg1->species.id++;
     }
+#endif
 
     if (sp2E != 0) {
         if (Trade_NicknameIsSpeciesDefault(sp2E, arg1->nickname) != 0) {
-            Text_CopyString(arg1->nickname, Trade_GetSpeciesName(arg1->species.id));
+            Text_CopyString(arg1->nickname, TRADE_SPECIES_NAME(arg1->species.id));
         }
         Pokemon_RecalcStats(arg1);
         GbSave_SetSeenOwnedBits(arg0, arg1->species.id, 3);
@@ -707,9 +731,67 @@ void TradeEvo_DrawPreviewStrips(unk_D_82F21238* arg0) {
     }
 }
 
+#if defined(VERSION_JP)
+extern FontContext* D_82F14170_jp; // the trade FontContext, D_82F14420 in other versions
+
+s32 TradeEvo_MeasureText(FontContext* font, s8* str) {
+    s32 width = 0;
+    FontSet* set = &font->unk_00[font->setIndex];
+
+    while (*str != '\x00') {
+        width += set->cellWidth + font->letterSpacing;
+        if (*str < 0) {
+            str += 2;
+        } else {
+            str++;
+        }
+    }
+    width += font->letterSpacing;
+    return width;
+}
+#else
 void func_82F0ECA4(void) {
 }
+#endif
 
+#if defined(VERSION_JP)
+void TradeEvo_DrawEvolutionCaption(unk_D_82F20A40_00E* arg0, BattleMon* arg1) {
+    s16 spC6;
+    s8 sp44[0x80];
+    char* sp40;
+    char* sp3C;
+
+    sp44[0] = '\x00';
+    sp3C = NULL;
+    sp40 = NULL;
+
+    switch (arg1->species.id) {
+        case 0x41:
+        case 0x44:
+        case 0x4C:
+        case 0x5E:
+            sp40 = D_8006FF00[arg1->species.id - 2].name;
+            sp3C = D_8006FF00[arg1->species.id - 1].name;
+            break;
+    }
+
+    if (sp40 != NULL) {
+        sprintf(sp44, "%s が %s にしんかしました", sp40, sp3C);
+    }
+
+    if ((sp44[0] != '\x00') && ((arg0->unk_04 != 0x210) || (arg0->unk_06 != 0))) {
+        Trade_DrawRoundedFrameLarge(arg0->unk_00, arg0->unk_02, arg0->unk_04, arg0->unk_06, 0x1E, 0x1E, 0x82, 0xFF);
+        if ((arg0->unk_04 == 0x210) && (arg0->unk_06 == 0x28)) {
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(0x10, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            spC6 = arg0->unk_00 + (arg0->unk_04 / 2);
+            Font_Printf(spC6 - (TradeEvo_MeasureText(D_82F14170_jp, sp44) / 2), arg0->unk_02 + 8, sp44);
+            Font_EndTexturedTextRendering();
+        }
+    }
+}
+#else
 void TradeEvo_DrawEvolutionCaption(unk_D_82F20A40_00E* arg0, BattleMon* arg1) {
     s16 spC6;
     s8 sp44[0x80];
@@ -724,7 +806,7 @@ void TradeEvo_DrawEvolutionCaption(unk_D_82F20A40_00E* arg0, BattleMon* arg1) {
 
     if (Trade_SpeciesEvolvesOnTransfer(arg1->species.id - 1) != 0) {
         sp40 = Trade_GetSpeciesName(arg1->species.id - 1);
-        sp3C = Trade_GetSpeciesName(arg1->species.id);
+        sp3C = TRADE_SPECIES_NAME(arg1->species.id);
     }
 
     if (sp40 != NULL) {
@@ -746,6 +828,7 @@ void TradeEvo_DrawEvolutionCaption(unk_D_82F20A40_00E* arg0, BattleMon* arg1) {
         }
     }
 }
+#endif
 
 void TradeEvo_Draw(void) {
     unk_D_82F21238* ptr = &D_82F21238;

@@ -405,7 +405,13 @@ void TradeEvo_CreatePreviewModel(unk_D_82F21238* arg0, s32 arg1);
 void TradeEvo_BeginSequence(s16 arg0);
 void TradeEvo_UpdatePreviewModel(unk_D_82F21238* arg0);
 void TradeEvo_UpdateOpenPreview(unk_D_82F21238* arg0);
+#if defined(VERSION_JP)
+s32 Trade_SpeciesEvolvesOnTransfer(BattleMon* arg0);
+#define TRADE_EVOLVE_CHECK_ARG(mon) (mon)
+#else
 s32 Trade_SpeciesEvolvesOnTransfer(s32 arg0);
+#define TRADE_EVOLVE_CHECK_ARG(mon) ((mon)->species.id)
+#endif
 void TradeEvo_UpdateWaitForConfirm(unk_D_82F21238* arg0);
 void TradeEvo_UpdateFlashIn(unk_D_82F21238* arg0);
 s32 Trade_NicknameIsSpeciesDefault(s16 arg0, s8* arg1);
