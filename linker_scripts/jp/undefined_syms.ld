@@ -2067,3 +2067,8 @@ D_8780F621_jp = 0x8780F621; // D_8780FE01
 // trade_machine_28ED00: C statics used by the functions that are still assembly on JP
 D_82F20598_jp = 0x82F20598; // &D_82F20A88[0].unk_004
 D_82F20BE8_jp = 0x82F20BE8; // D_82F210D8
+
+// trade_machine_287ED0: C statics used by trade_machine asm on JP
+D_82F14170_jp = 0x82F14170; // D_82F14420 (the trade FontContext)
+D_82F1419C_jp = 0x82F1419C; // D_82F1444C
+D_82F134F0_jp = 0x82F134F0; // D_82F13B88
