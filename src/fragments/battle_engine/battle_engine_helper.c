@@ -28,7 +28,11 @@ BattleMon* BattleScene_GetParticipantSessionMon(ActivePokemon* active_pokemon) {
 s32 BattleScene_IsPartnerPikachu(ActivePokemon* active_pokemon) {
     BattleMon* pokemon = BattleScene_GetParticipantSessionMon(active_pokemon);
 
+#if defined(VERSION_JP)
+    if ((active_pokemon->displayObject.objectType == PIKACHU) && (pokemon->unk_3C & 0x80)) {
+#else
     if ((active_pokemon->displayObject.objectType == PIKACHU) && (pokemon->unk_52 & 0x80)) {
+#endif
         return 1;
     }
     return 0;
@@ -293,7 +297,11 @@ s32 Battle_GetDisplayModelId(ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
 char* Battle_GetActiveMoveName(ActivePokemon* active_pokemon) {
+#if defined(VERSION_JP)
+    return gMoveDisplayInfo[active_pokemon->state.runtime.usedMove - 1].unk_04;
+#else
     return Text_GetString(NULL, 0, sMoveNameTable, active_pokemon->state.runtime.usedMove - 1);
+#endif
 }
 
 u8* Battle_GetActiveMonNickname(ActivePokemon* active_pokemon) {
