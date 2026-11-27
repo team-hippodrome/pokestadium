@@ -1689,9 +1689,6 @@ typedef struct Vtx4 {
     /* 0x30 */ Vtx vtx4;
 } Vtx4; // size = 0x40
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/func_87804320.s")
-#else
 void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
     u8 i;
     Mtx* temp_v0;
@@ -1702,7 +1699,9 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
     temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
     temp_s2 = arg1 + arg2 + arg3 + arg4;
 
+#if !defined(VERSION_JP)
     gSPDisplayList(gDisplayListHead++, D_8780EBA0);
+#endif
 
     if (temp_s2 == -4) {
         var_fv1 = D_8780F8DC[arg0];
@@ -1722,6 +1721,10 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
 
     guOrtho(temp_v0, -320.0f / (2.0f * var_fv1), 320.0f / (2.0f * var_fv1), 240.0f / (2.0f * var_fv1),
             -240.0f / (2.0f * var_fv1), -2.0f, 2.0f, 1.0f);
+
+#if defined(VERSION_JP)
+    gSPDisplayList(gDisplayListHead++, D_8780EBA0);
+#endif
 
     gSPMatrix(gDisplayListHead++, (u32)temp_v0 & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPMatrix(gDisplayListHead++, (u32)&gIdentityMtx & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -1833,7 +1836,6 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
         }
     }
 }
-#endif
 
 #if defined(VERSION_JP)
 #define PAUSE_MENU_SCORE_X 0x49
