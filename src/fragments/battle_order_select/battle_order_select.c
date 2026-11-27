@@ -720,12 +720,6 @@ void BattleMenu_DrawOrderSelectPanel_Ready(BattleOrderInputState* input_state) {
 }
 
 /* Draws a Pokemon's stats, types, moves, and remaining PP. */
-// JP: the C below keeps input_state on the stack instead of in s2; otherwise equivalent.
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/battle_order_select/battle_order_select/BattleMenu_DrawOrderSelectPanel_MonDetail.s")
-// clang-format on
-#else
 void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_state) {
     s32 i;
     s16 x;
@@ -735,17 +729,10 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
     s32 y;
     BattleMon* pokemon_to_summarize;
 
-#if defined(VERSION_JP)
-    y = input_state->y;
-    x = input_state->x;
-    slot_to_summarize = input_state->summaryDisplaySlot;
-    pokemon_to_summarize = &input_state->pokemon[slot_to_summarize];
-#else
     x = input_state->x;
     slot_to_summarize = input_state->summaryDisplaySlot;
     y = input_state->y;
     pokemon_to_summarize = &input_state->pokemon[slot_to_summarize];
-#endif
 
     BattleMenu_DrawPanelBorder(x, y, 471, 94, input_state->controllerPort);
 
@@ -868,6 +855,7 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
+#if !defined(VERSION_JP)
     if (input_state->overlayClearFrames > 0) {
         if (input_state->sideIndex == 0) {
             Gfx_DrawRgba16ImageRegion(sBackgroundImage, 200, 129, 351, 83);
@@ -876,8 +864,8 @@ void BattleMenu_DrawOrderSelectPanel_MonDetail(BattleOrderInputState* input_stat
         }
         input_state->overlayClearFrames--;
     }
-}
 #endif
+}
 
 /* Draws the trainer name in a controller-colored panel. */
 void BattleMenu_DrawTrainerLabel(BattleOrderInputState* input_state) {
