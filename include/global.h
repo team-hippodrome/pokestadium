@@ -551,8 +551,12 @@ typedef struct TrainerData {
     /* 0x004 */ char name1[12];
     /* 0x010 */ char name2[40];
     /* 0x038 */ u16 gfx_file_index; // Big-endian ROM halfword; high byte indexes battle_portraits, low byte unknown.
+#if defined(VERSION_JP)
+    /* 0x03A */ char unk3A[0x1DE];
+#else
     /* 0x03A */ char unk3A[0x1F6];
-} TrainerData; // size = 0x230
+#endif
+} TrainerData; // size = 0x230 (0x218 in JP)
 
 // GB Emulator State
 typedef struct unk_D_8122B2C0 {

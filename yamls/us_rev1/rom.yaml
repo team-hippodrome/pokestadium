@@ -2367,6 +2367,7 @@
     - [0x3941C0, c,      fragments/battle_prep/battle_prep_394120]
     - [0x397580, c,      fragments/battle_prep/battle_prep_3974E0]
     - [0x397BB0, c,      fragments/battle_prep/battle_prep_397B10]
+    - [0x399900, c,      fragments/battle_prep/battle_prep_399860]
     - [0x39ACF0, c,      fragments/battle_prep/battle_prep_39AC50]
     - [0x39C050, c,      fragments/battle_prep/battle_prep_39BFB0]
     - [0x39EE00, c,      fragments/battle_prep/battle_prep_39ED60]
@@ -2377,6 +2378,7 @@
 
     - [0x3A3CB0, .data,   fragments/battle_prep/battle_prep_394120]
     - [0x3A3DE0, .data,   fragments/battle_prep/battle_prep_397B10]
+    - [0x3A5D70, .data,   fragments/battle_prep/battle_prep_399860]
     - [0x3A5DC0, .data,   fragments/battle_prep/battle_prep_39AC50]
     - [0x3A8DB0, .data,   fragments/battle_prep/battle_prep_39BFB0]
     - [0x3AA530, .data,   fragments/battle_prep/battle_prep_39ED60]
@@ -2387,7 +2389,7 @@
 
     - [0x3AD900, .rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3AD950, .rodata, fragments/battle_prep/battle_prep_3974E0]
-    - [0x3AD960, .rodata, fragments/battle_prep/battle_prep_397B10]
+    - [0x3AD960, .rodata, fragments/battle_prep/battle_prep_399860]
     - [0x3AD990, .rodata, fragments/battle_prep/battle_prep_39AC50]
     - [0x3AD9A0, .rodata, fragments/battle_prep/battle_prep_39BFB0]
     - [0x3AD9C0, .rodata, fragments/battle_prep/battle_prep_39ED60]

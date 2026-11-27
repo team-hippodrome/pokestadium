@@ -851,8 +851,20 @@ static u32 D_84B14B50[] = {
  * undoing the start tilt of 0x5400 (0x53F0 PAL) set in BattlePrepRoster_InitDisplayObjects. Plays sound 0x01100006
  * on frame 0. Returns 0 while flipping, 1 when done.
  */
+// JP has no PAL release, so its timings are constants.
+#if defined(VERSION_JP)
+#define FLIP_IN_DURATION 0x14
+#define FLIP_IN_ROTATION_STEP 0x400
+#define ROSTER_START_ROTATION 0x5400
+#else
+#define FLIP_IN_DURATION duration
+#define FLIP_IN_ROTATION_STEP rotation_step
+#define ROSTER_START_ROTATION start_rotation
+#endif
+
 s32 BattlePrepRoster_FlipInPanelsStep(BattlePrepRoster* roster, s16 frame) {
     s16 i;
+#if !defined(VERSION_JP)
     s16 duration;
     s16 rotation_step;
 
@@ -863,18 +875,19 @@ s32 BattlePrepRoster_FlipInPanelsStep(BattlePrepRoster* roster, s16 frame) {
         duration = 0x14;
         rotation_step = 0x400;
     }
+#endif
 
     if (frame == 0) {
         Audio_PlayCategory11SoundCommand(0x01100006, 0, 0);
     }
 
-    if (duration >= frame) {
+    if (FLIP_IN_DURATION >= frame) {
         for (i = 0; i < 5; i++) {
-            roster->displayObjects[i].rotation.x -= rotation_step;
+            roster->displayObjects[i].rotation.x -= FLIP_IN_ROTATION_STEP;
         }
 
         for (i = 5; i < 10; i++) {
-            roster->displayObjects[i].rotation.x += rotation_step;
+            roster->displayObjects[i].rotation.x += FLIP_IN_ROTATION_STEP;
         }
 
         return 0;
@@ -919,6 +932,7 @@ s32 BattlePrepRoster_VersusLogoStepNTSC(BattlePrepRoster* roster, s16 frame) {
     return 1;
 }
 
+#if !defined(VERSION_JP)
 /**
  * PAL timing of BattlePrepRoster_VersusLogoStepNTSC: frames 0-15 move the logo from z = -80 to z = -650 (38 units
  * per frame), frames 16-31 shake the camera. Plays sound 0x01100007 on frame 0 and 0x01100008 on frame 17. Returns
@@ -945,6 +959,7 @@ s32 BattlePrepRoster_VersusLogoStepPAL(BattlePrepRoster* roster, s16 frame) {
 
     return 1;
 }
+#endif
 
 /**
  * State 3 tick of the versus intro: runs BattlePrepRoster_FlipInPanelsStep from frame 0 and the TV-specific V/S
@@ -954,6 +969,7 @@ s32 BattlePrepRoster_VersusLogoStepPAL(BattlePrepRoster* roster, s16 frame) {
 void BattlePrepRoster_UpdateAnimationStep(BattlePrepRoster* roster) {
     s32 is_done = 1;
 
+#if !defined(VERSION_JP)
     if (osTvType == OS_TV_PAL) {
         if (roster->timer >= 0) {
             is_done = BattlePrepRoster_FlipInPanelsStep(roster, roster->timer) & 1;
@@ -962,7 +978,9 @@ void BattlePrepRoster_UpdateAnimationStep(BattlePrepRoster* roster) {
         if (roster->timer >= 0xD) {
             is_done &= BattlePrepRoster_VersusLogoStepPAL(roster, roster->timer - 0xD);
         }
-    } else {
+    } else
+#endif
+    {
         if (roster->timer >= 0) {
             is_done = BattlePrepRoster_FlipInPanelsStep(roster, roster->timer) & 1;
         }
@@ -1141,28 +1159,32 @@ void BattlePrepRoster_PositionPanelsDouble(BattlePrepRoster* roster) {
  */
 s32 BattlePrepRoster_InitDisplayObjects(BattlePrepRoster* roster, DisplayObject* display_objects) {
     s32 i;
+#if !defined(VERSION_JP)
     s16 start_rotation;
+#endif
 
     if (roster->state == 2) {
         roster->state = 3;
         roster->displayObjects = display_objects;
         roster->timer = 0;
+#if !defined(VERSION_JP)
         if (osTvType == OS_TV_PAL) {
             start_rotation = 0x53F0;
         } else {
             start_rotation = 0x5400;
         }
+#endif
 
         for (i = 0; i < 11; i++) {
             roster->displayObjects[i].node.callbackArg = roster;
         }
 
         for (i = 0; i < 5; i++) {
-            roster->displayObjects[i].rotation.x = start_rotation;
+            roster->displayObjects[i].rotation.x = ROSTER_START_ROTATION;
         }
 
         // clang-format off
-        for (i = 5; i < 10; i++) { roster->displayObjects[i].rotation.x = -start_rotation; }
+        for (i = 5; i < 10; i++) { roster->displayObjects[i].rotation.x = -ROSTER_START_ROTATION; }
         // clang-format on
 
         Model_InitDisplayObject(&roster->displayObjects[0], 1, 0, roster->side0CardGeo);
