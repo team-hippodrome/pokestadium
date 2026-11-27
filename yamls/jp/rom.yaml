@@ -1721,14 +1721,33 @@
     vram: 0x84200000
     subsegments:
     - [0x2D6B40, textbin,   fragments/rental_team_selection/rental_team_selection_header]
-    - [0x2D6B60, asm, fragment61_2D6B60]
+    - [0x2D6B60, asm, fragments/61/fragment61_2D78B0]
+    - [0x2DAA20, asm, fragments/rental_team_selection/rental_team_selection_2DB900]
+    - [0x2DC6F0, asm, fragments/61/fragment61_2DD710]
+    - [0x2DE9B0, asm, fragments/61/fragment61_2DFB60]
+    - [0x2E1990, asm, fragments/rental_team_selection/rental_team_selection_2E2C20]
+    - [0x2E2D00, asm, fragments/rental_team_selection/rental_team_selection_2E4040]
+    - [0x2E4060, asm, fragments/rental_team_selection/rental_team_selection_2E5430]
+
+    - [0x2E71A0, data, fragments/61/fragment61_2D78B0]
     - [0x2E7230, data, fragments/rental_team_selection/rental_team_selection_2DB900]
+    - [0x2E7A40, data, fragments/61/fragment61_2DD710]
     - [0x2E7A70, data, fragments/61/fragment61_2DFB60]
+    - [0x2E7A90, data, fragments/rental_team_selection/rental_team_selection_2E2C20]
     - [0x2E7BA0, data, fragments/rental_team_selection/rental_team_selection_2E4040]
-    - [0x2E8110, rodata, fragments/rental_team_selection/rental_team_selection_2DB900]
-    - {vram: 0x84211D20, type:  bss, name: fragments/61/fragment61_2D78B0}
-    - {vram: 0x8423D5E0, type:  bss, name: fragments/rental_team_selection/rental_team_selection_2DB900}
-    - {vram: 0x8423E760, type:  bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
+    - [0x2E7CF0, data, fragments/rental_team_selection/rental_team_selection_2E5430]
+
+    - [0x2E7D50, rodata, fragments/61/fragment61_2D78B0]
+    - [0x2E80B0, rodata, fragments/rental_team_selection/rental_team_selection_2DB900]
+    - [0x2E8190, rodata, fragments/61/fragment61_2DD710]
+    - [0x2E8290, rodata, fragments/61/fragment61_2DFB60]
+    - [0x2E8340, rodata, fragments/rental_team_selection/rental_team_selection_2E2C20]
+    - [0x2E83F0, rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
+    - [0x2E86D0, rodata, fragments/rental_team_selection/rental_team_selection_2E5430]
+
+    - {vram: 0x84211D20, type: bss, name: fragments/61/fragment61_2D78B0}
+    - {vram: 0x8423D5E0, type: bss, name: fragments/rental_team_selection/rental_team_selection_2DB900}
+    - {vram: 0x8423E760, type: bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
   - name: fragment61_relocs
     type: code
     bss_size: 0x0
