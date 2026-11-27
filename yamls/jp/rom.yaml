@@ -1908,14 +1908,14 @@
     vram: 0x84B00000
     subsegments:
     - [0x394E30, textbin,   fragments/battle_prep/battle_prep_header]
-    - [0x394E50, asm, fragment63_394E50]
+    - [0x394E50, c, fragments/battle_prep/battle_prep_394120]
     - [0x398060, c,      fragments/battle_prep/battle_prep_3974E0]
     - [0x398690, asm, fragment63_398690]
     - [0x39EF90, c, fragments/battle_prep/battle_prep_39ED60]
     - [0x3A0230, c,      fragments/battle_prep/battle_prep_3A0010]
     - [0x3A1FB0, c, fragments/battle_prep/battle_prep_3A1970]
     - [0x3A2270, c,   fragments/battle_prep/battle_prep_3A1C30]
-    - [0x3A41A0, data, fragments/battle_prep/battle_prep_394120]
+    - [0x3A41A0, .data, fragments/battle_prep/battle_prep_394120]
     - [0x3A42D0, data, fragments/battle_prep/battle_prep_397B10]
     - [0x3A62B0, data, fragments/battle_prep/battle_prep_39AC50]
     - [0x3A92A0, data, fragments/battle_prep/battle_prep_39BFB0]
@@ -1924,7 +1924,7 @@
     - [0x3AB640, .data, fragments/battle_prep/battle_prep_3A1970]
     - [0x3ABC90, .data, fragments/battle_prep/battle_prep_3A1C30]
     - [0x3ABE00, data, fragments/battle_prep/battle_prep_data]
-    - [0x3ADF40, rodata, fragments/battle_prep/battle_prep_394120]
+    - [0x3ADF40, .rodata, fragments/battle_prep/battle_prep_394120]
     - [0x3ADF90, .rodata, fragments/battle_prep/battle_prep_3974E0]
     - [0x3ADFA0, rodata, fragments/battle_prep/battle_prep_397B10]
     - [0x3ADFD0, rodata, fragments/battle_prep/battle_prep_39AC50]
@@ -1933,7 +1933,7 @@
     - [0x3AE010, .rodata, fragments/battle_prep/battle_prep_3A0010]
     - [0x3AE050, .rodata, fragments/battle_prep/battle_prep_3A1970]
     - [0x3AE060, .rodata, fragments/battle_prep/battle_prep_3A1C30]
-    - {vram: 0x84B19710, type:  bss, name: fragments/battle_prep/battle_prep_394120}
+    - {vram: 0x84B19710, type:  .bss, name: fragments/battle_prep/battle_prep_394120}
   - name: fragment63_relocs
     type: code
     bss_size: 0x0
