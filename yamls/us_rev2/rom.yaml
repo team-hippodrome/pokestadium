@@ -1286,6 +1286,7 @@
     subsegments:
     - [0x1EAAC0, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
     - [0x1EAAE0, c,         fragments/lab_widget_tree/lab_widget_tree]
+    - [0x1F6800, c,         fragments/lab_widget_tree/lab_widget_tree_menu]
     - [0x1F7A40, .data,     fragments/lab_widget_tree/lab_widget_tree]
     - [0x1F7A70, .rodata,   fragments/lab_widget_tree/lab_widget_tree]
 
