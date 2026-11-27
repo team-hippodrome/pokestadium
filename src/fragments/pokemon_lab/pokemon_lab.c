@@ -16,7 +16,11 @@
 typedef void (*func88000020)(WidgetNode*, s32, s32);
 typedef void (*func8800071C)(unk_func_8800071C*, s32, s32, s32, s32, u8*, u8*, Color_RGBA8, Color_RGBA8);
 typedef void (*func88000830)(unk_func_88000830*, s32, s32, s32, s32, s32, u8**);
+#if defined(VERSION_JP)
+typedef void (*func88000C18)(unk_func_88000C18*, s32, s32, s32, s32, Color_RGBA8, char*);
+#else
 typedef void (*func88000C18)(unk_func_88000C18*, s32, s32, s32, s32, Color_RGBA8);
+#endif
 typedef void (*func88000CC8)(unk_func_88000CC8*, s32, s32, unk_func_88500020*, u8*, u8*, u8*, u8*, u8*,
                              WidgetTextList*);
 typedef void (*func88001CBC)(WidgetMainMenu*, s32);
@@ -2563,9 +2567,17 @@ s32 Lab_DrawLoopAnimWidget(unk_func_88000830* arg0, s32 arg1, s32 arg2) {
     return 0;
 }
 
+#if defined(VERSION_JP)
+void Lab_InitFrameTimerWidget(unk_func_88000C18* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5,
+                              char* label) {
+#else
 void Lab_InitFrameTimerWidget(unk_func_88000C18* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, Color_RGBA8 arg5) {
+#endif
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_88000C18));
 
+#if defined(VERSION_JP)
+    arg0->unk_00.unk_18 = Lab_DrawFrameTimerWidget;
+#endif
     arg0->unk_00.unk_1C = Lab_UpdateFrameTimerWidget;
     arg0->unk_00.unk_24 = Lab_SetFrameTimerState;
     arg0->unk_00.unk_10.unk_00 = arg1;
@@ -2574,6 +2586,9 @@ void Lab_InitFrameTimerWidget(unk_func_88000C18* arg0, s32 arg1, s32 arg2, s32 a
     arg0->unk_00.unk_14.unk_02 = arg4;
 
     arg0->unk_2C = arg5;
+#if defined(VERSION_JP)
+    arg0->label = label;
+#endif
     arg0->unk_30 = -1;
 }
 
@@ -2582,6 +2597,12 @@ void Lab_UpdateFrameTimerWidget(WidgetNode* arg0) {
 
     ptr->unk_30++;
 }
+
+#if defined(VERSION_JP)
+s32 Lab_DrawFrameTimerWidget(UNUSED WidgetNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+    return 0;
+}
+#endif
 
 void Lab_SetFrameTimerState(WidgetMainMenu* arg0, s32 arg1) {
     arg0->unk_00.unk_2A = arg1;
@@ -2619,7 +2640,11 @@ void Lab_UpdateAnimatedIconWidget(WidgetNode* arg0) {
         ptr->unk_48 = (guRandom() & 0x3F) / 3;
     }
 
+#if defined(VERSION_JP)
+    if (ptr->unk_50->unk_30 >= (((ptr->unk_50->unk_40 * 10) / 5) + 3)) {
+#else
     if (ptr->unk_50->unk_30 >= (((ptr->unk_50->unk_40 * 0xF) / 5) + 3)) {
+#endif
         ptr->unk_4C++;
         if (ptr->unk_4C >= 0x10) {
             ptr->unk_4C = 0;
@@ -2658,6 +2683,29 @@ s32 Lab_DrawAnimatedIconWidget(WidgetNode* arg0, s32 arg1, s32 arg2) {
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 }
 
+#if defined(VERSION_JP)
+// Professor's description of each lab machine, indexed by the selected menu item.
+static char* sLabMachineDescriptions[] = {
+    NULL,
+    NULL,
+    NULL,
+    // "Lucky you, getting a Pokémon as a present! Go on, take it."
+    "ポケモンをプレゼントしてもらえる\nとは　うらやましいのう。\nさあ　もっていってくれ。",
+    // "A high-performance PC for Pokémon research, items and sorting boxes."
+    "ポケモンのけんきゅうやどうぐ\nボックスのせいりなどができる\nこうせいのうパソコンじゃ。",
+    // "The Pokémon trade machine. Trade directly with a friend's GB cartridge."
+    "ポケモンこうかんのきかいじゃ。\nともだちのＧＢカートリッジと\nちょくせつこうかんできるぞ。",
+    // "Switches between GB cartridges."
+    "ＧＢカートリッジをきりかえる\nことができるぞ。",
+    // "A machine for looking through your Pokédex in detail. It even shows where Pokémon live."
+    "キミのずかんのなかを　くわしく\nみるきかいじゃ。\nポケモンの　すみかもわかるぞ。",
+};
+
+void Lab_ShowMenuItemDescription(WidgetMainMenu* arg0) {
+    ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
+                                                                    sLabMachineDescriptions[arg0->unk_3C->unk_24]);
+}
+#else
 void Lab_ShowMenuItemDescription(WidgetMainMenu* arg0) {
     u32 var_a3 = 0;
 
@@ -2685,6 +2733,16 @@ void Lab_ShowMenuItemDescription(WidgetMainMenu* arg0) {
     ((func88506074)Memmap_GetFragmentVaddr(WidgetTree_SetTextList))(arg0->unk_34,
                                                                     Text_GetString(NULL, 0, sLabMachineText, var_a3));
 }
+#endif
+
+// Number of GB PC boxes and Pokémon per box (JP Red/Green/Blue have 8 boxes of 30).
+#if defined(VERSION_JP)
+#define LAB_BOX_COUNT 8
+#define LAB_BOX_CAPACITY 30
+#else
+#define LAB_BOX_COUNT 12
+#define LAB_BOX_CAPACITY 20
+#endif
 
 void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, FontContext* arg5,
                        MemoryPool* arg6) {
@@ -2709,15 +2767,15 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
             arg0->unk_50 = 0;
         }
 
-        for (i = 0; i < 12; i++) {
-            if (Deck_GetCount(0x21, arg0->unk_40, i) < 0x14) {
+        for (i = 0; i < LAB_BOX_COUNT; i++) {
+            if (Deck_GetCount(0x21, arg0->unk_40, i) < LAB_BOX_CAPACITY) {
                 arg0->unk_50 = 0;
                 break;
             }
         }
 
-        for (i = 0; i < 12; i++) {
-            if (Deck_GetSaveEntryCount(0x11, i) < 0x14) {
+        for (i = 0; i < LAB_BOX_COUNT; i++) {
+            if (Deck_GetSaveEntryCount(0x11, i) < LAB_BOX_CAPACITY) {
                 arg0->unk_50 = 0;
                 break;
             }
@@ -2765,30 +2823,75 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_s0->unk_00);
 
     sp68 = mem_pool_alloc(arg6, sizeof(unk_func_88509A2C));
+#if defined(VERSION_JP)
+    ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp68, 0xE, 8, GbSave_GetActivePort());
+#else
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp68, 0xE, 8, GbSave_GetActivePort(),
                                                                           Text_GetString(NULL, 0, sIdLabelText, 0));
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&temp_s0->unk_00, &sp68->unk_00.unk_00);
 
     temp_v0_6 = mem_pool_alloc(arg6, sizeof(unk_func_88000C18));
+#if defined(VERSION_JP)
+    Lab_InitFrameTimerWidget(temp_v0_6, 0x36, 0xA0, 0x66, 0x7C, D_8800287C, "パソコン"); // PC
+#else
     Lab_InitFrameTimerWidget(temp_v0_6, 0x36, 0xA0, 0x66, 0x7C, D_8800287C);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_v0_6->unk_00.unk_00);
     arg0->unk_3C->unk_18[arg0->unk_3C->unk_2C] = &temp_v0_6->unk_00;
 
     temp_v0_6 = mem_pool_alloc(arg6, sizeof(unk_func_88000C18));
+#if defined(VERSION_JP)
+    Lab_InitFrameTimerWidget(temp_v0_6, 0x92, 0x6E, 0xC0, 0x98, D_8800287C, "こうかんマシーン"); // Trade Machine
+#else
     Lab_InitFrameTimerWidget(temp_v0_6, 0x92, 0x6E, 0xC0, 0x98, D_8800287C);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_v0_6->unk_00.unk_00);
     arg0->unk_3C->unk_18[arg0->unk_3C->unk_2C + 1] = &temp_v0_6->unk_00;
 
     temp_v0_6 = mem_pool_alloc(arg6, sizeof(unk_func_88000C18));
+#if defined(VERSION_JP)
+    Lab_InitFrameTimerWidget(temp_v0_6, 0x170, 0x9E, 0x7C, 0x60, D_8800287C,
+                             "カセットセレクター"); // Cartridge Selector
+#else
     Lab_InitFrameTimerWidget(temp_v0_6, 0x170, 0x9E, 0x7C, 0x60, D_8800287C);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_v0_6->unk_00.unk_00);
     arg0->unk_3C->unk_18[arg0->unk_3C->unk_2C + 2] = &temp_v0_6->unk_00;
 
     temp_v0_6 = mem_pool_alloc(arg6, sizeof(unk_func_88000C18));
+#if defined(VERSION_JP)
+    Lab_InitFrameTimerWidget(temp_v0_6, 0x1C8, 0xCE, 0x88, 0x70, D_8800287C, "ずかん"); // Pokédex
+#else
     Lab_InitFrameTimerWidget(temp_v0_6, 0x1C8, 0xCE, 0x88, 0x70, D_8800287C);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_2C->unk_00, &temp_v0_6->unk_00.unk_00);
     arg0->unk_3C->unk_18[arg0->unk_3C->unk_2C + 3] = &temp_v0_6->unk_00;
 
+#if defined(VERSION_JP)
+    if (Save_GetSelectedPokemonId() != 0) {
+        sp5C = mem_pool_alloc(arg6, sizeof(WidgetNode));
+        ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(sp5C, sizeof(WidgetNode));
+        // clang-format off
+        sp5C->unk_10.unk_00 = 0x1E4; sp5C->unk_10.unk_02 = 0x34;
+        // clang-format on
+        sp5C->unk_14.unk_00 = 0x4C;
+        sp5C->unk_14.unk_02 = 0x4C;
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp5C);
+
+        arg0->unk_38 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedPanel));
+        ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_38, 0, 0, sp5C->unk_14.unk_00,
+                                                                              sp5C->unk_14.unk_02);
+        arg0->unk_38->unk_00.unk_28 |= 0x200;
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp5C, arg0->unk_38);
+
+        temp_s0 = mem_pool_alloc(arg6, sizeof(WidgetNode));
+        Lab_InitTiledBackgroundWidget(temp_s0, 0, 0);
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_38, temp_s0);
+        tmp3C = arg0->unk_3C;
+        tmp3C->unk_18[3] = &sp5C->unk_00;
+    }
+#else
     if (Save_GetSelectedPokemonId() != 0) {
         temp_s0 = mem_pool_alloc(arg6, sizeof(WidgetNode));
         ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(temp_s0, sizeof(WidgetNode));
@@ -2811,6 +2914,7 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
         tmp3C = arg0->unk_3C;
         tmp3C->unk_18[3] = &temp_s0->unk_00;
     }
+#endif
 
     temp_s0_3 = mem_pool_alloc(arg6, sizeof(WidgetAnimatedFrame));
     ((func88504570)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantC))(temp_s0_3, 0, 0, 0x10, 0x10,
