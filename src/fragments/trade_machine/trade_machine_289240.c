@@ -9,8 +9,29 @@
 #include "src/gfx_rect.h"
 #include "src/memory.h"
 
+// JP boxes hold 30 Pokemon in a 6x5 grid, so the pick panel is larger and sits further left.
+#if defined(VERSION_JP)
+#define PICK_COLUMNS 6
+#define PICK_ROWS 5
+#define PICK_PANEL_X 0x38
+#define PICK_PANEL_W 0x210
+#define PICK_PANEL_H 0x148
+#define PICK_SWIPE_DIST 0x21B
+#define TRADE_BOX_TAB_W 0x30
+#define PICK_SLOT_FONT_SPACING -2
+#else
+#define PICK_COLUMNS 5
+#define PICK_ROWS 4
+#define PICK_PANEL_X 0x64
+#define PICK_PANEL_W 0x1B8
+#define PICK_PANEL_H 0x10C
+#define PICK_SWIPE_DIST 0x1C3
+#define TRADE_BOX_TAB_W 0x24
+#define PICK_SLOT_FONT_SPACING 0
+#endif
+
 typedef struct unk_D_82F20A00 {
-    /* 0x00000 */ u16 unk_00000[3][20][0x640];
+    /* 0x00000 */ u16 unk_00000[60 / TRADE_BOX_CAPACITY][TRADE_BOX_CAPACITY][0x640];
 } unk_D_82F20A00; // size = 0x2EE00
 
 static unk_D_82F144D0 D_82F144D0[2];
@@ -40,7 +61,7 @@ s16 Trade_ReadDeckEntries(unk_D_82F144D0* arg0, s16 arg1) {
 }
 
 u16* Trade_GetPickBufferSlot(u8* arg0, s16 arg1, s16 arg2) {
-    return arg0 + (arg1 * 0xFA00) + (arg2 * 0xC80);
+    return arg0 + (arg1 * (TRADE_BOX_CAPACITY * 0xC80)) + (arg2 * 0xC80);
 }
 
 void Trade_InitPickScreen(s32 arg0, s16 arg1) {
@@ -86,7 +107,7 @@ void Trade_InitPickScreen(s32 arg0, s16 arg1) {
 
     var_s2 = 0;
 
-    for (i = 12; i >= 0; i--) {
+    for (i = TRADE_BOX_COUNT - 1; i >= 0; i--) {
         if (Trade_ReadDeckEntries(temp_s1, i) > 0) {
             temp_s1->unk_0010 = i;
             var_s2++;
@@ -95,14 +116,14 @@ void Trade_InitPickScreen(s32 arg0, s16 arg1) {
         temp_s1->unk_0CA8[i].unk_004 = NULL;
     }
 
-    for (i = temp_s1->unk_0010; i < 13; i++) {
+    for (i = temp_s1->unk_0010; i < TRADE_BOX_COUNT; i++) {
         ptr1 = &temp_s1->unk_0CA8[i];
 
         if (ptr1->unk_000 <= 0) {
             continue;
         }
 
-        for (j = i + 1; j < 13; j++) {
+        for (j = i + 1; j < TRADE_BOX_COUNT; j++) {
             ptr2 = &temp_s1->unk_0CA8[j];
 
             if (ptr2->unk_000 > 0) {
@@ -119,7 +140,7 @@ void Trade_InitPickScreen(s32 arg0, s16 arg1) {
             ptr1++;
         }
 
-        ptr2 = &temp_s1->unk_0CA8[12];
+        ptr2 = &temp_s1->unk_0CA8[TRADE_BOX_COUNT - 1];
         while (ptr2->unk_000 <= 0) {
             ptr2--;
         }
@@ -154,10 +175,10 @@ s32 Trade_IsPickScreenActive(void) {
 void Trade_UpdatePickScreenOpen(unk_D_82F144D0* arg0) {
     arg0->unk_000C--;
 
-    arg0->unk_0004 = 0x64 - ((arg0->unk_000C * -0xDC) / 10);
+    arg0->unk_0004 = PICK_PANEL_X - ((arg0->unk_000C * -(0x140 - PICK_PANEL_X)) / 10);
     arg0->unk_0006 = 0x70 - ((arg0->unk_000C * -0x30) / 10);
-    arg0->unk_0008 = 0x1B8 - ((arg0->unk_000C * 0x1B8) / 10);
-    arg0->unk_000A = 0x10C - ((arg0->unk_000C * 0x10C) / 10);
+    arg0->unk_0008 = PICK_PANEL_W - ((arg0->unk_000C * PICK_PANEL_W) / 10);
+    arg0->unk_000A = PICK_PANEL_H - ((arg0->unk_000C * PICK_PANEL_H) / 10);
 
     if (arg0->unk_000C <= 0) {
         arg0->unk_0000 = 2;
@@ -201,8 +222,8 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
 
     if (temp_v0 & 0x100) {
         arg0->unk_0018++;
-        if (arg0->unk_0018 >= 5) {
-            arg0->unk_0018 = 4;
+        if (arg0->unk_0018 >= PICK_COLUMNS) {
+            arg0->unk_0018 = PICK_COLUMNS - 1;
         }
     }
 
@@ -215,8 +236,8 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
 
     if (temp_v0 & 0x400) {
         arg0->unk_001A++;
-        if (arg0->unk_001A >= 4) {
-            arg0->unk_001A = 3;
+        if (arg0->unk_001A >= PICK_ROWS) {
+            arg0->unk_001A = PICK_ROWS - 1;
         }
     }
 
@@ -226,7 +247,7 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
         return;
     }
 
-    temp_v1_3 = (arg0->unk_001A * 5) + arg0->unk_0018;
+    temp_v1_3 = (arg0->unk_001A * PICK_COLUMNS) + arg0->unk_0018;
     temp_a1 = &arg0->unk_0CA8[arg0->unk_0010].unk_00C[temp_v1_3];
 
     if (BTN_IS_PRESSED(controller, BTN_A) && (temp_v1_3 < arg0->unk_0CA8[arg0->unk_0010].unk_000)) {
@@ -310,9 +331,9 @@ void Trade_UpdatePickScreenInput(unk_D_82F144D0* arg0) {
 void Trade_UpdatePickScreenPageSwipe(unk_D_82F144D0* arg0) {
     arg0->unk_000C--;
     if (arg0->unk_0014 >= 0) {
-        arg0->unk_0004 = ((arg0->unk_000C * 0x1C3) / 10) - 0x15F;
+        arg0->unk_0004 = ((arg0->unk_000C * PICK_SWIPE_DIST) / 10) - (PICK_SWIPE_DIST - PICK_PANEL_X);
     } else {
-        arg0->unk_0004 = 0x227 - ((arg0->unk_000C * 0x1C3) / 10);
+        arg0->unk_0004 = (PICK_PANEL_X + PICK_SWIPE_DIST) - ((arg0->unk_000C * PICK_SWIPE_DIST) / 10);
     }
 
     if (arg0->unk_000C <= 0) {
@@ -321,7 +342,7 @@ void Trade_UpdatePickScreenPageSwipe(unk_D_82F144D0* arg0) {
         arg0->unk_000C = 0;
         arg0->unk_0014 = 0;
         arg0->unk_0016 ^= 1;
-        arg0->unk_0004 = 0x64;
+        arg0->unk_0004 = PICK_PANEL_X;
         TradeCable_SetSequenceTimer(2);
     }
 }
@@ -334,12 +355,14 @@ void Trade_ConfirmPickSelection(unk_D_82F144D0* arg0) {
             if (arg0->unk_0002 != -1) {
                 arg0->unk_0002 = -1;
             }
+#if !defined(VERSION_JP)
             TradeCable_SetSequenceTimer(-1);
+#endif
         }
     } else if (arg0->unk_0020 != 0) {
         arg0->unk_0000 = 5;
         arg0->unk_000C = 0xA;
-        _bcopy(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016, (arg0->unk_001A * 5) + arg0->unk_0018),
+        _bcopy(Trade_GetPickBufferSlot(D_82F20A00, arg0->unk_0016, (arg0->unk_001A * PICK_COLUMNS) + arg0->unk_0018),
                arg0->unk_0028, 0xC80);
     } else {
         arg0->unk_0000 = 2;
@@ -349,10 +372,10 @@ void Trade_ConfirmPickSelection(unk_D_82F144D0* arg0) {
 
 void Trade_UpdatePickScreenClose(unk_D_82F144D0* arg0) {
     arg0->unk_000C--;
-    arg0->unk_0004 = 0x140 - ((arg0->unk_000C * 0xDC) / 10);
+    arg0->unk_0004 = 0x140 - ((arg0->unk_000C * (0x140 - PICK_PANEL_X)) / 10);
     arg0->unk_0006 = 0xA0 - ((arg0->unk_000C * 0x30) / 10);
-    arg0->unk_0008 = (arg0->unk_000C * 0x1B8) / 10;
-    arg0->unk_000A = (arg0->unk_000C * 0x10C) / 10;
+    arg0->unk_0008 = (arg0->unk_000C * PICK_PANEL_W) / 10;
+    arg0->unk_000A = (arg0->unk_000C * PICK_PANEL_H) / 10;
     if (arg0->unk_000C <= 0) {
         arg0->unk_0000 = 0;
         main_pool_pop_state('PICK');
@@ -379,10 +402,15 @@ void Trade_DrawPlayerBanner(s16 arg0, s16 arg1, s16 arg2) {
     static Color_RGB8 D_82F13B94 = { 0x96, 0x64, 0x1E };
 
     Color_RGB8* var_s0;
+#if defined(VERSION_JP)
+    s16 tmp = 0x200;
+    s16 tmp2 = 0x14;
+#else
     char sp64[64];
     s16 tmp = 0x1A8;
     s16 tmp2 = 0x14;
     char* var_v0;
+#endif
 
     if (arg0 == 0) {
         var_s0 = &D_82F13B90;
@@ -411,6 +439,13 @@ void Trade_DrawPlayerBanner(s16 arg0, s16 arg1, s16 arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
 
+#if defined(VERSION_JP)
+    if (arg0 == 0) {
+        Font_Printf(arg1 + 0xEA, arg2 + 4, "てもち");
+    } else {
+        Font_Printf(arg1 + 0xC2, arg2 + 4, "GBボックス%d", arg0);
+    }
+#else
     if (arg0 == 0) {
         var_v0 = Text_GetString(NULL, 0, gTradeStrings, 0xA);
     } else {
@@ -419,6 +454,7 @@ void Trade_DrawPlayerBanner(s16 arg0, s16 arg1, s16 arg2) {
     }
 
     Font_Printf((arg1 - (Font_MeasureTextExtent(0, 0, var_v0) / 2)) + 0xDC, arg2 + 4, var_v0);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -638,31 +674,35 @@ void Trade_DrawBoxTabIcon(s16 arg0, s16 arg1, u8* arg2, s16 arg3) {
         gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
     }
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x24, 0x14, arg2, 0x24, 0);
+    Gfx_DrawTextureRgba16(arg0, arg1, TRADE_BOX_TAB_W, 0x14, arg2, TRADE_BOX_TAB_W, 0);
 }
 
 void Trade_DrawBoxTabBar(unk_D_82F144D0* arg0, s16 arg1, s16 arg2, s32 arg3) {
     static u8* D_82F13BD0[] = {
-        D_3039A10, D_3039FB0, D_303A550, D_303AAF0, D_303B090, D_303B630, D_303BBD0,
-        D_303C170, D_303C710, D_303CCB0, D_303D250, D_303D7F0, D_303DD90,
+        D_3039A10, D_3039FB0, D_303A550, D_303AAF0, D_303B090, D_303B630, D_303BBD0, D_303C170, D_303C710,
+#if !defined(VERSION_JP)
+        D_303CCB0, D_303D250, D_303D7F0, D_303DD90,
+#endif
     };
 
     s32 i;
 
-    Trade_DrawTitleBarStrip(arg1 - 0x10, arg2 - 4, 0x1F4);
+    Trade_DrawTitleBarStrip(arg1 - 0x10, arg2 - 4, (TRADE_BOX_COUNT * TRADE_BOX_TAB_W) + 0x20);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-    for (i = 0; i < 13; i++) {
-        Trade_DrawBoxTabIcon(arg1 + i * 0x24, arg2, D_82F13BD0[i], arg0->unk_0CA8[i].unk_000);
+    for (i = 0; i < TRADE_BOX_COUNT; i++) {
+        Trade_DrawBoxTabIcon(arg1 + i * TRADE_BOX_TAB_W, arg2, D_82F13BD0[i], arg0->unk_0CA8[i].unk_000);
     }
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, 255);
 
     if (arg0->unk_0000 != 3) {
-        Gfx_DrawTextureRgba16((arg1 + (arg0->unk_0010 * 0x24)) - 4, arg2 - 4, 0x2C, 0xE, D_3039070, 0x2C, 0);
-        Gfx_DrawTextureRgba16((arg1 + (arg0->unk_0010 * 0x24)) - 4, arg2 + 0xA, 0x2C, 0xE, D_3039540, 0x2C, 0);
+        Gfx_DrawTextureRgba16((arg1 + (arg0->unk_0010 * TRADE_BOX_TAB_W)) - 4, arg2 - 4, TRADE_BOX_TAB_W + 8, 0xE,
+                              D_3039070, TRADE_BOX_TAB_W + 8, 0);
+        Gfx_DrawTextureRgba16((arg1 + (arg0->unk_0010 * TRADE_BOX_TAB_W)) - 4, arg2 + 0xA, TRADE_BOX_TAB_W + 8, 0xE,
+                              D_3039540, TRADE_BOX_TAB_W + 8, 0);
     }
 
     gDPPipeSync(gDisplayListHead++);
@@ -674,10 +714,20 @@ void Trade_DrawBoxTabBar(unk_D_82F144D0* arg0, s16 arg1, s16 arg2, s32 arg3) {
     }
 
     Gfx_DrawTextureRgba16(arg1 - 0x38, arg2 - 8, 0x30, 0x24, D_3027168, 0x30, 0);
-    Gfx_DrawTextureRgba16(arg1 + 0x1DC, arg2 - 8, 0x30, 0x24, D_3027EE8, 0x30, 0);
+    Gfx_DrawTextureRgba16(arg1 + (TRADE_BOX_COUNT * TRADE_BOX_TAB_W) + 8, arg2 - 8, 0x30, 0x24, D_3027EE8, 0x30, 0);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
+
+#if defined(VERSION_JP)
+#define PORT_INFO_NAME_SPACING -1
+#define PORT_INFO_NUMBER_SPACING -4
+#define PORT_INFO_ID_SPACING -8
+#else
+#define PORT_INFO_NAME_SPACING 0
+#define PORT_INFO_NUMBER_SPACING 0
+#define PORT_INFO_ID_SPACING 0
+#endif
 
 void Trade_DrawPortInfoPanel(s16 arg0, s16 arg1, s16 arg2) {
     static s16 D_82F13C04[] = { 0xDC, 8 };
@@ -716,11 +766,11 @@ void Trade_DrawPortInfoPanel(s16 arg0, s16 arg1, s16 arg2) {
     }
 
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, PORT_INFO_NAME_SPACING);
     Font_Printf(D_82F13C08[arg0] + arg1, arg2 + 0xC, sp40->unk_08);
-    Font_SetActive(4, 0);
+    Font_SetActive(4, PORT_INFO_NUMBER_SPACING);
     Font_Printf(D_82F13C08[arg0] + arg1 + 0x8E, arg2 + 0x14, "%05d", sp40->unk_06);
-    Font_SetActive(4, 0);
+    Font_SetActive(4, PORT_INFO_ID_SPACING);
     Font_Printf(D_82F13C08[arg0] + arg1 + 0x72, arg2 + 0x14, "ID");
     Font_EndTexturedTextRendering();
 }
@@ -754,11 +804,11 @@ void func_82F04604(unk_D_82F144D0* arg0) {
     if (arg0->unk_0000 == 3) {
         spF4 = 2;
         if (arg0->unk_0014 < 0) {
-            spEE = -0x1C3;
+            spEE = -PICK_SWIPE_DIST;
         } else {
-            spEE = 0x1C3;
+            spEE = PICK_SWIPE_DIST;
         }
-        Gfx_SetScissorRect(&gDisplayListHead, 0x60, 0x6C, 0x1C3, 0x117);
+        Gfx_SetScissorRect(&gDisplayListHead, PICK_PANEL_X - 4, 0x6C, PICK_SWIPE_DIST, PICK_PANEL_H + 0xB);
         spE4 = 1;
     } else {
         spF4 = 1;
@@ -783,7 +833,7 @@ void func_82F04604(unk_D_82F144D0* arg0) {
             Trade_DrawPickScreenFrame((s16)(spEE * spF8) + arg0->unk_0004, arg0->unk_0006, arg0->unk_0008,
                                       arg0->unk_000A);
 
-            if ((arg0->unk_0008 == 0x1B8) && (arg0->unk_000A == 0x10C)) {
+            if ((arg0->unk_0008 == PICK_PANEL_W) && (arg0->unk_000A == PICK_PANEL_H)) {
                 unk_func_82F00838_sp30_00C* ptr;
 
                 Trade_DrawPlayerBanner(var_s2, (s16)sp68 + arg0->unk_0004, arg0->unk_0006);
@@ -794,9 +844,9 @@ void func_82F04604(unk_D_82F144D0* arg0) {
                     gSPDisplayList(gDisplayListHead++, D_8006F4C0);
                 }
 
-                for (i = 0; i < 20; i++) {
-                    idx1 = i / 5;
-                    idx2 = i % 5;
+                for (i = 0; i < TRADE_BOX_CAPACITY; i++) {
+                    idx1 = i / PICK_COLUMNS;
+                    idx2 = i % PICK_COLUMNS;
 
                     Trade_DrawPickSlotBackdrop((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58),
                                                arg0->unk_0006 + (idx1 * 0x3C) + 0x1C, spF4 - 1);
@@ -807,8 +857,8 @@ void func_82F04604(unk_D_82F144D0* arg0) {
 
                 for (i = 0; i < sp64->unk_000; i++) {
                     ptr = &sp64->unk_00C[i];
-                    idx1 = i / 5;
-                    idx2 = i % 5;
+                    idx1 = i / PICK_COLUMNS;
+                    idx2 = i % PICK_COLUMNS;
 
                     Gfx_DrawTextureIa8((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 4,
                                        arg0->unk_0006 + (idx1 * 0x3C) + 0x3B, 8, 0xA, D_302F690, 8, 0);
@@ -827,12 +877,12 @@ void func_82F04604(unk_D_82F144D0* arg0) {
 
                 Font_BeginTranslucentTextRendering();
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_SetActive(2, 0);
+                Font_SetActive(2, PICK_SLOT_FONT_SPACING);
 
                 for (i = 0; i < sp64->unk_000; i++) {
                     ptr = &sp64->unk_00C[i];
-                    idx1 = i / 5;
-                    idx2 = i % 5;
+                    idx1 = i / PICK_COLUMNS;
+                    idx2 = i % PICK_COLUMNS;
 
                     if ((ptr->unk_00 <= 0) || (ptr->unk_00 >= 0x98)) {
                         var_v0 = 1;
@@ -855,8 +905,8 @@ void func_82F04604(unk_D_82F144D0* arg0) {
 
                 for (i = 0; i < sp64->unk_000; i++) {
                     ptr = &sp64->unk_00C[i];
-                    idx1 = i / 5;
-                    idx2 = i % 5;
+                    idx1 = i / PICK_COLUMNS;
+                    idx2 = i % PICK_COLUMNS;
 
                     Font_Printf((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 5, arg0->unk_0006 + (idx1 * 0x3C) + 0x46,
                                 ptr->unk_30);
@@ -867,8 +917,8 @@ void func_82F04604(unk_D_82F144D0* arg0) {
                 gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
                 for (i = 0; i < sp64->unk_000; i++) {
-                    idx1 = i / 5;
-                    idx2 = i % 5;
+                    idx1 = i / PICK_COLUMNS;
+                    idx2 = i % PICK_COLUMNS;
 
                     Gfx_DrawTextureRgba16((s16)sp68 + arg0->unk_0004 + (idx2 * 0x58) + 0x2C,
                                           arg0->unk_0006 + (idx1 * 0x3C) + 0x1F, 0x28, 0x28,
@@ -892,7 +942,7 @@ void func_82F04604(unk_D_82F144D0* arg0) {
             sp68 += spEE;
         } while (spF8 < spF4);
 
-    if ((arg0->unk_0008 == 0x1B8) && (arg0->unk_000A == 0x10C)) {
+    if ((arg0->unk_0008 == PICK_PANEL_W) && (arg0->unk_000A == PICK_PANEL_H)) {
         if (spE4 != 0) {
             Gfx_SetScissorRect(&gDisplayListHead, 0, 0, 0x280, 0x1E0);
         }
@@ -903,7 +953,7 @@ void func_82F04604(unk_D_82F144D0* arg0) {
             var_a3 = 0;
         }
 
-        Trade_DrawBoxTabBar(arg0, 0x56, 0x50, var_a3);
+        Trade_DrawBoxTabBar(arg0, (0x280 - (TRADE_BOX_COUNT * TRADE_BOX_TAB_W)) / 2, 0x50, var_a3);
         Trade_DrawPortInfoPanel(D_82F20A04, D_82F13C0C[D_82F20A04], 0x20);
     }
 }
@@ -1012,7 +1062,7 @@ s32 Trade_GetPickScreenSnapshot(s32 arg0, unk_func_82F00838_sp30* arg1) {
         arg1->unk_00 = ptr->unk_0020;
         arg1->unk_02 = ptr->unk_000E;
         arg1->unk_04 = ptr->unk_0010;
-        arg1->unk_06 = (ptr->unk_001A * 5) + ptr->unk_0018;
+        arg1->unk_06 = (ptr->unk_001A * PICK_COLUMNS) + ptr->unk_0018;
         arg1->unk_08 = ptr->unk_0CA8[ptr->unk_0010].unk_000;
         arg1->unk_0C = &ptr->unk_0CA8[ptr->unk_0010].unk_00C;
         ret = 1;
