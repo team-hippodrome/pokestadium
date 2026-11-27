@@ -865,13 +865,11 @@ void Trade_DrawBoxMachineTopBar(unk_D_82F20A40* arg0) {
     }
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// The slot colours of the assembly Trade_DrawBoxMachineSlots (its sp88 and sp84).
-Color_RGB8 D_82F138BC_jp = { 0x1E, 0x1E, 0x82 };
-Color_RGB8 D_82F138C0_jp = { 0x64, 0x1E, 0x1E };
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/trade_machine/trade_machine_28ED00/Trade_DrawBoxMachineSlots.s")
-#else
 void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
+#if defined(VERSION_JP)
+    // JP gives ptr the highest stack home, which puts the colours at sp5C and sp60.
+    unk_D_82F20A40_00E* ptr;
+#endif
     s32 i;
     Color_RGB8* var_v0;
     s32 var_v1;
@@ -883,8 +881,8 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
     Color_RGB8 sp84 = { 0x64, 0x1E, 0x1E };
 #if !defined(VERSION_JP)
     char sp68[28];
-#endif
     unk_D_82F20A40_00E* ptr;
+#endif
 
     for (i = 0; i < 3; i++) {
         ptr = &arg0->unk_0E[i];
@@ -914,6 +912,10 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
 
     for (i = 0; i < 3; i++) {
         var_s2 = NULL;
+#if defined(VERSION_JP)
+        // FAKE: keeps the colour addresses out of saved registers.
+        if (var_s2) {}
+#endif
         if (D_82F20A88[i + 1].unk_002 == -1) {
             continue;
         }
@@ -970,7 +972,6 @@ void Trade_DrawBoxMachineSlots(unk_D_82F20A40* arg0) {
 
     Font_EndTexturedTextRendering();
 }
-#endif
 
 void Trade_DrawBoxMachineTitle(unk_D_82F20A40* arg0) {
     unk_D_82F20A40_00E* temp_s1 = &arg0->unk_26;
