@@ -145,10 +145,6 @@ u16 BattleEffect_ApplyStatStageMultiplier(u16* stat_ptr, u16 base_stat, u8 stat_
 }
 
 /* Apply a sleep duration, checking the sleep clause and the target's recharge state. */
-// JP: register allocation differs; the C below is otherwise equivalent.
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/battle_engine/battle_engine_move_mechanics/BattleEffect_Sleep.s")
-#else
 void BattleEffect_Sleep(void) {
     s32 was_recharging;
     s32 sleep_turns;
@@ -167,11 +163,10 @@ void BattleEffect_Sleep(void) {
 
         if (sBattleTarget->pendingStatusCondition == 0) {
             HandleMoveEffectFlags();
-            if ((sBattleMoveFailed == 0) &&
-                ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) ||
-                 (sBattleMechanicsSetting[0] == 2))) {
-                goto block_9;
-            }
+            // clang-format off
+            // Retail scheduling needs the condition and its goto on one line.
+            if ((sBattleMoveFailed == 0) && ((Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) || (sBattleMechanicsSetting[0] == 2))) { goto block_9; }
+            // clang-format on
         }
         sBattleDamage = 0;
         sBattleMoveFailed = 1;
@@ -203,7 +198,6 @@ block_9:
         BATTLE_QUEUE_MESSAGE1(sBattleMessageQueues->buffer[1], -0x7E, Battle_GetActiveMonNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
-#endif
 
 /* Apply poison or Toxic, or roll the secondary poison chance of a damaging move. */
 void BattleEffect_Poison(void) {
