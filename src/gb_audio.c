@@ -518,6 +518,10 @@ s32 GbMusic_ScheduleNote(u32 arg0, u8 arg1) {
     }
 
     tmp = (D_800FCEC0[arg0] + (sp26 * var_t0));
+#if defined(VERSION_PAL)
+    // PAL runs the GB music 1.2 times slower per frame to keep 60 Hz timing at 50 Hz.
+    tmp = tmp / 1.2f;
+#endif
     D_800FCEC0[arg0] = tmp & 0xFFFF;
     D_800FCD50[arg0] = (tmp & 0xFF00) >> 8;
 

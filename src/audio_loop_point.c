@@ -8,8 +8,8 @@
 #include "src/3D140.h"
 #include "src/audio_commands.h"
 
-static s32 D_800FF9B0;
-static s32 D_800FF9B4;
+s32 D_800FF9B0;
+s32 D_800FF9B4; // music track id last started by Audio_StartMusicTrack
 
 // Interior aliases of sLoopPointTable and D_80078EBC, which IDO addresses separately.
 extern u8 D_80078E83;
