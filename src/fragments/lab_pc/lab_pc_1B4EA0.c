@@ -1708,17 +1708,19 @@ void LabItem_GetSelectedSlotPositions(unk_func_8821421C_02C_06C_02C* arg0, Widge
     }
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// Matches except that IDO computes the final y sum in t0 instead of t9.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/lab_pc/lab_pc_1B4EA0/LabItem_OpenQuantitySpinnerForSelection.s")
-#else
 void LabItem_OpenQuantitySpinnerForSelection(unk_func_8821421C_02C_06C_02C* arg0, s32 arg1) {
     s32 temp_v1_2;
     s32 var_v1;
     unk_func_8820BE14_06C* temp_v1 = arg0->unk_2C[0]->unk_00.unk_2C;
+#if defined(VERSION_JP)
+    u8* entry;
 
+    entry = (u8*)temp_v1->unk_00 + (arg0->unk_2C[0]->unk_00.unk_38 * temp_v1->unk_0C);
+    LabItem_QuantitySpinner_SetMax(arg0->unk_34, entry[1], arg1);
+#else
     LabItem_QuantitySpinner_SetMax(
         arg0->unk_34, ((u8*)temp_v1->unk_00 + (arg0->unk_2C[0]->unk_00.unk_38 * temp_v1->unk_0C))[1], arg1);
+#endif
 
     var_v1 = arg0->unk_2C[0]->unk_5C - arg0->unk_2C[0]->unk_58;
 
@@ -1734,7 +1736,8 @@ void LabItem_OpenQuantitySpinnerForSelection(unk_func_8821421C_02C_06C_02C* arg0
 
 #if defined(VERSION_JP)
     arg0->unk_34->unk_00.unk_10.unk_00 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_00 + 0x98;
-    arg0->unk_34->unk_00.unk_10.unk_02 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_02 + var_v1 & 0xFFFF;
+    temp_v1_2 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_02 + var_v1;
+    arg0->unk_34->unk_00.unk_10.unk_02 = temp_v1_2 & 0xFFFF;
 #else
     arg0->unk_34->unk_00.unk_10.unk_00 =
         0xD3 + (arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_00 - arg0->unk_34->unk_2C->unk_00.unk_14.unk_00);
@@ -1743,7 +1746,6 @@ void LabItem_OpenQuantitySpinnerForSelection(unk_func_8821421C_02C_06C_02C* arg0
 
     LabItem_QuantitySpinner_Open(arg0->unk_34);
 }
-#endif
 
 void LabItem_SetOperationState(unk_func_8821421C_02C_06C_02C* arg0, s32 arg1) {
     switch (arg1) {

@@ -17,6 +17,8 @@
 #include "src/memory.h"
 #include "src/util.h"
 
+// The Japanese release has no gallery code in the main segment, only func_800318F0.
+#if !defined(VERSION_JP)
 typedef struct {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
@@ -1036,6 +1038,8 @@ s32 Gallery_IsPhotoSpeciesValid(unk_D_83403C60* arg0) {
     }
     return v1;
 }
+
+#endif
 
 void func_800318F0(void) {
     func_80036790();

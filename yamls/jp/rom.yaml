@@ -76,7 +76,7 @@
     - [0x2D400, c, gb_save]
     - [0x2ED60, c, lab_item]
     - [0x2EEA0, c, minigame_dispatch]
-    - [0x2F630, asm, gallery]
+    - [0x2F630, c, gallery]
     - [0x2F650, c, vector_math] # vector/matrix math
     - [0x2FE50, c, battle_hud]
     - [0x305F0, c, model_renderer_callbacks]
