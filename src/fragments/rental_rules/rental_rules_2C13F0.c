@@ -41,7 +41,11 @@ s32 RentalRules_SpeciesMatchesCategory(s16 species, s16 ruleset) {
             break;
 
         case RULE_CATEGORY_NINTENDO_CUP_99:
+#if defined(VERSION_JP)
+            eligibility_mask = 4;
+#else
             eligibility_mask = 1;
+#endif
             break;
 
         case RULE_CATEGORY_PETIT_CUP:
@@ -261,6 +265,13 @@ void RentalRules_DrawEligibilityPanelLegend(s16 x, s16 y) {
     Gfx_DrawTextureI4(x, y, 32, 20, ELIGIBILITY_PANEL_LEGEND, 0x20, 0);
 }
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// JP: the C below compiles with a few registers swapped. Its panel colors, as the asm's data.
+s32 D_830038B4_jp = 0x3C3CA000;
+s32 D_830038B8_jp = 0x641E1E00;
+s32 D_830038BC_jp = 0x1E1E6400;
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/rental_rules/rental_rules_2C13F0/RentalRules_DrawSpeciesPage.s")
+#else
 void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node) {
     UNUSED s32 pad;
     s32 i;
@@ -298,16 +309,24 @@ void RentalRules_DrawSpeciesPage(s16 x, s16 y, QualifyingPokemonDisplayRow* node
     Font_BeginTranslucentTextRendering();
     Font_SetActive(4, 0);
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+#if defined(VERSION_JP)
+    if (1) {}
+#endif
 
     for (i = 0; i < 6; i++) {
         species = node->speciesListed[i].species;
         if (species != NULL) {
+#if defined(VERSION_JP)
+            Font_Printf(x + (i * 84) + 2, y + 42, D_8006FF00[species - 1].name);
+#else
             Font_Printf(x + (i * 84) + 2, y + 42, RentalRules_GetPokemonName(species));
+#endif
         }
     }
 
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void RentalRules_QualifyingSpeciesWindowInit(s32 arg0) {
     QualifyingPokemonDisplay* ptr = &sQualifyingSpeciesDisplay;
@@ -381,6 +400,12 @@ void RentalRules_QualifyingSpeciesWindowDraw(void) {
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_Printf(x + 44, y + 8, "あおパネルがエントリーできるポケモン %3dしゅるい", display->eligibleCount);
+        if (1) {}
+#else
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Font_SetActive(8, 0);
         Text_SetNumberToken(3, display->eligibleCount);
@@ -388,6 +413,7 @@ void RentalRules_QualifyingSpeciesWindowDraw(void) {
             char var_sp4C[64];
             Font_Printf(x + 44, y + 8, Text_GetString(var_sp4C, sizeof(var_sp4C), sBattleModeLabels, 3));
         }
+#endif
         Font_EndTexturedTextRendering();
 
         if (display->rowDrawBudget == 0) {
