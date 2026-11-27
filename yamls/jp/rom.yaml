@@ -1736,7 +1736,8 @@
     - [0x3127B0, c, fragments/battle_engine/battle_engine_intro]
     - [0x3132B0, c,      fragments/battle_engine/battle_engine_scene]
     - [0x314D80, c, fragments/battle_engine/battle_engine_status_animation]
-    - [0x315280, asm, fragments/battle_engine/battle_engine_animation_system]
+    - [0x315280, c,      fragments/battle_engine/battle_engine_animation_system]
+    - [0x316F50, c,      fragments/battle_engine/battle_engine_animation_system_camera]
     - [0x3173B0, c,      fragments/battle_engine/battle_engine_particle_system]
     - [0x319D20, c,      fragments/battle_engine/battle_engine_stinger_projectiles]
     - [0x319F70, c,      fragments/battle_engine/battle_engine_particle_renderers]
@@ -1778,8 +1779,7 @@
     - [0x36FB00, .data,   fragments/battle_engine/battle_engine_broll]
     - [0x36FC70, .data, fragments/battle_engine/battle_engine_camera]
     - [0x36FC90, .data, fragments/battle_engine/battle_engine_battle_phases]
-    - [0x36FCD0, data, fragments/battle_engine/battle_engine_battle_phases_36FCD0]
-    - [0x370CC0, data, fragments/battle_engine/battle_engine_animation_system]
+    - [0x36FCD0, .data,   fragments/battle_engine/battle_engine_animation_system]
     - [0x372C10, .data,   fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x3730D0, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x373390, .data,   fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
@@ -1812,7 +1812,7 @@
     - [0x3769C0, .rodata, fragments/battle_engine/battle_engine_battle_phases]
     - [0x376D70, .rodata, fragments/battle_engine/battle_engine_intro]
     - [0x376DA0, .rodata, fragments/battle_engine/battle_engine_scene]
-    - [0x376F10, rodata, fragments/battle_engine/battle_engine_animation_system]
+    - [0x376F10, .rodata, fragments/battle_engine/battle_engine_animation_system]
     - [0x377050, .rodata, fragments/battle_engine/battle_engine_particle_system]
     - [0x377170, .rodata, fragments/battle_engine/battle_engine_tint_and_alpha_effects]
     - [0x3771A0, .rodata, fragments/battle_engine/battle_engine_flame_and_explosion_effects]
@@ -1850,7 +1850,7 @@
     - {vram: 0x84391480, type: .bss, name: fragments/battle_engine/battle_engine_camera}
     - {vram: 0x843914D0, type: .bss, name: fragments/battle_engine/battle_engine_battle_phases}
     - {vram: 0x84391510, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
-    - {vram: 0x84391570, type:  bss, name: fragments/battle_engine/battle_engine_animation_system}
+    - {vram: 0x84391570, type:  .bss, name: fragments/battle_engine/battle_engine_animation_system}
     - {vram: 0x84393390, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
     - {vram: 0x843938B0, type:  .bss, name: fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid}
     - {vram: 0x843988E0, type:  .bss, name: fragments/battle_engine/battle_engine_lasso}

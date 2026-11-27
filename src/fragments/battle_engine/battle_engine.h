@@ -1284,6 +1284,13 @@ extern s16 gBattleAnimDefaultAnchor;
 extern ActivePokemon* gBattleAnimCurrentOwner;
 extern ActivePokemon* gBattleAnimSecondaryOwner;
 extern ActivePokemon* gBattleAnimTertiaryOwner;
+typedef struct unk_D_84392040 {
+    /* 0x00 */ char unk00[0xC];
+    /* 0x0C */ f32 unk_0C;
+    /* 0x10 */ f32 unk_10;
+    /* 0x14 */ char unk14[0x4];
+} unk_D_84392040; // size = 0x18
+
 extern s32 D_843902F4;
 extern s32 D_843902F8;
 extern func_D_84390300 gBattleAnimEffectUpdateFuncs[8];

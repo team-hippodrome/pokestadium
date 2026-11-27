@@ -13,12 +13,14 @@
 
 /*stores particle descriptions*/
 
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040; // size = 0x18
+// JP builds BattleAnim_Initialize and the functions after it as a separate unit
+// (//@src/fragments/battle_engine/battle_engine_animation_system_camera.c), so the
+// state those functions reset is file-scope only outside JP.
+#if defined(VERSION_JP)
+#define ANIM_SYSTEM_STATIC
+#else
+#define ANIM_SYSTEM_STATIC static
+#endif
 
 s32 D_843902A0;
 #include "prevent_bss_reordering.h"
@@ -31,7 +33,7 @@ static s32 sBattleAnimQueuedEffectListMode;
 #define BATTLE_ANIMATION_QUEUE_END 2
 static s32 sD_843902B4;
 static s32 sBattleAnimQueuedEffectList;
-static s32 sD_843902BC;
+ANIM_SYSTEM_STATIC s32 sD_843902BC;
 static s32 sBattleAnimQueuedResourceListPending;
 static s32 sBattleAnimQueuedResourceListId;
 static s32 sBattleAnimQueuedAlternatePending;
@@ -49,16 +51,16 @@ ActivePokemon* gBattleAnimSecondaryOwner;
 ActivePokemon* gBattleAnimTertiaryOwner;
 s32 D_843902F4;
 s32 D_843902F8;
-static s8 sBattleAnimEffectCallbackIndex;
+ANIM_SYSTEM_STATIC s8 sBattleAnimEffectCallbackIndex;
 func_D_84390300 gBattleAnimEffectUpdateFuncs[8];
 func_D_84390320 gBattleAnimEffectDrawFuncs[8];
 s32 D_84390340;
-static f32 sD_84390344;
+ANIM_SYSTEM_STATIC f32 sD_84390344;
 Vec3f D_84390348;
-static Vec3s sD_84390354;
-static Vec3f sD_84390360;
-static Vec3s sD_8439036C;
-static Vec3s sD_84390374;
+ANIM_SYSTEM_STATIC Vec3s sD_84390354;
+ANIM_SYSTEM_STATIC Vec3f sD_84390360;
+ANIM_SYSTEM_STATIC Vec3s sD_8439036C;
+ANIM_SYSTEM_STATIC Vec3s sD_84390374;
 s16 gSavedPrimColorR;
 s16 gSavedPrimColorG;
 s16 gSavedPrimColorB;
@@ -80,18 +82,308 @@ s16 gBlendColorG;
 s16 gBlendColorB;
 s16 gBlendColorA;
 s32 pad_D_843903A8[2];
-static s32 sD_843903B0;
-static s32 sD_843903B4;
+ANIM_SYSTEM_STATIC s32 sD_843903B0;
+ANIM_SYSTEM_STATIC s32 sD_843903B4;
 s32 pad_D_843903B8[6];
 static DisplayObject sD_843903D0[16];
 static s32 sD_84391A50[16];
 static DisplayObject sD_84391A90[4];
 static s32 sD_84392030[4];
-static unk_D_84392040 sD_84392040;
+ANIM_SYSTEM_STATIC unk_D_84392040 sD_84392040;
 f32 D_84392058[26];
 
 static s32 sD_84385BB0[] = { 0, 0, 0, 0 };
 
+#if defined(VERSION_JP)
+// Battle message strings. The other versions load these from text archive files
+// listed in sBattleMessagesTableFileNumbers; JP's battle code reads each entry
+// of gBattleMessageTexts directly.
+static char sBattleMessageText0[] = "%sは だすことの\nできる わざがない！"; // %s has no moves left!
+static char sBattleMessageText1[] = "わざの のこりポイントが　ない！"; // No PP left for this move!
+static char sBattleMessageText2[] = "わざを ふうじられている！"; // The move is disabled!
+static char sBattleMessageText3[] = "たたかう きりょくが ない!"; // No will to fight!
+static char sBattleMessageText4[] = "%sはもうでています"; // %s is already out
+static char sBattleMessageText5[] = "どくの ダメージを うけている!"; // Hurt by poison!
+static char sBattleMessageText6[] = "やけどの ダメージをうけている!"; // Hurt by the burn!
+static char sBattleMessageText7[] = "やどりぎが たいりょくを うばう!"; // Leech Seed saps its health!
+static char sBattleMessageText8[] = "%sは たおれた!"; // %s fainted!
+static char sBattleMessageText9[] = "あいてに %sかい あたった！"; // Hit the enemy %s times!
+static char sBattleMessageText10[] = "ぐうぐう ねむっている"; // Fast asleep
+static char sBattleMessageText11[] = "めをさました！"; // Woke up!
+static char sBattleMessageText12[] = "こおってしまって うごかない！"; // Frozen solid!
+static char sBattleMessageText13[] = "みうごきが とれない！"; // Can't move!
+static char sBattleMessageText14[] = "ひるんだ！"; // Flinched!
+static char sBattleMessageText15[] = "はんどうで うごけない！"; // Must recharge!
+static char sBattleMessageText16[] = "かなしばりが とけた！"; // Disabled no more!
+static char sBattleMessageText17[] = "こんらんが とけた！"; // Snapped out of confusion!
+static char sBattleMessageText18[] = "こんらんしている！"; // Confused!
+static char sBattleMessageText19[] = "じぶんを こうげきした！"; // Hurt itself in its confusion!
+static char sBattleMessageText20[] = "かなしばりで %sがだせない！"; // %s is disabled!
+static char sBattleMessageText21[] = "からだが しびれて うごけない"; // Fully paralyzed! It can't move
+static char sBattleMessageText22[] = "がまんが とかれた!"; // Unleashed energy!
+static char sBattleMessageText23[] = "あばれている"; // Thrashing about
+static char sBattleMessageText24[] = "こうげきは まだ つづいている"; // The attack continues
+static char sBattleMessageText25[] = "%sは %sを つかった！"; // %s used %s!
+static char sBattleMessageText26[] = "%sは %sを した！"; // %s did %s!
+static char sBattleMessageText27[] = "%sは %sを した！"; // %s did %s!
+static char sBattleMessageText28[] = "%sの %s こうげき！"; // %s's %s attack!
+static char sBattleMessageText29[] = "%sの %s!"; // %s's %s!
+static char sBattleMessageText30[] = "ぜんぜんきいてない！"; // It had no effect at all!
+static char sBattleMessageText31[] = "こうげきは はずれた！"; // The attack missed!
+static char sBattleMessageText32[] = "こうかが ない みたいだ"; // It doesn't seem to have any effect
+static char sBattleMessageText33[] = "じめんに ぶつかった！"; // Kept going and crashed!
+static char sBattleMessageText34[] = "きゅうしょに あたった！"; // A critical hit!
+static char sBattleMessageText35[] = "いちげき ひっさつ！"; // One-hit KO!
+static char sBattleMessageText36[] = "いかりの ボルテージが あがっていく!"; // Its rage is building!
+static char sBattleMessageText37[] = "オウムがえしは しっぱいにおわった!"; // Mirror Move failed!
+static char sBattleMessageText38[] = "ゆけっ！ %s"; // Go! %s
+static char sBattleMessageText39[] = "いってこい！ %s"; // Get 'em! %s
+static char sBattleMessageText40[] = "がんばれ！ %s"; // Do your best! %s
+static char sBattleMessageText41[] = "あいてが よわっている！ チャンスだ！"; // The foe is weak! Now's your chance!
+static char sBattleMessageText42[] = "もういい！ もどれ！"; // Enough! Come back!
+static char sBattleMessageText43[] = "もういい！ もどれ！"; // Enough! Come back!
+static char sBattleMessageText44[] = "いいぞ！ もどれ！"; // Good! Come back!
+static char sBattleMessageText45[] = "よくやった！ もどれ！"; // Well done! Come back!
+static char sBattleMessageText46[] = "こうかは ばつぐんだ！"; // It's super effective!
+static char sBattleMessageText47[] = "こうかは いまひとつのようだ"; // It's not very effective
+static char sBattleMessageText48[] = "ぶんしんが こうげきを うけた!"; // The substitute took damage!
+static char sBattleMessageText49[] = "ぶんしんは きえてしまった"; // The substitute faded away
+static char sBattleMessageText50[] = "%sとの\nしょうぶに まけた!"; // Lost the battle\nagainst %s!
+static char sBattleMessageText51[] = "すでに ねむっている"; // Already asleep
+static char sBattleMessageText52[] = "しかし きかなかった！"; // But it had no effect!
+static char sBattleMessageText53[] = "ねむってしまった!"; // Fell asleep!
+static char sBattleMessageText54[] = "きかなかった！"; // It didn't affect it!
+static char sBattleMessageText55[] = "もうどくをあびた!"; // Badly poisoned!
+static char sBattleMessageText56[] = "どくをあびた!"; // Poisoned!
+static char sBattleMessageText57[] = "しかし きかなかった！"; // But it had no effect!
+static char sBattleMessageText58[] = "ゆめを くった!"; // Dream was eaten!
+static char sBattleMessageText59[] = "たいりょくを すいとった!"; // Sucked health!
+static char sBattleMessageText60[] = "こおりが とけた"; // Thawed out
+static char sBattleMessageText61[] = "やけどをおった!"; // Was burned!
+static char sBattleMessageText62[] = "こおりづけになった!"; // Was frozen solid!
+static char sBattleMessageText63[] = "わざが でにくくなった!"; // Moves became harder to use!
+static char sBattleMessageText64[] = "こうげきりょくが ぐーんと あがった!"; // Attack greatly rose!
+static char sBattleMessageText65[] = "ぼうぎょりょくが ぐーんと あがった!"; // Defense greatly rose!
+static char sBattleMessageText66[] = "すばやさが ぐーんと あがった!"; // Speed greatly rose!
+static char sBattleMessageText67[] = "とくしゅのうりょくが ぐーんと あがった!"; // Special greatly rose!
+static char sBattleMessageText68[] = "めいちゅうりつが ぐーんと あがった!"; // Accuracy greatly rose!
+static char sBattleMessageText69[] = "かいひりつが ぐーんと あがった!"; // Evasiveness greatly rose!
+static char sBattleMessageText70[] = "こうげきりょくが あがった!"; // Attack rose!
+static char sBattleMessageText71[] = "ぼうぎょりょくが あがった!"; // Defense rose!
+static char sBattleMessageText72[] = "すばやさが あがった!"; // Speed rose!
+static char sBattleMessageText73[] = "とくしゅのうりょくが あがった!"; // Special rose!
+static char sBattleMessageText74[] = "めいちゅうりつが あがった!"; // Accuracy rose!
+static char sBattleMessageText75[] = "かいひりつが あがった!"; // Evasiveness rose!
+static char sBattleMessageText76[] = "しかし こうかが なかった!"; // But it had no effect!
+static char sBattleMessageText77[] = "こうげきりょくが がくっと さがった!"; // Attack greatly fell!
+static char sBattleMessageText78[] = "ぼうぎょりょくが がくっと さがった!"; // Defense greatly fell!
+static char sBattleMessageText79[] = "すばやさが がくっと さがった!"; // Speed greatly fell!
+static char sBattleMessageText80[] = "とくしゅのうりょくが がくっと さがった!"; // Special greatly fell!
+static char sBattleMessageText81[] = "めいちゅうりつが がくっと さがった!"; // Accuracy greatly fell!
+static char sBattleMessageText82[] = "かいひりつが がくっと さがった!"; // Evasiveness greatly fell!
+static char sBattleMessageText83[] = "こうげきりょくが さがった!"; // Attack fell!
+static char sBattleMessageText84[] = "ぼうぎょりょくが さがった!"; // Defense fell!
+static char sBattleMessageText85[] = "すばやさが さがった!"; // Speed fell!
+static char sBattleMessageText86[] = "とくしゅのうりょくが さがった!"; // Special fell!
+static char sBattleMessageText87[] = "めいちゅうりつが さがった!"; // Accuracy fell!
+static char sBattleMessageText88[] = "かいひりつが さがった!"; // Evasiveness fell!
+static char sBattleMessageText89[] = "しかし こうかが なかった!"; // But it had no effect!
+static char sBattleMessageText90[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText91[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText92[] = "しかし きかなかった!"; // But it had no effect!
+static char sBattleMessageText93[] = "%sは せんとうから\nりだつした"; // %s fled\nfrom the battle
+static char sBattleMessageText94[] = "%sは おじけずいて\nにげだした"; // %s got scared\nand ran away
+static char sBattleMessageText95[] = "ふきとばされた!"; // Was blown away!
+static char sBattleMessageText96[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText97[] = "へいきな かおを している!"; // Looks unbothered!
+static char sBattleMessageText98[] = "くうきが うずを まく!"; // Whipped up a whirlwind!
+static char sBattleMessageText99[] = "ひかりをきゅうしゅうした!"; // Took in sunlight!
+static char sBattleMessageText100[] = "くびを ひっこめた!"; // Tucked in its head!
+static char sBattleMessageText101[] = "はげしい ひかりが つつむ!"; // Is cloaked in a harsh light!
+static char sBattleMessageText102[] = "そらたかく とびあがった!"; // Flew up high!
+static char sBattleMessageText103[] = "あなをほって ちちゅうに もぐった!"; // Dug a hole underground!
+static char sBattleMessageText104[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText105[] = "しろい きりに つつまれた!"; // Shrouded in white mist!
+static char sBattleMessageText106[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText107[] = "はりきっている!"; // Is getting pumped!
+static char sBattleMessageText108[] = "こうげきの はんどうを うけた!"; // Is hit with recoil!
+static char sBattleMessageText109[] = "こんらんした"; // Became confused
+static char sBattleMessageText110[] = "こんらんした!"; // Became confused!
+static char sBattleMessageText111[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText112[] = "まひして わざが　でにくくなった!"; // Paralyzed! Moves may be harder to use!
+static char sBattleMessageText113[] = "しかし　こうかが　なかった!"; // But it had no effect!
+static char sBattleMessageText114[] = "しかし きかなかった!"; // But it had no effect!
+static char sBattleMessageText115[] = "%sをおぼえた!"; // Learned %s!
+static char sBattleMessageText116[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText117[] = "たねを うえつけた!"; // Planted a seed!
+static char sBattleMessageText118[] = "こうげきを かわした!"; // Evaded the attack!
+static char sBattleMessageText119[] = "しかし なにもおこらない"; // But nothing happened
+static char sBattleMessageText120[] = "%sを ふうじこめた!"; // %s was sealed off!
+static char sBattleMessageText121[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText122[] = "こばんが あたりに ちらばった!"; // Coins scattered everywhere!
+static char sBattleMessageText123[] = "ぞくせいを じぶんに はりつけた!"; // Converted its type to its own!
+static char sBattleMessageText124[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText125[] = "ステータスが もとに もどった!"; // All stat changes were eliminated!
+static char sBattleMessageText126[] = "けんこうになって ねむりはじめた!"; // Regained health and fell asleep!
+static char sBattleMessageText127[] = "ねむりはじめた!"; // Fell asleep!
+static char sBattleMessageText128[] = "たいりょくを かいふくした!"; // Regained health!
+static char sBattleMessageText129[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText130[] = "%sに へんしんした!"; // Transformed into %s!
+static char sBattleMessageText131[] = "しかし うまく きまらなかった!"; // But it failed!
+// Message 139 is defined ahead of 132-138, which places its text earlier in .data.
+static char sBattleMessageText139[] = "メタモンにはへんしんできなかった"; // Can't transform into Ditto
+static char sBattleMessageText132[] = "とくしゅこうげきに つよくなった!"; // Became stronger against special attacks!
+static char sBattleMessageText133[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText134[] = "だげきこうげきに つよくなった!"; // Became stronger against physical attacks!
+static char sBattleMessageText135[] = "しかし うまく きまらなかった!"; // But it failed!
+static char sBattleMessageText136[] = "みがわりは すでに でていた!"; // A substitute is already out!
+static char sBattleMessageText137[] = "たいりょくが たりなかった!"; // Too weak to make a substitute!
+static char sBattleMessageText138[] = "ぶんしんが あらわれた"; // A substitute appeared
+
+char* gBattleMessageTexts[] = {
+    sBattleMessageText0,
+    sBattleMessageText1,
+    sBattleMessageText2,
+    sBattleMessageText3,
+    sBattleMessageText4,
+    sBattleMessageText5,
+    sBattleMessageText6,
+    sBattleMessageText7,
+    sBattleMessageText8,
+    sBattleMessageText9,
+    sBattleMessageText10,
+    sBattleMessageText11,
+    sBattleMessageText12,
+    sBattleMessageText13,
+    sBattleMessageText14,
+    sBattleMessageText15,
+    sBattleMessageText16,
+    sBattleMessageText17,
+    sBattleMessageText18,
+    sBattleMessageText19,
+    sBattleMessageText20,
+    sBattleMessageText21,
+    sBattleMessageText22,
+    sBattleMessageText23,
+    sBattleMessageText24,
+    sBattleMessageText25,
+    sBattleMessageText26,
+    sBattleMessageText27,
+    sBattleMessageText28,
+    sBattleMessageText29,
+    sBattleMessageText30,
+    sBattleMessageText31,
+    sBattleMessageText32,
+    sBattleMessageText33,
+    sBattleMessageText34,
+    sBattleMessageText35,
+    sBattleMessageText36,
+    sBattleMessageText37,
+    sBattleMessageText38,
+    sBattleMessageText39,
+    sBattleMessageText40,
+    sBattleMessageText41,
+    sBattleMessageText42,
+    sBattleMessageText43,
+    sBattleMessageText44,
+    sBattleMessageText45,
+    sBattleMessageText46,
+    sBattleMessageText47,
+    sBattleMessageText48,
+    sBattleMessageText49,
+    sBattleMessageText50,
+    sBattleMessageText51,
+    sBattleMessageText52,
+    sBattleMessageText53,
+    sBattleMessageText54,
+    sBattleMessageText55,
+    sBattleMessageText56,
+    sBattleMessageText57,
+    sBattleMessageText58,
+    sBattleMessageText59,
+    sBattleMessageText60,
+    sBattleMessageText61,
+    sBattleMessageText62,
+    sBattleMessageText63,
+    sBattleMessageText64,
+    sBattleMessageText65,
+    sBattleMessageText66,
+    sBattleMessageText67,
+    sBattleMessageText68,
+    sBattleMessageText69,
+    sBattleMessageText70,
+    sBattleMessageText71,
+    sBattleMessageText72,
+    sBattleMessageText73,
+    sBattleMessageText74,
+    sBattleMessageText75,
+    sBattleMessageText76,
+    sBattleMessageText77,
+    sBattleMessageText78,
+    sBattleMessageText79,
+    sBattleMessageText80,
+    sBattleMessageText81,
+    sBattleMessageText82,
+    sBattleMessageText83,
+    sBattleMessageText84,
+    sBattleMessageText85,
+    sBattleMessageText86,
+    sBattleMessageText87,
+    sBattleMessageText88,
+    sBattleMessageText89,
+    sBattleMessageText90,
+    sBattleMessageText91,
+    sBattleMessageText92,
+    sBattleMessageText93,
+    sBattleMessageText94,
+    sBattleMessageText95,
+    sBattleMessageText96,
+    sBattleMessageText97,
+    sBattleMessageText98,
+    sBattleMessageText99,
+    sBattleMessageText100,
+    sBattleMessageText101,
+    sBattleMessageText102,
+    sBattleMessageText103,
+    sBattleMessageText104,
+    sBattleMessageText105,
+    sBattleMessageText106,
+    sBattleMessageText107,
+    sBattleMessageText108,
+    sBattleMessageText109,
+    sBattleMessageText110,
+    sBattleMessageText111,
+    sBattleMessageText112,
+    sBattleMessageText113,
+    sBattleMessageText114,
+    sBattleMessageText115,
+    sBattleMessageText116,
+    sBattleMessageText117,
+    sBattleMessageText118,
+    sBattleMessageText119,
+    sBattleMessageText120,
+    sBattleMessageText121,
+    sBattleMessageText122,
+    sBattleMessageText123,
+    sBattleMessageText124,
+    sBattleMessageText125,
+    sBattleMessageText126,
+    sBattleMessageText127,
+    sBattleMessageText128,
+    sBattleMessageText129,
+    sBattleMessageText130,
+    sBattleMessageText131,
+    sBattleMessageText132,
+    sBattleMessageText133,
+    sBattleMessageText134,
+    sBattleMessageText135,
+    sBattleMessageText136,
+    sBattleMessageText137,
+    sBattleMessageText138,
+    sBattleMessageText139,
+    NULL,
+};
+#else
 u32 sBattleMessagesTableFileNumbers[] = {
     0x00000005, 0x00000006, 0x00000007, 0x00000008, 0x00000009, 0x0000000A, 0x0000000B, 0x0000000C,
     0x0000000D, 0x0000000E, 0x0000000F, 0x00000010, 0x00000011, 0x00000012, 0x00000013, 0x00000014,
@@ -100,6 +392,7 @@ u32 sBattleMessagesTableFileNumbers[] = {
     0x00000029, 0x0000002A, 0x0000002B, 0x0000002C, 0x0000002D, 0x0000002E, 0x0000002F, 0x00000030,
     0x00000031, 0x00000032, 0x00000033, 0x00000034, 0x00000035, 0x00000036, 0x00000000, 0x00000000,
 };
+#endif
 
 Vtx D_84385C80[] = {
     VTX(-64, -63, 0, 0, 2016, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -5315,112 +5608,6 @@ s32 BattleAnim_DispatchPresentation(s32 arg0, CameraNode* arg1) {
     return 0;
 }
 
-void BattleAnim_Initialize(void) {
-    BattleAnim_InitParticleSystem();
-    BattleAnim_Reset();
-}
-
-void BattleAnim_Reset(void) {
-    s32 i;
-
-    gBattleAnimCurrentOwner = NULL;
-    sD_843902BC = 0;
-    sParticleRenderContext.scale.x = 1.0f;
-    sParticleRenderContext.scale.y = 1.0f;
-    sParticleRenderContext.scale.z = 1.0f;
-    D_843902F4 = 0;
-    sD_84392040.unk_0C = 1.0f;
-    sD_84392040.unk_10 = 1.0f;
-    sBattleAnimEffectCallbackIndex = 0;
-
-    for (i = 0; i < 8; i++) {
-        gBattleAnimEffectUpdateFuncs[i] = NULL;
-        gBattleAnimEffectDrawFuncs[i] = NULL;
-    }
-
-    gSavedPrimColorR = 0xFF;
-    gSavedPrimColorG = 0xFF;
-    gSavedPrimColorB = 0xFF;
-    gPrimColorA = 0xFF;
-    gPrimColorR = 0xFF;
-    gPrimColorG = 0xFF;
-    gPrimColorB = 0xFF;
-    gEnvColorR = 0xFF;
-    gEnvColorG = 0xFF;
-    gEnvColorB = 0x64;
-    gFogColorR = 0;
-    gFogColorG = 0;
-    gFogColorB = 0;
-    sD_84390344 = 1.0f;
-
-    Vec3f_SetComponentsDuplicate(&sD_84390360, 0.0f, 0.0f, 0.0f);
-    Vec3s_SetComponents(&sD_8439036C, 0, 0, 0);
-    Vec3s_SetComponents(&sD_84390374, 0, 0, 0);
-    Vec3f_SetComponentsDuplicate(&D_84390348, 0.0f, 0.0f, 0.0f);
-    Vec3s_SetComponents(&sD_84390354, 0, 0, 0);
-    BattleAnim_ResetAssetTable();
-    BattleAnim_ResetDisplayContexts();
-    sD_843903B0 = 0;
-    sD_843903B4 = 0;
-    BattleAnim_EnableEffectSpawning();
-}
-
-void BattleAnim_GetPointAlongCameraRay(Vec3f* arg0, f32 arg1) {
-    arg0->x = sParticleCameraState->eyePosition.x + (arg1 * sParticleCameraState->lookDirection.x);
-    arg0->y = sParticleCameraState->eyePosition.y + (arg1 * sParticleCameraState->lookDirection.y);
-    arg0->z = sParticleCameraState->eyePosition.z + (arg1 * sParticleCameraState->lookDirection.z);
-}
-
-void BattleAnim_GetCameraEyeAngles(s16* arg0, s16* arg1) {
-    CameraNode* temp_v0 = BattleAnim_GetCameraContext();
-    f32 sp20 = temp_v0->view.eyePosition.x - temp_v0->view.targetPosition.x;
-    f32 sp1C = temp_v0->view.eyePosition.y - temp_v0->view.targetPosition.y;
-    f32 sp18 = temp_v0->view.eyePosition.z - temp_v0->view.targetPosition.z;
-
-    *arg0 = MathUtil_Atan2s(sqrtf(SQ(sp20) + SQ(sp18)), sp1C);
-    *arg1 = MathUtil_Atan2s(sp18, sp20);
-}
-
-void BattleAnim_GetCameraEyeYaw(s16* arg0) {
-    CameraNode* temp_v0 = BattleAnim_GetCameraContext();
-    f32 x = temp_v0->view.eyePosition.x - temp_v0->view.targetPosition.x;
-    f32 z = temp_v0->view.eyePosition.z - temp_v0->view.targetPosition.z;
-
-    *arg0 = MathUtil_Atan2s(z, x);
-}
-
-void BattleAnim_GetCameraLookAngles(s16* arg0, s16* arg1) {
-    CameraNode* temp_v0 = BattleAnim_GetCameraContext();
-    f32 sp20 = temp_v0->view.targetPosition.x - temp_v0->view.eyePosition.x;
-    f32 sp1C = temp_v0->view.targetPosition.y - temp_v0->view.eyePosition.y;
-    f32 sp18 = temp_v0->view.targetPosition.z - temp_v0->view.eyePosition.z;
-
-    *arg0 = MathUtil_Atan2s(sqrtf(SQ(sp20) + SQ(sp18)), sp1C);
-    *arg1 = MathUtil_Atan2s(sp18, sp20);
-}
-
-void BattleAnim_GetCameraLookYaw(s16* arg0) {
-    CameraNode* temp_v0 = BattleAnim_GetCameraContext();
-    f32 x = temp_v0->view.targetPosition.x - temp_v0->view.eyePosition.x;
-    f32 z = temp_v0->view.targetPosition.z - temp_v0->view.eyePosition.z;
-
-    *arg0 = MathUtil_Atan2s(z, x);
-}
-
-void BattleAnim_GetCameraStoredAngles76(s16* arg0, s16* arg1) {
-    *arg0 = sParticleCameraState->unk_76;
-    *arg1 = sParticleCameraState->unk_78;
-}
-
-void BattleAnim_GetCameraStoredYaw78(s16* arg0) {
-    *arg0 = sParticleCameraState->unk_78;
-}
-
-void BattleAnim_GetCameraStoredAngles70(s16* arg0, s16* arg1) {
-    *arg0 = sParticleCameraState->unk_70;
-    *arg1 = sParticleCameraState->unk_72;
-}
-
-void BattleAnim_GetCameraStoredYaw72(s16* arg0) {
-    *arg0 = sParticleCameraState->unk_72;
-}
+#if !defined(VERSION_JP)
+#include "battle_engine_animation_system_camera.inc.c"
+#endif
