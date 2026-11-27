@@ -583,7 +583,7 @@ s32 BattlePrep_ShowRoundIntro(void) {
 #if !defined(VERSION_JP)
 /**
  * In round 2 mode 6 at modeSelection 3 (session flag 0x2 clear), if every roster Pokémon passes the
- * unk_52 limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
+ * rentalInfo limits and a brought Pikachu (species 25) lacks Surf (move 57), sets transitionFlags 0x1000.
  */
 void BattlePrep_CheckPikachuNeedsSurf(void) {
     s32 i;
@@ -597,10 +597,10 @@ void BattlePrep_CheckPikachuNeedsSurf(void) {
         roster_info = trainer_roster->rosterInfo;
 
         for (i = 0; i < roster_info->numberOfPokemonCanBePicked; i++) {
-            s32 unk_52_high = (roster_info->battleMon[i].unk_52 & 0x70) >> 4;
-            s32 unk_52_low = roster_info->battleMon[i].unk_52 & 0xF;
+            s32 rental_group = (roster_info->battleMon[i].rentalInfo & 0x70) >> 4;
+            s32 rental_entry = roster_info->battleMon[i].rentalInfo & 0xF;
 
-            if ((unk_52_high >= 4) || (unk_52_low >= 13)) {
+            if ((rental_group >= 4) || (rental_entry >= 13)) {
                 return;
             }
         }

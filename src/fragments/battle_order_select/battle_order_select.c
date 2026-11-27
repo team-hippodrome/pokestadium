@@ -25,13 +25,6 @@
 #define ORDER_SELECT_STAR "*"
 #endif
 
-// The cup with a total level cap: JP's Nintendo Cup is the 97 one.
-#if defined(VERSION_JP)
-#define LEVEL_CAP_CUP RULE_CATEGORY_NINTENDO_CUP_97
-#else
-#define LEVEL_CAP_CUP RULE_CATEGORY_NINTENDO_CUP_99
-#endif
-
 static TeamOrderState sTeamOrderStates[2];
 static BinArchive* sBackgroundArchive;
 static void* sBackgroundImage;

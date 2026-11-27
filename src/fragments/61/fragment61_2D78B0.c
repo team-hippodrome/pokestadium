@@ -23,11 +23,13 @@
 BinArchive* D_84211B30;
 void* D_84211B34;
 RentalRoster* D_84211B38;
+#if !defined(VERSION_JP)
 char** sRentalSelectPokemonNames;
 char** sRentalSelectMoveNames;
 char** sRentalSelectTypeNames;
 char** sTeamEntryText;
 char** sRentalSelectDetailText;
+#endif
 RentalTeamTray D_84211B50;
 RentalCarouselState D_842168A0;
 unk_D_84229EB0 D_84229EB0;
@@ -42,6 +44,28 @@ u8 D_84210D4C[] = {
     0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0F,
 };
 
+#if defined(VERSION_JP)
+// Screen titles, one per TeamSelection_DrawFrame mode.
+static char* sFrameTitles[] = {
+    "エントリーポケモンのせんたく",
+    "ポケモンをとうろくする",
+    "とうろくしたポケモンをみる",
+    "とうろくしたポケモンをけす",
+};
+
+// A trainer name buffer. Without a Game Boy cartridge, the default name is copied in as one block.
+typedef struct TrainerNameBuffer {
+    char str[11];
+} TrainerNameBuffer;
+#define TRAINER_NAME_BUFFER(buf) TrainerNameBuffer buf
+#define TRAINER_NAME_STR(buf) ((buf).str)
+#define COPY_DEFAULT_TRAINER_NAME(buf) ((buf) = *(TrainerNameBuffer*)"トレーナー")
+#else
+#define TRAINER_NAME_BUFFER(buf) char buf[16]
+#define TRAINER_NAME_STR(buf) (buf)
+#define COPY_DEFAULT_TRAINER_NAME(buf) HAL_Strcpy(buf, Text_GetPlayerLabel(1))
+#endif
+
 s32 TeamSelection_CheckCartRemoved(s32 arg0) {
     u32 temp_a0 = osSetIntMask(1);
 
@@ -53,6 +77,7 @@ s32 TeamSelection_CheckCartRemoved(s32 arg0) {
     return arg0;
 }
 
+#if !defined(VERSION_JP)
 char* TeamSelection_GetTextFromSetA(s32 arg0) {
     return Text_GetString(NULL, 0, sRentalSelectPokemonNames, arg0 - 1);
 }
@@ -76,6 +101,7 @@ char* TeamSelection_GetInstructionText(s32 arg0) {
 char* TeamSelection_FormatText(char* arg0, s32 arg1, s32 arg2) {
     return Text_GetString(arg0, arg1, sTeamEntryText, arg2);
 }
+#endif
 
 void TeamSelection_DrawCornerFrame(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -304,9 +330,16 @@ void TeamSelection_DrawGradientPanel(s16 arg0, s16 arg1, s16 arg2, Color_RGBA8* 
 }
 
 void TeamSelection_DrawTitleHeader(void) {
+#if defined(VERSION_JP)
+    static char* D_84210D70[] = {
+        "フリーバトル",       "ポケモンスタジアム", "ポケモンスタジアム", "ポケモンスタジアム", "ポケモンスタジアム",
+        "ポケモンスタジアム", "ポケモンスタジアム", "ジムリーダーのしろ", "ミュウツーをたおせ",
+    };
+#else
     static s32 D_84210D70[] = {
         0x3B, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0x3C, 0x3D, 0x3E,
     };
+#endif
 
     Color_RGBA8 sp2C;
     Color_RGBA8 sp28;
@@ -316,11 +349,11 @@ void TeamSelection_DrawTitleHeader(void) {
     TeamSelection_DrawGradientPanel(0x48, 0x28, 0x208, &sp2C, &sp28);
     TeamSelection_DrawHeaderBackdrop(0x30, 0x20);
     Font_BeginTranslucentTextRendering();
-    Font_SetActive(0x10, 0);
+    Font_SetActive(0x10, LETTER_SPACING(-2));
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
-    Font_Printf(0x6A, 0x2C, TeamSelection_GetLabelText(D_84210D70[gSessionContext.mode]));
+    Font_Printf(0x6A, 0x2C, LABEL_TEXT(D_84210D70[gSessionContext.mode], D_84210D70[gSessionContext.mode]));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
-    Font_Printf(0x68, 0x2A, TeamSelection_GetLabelText(D_84210D70[gSessionContext.mode]));
+    Font_Printf(0x68, 0x2A, LABEL_TEXT(D_84210D70[gSessionContext.mode], D_84210D70[gSessionContext.mode]));
     Font_EndTexturedTextRendering();
 }
 
@@ -334,6 +367,13 @@ void TeamSelection_DrawCategoryRow(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
 }
 
 void TeamSelection_DrawCategoryScreen(s16 arg0, s16 arg1, s16 arg2) {
+#if defined(VERSION_JP)
+    static char* sRuleCategoryNames[] = {
+        "なんでもあり",       "ニンテンドウカップ‘９７", "ニンテンドウカップ‘９８", "ニンテンドウカップ‘９９",
+        "ファンシーカップ",   "イエローカップ",          "ウルトラカップ",          "ジムリーダーのしろ",
+        "ミュウツーをたおせ",
+    };
+#endif
     UNUSED s32 pad[2];
     char* sp30;
     s16 temp_a3;
@@ -354,17 +394,31 @@ void TeamSelection_DrawCategoryScreen(s16 arg0, s16 arg1, s16 arg2) {
             TeamSelection_DrawColoredFrame(0x74, 0xA8, 0x198, 0x7C, 0x64, 0x1E, 0x64, 0xFF);
             Ui_DrawAnimatedTextureMarker(0x79, (D_8423D3F8 * 0x1E) + 0xAD);
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -3);
+            Font_Printf(0x7D, 0x8B, "%s のとうろく", sRuleCategoryNames[gSessionContext.ruleCategory]);
+#else
             Font_SetActive(0x10, 0);
             Font_Printf(0x7D, 0x8B, "%s %s", TeamSelection_GetLabelText(gSessionContext.ruleCategory + 0x3F),
                         TeamSelection_GetLabelText(0x48));
-            TeamSelection_DrawCategoryRow(0x6D, 0x81, 0, TeamSelection_GetLabelText(0x49));
-            TeamSelection_DrawCategoryRow(0x6D, 0x81, 1, TeamSelection_GetLabelText(0x4A));
-            TeamSelection_DrawCategoryRow(0x6D, 0x81, 2, TeamSelection_GetLabelText(0x4B));
-            TeamSelection_DrawCategoryRow(0x6D, 0x81, 3, TeamSelection_GetLabelText(0x4C));
+#endif
+            TeamSelection_DrawCategoryRow(0x6D, 0x81, 0, LABEL_TEXT(0x49, "ポケモンをとうろくする"));
+            TeamSelection_DrawCategoryRow(0x6D, 0x81, 1, LABEL_TEXT(0x4A, "とうろくしたポケモンをみる"));
+            TeamSelection_DrawCategoryRow(0x6D, 0x81, 2, LABEL_TEXT(0x4B, "とうろくしたポケモンをけす"));
+            TeamSelection_DrawCategoryRow(0x6D, 0x81, 3, LABEL_TEXT(0x4C, "やめる"));
+#if defined(VERSION_JP)
+            Font_SetActive(8, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x58, 0x154, "いちど　とうろくしておくと　つぎからは　てがるに");
+            Font_Printf(0x58, 0x16C, "バトルに　さんかすることが　できます。");
+            Font_Printf(0x58, 0x184, "レンタルポケモンも　とうろくすることが　できます。");
+            Font_Printf(0x58, 0x19C, "ここには　１２とおりまでのとうろくが　できます。");
+#else
             Font_SetActive(8, 0);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_SetLineHeight(0x18);
             Font_Printf(0x58, 0x154, Text_GetString(NULL, 0, sTeamEntryText, 0x4D));
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -387,7 +441,7 @@ s32 TeamSelection_HandleConfirmInput(void) {
     s32 sp1C = 'exec';
 
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-        if ((D_8423D3F8 == 0) && (Deck_FindFirstFreeTeamSlot() == 0xA)) {
+        if ((D_8423D3F8 == 0) && (Deck_FindFirstFreeTeamSlot() == REGISTERED_TEAM_SLOTS)) {
             TeamSelection_WaitForConfirm();
         } else {
             if (D_8423D3F8 < 3) {
@@ -487,6 +541,19 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
     }
 
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+    Gfx_SetEnvColor(0, 0, 0, 0xFF);
+
+    Font_Printf(0x6A, 0x2C, sFrameTitles[arg0]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
+    Font_Printf(0x68, 0x2A, sFrameTitles[arg0]);
+
+    if ((arg0 == 0) && (var_t0 != 0)) {
+        Font_SetActive(4, -2);
+        Font_Printf(0x1F9, 0x2F, "のばんです");
+    }
+#else
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
 
@@ -502,6 +569,7 @@ void TeamSelection_DrawFrame(s16 arg0, s16 arg1) {
         Font_Printf(0x1F9, 0x2F, Text_GetString(NULL, 0, sTeamEntryText, 0x4E));
 #endif
     }
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -655,10 +723,18 @@ void TeamSelection_InitializeSlots(void) {
 }
 
 void TeamSelection_InitializeSlot(unk_D_8423D3D8* arg0, s16 arg1) {
-    char sp50[16];
+#if defined(VERSION_JP)
+    u16 var_v1;
+    TRAINER_NAME_BUFFER(sp50);
+    UNUSED s32 pad;
+    UNUSED s32 pad2;
+    GbSavePlayerIdentity sp38;
+#else
+    TRAINER_NAME_BUFFER(sp50);
     UNUSED s32 pad;
     u16 var_v1;
     GbSavePlayerIdentity sp38;
+#endif
 
     if (arg1 == 4) {
         D_84210D44 |= TeamSelection_RegisteredTeam_Initialize(&D_84229EB0, &D_84211B50, &D_842168A0, &D_8423D3A8, 0,
@@ -668,15 +744,15 @@ void TeamSelection_InitializeSlot(unk_D_8423D3D8* arg0, s16 arg1) {
 
     if (arg1 < 4) {
         GbSave_CopyPlayerIdentity(arg1, &sp38);
-        Text_UntranscodeName(sp50, sp38.unk_02);
+        Text_UntranscodeName(TRAINER_NAME_STR(sp50), sp38.unk_02);
         var_v1 = sp38.unk_00;
     } else {
-        HAL_Strcpy(sp50, Text_GetPlayerLabel(1));
+        COPY_DEFAULT_TRAINER_NAME(sp50);
         var_v1 = 0;
     }
 
-    D_84210D44 |=
-        Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, NULL, 0, var_v1, sp50, 0x40, 0x54, arg0->unk_02);
+    D_84210D44 |= Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, NULL, 0, var_v1, TRAINER_NAME_STR(sp50),
+                                      0x40, 0x54, arg0->unk_02);
     D_84210D44 |=
         Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 0, 0x68, 0xE4, arg0->unk_02, arg1, D_84211B38);
 }
@@ -759,7 +835,7 @@ void TeamSelection_ApplySlotSelection(s16 arg0, s16 arg1) {
 
     if (temp_v1->numberOfPokemonBrought != 0) {
         if (arg1 == 4) {
-            TeamSelection_RegisteredTeam_ApplySelection(&D_84229EB0, temp_v1->rosterInfo->battleMon[0].unk_53);
+            TeamSelection_RegisteredTeam_ApplySelection(&D_84229EB0, temp_v1->rosterInfo->battleMon[0].rentalSlot);
         } else {
             Rental_CopyRosterToTeam(&D_84211B50, &temp_v1->rosterInfo->battleMon,
                                     temp_v1->rosterInfo->numberOfPokemonCanBePicked);
@@ -810,7 +886,7 @@ s32 Team_SelectTeams(void) {
                 var_s1 -= 1;
                 while (var_s1 >= 0) {
                     if (D_8423D3D8[var_s1].unk_00 != 0) {
-                        var_s2 = (D_8423D3D8[var_s1].unk_04->pokemonPicked[0].unk_52 & 0x70) >> 4;
+                        var_s2 = (D_8423D3D8[var_s1].unk_04->pokemonPicked[0].rentalInfo & 0x70) >> 4;
                         break;
                     }
                     var_s1--;
@@ -888,7 +964,7 @@ s32 Team_SelectRegisteredTeams(void) {
             if (D_8423D3D8[var_s1].unk_04->numberOfPokemonBrought == 0) {
                 var_s2 = TeamSelection_RunModal(D_8423D3D8[var_s1].unk_02, 0, D_8423D3D8[var_s1].unk_01, 1);
             } else {
-                var_s2 = ((D_8423D3D8[var_s1].unk_04->pokemonPicked[0].unk_52 & 0x70) >> 4);
+                var_s2 = ((D_8423D3D8[var_s1].unk_04->pokemonPicked[0].rentalInfo & 0x70) >> 4);
             }
 
             if (var_s2 < 0) {
@@ -896,7 +972,7 @@ s32 Team_SelectRegisteredTeams(void) {
 
                 while (var_s1 >= 0) {
                     if (D_8423D3D8[var_s1].unk_00 != 0) {
-                        var_s2 = (D_8423D3D8[var_s1].unk_04->pokemonPicked[0].unk_52 & 0x70) >> 4;
+                        var_s2 = (D_8423D3D8[var_s1].unk_04->pokemonPicked[0].rentalInfo & 0x70) >> 4;
                         break;
                     }
                     var_s1--;
@@ -941,10 +1017,18 @@ s32 Team_SelectRegisteredTeams(void) {
 
 void RegisteredTeam_Register(void) {
     unk_D_84229EB0* ptr;
-    char sp74[16];
+#if defined(VERSION_JP)
     s16 temp_v0;
+    TRAINER_NAME_BUFFER(sp74);
+#else
+    TRAINER_NAME_BUFFER(sp74);
+    s16 temp_v0;
+#endif
     u16 var_s1;
     GbSavePlayerIdentity sp60;
+#if defined(VERSION_JP)
+    UNUSED s32 pad;
+#endif
 
     while (true) {
         temp_v0 = TeamSelection_RunModal(0, 1, 0, 1);
@@ -958,17 +1042,18 @@ void RegisteredTeam_Register(void) {
             GbSave_LoadPort(temp_v0);
             GbSave_MarkBoxDataLoaded(temp_v0);
             GbSave_CopyPlayerIdentity(temp_v0, &sp60);
-            Text_UntranscodeName(sp74, sp60.unk_02);
+            Text_UntranscodeName(TRAINER_NAME_STR(sp74), sp60.unk_02);
             var_s1 = sp60.unk_00;
         } else {
-            HAL_Strcpy(sp74, Text_GetPlayerLabel(1));
+            COPY_DEFAULT_TRAINER_NAME(sp74);
             var_s1 = 0;
         }
 
         ptr = &D_84229EB0;
         D_84210D44 |=
             TeamSelection_RegisteredTeam_Initialize(ptr, &D_84211B50, &D_842168A0, &D_8423D3A8, 3, 0x2C, 0xBC, 0);
-        D_84210D44 |= Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, ptr, 1, var_s1, sp74, 0x40, 0x54, 0);
+        D_84210D44 |= Rental_InitTeamTray(&D_84211B50, &D_842168A0, &D_8423D3A8, ptr, 1, var_s1, TRAINER_NAME_STR(sp74),
+                                          0x40, 0x54, 0);
         D_84210D44 |=
             Rental_PrimeCarousel(&D_842168A0, &D_84211B50, &D_8423D3A8, 1, 0x68, 0xE4, 0, temp_v0, D_84211B38);
 
@@ -1132,6 +1217,7 @@ s32 Rental_Main(s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
     PokeIcon_OpenModelArchives();
+#if !defined(VERSION_JP)
     Text_InitStringTables();
 
     sRentalSelectPokemonNames = Text_GetStringTable(0x24);
@@ -1139,6 +1225,7 @@ s32 Rental_Main(s32 arg0, UNUSED s32 arg1) {
     sRentalSelectTypeNames = Text_GetStringTable(0x26);
     sTeamEntryText = Text_GetStringTable(0x1A);
     sRentalSelectDetailText = Text_GetStringTable(6);
+#endif
 
     Save_EnsureBankLoaded(gSessionContext.ruleCategory / 4);
     Save_SetActiveRecordBank(gSessionContext.ruleCategory);

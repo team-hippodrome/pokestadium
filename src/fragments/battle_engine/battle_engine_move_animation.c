@@ -523,11 +523,7 @@ void Battle_LoadAnimationAndMarkMoveIllegality(ActivePokemon* pokemon, s32 mark_
                       ->pokemonPicked[pokemon->state.actionChosen];
 
     rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[species] & 0xFFFFFF);
-#if defined(VERSION_JP)
-    if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_3C & 0x80)) {
-#else
-    if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->unk_52 & 0x80)) {
-#endif
+    if ((pokemon->displayObject.objectType == PIKACHU) && (battle_mon->rentalInfo & 0x80)) {
         rom_address = (u32)_70D3A0_ROM_START + ((u32)D_80075BD0[PARTNER_PIKACHU_CUE_BANK] & 0xFFFFFF);
     }
     transform_end = ((u32)_70D3A0_ROM_START + ((u32)(D_6E910 + (species << 5)) & 0xFFFFFF)) + 0x20;

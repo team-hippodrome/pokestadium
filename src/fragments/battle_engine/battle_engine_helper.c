@@ -28,11 +28,7 @@ BattleMon* BattleScene_GetParticipantSessionMon(ActivePokemon* active_pokemon) {
 s32 BattleScene_IsPartnerPikachu(ActivePokemon* active_pokemon) {
     BattleMon* pokemon = BattleScene_GetParticipantSessionMon(active_pokemon);
 
-#if defined(VERSION_JP)
-    if ((active_pokemon->displayObject.objectType == PIKACHU) && (pokemon->unk_3C & 0x80)) {
-#else
-    if ((active_pokemon->displayObject.objectType == PIKACHU) && (pokemon->unk_52 & 0x80)) {
-#endif
+    if ((active_pokemon->displayObject.objectType == PIKACHU) && (pokemon->rentalInfo & 0x80)) {
         return 1;
     }
     return 0;

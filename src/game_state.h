@@ -60,10 +60,10 @@ typedef struct BattleMon {
     //@src/save_data.c
     //@src/fragments/battle_engine/battle_engine_intro.c
     /* 0x30 */ u8 nickname[12];
-    /* 0x3C */ u8 unk_3C;
+    /* 0x3C */ u8 rentalInfo; // Bit 7: OT is the player; bits 4-6: rental group; bits 0-3: group entry.
     /* 0x3D */ u8 unk_3D[3];
     /* 0x40 */ u8 unk_40[12];
-    /* 0x4C */ u8 unk_4C;
+    /* 0x4C */ u8 rentalSlot;
     /* 0x4D */ u8 unk_4D[3];
 } BattleMon; // size = 0x50
 #else
@@ -71,8 +71,8 @@ typedef struct BattleMon {
     /* 0x3B */ u8 unk_3B[11];
     /* 0x46 */ u8 unk_46[11];
     /* 0x51 */ u8 pad51;
-    /* 0x52 */ u8 unk_52;
-    /* 0x53 */ u8 unk_53;
+    /* 0x52 */ u8 rentalInfo; // Bit 7: OT is the player; bits 4-6: rental group; bits 0-3: group entry.
+    /* 0x53 */ u8 rentalSlot;
 } BattleMon; // size = 0x54
 #endif
 
@@ -164,6 +164,14 @@ typedef struct SessionContext {
 #define RULE_CATEGORY_PRIME_CUP 6
 #define RULE_CATEGORY_GYM_LEADER_CASTLE 7
 #define RULE_CATEGORY_VS_MEWTWO 8
+
+// The cup with a total level cap: JP's Nintendo Cup is the 97 one.
+#if defined(VERSION_JP)
+#define LEVEL_CAP_CUP RULE_CATEGORY_NINTENDO_CUP_97
+#else
+#define LEVEL_CAP_CUP RULE_CATEGORY_NINTENDO_CUP_99
+#endif
+
 #define SESSION_MODE_ANYTHING_GOES 0
 #define SESSION_MODE_NINTENDO_CUP_97 1
 #define SESSION_MODE_NINTENDO_CUP_98 2

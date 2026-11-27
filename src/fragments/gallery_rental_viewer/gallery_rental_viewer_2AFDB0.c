@@ -80,7 +80,7 @@ void Gallery_RentalViewerMarkMatchingPikachu(unk_D_838067F0* arg0, BattleMon* ar
         _bcopy(arg1->unk_46, sp28.unk_14, sizeof(arg1->unk_46));
         sp28.unk_12 = arg1->unk_0E;
         if (GbSave_PlayerIdentityMatches(&sp28.unk_12, &sp28) != 0) {
-            arg1->unk_52 |= 0x80;
+            arg1->rentalInfo |= 0x80;
         }
     }
 }
@@ -145,8 +145,8 @@ s32 Gallery_RentalViewerFillPage(unk_D_838067F0* arg0, unk_D_838067F0_0168* arg1
         arg1->unk_0000[i].unk_002 = arg2 * 3 + i;
         arg1->unk_0000[i].unk_003 = arg1->unk_0000[i].unk_004.species.id;
 
-        arg1->unk_0000[i].unk_004.unk_53 = arg2 * 3 + i;
-        arg1->unk_0000[i].unk_004.unk_52 = (arg0->unk_0018 * 0x10) | arg0->unk_001C;
+        arg1->unk_0000[i].unk_004.rentalSlot = arg2 * 3 + i;
+        arg1->unk_0000[i].unk_004.rentalInfo = (arg0->unk_0018 * 0x10) | arg0->unk_001C;
 
         Gallery_RentalViewerMarkMatchingPikachu(arg0, &arg1->unk_0000[i].unk_004);
     }
@@ -244,7 +244,7 @@ void Gallery_RentalViewerConfirmMonSelect(unk_D_838067F0* arg0) {
     if (temp_a1->species.id != 0) {
         arg0->unk_0000 = 7;
         Gallery_CopyPhotoMonFromBattleMon(&D_83407AC8, temp_a1);
-        if ((temp_a1->species.id == 0x19) && (temp_a1->unk_52 & 0x80)) {
+        if ((temp_a1->species.id == 0x19) && (temp_a1->rentalInfo & 0x80)) {
             D_83407AC8.unk_02 = 0x99;
         }
         Audio_PlaySoundEffectById(0x20);

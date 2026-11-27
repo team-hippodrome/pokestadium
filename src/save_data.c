@@ -188,8 +188,8 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     Pokemon_RecalcStats(arg0);
 
 #if defined(VERSION_JP)
-    arg0->unk_3C = 0;
-    arg0->unk_4C = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_25 = 0;
 
     // Keeps the raw GB trainer name, 3 bytes after each of the two names.
@@ -198,8 +198,8 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     Text_UntranscodeFixedName(arg0->nickname, arg1->unk_21);
     Text_UntranscodeFixedName(arg0->unk_40, arg1->unk_27);
 #else
-    arg0->unk_52 = 0;
-    arg0->unk_53 = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_25 = 0;
 
     _bcopy(arg1->unk_2C, arg0->unk_46, 0xB);
@@ -1013,13 +1013,8 @@ void Session_SaveContinueRecord(SessionContinueData* arg0, BattleMon* arg1, s32 
 
         for (i = 0; i < arg2; i++) {
             GbSave_SaveBattleMonRecord(&arg1[i], &temp_v0->unk_024[i]);
-#if defined(VERSION_JP)
-            temp_v0->unk_16E[i] = arg1[i].unk_3C;
-            temp_v0->unk_174[i] = arg1[i].unk_4C;
-#else
-            temp_v0->unk_16E[i] = arg1[i].unk_52;
-            temp_v0->unk_174[i] = arg1[i].unk_53;
-#endif
+            temp_v0->unk_16E[i] = arg1[i].rentalInfo;
+            temp_v0->unk_174[i] = arg1[i].rentalSlot;
         }
     }
 }
@@ -1038,13 +1033,8 @@ s32 Session_LoadContinueRecord(SessionContinueData* arg0, BattleMon* arg1) {
             if (arg1 != NULL) {
                 for (i = 0; i < var_s5; i++) {
                     GbSave_LoadBattleMonRecord(&arg1[i], &temp_v0->unk_024[i]);
-#if defined(VERSION_JP)
-                    arg1[i].unk_3C = temp_v0->unk_16E[i];
-                    arg1[i].unk_4C = temp_v0->unk_174[i];
-#else
-                    arg1[i].unk_52 = temp_v0->unk_16E[i];
-                    arg1[i].unk_53 = temp_v0->unk_174[i];
-#endif
+                    arg1[i].rentalInfo = temp_v0->unk_16E[i];
+                    arg1[i].rentalSlot = temp_v0->unk_174[i];
                 }
             }
         }

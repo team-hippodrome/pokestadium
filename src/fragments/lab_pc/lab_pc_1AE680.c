@@ -184,8 +184,8 @@ void func_88206110(BattleMon* arg0) {
         arg0->unk_08 = 0xA7;
     }
 
-    arg0->unk_52 = 0;
-    arg0->unk_53 = 0;
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_25 = 0;
 }
 

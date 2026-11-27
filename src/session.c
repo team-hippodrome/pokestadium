@@ -185,13 +185,8 @@ BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2) {
     arg0->pp[2] = 5;
     arg0->pp[3] = 5;
 
-#if defined(VERSION_JP)
-    arg0->unk_3C = 0;
-    arg0->unk_4C = 0;
-#else
-    arg0->unk_52 = 0;
-    arg0->unk_53 = 0;
-#endif
+    arg0->rentalInfo = 0;
+    arg0->rentalSlot = 0;
     arg0->unk_10 = Pokemon_ExpForLevel(arg1, arg2);
 
     Pokemon_RecalcStats(arg0);

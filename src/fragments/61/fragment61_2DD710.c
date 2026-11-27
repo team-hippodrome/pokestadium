@@ -6,6 +6,12 @@
 #include "src/audio_sfx.h"
 #include "src/hal_libc.h"
 
+#if defined(VERSION_JP)
+static char* sTeamSizeTexts[] = {
+    "１ぴきで", "２ひきで", "３びきで", "４ひきで", "５ひきで", "６ぴきで",
+};
+#endif
+
 s16 D_842115B0[] = { 0x78, 0xFC, 0x180, 0x78, 0xFC, 0x180 };
 s16 D_842115BC[] = {
     4, 4, 4, 0x30, 0x30, 0x30,
@@ -29,7 +35,11 @@ void Rental_DrawTeamTrayFrame(RentalTeamTray* arg0, s16 arg1, s16 arg2) {
 
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
+#if defined(VERSION_JP)
+        Gfx_DrawTextureRgba16(arg1 + 0x34, arg2 + 0x32, 0x14, 0x14, D_20068E0, 0x14, 0);
+#else
         Gfx_DrawTextureRgba16(arg1 + 0x32, arg2 + 0x32, 0x14, 0x14, D_20068E0, 0x14, 0);
+#endif
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     } else {
@@ -68,16 +78,20 @@ void Rental_DrawTeamCursor(RentalTeamTray* arg0) {
 }
 
 void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
+#if !defined(VERSION_JP)
     char* temp_v0_10;
     char* temp_v0_4;
     char* temp_v0_5;
     char* temp_v0_6;
     char* temp_v0_7;
     char* temp_v0_8;
+#endif
     s32 i;
     s16 sp42;
     s16 sp40;
+#if !defined(VERSION_JP)
     char* temp_v0_9;
+#endif
 
     if ((arg0->unk_0001 != 1) && (arg0->unk_0001 != 0) && ((arg1 != 0) || (arg0->unk_0003 != 0))) {
         Rental_DrawTeamTrayFrame(arg0, arg0->unk_0018, arg0->unk_001A);
@@ -97,6 +111,32 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
 
         Font_BeginTranslucentTextRendering();
 
+#if defined(VERSION_JP)
+        if (((gSessionContext.ruleCategory == 0) || (gSessionContext.ruleCategory == 8)) && (arg0->unk_0004 != 0) &&
+            (arg0->unk_0006 > 0) && (arg0->unk_0006 < 6)) {
+            Font_SetActive(8, -3);
+            Font_Printf(arg0->unk_0018 + 27, arg0->unk_001A + 8, sTeamSizeTexts[arg0->unk_0006 - 1]);
+            if (arg0->unk_0000 == 0) {
+                Font_Printf(arg0->unk_0018 + 20, arg0->unk_001A + 0x1C, "エントリー");
+            } else {
+                Font_Printf(arg0->unk_0018 + 10, arg0->unk_001A + 0x1C, "とうろくする");
+            }
+            Font_SetActive(4, -3);
+            Font_Printf(arg0->unk_0018 + 16, arg0->unk_001A + 0x46, "スタートボタン");
+        } else {
+            Font_SetActive(4, 0);
+            if (arg0->unk_0000 == 0) {
+                Font_Printf(arg0->unk_0018 + 25, arg0->unk_001A + 9, "エントリー");
+            } else {
+                Font_Printf(arg0->unk_0018 + 10, arg0->unk_001A + 9, "とうろくする");
+            }
+            Font_Printf(arg0->unk_0018 + 25, arg0->unk_001A + 0x1A, "ポケモン");
+            Font_SetActive(8, 0);
+            Font_Printf(arg0->unk_0018 + 12, arg0->unk_001A + 0x2F, arg0->unk_001E);
+            Font_SetActive(4, -4);
+            Font_Printf(arg0->unk_0018 + 12, arg0->unk_001A + 0x46, "ID %05d", arg0->unk_001C);
+        }
+#else
         if (((gSessionContext.ruleCategory == 0) || (gSessionContext.ruleCategory == 8)) && (arg0->unk_0004 != 0) &&
             (arg0->unk_0006 > 0) && (arg0->unk_0006 < 6)) {
             Font_SetActive(8, 0);
@@ -137,6 +177,7 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
             Font_Printf((arg0->unk_0018 - (Font_MeasureTextExtent(4, 0, "ID  00000") / 2)) + 0x3C,
                         arg0->unk_001A + 0x46, "ID  %05d", arg0->unk_001C);
         }
+#endif
         Font_SetActive(4, 0);
 
         for (i = 0; i < 6; i++) {
@@ -148,14 +189,18 @@ void Rental_DrawTeamTray(RentalTeamTray* arg0, s32 arg1) {
             }
         }
 
-        Font_SetActive(4, 0);
+        Font_SetActive(4, LETTER_SPACING(-4));
 
         for (i = 0; i < 6; i++) {
             if (arg0->unk_0030[i].unk_004.species.id != 0) {
                 sp42 = D_842115B0[i] + arg0->unk_0018 + 0x2C;
                 sp40 = D_842115BC[i] + arg0->unk_001A + 0x17;
+#if defined(VERSION_JP)
+                Font_Printf(sp42, sp40, "L%d", arg0->unk_0030[i].unk_004.level);
+#else
                 Font_Printf(sp42, sp40, "%s %d", TeamSelection_GetInstructionText(0x15),
                             arg0->unk_0030[i].unk_004.level);
+#endif
             }
         }
 
@@ -200,7 +245,7 @@ s32 Rental_SaveTeamToDeck(RentalTeamTray* arg0) {
     DeckHandle* temp_s3;
 
     temp_v0 = Deck_FindFirstFreeTeamSlot();
-    if (temp_v0 < 0xA) {
+    if (temp_v0 < REGISTERED_TEAM_SLOTS) {
         temp_s3 = Deck_OpenAndSetName(0x10, 0, temp_v0, arg0->unk_001E, arg0->unk_001E, arg0->unk_001C);
 
         for (i = 0; i < arg0->unk_0006; i++) {
@@ -246,7 +291,7 @@ s32 Rental_CheckTeamLevelCap(RentalTeamTray* arg0) {
             temp_v1 = 0;
             break;
 
-        case 3:
+        case LEVEL_CAP_CUP:
             temp_v1 = (s16)(sp8[0] + sp8[1] + sp8[2]);
             temp_v1 = temp_v1 >= 0x9C;
             break;
@@ -559,7 +604,7 @@ void Rental_HandleLevelCapWarning(RentalTeamTray* arg0) {
     Controller* cont = &gControllers[arg0->unk_0002];
 
     switch (gSessionContext.ruleCategory) {
-        case 3:
+        case LEVEL_CAP_CUP:
             break;
 
         case 4:
@@ -936,9 +981,9 @@ void Rental_CopyRosterToTeam(RentalTeamTray* arg0, BattleMon* arg1, s16 arg2) {
 
         arg0->unk_0030[i].unk_004 = arg1[i];
 
-        arg0->unk_0030[i].unk_000 = (arg1[i].unk_52 & 0x70) >> 4;
-        arg0->unk_0030[i].unk_001 = arg1[i].unk_52 & 0xF;
-        arg0->unk_0030[i].unk_002 = arg1[i].unk_53;
+        arg0->unk_0030[i].unk_000 = (arg1[i].rentalInfo & 0x70) >> 4;
+        arg0->unk_0030[i].unk_001 = arg1[i].rentalInfo & 0xF;
+        arg0->unk_0030[i].unk_002 = arg1[i].rentalSlot;
         arg0->unk_0030[i].unk_003 = arg1[i].species.id;
     }
 }

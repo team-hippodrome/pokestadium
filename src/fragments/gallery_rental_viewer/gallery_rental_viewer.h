@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "src/gallery.h"
+#include "src/save_data.h"
 #include "src/geo_layout.h"
 #include "src/fragments/gallery_backgrounds/gallery_backgrounds.h"
 
@@ -24,6 +25,9 @@ typedef struct unk_D_838067F0_0168_0000 {
         s32 raw;
     };
     /* 0x004 */ BattleMon unk_004;
+#if defined(VERSION_JP)
+    /* 0x054 */ char unk054[0x4];
+#endif
     /* 0x058 */ u16 unk_058[0x640];
 } unk_D_838067F0_0168_0000; // size = 0xCD8
 
@@ -36,11 +40,11 @@ typedef struct unk_D_838067F0_0168 {
     /* 0x2694 */ char unk2694[0x4];
 } unk_D_838067F0_0168; // size = 0x2698
 
+// One GB box (or the party): how many of its Pokémon are usable, and their slots.
 typedef struct unk_D_838067F0_003C {
     /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u8 unk_02[1];
-    /* 0x03 */ char unk03[0x13];
-} unk_D_838067F0_003C; // size = 0x16
+    /* 0x02 */ u8 unk_02[SAVE_BOX_CAPACITY];
+} unk_D_838067F0_003C; // size = 0x16, 0x20 in JP
 
 typedef struct unk_D_838067F0 {
     /* 0x0000 */ s32 unk_0000;
