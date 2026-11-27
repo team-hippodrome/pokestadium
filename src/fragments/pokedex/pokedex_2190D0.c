@@ -17,6 +17,12 @@
 #include "src/stage_loader.h"
 #include "src/pokemon_stats.h"
 
+#if defined(VERSION_JP)
+typedef struct unk_D_88826A88 {
+    /* 0x00 */ char unk_00[0x2E]; // The whole encounter line.
+    /* 0x2E */ s16 unk_5A; // Line width; keeps the western name.
+} unk_D_88826A88; // size = 0x30
+#else
 typedef struct unk_D_88826A88 {
     /* 0x00 */ char unk_00[1]; // unk size
     /* 0x01 */ char unk01[0x2C];
@@ -25,6 +31,7 @@ typedef struct unk_D_88826A88 {
     /* 0x4B */ char unk_4B[15];
     /* 0x5A */ s16 unk_5A;
 } unk_D_88826A88; // size = 0x5C
+#endif
 
 typedef struct unk_D_88826CF0_004 {
     /* 0x00 */ s16 unk_00;
@@ -43,9 +50,15 @@ typedef struct unk_D_88826CF0 {
 } unk_D_88826CF0; // size = 0x24
 
 typedef struct unk_D_88825ECC {
+#if defined(VERSION_JP)
+    /* 0x00 */ char unk_00[10];
+    /* 0x0A */ s16 unk_0E; // Keeps the western name; JP packs the floor names into 10 bytes.
+} unk_D_88825ECC; // size = 0xC
+#else
     /* 0x00 */ char unk_00[14];
     /* 0x0E */ s16 unk_0E;
 } unk_D_88825ECC; // size = 0x10
+#endif
 
 typedef struct unk_D_88826444 {
     /* 0x00 */ s16 unk_00;
@@ -56,8 +69,10 @@ static unk_func_80011B94 D_888269C0;
 static unk_func_80011B94 D_888269E0;
 static unk_func_80011B94 D_88826A00;
 static unk_func_80011B94 D_88826A20;
+#if !defined(VERSION_JP)
 static char** D_88826A3C;
 static s32 pad_D_88826A40;
+#endif
 static GraphNode* D_88826A44;
 static char** D_88826A48;
 static s16 D_88826A4C;
@@ -71,21 +86,32 @@ static char D_88826A60[0x1E];
 static u16 D_88826A7E;
 static s16 D_88826A80;
 static unk_D_88826A88 D_88826A88[6];
+#if defined(VERSION_JP)
+// JP keeps the encounter list width only in D_88826CB2.
+#define AREA_LIST_WIDTH D_88826CB2
+#else
 static s16 D_88826CB0;
+#define AREA_LIST_WIDTH D_88826CB0
+#endif
 static s16 D_88826CB2;
 static s16 D_88826CB4;
 static s16 D_88826CB8[7];
 static s16 D_88826CC6;
+#if !defined(VERSION_JP)
+// Text widths measured by the western build; JP uses fixed label widths.
 static s16 D_88826CC8;
 static s16 D_88826CCA;
 static s16 D_88826CCC;
 static s16 D_88826CCE;
 static s16 D_88826CD0;
+#endif
 static u8* D_88826CD4;
 static f32 D_88826CD8;
 static s32 D_88826CDC;
+#if !defined(VERSION_JP)
 static char* D_88826CE0;
 static char* D_88826CE4;
+#endif
 static Mtx* D_88826CE8;
 static unk_D_88826CF0 D_88826CF0[36];
 
@@ -1881,6 +1907,42 @@ static Gfx D_88825AA8[] = {
     gsSPSetGeometryMode(G_ZBUFFER | G_CULL_BACK | G_LIGHTING),
     gsSPEndDisplayList(),
 };
+#if defined(VERSION_JP)
+// "'s habitat"
+static char sAreaMapHabitatSuffix[] = "のすみか";
+// "Button: GB map"
+static char sAreaMapShowGbMapHint[] = "ボタンでGBマップ";
+// "Button: hide GB map"
+static char sAreaMapHideGbMapHint[] = "ボタンでGBマップをけす";
+// "Habitat unknown"
+static char sAreaMapHabitatUnknown[] = "せいそくちふめい";
+// "Can be fished anywhere with the Old Rod"
+UNUSED static char sAreaMapOldRodAnywhere[] = "ぼろのつりざおでどこでもつれる";
+// "Level"
+static char sAreaMapLevelLabel[] = "レベル";
+static char sAreaMapLevelRangeSeparator[] = "〜";
+// "Rate"
+static char sAreaMapRateLabel[] = "かくりつ";
+// Encounter rate descriptions, indexed by Pokedex_GetCountTier.
+static char sAreaMapRarityLabels[][18] = {
+    // "Might be around"
+    "いるかもしんない",
+    // "Rarely seen"
+    "あまりみかけない",
+    // "Sometimes seen"
+    "たまにみかける　",
+    // "Seen now and then"
+    "ときどきみかける",
+    // "Seen quite often"
+    "けっこうみかける",
+    // "Seen a lot"
+    "たくさんみかける",
+    // "Swarming"
+    "うじゃうじゃいる",
+    // "Always found"
+    "かならずみつかる",
+};
+#else
 static u32 D_88825AE8[] = {
     // のすみか
     0xA4CEA4B9,
@@ -1969,6 +2031,7 @@ static u32 D_88825B60[] = {
     0xA4C4A4AB,
     0xA4EB0000,
 };
+#endif
 static char D_88825BFC[0x24][20] = {
     // １ばんどうろ
     {
@@ -2153,1024 +2216,80 @@ static char D_88825BFC[0x24][20] = {
 };
 static unk_D_88825ECC D_88825ECC[] = {
     // 　２Ｆ
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
+    { { 0xA1, 0xA1, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
     // 　３Ｆ
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB3,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      3 },
+    { { 0xA1, 0xA1, 0xA3, 0xB3, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 3 },
     // Ｂ１Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA3, 0xC2, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
     // エリア１
-    { {
-          0xA5,
-          0xA8,
-          0xA5,
-          0xEA,
-          0xA5,
-          0xA2,
-          0xA3,
-          0xB1,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
+    { { 0xA5, 0xA8, 0xA5, 0xEA, 0xA5, 0xA2, 0xA3, 0xB1, 0x00, 0x00 }, 1 },
     // エリア２
-    { {
-          0xA5,
-          0xA8,
-          0xA5,
-          0xEA,
-          0xA5,
-          0xA2,
-          0xA3,
-          0xB2,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
+    { { 0xA5, 0xA8, 0xA5, 0xEA, 0xA5, 0xA2, 0xA3, 0xB2, 0x00, 0x00 }, 2 },
     // エリア３
-    { {
-          0xA5,
-          0xA8,
-          0xA5,
-          0xEA,
-          0xA5,
-          0xA2,
-          0xA3,
-          0xB3,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      3 },
+    { { 0xA5, 0xA8, 0xA5, 0xEA, 0xA5, 0xA2, 0xA3, 0xB3, 0x00, 0x00 }, 3 },
     // ひろば
-    { {
-          0xA4,
-          0xD2,
-          0xA4,
-          0xED,
-          0xA4,
-          0xD0,
-          0xA1,
-          0xA1,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA4, 0xD2, 0xA4, 0xED, 0xA4, 0xD0, 0xA1, 0xA1, 0x00, 0x00 }, 0 },
     // 　２Ｆ
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
+    { { 0xA1, 0xA1, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
     // Ｂ１Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA3, 0xC2, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
     // 　１Ｆ
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
     // Ｂ２Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA3, 0xC2, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
     // Ｂ１Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      3 },
+    { { 0xA3, 0xC2, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 3 },
     // Ｂ２Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
+    { { 0xA3, 0xC2, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
     // Ｂ３Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB3,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
+    { { 0xA3, 0xC2, 0xA3, 0xB3, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
     // Ｂ４Ｆ
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB4,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA3, 0xC2, 0xA3, 0xB4, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
     // 　１Ｆ
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB3,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
-    { {
-          0xA3,
-          0xC2,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      4 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB2,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB3,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      2 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB4,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      3 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB5,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      4 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB6,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      5 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB7,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      6 },
-    { {
-          0xA1,
-          0xA1,
-          0xA3,
-          0xB1,
-          0xA3,
-          0xC6,
-          0x00,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      1 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
-    { {
-          0x00,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x20,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-          0x00,
-      },
-      0 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
+    { { 0xA3, 0xC2, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0xA3, 0xC2, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0xA1, 0xA1, 0xA3, 0xB3, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
+    { { 0xA3, 0xC2, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 4 },
+    { { 0xA1, 0xA1, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 0 },
+    { { 0xA1, 0xA1, 0xA3, 0xB2, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0xA1, 0xA1, 0xA3, 0xB3, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 2 },
+    { { 0xA1, 0xA1, 0xA3, 0xB4, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 3 },
+    { { 0xA1, 0xA1, 0xA3, 0xB5, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 4 },
+    { { 0xA1, 0xA1, 0xA3, 0xB6, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 5 },
+    { { 0xA1, 0xA1, 0xA3, 0xB7, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 6 },
+    { { 0xA1, 0xA1, 0xA3, 0xB1, 0xA3, 0xC6, 0x00, 0x20, 0x20, 0x00 }, 1 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
+    { { 0x00, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00 }, 0 },
 };
 static Vec3f D_8882627C = { 70.0f, -1020.0f, -390.0f };
 static Vec3f D_88826288 = { 70.0f, 2370.0f, 3260.0f };
@@ -3699,7 +2818,12 @@ void Pokedex_BuildMapLabelsDisplayList(void) {
 
     gSPDisplayList(temp_v0++, D_88825510);
 
+#if defined(VERSION_JP)
+    // JP labels have fixed widths.
+    temp_v0 = func_88805AEC(temp_v0, 0x1E, 0x14, 0x64, 0x10, 2, 1);
+#else
     temp_v0 = func_88805AEC(temp_v0, 0x1E, 0x14, D_88826CC8, 0x10, 2, 1);
+#endif
 
     if (D_88826A54 == 1) {
         if (D_88826CB2 > 0) {
@@ -3711,19 +2835,29 @@ void Pokedex_BuildMapLabelsDisplayList(void) {
         if (D_88826A4C == 0) {
             sp2C = D_8882651C[D_88826A4E] - 1;
             temp_v0 = func_88805AEC(temp_v0, 0xB9, 0xD2, 0x73, 0x10, 2, 1);
-            if ((D_88826A52 == 1) && (sp2C >= 0) && (D_88826A80 == 0) && (D_88826CB0 > 0) && (D_88826CDC != 0)) {
+            if ((D_88826A52 == 1) && (sp2C >= 0) && (D_88826A80 == 0) && (AREA_LIST_WIDTH > 0) && (D_88826CDC != 0)) {
                 temp_v0_2 = (D_88826CF0[sp2C].unk_02 * 0xA) - 0xA;
+#if defined(VERSION_JP)
+                sp42 = 0x8C - (D_88826CB2 / 2);
+                sp40 = 0xB4 - temp_v0_2;
+                sp3E = D_88826CB2 + 0x28;
+#else
                 sp42 = 0x5A - D_88826CCE;
                 sp3E = D_88826CB0 + 0xA;
                 sp40 = 0xB4 - temp_v0_2;
+#endif
                 sp3C = temp_v0_2 + 0x14;
                 temp_v0 = func_88805AEC(temp_v0, sp42, sp40, sp3E, sp3C, 2, 1);
             }
         } else {
             temp_v0 = func_88805AEC(func_88805AEC(temp_v0, 0x4F, 0x2F, 0x97, 0x86, 2, 0), 0x4F, 0xB5, 0x97, 0x10, 2, 1);
         }
+#if defined(VERSION_JP)
+        temp_v0 = func_88805AEC(temp_v0, 0x1E, 0xD2, 0x78, 0x10, 2, 1);
+#else
         temp_v0 = func_88805AEC(temp_v0, 0x50 - (D_88826CCA / 2), 0xD2, D_88826CCA + 0x14, 0x10, 2, 1);
         D_88826CCC = D_88826CCA;
+#endif
     }
 
     gSPDisplayList(temp_v0++, D_88825548);
@@ -3749,7 +2883,7 @@ void Pokedex_BuildMapLabelsDisplayList(void) {
         gDPFillRectangle(temp_v0++, 79, 47, 232, 199);
     }
 
-    if ((D_88826A52 == 1) && (D_88826A80 == 0) && (D_88826CB0 > 0)) {
+    if ((D_88826A52 == 1) && (D_88826A80 == 0) && (AREA_LIST_WIDTH > 0)) {
         gDPFillRectangle(temp_v0++, sp42 - 1, sp40 - 1, sp42 + sp3E + 1, sp40 + sp3C + 1);
     }
 
@@ -3869,6 +3003,138 @@ s32 Pokedex_GetCountTier(s32 arg0) {
     return ret;
 }
 
+#if defined(VERSION_JP)
+// JP builds each encounter line from built-in strings, with widths from strlen.
+s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0) {
+    char* area_name;
+    unk_D_88826CF0_004* temp_s2;
+    s32 temp_s0;
+    char* floor_name;
+    s32 i;
+    s32 spB4;
+    s32 j;
+    s32 idx;
+    s32 temp_s1;
+    s32 temp_s4;
+    s32 var_a1;
+    UNUSED s32 pad; // FAKE: unused stack padding retained for matching.
+
+    area_name = D_88825BFC[D_88826A4E];
+    Pokedex_UpdateAreaMapFrame();
+    GeoRender_AdvanceFrameCounter();
+    BgStage_DrawFrame();
+    Geo_RenderRootNode(D_88826A44);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(1, 0);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Font_Printf(0x23, 0x17, "%s%s", D_88826A60, sAreaMapHabitatSuffix);
+    D_88826CB2 = 0;
+    if (D_88826A54 == 1) {
+        sprintf(D_88826A88[0].unk_00, "%s", sAreaMapHabitatUnknown);
+        D_88826CB2 = (strlen(D_88826A88[0].unk_00) * 5 + 0x1E) & 0xFFF8;
+        Font_Printf(0xAF - (D_88826CB2 / 2), 0x7D, "%s", D_88826A88[0].unk_00);
+    } else {
+        if (D_88826A4C == 0) {
+            temp_s0 = D_8882651C[D_88826A4E];
+            temp_s0--;
+            Font_Printf(0xCB, 0xD5, "%s", sAreaMapShowGbMapHint);
+            if (D_88826A52 == 1) {
+                unk_D_88826CF0* ptr = &D_88826CF0[temp_s0];
+
+                if ((ptr->unk_00 == 1) && (D_88826A80 == 0)) {
+                    s32 tmp = ptr->unk_02;
+                    s32 x;
+
+                    if (tmp > 0) {
+                        for (i = 0; i < tmp; i++) {
+                            temp_s2 = ptr->unk_04[i];
+
+                            temp_s1 = temp_s2->unk_02;
+                            temp_s4 = temp_s2->unk_04;
+
+                            spB4 = Pokedex_GetCountTier(temp_s2->unk_06);
+                            floor_name = D_88825ECC[ptr->unk_18[i]].unk_00;
+                            if (D_88826CC6 == 1) {
+                                if (temp_s1 == temp_s4) {
+                                    if (tmp >= 2) {
+                                        sprintf(D_88826A88[i].unk_00, "%s %s %2d    %s  %d%%  ", floor_name,
+                                                sAreaMapLevelLabel, temp_s1, sAreaMapRateLabel, temp_s2->unk_06);
+                                    } else {
+                                        sprintf(D_88826A88[i].unk_00, "%s %s %d %s  %d%%  ", floor_name,
+                                                sAreaMapLevelLabel, temp_s1, sAreaMapRateLabel, temp_s2->unk_06);
+                                    }
+                                } else if (tmp >= 2) {
+                                    sprintf(D_88826A88[i].unk_00, "%s %s %2d%s%2d %s  %d%%  ", floor_name,
+                                            sAreaMapLevelLabel, temp_s1, sAreaMapLevelRangeSeparator, temp_s4,
+                                            sAreaMapRateLabel, temp_s2->unk_06);
+                                } else {
+                                    sprintf(D_88826A88[i].unk_00, "%s %s %d%s%d %s  %d%%  ", floor_name,
+                                            sAreaMapLevelLabel, temp_s1, sAreaMapLevelRangeSeparator, temp_s4,
+                                            sAreaMapRateLabel, temp_s2->unk_06);
+                                }
+                            } else if (temp_s1 == temp_s4) {
+                                if (tmp >= 2) {
+                                    sprintf(D_88826A88[i].unk_00, "%s %s %2d    %s", floor_name, sAreaMapLevelLabel,
+                                            temp_s1, sAreaMapRarityLabels[spB4]);
+                                } else {
+                                    sprintf(D_88826A88[i].unk_00, "%s %s %d %s", floor_name, sAreaMapLevelLabel,
+                                            temp_s1, sAreaMapRarityLabels[spB4]);
+                                }
+                            } else if (tmp >= 2) {
+                                sprintf(D_88826A88[i].unk_00, "%s %s %2d%s%2d %s", floor_name, sAreaMapLevelLabel,
+                                        temp_s1, sAreaMapLevelRangeSeparator, temp_s4, sAreaMapRarityLabels[spB4]);
+                            } else {
+                                sprintf(D_88826A88[i].unk_00, "%s %s %d%s%d %s", floor_name, sAreaMapLevelLabel,
+                                        temp_s1, sAreaMapLevelRangeSeparator, temp_s4, sAreaMapRarityLabels[spB4]);
+                            }
+
+                            D_88826CB2 = (strlen(D_88826A88[i].unk_00) * 5 + 0x32) & 0xFFF8;
+                            D_88826A88[i].unk_5A = D_88826CB2;
+                        }
+
+                        var_a1 = 0;
+                        for (x = 0; x < 7; x++) {
+                            for (j = 0; j < tmp; j++) {
+                                idx = D_88825ECC[ptr->unk_18[j]].unk_0E;
+
+                                if (idx == x) {
+                                    D_88826CB8[var_a1] = j;
+                                    var_a1 += 1;
+                                    if (var_a1 >= tmp) {
+                                        x = 7;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (D_88826CDC != 0) {
+                            for (i = 0; i < tmp; i++) {
+                                s32 entry = D_88826CB8[i];
+
+                                if (D_88826A88[entry].unk_5A > 0) {
+                                    Font_Printf(0xA0 - (D_88826CB2 / 2), (((i * 0xA) - (tmp * 0xA)) + 0xC3), "%s",
+                                                D_88826A88[entry].unk_00);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Font_Printf(0x65, 0xB8, "%s", sAreaMapHideGbMapHint);
+        }
+
+        if ((D_88826A80 == 0) || (D_88826A4E == D_88826A50)) {
+            Font_Printf(0x54 - strlen(area_name) * 2, 0xD5, "%s", area_name);
+        }
+    }
+
+    D_88826CB4 = D_88826CB2;
+    Font_EndTexturedTextRendering();
+    return 0;
+}
+#else
 s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0) {
     char* spF4;
     s32 i;
@@ -4031,6 +3297,7 @@ s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0) {
     Font_EndTexturedTextRendering();
     return 0;
 }
+#endif
 
 s32 Pokedex_CheckAreaMapExit(void) {
     if ((gPlayer1Controller->buttonPressed & 0x4000) && (D_88826A52 == 0)) {
@@ -4113,12 +3380,19 @@ void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32
         D_88826CF0[i].unk_02 = 0;
     }
 
+#if defined(VERSION_JP)
+    // JP takes the species name from the species table and has no area text table.
+    D_88826A58 = arg0 - 1;
+    sprintf(D_88826A60, "%s", D_8006FF00[D_88826A58].name);
+    main_pool_push_state('MAPV');
+#else
     main_pool_push_state('MAPV');
     D_88826A3C = arg6;
     D_88826A58 = arg0 - 1;
     sprintf(D_88826A60, "%s", arg5);
     D_88826CE0 = Text_GetString(NULL, 0, D_88826A3C, 9);
     D_88826CE4 = Text_GetString(NULL, 0, D_88826A3C, 0x37);
+#endif
 
     D_88826CD4 = main_pool_alloc(0x3200, 0);
     Pokedex_LoadIcon(D_88826CD4, arg0);
@@ -4147,7 +3421,12 @@ void func_88807D04(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, s32 arg3, s32
                     break;
 
                 case 2:
+#if defined(VERSION_JP)
+                    var_v1_2 = D_888224D0[i];
+#else
+                    // The western release reuses the case 1 table here.
                     var_v1_2 = D_888218FC[i];
+#endif
                     break;
 
                 case 3:
