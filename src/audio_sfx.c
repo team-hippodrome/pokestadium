@@ -19,10 +19,16 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
     u32 temp_v0_3;
     s32 sp28;
     f32 sp24;
+#if defined(VERSION_PAL)
+    s32 voice_volume;
+#endif
 
     temp_v0_3 = sfx & 0xFFFF0000;
     sp28 = 0x80;
     sp24 = 0.0f;
+#if defined(VERSION_PAL)
+    voice_volume = 0x80;
+#endif
 
     if (temp_v0_3 == 0x01200000) {
         return Audio_PlayCategory12SoundCommand(sfx, 0, 0);
@@ -145,6 +151,9 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
         case SFX_PAK_LAB_SELECT:
         case SFX_PAK_TOWER_SELECT:
             Audio_PlaySoundEffectById(0x1B);
+#if defined(VERSION_PAL)
+            voice_volume = 0x6A;
+#endif
             break;
 
         case SFX_AREA_CURSOR:
@@ -160,6 +169,12 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
     }
 
     D_80078A30 = Audio_PlaySoundEffect(D_800FC68C, D_800FC688, sfx, sp28, 0x80, -1);
+#if defined(VERSION_PAL)
+    // PAL plays the Game Pak menu selection sounds quieter.
+    if (voice_volume != 0x80) {
+        Audio_QueueVoiceVolume(D_80078A30, voice_volume);
+    }
+#endif
     if (sp24 != 0.0f) {
         Audio_QueueVoiceDetune(D_80078A30, sp24);
     }

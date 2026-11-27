@@ -604,3 +604,36 @@
 -> - {vram: 0x800FD190, type: .bss, name: 3D140}
 - {vram: 0x800FD480, type: bss, name: libnumus/player}
 -> - {vram: 0x800FD480, type: .bss, name: libnumus/player}
+
+# audio_commands_category2 and audio_sfx: built from the shared C. The porter merges the
+# audio_sfx .data and .rodata into the audio_commands_category2 blobs.
+- [0x3A810, asm, audio_commands_category2]
+-> - [0x3A810, c, audio_commands_category2]
+- [0x3D1F0, asm, text_3D1F0]
+-> - [0x3D1F0, c, audio_sfx]
+- [0x793D0, data, audio_commands_category2]
+-> - [0x793D0, .data, audio_commands_category2]
+-> - [0x79560, .data, audio_sfx]
+- [0x7DDA0, rodata, audio_commands_category2]
+-> - [0x7DDA0, .rodata, audio_commands_category2]
+-> - [0x7E010, .rodata, audio_sfx]
+
+# n_synthesizer, gb_audio_render and gb_audio: built from the shared C. PAL links the GB
+# synth and music player right after n_synthesizer, and the porter merges all three texts and
+# the n_resample, n_reverb, n_synthesizer, gb_audio_render and gb_audio .rodata into n_env's.
+- [0x4BA20, asm, libnaudio/n_synthesizer]
+-> - [0x4BA20, c, libnaudio/n_synthesizer]
+-> - [0x4BFC0, c, gb_audio_render]
+-> - [0x4D520, c, gb_audio]
+- [0x7A460, data, gb_audio_render]
+-> - [0x7A460, .data, gb_audio_render]
+- [0x7A860, data, gb_audio]
+-> - [0x7A860, .data, gb_audio]
+- [0x7EC90, rodata, libnaudio/n_env]
+-> - [0x7EC90, rodata, libnaudio/n_env]
+-> - [0x7ED20, .rodata, libnaudio/n_synthesizer]
+-> - [0x7ED30, .rodata, gb_audio_render]
+-> - [0x7ED40, .rodata, gb_audio]
+- {vram: 0x800FD500, type: bss, name: gb_audio_render}
+-> - {vram: 0x800FD500, type: .bss, name: gb_audio_render}
+-> - {vram: 0x800FFF30, type: .bss, name: gb_audio}
