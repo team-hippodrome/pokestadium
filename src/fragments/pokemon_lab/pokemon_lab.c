@@ -2759,11 +2759,6 @@ void Lab_ShowMenuItemDescription(WidgetMainMenu* arg0) {
 #define LAB_BOX_CAPACITY 20
 #endif
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// Matches except one stack slot: the original gives the last widget pointer its own slot (0x54), while
-// this C reuses the panel's slot (0x64).
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/pokemon_lab/pokemon_lab/Lab_BuildMainMenu.s")
-#else
 void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, FontContext* arg5,
                        MemoryPool* arg6) {
     s32 i;
@@ -2776,7 +2771,13 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     unk_func_88000CC8* temp_v0_16;
     unk_func_88509A2C* sp68;
     unk_func_8800071C* temp_v0_2;
+#if defined(VERSION_JP)
+    // JP keeps the loop animation widget in temp_v0_2. The tiled background widget stays in its stack home,
+    // which IDO assigns in declaration order, so it must be the local declared here (sp+0x54).
+    WidgetNode* bgWidget;
+#else
     unk_func_88000830* temp_v0_5;
+#endif
 #if !defined(VERSION_JP)
     WidgetNode* sp5C;
 #endif
@@ -2833,9 +2834,15 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
     Lab_InitDualLayerIconWidget(temp_v0_2, 0xE2, 0x68, 0x40, 0x20, D_88012AB8, D_88013060, D_88002870, D_88002874);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp78->unk_00.unk_00, &temp_v0_2->unk_00.unk_00);
 
+#if defined(VERSION_JP)
+    temp_v0_2 = mem_pool_alloc(arg6, sizeof(unk_func_88000830));
+    Lab_InitLoopAnimWidget((unk_func_88000830*)temp_v0_2, 0xBE, 0x61, 0x14, 0xF, 0x14, D_88013F80);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp78->unk_00.unk_00, &temp_v0_2->unk_00.unk_00);
+#else
     temp_v0_5 = mem_pool_alloc(arg6, sizeof(unk_func_88000830));
     Lab_InitLoopAnimWidget(temp_v0_5, 0xBE, 0x61, 0x14, 0xF, 0x14, D_88013F80);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp78->unk_00.unk_00, &temp_v0_5->unk_00.unk_00);
+#endif
 
     arg0->unk_2C = mem_pool_alloc(arg6, sizeof(WidgetDelayedNode));
     ((func88503118)Memmap_GetFragmentVaddr(WidgetTree_InitDelayedWidget))(&arg0->unk_2C->unk_00, 0, 0, 0x280, 0x1E0);
@@ -2910,9 +2917,9 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
         arg0->unk_38->unk_00.unk_28 |= 0x200;
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp5C, arg0->unk_38);
 
-        temp_s0 = mem_pool_alloc(arg6, sizeof(WidgetNode));
-        Lab_InitTiledBackgroundWidget(temp_s0, 0, 0);
-        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_38, temp_s0);
+        bgWidget = mem_pool_alloc(arg6, sizeof(WidgetNode));
+        Lab_InitTiledBackgroundWidget(bgWidget, 0, 0);
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_38, bgWidget);
         tmp3C = arg0->unk_3C;
         tmp3C->unk_18[3] = &sp5C->unk_00;
     }
@@ -2973,7 +2980,6 @@ void Lab_BuildMainMenu(WidgetMainMenu* arg0, s32 arg1, s32 arg2, s32 arg3, u8* a
                                D_8800EAC0, arg0->unk_34);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&arg0->unk_30->unk_00, &temp_v0_16->unk_00.unk_00);
 }
-#endif
 
 void Lab_SetSelectedMenuItem(WidgetMainMenu* arg0, s32 arg1) {
     ((func8850093C)Memmap_GetFragmentVaddr(WidgetTree_SetStateDefault))(arg0, arg1);
