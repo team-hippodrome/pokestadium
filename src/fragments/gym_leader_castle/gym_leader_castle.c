@@ -39,6 +39,7 @@ static s16 sCurrentHoverNodeIndex;
 #define NODE_TEXT(title, fileNumber, jpTitle, jpTrainerName) title, fileNumber
 #endif
 
+// clang-format off
 static CastleMapNode sCastleMapNodes[] = {
     {
         0x00,      0x00, 154, 390,  118, 362, 96, 278, 48, 70, -32768, 0, 0, 0, 2, { 0x96, 0x64, 0xFF, 0x00 },
@@ -89,6 +90,7 @@ static CastleMapNode sCastleMapNodes[] = {
         D_3008238, NODE_TEXT(-1, 11, " ", "ライバル"), NULL,
     },
 };
+// clang-format on
 
 static s16 sSelectedMapNode = 0;
 static s16 sCursorMoveTimer = 0;
