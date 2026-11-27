@@ -1100,9 +1100,11 @@
     - [0x1CF290, c,      fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1D83D0, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E4F40, c, fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E5730, c, fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E6440, .data,   fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E65D0, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E6940, .data, fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E94C0, .data, fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E94D0, .rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E9640, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - {vram: 0x8831A4C0, type:  .bss, name: fragments/lab_pc_list/lab_pc_list_1CEA00}

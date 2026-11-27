@@ -224,10 +224,12 @@
 - [0x1D8430, asm, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1D8430, c, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1E4FA0, c, fragments/lab_pc_list/lab_pc_list_1E46B0]
+-> - [0x1E5790, c, fragments/lab_pc_list/lab_pc_list_1E4EA0]
 - [0x1E6630, data, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1E6630, .data, fragments/lab_pc_list/lab_pc_list_1D7B40]
 - [0x1E69A0, data, fragments/lab_pc_list/lab_pc_list_1E46B0]
 -> - [0x1E69A0, .data, fragments/lab_pc_list/lab_pc_list_1E46B0]
+-> - [0x1E9520, .data, fragments/lab_pc_list/lab_pc_list_1E4EA0]
 - [0x1E96A0, rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 -> - [0x1E96A0, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 

@@ -73,6 +73,9 @@ typedef struct unk_func_8830867C_034_03C_038_02C {
 
 // Seems to be >= 0x58 in other places?
 typedef struct unk_func_8830867C_02C_144_000 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_jp_00; // Label string, set from a table in LabPCList_InitDeckSlots.
+#endif
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ char unk08[0x4];
@@ -386,7 +389,18 @@ typedef struct unk_func_8830867C_054 {
     /* 0x14 */ WidgetNode* unk_14;
 } unk_func_8830867C_054; // size = 0x18
 
+#if defined(VERSION_JP)
+typedef struct LabPCListSortMenu {
+    /* 0x00 */ char** labels;
+    /* 0x04 */ s32 count;
+} LabPCListSortMenu; // size = 0x8
+extern LabPCListSortMenu D_88318400_jp[];
+#endif
+
 typedef struct unk_func_8830867C_02C_0E4 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_jp_00; // Label string, set from a table in LabPCList_InitDeckSlots.
+#endif
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
@@ -587,8 +601,13 @@ typedef struct unk_func_88316128 {
     /* 0x34 */ u16 unk_34;
     /* 0x36 */ u16 unk_36;
     /* 0x38 */ u8 unk_38;
+#if defined(VERSION_JP)
+    /* 0x39 */ char unk39[0xF];
+    /* 0x48 */ u8 unk_43; // OT name (BattleMon at 0x08)
+#else
     /* 0x39 */ char unk39[0xA];
-    /* 0x43 */ u8 unk_43;
+    /* 0x43 */ u8 unk_43; // OT name (BattleMon at 0x08)
+#endif
 } unk_func_88316128; // size >= 0x44
 
 extern char** sIdLabelText;

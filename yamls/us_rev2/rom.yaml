@@ -1240,9 +1240,11 @@
     - [0x1CEC60, c,      fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1D7DA0, c,      fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E4910, c,      fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E5100, c,      fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E5E10, .data,   fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E5FA0, .data,   fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1E6310, .data,   fragments/lab_pc_list/lab_pc_list_1E46B0]
+    - [0x1E8E90, .data,   fragments/lab_pc_list/lab_pc_list_1E4EA0]
     - [0x1E8EA0, .rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
     - [0x1E9010, .rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
 
