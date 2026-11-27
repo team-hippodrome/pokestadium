@@ -135,7 +135,7 @@ sync_tree() {
             target_file="${line#* and }"
             target_file="${target_file% differ}"
             mkdir -p "$(dirname "$target_file")"
-            cp -p "$source_file" "$target_file"
+            cp --preserve=mode,timestamps "$source_file" "$target_file"
             ;;
         "Only in ${source_dir}"*)
             source_parent="${line#Only in }"
@@ -145,10 +145,10 @@ sync_tree() {
             target_file="$target_dir/$relative"
             if [ -d "$source_file" ]; then
                 mkdir -p "$target_file"
-                cp -pR "$source_file/." "$target_file/"
+                cp -R --preserve=mode,timestamps "$source_file/." "$target_file/"
             else
                 mkdir -p "$(dirname "$target_file")"
-                cp -p "$source_file" "$target_file"
+                cp --preserve=mode,timestamps "$source_file" "$target_file"
             fi
             ;;
         "Only in ${target_dir}"*)
@@ -264,7 +264,7 @@ if [ ! -f /work/Makefile ] || ! cmp -s /src/Makefile /work/Makefile; then
     makefile_changed=1
 fi
 if [ "${makefile_changed}" -eq 1 ]; then
-    cp -p /src/Makefile /work/Makefile
+    cp --preserve=mode,timestamps /src/Makefile /work/Makefile
 fi
 
 # The baked venv must match the checked-in requirements. Rebuilding it would
