@@ -17,10 +17,14 @@ extern u32 D_87806670[];
 extern u32 D_878065B0[];
 extern u32 D_87806730[];
 
+#if !defined(VERSION_JP)
 char** gMinigameText = NULL;
+#endif
 
 static s32 D_8780FA20;
+#if !defined(VERSION_JP)
 static char** sControllerErrorText;
+#endif
 u16 D_8780FA28;
 s16 D_8780FA2A;
 s16 D_8780FA2C;
@@ -219,16 +223,12 @@ void Minigame_InitSharedState(s16 arg0) {
         D_8780FA40[i] = 0;
     }
 
-#if defined(VERSION_JP)
-    for (i = 0; i < 4; i++) {
-        D_8780FA68[i] = 0;
-    }
-#else
     i = 0;
     do {
         D_8780FA68[i] = 0;
         i++;
     } while (i < 4);
+#if !defined(VERSION_JP)
     Widget_Init();
 #endif
 }

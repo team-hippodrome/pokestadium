@@ -25,12 +25,15 @@
 #define LAB_TEXT(id, jp) (jp)
 #define LAB_TITLE_SPACING -2
 #define LAB_RELEASE_PROMPT_X 0x46
+// The move name widget is 6 pixels narrower on JP.
+#define LAB_MOVE_X(x) ((x) - 6)
 #else
 #define LAB_OT_NAME(mon) ((mon)->unk_3B)
 #define LAB_LABEL_WIDTH(n) (n)
 #define LAB_TEXT(id, jp) Text_GetString(NULL, 0, D_8861C510, id)
 #define LAB_TITLE_SPACING 0
 #define LAB_RELEASE_PROMPT_X 0x14
+#define LAB_MOVE_X(x) (x)
 #endif
 
 #if !defined(VERSION_JP)
@@ -830,7 +833,7 @@ void LabPC_InitMovesPanel(unk_func_88205880_0098_008_040* arg0, s32 arg1, s32 ar
     static unk_D_88605B00 D_88605B00[] = {
         { 0x00F7, 0x0007 },
         { 0x0111, 0x0021 },
-        { 0x001E, 0x003B },
+        { LAB_MOVE_X(0x001E), 0x003B },
         { 0x0004, 0x0021 },
     };
     static Color_RGBA8 D_88605B10 = { 0x2D, 0x2D, 0x61, 0xFF };
@@ -842,14 +845,14 @@ void LabPC_InitMovesPanel(unk_func_88205880_0098_008_040* arg0, s32 arg1, s32 ar
     };
     static unk_D_88605B00 D_88605B24[] = {
         { 0x01BF, 0x0010 },
-        { 0x01D9, 0x002A },
-        { 0x00C1, 0x0044 },
+        { LAB_MOVE_X(0x01D9), 0x002A },
+        { LAB_MOVE_X(0x00C1), 0x0044 },
         { 0x00A7, 0x002A },
     };
     static unk_D_88605B00 D_88605B34[] = {
         { 0x0120, 0x000C },
-        { 0x013A, 0x0026 },
-        { 0x0022, 0x0040 },
+        { LAB_MOVE_X(0x013A), 0x0026 },
+        { LAB_MOVE_X(0x0022), 0x0040 },
         { 0x0008, 0x0026 },
     };
 
@@ -1492,6 +1495,9 @@ void LabPC_SetDetailPanelMon(unk_func_88205880_0098_008* arg0, BattleMon* arg1, 
                                         { 0x90, 0x60, 0x18, 0xFF },
                                         { 0x30, 0x60, 0x60, 0xFF } };
     UNUSED static Gfx D_88605B90[] = {
+#if defined(VERSION_JP)
+        gsDPNoOp(),
+#endif
         gsSPEndDisplayList(),
     };
 
@@ -2197,7 +2203,9 @@ static Gfx D_88607730[] = {
     gsSPEndDisplayList(),
 };
 // Type name icons, which carry the type names in each language.
-#if defined(VERSION_ES)
+#if defined(VERSION_JP)
+#include "lab_pc_icons_type_icons_jp.inc.c"
+#elif defined(VERSION_ES)
 #include "lab_pc_icons_type_icons_es.inc.c"
 #elif defined(VERSION_DE)
 #include "lab_pc_icons_type_icons_de.inc.c"
