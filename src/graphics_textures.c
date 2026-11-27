@@ -321,6 +321,34 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height) {
     viewport->vp.vscale[3] = 0;
 }
 
+#if defined(VERSION_JP)
+// Maps a JIS X 0208 code (or ASCII) to a glyph index. The tables sit in ui_graphics data after
+// gUiRestoreTextureDL: ASCII at +0x20, JIS row 1 symbols at +0xD4, and one kana table at +0x80
+// shared by hiragana (glyphs 0xAF+) and katakana (glyphs 0x45+).
+s32 Font_MapGlyphCode(u16 index) {
+    s32 glyph_code = 0;
+
+    if ((index > 0x20) && (index < 0x7F)) {
+        glyph_code = ((u8*)gUiRestoreTextureDL)[index - 1];
+    } else if ((index >= 0x2122) && (index < 0x2178)) {
+        glyph_code = ((u8*)gUiRestoreTextureDL)[index - 0x204E];
+    } else if ((index >= 0x2330) && (index < 0x233A)) {
+        glyph_code = index - 0x2320;
+    } else if ((index >= 0x2341) && (index < 0x235B)) {
+        glyph_code = index - 0x2327;
+    } else if ((index >= 0x2361) && (index < 0x237B)) {
+        glyph_code = index - 0x22CC;
+    } else if ((index >= 0x2421) && (index < 0x2474)) {
+        glyph_code = ((u8*)gUiRestoreTextureDL)[index - 0x23A1] + 0xAF;
+    } else if ((index >= 0x2521) && (index < 0x2574)) {
+        glyph_code = ((u8*)gUiRestoreTextureDL)[index - 0x24A1] + 0x45;
+    } else if (index == 0x2574) {
+        glyph_code = 0xFF;
+    }
+
+    return glyph_code;
+}
+#else
 u8 Font_MapGlyphCode(u16 index) {
     u8 glyph_code = 0;
 
@@ -332,12 +360,15 @@ u8 Font_MapGlyphCode(u16 index) {
 
     return glyph_code;
 }
+#endif
 
+#if !defined(VERSION_JP)
 u8 Font_GetGlyphAdvance(FontSet* font_set, u16 index) {
     s32 idx = Font_MapGlyphCode(index);
 
     return font_set->glyphWidths[idx];
 }
+#endif
 
 void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1) {
     gFontContext = NULL;
@@ -345,7 +376,9 @@ void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1) {
 
 void Font_FreeSetAsset(UNUSED s32 arg0, s32 arg1) {
     if (gFontContext != NULL) {
+#if !defined(VERSION_JP)
         gFontContext->unk_00[arg1].glyphWidths = 0;
+#endif
         gFontContext->unk_00[arg1].texture = 0;
     }
 }
@@ -370,6 +403,24 @@ s32 Font_GetSetIndexFromMask(s32 mask) {
     return index;
 }
 
+#if defined(VERSION_JP)
+// JP fonts have no width table: the archive file is the glyph texture.
+void Font_LoadSet(s32 arg0, s32 cell_width, s32 height, s32 width) {
+    s32 sp1C;
+    u8* temp_v0_2;
+
+    sp1C = Font_GetSetIndexFromMask(arg0);
+    if (gFontContext->unk_00[sp1C].texture == NULL) {
+        temp_v0_2 = BinArchive_GetFile(gFontContext->unk_48, sp1C);
+        gFontContext->unk_00[sp1C].texture = temp_v0_2;
+        gFontContext->unk_00[sp1C].cellWidth = cell_width;
+        gFontContext->unk_00[sp1C].height = height;
+        gFontContext->unk_00[sp1C].width = width;
+        gFontContext->setIndex = sp1C;
+        main_pool_set_func(temp_v0_2, sp1C, &Font_FreeSetAsset);
+    }
+}
+#else
 void Font_LoadSet(s32 arg0, s32 arg1, s32 arg2) {
     s32 sp1C;
     ret_func_8000484C* temp_v0_2;
@@ -385,6 +436,7 @@ void Font_LoadSet(s32 arg0, s32 arg1, s32 arg2) {
         main_pool_set_func(temp_v0_2, sp1C, &Font_FreeSetAsset);
     }
 }
+#endif
 
 FontContext* Font_Init(s32 load_size, s32 side) {
     gFontContext = main_pool_alloc_with_func(sizeof(*gFontContext), side, 'PRNT', Font_ResetContext);
@@ -399,6 +451,35 @@ void Font_Free(void) {
     main_pool_try_free(gFontContext);
 }
 
+#if defined(VERSION_JP)
+void Font_LoadSizes(s32 arg0) {
+    if (gFontContext != NULL) {
+        if (arg0 & 0x20) {
+            Font_LoadSet(0x20, 0x20, 0x20, 0x20);
+        }
+
+        if (arg0 & 0x10) {
+            Font_LoadSet(0x10, 0x18, 0x18, 0x18);
+        }
+
+        if (arg0 & 8) {
+            Font_LoadSet(8, 0x14, 0x14, 0x18);
+        }
+
+        if (arg0 & 4) {
+            Font_LoadSet(4, 0x10, 0x10, 0x10);
+        }
+
+        if (arg0 & 2) {
+            Font_LoadSet(2, 0xC, 0xC, 0x10);
+        }
+
+        if (arg0 & 1) {
+            Font_LoadSet(1, 0xA, 0xA, 0x10);
+        }
+    }
+}
+#else
 void Font_LoadSizes(s32 arg0) {
     if (gFontContext != NULL) {
         if (arg0 & 0x20) {
@@ -426,42 +507,50 @@ void Font_LoadSizes(s32 arg0) {
         }
     }
 }
+#endif
+
+// The pool block a loaded font set owns: its width table, or in JP its texture.
+#if defined(VERSION_JP)
+#define FONT_SET_DATA texture
+#else
+#define FONT_SET_DATA glyphWidths
+#endif
 
 void Font_UnloadSizes(s32 arg0) {
     if (gFontContext != NULL) {
         if (arg0 & 1) {
-            if (gFontContext->unk_00[0].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[0].glyphWidths);
+            if (gFontContext->unk_00[0].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[0].FONT_SET_DATA);
             }
         }
 
         if (arg0 & 2) {
-            if (gFontContext->unk_00[1].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[1].glyphWidths);
+            if (gFontContext->unk_00[1].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[1].FONT_SET_DATA);
             }
         }
 
         if (arg0 & 4) {
-            if (gFontContext->unk_00[2].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[2].glyphWidths);
+            if (gFontContext->unk_00[2].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[2].FONT_SET_DATA);
             }
         }
 
         if (arg0 & 8) {
-            if (gFontContext->unk_00[3].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[3].glyphWidths);
+            if (gFontContext->unk_00[3].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[3].FONT_SET_DATA);
             }
         }
 
         if (arg0 & 0x10) {
-            if (gFontContext->unk_00[4].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[4].glyphWidths);
+            if (gFontContext->unk_00[4].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[4].FONT_SET_DATA);
             }
         }
 
         if (arg0 & 0x20) {
-            if (gFontContext->unk_00[5].glyphWidths != NULL) {
-                main_pool_try_free(gFontContext->unk_00[5].glyphWidths);
+            if (gFontContext->unk_00[5].FONT_SET_DATA != NULL) {
+                main_pool_try_free(gFontContext->unk_00[5].FONT_SET_DATA);
             }
         }
     }
@@ -486,6 +575,37 @@ s32 Font_GetSetInfo(s32 arg0, FontSet* arg1) {
     return var_v1;
 }
 
+#if defined(VERSION_JP)
+// JP glyphs all advance by the set's cell width.
+s32 Font_DrawChar(s16 x, s16 y, s16 char_index) {
+    FontSet* character;
+    s32 sp88;
+
+    character = &gFontContext->unk_00[gFontContext->setIndex];
+    sp88 = Font_MapGlyphCode(char_index) * character->width * character->height;
+
+    if ((gFontContext->flags & 1) && !(gFontContext->flags & 2)) {
+        gFontContext->flags |= 2;
+
+        gDPLoadMultiBlock(gDisplayListHead++, (u32)character->texture + (character->width * 0x100 * character->height),
+                          0x0100, 1, G_IM_FMT_I, G_IM_SIZ_8b, character->width, character->height, 0,
+                          G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                          G_TX_NOLOD);
+    }
+
+    if (character->texture + sp88 != gFontContext->unk_4C) {
+        gFontContext->unk_4C = character->texture + sp88;
+
+        gDPLoadTextureBlock(gDisplayListHead++, (u32)character->texture + sp88, G_IM_FMT_IA, G_IM_SIZ_8b,
+                            character->width, character->height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
+                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+    }
+
+    Gfx_DrawTexturedRectClipped(x, y, character->cellWidth, character->height, 0, 0, 0x400, 0x400, 0);
+
+    return x + character->cellWidth + gFontContext->letterSpacing;
+}
+#else
 s16 Font_DrawChar(s16 x, s16 y, s16 char_index) {
     FontSet* character;
     s32 sp88;
@@ -522,11 +642,60 @@ s16 Font_DrawChar(s16 x, s16 y, s16 char_index) {
 
     return x;
 }
+#endif
 
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// The C below matches except that two register moves at the start are swapped.
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/graphics_textures/Font_Printf.s")
+#elif defined(VERSION_JP)
+// Bytes from 0x80 up start a two-byte EUC-JP character, drawn by its JIS code.
+void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
+    char sp58[0x100];
+    s32 var_s1 = x;
+    s32 temp_s5 = x;
+    s32 temp_v0;
+    s32 var_v0;
+    u8* var_s0;
+    s32 chr;
+
+    va_list args;
+    va_start(args, fmt);
+
+    temp_v0 = _Printf(String_CopyBytesAndAdvance, sp58, fmt, args);
+
+    if (temp_v0 > 0) {
+        sp58[temp_v0] = 0;
+        chr = *(u8*)sp58;
+        var_s0 = (u8*)&sp58[1];
+
+        while (chr != 0) {
+            var_v0 = 1;
+
+            if (!(gFontContext->flags & 4) && (chr == 0xA)) {
+                var_s1 = temp_s5;
+                var_v0 = 0;
+                y += gFontContext->lineHeight;
+            }
+
+            if (var_v0 != 0) {
+                if ((chr >= 0x80) && (*var_s0 != 0)) {
+                    chr = (chr << 8) | *var_s0++;
+                }
+                var_s1 = Font_DrawChar(var_s1, y, chr & 0x7F7F);
+            }
+
+            chr = *var_s0;
+            var_s0++;
+        }
+    }
+
+    va_end(args);
+}
+#else
 void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     char sp50[0x100];
     s32 temp_s5 = x - 1;
@@ -566,9 +735,14 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
 
     va_end(args);
 }
+#endif
 
 void Font_DrawCharAt(s32 x, s32 y, s32 char_index) {
+#if defined(VERSION_JP)
+    Font_DrawChar(x, y, char_index & 0x7F7F);
+#else
     Font_DrawChar(x - 1, y, char_index & 0xFF);
+#endif
 }
 
 void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 alpha) {
@@ -623,6 +797,7 @@ void Gfx_FillRectWithDisplayState(s32 x1, s32 y1, s32 width, s32 length, s32 r, 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+#if !defined(VERSION_JP)
 s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...) {
     s32 temp_s0;
     s32 temp_v0;
@@ -683,3 +858,4 @@ s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...) {
 u8 Font_GetCharWidth(UNUSED s32 arg0, s32 index) {
     return Font_GetGlyphAdvance(&gFontContext->unk_00[gFontContext->setIndex], index & 0xFF);
 }
+#endif

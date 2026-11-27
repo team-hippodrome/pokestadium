@@ -63,7 +63,8 @@
     - [0x1A7B0, c, poke_icon]
     - [0x1B990, c, poke_icon_preview]
     - [0x1C370, c, model_renderer]
-    - [0x1CB80, asm, graphics_textures]
+    - [0x1CB80, c, graphics_textures]
+    - [0x1FE10, c, input]
     - [0x200E0, c, ui_graphics]
     - [0x22190, c, status_icons]
     - [0x22220, c, gb_data]
@@ -433,8 +434,8 @@
     - {vram: 0x800B2A00, type: .bss, name: display_object_textures}
     - {vram: 0x800B3420, type: .bss, name: poke_icon_preview}
     - {vram: 0x800B3430, type: .bss, name: model_renderer}
-    - {vram: 0x800B3460, type: bss, name: graphics_textures}
-    - {vram: 0x800B3470, type: bss, name: input}
+    - {vram: 0x800B3460, type: .bss, name: graphics_textures}
+    - {vram: 0x800B3470, type: .bss, name: input}
     - {vram: 0x800B3480, type: .bss, name: pokemon_stats}
     - {vram: 0x800B4B70, type: .bss, name: save_data}
     - {vram: 0x800B4BB0, type: .bss, name: game_state}

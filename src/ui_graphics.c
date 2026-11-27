@@ -144,8 +144,8 @@ Gfx gUiRestoreTextureDL[] = {
 // Glyph indices by character code. Font_MapGlyphCode reads codes 0x20..0x7F as
 // D_8006F630[code], so this table starts at code 0x20 (D_8006F630 + 0x20).
 // The Japanese table is 0x110 bytes and starts at code 0x21: that build's
-// Font_MapGlyphCode (asm/jp/graphics_textures.s) loads (D_8006F630 - 1)[code]
-// for codes 0x21..0x7E.
+// Font_MapGlyphCode loads (D_8006F630 - 1)[code] for codes 0x21..0x7E, and
+// also holds the JIS symbol and kana tables.
 //@src/graphics_textures.c
 static u8 D_8006F650[] = {
 #if defined(VERSION_JP)

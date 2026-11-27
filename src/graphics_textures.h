@@ -34,19 +34,31 @@ Vtx* func_8001E490(void);
 void Gfx_SetVertexAttributes(Vtx* vertex, s16 x, s16 y, s16 z, s16 texture_x, s16 texture_y, u8 r, u8 g, u8 b,
                              u8 alpha);
 void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height);
+#if defined(VERSION_JP)
+s32 Font_MapGlyphCode(u16 arg0);
+#else
 u8 Font_MapGlyphCode(u16 arg0);
+#endif
 u8 Font_GetGlyphAdvance(FontSet* arg0, u16 arg1);
 void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1);
 void Font_FreeSetAsset(UNUSED s32 arg0, s32 arg1);
 s32 Font_GetSetIndexFromMask(s32 mask);
+#if defined(VERSION_JP)
+void Font_LoadSet(s32 arg0, s32 cell_width, s32 height, s32 width);
+#else
 void Font_LoadSet(s32 arg0, s32 arg1, s32 arg2);
+#endif
 FontContext* Font_Init(s32 load_size, s32 side);
 void Font_Free(void);
 void Font_LoadSizes(s32 arg0);
 void Font_UnloadSizes(s32 arg0);
 void Font_SetActive(s32 mask, s32 letter_spacing);
 s32 Font_GetSetInfo(s32 arg0, FontSet* arg1);
+#if defined(VERSION_JP)
+s32 Font_DrawChar(s16 arg0, s16 arg1, s16 arg2);
+#else
 s16 Font_DrawChar(s16 arg0, s16 arg1, s16 arg2);
+#endif
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void Font_DrawCharAt(s32 x, s32 y, s32 char_index);
@@ -64,10 +76,11 @@ s32 Font_MeasureTextExtent(s32 x, s32 y, const char* fmt, ...);
 u8 Font_GetCharWidth(s32 arg0, s32 index);
 
 #if defined(VERSION_JP)
-// JP only, still in assembly: when a disk is present, set D_8006F7C0[0] to 1 (or 0) and turn
+// JP only, defined in input.c: when a disk is present, set D_8006F7C0[0] to 1 (or 0) and turn
 // Audio_SetDiskReadyPolling on (or off).
 void Storage_StartDiskReadyPolling(void);
 void Storage_StopDiskReadyPolling(void);
+void Storage_PollDiskReady(void);
 #endif
 
 #endif // _1CF30_H_
