@@ -44,7 +44,11 @@ static Gfx D_84B17080[] = {
     gsSP2Triangles(12, 13, 14, 0, 12, 14, 15, 0),
     gsDPPipeSync(),
     gsDPSetEnvColor(220, 220, 30, 255),
+#if defined(VERSION_JP)
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b, 128, 0x0302CE70),
+#else
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b, 128, 0x03028870),
+#endif
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_8b, 8, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,
                 G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),
@@ -54,7 +58,11 @@ static Gfx D_84B17080[] = {
                 G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD),
     gsDPSetTileSize(G_TX_RENDERTILE, 0, 0, 0x00FC, 0x004C),
     gsSP2Triangles(16, 17, 18, 0, 16, 18, 19, 0),
+#if defined(VERSION_JP)
+    gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b, 128, 0x0302CE70),
+#else
     gsDPSetTextureImage(G_IM_FMT_IA, G_IM_SIZ_8b, 128, 0x03028870),
+#endif
     gsDPSetTile(G_IM_FMT_IA, G_IM_SIZ_8b, 8, 0x0000, G_TX_LOADTILE, 0, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK,
                 G_TX_NOLOD, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOLOD),
     gsDPLoadSync(),

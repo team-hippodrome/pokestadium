@@ -3,6 +3,14 @@
 #include "src/libnumus/player.h"
 #include "src/3D140.h"
 
+// JP still defines these in gb_audio_render.
+#if !defined(VERSION_JP)
+s32 D_80078E60 = 0;
+s32 D_80078E64 = 0;
+s32 D_80078E68 = 0;
+s32 D_80078E6C = 0; // unreferenced
+#endif
+
 // The translated releases play every volume step 0x1000 quieter.
 #if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
 #define VOLUME_STEP_DROP 0x1000

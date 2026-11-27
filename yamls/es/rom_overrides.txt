@@ -511,7 +511,9 @@
 # audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
 # libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
 - [0x7DA10, rodata, audio_commands]
--> - [0x7DA10, rodata, audio_commands]
+-> - [0x7DA10, .rodata, audio_commands]
+-> - [0x7DB20, .rodata, audio_loop_point]
+-> - [0x7DD00, .rodata, cry]
 -> - [0x7DD70, .rodata, audio_channel]
 - [0x7EC90, rodata, libnaudio/n_env]
 -> - [0x7EC90, rodata, libnaudio/n_env]
@@ -544,14 +546,21 @@
 - {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 -> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
 
-# credits_158A00 and 15A2A0 (merged by the porter): built from the shared C.
+# credits_158A00, credits_159A00 and credits_15A2A0 (merged into 159A00 by the porter): built
+# from the shared C.
 - [0x159260, asm, fragments/credits/credits_158A00]
 -> - [0x159260, c, fragments/credits/credits_158A00]
--> - [0x15AB00, c, fragments/credits/credits_15A2A0]
 - [0x15B7E0, data, fragments/credits/credits_158A00]
 -> - [0x15B7E0, .data, fragments/credits/credits_158A00]
 - {vram: 0x86A06170, type:  bss, name: fragments/credits/credits_158A00}
 -> - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
+- [0x15A260, asm, fragments/credits/credits_159A00]
+-> - [0x15A260, c, fragments/credits/credits_159A00]
+-> - [0x15AB00, c, fragments/credits/credits_15A2A0]
+- [0x15B940, data, fragments/credits/credits_159A00]
+-> - [0x15B940, .data, fragments/credits/credits_159A00]
+- {vram: 0x86A06210, type:  bss, name: fragments/credits/credits_159A00}
+-> - {vram: 0x86A06210, type: .bss, name: fragments/credits/credits_159A00}
 
 # credits_15AD80: built from the shared C.
 - [0x15B5E0, asm, fragments/credits/credits_15AD80]
@@ -618,3 +627,50 @@
 -> - {vram: 0x8122C820, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
 - {vram: 0x812314E0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
 -> - {vram: 0x812314E0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+
+# audio_fade and 3D140_2: built from the shared C (PAL move sound bank reload and battle music
+# volume). The porter merges them into one text blob and merges the 3D140 .rodata into the
+# 3D140_2 .rodata.
+- [0x3D770, asm, text_3D770]
+-> - [0x3D770, c, audio_fade]
+-> - [0x3DF10, c, 3D140_2]
+- [0x798A0, data, 3D140_2]
+-> - [0x798A0, .data, 3D140_2]
+- [0x7E7B0, rodata, 3D140_2]
+-> - [0x7E7B0, .rodata, 3D140_2]
+-> - [0x7EBD0, rodata, 3D140]
+
+# audio_fade .data and .rodata: merged into the audio_commands_category2 blobs by the porter.
+- [0x793D0, data, audio_commands_category2]
+-> - [0x793D0, data, audio_commands_category2]
+-> - [0x79590, .data, audio_fade]
+- [0x7DDA0, rodata, audio_commands_category2]
+-> - [0x7DDA0, rodata, audio_commands_category2]
+-> - [0x7E100, .rodata, audio_fade]
+
+# audio_stored_fade, audio_commands, audio_loop_point, cry and audio_bank_init: built from the
+# shared C. PAL links audio_loop_point and cry between the two halves of audio_commands, and the
+# porter merges all five files (plus audio_channel's .data) into one blob per section.
+- [0x37030, asm, audio_stored_fade]
+-> - [0x37030, c, audio_stored_fade]
+-> - [0x374D0, c, audio_commands]
+-> - [0x384E0, c, audio_loop_point]
+-> - [0x39300, c, cry]
+-> - [0x39780, c, audio_bank_init]
+- [0x78D10, data, audio_stored_fade]
+-> - [0x78D10, .data, audio_stored_fade]
+-> - [0x78D30, .data, audio_commands]
+-> - [0x79040, .data, audio_loop_point]
+-> - [0x790B0, .data, cry]
+-> - [0x793B0, .data, audio_bank_init]
+-> - [0x793C0, .data, audio_channel]
+- [0x7D9C0, rodata, text_7D9C0]
+-> - [0x7D9C0, .rodata, audio_stored_fade]
+
+# audio_loop_point and audio_bank_init .bss: built from the shared C. The porter merges them under
+# the audio_bank_init name, and names the libleo/leofunc .bss after audio_loop_point.
+- {vram: 0x800B3A40, type: bss, name: audio_bank_init}
+-> - {vram: 0x800B3A40, type: .bss, name: audio_loop_point}
+-> - {vram: 0x800B3A50, type: .bss, name: audio_bank_init}
+- {vram: 0x80100170, type: bss, name: audio_loop_point}
+-> - {vram: 0x80100170, type: bss, name: libleo/leofunc}

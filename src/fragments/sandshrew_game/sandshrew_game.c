@@ -1453,10 +1453,31 @@ static u32 D_86F0ACE0[] = {
     0x2301FFFF, D_86F08F00, 0x0008FFFF, 0xFFFFFFFF, 0x22010000, D_86F0A9C8, 0x06000000, 0x06000000, 0x06000000,
     0x06000000, 0x04000000,
 };
+
 static u32 D_86F0AFB8[] = {
     0x17000009, 0x0000015C, D_86F08E90, NULL,       D_86F09170, 0x05000000, 0x1C000000, 0x000023D7,
     0x000023D7, 0x000023D7, 0x05000000, 0x03000000, D_86F0ACE0, 0x06000000, 0x06000000, 0x01000000,
 };
+
+#if defined(VERSION_JP)
+// Tutorial body text. The runs of ideographic spaces leave room for the button names drawn over them.
+static char* sTutorialLines[9] = {
+    // "Press [L Button] and [R Button] alternately"
+    "　　　　と　　　　を　こうたいごうたいに　おして",
+    // "to dig a hole."
+    "あなほりをしよう。",
+    "",
+    // "The first to make the water spout wins."
+    "はやく　みずを　ふきださせたひとの　かち。",
+    "",
+    // "If you hurry and keep pressing the same button,"
+    "いそぎすぎて　おなじボタンを　つづけておすと",
+    // "you will stop digging, so be careful."
+    "あなほりを　やめてしまうので　ちゅういしよう。",
+    "",
+    "",
+};
+#endif
 
 static MiniActor* miniSandshrewPtr = miniSandshrews;
 static MiniActor* miniSandshrewHolePtr = miniSandshrewHoles;
@@ -1534,6 +1555,9 @@ void SandshrewGame_PlaySoundEvent(s16 arg0, s16 arg1) {
         case 3:
             var_s0 = 0x30003;
             sp30 = arg1;
+#if defined(VERSION_JP)
+            sp2C = miniSandshrews[arg1].unk_272;
+#endif
             break;
 
         case 4:
@@ -2236,6 +2260,41 @@ void SandshrewGame_SyncModelTransforms(void) {
     MiniFx_UpdateParticles();
 }
 
+#if defined(VERSION_JP)
+void SandshrewGame_DrawTutorialText(void) {
+    s32 i;
+
+    Ui_DrawBorderedPanel(0x18, 0x16, 0x110, 0x90, 0x15);
+    Ui_DrawBorderedPanel(0x18, 0xA5, 0x110, 0x36, 0x14B);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(2, -2);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86F0D264, gMinigameStrings[MINIGAME_STR_SANDSHREW_TITLE]) / 2), 0x20,
+                gMinigameStrings[MINIGAME_STR_SANDSHREW_TITLE]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+    for (i = 0; i < 7; i++) {
+        Font_Printf(0x28, 0x34 + (i * 12), "%s", sTutorialLines[i]);
+    }
+    Font_Printf(0xB1, 0xB2, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Font_Printf(0x84, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+    Font_Printf(0x28, 0x34, "%s", gMinigameStrings[MINIGAME_STR_L_BUTTON]);
+    Font_Printf(0x5A, 0x34, "%s", gMinigameStrings[MINIGAME_STR_R_BUTTON]);
+    Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+    Font_Printf(0xCF, 0xB2, "%s", gMinigameStrings[MINIGAME_STR_DIG]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+    Font_Printf(0xA2, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_START_GAME]);
+    Font_DisableTwoCycleTexturing();
+    Font_SetActive(4, -2);
+    Font_EndTexturedTextRendering();
+}
+#else
 void SandshrewGame_DrawTutorialText(void) {
     UNUSED s32 pad;
     s32 sp38;
@@ -2273,6 +2332,7 @@ void SandshrewGame_DrawTutorialText(void) {
     Font_SetActive(4, -2);
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void SandshrewGame_DrawTutorialScreen(void) {
     switch (D_87903DCC) {

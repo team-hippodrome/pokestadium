@@ -58,19 +58,32 @@ typedef struct unk_D_86106450 {
 void ClefairyGame_DespawnPatternIcons(void);
 void ClefairyGame_SpawnPatternIcons(void);
 
-static u32 D_86104640[] = {
-    0xFFFFFFD8, 0xFFFFFFF6, 0x00000014, 0x00000032, 0xA5D4A5C3, 0xA5D4A4CE, 0xA4E6A4D3, 0xA4D5A4EA, 0xA4ADA4E7,
-    0xA4A6A4B7, 0xA4C40000, 0xA4B3A4AF, 0xA4D0A4F3, 0xA4CBA4AB, 0xA4ABA4EC, 0xA4BFA1A1, 0xA4E4A4B8, 0xA4EBA4B7,
-    0xA4CEA1A1, 0xA4E0A4AD, 0xA4F2A1A1, 0xA4AAA4DC, 0xA4A8A4C6, 0x00000000, 0xA4BBA4F3, 0xA4BBA4A4, 0xA4ACA1A1,
-    0xA1D6A4AA, 0xA4B7A4C6, 0xA1BCA1AA, 0xA1D7A4C8, 0xA4A4A4C3, 0xA4BFA4E9, 0xA1A1A5E1, 0xA1BCA5BF, 0xA1BCA4AC,
-    0x00000000, 0xA4ADA4A8, 0xA4EBA4DE, 0xA4C7A4CB, 0xA1A1A1A1, 0xA1A1A1A1, 0xA1A1A1A1, 0xA1A1A4C7, 0xA1A1A4B8,
-    0xA4E5A4F3, 0xA4D0A4F3, 0xA4C9A4AA, 0xA4EAA4CB, 0x00000000, 0xA4E4A4B8, 0xA4EBA4B7, 0xA4CEA1A1, 0xA4E0A4AD,
-    0xA4F2A1A1, 0xA4A4A4EC, 0xA4E8A4A6, 0xA1A30000, 0xA4DEA4C1, 0xA4ACA4A4, 0xA4CEA1A1, 0xA4B9A4AF, 0xA4CAA4AB,
-    0xA4C3A4BF, 0xA4D2A4C8, 0xA4ACA1A1, 0xA4ABA4C1, 0xA1A30000, 0xA4E6A4D3, 0xA4D5A4EA, 0xA4CEA4E0, 0xA4ADA4F2,
-    0xA4ADA4E1, 0xA4EB0000, 0xA4C1A4E5, 0xA4A6A4E2, 0xA1BCA4AF, 0xA1AA0000, 0xA4AAA4DC, 0xA4A8A4C6, 0xA1BCA4C3,
-    0xA1AA0000, 0xA4AAA4B7, 0xA4C6A1BC, 0xA4C3A1AA, 0x00000000, 0xA4BDA4B3, 0xA4DEA4C7, 0xA4C3A1AA, 0x00000000,
-    0xA4B5A4F3, 0xA5CFA5A4, 0xA5C3A1AA, 0x00000000,
-};
+static s32 D_86104640[] = { -40, -10, 20, 50 };
+
+// "Clefairy Says"
+static char sTitleText[] = "ピッピのゆびふりきょうしつ";
+// "Memorize the arrows drawn on the blackboard."
+static char sTutorialLine0[] = "こくばんにかかれた　やじるしの　むきを　おぼえて";
+// "When the teacher says "Push!", before the meter"
+static char sTutorialLine1[] = "せんせいが　「おしてー！」といったら　メーターが";
+// "runs out, use [Control Pad] to enter the arrows"
+static char sTutorialLine2[] = "きえるまでに　　　　　　　で　じゅんばんどおりに";
+// "in the same order."
+static char sTutorialLine3[] = "やじるしの　むきを　いれよう。";
+// "The one with the fewest mistakes wins."
+static char sTutorialLine4[] = "まちがいの　すくなかったひとが　かち。";
+// "Choose the finger direction"
+static char sControlsText[] = "ゆびふりのむきをきめる";
+// "Attention!"
+static char sAttentionText[] = "ちゅうもーく！";
+// "Memorize!"
+static char sMemorizeText[] = "おぼえてーっ！";
+// "Push!"
+static char sPushText[] = "おしてーっ！";
+// "That's it!"
+static char sStopText[] = "そこまでっ！";
+// "Ready, go!"
+static char sReadyGoText[] = "さんハイッ！";
 
 typedef struct unk_D_861047B8 {
     /* 0x00 */ u8 unk_00[6];
@@ -556,6 +569,15 @@ void ClefairyGame_InitCamera(void) {
 void func_86100C28(void) {
 }
 
+// JP prints built-in strings instead of looking them up in the minigame text table.
+#if defined(VERSION_JP)
+#define CLEFAIRY_TEXT(id, jpText) (jpText)
+#define CLEFAIRY_LETTER_SPACING -2
+#else
+#define CLEFAIRY_TEXT(id, jpText) Text_GetString(NULL, 0, gMinigameText, id)
+#define CLEFAIRY_LETTER_SPACING 0
+#endif
+
 void ClefairyGame_DrawOverlay(s32 arg0) {
     s32 i;
     UNUSED unk_D_86104B5C sp5C = D_86104B5C;
@@ -591,14 +613,42 @@ void ClefairyGame_DrawOverlay(s32 arg0) {
     Font_BeginTranslucentTextRendering();
 
     switch (arg0) {
+#if !defined(VERSION_JP)
         s32 sp48;
         s32 sp44;
+#endif
 
         case 17:
             break;
 
         case 0:
             Font_EnableTwoCycleTexturing();
+#if defined(VERSION_JP)
+            Font_SetActive(2, CLEFAIRY_LETTER_SPACING);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_861054B4, sTitleText) / 2), 0x20, sTitleText);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x28, 0x34, sTutorialLine0);
+            Font_Printf(0x28, 0x40, sTutorialLine1);
+            Font_Printf(0x28, 0x4C, sTutorialLine2);
+            Font_Printf(0x28, 0x58, sTutorialLine3);
+            Font_Printf(0x28, 0x70, sTutorialLine4);
+            Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+            Font_Printf(0x6E, 0x4C, MINIGAME_SHARED_TEXT_CONTROL_PAD);
+            Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+            Font_Printf(0x8C, 0xB0, sControlsText);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+            Font_Printf(0xA2, 0xC8, MINIGAME_SHARED_TEXT_START_GAME);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x6E, 0xB0, MINIGAME_SHARED_TEXT_ELLIPSIS);
+            Font_Printf(0x84, 0xC8, MINIGAME_SHARED_TEXT_ELLIPSIS);
+#else
             Font_SetActive(2, 0);
             Font_SetLineHeight(0xC);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -628,48 +678,49 @@ void ClefairyGame_DrawOverlay(s32 arg0) {
             Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
             Font_Printf(0x75, 0xB0, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
+#endif
             Font_DisableTwoCycleTexturing();
             break;
 
         case 3:
-            Font_SetActive(4, 0);
+            Font_SetActive(4, CLEFAIRY_LETTER_SPACING);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x1E)) / 2),
-                        0x40, Text_GetString(NULL, 0, gMinigameText, 0x1E));
+            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, CLEFAIRY_TEXT(0x1E, sAttentionText)) / 2),
+                        0x40, CLEFAIRY_TEXT(0x1E, sAttentionText));
             break;
 
         case 5:
-            Font_SetActive(4, 0);
+            Font_SetActive(4, CLEFAIRY_LETTER_SPACING);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x1F)) / 2),
-                        0x40, Text_GetString(NULL, 0, gMinigameText, 0x1F));
+            Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, CLEFAIRY_TEXT(0x1F, sMemorizeText)) / 2),
+                        0x40, CLEFAIRY_TEXT(0x1F, sMemorizeText));
             break;
 
         case 8:
             if (D_8610549C < 0x3C) {
-                Font_SetActive(4, 0);
+                Font_SetActive(4, CLEFAIRY_LETTER_SPACING);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x20)) / 2),
-                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x20));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, CLEFAIRY_TEXT(0x20, sPushText)) / 2),
+                            0x40, CLEFAIRY_TEXT(0x20, sPushText));
             }
             break;
 
         case 9:
         case 10:
             if (D_8610549C < 0x3C) {
-                Font_SetActive(4, 0);
+                Font_SetActive(4, CLEFAIRY_LETTER_SPACING);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x21)) / 2),
-                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x21));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, CLEFAIRY_TEXT(0x21, sStopText)) / 2),
+                            0x40, CLEFAIRY_TEXT(0x21, sStopText));
             }
             break;
 
         case 11:
             if ((D_8610549C >= 0x10) && (D_8610549C < 0x3C)) {
-                Font_SetActive(4, 0);
+                Font_SetActive(4, CLEFAIRY_LETTER_SPACING);
                 Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, Text_GetString(NULL, 0, gMinigameText, 0x22)) / 2),
-                            0x40, Text_GetString(NULL, 0, gMinigameText, 0x22));
+                Font_Printf(0xA4 - (Text_MeasureStringWidth(D_861054B4, CLEFAIRY_TEXT(0x22, sReadyGoText)) / 2),
+                            0x40, CLEFAIRY_TEXT(0x22, sReadyGoText));
             }
             break;
     }
@@ -1335,9 +1386,11 @@ s32 ClefairyGame_UpdatePatternPlayback(void) {
     s32 i;
 
     temp_lo = D_8610549C / NTSC_PAL(17, 14);
+#if !defined(VERSION_JP)
     if ((temp_lo + 1) == D_861054A0) {
         D_861054BC = ClefairyGame_ComputeMaxRemainingHealth();
     }
+#endif
 
     if (temp_lo >= D_861054A0) {
         ModelAnim_SetAnimation(&D_86105BD0, 0);
@@ -1354,6 +1407,9 @@ s32 ClefairyGame_UpdatePatternPlayback(void) {
             }
         }
 
+#if defined(VERSION_JP)
+        D_861054BC = ClefairyGame_ComputeMaxRemainingHealth();
+#endif
         return -1;
     }
 

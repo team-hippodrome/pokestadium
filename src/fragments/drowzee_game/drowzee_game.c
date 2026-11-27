@@ -620,6 +620,35 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
 
+#if defined(VERSION_JP)
+    if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
+        Font_SetActive(2, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+        // "Drowzee's Hypnosis Battle"
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, "スリープのさいみんがっせん") / 2), 0x20,
+                    "スリープのさいみんがっせん");
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+        // "When the pendulum reaches the red needle in the middle, press [A Button] to cast
+        // hypnosis on the other Drowzee. The last one who doesn't fall asleep wins."
+        Font_Printf(0x28, 0x34, "ふりこが まんなかの あかいハリのところに きた");
+        Font_Printf(0x28, 0x40, "ときに     をおすと ほかのスリープたちに");
+        Font_Printf(0x28, 0x4C, "さいみんじゅつを かけることができるよ。");
+        Font_Printf(0x28, 0x64, "さいごまで ねむらなかったひとが かち。");
+        Font_Printf(0x84, 0xB2, "・・・");
+        Font_Printf(0x84, 0xC8, "・・・");
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0x28, 0x40, "    Ａボタン"); // "A Button", filling the gap in the second line
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0xA2, 0xB2, "さいみんじゅつ"); // "Hypnosis"
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+        Font_Printf(0xA2, 0xC8, "ゲームをはじめる"); // "Start the game"
+    }
+#else
     if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
         char* temp_s2 = Text_GetString(NULL, 0, gMinigameText, 0x29);
         s32 sp58;
@@ -651,6 +680,7 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
         Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     }
+#endif
 
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
@@ -949,7 +979,11 @@ s32 DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_push_state('MINI');
 
+#if defined(VERSION_JP)
+    Gfx_InitDisplayListBuffers(0x10000, 0);
+#else
     Gfx_InitDisplayListBuffers(0x18000, 0);
+#endif
     sp24 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_87B000E0 = Font_Init(0x16, 0);
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);

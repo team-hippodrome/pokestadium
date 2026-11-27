@@ -300,10 +300,20 @@ void BattlePrepBadgeAward_FlipInStep(BattlePrepBadgeAward* badge_award) {
 void BattlePrepBadgeAward_RevealStep(BattlePrepBadgeAward* badge_award) {
     s16 i;
     s16 medal_index;
+#if defined(VERSION_JP)
+    // JP has no PAL release, so the NTSC timings are constants.
+    enum {
+        reveal_interval = 6,
+        newest_medal_delay = 20,
+        cleanup_delay = 40,
+    };
+#else
     s16 reveal_interval;
     s16 newest_medal_delay;
     s16 cleanup_delay;
+#endif
 
+#if !defined(VERSION_JP)
     if (osTvType == OS_TV_PAL) {
         reveal_interval = 5;
         newest_medal_delay = 0x11;
@@ -313,6 +323,7 @@ void BattlePrepBadgeAward_RevealStep(BattlePrepBadgeAward* badge_award) {
         newest_medal_delay = 0x14;
         cleanup_delay = 0x28;
     }
+#endif
 
     medal_index = badge_award->timer / reveal_interval;
     badge_award->timer++;

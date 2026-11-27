@@ -11,8 +11,21 @@
 static s32 sErrorPort;
 // Error code passed to Game_ShutdownAndLoadFragment (1-3); selects the message in text file 0xD.
 static s32 sErrorMessageId;
+#if defined(VERSION_JP)
+// The three Transfer Pak / Game Boy error messages, indexed by sErrorMessageId - 1.
+static char* sTransferPakErrorText[] = {
+    // "The 64GB Pak is not set properly. Turn off the power and check the connection."
+    "６４ＧＢパックが\nただしくセットされていません。\nでんげんをきって　せつぞくを\nかくにんしてください。",
+    // "There is a problem with the Game Boy cartridge's connector. Turn off the console and
+    // see the 64GB Pak instruction booklet."
+    "ゲームボーイカートリッジの\nコネクタぶが　いじょうです。\nほんたいのでんげんをきり\n６４ＧＢパックの\nとりあつかいせつめいしょを\nごらんください。",
+    // "The report is not valid, so you cannot continue. Reset and choose \"Start from the beginning\"."
+    "レポートがただしくないので\nつづきからあそぶことはできません。\nリセットして「さいしょからはじめる」\nをえらんでください。",
+};
+#else
 // Text file 0xD: the three Transfer Pak / Game Boy error messages, indexed by sErrorMessageId - 1.
 static char** sTransferPakErrorText;
+#endif
 
 /**
  * Fills the 320x240 screen with the green Poke Ball wallpaper from transfer_pak_error_ui
@@ -66,7 +79,11 @@ void TransferPakError_DrawMessagePanel(s32 message_id) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
+#if defined(VERSION_JP)
+    Font_Printf(0x52, 0x21, sTransferPakErrorText[message_id - 1]);
+#else
     Font_Printf(0x52, 0x21, Text_GetString(NULL, 0, sTransferPakErrorText, message_id - 1));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -159,8 +176,10 @@ void TransferPakError_Main(s32 port, s32 message_id) {
     Font_Init(6, 0);
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, transfer_pak_error_ui, 0);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sTransferPakErrorText = Text_GetStringTable(0xD);
+#endif
     StageContext_Activate(stage_context);
 
     while (true) {

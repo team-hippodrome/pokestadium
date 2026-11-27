@@ -83,14 +83,19 @@
     - [0x339C0, c, 33E30]
     - [0x33C70, c, 33FE0]
     - [0x37000, c, audio_sfx_wrapper]
-    - [0x37030, asm, audio_stored_fade]
+    - [0x37030, c, audio_stored_fade]
+    - [0x374D0, c, audio_commands]
+    - [0x384E0, c, audio_loop_point]
+    - [0x39300, c, cry]
+    - [0x39780, c, audio_bank_init]
     - [0x3A3F0, c, audio_sound_state]  # audio functions to 0x50C00
     - [0x3A4E0, c, audio_channel]
     - [0x3A810, asm, audio_commands_category2]
     - [0x3D0C0, c, audio_category_fade]
     - [0x3D1F0, asm, text_3D1F0]
     - [0x3D630, c, audio_data]
-    - [0x3D770, asm, text_3D770]
+    - [0x3D770, c, audio_fade]
+    - [0x3DF10, c, 3D140_2]
     - [0x432C0, asm, 3D140]
     - [0x48960, c, libnaudio/n_auxbus]
     - [0x48A10, asm, libnaudio/n_drvrNew]
@@ -292,9 +297,15 @@
     - [0x77610, .data, model_renderer_callbacks]
     - [0x77690, .data, 33E30]
     - [0x77750, .data, 33FE0]
-    - [0x78D10, data, audio_stored_fade]
+    - [0x78D10, .data, audio_stored_fade]
+    - [0x78D30, .data, audio_commands]
+    - [0x79040, .data, audio_loop_point]
+    - [0x790B0, .data, cry]
+    - [0x793B0, .data, audio_bank_init]
+    - [0x793C0, .data, audio_channel]
     - [0x793D0, data, audio_commands_category2]
-    - [0x798A0, data, 3D140_2]
+    - [0x79590, .data, audio_fade]
+    - [0x798A0, .data, 3D140_2]
     - [0x7A030, data, 3D140]
     - [0x7A460, data, gb_audio_render]
     - [0x7A860, data, gb_audio]
@@ -356,11 +367,15 @@
     - [0x7D8A0, rodata, vector_math]
     - [0x7D910, .rodata, 33E30]
     - [0x7D940, .rodata, 33FE0]
-    - [0x7D9C0, rodata, text_7D9C0]
-    - [0x7DA10, rodata, audio_commands]
+    - [0x7D9C0, .rodata, audio_stored_fade]
+    - [0x7DA10, .rodata, audio_commands]
+    - [0x7DB20, .rodata, audio_loop_point]
+    - [0x7DD00, .rodata, cry]
     - [0x7DD70, .rodata, audio_channel]
     - [0x7DDA0, rodata, audio_commands_category2]
-    - [0x7E7B0, rodata, 3D140_2]
+    - [0x7E100, .rodata, audio_fade]
+    - [0x7E7B0, .rodata, 3D140_2]
+    - [0x7EBD0, rodata, 3D140]
     - [0x7EBF0, rodata, libnumus/player]
     - [0x7EC90, rodata, libnaudio/n_env]
     - [0x7EDB0, .rodata, audio_stream]
@@ -431,7 +446,8 @@
     - {vram: 0x800AFF10, type: .bss, name: battle_hud}
     - {vram: 0x800AFF60, type: .bss, name: model_renderer_callbacks}
     - {vram: 0x800B36F0, type: .bss, name: 33FE0}
-    - {vram: 0x800B3A40, type: bss, name: audio_commands}
+    - {vram: 0x800B3A40, type: .bss, name: audio_loop_point}
+    - {vram: 0x800B3A50, type: .bss, name: audio_bank_init}
     - {vram: 0x800FCF50, type: .bss, name: audio_data}
     - {vram: 0x800FCF60, type: bss, name: 3D140}
     - {vram: 0x800FD190, type: bss, name: gb_audio}
@@ -439,7 +455,7 @@
     - {vram: 0x800FD500, type: bss, name: gb_audio_render}
     - {vram: 0x801000C0, type: .bss, name: audio_stream}
     - {vram: 0x80100150, type: .bss, name: rom_device}
-    - {vram: 0x80100170, type: bss, name: audio_loop_point}
+    - {vram: 0x80100170, type: bss, name: libleo/leofunc}
     - {vram: 0x80100E60, type: .bss, name: libleo/leocmdex}
     - {vram: 0x80100E80, type: .bss, name: libleo/leoint}
     - {vram: 0x80100ED0, type: .bss, name: libleo/leomecha}
@@ -740,9 +756,11 @@
     subsegments:
     - [0x139790, textbin,   fragments/dynamo_game/dynamo_game_header]
     - [0x1397B0, c, fragments/dynamo_game/dynamo_game]
+    - [0x13B750, c,      fragments/dynamo_game/dynamo_game_ai]
     - [0x13B8A0, c,      fragments/dynamo_game/dynamo_game_1]
     - [0x13C150, c, fragments/dynamo_game/dynamo_game_2]
     - [0x13C3C0, .data, fragments/dynamo_game/dynamo_game]
+    - [0x13C640, .data,   fragments/dynamo_game/dynamo_game_ai]
     - [0x13C6F0, .data,   fragments/dynamo_game/dynamo_game_1]
     - [0x142970, .data, fragments/dynamo_game/dynamo_game_2]
     - [0x142A10, .rodata, fragments/dynamo_game/dynamo_game]
@@ -859,14 +877,17 @@
     subsegments:
     - [0x159240, textbin,   fragments/credits/credits_header]
     - [0x159260, c, fragments/credits/credits_158A00]
+    - [0x15A260, c, fragments/credits/credits_159A00]
     - [0x15AB00, c, fragments/credits/credits_15A2A0]
     - [0x15AB10, c,      fragments/credits/credits_15A2B0]
     - [0x15B5E0, c, fragments/credits/credits_15AD80]
     - [0x15B7E0, .data, fragments/credits/credits_158A00]
+    - [0x15B940, .data, fragments/credits/credits_159A00]
     - [0x15C3B0, .data,   fragments/credits/credits_15A2B0]
     - [0x15ED90, .data, fragments/credits/credits_15AD80]
     - [0x15F380, .rodata, fragments/credits/credits_15A2B0]
     - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
+    - {vram: 0x86A06210, type: .bss, name: fragments/credits/credits_159A00}
     - {vram: 0x86A06220, type:  .bss, name: fragments/credits/credits_15A2B0}
   - name: fragment16_relocs
     type: code
