@@ -1773,7 +1773,7 @@
     - [0x3391E0, c, fragments/battle_engine/battle_engine_shared_move_effects]
     - [0x342DC0, asm, fragment62_3391E0]
     - [0x3430F0, c,      fragments/battle_engine/battle_engine_effect_render_pipeline]
-    - [0x3433E0, asm, fragment62_3433E0]
+    - [0x3433E0, c, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x346A70, c,      fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x349B90, c,      fragments/battle_engine/battle_engine_lasso]
     - [0x34D8E0, c,      fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -1805,7 +1805,7 @@
     - [0x36FC90, .data, fragments/battle_engine/battle_engine_battle_phases]
     - [0x36FCD0, .data,   fragments/battle_engine/battle_engine_animation_system]
     - [0x372C10, .data,   fragments/battle_engine/battle_engine_model_and_overlay_effects]
-    - [0x3730D0, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+    - [0x3730D0, .data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x373390, .data,   fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x374170, .data,   fragments/battle_engine/battle_engine_lasso]
     - [0x374410, .data,   fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -1846,7 +1846,8 @@
     - [0x3773A0, .rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
     - [0x377400, .rodata, fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x378160, .rodata, fragments/battle_engine/battle_engine_shared_move_effects]
-    - [0x378550, rodata, fragments/battle_engine/battle_engine_shared_move_effects_378550]
+    - [0x378550, rodata, fragment62_3391E0]
+    - [0x378570, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x378650, .rodata, fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x3786F0, .rodata, fragments/battle_engine/battle_engine_lasso]
     - [0x378850, .rodata, fragments/battle_engine/battle_engine_hypnosis_screech]
@@ -1875,7 +1876,7 @@
     - {vram: 0x843914D0, type: .bss, name: fragments/battle_engine/battle_engine_battle_phases}
     - {vram: 0x84391510, type:  .bss, name: fragments/battle_engine/battle_engine_scene}
     - {vram: 0x84391570, type:  .bss, name: fragments/battle_engine/battle_engine_animation_system}
-    - {vram: 0x84393390, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+    - {vram: 0x84393390, type:  .bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
     - {vram: 0x843938B0, type:  .bss, name: fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid}
     - {vram: 0x843988E0, type:  .bss, name: fragments/battle_engine/battle_engine_lasso}
     - {vram: 0x8439DD30, type:  .bss, name: fragments/battle_engine/battle_engine_hypnosis_screech}
