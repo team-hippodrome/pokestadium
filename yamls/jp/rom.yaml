@@ -22,14 +22,14 @@
     - [0x11B0, pad]
     - [0x11C0, c, rsp] # rsp audio
     - [0x1A80, c, dma] # DMA transfer
-    - [0x1F70, asm, text_1F70]
+    - [0x1F70, pad]
     - [0x1F80, c, dp_intro]
     - [0x2850, c, memmap]
     - [0x2E30, c, memory_main] # handles the main global pool
     - [0x35B0, c, memory] # memory_pool
     - [0x39F0, c, util]
     - [0x3F20, c, jpeg_stream] # PRES-JPEG stream/asset loader
-    - [0x54F0, asm, text_54F0]
+    - [0x54F0, pad]
     - [0x5500, c, scheduler]
     - [0x6020, c, reset]
     - [0x63D0, c, controller]
@@ -1814,7 +1814,7 @@
     - [0x329B80, c,      fragments/battle_engine/battle_engine_lingering_fall_particles]
     - [0x32ABC0, c,      fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x3391E0, c, fragments/battle_engine/battle_engine_shared_move_effects]
-    - [0x342DC0, asm, fragment62_3391E0]
+    - [0x342DC0, c, fragments/battle_engine/battle_engine_unused_ring_scatter]
     - [0x3430F0, c,      fragments/battle_engine/battle_engine_effect_render_pipeline]
     - [0x3433E0, c, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x346A70, c,      fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
@@ -1889,7 +1889,7 @@
     - [0x3773A0, .rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
     - [0x377400, .rodata, fragments/battle_engine/battle_engine_model_and_overlay_effects]
     - [0x378160, .rodata, fragments/battle_engine/battle_engine_shared_move_effects]
-    - [0x378550, rodata, fragment62_3391E0]
+    - [0x378550, .rodata, fragments/battle_engine/battle_engine_unused_ring_scatter]
     - [0x378570, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
     - [0x378650, .rodata, fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid]
     - [0x3786F0, .rodata, fragments/battle_engine/battle_engine_lasso]

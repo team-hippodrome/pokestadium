@@ -3148,6 +3148,8 @@ void BattleAnim_NoopUpdateHook(void);
 // Japanese-only empty hook that BattleAnim_UpdateFrame calls before BattleAnim_UpdateEffects. It
 // follows battle_engine_shared_move_effects in the Japanese fragment, which US 1.0 does not have.
 void func_84359274_jp(void);
+void BattleAnim_SetupUnusedRingScatterParticle(Particle* arg0);
+void BattleAnim_RunUnusedRingScatterParticle(Particle* arg0);
 #endif
 void func_843592E8(void);
 void func_843592F0(void);
