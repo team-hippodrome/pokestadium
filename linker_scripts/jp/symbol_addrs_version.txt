@@ -1349,7 +1349,6 @@ D_87903DC8 = 0x87903CC8; // type:func
 D_87903DCC = 0x87903CCC; // type:func
 D_87903DD0 = 0x87903CD0; // type:func
 D_87903DD4 = 0x87903CD4; // type:func
-D_87903D48_jp = 0x87903D48;
 MiniFxParticleDescriptorPayloadI4Frame = 0x87903D80; // type:func
 gMiniFxParticleDescriptorI4Frame = 0x87903D90; // type:func
 MiniFxParticleDescriptorPayloadIa8 = 0x87903D98; // type:func
