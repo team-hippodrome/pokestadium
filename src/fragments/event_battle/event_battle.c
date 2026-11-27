@@ -18,16 +18,82 @@
 #include "src/pokemon_stats.h"
 #include "pokemon.h"
 
+#if defined(VERSION_JP)
+// JP cup icons in segment 3.
+extern u8 D_3026300[];
+extern u8 D_3026F80[];
+extern u8 D_3027C00[];
+extern u8 D_3028880[];
+extern u8 D_3029500[];
+extern u8 D_302A180[];
+#endif
+
+#if !defined(VERSION_JP)
+// JP uses built-in strings instead of these text tables.
 static char** sEventBattleText;
 static char** sPokemonDetailText;
+#endif
 static EventBattleMenuState sEventBattleMenuState;
 static EventBattleDescriptionPanel sDescriptionPanel;
 static EventBattleDescriptionPanel sPartyEligibilityBanner;
 static EventBattleSettingsPanel sSettingsPanel;
-static EventBattleSelectionOption sSelectionOptions[6];
+#if defined(VERSION_JP)
+// Six cups plus the settings and back options.
+#define EVENT_BATTLE_OPTION_COUNT 8
+#else
+#define EVENT_BATTLE_OPTION_COUNT 6
+#endif
+#define EVENT_BATTLE_OPTION_SETTINGS (EVENT_BATTLE_OPTION_COUNT - 2)
+#define EVENT_BATTLE_OPTION_BACK (EVENT_BATTLE_OPTION_COUNT - 1)
+static EventBattleSelectionOption sSelectionOptions[EVENT_BATTLE_OPTION_COUNT];
 static EventBattleTrainerParty sTrainerCards[2];
 static EventBattleActionLabel sActionLabels[3];
 
+#if defined(VERSION_JP)
+// FAKE: DrawFrame reads entry 10 beyond this ten-entry table; adjacent
+// sBackActionBoundsData supplies the back action's x, y, width, and height.
+static EventBattleSelectionEntry sSelectionEntries[] = {
+    { 68, 96, 248, 56, 3 },    { 324, 96, 248, 56, 4 },   { 68, 164, 248, 56, 2 },   { 324, 164, 248, 56, 5 },
+    { 68, 232, 248, 56, 1 },   { 324, 232, 248, 56, 6 },  { 68, 300, 248, 56, 254 }, { 324, 300, 248, 56, 255 },
+    { 80, 385, 152, 48, 1 },   { 244, 385, 152, 48, 2 },
+};
+static s16 sBackActionBoundsData[] = {
+    408, 385, 152, 48, 0, 0,
+};
+static EventBattleCupRules sCupRules[] = {
+    // Nintendo Cup '97
+    { 50, 55, 155, 0x01 },
+    // Nintendo Cup '98
+    { 1, 30, 300, 0x02 },
+    // Nintendo Cup '99
+    { 1, 50, 300, 0x04 },
+    // Fancy Cup
+    { 25, 30, 80, 0x08 },
+    // Yellow Cup
+    { 15, 20, 50, 0x10 },
+    // Ultra Cup
+    { 1, 100, 300, 0x20 },
+};
+// Description shown for each selection, indexed by cursor position.
+static char* sCupDescriptions[] = {
+    // " A battle under the 3rd Pokémon League rules of '99.\n A new fight begins."
+    "　９９ねん　だい３かいポケモンリーグルールでの\n　バトル。あたらしい　たたかいの　はじまりだ。",
+    // " Lots of cute Pokémon, but take it lightly and you're in\n trouble. It may show your true skill."
+    "　かわいいポケモンがおおいからって、ナメてかかると\n　たいへん。キミのじつりょくが　わかるかも。",
+    // " A battle under the 2nd Pokémon League rules of '98.\n A tough, well-studied cup."
+    "　９８ねん　だい２かいポケモンリーグルールでの\n　バトル。けんきゅうしつくされた　てごわいカップ。",
+    // " The cup you can enter at the lowest level.\n That makes your strategy all the more important."
+    "　もっとも　ちいさいレベルで　さんかできるカップ。\n　それだけに　さくせんの　たてかたが　だいじ。",
+    // " A battle under the 1st Pokémon League rules of '97.\n Seasoned veterans gather here."
+    "　９７ねん　だい１かいポケモンリーグルールでの\n　バトル。れきせんの　つわものが　せいぞろい。",
+    // " The top-level cup that seeks the peak of Pokémon\n battling. Go all out!"
+    "　ポケモンバトルのちょうてんを　きわめる　さいだい\n　レベルのカップ。おもいっきり　あばれてみよう。",
+    // " Set the \"match time\" and the\n \"move selection time\"."
+    "　「しあいじかん」や「わざをきめるじかん」を\n　せっていできます。",
+    // " Return to the selection screen."
+    "　せんたく　がめんに　もどります。",
+};
+#else
 // FAKE: DrawFrame reads entry 8 beyond this eight-entry table; adjacent
 // sBackActionBoundsData supplies the back action's x, y, width, and height.
 static EventBattleSelectionEntry sSelectionEntries[] = {
@@ -133,6 +199,7 @@ static EventBattleCupRules sCupRules[] = {
         0x20,
     },
 };
+#endif
 
 /* Draw selection-corner textures with a sinusoidal inset around a rectangle. */
 void EventBattle_DrawSelectionCorners(s16 x, s16 y, s16 width, s16 height) {
@@ -349,11 +416,22 @@ void EventBattle_DrawTitleBar(void) {
     EventBattle_DrawTitleBarBackground(72, 40, 520, &env_color, &prim_color);
     EventBattle_DrawTitlePokeBall(48, 32);
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+#else
     Font_SetActive(0x10, 0);
+#endif
     Gfx_SetEnvColor(0x00, 0x00, 0x00, 0xFF); // #000000
+#if defined(VERSION_JP)
+    // "Event Battle"
+    Font_Printf(106, 44, "イベントバトル");
+    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF); // #FFFF77
+    Font_Printf(104, 42, "イベントバトル");
+#else
     Font_Printf(106, 44, Text_GetString(NULL, 0, sEventBattleText, 8));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF); // #FFFF77
     Font_Printf(104, 42, Text_GetString(NULL, 0, sEventBattleText, 8));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -371,10 +449,18 @@ void EventBattle_DrawDescriptionPanel(EventBattleDescriptionPanel* panel) {
         EventBattle_DrawDescriptionBackground(x, y, 528, opening_progress, 0x1E, 0x1E, 0x82, 0x96); // #1E1E82
         if (((60 - opening_progress) == 0) && (sEventBattleMenuState.cursorPosition < 8)) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x08, -2);
+#else
             Font_SetActive(0x08, 0);
+#endif
             Font_SetLineHeight(24);
+#if defined(VERSION_JP)
+            Font_Printf(x + 32, y + 8, sCupDescriptions[sEventBattleMenuState.cursorPosition]);
+#else
             Font_Printf(x + 32, y + 8,
                         Text_GetString(NULL, 0, sEventBattleText, sSelectionOptions[sEventBattleMenuState.cursorPosition].descriptionTextId));
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -437,6 +523,37 @@ void EventBattle_DrawSelectionOption(EventBattleSelectionOption* selection_optio
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        // JP glyphs are 2 bytes each; the width math below counts bytes.
+        if (selection_option->icon != NULL) {
+            s32 text_y = y + 8;
+            char format[28];
+
+            // Long cup names are drawn tighter.
+            if (strlen(selection_option->text) > 16) {
+                Font_SetActive(0x08, -5);
+            } else {
+                Font_SetActive(0x08, -2);
+            }
+
+            // Cup Title Color
+            if (selection_option->bothPartiesEligible != 0) {
+                Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+            } else {
+                Gfx_SetEnvColor(0xDC, 0x37, 0x37, 0xFF); // #DC3737
+            }
+
+            Font_Printf(x + 52, text_y, selection_option->text);
+            Font_SetActive(0x04, -4);
+            // Cup Level Range Color
+            Gfx_SetEnvColor(0x92, 0xC1, 0xFF, 0xFF); // #92C1FF
+            sprintf(format, "L%d〜%d", selection_option->minLevel, selection_option->maxLevel);
+            Font_Printf((x - strlen(format) * 12) + 244, y + 32, format);
+        } else {
+            Font_SetActive(0x08, -2);
+            Font_Printf((x - (strlen(selection_option->text) * 18) / 4) + 122, y + 18, selection_option->text);
+        }
+#else
         if (selection_option->icon != NULL) {
             s32 text_y = y + 8;
             char format[64];
@@ -461,6 +578,7 @@ void EventBattle_DrawSelectionOption(EventBattleSelectionOption* selection_optio
             Font_Printf((x - ((s16)Font_MeasureTextExtent(0x08, 0, selection_option->text) / 2)) + 122, y + 18,
                         selection_option->text);
         }
+#endif
         Font_EndTexturedTextRendering();
     }
 }
@@ -497,7 +615,11 @@ void EventBattle_UpdateSelectionOptionSlide(EventBattleSelectionOption* option) 
 }
 
 /* Initialize a hidden card and derive cup levels and both-party eligibility for a supplied ruleset. */
+#if defined(VERSION_JP)
+void EventBattle_InitSelectionOption(EventBattleSelectionOption* option, s16 x, s16 y, u8* icon, s8* text, s16 rule_category) {
+#else
 void EventBattle_InitSelectionOption(EventBattleSelectionOption* option, s16 x, s16 y, u8* icon, s8* text, s16 rule_category, s16 description_text_id) {
+#endif
     option->slideState = 0;
     option->slideOffsetSteps = 10;
     option->restingX = x;
@@ -508,7 +630,9 @@ void EventBattle_InitSelectionOption(EventBattleSelectionOption* option, s16 x, 
     option->text = text;
     option->minLevel = 0;
     option->maxLevel = 0;
+#if !defined(VERSION_JP)
     option->descriptionTextId = description_text_id;
+#endif
     option->bothPartiesEligible = 1;
 
     if (rule_category != 0) {
@@ -556,6 +680,27 @@ void EventBattle_DrawPartyPanelBackground(EventBattleTrainerParty* trainer_card,
 }
 
 /* Draw and pulse the warning when the three lowest party levels exceed the combined level cap. */
+#if defined(VERSION_JP)
+void EventBattle_DrawLevelCapWarning(EventBattleTrainerParty* trainer_card, s16 x, s16 y) {
+    s16 alpha;
+
+    if (trainer_card->levelCapCompliancePossible == 0) {
+        alpha = (trainer_card->levelCapWarningPhase >= 0) ? (s16)(SINS((s16)(SINS(trainer_card->levelCapWarningPhase) * 16384.0f)) * 127.0f) + 127
+                                     : (s16)(SINS(trainer_card->levelCapWarningPhase) * 127.0f) + 127;
+
+        Gfx_FillRectWithDisplayState(x + 120, y + 4, 396, 88, 0x64, 0x1E, 0x1E, (alpha * 2) / 3); // #641E1E
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, -3);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x00, alpha); // #FFFF00
+        // "The total of the three lowest levels"
+        Font_Printf(x + 136, y + 20, "さいていレベル　３びきのごうけいが");
+        // "goes over %d."
+        Font_Printf(x + 136, y + 52, "%dを　こえてしまいます。", sCupRules[trainer_card->ruleCategory - 1].levelCap);
+        Font_EndTexturedTextRendering();
+        trainer_card->levelCapWarningPhase += 0x300;
+    }
+}
+#else
 void EventBattle_DrawLevelCapWarning(EventBattleTrainerParty* trainer_card, s16 x, s16 y) {
     char warning_text_buffer[256];
     s16 alpha;
@@ -575,6 +720,7 @@ void EventBattle_DrawLevelCapWarning(EventBattleTrainerParty* trainer_card, s16 
         trainer_card->levelCapWarningPhase += 0x300;
     }
 }
+#endif
 
 /* Draw the party's identity, Pokemon icons, nicknames, levels, and optional level-cap warning. */
 void EventBattle_DrawTrainerCard(EventBattleTrainerParty* trainer_card) {
@@ -612,6 +758,28 @@ void EventBattle_DrawTrainerCard(EventBattleTrainerParty* trainer_card) {
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
+#if defined(VERSION_JP)
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x08, 0);
+        Font_Printf(x + 12, y + 47, trainer_card->trainerName);
+        Font_SetActive(0x04, -4);
+        Font_Printf(x + 12, y + 70, "ID %05d", trainer_card->trainerId);
+        Font_SetActive(0x04, 0);
+
+        for (i = 0; i < 6; i++) {
+            slot_x = sPokemonPartySlotXOffsets[i] + x + 44;
+            slot_y = sPokemonPartySlotYOffsets[i] + y + 5;
+            Font_Printf(slot_x, slot_y, trainer_card->pokemon[i].nickname);
+        }
+
+        Font_SetActive(0x04, -4);
+
+        for (i = 0; i < 6; i++) {
+            pokemon_name_x = sPokemonPartySlotXOffsets[i] + x + 44;
+            pokemon_name_y = sPokemonPartySlotYOffsets[i] + y + 23;
+            Font_Printf(pokemon_name_x, pokemon_name_y, "L%d", trainer_card->pokemon[i].level);
+        }
+#else
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x08, 0);
         Font_Printf((x - (Font_MeasureTextExtent(0x08, 0, trainer_card->trainerName) / 2)) + 62, y + 47, trainer_card->trainerName);
@@ -634,6 +802,7 @@ void EventBattle_DrawTrainerCard(EventBattleTrainerParty* trainer_card) {
             Font_Printf(pokemon_name_x, pokemon_name_y, "%s%d", Text_GetString(NULL, 0, sPokemonDetailText, 21), trainer_card->pokemon[i].level);
         }
 
+#endif
         Font_EndTexturedTextRendering();
         EventBattle_DrawLevelCapWarning(trainer_card, x, y);
     }
@@ -814,9 +983,16 @@ void EventBattle_DrawPartyEligibilityBanner(EventBattleDescriptionPanel* warning
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            Gfx_SetEnvColor(0xFF, 0x50, 0x64, 0xFF); // #FF5064
+            // "Some Pokémon don't fit the rules"
+            Font_Printf(144, y + 14, "ルールにあわないポケモンがいます");
+#else
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xFF, 0x50, 0x64, 0xFF); // #FF5064
             Font_Printf(144, y + 14, Text_GetString(NULL, 0, sEventBattleText, 10));
+#endif
             Font_EndTexturedTextRendering();
         } else {
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -862,7 +1038,11 @@ void EventBattle_OpenPartyEligibilityBanner(EventBattleDescriptionPanel* panel, 
 
 /* Draw an action label at its animated height and show its text when fully open. */
 void EventBattle_DrawActionLabel(EventBattleActionLabel* option) {
+#if defined(VERSION_JP)
+    UNUSED s16 pad; // FAKE: unused stack padding retained for matching.
+#else
     UNUSED s32 pad; // FAKE: unused stack padding retained for matching.
+#endif
     s16 opening_progress;
     s16 x;
     s16 y;
@@ -881,9 +1061,14 @@ void EventBattle_DrawActionLabel(EventBattleActionLabel* option) {
 
         if (option->height == 48) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -4);
+            Font_Printf((x - (strlen(option->text) * 20) / 4) + 76, y + 11, option->text);
+#else
             Font_SetActive(0x10, 0);
             Font_Printf((x - ((s16)Font_MeasureTextExtent(0x10, 0, option->text) / 2)) + 76, y + 11,
                         option->text);
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -917,6 +1102,25 @@ void EventBattle_InitActionLabel(EventBattleActionLabel* option, s16 x, s16 y, s
     option->text = text;
 }
 
+#if defined(VERSION_JP)
+/* Draw a row's label and optional formatted value, centered by its character count. */
+void EventBattle_DrawSettingsRow(EventBattleSettingsPanel* settings_window, s16 option_index, char* label, char* value_format, s16 value_length, s16 value_number) {
+    if (((option_index == 1) || (option_index == 2)) && (settings_window->timeLimitsEnabled == 0)) {
+        Gfx_SetEnvColor(0x50, 0x50, 0xB4, 0xFF); // #5050B4
+    } else if (option_index == settings_window->cursorPosition) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x00, 0xFF); // #FFFF00
+    } else {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    }
+
+    Font_Printf(settings_window->x + 52, settings_window->y + option_index * 33 + 47, label);
+
+    if (value_length > 0) {
+        Font_Printf((settings_window->x - ((value_length * 22) / 2)) + 344, settings_window->y + option_index * 33 + 47,
+                    value_format, value_number);
+    }
+}
+#else
 /* Draw a row's label and optional formatted value using its selection and enabled-state colors. */
 void EventBattle_DrawSettingsRow(EventBattleSettingsPanel* settings_window, s16 option_index, s16 label_text_id, s16 value_text_id, s16 value_number) {
     char text[64];
@@ -939,6 +1143,8 @@ void EventBattle_DrawSettingsRow(EventBattleSettingsPanel* settings_window, s16 
                     settings_window->y + option_index * 33 + 47, text, value_number);
     }
 }
+
+#endif
 
 /* Draw a 120-by-28 value-field strip using the enabled or disabled tint. */
 void EventBattle_DrawSettingsValueBackground(s16 x, s16 y, s16 enabled) {
@@ -983,12 +1189,19 @@ void EventBattle_DrawTimeSettingArrows(s16 x, s16 y, s16 cursor_position, s16 op
 
 /* Draw the animated settings window and reveal its controls when fully open. */
 void EventBattle_DrawSettingsPanel(EventBattleSettingsPanel* settings_window) {
+#if defined(VERSION_JP)
+    s16 opening_progress;
+    char* value_format;
+    s16 y;
+    s16 x;
+#else
     char* title_string;
     s16 time_limits_index;
     s16 y;
     s16 x;
     UNUSED s16 pad; // FAKE: unused stack padding retained for matching.
     s16 opening_progress;
+#endif
 
     if (settings_window->height >= 15) {
         opening_progress = settings_window->height;
@@ -1021,6 +1234,33 @@ void EventBattle_DrawSettingsPanel(EventBattleSettingsPanel* settings_window) {
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            // "Event Battle Settings"
+            Font_Printf(x + 102, y + 10, "イベントバトルせってい");
+
+            // "On" / "Off"
+            if (settings_window->timeLimitsEnabled == 1) {
+                value_format = "あり";
+            } else {
+                value_format = "なし";
+            }
+            // "Time limits"
+            EventBattle_DrawSettingsRow(settings_window, 0, "じかんせいげん", value_format, 2, 0);
+
+            // "%2d min", with the counter word read "pun" after a multiple of ten
+            if ((settings_window->battleLimitMinutes % 10) == 0) {
+                value_format = "%2dぷん";
+            } else {
+                value_format = "%2dふん";
+            }
+            // "Match time"
+            EventBattle_DrawSettingsRow(settings_window, 1, "しあいじかん", value_format, 4, settings_window->battleLimitMinutes);
+            // "Move selection time", "%2d sec"
+            EventBattle_DrawSettingsRow(settings_window, 2, "わざをきめるじかん", "%2dびょう", 5, settings_window->orderLimitSeconds);
+            // "Confirm"
+            EventBattle_DrawSettingsRow(settings_window, 3, "けってい", NULL, 0, 0);
+#else
             Font_SetActive(0x10, 0);
             title_string = Text_GetString(NULL, 0, sEventBattleText, 11);
             Font_Printf((x - (Font_MeasureTextExtent(0x10, 0, title_string) / 2)) + 223, y + 10, title_string);
@@ -1035,6 +1275,7 @@ void EventBattle_DrawSettingsPanel(EventBattleSettingsPanel* settings_window) {
             EventBattle_DrawSettingsRow(settings_window, 1, 16, 15, settings_window->battleLimitMinutes);
             EventBattle_DrawSettingsRow(settings_window, 2, 17, 18, settings_window->orderLimitSeconds);
             EventBattle_DrawSettingsRow(settings_window, 3, 19, -1, 0);
+#endif
             Font_EndTexturedTextRendering();
         } else {
             EventBattle_DrawFilledPanel(x + 7, y + 7, 432, opening_progress - 14, 0x1E, 0x1E, 0x64, 0xFF); // #1E1E64
@@ -1186,7 +1427,7 @@ void EventBattle_DrawFrame(s16 selection_index) {
     EventBattle_DrawTrainerCard(&sTrainerCards[0]);
     EventBattle_DrawTrainerCard(&sTrainerCards[1]);
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         EventBattle_DrawSelectionOption(&sSelectionOptions[i]);
     }
 
@@ -1213,7 +1454,7 @@ void EventBattle_UpdateWidgets(void) {
     EventBattle_UpdateTrainerCardSlide(&sTrainerCards[0]);
     EventBattle_UpdateTrainerCardSlide(&sTrainerCards[1]);
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         EventBattle_UpdateSelectionOptionSlide(&sSelectionOptions[i]);
     }
 
@@ -1233,7 +1474,7 @@ void EventBattle_RunModeSelection(EventBattleMenuState* state) {
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_DDOWN) {
-                if (state->cursorPosition < 4) {
+                if (state->cursorPosition < EVENT_BATTLE_OPTION_COUNT - 2) {
                     state->cursorPosition += 2;
                     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
                 }
@@ -1249,12 +1490,12 @@ void EventBattle_RunModeSelection(EventBattleMenuState* state) {
                 }
             } else if (gPlayer1Controller->buttonPressed & BTN_A) {
                 switch (state->cursorPosition) {
-                    case 4:
+                    case EVENT_BATTLE_OPTION_SETTINGS:
                         state->state = 5;
                         Audio_PlaySoundEffectById(28);
                         break;
 
-                    case 5:
+                    case EVENT_BATTLE_OPTION_BACK:
                         state->state = 2;
                         Audio_PlaySoundEffectById(SFX_MENU_BACK);
                         break;
@@ -1290,7 +1531,7 @@ void EventBattle_EnterModeSelection(EventBattleMenuState* state) {
     sDescriptionPanel.animationState = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
-    for (j = 0; j < 6; j++) {
+    for (j = 0; j < EVENT_BATTLE_OPTION_COUNT; j++) {
         sSelectionOptions[j].slideState = 2;
     }
 
@@ -1309,7 +1550,7 @@ void EventBattle_ExitToMainMenu(EventBattleMenuState* state) {
 
     sDescriptionPanel.animationState = 2;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         sSelectionOptions[i].slideState = 3;
     }
 
@@ -1338,7 +1579,7 @@ void EventBattle_EnterPartyReview(EventBattleMenuState* state) {
 
     sDescriptionPanel.animationState = 2;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         sSelectionOptions[i].slideState = 3;
     }
 
@@ -1390,7 +1631,7 @@ void EventBattle_ReturnToModeSelection(EventBattleMenuState* state) {
     sDescriptionPanel.animationState = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         sSelectionOptions[i].slideState = 2;
     }
 
@@ -1435,18 +1676,33 @@ void EventBattle_MarkPartnerPikachu(BattleMon* pokemon, s16 controller_port) {
 
     if ((GbSave_GetPortGame(controller_port) == 7) && (pokemon->species.id == PIKACHU)) {
         GbSave_CopyPlayerIdentity(controller_port, &cartridge_player_identity);
+#if defined(VERSION_JP)
+        // The JP identity is 8 bytes (ID and a 6-byte name), so it is compared as one u64.
+        _bcopy(pokemon->unk_3D, pokemon_trainer_identity.unk_02, 3);
+        _bcopy(pokemon->unk_4D, pokemon_trainer_identity.unk_02 + 3, 3);
+        pokemon_trainer_identity.unk_00 = pokemon->unk_0E;
+        if (*(u64*)&pokemon_trainer_identity == *(u64*)&cartridge_player_identity) {
+            pokemon->unk_3C |= 0x80;
+        }
+#else
         _bcopy(pokemon->unk_46, pokemon_trainer_identity.unk_02, 11);
         pokemon_trainer_identity.unk_00 = pokemon->unk_0E;
         if (GbSave_PlayerIdentityMatches(&pokemon_trainer_identity, &cartridge_player_identity)) {
             pokemon->unk_52 |= 0x80;
         }
+#endif
     }
 }
 
 /* Create a session trainer, mark partner Pikachu, and add all six party Pokemon to its battle side. */
 void EventBattle_AddPartyToSession(EventBattleTrainerParty* trainer_card) {
     s16 i;
+#if defined(VERSION_JP)
+    // "Trainer"
+    TeamRoster* trainer = Trainer_Create(trainer_card->controllerPort, trainer_card->trainerId, trainer_card->trainerName, "トレーナー");
+#else
     TeamRoster* trainer = Trainer_Create(trainer_card->controllerPort, trainer_card->trainerId, trainer_card->trainerName, Text_GetPlayerLabel(1));
+#endif
 
     for (i = 0; i < 6; i++) {
         EventBattle_MarkPartnerPikachu(&trainer_card->pokemon[i], trainer_card->controllerPort);
@@ -1537,7 +1793,7 @@ void EventBattle_RunPartyActionMenu(EventBattleMenuState* state) {
                 state->actionCursor = 2;
                 state->state = 8;
             }
-            EventBattle_DrawFrame(state->actionCursor + 6);
+            EventBattle_DrawFrame(state->actionCursor + EVENT_BATTLE_OPTION_COUNT);
         } while (state->state == 4);
     }
 }
@@ -1549,7 +1805,7 @@ void EventBattle_RunSettingsPanel(EventBattleMenuState* state) {
 
     sDescriptionPanel.animationState = 2;
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         sSelectionOptions[i].slideState = 3;
     }
 
@@ -1568,7 +1824,7 @@ void EventBattle_RunSettingsPanel(EventBattleMenuState* state) {
     sDescriptionPanel.animationState = 1;
     Audio_PlayCategory11SoundCommand(0x01100001, 0, 0);
 
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < EVENT_BATTLE_OPTION_COUNT; i++) {
         sSelectionOptions[i].slideState = 2;
     }
 
@@ -1657,7 +1913,11 @@ void EventBattle_InitSelectionScreen(EventBattleMenuState* state, s16 selection_
 
     if (selection_index == -1) {
         state->state = 1;
+#if defined(VERSION_JP)
+        state->cursorPosition = 5;
+#else
         state->cursorPosition = 2;
+#endif
     } else {
         state->state = 10;
         state->cursorPosition = selection_index;
@@ -1671,6 +1931,37 @@ void EventBattle_InitSelectionScreen(EventBattleMenuState* state, s16 selection_
     EventBattle_InitTrainerCard(&sTrainerCards[0], 64, 92, 0);
     EventBattle_InitTrainerCard(&sTrainerCards[1], 64, 248, 1);
 
+#if defined(VERSION_JP)
+    // The options are listed by column; sSelectionEntries maps cursor positions to them by row.
+    EventBattle_InitSelectionOption(&sSelectionOptions[0], 68, 96, D_3027C00, "ニンテンドウカップ‘９９", 3);
+    EventBattle_InitSelectionOption(&sSelectionOptions[1], 68, 164, D_3026F80, "ニンテンドウカップ‘９８", 2);
+    EventBattle_InitSelectionOption(&sSelectionOptions[2], 68, 232, D_3026300, "ニンテンドウカップ‘９７", 1);
+    // "Fancy Cup"
+    EventBattle_InitSelectionOption(&sSelectionOptions[3], 324, 96, D_3028880, "ファンシーカップ", 4);
+    // "Yellow Cup"
+    EventBattle_InitSelectionOption(&sSelectionOptions[4], 324, 164, D_302A180, "イエローカップ", 5);
+    // "Ultra Cup"
+    EventBattle_InitSelectionOption(&sSelectionOptions[5], 324, 232, D_3029500, "ウルトラカップ", 6);
+    // "Event Battle Settings"
+    EventBattle_InitSelectionOption(&sSelectionOptions[6], 68, 300, NULL, "イベントバトルせってい", 0);
+    // "Back"
+    EventBattle_InitSelectionOption(&sSelectionOptions[7], 324, 300, NULL, "もどる", 0);
+
+    // "Battle"
+    EventBattle_InitActionLabel(&sActionLabels[0], 80, 385, "バトルする");
+    // "View Rules"
+    EventBattle_InitActionLabel(&sActionLabels[1], 244, 385, "ルールをみる");
+    // "Quit"
+    EventBattle_InitActionLabel(&sActionLabels[2], 408, 385, "やめる");
+
+    if (selection_index == -1) {
+        for (i = 4; i >= 0; i--) {
+            if (sSelectionOptions[i].bothPartiesEligible != 0) {
+                state->cursorPosition = i;
+            }
+        }
+    }
+#else
     EventBattle_InitSelectionOption(&sSelectionOptions[0], 68, 132, D_3028E00, Text_GetString(NULL, 0, sEventBattleText, 21), 3, 0);
     EventBattle_InitSelectionOption(&sSelectionOptions[1], 324, 132, D_3029A80, Text_GetString(NULL, 0, sEventBattleText, 24), 4, 1);
     EventBattle_InitSelectionOption(&sSelectionOptions[2], 68, 200, D_302A700, Text_GetString(NULL, 0, sEventBattleText, 26), 6, 5);
@@ -1689,6 +1980,7 @@ void EventBattle_InitSelectionScreen(EventBattleMenuState* state, s16 selection_
             }
         }
     }
+#endif
 }
 
 /* Load screen assets and cartridge data, run the menu, remember its selection, and return its next game state. */
@@ -1726,9 +2018,11 @@ s32 EventBattle_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     StageContext_Activate(StageContext_Allocate(1, 0, 2, 0, 2, 1));
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sEventBattleText = Text_GetStringTable(16);
     sPokemonDetailText = Text_GetStringTable(6);
+#endif
 
     while (next_game_state == STATE_EVENT_BATTLE) {
         next_game_state = EventBattle_RunSelectionScreen();

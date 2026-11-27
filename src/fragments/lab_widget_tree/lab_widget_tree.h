@@ -131,6 +131,17 @@ typedef struct unk_func_88500E34 {
     /* 0x2C */ u8* unk_2C;
 } unk_func_88500E34; // size = 0x30
 
+#if defined(VERSION_JP)
+// JP has no ID label pointer; the player name follows the trainer ID.
+typedef struct unk_func_88509A2C {
+    /* 0x00 */ WidgetNode unk_00;
+    /* 0x2C */ s32 unk_2C;
+    /* 0x30 */ s32 unk_30;
+    /* 0x34 */ s32 unk_34;
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ s8 unk_40[12];
+} unk_func_88509A2C; // size = 0x48
+#else
 typedef struct unk_func_88509A2C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
@@ -140,6 +151,7 @@ typedef struct unk_func_88509A2C {
     /* 0x3C */ char* unk_3C;
     /* 0x40 */ s8 unk_40[12];
 } unk_func_88509A2C; // size = 0x4C
+#endif
 
 typedef struct unk_func_88500EE4 {
     /* 0x00 */ WidgetNode unk_00;
@@ -764,7 +776,11 @@ typedef void (*func88507CEC)(unk_func_8820BE14_02C_038*);
 typedef void (*func88507D4C)(unk_func_88507D4C*, s32, s32, s32, s32, unk_func_8820BE14_02C_038*);
 typedef void (*func8850878C)(unk_func_8850878C*, s32, s32, char*, s32);
 typedef void (*func885088F4)(unk_func_885088F4*, s32, s32, s32);
+#if defined(VERSION_JP)
+typedef void (*func88509A2C)(unk_func_88509A2C*, s32, s32, s32);
+#else
 typedef void (*func88509A2C)(unk_func_88509A2C*, s32, s32, s32, char*);
+#endif
 typedef void (*func88509E34)(unk_func_88509F0C*, s32, s32, char*);
 typedef void (*func88509F48)(unk_func_88509F48*, s32, s32, s32, s32, MemoryPool*, s32);
 typedef void (*func8850A10C)(unk_func_88509F48*, unk_func_8850878C*, s32, s32);
@@ -884,7 +900,11 @@ s32 WidgetTree_DrawTextLabel(unk_func_8850878C*, s32, s32);
 void WidgetTree_InitSlideTransition(unk_func_885088F4*, s32, s32, s32);
 s32 WidgetTree_UpdateSlideTransition(unk_func_885088F4*);
 s32 WidgetTree_DrawSlideTransition(unk_func_885088F4*, s32, s32);
+#if defined(VERSION_JP)
+void WidgetTree_InitSaveSlotLabel(unk_func_88509A2C*, s32, s32, s32);
+#else
 void WidgetTree_InitSaveSlotLabel(unk_func_88509A2C*, s32, s32, s32, char*);
+#endif
 s32 WidgetTree_DrawSaveSlotLabel(unk_func_88509A2C*, s32, s32);
 void WidgetTree_InitTextMessage(unk_func_88509E34*, s32, s32, char*);
 s32 WidgetTree_DrawTextMessage(unk_func_88509F0C*, s32, s32);

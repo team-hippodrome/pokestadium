@@ -24,8 +24,13 @@ typedef struct EventBattleSelectionOption {
     /* 0x10 */ char* text;
     /* 0x14 */ s16 minLevel;
     /* 0x16 */ s16 maxLevel;
+#if defined(VERSION_JP)
+    // JP looks descriptions up by cursor position in sCupDescriptions.
+} EventBattleSelectionOption; // size = 0x18
+#else
     /* 0x18 */ s16 descriptionTextId;
 } EventBattleSelectionOption; // size = 0x1C
+#endif
 
 typedef struct EventBattleDescriptionPanel {
     /* 0x00 */ u8 animationState; // 0 = idle, 1 = opening, 2 = closing
@@ -61,8 +66,13 @@ typedef struct EventBattleTrainerParty {
     /* 0x0012 */ u16 trainerId;
     /* 0x0014 */ char trainerName[12];
     /* 0x0020 */ BattleMon pokemon[6];
+#if defined(VERSION_JP)
+    /* 0x0200 */ u8 pokemonIcons[6][3200];
+} EventBattleTrainerParty; // size = 0x4D00
+#else
     /* 0x0218 */ u8 pokemonIcons[6][3200];
 } EventBattleTrainerParty; // size = 0x4D18
+#endif
 
 typedef struct EventBattleActionLabel {
     /* 0x00 */ u8 animationState; // 0 = idle, 1 = growing, 2 = shrinking
