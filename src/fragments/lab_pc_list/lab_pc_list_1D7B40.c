@@ -4199,20 +4199,7 @@ void BattleInfoWidget_MarkIneligibleItems(unk_func_8830867C_04C* arg0) {
 }
 
 #if defined(VERSION_JP)
-// The JP title is built by appending fixed strings, which the compiler copies as whole blocks.
-typedef struct JpStr3 {
-    char c[3];
-} JpStr3;
-typedef struct JpStr7 {
-    char c[7];
-} JpStr7;
-typedef struct JpStr13 {
-    char c[13];
-} JpStr13;
-typedef struct JpStr15 {
-    char c[15];
-} JpStr15;
-
+// The JP title is built by appending fixed strings, which the compiler copies as whole blocks (see JpStr).
 void BattleInfoWidget_UpdateItemMenuTitle(unk_func_8830867C_04C* arg0) {
     arg0->unk_38[0] = '\0';
     if (arg0->unk_88 != NULL) {

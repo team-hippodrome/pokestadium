@@ -499,11 +499,19 @@ typedef struct unk_func_8830867C_02C {
     /* 0xCC4 */ s32 unk_CC4;
     /* 0xCC8 */ s32 unk_CC8;
     /* 0xCCC */ unk_func_8850878C* unk_CCC;
+#if defined(VERSION_JP)
+    // JP has a second message label; each label carries two layout values.
+    /* 0xCDC */ s32 unk_CCC_jp_04;
+    /* 0xCE0 */ s32 unk_CCC_jp_08;
+    /* 0xCE4 */ unk_func_8850878C* unk_CCC_jp_0C;
+    /* 0xCE8 */ s32 unk_CCC_jp_10;
+    /* 0xCEC */ s32 unk_CCC_jp_14;
+#endif
     /* 0xCD0 */ s32 unk_CD0;
     /* 0xCD4 */ s32* unk_CD4;
     /* 0xCD8 */ FragmentEntry unk_CD8;
     /* 0xCDC */ unk_func_8830867C_054* unk_CDC;
-} unk_func_8830867C_02C; // size = 0xCE0
+} unk_func_8830867C_02C; // size = 0xCE0 (JP 0xD00)
 
 typedef struct unk_func_8830867C {
     /* 0x00 */ WidgetNode unk_00;
@@ -519,6 +527,7 @@ typedef struct unk_func_8830867C {
     /* 0x50 */ unk_func_889000C4* unk_50;
     /* 0x54 */ unk_func_8830867C_054 unk_54;
     /* 0x6C */ s32 unk_6C;
+#if !defined(VERSION_JP)
     /* 0x70 */ char** unk_70;
     /* 0x74 */ char** unk_74;
     /* 0x78 */ char** unk_78;
@@ -526,7 +535,8 @@ typedef struct unk_func_8830867C {
     /* 0x80 */ char** unk_80;
     /* 0x84 */ char** unk_84;
     /* 0x88 */ char** unk_88;
-} unk_func_8830867C; // size = 0x8C
+#endif
+} unk_func_8830867C; // size = 0x8C (JP 0x70)
 
 typedef struct unk_func_88302D98 {
     /* 0x00 */ WidgetNode unk_00;
@@ -546,10 +556,15 @@ typedef struct unk_func_88304850_arg2 {
     /* 0x32 */ s16 unk_32;
     /* 0x34 */ s16 unk_34;
     /* 0x36 */ s16 unk_36;
+#if defined(VERSION_JP)
+    /* 0x38 */ char unk_38[0x10]; // Nickname
+    /* 0x48 */ char unk_43[1];    // OT name
+#else
     /* 0x38 */ char unk_38[4];
     /* 0x3C */ char unk3C[0x4];
     /* 0x40 */ char unk_40[3];
     /* 0x43 */ char unk_43[1];
+#endif
 } unk_func_88304850_arg2; // size >= 0x44
 
 typedef struct unk_func_88309C38_arg2_004 {
@@ -573,6 +588,22 @@ typedef struct unk_func_88309C38_arg2 {
     /* 0x14 */ s32 unk_14;
     /* 0x18 */ s32 unk_18;
 } unk_func_88309C38_arg2; // size >= 0x1C
+
+#if defined(VERSION_JP)
+// JP code appends fixed strings with struct copies: *(JpStrN*)(strlen(buf) + buf) = *(JpStrN*)"...",
+// where N is the string's size in bytes including the terminator.
+#define JP_STR_TYPE(n)        \
+    typedef struct JpStr##n { \
+        char c[n];            \
+    } JpStr##n
+JP_STR_TYPE(3);
+JP_STR_TYPE(6);
+JP_STR_TYPE(7);
+JP_STR_TYPE(9);
+JP_STR_TYPE(13);
+JP_STR_TYPE(15);
+JP_STR_TYPE(84);
+#endif
 
 #if defined(VERSION_JP)
 // JP box descriptors start with a label string (see unk_func_8830867C_02C_0E4).
@@ -709,12 +740,20 @@ void LabPCList_InitDeckSlots(unk_func_8830867C_02C* arg0, MemoryPool* arg1);
 void LabPCList_InitPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2, unk_func_8830867C_02C* arg3);
 s32 LabPCList_DrawPageHeader(unk_func_88302D98* arg0, s32 arg1, s32 arg2);
 void LabPCList_SwitchColumnPage(unk_func_8830867C_02C* arg0);
+#if defined(VERSION_JP)
+void LabPCList_DrawTypeName(s32 arg0, s32 arg1, u8* arg3, s32 arg4);
+void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, u8* arg3, s32 arg4);
+void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg3);
+void LabPCList_DrawPlainText(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
+void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, u8* arg5);
+#else
 void LabPCList_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
 void LabPCList_DrawMoveNameCell(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4);
 void LabPCList_DrawAreaCell(s32 arg0, s32 arg1, s32 arg2, unk_func_88304850_arg2* arg3);
 void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3);
 void LabPCList_DrawFormattedNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3);
 void LabPCList_DrawStatNumber(s32 arg0, s32 arg1, char* arg2, s32 arg3, u8* arg4);
+#endif
 s32 LabPCList_CheckStatFilterRange(unk_func_8830867C_02C* arg0, unk_func_88304850_arg2* arg1);
 void func_88304850(s32 arg0, s32 arg1, unk_func_88304850_arg2* arg2, s32 arg3, s32 arg4,
                    unk_func_8830867C_02C_034* arg5);

@@ -57,6 +57,9 @@ typedef struct unk_func_8820BE14_06C {
 } unk_func_8820BE14_06C; // size = 0x10
 
 typedef struct unk_func_8830867C_02C_0CC_000_000_000 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_jp_00; // Label string (see unk_func_8830867C_02C_0E4).
+#endif
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ s32 unk_08;
 } unk_func_8830867C_02C_0CC_000_000_000; // size >= 0xC
@@ -114,9 +117,14 @@ typedef struct unk_func_8830867C_02C_0CC_000 {
     /* 0x00 */ unk_func_8830867C_02C_0CC_000_000* unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ unk_func_8830867C_02C_0CC_000_008 unk_08;
+#if defined(VERSION_JP)
+    /* 0x38 */ char unk_38[0x10];    // Nickname
+    /* 0x48 */ char unk_48_jp[0x10]; // OT name
+#else
     /* 0x38 */ char unk_38[4];
     /* 0x3C */ char unk3C[0x20];
-} unk_func_8830867C_02C_0CC_000; // size = 0x5C
+#endif
+} unk_func_8830867C_02C_0CC_000; // size = 0x5C (JP 0x58)
 
 typedef struct unk_func_8830867C_02C_0CC {
     /* 0x00 */ unk_func_8830867C_02C_0CC_000** unk_00;
