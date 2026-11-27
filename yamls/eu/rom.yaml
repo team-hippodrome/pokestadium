@@ -98,7 +98,8 @@
     - [0x3CFD0, c, audio_data]
     - [0x3D110, c, audio_fade]
     - [0x3D830, c, 3D140_2]
-    - [0x42BE0, asm, 3D140]
+    - [0x42BE0, c, 3D140]
+    - [0x43CD0, c, libnumus/player]
     - [0x48280, c, libnaudio/n_auxbus]
     - [0x48330, asm, libnaudio/n_drvrNew]
     - [0x48870, asm, libnaudio/n_env]
@@ -308,7 +309,9 @@
     - [0x78CF0, data, audio_commands_category2]
     - [0x78EB0, .data, audio_fade]
     - [0x791C0, .data, 3D140_2]
-    - [0x79950, data, 3D140]
+    - [0x79950, .data, 3D140]
+    - [0x799D0, .data, libnumus/player]
+    - [0x79AD0, data, libnaudio/n_drvrNew]
     - [0x79D80, data, gb_audio_render]
     - [0x7A180, data, gb_audio]
     - [0x7A1E0, .data, audio_stream]
@@ -377,8 +380,9 @@
     - [0x7D6D0, rodata, audio_commands_category2]
     - [0x7DA30, .rodata, audio_fade]
     - [0x7E0E0, .rodata, 3D140_2]
-    - [0x7E500, rodata, 3D140]
-    - [0x7E520, rodata, libnumus/player]
+    - [0x7E500, .rodata, 3D140]
+    - [0x7E520, .rodata, libnumus/player]
+    - [0x7E5A0, rodata, libnaudio/n_drvrNew]
     - [0x7E5C0, rodata, libnaudio/n_env]
     - [0x7E6E0, .rodata, audio_stream]
     - [0x7E700, rodata, libleo/leofunc]
@@ -452,9 +456,9 @@
     - {vram: 0x800B3370, type: .bss, name: audio_loop_point}
     - {vram: 0x800B3380, type: .bss, name: audio_bank_init}
     - {vram: 0x800FC880, type: .bss, name: audio_data}
-    - {vram: 0x800FC890, type: bss, name: 3D140}
-    - {vram: 0x800FCAC0, type: bss, name: gb_audio}
-    - {vram: 0x800FCDB0, type: bss, name: libnumus/player}
+    - {vram: 0x800FC890, type: .bss, name: 3D140_2}
+    - {vram: 0x800FCAC0, type: .bss, name: 3D140}
+    - {vram: 0x800FCDB0, type: .bss, name: libnumus/player}
     - {vram: 0x800FCE30, type: bss, name: gb_audio_render}
     - {vram: 0x800FF9F0, type: .bss, name: audio_stream}
     - {vram: 0x800FFA80, type: .bss, name: rom_device}

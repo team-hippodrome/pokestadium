@@ -349,3 +349,25 @@
 -> - {vram: 0x800B3380, type: .bss, name: audio_bank_init}
 - {vram: 0x800FFAA0, type: bss, name: audio_loop_point}
 -> - {vram: 0x800FFAA0, type: bss, name: libleo/leofunc}
+
+# 3D140 and libnumus/player: built from the shared C. PAL links player after 3D140 (US links it
+# before), and the porter merges the two into one blob per section. The 3D140 .bss holds only
+# 3D140.c's own variables in PAL; the rest belong to 3D140_2.c, which PAL links first.
+- [0x42BE0, asm, 3D140]
+-> - [0x42BE0, c, 3D140]
+-> - [0x43CD0, c, libnumus/player]
+- [0x79950, data, 3D140]
+-> - [0x79950, .data, 3D140]
+-> - [0x799D0, .data, libnumus/player]
+-> - [0x79AD0, data, libnaudio/n_drvrNew]
+- [0x7E500, rodata, 3D140]
+-> - [0x7E500, .rodata, 3D140]
+- [0x7E520, rodata, libnumus/player]
+-> - [0x7E520, .rodata, libnumus/player]
+-> - [0x7E5A0, rodata, libnaudio/n_drvrNew]
+- {vram: 0x800FC890, type: bss, name: 3D140}
+-> - {vram: 0x800FC890, type: .bss, name: 3D140_2}
+- {vram: 0x800FCAC0, type: bss, name: gb_audio}
+-> - {vram: 0x800FCAC0, type: .bss, name: 3D140}
+- {vram: 0x800FCDB0, type: bss, name: libnumus/player}
+-> - {vram: 0x800FCDB0, type: .bss, name: libnumus/player}

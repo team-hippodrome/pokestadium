@@ -162,6 +162,53 @@ extern s8 D_800FCCD8[0x18];
 extern u32 D_800FCCF0[10];
 extern u8 D_800FCD18[0x28];
 
+#if defined(VERSION_PAL)
+// PAL links this file before 3D140.c, so its .bss comes first.
+s32 D_800FCB10[2];
+BattleMonRuntime* D_800FCB18[4];
+u32 D_800FCB28[2];
+u8 D_800FCB30[2];
+u8 D_800FCB38[2][8];
+unk_D_800FCB48 D_800FCB48[2];
+s32 D_800FCC50[20];
+s8 D_800FCCA0;
+s8 D_800FCCA1;
+u8 D_800FCCA2;
+u32 D_800FCCA4;
+s32 D_800FCCA8;
+u8 D_800FCCAC;
+u8 D_800FCCAD;
+u8 D_800FCCAE;
+u8 D_800FCCAF;
+u8 D_800FCCB0;
+u8 D_800FCCB1;
+u8 D_800FCCB2;
+u8 D_800FCCB3;
+u8 D_800FCCB4;
+u8 D_800FCCB5;
+u8 D_800FCCB6;
+u8 D_800FCCB7;
+u8 D_800FCCB8[2];
+u8 D_800FCCBA[2];
+u8 D_800FCCBC[2];
+u8 D_800FCCBE[2];
+u8 D_800FCCC0[2];
+u8 D_800FCCC2[2];
+u8 D_800FCCC4[2];
+u8 D_800FCCC6[2];
+u8 D_800FCCC8[2];
+u8 D_800FCCCA[2];
+u8 D_800FCCCC[2];
+u8 D_800FCCCE[2];
+u8 D_800FCCD0[2];
+u8 D_800FCCD2[2];
+u8 D_800FCCD4[2];
+u8 D_800FCCD6[2];
+s8 D_800FCCD8[0x18];
+u32 D_800FCCF0[10];
+u8 D_800FCD18[0x28];
+#endif
+
 // function prototypes
 void Audio_QueueSoundWithFallbackList(u16, u16*, u8*);
 u32 Battle_EstimateMoveDamage(u32, BattleMonRuntime*, BattleMonRuntime*);
