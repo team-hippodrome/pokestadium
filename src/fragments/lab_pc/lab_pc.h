@@ -22,6 +22,22 @@
 #define LETTER_SPACING(jpSpacing) 0
 #endif
 
+// A value that differs on JP.
+#if defined(VERSION_JP)
+#define LABPC_JP(jp, other) (jp)
+#else
+#define LABPC_JP(jp, other) (other)
+#endif
+
+// A text-table argument that JP functions don't take.
+#if defined(VERSION_JP)
+#define LAB_PC_TEXT_PARAM(param)
+#define LAB_PC_TEXT_ARG(arg)
+#else
+#define LAB_PC_TEXT_PARAM(param) param,
+#define LAB_PC_TEXT_ARG(arg) arg,
+#endif
+
 struct unk_func_8821421C_038_04C_000;
 struct unk_func_8820B12C_02C;
 struct unk_func_8821421C_034;
@@ -69,8 +85,9 @@ typedef struct unk_func_88205880 {
     /* 0xA030 */ unk_func_88205880_A030 unk_A030[2];
 } unk_func_88205880; // size = 0xA048, 0x9808 on JP
 
+// One BattleMon-sized record (0x50 on JP, 0x54 elsewhere).
 typedef struct unk_func_882062E4 {
-    /* 0x0000 */ char unk_00[0x54];
+    /* 0x0000 */ char unk_00[sizeof(BattleMon)];
 } unk_func_882062E4; // size = 0x54
 
 typedef struct unk_func_88208C5C {
@@ -207,15 +224,20 @@ typedef struct unk_func_8820BE14_02C {
     /* 0x78 */ unk_func_8820BE14_02C_078* unk_78[2];
     /* 0x80 */ unk_func_88509F48* unk_80;
     /* 0x84 */ unk_func_889000C4* unk_84;
+#if defined(VERSION_JP)
+    /* 0x88 */ unk_func_8850878C* unk_88_jp[1]; // "Can't save with an empty party" message.
+#endif
     /* 0x88 */ unk_func_8850878C* unk_88;
     /* 0x8C */ unk_func_8820BE14_06C* unk_8C;
     /* 0x90 */ char unk90[0x10];
-} unk_func_8820BE14_02C; // size = 0xA0
+} unk_func_8820BE14_02C; // size = 0xA0 (0xA4 on JP)
 
 typedef struct unk_func_8820BE14 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8820BE14_02C* unk_2C;
     /* 0x30 */ unk_func_8820BE14_030 unk_30;
+#if !defined(VERSION_JP)
+    // Text tables; JP has none (its strings are inline), so later offsets drop by 0x1C there.
     /* 0x4C */ char** unk_4C;
     /* 0x50 */ char** unk_50;
     /* 0x54 */ char** unk_54;
@@ -223,11 +245,12 @@ typedef struct unk_func_8820BE14 {
     /* 0x5C */ char** unk_5C;
     /* 0x60 */ char** unk_60;
     /* 0x64 */ char** unk_64;
+#endif
     /* 0x68 */ unk_func_88509F48* unk_68;
     /* 0x6C */ unk_func_8820BE14_06C unk_6C;
     /* 0x7C */ unk_func_8820BE14_06C unk_7C;
     /* 0x8C */ unk_func_8820BE14_06C unk_8C;
-} unk_func_8820BE14; // size = 0x9C
+} unk_func_8820BE14; // size = 0x9C (0x80 on JP)
 
 typedef struct unk_func_882170A8 {
     /* 0x00 */ WidgetNode unk_00;
@@ -576,8 +599,18 @@ void LabPC_BoxTypeSelector_SetSlotASelection(unk_func_8820BE14_02C_078* arg0, u3
 void LabPC_BoxTypeSelector_SetSlotBSelection(unk_func_8820BE14_02C_078* arg0, u32 arg1);
 s32 LabPC_BoxTypeSelectorInput(unk_func_8820BE14_02C_078* arg0, Controller* arg1);
 s32 LabPC_RunBoxTypeSelectorModal(unk_func_8820BE14_02C_078* arg0, Controller* arg1);
+// JP draws the level at a fixed x, so it takes no width.
+#if defined(VERSION_JP)
+#define MON_NAME_LEVEL_WIDTH(width)
+#define MON_NAME_LEVEL_WIDTH_PARAM(param)
+void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2);
+#else
+#define MON_NAME_LEVEL_WIDTH(width) , width
+#define MON_NAME_LEVEL_WIDTH_PARAM(param) param,
 void LabPC_DrawMonNameLevel(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2, s32 arg3);
-void LabPC_InitMonNameLevelWidget(unk_func_882079D8* arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4);
+#endif
+void LabPC_InitMonNameLevelWidget(unk_func_882079D8* arg0, s32 arg1, s32 arg2,
+                                  MON_NAME_LEVEL_WIDTH_PARAM(s32 arg3) unk_func_88205880_00D0* arg4);
 void LabPC_MonNameLevelWidget_SetMon(unk_func_882079D8* arg0, unk_func_88205880_00D0* arg1);
 s32 LabPC_MonNameLevelWidget_Draw(unk_func_882079D8* arg0, s32 arg1, s32 arg2);
 void LabPC_SwapMenu_NotifyModeChanged(unk_func_8820B12C_02C* arg0, s32 arg1);
