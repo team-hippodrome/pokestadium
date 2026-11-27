@@ -1077,8 +1077,16 @@
     vram: 0x88300000
     subsegments:
     - [0x1E76D0, textbin,   fragments/lab_pc_list/lab_pc_list_header]
-    - [0x1E76F0, asm, fragment24_1E76F0]
+    - [0x1E76F0, asm, fragments/lab_pc_list/lab_pc_list_1CEA00]
+    - [0x1EFD40, asm, fragments/lab_pc_list/lab_pc_list_1D7B40]
+    - [0x1FB570, asm, fragments/lab_pc_list/lab_pc_list_1E46B0]
+
+    - [0x1FCA90, data, fragments/lab_pc_list/lab_pc_list_1CEA00]
+    - [0x1FCBE0, data, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - [0x1FD020, data, fragments/lab_pc_list/lab_pc_list_1E46B0]
+
+    - [0x1FFBA0, rodata, fragments/lab_pc_list/lab_pc_list_1CEA00]
+    - [0x1FFFC0, rodata, fragments/lab_pc_list/lab_pc_list_1D7B40]
     - {vram: 0x88318DA0, type:  bss, name: fragments/lab_pc_list/lab_pc_list_1CEA00}
   - name: fragment24_relocs
     type: code
