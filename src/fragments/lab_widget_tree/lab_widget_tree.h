@@ -313,7 +313,7 @@ typedef struct unk_func_8850143C {
 typedef struct unk_func_8820399C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
-    /* 0x30 */ unk_func_8850143C* unk_30;
+    /* 0x30 */ s32 unk_30; // 0: GB cartridge side, 1: N64 cartridge side
 } unk_func_8820399C; // size = 0x34
 
 typedef struct unk_func_88509F48 {
@@ -516,6 +516,8 @@ typedef struct unk_func_88205880_0098 {
     /* 0x10 */ s32 unk_10;
     /* 0x14 */ WidgetNode* unk_14;
     /* 0x18 */ s32 unk_18;
+#if !defined(VERSION_JP)
+    // Text tables; JP has none.
     /* 0x1C */ char** unk_1C;
     /* 0x20 */ char** unk_20;
     /* 0x24 */ char** unk_24;
@@ -523,7 +525,8 @@ typedef struct unk_func_88205880_0098 {
     /* 0x2C */ char** unk_2C;
     /* 0x30 */ char** unk_30;
     /* 0x34 */ char** unk_34;
-} unk_func_88205880_0098; // size = 0x38
+#endif
+} unk_func_88205880_0098; // size = 0x38, 0x1C on JP
 
 typedef struct unk_func_88201DA0 {
     /* 0x00 */ WidgetNode unk_00;
@@ -533,12 +536,15 @@ typedef struct unk_func_88201DA0 {
     /* 0x38 */ unk_func_88201DA0_038 unk_38;
     /* 0x48 */ FragmentEntry unk_48;
     /* 0x4C */ unk_func_88205880_0098* unk_4C;
+#if !defined(VERSION_JP)
+    // The title label; JP doesn't recenter it, so it keeps no pointer to it.
     /* 0x50 */ unk_func_8850878C* unk_50;
+#endif
     /* 0x54 */ char* unk_54;
     /* 0x58 */ unk_func_8850182C* unk_58;
     /* 0x5C */ unk_func_88205880_00D0* unk_5C;
     /* 0x60 */ u32 unk_60;
-} unk_func_88201DA0; // size = 0x64
+} unk_func_88201DA0; // size = 0x64, 0x60 on JP
 
 typedef struct unk_func_8820253C {
     /* 0x00 */ WidgetNode unk_00;

@@ -76,6 +76,15 @@ typedef struct BattleMon {
 } BattleMon; // size = 0x54
 #endif
 
+// The GB cartridge's PC boxes: JP Red/Green has 8 boxes of 30, the other releases 12 boxes of 20.
+#if defined(VERSION_JP)
+#define SAVE_BOX_COUNT 8
+#define SAVE_BOX_CAPACITY 30
+#else
+#define SAVE_BOX_COUNT 12
+#define SAVE_BOX_CAPACITY 20
+#endif
+
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
     /* 0x002 */ u8 numberOfPokemonCanBePicked; // Only changes for Free Battle and VS Mewtwo, see

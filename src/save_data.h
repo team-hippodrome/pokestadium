@@ -75,14 +75,11 @@ typedef struct RegisteredTeamSlot {
 } RegisteredTeamSlot; // size = 0x160
 #endif
 
+// SAVE_BOX_COUNT and SAVE_BOX_CAPACITY are in game_state.h.
 #if defined(VERSION_JP)
 #define REGISTERED_TEAM_SLOTS 12
-#define SAVE_BOX_COUNT 8
-#define SAVE_BOX_CAPACITY 30
 #else
 #define REGISTERED_TEAM_SLOTS 10
-#define SAVE_BOX_COUNT 12
-#define SAVE_BOX_CAPACITY 20
 #endif
 
 typedef struct RegisteredTeamBank {

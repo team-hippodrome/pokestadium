@@ -8,6 +8,20 @@
 #include "src/gb_data.h"
 #include "src/gb_save.h"
 
+// JP has no text tables: the Lab PC strings sit at the use site.
+#if defined(VERSION_JP)
+#define LABPC_TEXT(table, id, jpText) (jpText)
+#else
+#define LABPC_TEXT(table, id, jpText) Text_GetString(NULL, 0, table, id)
+#endif
+
+// JP fonts draw with tighter letter spacing.
+#if defined(VERSION_JP)
+#define LETTER_SPACING(jpSpacing) (jpSpacing)
+#else
+#define LETTER_SPACING(jpSpacing) 0
+#endif
+
 struct unk_func_8821421C_038_04C_000;
 struct unk_func_8820B12C_02C;
 struct unk_func_8821421C_034;
@@ -40,15 +54,20 @@ typedef struct unk_func_88200FA0 {
 typedef struct unk_func_88205880 {
     /* 0x0000 */ WidgetNode unk_0000;
     /* 0x002C */ unk_func_88203ED8* unk_002C;
+#if defined(VERSION_JP)
+    /* 0x0030 */ char unk0030[0x60];
+#else
     /* 0x0030 */ char unk0030[0x64];
+#endif
+    // The offsets below are the US ones; JP has 8 GB boxes of 30 Pokémon and a smaller unk_0098.
     /* 0x0094 */ unk_func_88201DA0* unk_0094;
     /* 0x0098 */ unk_func_88205880_0098 unk_0098;
-    /* 0x00D0 */ unk_func_88205880_00D0 unk_00D0[12];
-    /* 0x5050 */ unk_func_88205880_00D0 unk_5050[12];
-    /* 0x9FD0 */ unk_func_88205880_00D0* unk_9FD0[12];
-    /* 0xA000 */ unk_func_88205880_00D0* unk_A000[12];
+    /* 0x00D0 */ unk_func_88205880_00D0 unk_00D0[SAVE_BOX_COUNT];
+    /* 0x5050 */ unk_func_88205880_00D0 unk_5050[SAVE_BOX_COUNT];
+    /* 0x9FD0 */ unk_func_88205880_00D0* unk_9FD0[SAVE_BOX_COUNT];
+    /* 0xA000 */ unk_func_88205880_00D0* unk_A000[SAVE_BOX_COUNT];
     /* 0xA030 */ unk_func_88205880_A030 unk_A030[2];
-} unk_func_88205880; // size = 0xA048
+} unk_func_88205880; // size = 0xA048, 0x9808 on JP
 
 typedef struct unk_func_882062E4 {
     /* 0x0000 */ char unk_00[0x54];
@@ -469,7 +488,12 @@ s32 LabPC_Dispatch(s32 arg0, s32 arg1);
 
 void LabPC_BuildMenuTitleLabel(unk_func_88503298* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
 void LabPC_MenuTitleLabel_SetText(unk_func_88503298* arg0, s8* arg1);
+#if defined(VERSION_JP)
+void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, s32 arg3, WidgetNode* arg4,
+                               MemoryPool* arg5);
+#else
 void LabPC_BuildMenuGridWidget(unk_func_88200FA0_030* arg0, s32 arg1, s32 arg2, WidgetNode* arg3, MemoryPool* arg4);
+#endif
 void LabPC_MenuGridWidget_RefreshTitle(unk_func_88200FA0_030* arg0, s32 arg1);
 void LabPC_DrawMenuGridCell(s32 arg0, s32 arg1, char* arg2, s32 arg3);
 s32 LabPC_MenuGridWidget_HandleInput(unk_func_88200FA0_030* arg0, Controller* arg1);
@@ -515,7 +539,14 @@ s32 LabPC_BoxPairSelector_IsInitialStage(unk_func_882025E0_1A9780* arg0);
 void LabPC_BoxPairSelector_ReorderSwap(unk_func_882025E0_1A9780* arg0);
 void LabPC_BoxPairSelector_ExchangeSwap(unk_func_882025E0_1A9780* arg0);
 s32 LabPC_BoxPairSelector_HandleInput(unk_func_882025E0_1A9780* arg0, Controller* arg1);
+#if defined(VERSION_JP)
+// JP's box label tabs keep their own size, so they don't take the frame they sit in.
+void LabPC_BuildBoxLabelTab(unk_func_8820399C* arg0, s32 arg1);
+#define BOX_LABEL_TAB_FRAME(frame)
+#else
 void LabPC_BuildBoxLabelTab(unk_func_8820399C* arg0, s32 arg1, unk_func_8850143C* arg2);
+#define BOX_LABEL_TAB_FRAME(frame) , frame
+#endif
 s32 LabPC_DrawBoxLabelTab(unk_func_8820399C* arg0, s32 arg1, s32 arg2);
 s32 LabPC_BoxMenu_OnShow(unk_func_88203ED8* arg0);
 void LabPC_BoxMenu_SetVisible(unk_func_88203ED8* arg0, s32 arg1);

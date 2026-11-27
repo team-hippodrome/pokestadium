@@ -6,12 +6,12 @@
 #include "src/poke_icon.h"
 
 typedef struct unk_func_88205880_00D0 {
-    /* 0x000 */ BattleMon unk_000[20];
-    /* 0x690 */ s32 unk_690;
+    /* 0x000 */ BattleMon unk_000[SAVE_BOX_CAPACITY];
+    /* 0x690 */ s32 unk_690; // 0x960 on JP
     /* 0x694 */ s32 unk_694;
     /* 0x698 */ s32 unk_698;
     /* 0x69C */ u32 unk_69C;
-} unk_func_88205880_00D0; // size = 0x6A0
+} unk_func_88205880_00D0; // size = 0x6A0, 0x970 on JP
 
 typedef struct unk_func_88200FA0_030_038 {
     /* 0x00 */ unk_func_88205880_00D0** unk_00;
