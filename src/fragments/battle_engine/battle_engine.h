@@ -1787,8 +1787,20 @@ void Battle_SimpleStringFormat(s8* buffer, s8* format, ...);
 #if defined(VERSION_JP)
 // The Japanese build formats the message: %s in fmt copies the next char* argument.
 void Battle_QueueMessage(s8* arg0, s8 arg1, const char* fmt, ...);
+// Queue message `id` from gBattleQueuedMessageTexts, formatted with N %s arguments.
+#define BATTLE_QUEUE_MESSAGE0(text, id) Battle_QueueMessage(text, id, gBattleQueuedMessageTexts[id])
+#define BATTLE_QUEUE_MESSAGE1(text, id, a) Battle_QueueMessage(text, id, gBattleQueuedMessageTexts[id], a)
+#define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id, gBattleQueuedMessageTexts[id], a, b)
+// JP passes message arguments directly, so it sets no text tokens.
+#define BATTLE_SET_MESSAGE_TOKEN(token, string)
 #else
 void Battle_QueueMessage(s8* text, s8 file_number_index);
+// Queues message `id` from the battle message text file; %s values come from the
+// text tokens set with BATTLE_SET_MESSAGE_TOKEN, so the arguments are unused here.
+#define BATTLE_QUEUE_MESSAGE0(text, id) Battle_QueueMessage(text, id)
+#define BATTLE_QUEUE_MESSAGE1(text, id, a) Battle_QueueMessage(text, id)
+#define BATTLE_QUEUE_MESSAGE2(text, id, a, b) Battle_QueueMessage(text, id)
+#define BATTLE_SET_MESSAGE_TOKEN(token, string) Text_SetStringToken(token, string)
 #endif
 void Battle_QueueStatusText(char* text, s32 side);
 void func_84317B38(void);
