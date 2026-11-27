@@ -124,6 +124,15 @@ u32 sDioramaSkyGradientTex[] = {
     0x53FF53FF, 0x53FF53FF, 0x53FF53FF, 0x53FF53FF,
 };
 // Camera keyframes for groups 0-3 of the boot diorama.
+// The first two camera moves are slower in JP.
+#ifdef VERSION_JP
+#define DIORAMA_SHOT0_SPEED 4.0f
+#define DIORAMA_SHOT1_SPEED 3.0f
+#else
+#define DIORAMA_SHOT0_SPEED 4.400000095367432f
+#define DIORAMA_SHOT1_SPEED 3.299999952316284f
+#endif
+
 DioramaAnimData sDioramaAnimData[] = {
     {
         0,
@@ -140,7 +149,7 @@ DioramaAnimData sDioramaAnimData[] = {
         0,
         0.0f,
         85.0f,
-        4.400000095367432f,
+        DIORAMA_SHOT0_SPEED,
         0.0f,
         255.0f,
     },
@@ -159,7 +168,7 @@ DioramaAnimData sDioramaAnimData[] = {
         0,
         0.0f,
         60.000003814697266f,
-        3.299999952316284f,
+        DIORAMA_SHOT1_SPEED,
         0.0f,
         255.0f,
     },
@@ -783,6 +792,38 @@ static GfxTileParams sCompletionBannerColors[] = {
       } },
 };
 
+#ifdef VERSION_JP
+// "Congratulations! For beating your rival, here is a present: %s."
+static char sGiftTextYouWon[] = "おめでとう！ライバルに\nかったキミに%sを\nプレゼントだ。";
+// "For entering all 151 in the Hall of Fame, you get the Amnesia Psyduck!"
+static char sGiftTextAmnesiaPsyduck[] = "１５１ぴき でんどういり\n がんばった キミには\n ドわすれコダックだ！";
+// "You received %s!"
+static char sGiftTextReceived[] = "%sをもらった！";
+// "Go to the lab right away and pick it up from Prof. Oak."
+static char sGiftTextGoToLab[] = "すぐにけんきゅうじょに\nいってオーキドはかせから\nうけとってね。";
+// "But Prof. Oak is already holding one Pokemon for you."
+static char sGiftTextOakAlreadyHolding[] = "でも、オーキドはかせは\nすでに１ぴきあずかって\nくれています。";
+// "The professor can only hold one Pokemon for you."
+static char sGiftTextOakHoldsOnlyOne[] = "はかせがポケモンをあず\nかってくれるのは１ぴき\nだけです。";
+// "Release the earlier %s and take the new %s?"
+static char sGiftTextReleasePrompt[] = "まえの%sをにが\nしてこんどの%sを\nもらいますか？";
+// "You released %s and received %s!"
+static char sGiftTextReleasedAndGot[] = "%sをにがして\n%sをもらった！";
+// "You gave up on %s."
+static char sGiftTextGaveUp[] = "%sをあきらめた。";
+
+// Format strings used by the present dialog.
+static char* sGiftMsgYouWon = sGiftTextYouWon;
+static char* sGiftMsgReceived = sGiftTextReceived;
+static char* sGiftMsgGoToLab = sGiftTextGoToLab;
+static char* sGiftMsgYouWonOakHolding = sGiftTextYouWon;
+static char* sGiftMsgOakAlreadyHolding = sGiftTextOakAlreadyHolding;
+static char* sGiftMsgOakHoldsOnlyOne = sGiftTextOakHoldsOnlyOne;
+static char* sGiftMsgReleasePrompt = sGiftTextReleasePrompt;
+static char* sGiftMsgReleasedAndGot = sGiftTextReleasedAndGot;
+static char* sGiftMsgGoToLabAfterSwap = sGiftTextGoToLab;
+static char* sGiftMsgGaveUp = sGiftTextGaveUp;
+#else
 // Message IDs in string table 0x1E used by the present dialog.
 static u32 sGiftMsgYouWon = 0x95;
 static u32 sGiftMsgReceived = 0x97;
@@ -794,6 +835,8 @@ static u32 sGiftMsgReleasePrompt = 0x9B;
 static u32 sGiftMsgReleasedAndGot = 0x9C;
 static u32 sGiftMsgGoToLabAfterSwap = 0x98;
 static u32 sGiftMsgGaveUp = 0x9D;
+
+#endif
 
 // Frames (texture, duration) of the animated A-button icon.
 static TextureAnimFrame sCompletionAButtonFrames[] = {
@@ -844,8 +887,11 @@ static CameraNode* sCompletionCamera;
 static s16 sCompletionCameraRotationX;
 static s16 sCompletionCameraRotationY;
 static f32 sCompletionCameraDistance;
+#ifndef VERSION_JP
+// JP builds its messages from literal strings and species names, so it loads no string tables.
 static char** sBattleMessagesTable;
 static char** sPokemonNameTable;
+#endif
 static CompletionBanner* sCompletionBanner;
 static CompletionScene* sCompletionScene;
 static CompletionDialog* sCompletionDialog;
@@ -1072,7 +1118,11 @@ s32 Completion_RevealNextDialogChar(void) {
         }
         sCompletionDialogRevealed[sCompletionDialog->charIndex] = sCompletionDialogText[sCompletionDialog->charIndex];
         sCompletionDialogRevealed[sCompletionDialog->charIndex + 1] = sCompletionDialogText[sCompletionDialog->charIndex + 1];
+#ifdef VERSION_JP
+        sCompletionDialog->charIndex += 2;
+#else
         sCompletionDialog->charIndex++;
+#endif
     }
 
     sCompletionDialog->awaitingA = 0;
@@ -1090,6 +1140,29 @@ s32 Completion_RevealNextDialogChar(void) {
  * the selected answer.
  */
 void Completion_DrawReceivePrompt(s16 arg0, s16 arg1) {
+#ifdef VERSION_JP
+    // JP glyphs are 8 pixels wide and each one is two bytes, so this centers the prompt.
+    u32 temp = (strlen(D_8006FF00[sCompletionScene->giftSpecies - 1].name) / 2) * 8 + 0x10;
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
+    Font_SetLineHeight(0x10);
+    // "Receive %s."
+    Font_Printf(0xA0 - temp, arg1 + 5, "%sをもらう。", D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+    // "Yes" (temp now holds the answer row)
+    Font_Printf(arg0 + 0x28, temp = arg1 + 0x19, "はい");
+    // "No"
+    Font_Printf(arg0 + 0x69, temp, "いいえ");
+    Font_EndTexturedTextRendering();
+
+    gSPDisplayList(gDisplayListHead++, gUiMaskedTextureDL);
+
+    if (sCompletionScene->acceptGift == 1) {
+        Gfx_DrawTextureRgba16Ia8(arg0 + 0x14, temp, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);
+    } else {
+        Gfx_DrawTextureRgba16Ia8(arg0 + 0x55, temp, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);
+    }
+#else
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
@@ -1107,6 +1180,7 @@ void Completion_DrawReceivePrompt(s16 arg0, s16 arg1) {
     } else {
         Gfx_DrawTextureRgba16Ia8(arg0 + 0x55, arg1 + 0x19, 0x18, 0xE, D_300B6E0, D_300B980, 0x18, 0x100000);
     }
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -1158,11 +1232,18 @@ void Completion_UpdateGiftDialog(void) {
     switch (sCompletionDialog->state) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
+#ifdef VERSION_JP
+                sprintf(sCompletionDialogText, sGiftTextAmnesiaPsyduck);
+            } else {
+                sprintf(sCompletionDialogText, sGiftMsgYouWon, D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+            }
+#else
                 sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
                 Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
                 Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgYouWon);
             }
+#endif
 
             sCompletionDialog->charIndex = 0;
             sCompletionDialog->width = 0xB4;
@@ -1200,8 +1281,12 @@ void Completion_UpdateGiftDialog(void) {
                     for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
+#ifdef VERSION_JP
+                    sprintf(sCompletionDialogText, sGiftMsgReceived, D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+#else
                     Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
                     Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReceived);
+#endif
                     sCompletionDialog->state++;
                 }
             }
@@ -1219,7 +1304,11 @@ void Completion_UpdateGiftDialog(void) {
                 for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                 // clang-format on
 
+#ifdef VERSION_JP
+                sprintf(sCompletionDialogText, sGiftMsgGoToLab);
+#else
                 sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgGoToLab));
+#endif
                 Cry_Play(sCompletionScene->giftSpecies, 2);
                 ModelAnim_SetAnimation(&sCompletionScene->giftObject, *sGiftBattleCuesTail);
                 sCompletionDialog->state++;
@@ -1253,11 +1342,18 @@ void Completion_UpdateGiftDialogOakHolding(void) {
     switch (sCompletionDialog->state) {
         case 0:
             if (gSessionContext.mode == 0x1A) {
+#ifdef VERSION_JP
+                sprintf(sCompletionDialogText, sGiftTextAmnesiaPsyduck);
+            } else {
+                sprintf(sCompletionDialogText, sGiftMsgYouWonOakHolding, D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+            }
+#else
                 sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, 0x96));
             } else {
                 Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
                 Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgYouWonOakHolding);
             }
+#endif
             sCompletionDialog->charIndex = 0;
             sCompletionDialog->width = 0xB4;
             sCompletionDialog->height = 0xA;
@@ -1294,7 +1390,11 @@ void Completion_UpdateGiftDialogOakHolding(void) {
                     for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
+#ifdef VERSION_JP
+                    sprintf(sCompletionDialogText, sGiftMsgOakAlreadyHolding);
+#else
                     sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgOakAlreadyHolding));
+#endif
                     sCompletionDialog->state++;
                 }
             }
@@ -1312,7 +1412,11 @@ void Completion_UpdateGiftDialogOakHolding(void) {
                     for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
+#ifdef VERSION_JP
+                    sprintf(sCompletionDialogText, sGiftMsgOakHoldsOnlyOne);
+#else
                     sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgOakHoldsOnlyOne));
+#endif
                     sCompletionDialog->state++;
                 }
             }
@@ -1330,9 +1434,14 @@ void Completion_UpdateGiftDialogOakHolding(void) {
                     for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
+#ifdef VERSION_JP
+                    sprintf(sCompletionDialogText, sGiftMsgReleasePrompt, D_8006FF00[sCompletionScene->oakHeldSpecies - 1].name,
+                            D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+#else
                     Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->oakHeldSpecies - 1));
                     Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
                     Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReleasePrompt);
+#endif
                     sCompletionDialog->state++;
                 }
             }
@@ -1367,7 +1476,11 @@ void Completion_UpdateGiftDialogOakHolding(void) {
                     for (i = 0; i < 255; i++) { sCompletionDialogRevealed[i] = 0; }
                     // clang-format on
 
+#ifdef VERSION_JP
+                    sprintf(sCompletionDialogText, sGiftMsgGoToLabAfterSwap);
+#else
                     sprintf(sCompletionDialogText, Text_GetString(NULL, 0, sBattleMessagesTable, sGiftMsgGoToLabAfterSwap));
+#endif
                     sCompletionDialog->state++;
                 }
             }
@@ -1594,9 +1707,15 @@ void Completion_HandleAcceptDeclineInput(void) {
             Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
             sCompletionDialog->state = 6;
             Completion_ResetDialogText();
+#ifdef VERSION_JP
+            sprintf(sCompletionDialogText, sGiftMsgReleasedAndGot,
+                    D_8006FF00[sCompletionScene->oakHeldSpecies - 1].name,
+                    D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+#else
             Text_SetStringToken(0x20, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->oakHeldSpecies - 1));
             Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
             Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgReleasedAndGot);
+#endif
             ModelAnim_SetAnimation(&sCompletionScene->giftObject, *sGiftBattleCuesTail);
             Cry_Play(sCompletionScene->giftSpecies, 2);
         }
@@ -1605,8 +1724,12 @@ void Completion_HandleAcceptDeclineInput(void) {
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
             sCompletionDialog->state = 7;
             Completion_ResetDialogText();
+#ifdef VERSION_JP
+            sprintf(sCompletionDialogText, sGiftMsgGaveUp, D_8006FF00[sCompletionScene->giftSpecies - 1].name);
+#else
             Text_SetStringToken(0x1F, Text_GetString(NULL, 0, sPokemonNameTable, sCompletionScene->giftSpecies - 1));
             Text_GetString(sCompletionDialogText, 0xFF, sBattleMessagesTable, sGiftMsgGaveUp);
+#endif
             ModelAnim_SetSpeed(&sCompletionScene->anchorObject, -1);
         }
     }
@@ -1910,10 +2033,12 @@ s32 Stage_ShowCompletionScene(void) {
     FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);
     Fragment_Load((((u32)D_8D000000 & 0x0FF00000) >> 0x14) - 0x10, _5C7A70_ROM_START, _5C7A70_ROM_END);
 
+#ifndef VERSION_JP
     Text_InitStringTables();
 
     sBattleMessagesTable = Text_GetStringTable(0x1E);
     sPokemonNameTable = Text_GetStringTable(0x24);
+#endif
 
     Completion_InitScene();
     StageContext_Activate(sp24);

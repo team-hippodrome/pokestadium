@@ -747,9 +747,11 @@
     subsegments:
     - [0x139720, textbin,   fragments/dynamo_game/dynamo_game_header]
     - [0x139740, c, fragments/dynamo_game/dynamo_game]
+    - [0x13B6E0, c,      fragments/dynamo_game/dynamo_game_ai]
     - [0x13B830, c,      fragments/dynamo_game/dynamo_game_1]
     - [0x13C0E0, c, fragments/dynamo_game/dynamo_game_2]
     - [0x13C350, .data, fragments/dynamo_game/dynamo_game]
+    - [0x13C5D0, .data,   fragments/dynamo_game/dynamo_game_ai]
     - [0x13C680, .data,   fragments/dynamo_game/dynamo_game_1]
     - [0x142900, .data, fragments/dynamo_game/dynamo_game_2]
     - [0x1429A0, .rodata, fragments/dynamo_game/dynamo_game]
@@ -866,9 +868,12 @@
     subsegments:
     - [0x1591D0, textbin,   fragments/credits/credits_header]
     - [0x1591F0, asm, fragments/credits/credits_158A00]
+    - [0x15A1F0, asm, fragments/credits/credits_159A00]
     - [0x15B770, data, fragments/credits/credits_158A00]
+    - [0x15B8D0, data, fragments/credits/credits_159A00]
     - [0x15C330, data, fragments/credits/credits_15A2B0]
     - {vram: 0x86A06150, type:  bss, name: fragments/credits/credits_158A00}
+    - {vram: 0x86A061F0, type:  bss, name: fragments/credits/credits_159A00}
     - {vram: 0x86A06200, type:  bss, name: fragments/credits/credits_15A2B0}
   - name: fragment16_relocs
     type: code

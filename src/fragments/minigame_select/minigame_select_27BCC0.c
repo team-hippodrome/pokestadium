@@ -35,7 +35,18 @@ typedef struct unk_D_8250A2A0 {
     /* 0x0E */ s16 unk_0E;
 } unk_D_8250A2A0; // size >= 0x10
 
-static u16 D_82508AF0;
+#if defined(VERSION_JP)
+typedef struct MiniGameSelectTextLine {
+    /* 0x00 */ s16 charCount;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s16 unk_08[32];
+    /* 0x48 */ s8* text;
+} MiniGameSelectTextLine; // size = 0x4C
+#endif
+
+u16 D_82508AF0;
 static s32 D_82508AF4;
 static unk_D_82508B00* D_82508AF8;
 static unk_D_82508B00 D_82508B00[4];
@@ -46,7 +57,7 @@ static unk_D_8250A228* D_8250A238;
 static unk_D_8250A228* D_8250A240[9];
 static BinArchive* D_8250A264;
 static void* D_8250A268;
-static s16 D_8250A26C;
+s16 D_8250A26C;
 static s16 D_8250A26E;
 static GraphNode* D_8250A270;
 static GraphNode* D_8250A274;
@@ -60,14 +71,20 @@ static s16 D_8250A294;
 static s16 D_8250A296;
 static s16 D_8250A298;
 static unk_D_8250A2A0 D_8250A2A0;
+#if defined(VERSION_JP)
+static MiniGameSelectTextLine sOptionPanelTitle;
+#else
 static s32 pad_D_8250A2B0[18];
 static s32 pad_D_8250A2F8;
+#endif
 static s16 D_8250A2FC;
 static s16 D_8250A2FE;
 static s16 D_8250A300;
 FontContext* D_8250A304;
 static unk_D_8250A308 D_8250A308;
+#if !defined(VERSION_JP)
 static char** D_8250A47C;
+#endif
 
 static Vtx D_825061B0[] = {
     VTX(0, 40, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF),
@@ -1271,7 +1288,11 @@ void MiniGameSelect_RenderNumberSpinner(unk_D_82508B30* arg0) {
     gDPSetBlendColor(gDisplayListHead++, 255, 255, 255, 128);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
 
+#if defined(VERSION_JP)
+    var_s2 = D_030C1290;
+#else
     var_s2 = D_3000000;
+#endif
     for (i = 0; i < 16; i++) {
         gDPLoadTextureTile(gDisplayListHead++, var_s2, G_IM_FMT_RGBA, G_IM_SIZ_16b, 300, 0, 0, 0, 299, 4, 0,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -1308,7 +1329,11 @@ void MiniGameSelect_RenderNumberSpinner(unk_D_82508B30* arg0) {
         if (sp90[i] == -1) {
             continue;
         }
+#if defined(VERSION_JP)
+        Font_Printf(0x70, (D_8250A300 - (i * 0x1A)) + 0x28, "%d", sp90[i]);
+#else
         Font_Printf(0x76, (D_8250A300 - (i * 0x1A)) + 0x28, "%d", sp90[i]);
+#endif
     }
 
     Font_EndTexturedTextRendering();
@@ -1691,6 +1716,33 @@ void MiniGameSelect_UpdateWidgets(void) {
     }
 }
 
+#if defined(VERSION_JP)
+/**
+ * Points the text line at text and counts its characters, where an EUC-JP character is 2 bytes.
+ */
+void MiniGameSelect_InitTextLine(MiniGameSelectTextLine* line, s8* text) {
+    s32 i;
+
+    line->text = text;
+    line->charCount = 0;
+    while (*text != 0) {
+        if (*text < 0) {
+            text += 2;
+        } else {
+            text += 1;
+        }
+        line->charCount++;
+    }
+    line->unk_02 = 1;
+    line->unk_04 = 0;
+    line->unk_06 = 0;
+
+    for (i = 0; i < 32; i++) {
+        line->unk_08[i] = -1;
+    }
+}
+#endif
+
 void MiniGameSelect_ClearOptionPanelState(void) {
     D_8250A2A0.unk_00 = 0;
     D_8250A2A0.unk_02 = 0;
@@ -1700,6 +1752,9 @@ void MiniGameSelect_ClearOptionPanelState(void) {
     D_8250A2A0.unk_0A = 0;
     D_8250A2A0.unk_0C = 0;
     D_8250A2A0.unk_0E = 0;
+#if defined(VERSION_JP)
+    MiniGameSelect_InitTextLine(&sOptionPanelTitle, (s8*)D_82508908);
+#endif
 }
 
 void MiniGameSelect_ResetSelection(void) {
@@ -1808,8 +1863,13 @@ void MiniGameSelect_InitMenuNodes(s16 arg0, s16 arg1) {
         MiniGameSelect_ChainWidget(D_8250A240[i], D_8250A240[i + 1]);
     }
 
+#if defined(VERSION_JP)
+    KidsClub_InitMatchBanner();
+    KidsClub_InitRoundBanner();
+#else
     KidsClub_InitMatchBanner(D_8250A47C);
     KidsClub_InitRoundBanner(D_8250A47C);
+#endif
     MiniGameSelect_ClearOptionPanelState();
     MiniGameSelect_CreateCursor();
 }
@@ -1859,7 +1919,11 @@ void func_8250281C(void) {
                 s16 var_v0;
 
                 var_a2 = 1;
+#if defined(VERSION_JP)
+                sp40 = 0xF0;
+#else
                 sp40 = 0xDC;
+#endif
                 if (D_82508AF0 & 1) {
                     var_v0 = 0x36;
                 } else {
@@ -1936,6 +2000,56 @@ void MiniGameSelect_RenderDirtyPanels(void) {
     }
 }
 
+#if defined(VERSION_JP)
+void func_82502D1C_jp(void) {
+}
+
+void MiniGameSelect_DrawOptionPanel(void) {
+    char** var_v0;
+    s32 i;
+    s32 var_s5;
+    Color_RGB8 sp80 = { 0, 0, 30 };
+    Color_RGB8 sp7C = { 0, 0, 250 };
+    s32 var_s4;
+    // "Strong", "Normal", "Weak"
+    static char* sp6C[] = { "つよい", "ふつう", "よわい" };
+    // "Awesome", "Strong", "Normal", "Weak"
+    static char* sp5C[] = { "すごい", "つよい", "ふつう", "よわい" };
+
+    if (D_8250A2A0.unk_00 != 0) {
+        Ui_DrawGradientPanel(D_8250A2A0.unk_08, D_8250A2A0.unk_0A, D_8250A2A0.unk_0C, D_8250A2A0.unk_0E, &sp80, &sp7C);
+        if (D_8250A2A0.unk_00 == 2) {
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(0x10, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x140 - (Text_MeasureStringWidth(D_8250A304, D_82508908) / 2), D_8250A2A0.unk_0A + 0x18,
+                        D_82508908);
+
+            if (D_82508AF0 & 1) {
+                var_s4 = 4;
+                var_s5 = 0x36;
+                var_v0 = sp5C;
+            } else {
+                var_s4 = 3;
+                var_s5 = 0x48;
+                var_v0 = sp6C;
+            }
+
+            for (i = 0; i < var_s4; i++) {
+                if (i != D_8250A288.unk_08) {
+                    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+                } else {
+                    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+                }
+                Font_Printf(0x140 - (Text_MeasureStringWidth(D_8250A304, var_v0[i]) / 2),
+                            D_8250A2A0.unk_0A + var_s5 + (i * 0x18), var_v0[i]);
+            }
+
+            Font_EndTexturedTextRendering();
+        }
+    }
+}
+#else
 void MiniGameSelect_DrawOptionPanel(void) {
     char** var_v0;
     s32 i;
@@ -1987,6 +2101,7 @@ void MiniGameSelect_DrawOptionPanel(void) {
         }
     }
 }
+#endif
 
 void MiniGameSelect_DrawFrame(void) {
     MiniGameSelect_RenderDirtyPanels();
@@ -2666,7 +2781,9 @@ s32 MiniGameSelect_Entry(s32 arg0, s32 arg1) {
     D_8250A264 = ASSET_LOAD2(backgrounds, 1, 1);
 
     D_8250A268 = BinArchive_GetFile(D_8250A264, 4);
+#if !defined(VERSION_JP)
     D_8250A47C = gMinigameText;
+#endif
     Save_EnsureBankLoaded(2);
     MiniGameSelect_LoadScene();
     StageContext_Activate(sp24);

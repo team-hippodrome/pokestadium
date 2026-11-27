@@ -10,6 +10,12 @@
 extern u64 F3DEX2_data_bin[]; // F3DEX2_data.bin
 
 // .data
+#if defined(VERSION_JP)
+// The Japanese version has only the NTSC video mode entries.
+char D_80068B74[] = {
+    0x0E, 0x10, 0x17, 0x19, 0x00, 0x02, 0x09, 0x0B, 0x1C, 0x1E, 0x25, 0x27,
+};
+#else
 s32 D_80068B70 = 0;
 char D_80068B74[] = {
     0x0E, 0x10, 0x17, 0x19, 0x00, 0x02, 0x09, 0x0B, 0x1C, 0x1E, 0x25, 0x27, 0x2A, 0x2C,
@@ -23,6 +29,7 @@ const f32 D_8007AF10[4] = {
     0.0f,
     0.0f,
 };
+#endif
 
 // .bss
 UnkStruct80083CA0_2 D_80083CA0;
@@ -60,6 +67,9 @@ void DisplayTask_Submit(UnkStruct80001380* arg0, struct UnkArray4* arg1, s32 arg
 }
 
 void Video_SetMode(s8 arg0, s8 arg1) {
+#if defined(VERSION_JP)
+    osViSetMode(&osViModeTable[(s32)D_80068B74[(arg0 * 2) + arg1 + 4]]);
+#else
     s32 var_v0;
 
     if (osTvType == 2) {
@@ -69,12 +79,15 @@ void Video_SetMode(s8 arg0, s8 arg1) {
     }
 
     osViSetMode(&osViModeTable[(s32)D_80068B74[var_v0]]);
+#endif
     osViSetSpecialFeatures(0x40U);
     osViSetSpecialFeatures(2U);
     osViSetSpecialFeatures(0x10U);
+#if !defined(VERSION_JP)
     if (osTvType == 0) {
         osViSetYScale(D_8007AF10[0]);
     }
+#endif
 }
 
 void DisplayWorker_SetBufferConfig(struct UnkArray4* arg0) {
@@ -125,11 +138,15 @@ void DisplayWorker_ProcessFrame(void) {
             (D_80083CA0.unk_A9C.unk_02 != D_80083CA0.unk_AAC.unk_02)) {
             Video_SetMode((s8)D_80083CA0.unk_A9C.unk_01, (s8)D_80083CA0.unk_A9C.unk_02);
         }
+#if defined(VERSION_JP)
+        osViBlack(0U);
+#else
         if (D_80068B70 != 0) {
             osViBlack(1U);
         } else {
             osViBlack(0U);
         }
+#endif
         crash_screen_set_draw_info((u16*)D_80083CA0.unk_A9C.unk_0C->img_p, D_80083CA0.unk_A9C.unk_0C->width, 0x10);
     } else {
         osViRepeatLine(1);
@@ -186,7 +203,9 @@ void DisplayWorker_ThreadMain(UNUSED void* arg) {
 void DisplayWorker_Initialize(void) {
     switch (osTvType) {
         case 1:
+#if !defined(VERSION_JP)
         case 2:
+#endif
             break;
 
         default:
@@ -279,6 +298,7 @@ s32 Display_IsFrameReady(void) {
     return result;
 }
 
+#if !defined(VERSION_JP)
 void Display_EnableBlackout(void) {
     D_80068B70 = 1;
 }
@@ -286,3 +306,4 @@ void Display_EnableBlackout(void) {
 void Display_DisableBlackout(void) {
     D_80068B70 = 0;
 }
+#endif

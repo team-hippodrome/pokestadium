@@ -37,7 +37,9 @@ typedef struct MenuRectAnim {
     /* 0x0A */ s16 unk_0A;
 } MenuRectAnim; // size = 0xC
 
+#if !defined(VERSION_JP)
 static char** sStadiumCupText;
+#endif
 static BinArchive* D_84103444;
 static void* D_84103448;
 static void* D_8410344C;
@@ -55,6 +57,12 @@ static u8 sBackgroundFileIds[] = {
 };
 static s16 gStadiumCupSessionModes[] = { 3, 1, 2, 6, 4, 5 };
 static s16 gStadiumCupModeCategories[] = { 3, 1, 2, 6, 4, 5 };
+#if defined(VERSION_JP)
+static MenuItemInfo sMenuItemInfo[] = {
+    { 244, 70, 152, 114, -1, 3, 1, 2 },   { 88, 88, 128, 96, -1, 4, -1, 0 },  { 424, 88, 128, 96, -1, 5, 0, -1 },
+    { 244, 212, 152, 114, 0, -1, 4, 5 },  { 88, 212, 128, 96, 1, -1, -1, 3 }, { 424, 212, 128, 96, 2, -1, 3, -1 },
+};
+#else
 static MenuItemInfo sMenuItemInfo[] = {
     {
         244,
@@ -117,6 +125,7 @@ static MenuItemInfo sMenuItemInfo[] = {
         -1,
     },
 };
+#endif
 static MenuRectAnim sMenuRectAnimations[] = {
     {
         0,
@@ -198,9 +207,49 @@ static MenuRectAnim sMenuRectAnimations[] = {
         8192,
         0,
     },
+#if defined(VERSION_JP)
+    { 0, 0xBC, 0x110, 0x20, 0x9000, 0 },
+    { 0, 0x20C, 0x110, 0x20, 0xD000, 0 },
+#else
     { 0, 0xBC, 0xD2, 0x20, 0x9000, 0 },
     { 0, 0x20C, 0xD2, 0x20, 0xD000, 0 },
+#endif
 };
+#if defined(VERSION_JP)
+// JP has built-in cup names and descriptions instead of a string table.
+static char* sStadiumCupNames[] = {
+    // "Nintendo Cup '99"
+    "ニンテンドウカップ‘９９",
+    // "Nintendo Cup '97"
+    "ニンテンドウカップ‘９７",
+    // "Nintendo Cup '98"
+    "ニンテンドウカップ‘９８",
+    // "Ultra Cup"
+    "ウルトラカップ",
+    // "Fancy Cup"
+    "ファンシーカップ",
+    // "Yellow Cup"
+    "イエローカップ",
+};
+static char* sStadiumCupDescriptions[] = {
+    // "Battle under the rules of the 3rd Pokémon League in '99. A new kind of battle begins."
+    "　９９ねん　だい３かいポケモンリーグルールでの\n　バトル。あたらしい　たたかいの　はじまりだ。",
+    // "Battle under the rules of the 1st Pokémon League in '97. Seasoned veterans gather here."
+    "　９７ねん　だい１かいポケモンリーグルールでの\n　バトル。れきせんの　つわものが　せいぞろい。",
+    // "Battle under the rules of the 2nd Pokémon League in '98. A tough, thoroughly studied cup."
+    "　９８ねん　だい２かいポケモンリーグルールでの\n　バトル。けんきゅうしつくされた　てごわいカップ。",
+    // "The highest-level cup, for mastering the peak of Pokémon battles. Go all out!"
+    "　ポケモンバトルの　ちょうてんを　きわめる　さいだい\n　レベルのカップ。おもいっきり　あばれてみよう。",
+    // "There are lots of cute Pokémon, but take them lightly and you'll be in trouble. It may show your true skill."
+    "　かわいいポケモンが　おおいからって、ナメてかかると\n　たいへん。キミのじつりょくが　わかるかも。",
+    // "The cup you can enter at the lowest level. That makes planning your strategy all the more important."
+    "　もっとも　ちいさいレベルで　さんかできるカップ。\n　それだけに　さくせんの　たてかたが　だいじ。",
+};
+
+static u8 sMenuOptionRanges[][2] = {
+    { 1, 50 }, { 50, 55 }, { 1, 30 }, { 1, 100 }, { 25, 30 }, { 15, 20 },
+};
+#else
 static u8 sMenuOptionRanges[][2] = {
     {
         0x32,
@@ -224,6 +273,7 @@ static u8 sMenuOptionRanges[][2] = {
     },
     { 0xF, 0x14 },
 };
+#endif
 #if defined(VERSION_DE) || defined(VERSION_IT)
 // The German and Italian menu textures before these are larger, so these sit later in segment 3.
 extern u8 D_030294E0[];
@@ -570,9 +620,11 @@ void StadiumSelect_UpdateSparkles(s16 arg0) {
 
     for (i = 0; i < 12; i++, var_s0++) {
         switch (i) {
+#if !defined(VERSION_JP)
             case 4:
             case 5:
                 break;
+#endif
 
             default:
                 switch (var_s0->unk_00) {
@@ -607,6 +659,16 @@ void StadiumSelect_InitSparkleFlags(void) {
     for (i = 0; i < D_84103CF0.primeCupClears; i++) {
         sMenuRectAnimations[i + 6].unk_00 = 1;
     }
+
+#if defined(VERSION_JP)
+    if (D_84103CF0.clearedModes & (1 << RULE_CATEGORY_NINTENDO_CUP_97)) {
+        sMenuRectAnimations[4].unk_00 = 1;
+    }
+
+    if (D_84103CF0.clearedModes & (1 << RULE_CATEGORY_NINTENDO_CUP_98)) {
+        sMenuRectAnimations[5].unk_00 = 1;
+    }
+#endif
 
     if (D_84103CF0.clearedModes & 0x10) {
         sMenuRectAnimations[10].unk_00 = 1;
@@ -751,6 +813,34 @@ void StadiumSelect_DrawCupInfoPanel(s16 arg0) {
         StadiumSelect_DrawBlurbBackdrop(0x38, ((0x5C - temp_a3) / 2) + 0x15C, 0x210, temp_a3, 0x1E, 0x1E, 0x82, 0x96);
     }
 
+#if defined(VERSION_JP)
+    if ((sp28 == 0x5A) && (D_84103CC8 < 6)) {
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(0x10, -4);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
+        Font_Printf(0x48, 0x160, sStadiumCupNames[D_84103CC8]);
+        // "Level %d-%d"
+        Font_Printf(0x18C, 0x160, "レベル%d〜%d", sMenuOptionRanges[D_84103CC8][0], sMenuOptionRanges[D_84103CC8][1]);
+        Font_SetActive(8, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Font_SetLineHeight(0x18);
+        Font_Printf(0x48, 0x182, sStadiumCupDescriptions[D_84103CC8]);
+        Font_EndTexturedTextRendering();
+
+        if (gSessionContext.inRound2 == 1) {
+            // Each full-width character is 20 pixels wide.
+            temp_v0 = (strlen(sStadiumCupNames[D_84103CC8]) / 2) * 20;
+
+            gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+
+            Gfx_DrawTextureRgba16(temp_v0 + 0x4C, 0x160, 0x1C, 0x1C, &D_302E840, 0x1C, 0);
+
+            gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+        }
+    }
+}
+
+#else
     if ((sp28 == 0x5A) && (D_84103CC8 < 6)) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
@@ -776,6 +866,7 @@ void StadiumSelect_DrawCupInfoPanel(s16 arg0) {
         }
     }
 }
+#endif
 
 void StadiumSelect_RenderFrame(s32 arg0, s32 arg1, f32 arg2) {
     s16 i;
@@ -876,11 +967,19 @@ DepthBuffer* StadiumSelect_BuildSimpleCupIcon(u8* arg0, s16 arg1) {
     }
 
     if (D_84103CF0.clearedModes & (1 << arg1)) {
+#if defined(VERSION_JP)
+        if (arg1 < 4) {
+            var_v0 = 5;
+        } else {
+            var_v0 = 4;
+        }
+#else
         if (arg1 == 4) {
             var_v0 = 5;
         } else {
             var_v0 = 4;
         }
+#endif
         Gfx_DrawTextureRgba16(0x54, 0x3A, 0x30, 0x2A, sMenuOptionTexturePointers[var_v0], 0x30, 0);
     }
 
@@ -897,6 +996,20 @@ void StadiumSelect_BuildCupIconGrid(void) {
     D_84103CD0[3] = StadiumSelect_BuildDivisionCupIcon(&D_3020760, 6);
     D_84103CD0[4] = StadiumSelect_BuildSimpleCupIcon(&D_3014760, 4);
     D_84103CD0[5] = StadiumSelect_BuildSimpleCupIcon(&D_301A760, 5);
+#if defined(VERSION_JP)
+    Model_InitDisplayObject(D_84103458, 0, 0, D_84103CE8);
+    Model_InitDisplayObject(&D_84103458[1], 0, 0, D_84103CEC);
+    Model_InitDisplayObject(&D_84103458[2], 0, 0, D_84103CEC);
+    Model_InitDisplayObject(&D_84103458[3], 0, 0, D_84103CE8);
+    Model_InitDisplayObject(&D_84103458[4], 0, 0, D_84103CEC);
+    Model_InitDisplayObject(&D_84103458[5], 0, 0, D_84103CEC);
+    Vec3f_SetComponentsDuplicate(&D_84103458->position, -80.0f, 113.0f, -579.0f);
+    Vec3f_SetComponentsDuplicate(&D_84103458[1].position, -236.0f, 104.0f, -579.0f);
+    Vec3f_SetComponentsDuplicate(&D_84103458[2].position, 100.0f, 104.0f, -579.0f);
+    Vec3f_SetComponentsDuplicate(&D_84103458[3].position, -80.0f, -29.0f, -579.0f);
+    Vec3f_SetComponentsDuplicate(&D_84103458[4].position, -236.0f, -20.0f, -579.0f);
+    Vec3f_SetComponentsDuplicate(&D_84103458[5].position, 100.0f, -20.0f, -579.0f);
+#else
     Model_InitDisplayObject(D_84103458, 0, 0, D_84103CE8);
     Model_InitDisplayObject(&D_84103458[3], 0, 0, D_84103CE8);
     Model_InitDisplayObject(&D_84103458[4], 0, 0, D_84103CEC);
@@ -905,6 +1018,7 @@ void StadiumSelect_BuildCupIconGrid(void) {
     Vec3f_SetComponentsDuplicate(&D_84103458[3].position, -80.0f, -29.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_84103458[4].position, -236.0f, 42.0f, -579.0f);
     Vec3f_SetComponentsDuplicate(&D_84103458[5].position, 100.0f, 42.0f, -579.0f);
+#endif
 }
 
 s16 StadiumSelect_HandleInput(void) {
@@ -1019,8 +1133,15 @@ s32 StadiumSelect_ConfirmSelection(void) {
         s16 tmp = gStadiumCupSessionModes[D_84103CC8];
 
         Session_SetMode(tmp, gStadiumCupModeCategories[D_84103CC8], 0);
+#if defined(VERSION_JP)
+        // "Trainer"
+        Team_AddTrainer(0, Trainer_Create(0, 0, "1P", "トレーナー"));
+        // "Computer"
+        Team_AddTrainer(1, Trainer_Create(-1, 0, "COM", "コンピュータ"));
+#else
         Team_AddTrainer(0, Trainer_Create(0, 0, "1P", Text_GetPlayerLabel(1)));
         Team_AddTrainer(1, Trainer_Create(-1, 0, "COM", Text_GetPlayerLabel(3)));
+#endif
         var_v1 = 1;
     }
     return var_v1;
@@ -1037,8 +1158,10 @@ s32 StadiumSelect_Main(s32 arg0, s32 arg1) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     ASSET_LOAD(D_3000000, stadium_select_ui, 0);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sStadiumCupText = Text_GetStringTable(0x13);
+#endif
     D_84103450 = func_8001E490();
 
     D_84103444 = ASSET_LOAD2(backgrounds, 1, 1);

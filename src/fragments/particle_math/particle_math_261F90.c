@@ -13,6 +13,11 @@ s32 sParticleMatrixPoolIndex;
 s32 sParticleMatrixPoolIndex;
 ParticleRenderContext sParticleRenderContext;
 ParticleCameraState* sParticleCameraState;
+#if defined(VERSION_JP)
+// Japanese-only countdown between the camera state and the frame counters. Each particle clock
+// tick in Particle_UpdateFrameCounters lowers it until it reaches zero.
+s32 D_8140E6B8_jp;
+#endif
 u32 sParticleFrameCounter;
 s32 sParticleFrameMod64;
 s32 sParticleFrameMod32;
@@ -538,10 +543,12 @@ void ParticleMath_AddVec3s(Vec3s* destination, Vec3s* source) {
     destination->z += source->z;
 }
 
-/* Return the sum of the three component-wise products. */
+#if !defined(VERSION_JP)
+/* Return the sum of the three component-wise products. Absent from the Japanese release. */
 f32 ParticleMath_DotVec3f(Vec3f lhs, Vec3f rhs) {
     return (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z);
 }
+#endif
 
 /* Compare squared 2D distance with squared radius, including the boundary. */
 s32 ParticleMath_IsWithinRadius2D(f32 first_x, f32 first_y, f32 second_x, f32 second_y, f32 radius) {
