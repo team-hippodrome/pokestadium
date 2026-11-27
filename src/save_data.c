@@ -73,15 +73,15 @@ void Save_WriteRecord(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
 }
 
 void Save_CommitRecord(u8* arg0, s32 arg1, s32 arg2) {
-    if (*arg0 & 2) {
-        *arg0 &= ~2;
+    if (SAVE_RECORD_FLAGS(arg0) & 2) {
+        SAVE_RECORD_FLAGS(arg0) &= ~2;
         Save_WriteFooter(arg0, arg1, 1);
         D_800AE4E8[arg2].unk_00 |= 2;
     }
 }
 
 void Save_InvalidateRecord(u8* arg0, s32 arg1, s32 arg2) {
-    if (*arg0 & 2) {
+    if (SAVE_RECORD_FLAGS(arg0) & 2) {
         Save_WriteFooter(arg0, arg1, 0);
         D_800AE4E8[arg2].unk_00 |= 2;
     }
@@ -95,7 +95,7 @@ void Save_RestoreRecord(u8* arg0, s32 arg1, s32 arg2) {
 
 void Save_ClearRecord(u8* arg0, s32 arg1, s32 arg2) {
     bzero(arg0, arg1);
-    *arg0 |= 2;
+    SAVE_RECORD_FLAGS(arg0) |= 2;
     D_800AE4E8[arg2].unk_00 |= 2;
 }
 
@@ -111,59 +111,61 @@ void Save_LoadWithRepair(s32 arg0, s32 arg1) {
         case 16:
             sp30 = D_800AE4E0 / 4;
             idx2 = D_800AE4E0 % 4;
-            sp34 = 0x160;
+            sp34 = sizeof(RegisteredTeamSlot);
             sp24 = (u8*)&D_800AE4E8[sp30].unk_04.unk1->unk_0000[idx2][arg1];
             sp20 = (u8*)&D_800AE4E8[sp30].unk_08.unk1->unk_0000[idx2][arg1];
             break;
 
         case 17:
             sp30 = 3;
-            sp34 = 0x468;
+            sp34 = sizeof(unk_D_800AE4E8_004_3_0000);
             sp24 = (u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1];
             sp20 = (u8*)&D_800AE4E8[3].unk_08.unk3->unk_0000[arg1];
             break;
 
         case 18:
             sp30 = 3;
-            sp34 = 0xE0;
+            sp34 = sizeof(unk_D_800AE4E8_004_3_34E0);
             sp24 = (u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1];
             sp20 = (u8*)&D_800AE4E8[3].unk_08.unk3->unk_34E0[arg1];
             break;
 
         case 19:
             sp30 = 2;
-            sp34 = 0xF60;
+            sp34 = sizeof(unk_D_800AE4E8_004_2_0DC0);
             sp24 = (u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0;
             sp20 = (u8*)&D_800AE4E8[2].unk_08.unk2->unk_0DC0;
             break;
 
         case 20:
             sp30 = 2;
-            sp34 = 0x28;
+            sp34 = sizeof(SaveOptionsRecord);
             sp24 = (u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0;
             sp20 = (u8*)&D_800AE4E8[2].unk_08.unk2->unk_1EA0;
             break;
 
         case 21:
             sp30 = 2;
-            sp34 = 0x180;
+            sp34 = sizeof(ContinueRecordBlock);
             sp24 = (u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20;
             sp20 = (u8*)&D_800AE4E8[2].unk_08.unk2->unk_1D20;
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             sp30 = 2;
-            sp34 = 0x13B8;
+            sp34 = sizeof(unk_D_800AE4E8_004_2_1EC8);
             sp24 = (u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8;
             sp20 = (u8*)&D_800AE4E8[2].unk_08.unk2->unk_1EC8;
             break;
 
         case 23:
             sp30 = 2;
-            sp34 = 0xB84;
+            sp34 = sizeof(unk_D_800AE4E8_004_2_3280);
             sp24 = (u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280;
             sp20 = (u8*)&D_800AE4E8[2].unk_08.unk2->unk_3280;
             break;
+#endif
     }
 
     switch ((Save_RecordIsValid(sp24, sp34) | Save_RecordIsValid(sp20, sp34) << 1)) {
@@ -185,6 +187,17 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     Pokemon_FromGbRecord(arg0, arg1);
     Pokemon_RecalcStats(arg0);
 
+#if defined(VERSION_JP)
+    arg0->unk_3C = 0;
+    arg0->unk_4C = 0;
+    arg0->unk_25 = 0;
+
+    // Keeps the raw GB trainer name, 3 bytes after each of the two names.
+    _bcopy(arg1->unk_27, arg0->unk_3D, 3);
+    _bcopy(arg1->unk_27 + 3, arg0->unk_4D, 3);
+    Text_UntranscodeFixedName(arg0->nickname, arg1->unk_21);
+    Text_UntranscodeFixedName(arg0->unk_40, arg1->unk_27);
+#else
     arg0->unk_52 = 0;
     arg0->unk_53 = 0;
     arg0->unk_25 = 0;
@@ -192,6 +205,7 @@ void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     _bcopy(arg1->unk_2C, arg0->unk_46, 0xB);
     Text_UntranscodeFixedName(arg0->nickname, arg1->unk_21);
     Text_UntranscodeFixedName(arg0->unk_3B, arg1->unk_2C);
+#endif
 }
 
 void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
@@ -200,7 +214,12 @@ void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1) {
     Pokemon_ToGbRecord(arg0, &arg1->unk_00);
     Text_TranscodeName(arg1->unk_21, arg0->nickname);
 
+#if defined(VERSION_JP)
+    _bcopy(arg0->unk_3D, arg1->unk_27, 3);
+    _bcopy(arg0->unk_4D, arg1->unk_27 + 3, 3);
+#else
     _bcopy(arg0->unk_46, arg1->unk_2C, 0xB);
+#endif
 }
 
 s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2) {
@@ -233,6 +252,7 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2) {
             var_v1 = (D_800AE4E8[2].unk_04.unk2->unk_1D20.unk_000 & arg2) != 0;
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             var_v1 = (D_800AE4E8[2].unk_04.unk2->unk_1EC8.unk_0000 & arg2) != 0;
             break;
@@ -240,6 +260,7 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2) {
         case 23:
             var_v1 = (D_800AE4E8[2].unk_04.unk2->unk_3280.unk_0000 & arg2) != 0;
             break;
+#endif
     }
 
     return var_v1;
@@ -274,6 +295,7 @@ void Save_MarkRecordDirty(s32 arg0, s32 arg1, s16 arg2) {
             D_800AE4E8[2].unk_04.unk2->unk_1D20.unk_000 |= arg2;
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             D_800AE4E8[2].unk_04.unk2->unk_1EC8.unk_0000 |= arg2;
             break;
@@ -281,6 +303,7 @@ void Save_MarkRecordDirty(s32 arg0, s32 arg1, s16 arg2) {
         case 23:
             D_800AE4E8[2].unk_04.unk2->unk_3280.unk_0000 |= arg2;
             break;
+#endif
     }
 }
 
@@ -293,36 +316,39 @@ void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
 
     switch (arg0) {
         case 16:
-            Save_CommitRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], 0x160, idx1);
+            Save_CommitRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], sizeof(RegisteredTeamSlot),
+                              idx1);
             break;
 
         case 17:
-            Save_CommitRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], 0x468, 3);
+            Save_CommitRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], sizeof(unk_D_800AE4E8_004_3_0000), 3);
             break;
 
         case 18:
-            Save_CommitRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], 0xE0, 3);
+            Save_CommitRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], sizeof(unk_D_800AE4E8_004_3_34E0), 3);
             break;
 
         case 19:
-            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, 0xF60, 2);
+            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, sizeof(unk_D_800AE4E8_004_2_0DC0), 2);
             break;
 
         case 20:
-            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, 0x28, 2);
+            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, sizeof(SaveOptionsRecord), 2);
             break;
 
         case 21:
-            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, 0x180, 2);
+            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, sizeof(ContinueRecordBlock), 2);
             break;
 
+#if !defined(VERSION_JP)
         case 22:
-            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, 0x13B8, 2);
+            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, sizeof(unk_D_800AE4E8_004_2_1EC8), 2);
             break;
 
         case 23:
-            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, 0xB84, 2);
+            Save_CommitRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, sizeof(unk_D_800AE4E8_004_2_3280), 2);
             break;
+#endif
     }
 }
 
@@ -332,36 +358,41 @@ void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
 
     switch (arg0) {
         case 16:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], 0x160, idx1);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], sizeof(RegisteredTeamSlot),
+                                  idx1);
             break;
 
         case 17:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], 0x468, 3);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], sizeof(unk_D_800AE4E8_004_3_0000),
+                                  3);
             break;
 
         case 18:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], 0xE0, 3);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], sizeof(unk_D_800AE4E8_004_3_34E0),
+                                  3);
             break;
 
         case 19:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, 0xF60, 2);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, sizeof(unk_D_800AE4E8_004_2_0DC0), 2);
             break;
 
         case 20:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, 0x28, 2);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, sizeof(SaveOptionsRecord), 2);
             break;
 
         case 21:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, 0x180, 2);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, sizeof(ContinueRecordBlock), 2);
             break;
 
+#if !defined(VERSION_JP)
         case 22:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, 0x13B8, 2);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, sizeof(unk_D_800AE4E8_004_2_1EC8), 2);
             break;
 
         case 23:
-            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, 0xB84, 2);
+            Save_InvalidateRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, sizeof(unk_D_800AE4E8_004_2_3280), 2);
             break;
+#endif
     }
 }
 
@@ -371,36 +402,39 @@ void Save_RestoreTypedRecord(s32 arg0, s32 arg1) {
 
     switch (arg0) {
         case 16:
-            Save_RestoreRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], 0x160, idx1);
+            Save_RestoreRecord((u8*)&D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1], sizeof(RegisteredTeamSlot),
+                               idx1);
             break;
 
         case 17:
-            Save_RestoreRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], 0x468, 3);
+            Save_RestoreRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_0000[arg1], sizeof(unk_D_800AE4E8_004_3_0000), 3);
             break;
 
         case 18:
-            Save_RestoreRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], 0xE0, 3);
+            Save_RestoreRecord((u8*)&D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1], sizeof(unk_D_800AE4E8_004_3_34E0), 3);
             break;
 
         case 19:
-            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, 0xF60, 2);
+            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_0DC0, sizeof(unk_D_800AE4E8_004_2_0DC0), 2);
             break;
 
         case 20:
-            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, 0x28, 2);
+            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EA0, sizeof(SaveOptionsRecord), 2);
             break;
 
         case 21:
-            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, 0x180, 2);
+            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1D20, sizeof(ContinueRecordBlock), 2);
             break;
 
+#if !defined(VERSION_JP)
         case 22:
-            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, 0x13B8, 2);
+            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_1EC8, sizeof(unk_D_800AE4E8_004_2_1EC8), 2);
             break;
 
         case 23:
-            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, 0xB84, 2);
+            Save_RestoreRecord((u8*)&D_800AE4E8[2].unk_04.unk2->unk_3280, sizeof(unk_D_800AE4E8_004_2_3280), 2);
             break;
+#endif
     }
 }
 
@@ -420,50 +454,52 @@ void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
         case 16:
             sp38 = &D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1];
-            Save_ClearRecord(sp38, 0x160, idx1);
+            Save_ClearRecord(sp38, sizeof(RegisteredTeamSlot), idx1);
             sp38->unk_000.unk_01 = 0x50;
             break;
 
         case 17:
             sp34 = &D_800AE4E8[3].unk_04.unk3->unk_0000[arg1];
-            Save_ClearRecord(sp34, 0x468, 3);
+            Save_ClearRecord(sp34, sizeof(unk_D_800AE4E8_004_3_0000), 3);
             sp34->unk_000.unk_01 = 0x50;
             break;
 
         case 18:
             sp30 = &D_800AE4E8[3].unk_04.unk3->unk_34E0[arg1];
-            Save_ClearRecord(sp30, 0xE0, 3);
+            Save_ClearRecord(sp30, sizeof(unk_D_800AE4E8_004_3_34E0), 3);
             sp30->unk_00.unk_01 = 0x50;
             break;
 
         case 19:
             sp2C = &D_800AE4E8[2].unk_04.unk2->unk_0DC0;
-            Save_ClearRecord(sp2C, 0xF60, 2);
+            Save_ClearRecord(sp2C, sizeof(unk_D_800AE4E8_004_2_0DC0), 2);
             sp2C->unk_000 |= 1;
             break;
 
         case 20:
             sp28 = &D_800AE4E8[2].unk_04.unk2->unk_1EA0;
-            Save_ClearRecord(sp28, 0x28, 2);
+            Save_ClearRecord(sp28, sizeof(SaveOptionsRecord), 2);
             sp28->unk_00 |= 1;
             break;
 
         case 21:
             sp24 = &D_800AE4E8[2].unk_04.unk2->unk_1D20;
-            Save_ClearRecord(sp24, 0x180, 2);
+            Save_ClearRecord(sp24, sizeof(ContinueRecordBlock), 2);
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             sp20 = &D_800AE4E8[2].unk_04.unk2->unk_1EC8;
-            Save_ClearRecord(sp20, 0x13B8, 2);
+            Save_ClearRecord(sp20, sizeof(unk_D_800AE4E8_004_2_1EC8), 2);
             sp20->unk_0000 |= 1;
             break;
 
         case 23:
             sp1C = &D_800AE4E8[2].unk_04.unk2->unk_3280;
-            Save_ClearRecord(sp1C, 0xB84, 2);
+            Save_ClearRecord(sp1C, sizeof(unk_D_800AE4E8_004_2_3280), 2);
             sp1C->unk_0000 |= 1;
             break;
+#endif
     }
 }
 
@@ -477,7 +513,7 @@ void Save_CommitBankRecords(s16 arg0) {
         switch (arg0) {
             case 0:
                 for (D_800AE4E0 = 0; D_800AE4E0 < 4; D_800AE4E0++) {
-                    for (i = 0; i < 10; i++) {
+                    for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
                         Save_CommitTypedRecord(0x10, i);
                     }
                 }
@@ -485,7 +521,7 @@ void Save_CommitBankRecords(s16 arg0) {
 
             case 1:
                 for (D_800AE4E0 = 4; D_800AE4E0 < 8; D_800AE4E0++) {
-                    for (i = 0; i < 10; i++) {
+                    for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
                         Save_CommitTypedRecord(0x10, i);
                     }
                 }
@@ -494,19 +530,21 @@ void Save_CommitBankRecords(s16 arg0) {
             case 2:
                 D_800AE4E0 = 8;
 
-                for (i = 0; i < 10; i++) {
+                for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
                     Save_CommitTypedRecord(0x10, i);
                 }
 
                 Save_CommitTypedRecord(0x13, 0);
                 Save_CommitTypedRecord(0x14, 0);
                 Save_CommitTypedRecord(0x15, 0);
+#if !defined(VERSION_JP)
                 Save_CommitTypedRecord(0x16, 0);
                 Save_CommitTypedRecord(0x17, 0);
+#endif
                 break;
 
             case 3:
-                for (i = 0; i < 12; i++) {
+                for (i = 0; i < SAVE_BOX_COUNT; i++) {
                     Save_CommitTypedRecord(0x11, i);
                 }
 
@@ -543,7 +581,7 @@ s32 Deck_GetSaveRecordCapacity(s32 arg0) {
             break;
 
         case 17:
-            var_v1 = 0x14;
+            var_v1 = SAVE_BOX_CAPACITY;
             break;
 
         case 18:
@@ -554,6 +592,7 @@ s32 Deck_GetSaveRecordCapacity(s32 arg0) {
             var_v1 = 0x97;
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             var_v1 = 0x24;
             break;
@@ -561,6 +600,7 @@ s32 Deck_GetSaveRecordCapacity(s32 arg0) {
         case 23:
             var_v1 = 0x15;
             break;
+#endif
     }
 
     return var_v1;
@@ -571,11 +611,11 @@ s32 Deck_GetSaveRecordSize(s32 arg0) {
 
     switch (arg0) {
         case 16:
-            var_v1 = 0x54;
+            var_v1 = sizeof(BattleMon);
             break;
 
         case 17:
-            var_v1 = 0x54;
+            var_v1 = sizeof(BattleMon);
             break;
 
         case 18:
@@ -583,9 +623,10 @@ s32 Deck_GetSaveRecordSize(s32 arg0) {
             break;
 
         case 19:
-            var_v1 = 0x1A;
+            var_v1 = sizeof(unk_D_800AE4E8_004_2_0DC0_002);
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             var_v1 = 0x8C;
             break;
@@ -593,6 +634,7 @@ s32 Deck_GetSaveRecordSize(s32 arg0) {
         case 23:
             var_v1 = 0x8C;
             break;
+#endif
     }
 
     return var_v1;
@@ -735,6 +777,7 @@ s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1) {
             var_v1 = 0x97;
             break;
 
+#if !defined(VERSION_JP)
         case 22:
             var_v1 = 0x24;
             break;
@@ -742,6 +785,7 @@ s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1) {
         case 23:
             var_v1 = 0x15;
             break;
+#endif
     }
 
     return var_v1;
@@ -820,6 +864,7 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, void* arg3) {
                 *(unk_D_800AE4E8_004_2_0DC0_002*)arg3 = D_800AE4E8[2].unk_04.unk2->unk_0DC0.unk_002[arg2];
                 break;
 
+#if !defined(VERSION_JP)
             case 22:
                 _bcopy(&D_800AE4E8[2].unk_04.unk2->unk_1EC8.unk_0002[arg2], arg3,
                        sizeof(unk_D_800AE4E8_004_2_1EC8_0002));
@@ -829,6 +874,7 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, void* arg3) {
                 _bcopy(&D_800AE4E8[2].unk_04.unk2->unk_3280.unk_0002[arg2], arg3,
                        sizeof(unk_D_800AE4E8_004_2_1EC8_0002));
                 break;
+#endif
         }
         sp2C = 1;
     }
@@ -857,12 +903,14 @@ s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, void* arg3) {
             case 19:
                 D_800AE4E8[2].unk_04.unk2->unk_0DC0.unk_002[arg2] = *(unk_D_800AE4E8_004_2_0DC0_002*)arg3;
                 break;
+#if !defined(VERSION_JP)
             case 22:
                 _bcopy(arg3, &D_800AE4E8[2].unk_04.unk2->unk_1EC8.unk_0002[arg2], 0x8C);
                 break;
             case 23:
                 _bcopy(arg3, &D_800AE4E8[2].unk_04.unk2->unk_3280.unk_0002[arg2], 0x8C);
                 break;
+#endif
         }
 
         if (arg2 == sp24) {
@@ -965,8 +1013,13 @@ void Session_SaveContinueRecord(SessionContinueData* arg0, BattleMon* arg1, s32 
 
         for (i = 0; i < arg2; i++) {
             GbSave_SaveBattleMonRecord(&arg1[i], &temp_v0->unk_024[i]);
+#if defined(VERSION_JP)
+            temp_v0->unk_16E[i] = arg1[i].unk_3C;
+            temp_v0->unk_174[i] = arg1[i].unk_4C;
+#else
             temp_v0->unk_16E[i] = arg1[i].unk_52;
             temp_v0->unk_174[i] = arg1[i].unk_53;
+#endif
         }
     }
 }
@@ -985,8 +1038,13 @@ s32 Session_LoadContinueRecord(SessionContinueData* arg0, BattleMon* arg1) {
             if (arg1 != NULL) {
                 for (i = 0; i < var_s5; i++) {
                     GbSave_LoadBattleMonRecord(&arg1[i], &temp_v0->unk_024[i]);
+#if defined(VERSION_JP)
+                    arg1[i].unk_3C = temp_v0->unk_16E[i];
+                    arg1[i].unk_4C = temp_v0->unk_174[i];
+#else
                     arg1[i].unk_52 = temp_v0->unk_16E[i];
                     arg1[i].unk_53 = temp_v0->unk_174[i];
+#endif
                 }
             }
         }
@@ -1007,10 +1065,10 @@ s32 Save_ContinueRecordExists(void) {
 
 s32 Save_FlushBank(s16 arg0) {
     static u32 D_80073650[] = {
-        0x3700,
-        0x3700,
-        0x3F80,
-        0x3880,
+        sizeof(RegisteredTeamBank),
+        sizeof(RegisteredTeamBank),
+        sizeof(unk_D_800AE4E8_004_2),
+        sizeof(unk_D_800AE4E8_004_3),
     };
 
     s32 sp38;
@@ -1098,11 +1156,11 @@ void Save_InitializeBank0(void) {
     s32 j;
     s32 sp28;
 
-    if (Save_AllocateBank(0, 0x3700) != 0) {
+    if (Save_AllocateBank(0, sizeof(RegisteredTeamBank)) != 0) {
         sp28 = D_800AE4E0;
 
         for (D_800AE4E0 = 0; D_800AE4E0 < 4; D_800AE4E0++) {
-            for (j = 0; j < 10; j++) {
+            for (j = 0; j < REGISTERED_TEAM_SLOTS; j++) {
                 Save_LoadWithRepair(0x10, j);
             }
         }
@@ -1116,11 +1174,11 @@ void Save_InitializeBank1(void) {
     s32 i;
     s32 sp28;
 
-    if (Save_AllocateBank(1, 0x3700) != 0) {
+    if (Save_AllocateBank(1, sizeof(RegisteredTeamBank)) != 0) {
         sp28 = D_800AE4E0;
         D_800AE4E0 = 4;
         while (D_800AE4E0 < 8) {
-            for (i = 0; i < 10; i++) {
+            for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
                 Save_LoadWithRepair(16, i);
             }
             D_800AE4E0++;
@@ -1134,19 +1192,21 @@ void Save_InitializeBank2(void) {
     s32 i;
     s32 sp20;
 
-    if (Save_AllocateBank(2, 0x3F80) != 0) {
+    if (Save_AllocateBank(2, sizeof(unk_D_800AE4E8_004_2)) != 0) {
         sp20 = D_800AE4E0;
         D_800AE4E0 = 8;
 
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
             Save_LoadWithRepair(16, i);
         }
 
         Save_LoadWithRepair(19, 0);
         Save_LoadWithRepair(20, 0);
         Save_LoadWithRepair(21, 0);
+#if !defined(VERSION_JP)
         Save_LoadWithRepair(22, 0);
         Save_LoadWithRepair(23, 0);
+#endif
 
         D_800AE4E8[2].unk_00 |= 1;
         D_800AE4E0 = sp20;
@@ -1156,8 +1216,8 @@ void Save_InitializeBank2(void) {
 void Save_InitializeBank3(void) {
     s32 i;
 
-    if (Save_AllocateBank(3, 0x3880) != 0) {
-        for (i = 0; i < 12; i++) {
+    if (Save_AllocateBank(3, sizeof(unk_D_800AE4E8_004_3)) != 0) {
+        for (i = 0; i < SAVE_BOX_COUNT; i++) {
             Save_LoadWithRepair(17, i);
         }
 
@@ -1219,7 +1279,7 @@ s32 RegisteredTeam_ReadSlot(RegisteredTeamSlot* arg0, s32 arg1) {
     s32 idx1 = D_800AE4E0 / 4;
     s32 idx2 = D_800AE4E0 % 4;
 
-    if ((arg1 >= 0) && (arg1 < 0xA)) {
+    if ((arg1 >= 0) && (arg1 < REGISTERED_TEAM_SLOTS)) {
         *arg0 = D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1];
         var_v1 = 1;
     }
@@ -1231,7 +1291,7 @@ s32 RegisteredTeam_WriteSlot(RegisteredTeamSlot* arg0, s32 arg1) {
     s32 idx1 = D_800AE4E0 / 4;
     s32 idx2 = D_800AE4E0 % 4;
 
-    if ((arg1 >= 0) && (arg1 < 0xA)) {
+    if ((arg1 >= 0) && (arg1 < REGISTERED_TEAM_SLOTS)) {
         D_800AE4E8[idx1].unk_04.unk1->unk_0000[idx2][arg1] = *arg0;
         Save_MarkRecordDirty(0x10, arg1, 2);
         var_v1 = 1;
@@ -1242,7 +1302,7 @@ s32 RegisteredTeam_WriteSlot(RegisteredTeamSlot* arg0, s32 arg1) {
 s32 Deck_FindFirstFreeTeamSlot(void) {
     s32 i;
 
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < REGISTERED_TEAM_SLOTS; i++) {
         if (Deck_IsSaveEntryPresent(0x10, i) == 0) {
             break;
         }
@@ -1256,7 +1316,7 @@ void Deck_CompactRegisteredTeams(void) {
     s32 i;
     s32 j;
 
-    for (i = 9; i >= 0; i--) {
+    for (i = REGISTERED_TEAM_SLOTS - 1; i >= 0; i--) {
         if (Deck_IsSaveEntryPresent(0x10, i) != 0) {
             break;
         }
@@ -1267,7 +1327,7 @@ void Deck_CompactRegisteredTeams(void) {
             continue;
         }
 
-        for (i = j; i < 9; i++) {
+        for (i = j; i < REGISTERED_TEAM_SLOTS - 1; i++) {
             if (i && i) {}
 
             RegisteredTeam_ReadSlot(&sp40, i + 1);
@@ -1275,6 +1335,6 @@ void Deck_CompactRegisteredTeams(void) {
             Save_CommitTypedRecord(0x10, i);
         }
 
-        Save_ResetAndCommitTypedRecord(0x10, 9);
+        Save_ResetAndCommitTypedRecord(0x10, REGISTERED_TEAM_SLOTS - 1);
     }
 }

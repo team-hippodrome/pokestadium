@@ -88,9 +88,16 @@ typedef struct GbPokemonRecord {
 
 typedef struct GbPokemonNamedRecord {
     /* 0x00 */ GbPokemonRecord unk_00;
+#if defined(VERSION_JP)
+    // Japanese GB names are 5 characters plus a terminator.
+    /* 0x21 */ u8 unk_21[6];
+    /* 0x27 */ u8 unk_27[6];
+} GbPokemonNamedRecord; // size = 0x2D
+#else
     /* 0x21 */ u8 unk_21[11];
     /* 0x2C */ u8 unk_2C[11];
 } GbPokemonNamedRecord; // size = 0x37
+#endif
 
 typedef struct GbPokemonRecordExt {
     /* 0x00 */ GbPokemonRecord unk_00;

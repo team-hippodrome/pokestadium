@@ -39,26 +39,58 @@ typedef struct SessionContinueData {
 } SessionContinueData; // size = 0x20
 #endif
 
+// Every save record starts with a flags field: u8 in most versions, s16 in JP.
+#if defined(VERSION_JP)
+typedef s16 SaveRecordFlags;
+#else
+typedef u8 SaveRecordFlags;
+#endif
+#define SAVE_RECORD_FLAGS(record) (*(SaveRecordFlags*)(record))
+
 typedef struct DeckRecordHeader {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ SaveRecordFlags unk_00;
+#if defined(VERSION_JP)
+    /* 0x02 */ u8 unk_01;
+    /* 0x03 */ char unk03[0x5];
+    /* 0x08 */ u16 unk_0C;
+    /* 0x0A */ s16 unk_0E;
+} DeckRecordHeader; // size = 0xC
+#else
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ char unk02[0xA];
     /* 0x0C */ u16 unk_0C;
     /* 0x0E */ s16 unk_0E;
 } DeckRecordHeader; // size >= 0x10
+#endif
 
+// JP sizes come from the record sizes Save_LoadWithRepair passes for each record type.
 typedef struct RegisteredTeamSlot {
     /* 0x000 */ DeckRecordHeader unk_000;
     /* 0x010 */ GbPokemonNamedRecord unk_010[1];
+#if defined(VERSION_JP)
+    /* 0x039 */ char unk039[0xE7];
+} RegisteredTeamSlot; // size = 0x120
+#else
     /* 0x047 */ char unk047[0x119];
 } RegisteredTeamSlot; // size = 0x160
+#endif
+
+#if defined(VERSION_JP)
+#define REGISTERED_TEAM_SLOTS 12
+#define SAVE_BOX_COUNT 8
+#define SAVE_BOX_CAPACITY 30
+#else
+#define REGISTERED_TEAM_SLOTS 10
+#define SAVE_BOX_COUNT 12
+#define SAVE_BOX_CAPACITY 20
+#endif
 
 typedef struct RegisteredTeamBank {
-    /* 0x0000 */ RegisteredTeamSlot unk_0000[4][10];
-} RegisteredTeamBank; // size = 0x3700
+    /* 0x0000 */ RegisteredTeamSlot unk_0000[4][REGISTERED_TEAM_SLOTS];
+} RegisteredTeamBank; // size = 0x3600 in JP, 0x3700 otherwise
 
 typedef struct SaveOptionsRecord {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ SaveRecordFlags unk_00;
     /* 0x02 */ u16 unk_02;
     /* 0x04 */ GameOptions unk_04;
     /* 0x0C */ ModeSettings unk_0C[1];
@@ -86,12 +118,30 @@ typedef struct unk_D_800AE4E8_004_2_0DC0_002 {
 #endif
 
 typedef struct unk_D_800AE4E8_004_2_0DC0 {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ SaveRecordFlags unk_000;
+#if !defined(VERSION_JP)
     /* 0x001 */ char unk001[0x1];
+#endif
     /* 0x002 */ unk_D_800AE4E8_004_2_0DC0_002 unk_002[1];
+#if defined(VERSION_JP)
+    /* 0x012 */ char unk012[0x966];
+} unk_D_800AE4E8_004_2_0DC0; // size = 0x978
+#else
     /* 0x01C */ char unk01C[0xF44];
 } unk_D_800AE4E8_004_2_0DC0; // size = 0xF60
+#endif
 
+#if defined(VERSION_JP)
+typedef struct ContinueRecordBlock {
+    /* 0x000 */ s16 unk_000;
+    /* 0x002 */ SessionContinueData unk_002;
+    /* 0x01A */ s16 unk_022;
+    /* 0x01C */ GbPokemonNamedRecord unk_024[6];
+    /* 0x12A */ u8 unk_16E[6];
+    /* 0x130 */ u8 unk_174[6];
+    /* 0x136 */ char unk136[0x6];
+} ContinueRecordBlock; // size = 0x13C
+#else
 typedef struct ContinueRecordBlock {
     /* 0x000 */ u8 unk_000;
     /* 0x002 */ SessionContinueData unk_002;
@@ -101,6 +151,7 @@ typedef struct ContinueRecordBlock {
     /* 0x174 */ u8 unk_174[6];
     /* 0x17A */ char unk17A[0x6];
 } ContinueRecordBlock; // size = 0x180
+#endif
 
 typedef struct unk_D_800AE4E8_004_2_1EC8_0002 {
     /* 0x00 */ char unk00[0x8C];
@@ -120,6 +171,16 @@ typedef struct unk_D_800AE4E8_004_2_3280 {
     /* 0x008E */ char unk008E[0xAF6];
 } unk_D_800AE4E8_004_2_3280; // size = 0xB84
 
+#if defined(VERSION_JP)
+// Member names give the US offsets. JP has no 1EC8/3280 records.
+typedef struct unk_D_800AE4E8_004_2 {
+    /* 0x0000 */ char unk0000[0xD80];
+    /* 0x0D80 */ unk_D_800AE4E8_004_2_0DC0 unk_0DC0;
+    /* 0x16F8 */ ContinueRecordBlock unk_1D20;
+    /* 0x1834 */ SaveOptionsRecord unk_1EA0;
+    /* 0x185C */ char unk185C[0x24];
+} unk_D_800AE4E8_004_2; // size = 0x1880
+#else
 typedef struct unk_D_800AE4E8_004_2 {
     /* 0x0000 */ char unk0000[0xDC0];
     /* 0x0DC0 */ unk_D_800AE4E8_004_2_0DC0 unk_0DC0;
@@ -129,12 +190,18 @@ typedef struct unk_D_800AE4E8_004_2 {
     /* 0x3280 */ unk_D_800AE4E8_004_2_3280 unk_3280;
     /* 0x3E04 */ char unk3E04[0x17C];
 } unk_D_800AE4E8_004_2; // size = 0x3F80
+#endif
 
 typedef struct unk_D_800AE4E8_004_3_0000 {
     /* 0x0000 */ DeckRecordHeader unk_000;
     /* 0x0010 */ GbPokemonNamedRecord unk_010[1];
+#if defined(VERSION_JP)
+    /* 0x0039 */ char unk010[0x51F];
+} unk_D_800AE4E8_004_3_0000; // size = 0x558
+#else
     /* 0x0047 */ char unk010[0x421];
 } unk_D_800AE4E8_004_3_0000; // size = 0x468
+#endif
 
 typedef struct unk_D_800AE4E8_004_3_34E0_010 {
     /* 0x00 */ u8 unk_00;
@@ -144,14 +211,26 @@ typedef struct unk_D_800AE4E8_004_3_34E0_010 {
 typedef struct unk_D_800AE4E8_004_3_34E0 {
     /* 0x0000 */ DeckRecordHeader unk_00;
     /* 0x0010 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
+#if defined(VERSION_JP)
+    /* 0x000E */ char unk0E[0xD2];
+#else
     /* 0x0012 */ char unk12[0xCE];
+#endif
 } unk_D_800AE4E8_004_3_34E0; // size = 0xE0
 
 typedef struct unk_D_800AE4E8_004_3 {
+#if defined(VERSION_JP)
+    // 8 boxes of 30 instead of 12 boxes of 20.
+    /* 0x0000 */ unk_D_800AE4E8_004_3_0000 unk_0000[8];
+    /* 0x2AC0 */ unk_D_800AE4E8_004_3_34E0 unk_34E0[4];
+    /* 0x2E40 */ char unk_3860[0x40];
+} unk_D_800AE4E8_004_3; // size = 0x2E80
+#else
     /* 0x0000 */ unk_D_800AE4E8_004_3_0000 unk_0000[12];
     /* 0x34E0 */ unk_D_800AE4E8_004_3_34E0 unk_34E0[4];
     /* 0x3860 */ char unk_3860[0x20];
 } unk_D_800AE4E8_004_3; // size = 0x3880
+#endif
 
 typedef union unk_D_800AE4E8_004 {
     RegisteredTeamBank* unk1;
