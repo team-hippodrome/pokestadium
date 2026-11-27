@@ -1977,7 +1977,10 @@
     vram: 0x84A00000
     subsegments:
     - [0x3B35E0, textbin,   fragments/gym_leader_castle/gym_leader_castle_header]
-    - [0x3B3600, asm, fragment65_3B3600]
+    - [0x3B3600, c, fragments/gym_leader_castle/gym_leader_castle]
+    - [0x3B6260, .data, fragments/gym_leader_castle/gym_leader_castle]
+    - [0x3B6490, .rodata, fragments/gym_leader_castle/gym_leader_castle]
+    - {vram: 0x84A03090, type: .bss, name: fragments/gym_leader_castle/gym_leader_castle}
   - name: fragment65_relocs
     type: code
     bss_size: 0x0

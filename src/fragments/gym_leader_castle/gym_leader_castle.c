@@ -1,4 +1,5 @@
 #include "gym_leader_castle.h"
+#include "string.h"
 #include "src/graphics_textures.h"
 #include "src/ui_graphics.h"
 #include "src/save_data.h"
@@ -11,8 +12,10 @@
 #include "src/memory.h"
 #include "src/stage_loader.h"
 
+#if !defined(VERSION_JP)
 static char** sUiText;
 static char** sTrainerNameText;
+#endif
 static GymLeaderCastleTrainer sCurrentNodeTrainers[4];
 static BinArchive* sTrainerDataArchive;
 static BinArchive* sPortraitArchive;
@@ -29,54 +32,61 @@ static s16 sCurrentHoverNodeIndex;
 #define GLC_TO_ELITE_4 8
 #define GIOVANNI 7
 
+// JP has the room and trainer names inline; the other versions index the UI and trainer name text.
+#if defined(VERSION_JP)
+#define NODE_TEXT(title, fileNumber, jpTitle, jpTrainerName) jpTitle, jpTrainerName
+#else
+#define NODE_TEXT(title, fileNumber, jpTitle, jpTrainerName) title, fileNumber
+#endif
+
 static CastleMapNode sCastleMapNodes[] = {
     {
         0x00,      0x00, 154, 390,  118, 362, 96, 278, 48, 70, -32768, 0, 0, 0, 2, { 0x96, 0x64, 0xFF, 0x00 },
-        D_3000000, 0,    30,  NULL,
+        D_3000000, NODE_TEXT(0, 30, "ニビジム", "タケシ"), NULL,
     },
     {
         0x01,      0x00, 238, 416,  210, 392, 184, 304, 48, 70, -32768, 3, 0, 1, 3, { 0x00, 0x9B, 0xFF, 0x00 },
-        D_3000D20, 1,    31,  NULL,
+        D_3000D20, NODE_TEXT(1, 31, "ハナダジム", "カスミ"), NULL,
     },
     {
         0x02,      0x00, 322, 386,  282, 362, 248, 274, 48, 70, -32768, 4, 2, 2, 0, { 0xFF, 0x5F, 0x0F, 0x00 },
-        D_3001A40, 2,    32,  NULL,
+        D_3001A40, NODE_TEXT(2, 32, "クチバジム", "マチス"), NULL,
     },
     {
         0x03,      0x00, 270, 304,  256, 282, 234, 190, 48, 70, -32768, 5, 3, 5, 0, { 0x8C, 0x37, 0xFF, 0x00 },
-        D_3002760, 3,    33,  NULL,
+        D_3002760, NODE_TEXT(3, 33, "タマムシジム", "エリカ"), NULL,
     },
     {
         0x04,      0x00, 214, 286,  188, 266, 168, 180, 48, 70, -32768, 6, 4, 6, 4, { 0xFF, 0x37, 0xFF, 0x00 },
-        D_3003480, 4,    34,  NULL,
+        D_3003480, NODE_TEXT(4, 34, "セキチクジム", "キョウ"), NULL,
     },
     {
         5,         0x00, 164, 178,  160, 170, 116, 96, 48, 70, -32768, 7, 5, 0, 7, { 0xCD, 0x91, 0x00, 0x00 },
-        D_30041A0, 5,    35,  NULL,
+        D_30041A0, NODE_TEXT(5, 35, "ヤマブキジム", "ナツメ"), NULL,
     },
     {
         6,         0x00, 284, 148,  290, 138, 250, 78, 48, 70, -32768, 0, 8, 6, 8, { 0xFF, 0x00, 0x00, 0x00 },
-        D_3004EC0, 6,    36,  NULL,
+        D_3004EC0, NODE_TEXT(6, 36, "グレンジム", "カツラ"), NULL,
     },
     {
         0x07,      0x00, 364, 243,  330, 214, 306, 110, 48, 70, -32768, 7, 0, 7, 9, { 0x37, 0xFF, 0xFF, 0x00 },
-        D_3005BE0, 7,    37,  NULL,
+        D_3005BE0, NODE_TEXT(7, 37, "トキワジム", "サカキ"), NULL,
     },
     {
         0x08,      0x00, 0,  0,    418, 204, 390, 102, 48, 70, -32768, 0, 0, 0, 0, { 0xC8, 0xFF, 0x00, 0x00 },
-        D_3006900, -1,   -1, NULL,
+        D_3006900, NODE_TEXT(-1, -1, NULL, NULL), NULL,
     },
     {
         9,         0x00, 190, 384,  174, 424, 180, 394, 40, 27, -32768, 0, 0, 0, 0, { 0xFF, 0x64, 0x00, 0x00 },
-        D_3008E50, -1,   9,   NULL,
+        D_3008E50, NODE_TEXT(-1, 9, NULL, "サカキのとうへ"), NULL,
     },
     {
         10,        0x00, 446, 216,  374, 210, 356, 128, 72, 43, -32768, 12, 10, 10, 0, { 0xFF, 0x64, 0x00, 0x00 },
-        D_3007620, 10,   10,  NULL,
+        D_3007620, NODE_TEXT(10, 10, "してんのう", "してんのう"), NULL,
     },
     {
         11,        0x00, 0,  0,    312, 148, 274, 68, 72, 43, -32768, 0, 11, 0, 0, { 0x00, 0x64, 0xC8, 0x00 },
-        D_3008238, -1,   11, NULL,
+        D_3008238, NODE_TEXT(-1, 11, " ", "ライバル"), NULL,
     },
 };
 
@@ -156,6 +166,20 @@ void GymLeaderCastle_DrawRoomDescription(void) {
 
         if (sRoomDescriptionHeight == 80) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(8, -2);
+            Font_SetLineHeight(24);
+
+            if (sSelectedMapNode == GIOVANNI) {
+                Font_Printf(136, y1 + 16, "サカキから カギをうけとり、\nさいごのしろの もんをひらいた。");
+            } else if (sSelectedMapNode == ELITE_4) {
+                Font_Printf(136, y1 + 16, "してんのうから カギをうけとり、\nさいじょうかいへの とびらがひらいた。");
+            } else {
+                Font_Printf(136, y1 + 16, "%sから うけとったカギで\n%sのとうの とびらがひらいた。",
+                            sCastleMapNodes[sSelectedMapNode].trainerName,
+                            sCastleMapNodes[sSelectedMapNode + 1].trainerName);
+            }
+#else
             Font_SetActive(8, 0);
             Font_SetLineHeight(24);
 
@@ -183,6 +207,7 @@ void GymLeaderCastle_DrawRoomDescription(void) {
                 }
                 Font_Printf(136, y1 + 0x10, Text_GetString(var_sp40, sizeof(var_sp40), sUiText, 14));
             }
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -213,6 +238,26 @@ void GymLeaderCastle_DrawTrainerIntroPanels(void) {
             Font_BeginTranslucentTextRendering();
             // special titles for Gym leaders
             // Condition reads as "is the player in the Elite Four room OR is panel the gym leader's?"
+#if defined(VERSION_JP)
+            if ((sSelectedMapNode >= GLC_TO_ELITE_4) || (i == 3)) {
+                Font_SetActive(8, -2);
+                Font_Printf((trainer_portrait_x - (s32)(strlen(hovered_map_node->title) / 2 * 18) / 2) + 64, 244, "%s",
+                            hovered_map_node->title);
+            }
+
+            Font_SetActive(4, -2);
+
+            if ((i == 3) && (sSelectedMapNode < GLC_TO_ELITE_4)) {
+                Font_Printf(trainer_portrait_x + 8, 268, "ジムリーダー");
+            } else {
+                Font_Printf(trainer_portrait_x + 8, 268, "トレーナー");
+            }
+
+            Font_SetActive(0x10, -2);
+            Font_Printf((trainer_portrait_x - (s32)(strlen(sCurrentNodeTrainers[i].name) / 2 * 22) / 2) + 64, 284,
+                        sCurrentNodeTrainers[i].name);
+            Font_EndTexturedTextRendering();
+#else
             if ((sSelectedMapNode >= GLC_TO_ELITE_4) || (i == 3)) {
                 Font_SetActive(8, 0);
 
@@ -238,6 +283,7 @@ void GymLeaderCastle_DrawTrainerIntroPanels(void) {
             Font_Printf((trainer_portrait_x - (Font_MeasureTextExtent(0x10, 0, sCurrentNodeTrainers[i].name) / 2)) + 64,
                         284, sCurrentNodeTrainers[i].name);
             Font_EndTexturedTextRendering();
+#endif
         }
     }
 }
@@ -334,6 +380,17 @@ void GymLeaderCastle_DrawRoomLabels(void) {
 
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
+#if defined(VERSION_JP)
+    Font_SetActive(4, -2);
+    Gfx_SetPrimColor(0x50, 0x64, 0xDC, 0xFF);
+
+    for (; backwards_index > 0; backwards_index--, node++) {
+        if (node->nodeState != 0) {
+            tmp = node->labelX - strlen(node->trainerName) * 22 / 4;
+            Font_Printf(tmp, node->labelY, node->trainerName);
+        }
+    }
+#else
     Font_SetActive(4, 0);
     Gfx_SetPrimColor(0x50, 0x64, 0xDC, 0xFF);
 
@@ -350,13 +407,18 @@ void GymLeaderCastle_DrawRoomLabels(void) {
             Font_Printf(tmp, node->labelY, label);
         }
     }
+#endif
 
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
 
 void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 alpha2) {
+#if defined(VERSION_JP)
+    s16 len;
+#else
     char* string;
+#endif
 
     if (node->infoPanelTexture != NULL) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -368,8 +430,13 @@ void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 a
         gSPDisplayList(gDisplayListHead++, D_8006F558);
         gDPSetEnvColor(gDisplayListHead++, node->color.r, node->color.g, node->color.b, (alpha2 * 0x96) / 255);
 
+#if defined(VERSION_JP)
+        Gfx_DrawTextureIa16(378, 372, 16, 76, D_300C290, 0x10, 0);
+        Gfx_DrawTexturedRectClipped(394, 372, 108, 76, 480, 0, 0, 0x400, 0);
+#else
         Gfx_DrawTextureIa16(358, 372, 16, 76, D_300C290, 0x10, 0);
         Gfx_DrawTexturedRectClipped(374, 372, 128, 76, 480, 0, 0, 0x400, 0);
+#endif
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -377,6 +444,14 @@ void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 a
         Font_EnableTwoCycleTexturing();
         Gfx_SetEnvColor(0x8C, 0x90, 0x90, alpha2);
         Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, alpha2);
+#if defined(VERSION_JP)
+        Font_SetActive(8, -2);
+        len = strlen(node->title) / 2;
+        Font_Printf(440 - (len * 18) / 2, 378, "%s", node->title);
+        Font_SetActive(32, -4);
+        len = strlen(node->trainerName) / 2;
+        Font_Printf(440 - (len * 28) / 2, 406, node->trainerName);
+#else
         Font_SetActive(8, 0);
 
         if (node->bossTitle >= 0) {
@@ -396,13 +471,18 @@ void GymLeaderCastle_DrawGymLeaderInfoPanel(CastleMapNode* node, u8 alpha1, u8 a
         }
 
         Font_Printf(430 - (Font_MeasureTextExtent(32, 0, string) / 2), 406, string);
+#endif
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
 }
 
 void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, u8 alpha2) {
+#if defined(VERSION_JP)
+    s16 len;
+#else
     char* string;
+#endif
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, alpha1);
@@ -432,6 +512,11 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
     Font_EnableTwoCycleTexturing();
     Gfx_SetEnvColor(0x8C, 0x90, 0x90, alpha2);
     Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, alpha2);
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+    len = strlen(node->trainerName) / 2;
+    Font_Printf(408 - (len * 22) / 2, 406, node->trainerName);
+#else
     Font_SetActive(0x10, 0);
 
     if (node->fileNumber >= 30) {
@@ -446,6 +531,7 @@ void GymLeaderCastle_DrawEliteFourRoomInfoPanel(CastleMapNode* node, u8 alpha1, 
     Font_Printf((156 - Font_MeasureTextExtent(16, 0, string)) / 2 + 314, 406, string);
 #else
     Font_Printf(408 - (Font_MeasureTextExtent(16, 0, string) / 2), 406, string);
+#endif
 #endif
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
@@ -892,9 +978,11 @@ s32 GymLeaderCastle_Main(s32 arg0, UNUSED s32 arg1) {
     Font_Init(60, 0);
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_3000000, gym_leader_castle_ui, 0);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sUiText = Text_GetStringTable(25);
     sTrainerNameText = Text_GetStringTable(34);
+#endif
     Save_EnsureBankLoaded(2);
     Save_GetModeSettings(&D_84A03180, gSessionContext.inRound2);
     sTrainerDataArchive = BinArchive_Open(TRAINER_DATA_ROM_START, NULL, 1, 1);

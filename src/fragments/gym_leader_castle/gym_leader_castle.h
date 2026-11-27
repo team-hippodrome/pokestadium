@@ -28,10 +28,17 @@ typedef struct CastleMapNode {
     /* 0x17 */ s8 rightNeighbor;
     /* 0x18 */ Color_RGBA8 color;
     /* 0x1C */ u8* texture;
+#if defined(VERSION_JP)
+    /* 0x20 */ char* title;
+    /* 0x24 */ char* trainerName;
+    /* 0x28 */ u8* infoPanelTexture;
+} CastleMapNode; // size = 0x2C
+#else
     /* 0x20 */ s16 bossTitle;
     /* 0x22 */ s16 fileNumber;
     /* 0x24 */ u8* infoPanelTexture;
 } CastleMapNode; // size = 0x28
+#endif
 
 void GymLeaderCastle_DrawBackgroundCrossFade(u8* fade_in_texture, u8* fade_out_texture, u8 alpha);
 void GymLeaderCastle_DrawScaledTextureRgba(s16 x_start, s16 y_start, s16 draw_width, s16 height, s16 load_width,
