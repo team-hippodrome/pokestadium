@@ -1383,7 +1383,11 @@
     vram: 0x82300000
     subsegments:
     - [0x28B300, textbin,   fragments/event_battle/event_battle_header]
-    - [0x28B320, asm, fragments/event_battle/event_battle]
+    - [0x28B320, c,      fragments/event_battle/event_battle]
+    - [0x290A80, .data,   fragments/event_battle/event_battle]
+    - [0x290B70, .rodata, fragments/event_battle/event_battle]
+
+    - {vram: 0x82305D40, type: .bss, name: fragments/event_battle/event_battle}
   - name: fragment38_relocs
     type: code
     bss_size: 0x0
