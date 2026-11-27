@@ -54,14 +54,16 @@ u8 D_81259A40;
 u8 D_81259A41;
 u8 D_81259A42;
 u8 D_81259A43;
-s32 D_81259A44;
+u8* D_81259A44;
 u8 D_81259A48;
 u8 D_81259A49;
-s32 D_81259A4C;
+u8* D_81259A4C;
 u32 D_81259A50;
 u32 D_81259A54;
 s32 D_81259A58;
-s32 D_81259A5C;
+u8 D_81259A5C;
+u8 D_81259A5D;
+UNUSED u8 D_81259A5E[2];
 extern OSThread gGbPakServiceThread;
 extern u8 gGbPakServiceThreadStack[0x1000];
 extern OSMesg gGbPakServiceQueueMessages[4];
@@ -2051,38 +2053,37 @@ extern volatile u8 D_81259915;
 extern volatile u8 D_81259916;
 extern OSMesgQueue D_812598F8;
 extern u8 D_81259A40;
-extern u8 D_811565A1;
-extern u8 D_811565A3;
-extern u8 D_811565A4;
-extern u8 D_811565A5;
-extern u8* D_811565A8;
-extern u8 D_811565B8;
-extern u8 D_811565B9;
+extern u8 D_81259A41;
+extern u8 D_81259A43;
+extern u8* D_81259A44;
+extern u8 D_81259A48;
+extern u8 D_81259A49;
+extern u8* D_81259A4C;
+extern u8 D_81259A5C;
+extern u8 D_81259A5D;
 extern u8 D_8121E908;
-extern u16 D_8111E30C;
-extern u16 D_8111E310;
-extern u16 D_811228B4;
-extern u8 D_811228B8;
+extern u16 D_8121E90C;
+extern u16 D_8121E910;
+extern u16 D_812235B0;
+extern u8 D_812235B4;
 extern s32 D_812580E8;
-extern u8 D_81154C0F;
-extern u8 D_81154C4F;
-extern GbEmuTask D_81154BF0;
-extern u8* D_800603C0;
-extern u8 D_8112AF3C[];
-extern u8 D_81130024[];
-extern u8 D_811565F0[];
-extern u8 D_811645F0[];
-extern u8 D_811725F0[];
-extern u8 D_81135178[];
-extern u8 D_81135378[];
-extern u8 D_8113556C[];
-extern u8 D_8111F470[];
-extern u8 D_8111E678[];
-void func_800093E0(void*, void*);
+extern u8 D_812580AF;
+extern u8 D_812580EF;
+extern GbEmuTask D_81258090;
+extern u8 D_8121EC78[];
+extern u8 D_8121FA70[];
+extern u8 D_8122BC3C[];
+extern u8 D_812342A8[];
+extern u8 D_812385CC[];
+extern u8 D_812387CC[];
+extern u8 D_812389CC[];
+extern u8 D_81259A90[];
+extern u8 D_81267A90[];
+extern u8 D_81275A90[];
 void GbPak_QueueNextBankLoad(GbPakChannel* ch);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
-u8 GbCpu_Run(void*, s32);
+u8 func_81218618_jp(void*, s32);
 void osInvalDCache(void*, s32);
 void GbAudio_SetMenuSoundMode(s32);
 
@@ -2094,21 +2095,18 @@ void GbAudio_SetMenuSoundMode(s32);
  * cycles the graphics set copied in for the screen frame. Returns 1 when only
  * C-Up is held, a negative value on a Transfer Pak error, -100 when the core
  * stopped, otherwise 0.
- * Seen in play (2026-11-12): runs Green frame by frame and, while banks load, restores the header
- * bytes once the GB PC (gbPc) reaches 0x100.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_RunFrame.
+ * While banks stream in, the header bytes are put back once the GB PC reaches 0x100. JP adds two
+ * patches for the cartridge driven through D_81259A44: an opcode byte (0xC3 jp / 0xCD call) set
+ * from the speed level and two RAM bytes, and a fix-up of the save block at SRAM 0x2598-0x3594
+ * (sets four bytes and rewrites its checksum) when the game asks for it via GB_MEM[0x101C5].
  */
-s32 GbEmu_UpdateFrame(void);
-#ifdef NON_MATCHING
 s32 GbEmu_UpdateFrame(void) {
     s32 i;
     s32 err;
     s32 status;
     u8* src;
-    // FAKE: state and timer only exist so that IDO addresses D_811228B8, D_811565B8 and D_811565B9 with a
-    // fresh lui on every access, as in retail. Function-scope statics give the same code and are the likely
-    // original, but would move these bytes into this file's own data/bss sections.
+    // FAKE: state and timer only exist so that IDO addresses D_812235B4, D_81259A5C and D_81259A5D with a
+    // fresh lui on every access, as in retail.
     u8* state;
     u8* timer;
     s32 j;
@@ -2120,18 +2118,20 @@ s32 GbEmu_UpdateFrame(void) {
     s32 remap_a;
     s32 remap_b;
     s32 pad; // FAKE: unused, only reserves the stack slot the retail frame has
+    s32 k;
+    s32 sum;
     u8* dst;
 
     status = 0;
     if (D_81259916 != 0) {
         // While banks stream in, the GB runs a boot stub that ends in `jr $` at 0x100 (see
         // GbEmu_LoadCartridge). Once it gets there, put the real header bytes back.
-        if (D_811565A4 != 0 && GB_RUN->gbPc == 0x100) {
-            if (--D_811565A4 == 0) {
-                func_800093E0(D_8112AF3C, D_811645F0);
-                func_800093E0(D_81130024, D_811725F0);
+        if (D_81259A48 != 0 && GB_RUN->gbPc == 0x100) {
+            if (--D_81259A48 == 0) {
+                Yay0_Decompress(D_8122BC3C, D_81267A90);
+                Yay0_Decompress(D_812342A8, D_81275A90);
                 for (j = 0; j < 258; j++) {
-                    GB_RUN->rom[j] = D_811565A8[j];
+                    GB_RUN->rom[j] = D_81259A4C[j];
                 }
             }
         }
@@ -2140,21 +2140,28 @@ s32 GbEmu_UpdateFrame(void) {
             if (D_81259668[D_81259A40].error != 0) {
                 status = (D_81259668[D_81259A40].unkA2 != 0) ? -3 : -1;
             }
-            if (++D_811565A3 >= 11) {
-                D_811565A3 = 0;
+            if (++D_81259A43 >= 11) {
+                D_81259A43 = 0;
             }
-            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
+            GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_81259A43);
             GB_RUN->buttons = 0;
         } else {
             GbEmu_ClearStatusBar();
             GbEmu_DrawStatusBar();
         }
     } else {
+        if (D_81259A44 != NULL) {
+            if ((GB_MEM[0x101B9] >= 2) || ((GB_MEM[0xD97D] == 0xFE) && (GB_MEM[0xD97F] == 0x3B))) {
+                *D_81259A44 = 0xC3;
+            } else {
+                *D_81259A44 = 0xCD;
+            }
+        }
         for (i = 0; i < 5; i++) {
             D_81259668[D_81259A40].blockDirty[i] = 0xFF;
             D_81259668[D_81259A40].blockState[i] = D_81259668[D_81259A40].blockDirty[i];
         }
-        timer = &D_811565B8; // FAKE: frame counter here, reused below for the D_811565B9 timer
+        timer = &D_81259A5C; // FAKE: frame counter here, reused below for the D_81259A5D timer
         err = GbPak_WriteBackDirtySramBlock(D_81259A40);
         if (err == 0) {
             Cont_StartReadInputs();
@@ -2163,8 +2170,8 @@ s32 GbEmu_UpdateFrame(void) {
                 D_81259668[D_81259A40].request = 8;
                 osSendMesg(&D_812598F8, D_81259A40, 1);
             }
-            remap_a = (gPlayer1Controller->buttonDown & D_8111E30C) ? 0x1000 : 0;
-            remap_b = (gPlayer1Controller->buttonDown & D_8111E310) ? 0x2000 : 0;
+            remap_a = (gPlayer1Controller->buttonDown & D_8121E90C) ? 0x1000 : 0;
+            remap_b = (gPlayer1Controller->buttonDown & D_8121E910) ? 0x2000 : 0;
             GB_RUN->buttons = (gPlayer1Controller->buttonDown & ~0x3000) | remap_a | remap_b;
             if (D_8121E908 != 0) {
                 j = GB_MEM[0x101B9];
@@ -2192,21 +2199,21 @@ s32 GbEmu_UpdateFrame(void) {
             status = (D_81259668[D_81259A40].unkA2 != 0) ? -3 : -2;
         } else {
             if (err == 2) {
-                if (D_811565A1 == 0) {
+                if (D_81259A41 == 0) {
                     GbEmu_DrawAccessOverlay(1);
                 }
-                D_811565A1 = 10;
+                D_81259A41 = 10;
             }
             GB_RUN->buttons = 0;
         }
     }
 
-    if (D_811565A1 != 0) {
+    if (D_81259A41 != 0) {
         //!bug err is only set on the D_81259916 == 0 path; with a pak present this reads an uninitialized local
         if (err == 0) {
-            D_811565A1 = D_811565A1 - 1;
+            D_81259A41 = D_81259A41 - 1;
         }
-        if (D_811565A1 == 0) {
+        if (D_81259A41 == 0) {
             GbEmu_DrawStatusBar();
         } else {
             if (++D_81259A42 >= 11) {
@@ -2230,17 +2237,17 @@ s32 GbEmu_UpdateFrame(void) {
             if (i == 0) {
                 if (GB_MEM[0x101CD] != 0) {
                     GB_MEM[0x101CD] = 0;
-                    D_811228B4 = 0xFFFF;
+                    D_812235B0 = 0xFFFF;
                     i = 10;
                 }
             } else {
                 i--;
                 if (i == 10) {
-                    GB_MEM[0x101CD] = D_811228B4 != GB_MEM[0xFF47];
+                    GB_MEM[0x101CD] = D_812235B0 != GB_MEM[0xFF47];
                 } else if ((i < 10) && (GB_MEM[0x101CD] != 0)) {
                     GB_MEM[0x101CD] = 0;
                     i = 20;
-                    D_811228B4 = GB_MEM[0xFF47];
+                    D_812235B0 = GB_MEM[0xFF47];
                 }
             }
         } else {
@@ -2251,8 +2258,8 @@ s32 GbEmu_UpdateFrame(void) {
 
         steps = count;
         cycles = 0;
-        state = &D_811228B8;
-        timer = &D_811565B9;
+        state = &D_812235B4;
+        timer = &D_81259A5D;
         while (count != 0) {
             *(s32*)(GB_MEM + 0x10100) = cycles;
             if (count == 1) {
@@ -2260,7 +2267,7 @@ s32 GbEmu_UpdateFrame(void) {
             } else {
                 GB_MEM[0x101C1] = 1;
             }
-            i = GbCpu_Run(&D_812599E0, 0);
+            i = func_81218618_jp(&D_812599E0, 0);
             if ((i != 0) || (GB_MEM[0x1017D] != 0) || (cycles += 17248, GB_MEM[0x10181] != 0) ||
                 (GB_MEM[0x1018D] != 0)) {
                 break;
@@ -2323,7 +2330,33 @@ s32 GbEmu_UpdateFrame(void) {
                 GB_MEM[0x101D5] = 0;
             }
         }
-        if (1) { // karodo
+        if ((D_81259A44 != NULL) && (GB_MEM[0x101C5] != 0)) {
+            GB_MEM[0x101C5] = 0;
+            for (k = 0x2598; k < 0x259E; k++) {
+                if (GB_RUN->sram[k] == 0x50) {
+                    goto found;
+                }
+            }
+            goto done;
+        found:
+            for (sum = 0, k = 0x2598; k < 0x3594; k++) {
+                sum += GB_RUN->sram[k];
+            }
+            if (((u8)sum ^ 0xFF) == GB_RUN->sram[k]) {
+                if (((GB_RUN->sram[0x2CA0] == 0xFE) && (GB_RUN->sram[0x2CA2] == 0x3B)) ||
+                    (GB_RUN->sram[0x2CA0] == 0xFF)) {
+                    GB_RUN->sram[0x271C] = 0;
+                    GB_RUN->sram[0x2CA0] = 0xFF;
+                    GB_RUN->sram[0x2CA1] = 0xFF;
+                    GB_RUN->sram[0x2CA2] = 0x3B;
+                    GB_RUN->sram[0x2CA3] = 0x3B;
+                    for (sum = 0, k = 0x2598; k < 0x3594; k++) {
+                        sum += GB_RUN->sram[k];
+                    }
+                    GB_RUN->sram[k] = sum ^ 0xFF;
+                }
+            }
+        done:;
         }
     } else {
         i = 0;
@@ -2350,52 +2383,52 @@ s32 GbEmu_UpdateFrame(void) {
                 }
             }
         }
-        D_81154BF0.type = 2;
-        D_81154BF0.flags = 0;
-        D_81154BF0.ucode = D_8111F470;
-        D_81154BF0.ucodeSize = 0xE38;
-        D_81154BF0.unk_18 = GB_MEM + 0xFE00;
-        D_81154BF0.unk_1C.word = 0x0E300100;
-        D_81154BF0.unk_30 = *(s32*)(GB_MEM + 0x10140);
-        D_81154BF0.unk_38 = *(s32*)(GB_MEM + 0x10190);
-        D_81154BF0.unk_20 = GB_RUN->unk_44;
-        D_81154BF0.unk_14 = 0x10;
-        D_81154BF0.unk_15 = 0xD1 - (D_811565A5 / 2);
-        D_81154BF0.unk_1C.bytes[3] = GB_MEM[0x101A1];
+        D_81258090.type = 2;
+        D_81258090.flags = 0;
+        D_81258090.ucode = D_8121FA70;
+        D_81258090.ucodeSize = 0xE38;
+        D_81258090.unk_18 = GB_MEM + 0xFE00;
+        D_81258090.unk_1C.word = 0x0E300100;
+        D_81258090.unk_30 = *(s32*)(GB_MEM + 0x10140);
+        D_81258090.unk_38 = *(s32*)(GB_MEM + 0x10190);
+        D_81258090.unk_20 = GB_RUN->unk_44;
+        D_81258090.unk_14 = 0x10;
+        D_81258090.unk_15 = 0xD1 - (D_81259A49 / 2);
+        D_81258090.unk_1C.bytes[3] = GB_MEM[0x101A1];
     } else {
-        D_81154BF0.type = 2;
-        D_81154BF0.flags = 0;
-        D_81154BF0.ucode = D_8111E678;
-        D_81154BF0.ucodeSize = 0xDF8;
-        D_81154BF0.unk_18 = GB_MEM + 0xFE00;
-        D_81154BF0.unk_1C.word = 0x0E300100;
-        D_81154BF0.unk_30 = *(s32*)(GB_MEM + 0x10140);
-        D_81154BF0.unk_38 = *(s32*)(GB_MEM + 0x10190);
-        D_81154BF0.unk_20 = GB_RUN->unk_44;
-        D_81154BF0.unk_14 = 0x10;
-        D_81154BF0.unk_15 = 0xD1 - (D_811565A5 / 2);
-        D_81154BF0.unk_1C.bytes[3] = GB_MEM[0x101A1];
+        D_81258090.type = 2;
+        D_81258090.flags = 0;
+        D_81258090.ucode = D_8121EC78;
+        D_81258090.ucodeSize = 0xDF8;
+        D_81258090.unk_18 = GB_MEM + 0xFE00;
+        D_81258090.unk_1C.word = 0x0E300100;
+        D_81258090.unk_30 = *(s32*)(GB_MEM + 0x10140);
+        D_81258090.unk_38 = *(s32*)(GB_MEM + 0x10190);
+        D_81258090.unk_20 = GB_RUN->unk_44;
+        D_81258090.unk_14 = 0x10;
+        D_81258090.unk_15 = 0xD1 - (D_81259A49 / 2);
+        D_81258090.unk_1C.bytes[3] = GB_MEM[0x101A1];
         if ((D_81259915 == 0) && (status == 0)) {
-            if ((GB_RUN->buttons == 8) && (D_81154C0F == 0)) {
+            if ((GB_RUN->buttons == 8) && (D_812580AF == 0)) {
                 return 1;
             }
             btn = gPlayer1Controller->buttonPressed;
-            if ((btn & 0x2000) && (D_81154C0F == 0) && (D_8121E908 != 0)) {
+            if ((btn & 0x2000) && (D_812580AF == 0) && (D_8121E908 != 0)) {
                 gPlayer1Controller->buttonPressed = btn & 0xDFFF;
                 if (((GB_MEM[0x1019A] | GB_MEM[0x1019B] | GB_MEM[0x1019D]) == 0) && (GB_MEM[0x101C9] != 0)) {
-                    if (++D_81154C4F > D_8121E908) {
-                        D_81154C4F = 0;
+                    if (++D_812580EF > D_8121E908) {
+                        D_812580EF = 0;
                     }
                     // Each case keeps both assignments on one line; IDO only schedules these blocks like retail that way.
-                    switch (D_81154C4F) {
+                    switch (D_812580EF) {
                         case 1:
-                            src = D_811645F0; dst = D_81135378;
+                            src = D_81267A90; dst = D_812387CC;
                             break;
                         case 2:
-                            src = D_811725F0; dst = D_8113556C;
+                            src = D_81275A90; dst = D_812389CC;
                             break;
                         default:
-                            src = D_811565F0; dst = D_81135178;
+                            src = D_81259A90; dst = D_812385CC;
                             break;
                     }
                     _bcopy(src, GB_RUN->unk_48 + 0x800, 0xE000);
@@ -2406,8 +2439,8 @@ s32 GbEmu_UpdateFrame(void) {
         }
     }
 
-    if ((D_811565A5 != 0) && (D_811565A5 != 0x20)) {
-        D_811565A5 = D_811565A5 - 1;
+    if ((D_81259A49 != 0) && (D_81259A49 != 0x20)) {
+        D_81259A49 = D_81259A49 - 1;
     }
     if (status != 0) {
         return status;
@@ -2417,11 +2450,6 @@ s32 GbEmu_UpdateFrame(void) {
     }
     return 0;
 }
-#else
-// clang-format off
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/gb_tower_emulator/jp/gb_emu_pak/GbEmu_UpdateFrame.s")
-// clang-format on
-#endif
 
 extern OSMesgQueue D_812598F8;
 extern u8 D_81259A40;
