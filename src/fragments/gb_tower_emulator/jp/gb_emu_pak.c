@@ -1797,40 +1797,54 @@ void GbEmu_PauseAndBlankScreen(void);
 void GbPak_QueueNextBankLoad(GbPakChannel* ch);
 void GbEmu_DrawLoadingScreen(u16*, u8 (*)[0xC80], s32, s32);
 void GbCpu_Reset(GbEmuState*);
-extern u8 D_8111E570[];
-extern u8 D_811565A1;
+// One compressed Yellow bank in the gb_tower_roms segment (ROM 0x7B8000): the bank it unpacks to
+// and its compressed size. Followed in the unpacked data by the per-revision XOR patches.
+typedef struct GbYellowBank {
+    /* 0x0 */ u8 bank;
+    /* 0x1 */ u8 unk_1;
+    /* 0x2 */ u16 size;
+} GbYellowBank; // size = 0x4
+
+extern u8 D_8121EB70[];
+extern u8 D_81259A41;
 extern s16 D_800AD928_jp;
-extern u8 D_811565A3;
-extern u8 D_811565A4;
-extern u8 D_811565A5;
-extern u8* D_811565A8;
-extern s32 D_811565B4;
-extern u8 D_8112AF3C[];
-extern u8 D_81130024[];
-extern u8 D_811645F0[];
-extern u8 D_811725F0[];
-extern u8 D_811223F4[];
-extern u8 D_811224D4[];
-extern u8 D_811225B4[];
-extern u8 D_81122694[];
-extern u8 D_81122774[];
-extern f32 D_FLT_81154254;
+extern u8 D_81259A43;
+extern u8* D_81259A44;
+extern u8 D_81259A48;
+extern u8 D_81259A49;
+extern u8* D_81259A4C;
+extern s32 D_81259A58;
+extern u8 D_8122BC3C[];
+extern u8 D_812342A8[];
+extern u8 D_81267A90[];
+extern u8 D_81275A90[];
+extern GbYellowBank D_81222860[];
+extern GbYellowBank D_81222960[];
+extern u8 D_81222A70[];
+extern u8 D_81222B50[];
+extern u8 D_81222C30[];
+extern u8 D_81222D10[];
+extern u8 D_81222DF0[];
+extern u8 D_81222ED0[];
+extern u8 D_81223070[];
+extern u8 D_81223210[];
+extern u8 D_812233B0[];
+void func_81218120_jp(GbEmuState*);
 
 /**
  * Starts a Game Boy session on Transfer Pak channel arg3: allocates the GB memory, ROM and RAM
  * buffers and identifies the cartridge on every port (GbPak_IdentifyCartridge). A cartridge
- * without a bank list (Yellow, or a revision the tables don't cover) has its four SRAM banks and
- * whole ROM copied before play; Red, Green and Blue instead stream their banks in the background
- * while the game runs. For a streamed load it keeps ROM bytes 0x000-0x101 in D_811565A8 and
- * replaces them with the boot stub D_8111E570, which ends in `jr $` at 0x100. GbEmu_UpdateFrame
- * puts the real bytes back once the GB PC reaches 0x100 while banks are still loading. Seen in
- * play: with Green this showed the 「ロードちゅう」 ("Loading") banner and the Nintendo logo, then the game's own
- * copyright screen.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_Init.
+ * without a bank list has its four SRAM banks and whole ROM copied before play; the others
+ * stream their banks in the background while the game runs. JP Yellow (gameIndex 4) first
+ * unpacks the banks listed in D_81222860 from the game ROM's gb_tower_roms segment, applies the
+ * XOR patches for its mask ROM revision and adds them to the checksum. For a streamed load it
+ * keeps ROM bytes 0x000-0x101 in D_81259A4C and replaces them with the boot stub D_8121EB70,
+ * which ends in `jr $` at 0x100. GbEmu_UpdateFrame puts the real bytes back once the GB PC
+ * reaches 0x100 while banks are still loading.
  */
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 #ifdef NON_MATCHING
+// Same code as retail except for register allocation.
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     GbPakChannel* cur;
     GbPakChannel* slot;
@@ -1838,14 +1852,21 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     s32 i;
     u32 j;
     u8* p;
+    GbYellowBank* bank;
+    u8* tmp;
+    u8* dst;
+    u8* q;
+    s32 off;
+    s32 n;
+    s32 cnt;
     s32 pad[2]; // FAKE
 
-    D_811565B4 = 0;
+    D_81259A58 = 0;
     D_81259A50 = arg1;
     D_81259A54 = arg1 + arg2;
     D_81259A40 = arg3;
-    D_81259A38 = M2C_FIELD(arg4, u8**, 0x21CC);
-    D_81259A3C = M2C_FIELD(arg4, u8**, 0x21D0);
+    D_81259A38 = M2C_FIELD(arg4, u8**, 0x21FC);
+    D_81259A3C = M2C_FIELD(arg4, u8**, 0x2200);
     D_812599E0.mem = (u8*)GbEmu_AllocAligned64(0x27F80, 0);
     D_812599E0.rom = (u8*)GbEmu_AllocAligned64(0x100000, 0);
     D_812599E0.sramSize = 0x8000;
@@ -1854,12 +1875,12 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     D_812599E0.unk_48 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
     sGbEmu = D_812599E0.framebuffer = GbEmu_AllocAligned64(0x2800, 0);
     D_812599E0.unk_50 = (u8*)GbEmu_AllocAligned64(0x2800, 0);
-    D_811565A8 = (u8*)GbEmu_AllocAligned64(0x102, 0);
-    D_811565A3 = 0;
+    D_81259A4C = (u8*)GbEmu_AllocAligned64(0x102, 0);
+    D_81259A43 = 0;
     D_81259917 = 1;
-    D_811565A1 = 0;
-    D_811565A5 = 0x20;
-    D_811565A4 = 0;
+    D_81259A41 = 0;
+    D_81259A49 = 0x20;
+    D_81259A48 = 0;
     bzero((s32)D_812599E0.mem, 0xFF80);
     for (i = 0, p = D_812599E0.mem + 0x16B20; i < 0x40; i++) {
         *p++ = 1;
@@ -1868,7 +1889,7 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         *p++ = 1;
     }
     GbEmu_ClearStatusBar();
-    i = func_80025BD8();
+    i = GbSave_GetActivePort();
     D_81259668[i].request = 0x80;
     osSendMesg(&D_812598F8, i, 1);
     while (D_81259915 != 0) {
@@ -1915,18 +1936,22 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     }
     D_812599E0.unk_07 = 0;
     D_812599E0.unk_06 = 1;
-    GbCpu_Reset(&D_812599E0);
+    D_81259A44 = NULL;
+    func_81218120_jp(&D_812599E0);
     GbEmu_ClearStatusBar();
 
-    /* FAKE: the unsigned `1U` compares stop the constant 1 from sharing a register with unk_06 = 1. */
-    cur->bankList = (cur->gameIndex == 4)   ? NULL
-                    : (cur->gameIndex == 3) ? ((cur->maskRomVersion == 0) ? D_81122774 : NULL)
-                    : (cur->gameIndex == 2) ? ((cur->maskRomVersion == 1U) ? D_81122694 : (cur->maskRomVersion == 0) ? D_811225B4 : NULL)
-                                        : ((cur->maskRomVersion == 1U) ? D_811224D4 : (cur->maskRomVersion == 0) ? D_811223F4 : NULL);
+    cur->bankList = (cur->gameIndex == 4)   ? ((cur->maskRomVersion == 3)   ? D_812233B0
+                                               : (cur->maskRomVersion == 2) ? D_81223210
+                                               : (cur->maskRomVersion == 1) ? D_81223070
+                                               : (cur->maskRomVersion == 0) ? D_81222ED0
+                                                                            : NULL)
+                    : (cur->gameIndex == 3) ? ((cur->maskRomVersion == 0) ? D_81222DF0 : NULL)
+                    : (cur->gameIndex == 2) ? ((cur->maskRomVersion == 1) ? D_81222D10 : (cur->maskRomVersion == 0) ? D_81222C30 : NULL)
+                                            : ((cur->maskRomVersion == 1) ? D_81222B50 : (cur->maskRomVersion == 0) ? D_81222A70 : NULL);
     cur->sum = 0;
 
     if (cur->bankList == NULL) {
-        GbEmu_DrawLoadingScreen((u16*)arg0, M2C_FIELD(arg4, u8 (**)[0xC80], 0x2204), func_80025BD8(), D_812599E0.colorIndex);
+        GbEmu_DrawLoadingScreen((u16*)arg0, M2C_FIELD(arg4, u8 (**)[0xC80], 0x2208), GbSave_GetActivePort(), D_812599E0.colorIndex);
         GbEmu_DrawStatusBar();
         osWritebackDCacheAll();
         osViBlack(0);
@@ -1967,9 +1992,39 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         for (i = 0; i < (D_812599E0.sramSize >> 13); i++) {
             cur->sramState[i] = 0;
         }
-        func_800093E0(D_8112AF3C, D_811645F0);
-        func_800093E0(D_81130024, D_811725F0);
+        Yay0_Decompress(D_8122BC3C, D_81267A90);
+        Yay0_Decompress(D_812342A8, D_81275A90);
     } else {
+        if ((cur->gameIndex == 4) && (cur->maskRomVersion < 4)) {
+            off = 0;
+            for (n = 0; n < 64; n++) {
+                bank = &D_81222860[n];
+                if (bank->bank == 0) {
+                    break;
+                }
+                osWritebackDCacheAll();
+                tmp = D_812599E0.rom + 0x84000;
+                dst = D_812599E0.rom + (bank->bank << 14);
+                Dma_WriteChunks((u32)tmp, off + 0x7B8000, bank->size + off + 0x7B8000, 0);
+                off += bank->size;
+                Yay0_Decompress(tmp, dst);
+                p = dst + 0x4000;
+                for (cnt = cur->maskRomVersion; cnt != 0; cnt--) {
+                    while ((j = *p) != 0) {
+                        q = (p[2] << 8) + p[1] + dst;
+                        p += 3;
+                        for (; j != 0; j--) {
+                            *q++ ^= *p++;
+                        }
+                    }
+                    p++;
+                }
+                cur->bankState[bank->bank] = 0;
+                for (i = 0; i < 0x4000; i++) {
+                    cur->sum += (D_812599E0.rom + (bank->bank << 14))[i];
+                }
+            }
+        }
         GbEmu_DrawAccessOverlay(0);
         osWritebackDCacheAll();
         D_81259916 = 1;
@@ -1985,17 +2040,24 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
                 GbEmu_BlackScreenAndFail(0);
             }
         }
-        D_811565A4 = 1;
+        if (cur->gameIndex == 4) {
+            if (cur->maskRomVersion == 0) {
+                D_81259A44 = D_812599E0.rom + 0x1F25;
+            } else if (cur->maskRomVersion == 1) {
+                D_81259A44 = D_812599E0.rom + 0x1F2E;
+            }
+        }
+        D_81259A48 = 1;
         for (i = 0; i < 258; i++) {
-            D_811565A8[i] = D_812599E0.rom[i];
-            D_812599E0.rom[i] = D_8111E570[i];
+            D_81259A4C[i] = D_812599E0.rom[i];
+            D_812599E0.rom[i] = D_8121EB70[i];
         }
         D_812599E0.gbPc = 0;
         D_812599E0.mem[0xFF42] = 0x64;
     }
     D_812599E0.unk_06 = 0;
     GbEmu_PauseAndBlankScreen();
-    osViSetXScale(D_FLT_81154254);
+    osViSetXScale(0.888f);
     osViBlack(0);
     return 0;
 }
