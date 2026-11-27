@@ -1,3 +1,4 @@
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
 #include "variables.h"

@@ -1,9 +1,10 @@
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching the end of OoT heap.c and the start of OoT load.c (src/audio/internal) in
  * function order. The driver is Nintendo's "Nas" library (original names Nas_*); this revision
  * sits between SM64 Shindou and OoT. See docs/annotation/audio-driver.md for the per-function
  * mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-/* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
+/* The US and PAL builds have this code in src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -347,10 +348,10 @@ extern s32 D_81287ABC;
  * Sets up the persistent and temporary sample caches from the misc pool.
  * Corresponds to OoT AudioHeap_InitSampleCaches (original name Nas_Init_Single). Zero allocates
  * with GbApu_Alloc; OoT tries the external pool first.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
     s32 temp_v0;
@@ -762,10 +763,10 @@ extern s32 D_81288D80;
  * second, trying D_81287740 when D_81287760 is full. Each list's reuse queue
  * is filled with the buffer indices and the rest of the queue cleared.
  * Corresponds to OoT AudioLoad_InitSampleDmaBuffers (original name Nas_WaveDmaNew).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
     s32 i;
@@ -838,10 +839,10 @@ extern u8 D_81287AF5[1];
 /**
  * Returns 1 when font `arg0` is loaded (status 2 or above) or is 0xFF.
  * Corresponds to OoT AudioLoad_IsFontLoadComplete (original name Nas_CheckIDbank).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -858,10 +859,10 @@ extern u8 D_81287AF6[1];
 /**
  * Returns 1 when sequence `arg0` is loaded (status 2 or above) or is 0xFF.
  * Corresponds to OoT AudioLoad_IsSeqLoadComplete (original name Nas_CheckIDseq).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -953,8 +954,8 @@ void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
  * Stores `table`'s ROM base `rom_addr` and medium parameter `unk_medium_param`, and adds the base to every
  * cartridge entry (medium 2) that has a size.
  * Corresponds to OoT AudioLoad_InitTable (original name Nas_BankHeaderInit).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_Init.
  */
 void AudioLoad_InitTable(AudioTable* table, u32 rom_addr, u16 unk_medium_param) {
     s32 i;
@@ -1514,10 +1515,10 @@ extern u8* D_81288D44;
  * Matching note: the result is built in a local and returned once; separate
  * `return` statements in each case give a different register choice.
  * Corresponds to OoT AudioLoad_GetLoadTable.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_LoadPermanentSamples.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_LoadPermanentSamples.
  */
 u8* AudioLoad_GetLoadTable(s32 arg0) {
     u8* ret;
@@ -1681,11 +1682,11 @@ s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 dev_addr, void
     return 0;
 }
 
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching the rest of OoT load.c (src/audio/internal) in function order. The driver
  * is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
-/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_309ED0.c. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
+/* The US and PAL builds have this code in src/fragments/battle_engine/battle_engine_309ED0.c. */
 
 #include "gb_tower_emulator_jp.h"
 
@@ -1915,10 +1916,10 @@ void AudioLoad_InitTable(AudioTable* table, u32 rom_addr, u16 unk_medium_param);
  * ids and instrument and drum counts.
  * Corresponds to OoT AudioLoad_Init (original name Nas_InitAudio). OoT adds the DMA and unused
  * handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_Init.
  */
 void AudioLoad_Init(void) {
     s32 num_fonts;
@@ -2788,8 +2789,8 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
 /**
  * Preloads the samples of every permanently cached font.
  * Corresponds to OoT AudioLoad_LoadPermanentSamples (original name EmemReload).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_LoadPermanentSamples(void) {
     AudioTable* base = (AudioTable*)AudioLoad_GetLoadTable(2);

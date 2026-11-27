@@ -1,5 +1,5 @@
-/* Stadium Zero fragment000_80C00. */
-/* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
+/* The US and PAL builds have this code in src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
 #include "PR/ultratypes.h"
 // GbPak_VerifyRamBlocks only matches when bcmp takes an unsigned length (the constant is not
@@ -138,9 +138,9 @@ extern u8 D_81259920[];
  * Writes `value` to cartridge address `address` (an MBC1 register) through the Transfer Pak: puts
  * the value in the last byte of the 0x20-byte block D_81259920 and writes the block with
  * osGbpakReadWrite. Returns the osGbpakReadWrite result.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_InitializeCartridgeMapper, whose MBC1 writes the 2026-11-12
- * Transfer Pak trace showed.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_InitializeCartridgeMapper, whose MBC1 writes the 2026-11-12 Transfer Pak trace
+ * showed.
  */
 s32 GbPak_WriteFilledRegisterBlock(void *arg0, s32 address, s32 value) {
     M2C_FIELD(D_81259920, s8 *, 0x1F) = value;
@@ -150,10 +150,10 @@ s32 GbPak_WriteFilledRegisterBlock(void *arg0, s32 address, s32 value) {
 /**
  * Puts the MBC1 into a known state: RAM enable (0x0A), RAM banking mode,
  * bank 0, ROM banking mode, ROM bank 1. Caches pakRomBank/pakRamBank/pakMbcMode.
- * Seen in play (2026-11-12): the Transfer Pak trace shows the MBC1 writes 0x0000=0x0A, 0x6000=1,
+ * Seen in play in pokestadium0 (2026-11-12): the Transfer Pak trace shows the MBC1 writes 0x0000=0x0A, 0x6000=1,
  * 0x4000=0, 0x6000=0, 0x4000=0 and 0x2100=1 in that order.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
   s32 ret;
@@ -197,8 +197,8 @@ extern u8 D_81259960[];
 /**
  * Reads the 0x20-byte cartridge RAM probe block back at sramAddr and compares it with the copy for
  * this channel in D_81259960. Returns 0 when it matches.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
- * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow
+ * (state forced to 20, cartridge removal faked by stubbing GbPak_IsCartridgeInserted); called from GbPak_IoThreadMain.
  */
 s32 GbPak_VerifyProbeBlock(void *ch) {
     s32 pad; // FAKE: stack padding
@@ -226,13 +226,12 @@ s32 GbPak_VerifyProbeBlock(void *ch) {
     return var_v1;
 }
 
-
 /**
  * Reads the Transfer Pak status into status (0x9B) and fails with 0x63 unless bits 0 and 3 are
- * both set, i.e. the pak is powered and a cartridge is inserted. Seen in play (2026-11-12): runs
+ * both set, i.e. the pak is powered and a cartridge is inserted. Seen in play in pokestadium0 (2026-11-12): runs
  * before every transfer while Pocket Monsters Green loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckCartInserted(s8 *arg0) {
     s32 temp_v0;
@@ -258,9 +257,9 @@ s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2);
  * Before each transfer: checks the connector, resets the mapper, re-reads the
  * cartridge header ID and compares it with cartridgeId (detects a swapped cartridge),
  * then re-verifies the RAM probe block if one was written.
- * Seen in play (2026-11-12): runs before each ROM read while Green streams in.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_ReadRomSummed.
+ * Seen in play in pokestadium0 (2026-11-12): runs before each ROM read while Green streams in.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_ProbeCartridge(u8 *arg0) {
     s32 ret;
@@ -289,10 +288,10 @@ s32 GbPak_ProbeCartridge(u8 *arg0) {
 /**
  * Selects the MBC1 ROM bank for a 0x4000-0x7FFF read of a linear ROM address,
  * switching to ROM banking mode and writing the upper bank bits when needed.
- * Seen in play (2026-11-12): its writes reached the emulated MBC1 as 0x6000=0, 0x4000=bank/32 and
+ * Seen in play in pokestadium0 (2026-11-12): its writes reached the emulated MBC1 as 0x6000=0, 0x4000=bank/32 and
  * 0x2100=bank (Transfer Pak trace).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_ReadRomSummed.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 temp_a2;
@@ -326,10 +325,10 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
 
 /**
  * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
- * Seen in play (2026-11-12): wrote 0x6000=1 and 0x4000=bank on the emulated MBC1 before the SRAM
+ * Seen in play in pokestadium0 (2026-11-12): wrote 0x6000=1 and 0x4000=bank on the emulated MBC1 before the SRAM
  * probe.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
  */
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 var_v1;
@@ -355,10 +354,10 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
 extern GbPakChannel D_81259668[4];
 /**
  * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
- * Seen in play (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
+ * Seen in play in pokestadium0 (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
  * status 0x89 passes.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckTransferStatus(OSPfs* arg0) {
     s32 ret = osGbpakGetStatus(arg0, &D_81259668[arg0->channel].status);
@@ -377,8 +376,8 @@ s32 GbPak_CheckTransferStatus(OSPfs* arg0);
  * bank for the 0x4000-0x7FFF window, and adds every byte read to sum. The bank checksum check in
  * GbPak_IoThreadMain (request 6) compares these sums with the known-cartridge tables. Seen in
  * play: two 0x2000-byte reads per bank while Green loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_ReadRomSummed(u8* arg0) {
     s32 ret;
@@ -444,10 +443,10 @@ s32 GbPak_CheckTransferStatus(OSPfs* arg0);
 /**
  * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
  * RAM at gbAddress, selecting each 8 KB bank as it goes.
- * Seen in play (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
+ * Seen in play in pokestadium0 (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
  * cartridge RAM, just before GbPak_CheckGen1SaveChecksum checked the save; returned 0.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 temp_v0;
@@ -492,10 +491,10 @@ extern OSMesgQueue D_812598F8;
  * Called once a frame while the cartridge streams in. Queues the next ROM bank (request 6) or
  * SRAM bank (request 7) from the channel's bank list that is not loaded yet. Once all are loaded
  * it checks the running byte sum against the header's global checksum (error 2 on mismatch),
- * powers the pak off (request 4) and sets D_81259916 to 2. Seen in play: streamed all 32 banks of
+ * powers the pak off (request 4) and sets D_81259916 to 2. Seen in play in pokestadium0: streamed all 32 banks of
  * Green, after which bankState was all zero.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_UpdateFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_UpdateFrame.
  */
 void GbPak_QueueNextBankLoad(GbPakChannel* ch) {
     GbpakBankEntry* entry;
@@ -556,10 +555,10 @@ extern OSMesgQueue D_812598F8;
 /**
  * Queues the ROM bank `bank` for loading (request 6, state 3) ahead of the bank list order and
  * waits for the I/O thread. Returns -2 when no load is running or the channel is busy, and -1
- * when the bank is not in the list or the transfer failed. Seen in play: GbEmu_LoadCartridge
+ * when the bank is not in the list or the transfer failed. Seen in play in pokestadium0: GbEmu_LoadCartridge
  * requests bank 0 first.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_RequestBankLoad(s32 chan, s32 bank) {
     u8* entry;
@@ -606,9 +605,9 @@ extern OSMesgQueue D_812598F8;
  * Once the ROM has loaded, finds the first 256-byte block of cartridge RAM whose blockState is 0
  * (changed by the game) and queues request 5 to write it back to the cartridge. Returns 1 while
  * the I/O thread is busy, 2 when a write was queued, 3 when it must wait, 4 on a pak error and 0
- * when nothing is dirty. Seen in play: runs every frame of GbEmu_UpdateFrame once Green is
+ * when nothing is dirty. Seen in play in pokestadium0: runs every frame of GbEmu_UpdateFrame once Green is
  * running.
- * Seen in play (2026-11-14) ran while Green's intro played in the GB Player; called from
+ * Seen in play in pokestadium0 (2026-11-14) ran while Green's intro played in the GB Player; called from
  * GbEmu_UpdateFrame.
  */
 s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {
@@ -648,8 +647,7 @@ s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {
 }
 
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
-/* Stadium Zero fragment000_80C00. */
-/* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
+/* The US and PAL builds have this code in src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -780,8 +778,8 @@ s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 /**
  * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
  * mismatch rewrites the block and restarts the pass, up to 20 times. Returns -1 on failure.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
- * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow
+ * (state forced to 20, cartridge removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_VerifyRamBlocks(s32 arg0) {
     GbPakChannel* ch2;
@@ -858,9 +856,9 @@ u32 osGetCount(void);
  * Fills the 32-byte probe block (probePattern and unk_5D90) for the writable-RAM
  * probe: mode 3 all zeros, mode 2 all ones, mode 1 DP counters and osGetCount values
  * so the pattern differs each run.
- * Seen in play (2026-11-13) ran on the GB Player loading screen (ロードちゅう, "Loading").
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player loading screen (ロードちゅう, "Loading").
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
  */
 void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
     s32 i;
@@ -891,10 +889,10 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1);
 /**
  * Selects the SRAM bank for the address, then writes a 0x20-byte block at 0xA000 + offset and
  * reads it back until three writes in a row compare equal.
- * Seen in play (2026-11-12): wrote and read back 0x55, 0xAA and 0xAC blocks at GB 0xA000 when the
+ * Seen in play in pokestadium0 (2026-11-12): wrote and read back 0x55, 0xAA and 0xAC blocks at GB 0xA000 when the
  * GB item started.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
     GbPakChannel* ch = &D_81259668[arg0];
@@ -939,11 +937,11 @@ s32 GbPak_CheckGen1SaveChecksum(s8* arg0);
 /**
  * Game Boy Pak I/O thread: takes a channel number from the queue and serves that channel's
  * request (init and read the cartridge ID, read or write cartridge RAM). 0xFF ends the thread.
- * Seen in play (2026-11-12): serviced requests 6 (bank load with checksum check), 8 (status) and
+ * Seen in play in pokestadium0 (2026-11-12): serviced requests 6 (bank load with checksum check), 8 (status) and
  * 4 (power off) while Green loaded. A bank whose 0x2000-byte sums differ from the table sets
  * error 1.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak.
  */
 void GbPak_IoThreadMain(s32 arg0) {
     s32 pad0; // FAKE
@@ -1111,9 +1109,9 @@ void GbPak_IoThreadMain(s32 arg0);
 /**
  * Clears the four Transfer Pak channel records, gives each its OSPfs and starts the Game Boy Pak
  * I/O thread (GbPak_IoThreadMain) on the given message queue.
- * Seen in play (2026-11-12): runs when the GB item is entered, before the cartridge loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_Init.
+ * Seen in play in pokestadium0 (2026-11-12): runs when the GB item is entered, before the cartridge loads.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_Init.
  */
 void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -1148,11 +1146,11 @@ extern OSMesgQueue D_812598F8;
 /**
  * Waits for the I/O thread to go idle, sends it the 0xFF quit message and waits until it has
  * exited.
- * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
+ * Seen in play in pokestadium0 (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
  * session ended (Continue was picked on a save the game refused, and Stadium showed its "report is
  * not correct" panel); it did not run while the game played.
- * Seen in play (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the GB Player; called from
- * GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the
+ * GB Player; called from GbEmu_RunFrame.
  */
 void GbPak_StopIoThread(s32 arg0) {
     s32 i;
@@ -1196,11 +1194,11 @@ extern u16 D_8120E460[];
  * 0x80|flags, x, y, font height (0x0A = font1, 0x0C = font2), palette index, length,
  * then ASCII characters mapped through sFont1GlyphTable/sFont2GlyphTable.
  * A zero byte ends the list.
- * Seen in play (2026-11-12): opening the GB Player menu (C-Up) passed the list 80 38 07 0C 0B 04 +
- * 4 glyphs (メニュー, "Menu"), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける, "Continue game"), C0 03 59 0C 09 0A + 10 glyphs
- * (このメニューをぬけて, "leave this menu and"), matching flags, x, y, font height, palette, length and characters; the same glyph
- * bytes repeat for the same kana (71 65 4C 3B = メニュー).
- * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_DrawPauseMenu.
+ * Seen in play in pokestadium0 (2026-11-12): opening the GB Player menu (C-Up) passed the list 80 38 07 0C 0B 04 +
+ * 4 glyphs (メニュー, "Menu"), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける, "Continue game"), C0 03 59 0C 09 0A + 10
+ * glyphs (このメニューをぬけて, "leave this menu and"), matching flags, x, y, font height, palette, length and
+ * characters; the same glyph bytes repeat for the same kana (71 65 4C 3B = メニュー). Seen in play in pokestadium0
+ * (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_DrawPauseMenu.
  */
 void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     u8* ptr;
@@ -1312,10 +1310,10 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
 
 /**
  * Pixel op: keeps the destination when the source alpha bit is clear, else the source.
- * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
  * when the GB Player C-Up menu opened.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_BlitWithPixelOp.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_BlitWithPixelOp.
  */
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
   return (arg1 & 1) ? arg1 : arg0;
@@ -1354,10 +1352,10 @@ s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
 /**
  * Copies a width x height RGBA5551 image into a 320-wide destination, combining
  * each pixel with the selected pixel op.
- * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
  * when the GB Player C-Up menu opened.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_DrawAccessOverlay.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) {
   s32 (*operation)(s32, s32);
@@ -1385,8 +1383,8 @@ extern s32 D_81259A2C;
 
 /**
  * Clears the 0x2800-byte status bar image below the GB screen and writes back the data cache.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 void GbEmu_ClearStatusBar(void) {
     bzero(D_81259A2C, 0x2800);
@@ -1395,10 +1393,10 @@ void GbEmu_ClearStatusBar(void) {
 
 /**
  * Copies an image using its blue channel as intensity to scale the given color.
- * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
  * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_DrawTintedBar.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_DrawTintedBar.
  */
 void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
     s32 x;
@@ -1417,10 +1415,10 @@ void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
 
 /**
  * Additively blends a solid color into the destination using a 4-bit alpha map.
- * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
  * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_DrawAccessOverlay.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
   u16* dst_row;
@@ -1453,10 +1451,10 @@ extern u16 D_81220DF8[];
 /**
  * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
  * middle, right cap.
- * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * Seen in play in pokestadium0 (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
  * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_DrawAccessOverlay.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
     s32 i;
@@ -1473,10 +1471,9 @@ void osWritebackDCache(void*, s32);
 /**
  * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
  * the mirrored (zero) or normal direction, frame selects the frame (0-10).
- * Seen in play (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 ("Loading") banner below the GB
- * screen while Green loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_DrawAccessOverlay.
+ * Seen in play in pokestadium0 (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 ("Loading") banner
+ * below the GB screen while Green loads. Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main
+ * menu GB, はい "Yes") with JP Green in the Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
     u16* src;
@@ -1518,7 +1515,7 @@ void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
 /**
  * Draws the speed-up indicator in the status bar: the speed lamps 1, 2 (and 3 when two levels are
  * unlocked), lit up to the current speed in GB memory 0x101B9 (1, 2 or 4).
- * Seen in play (2026-11-14) ran when C-Right changed the speed (speed-up unlocked by poking
+ * Seen in play in pokestadium0 (2026-11-14) ran when C-Right changed the speed (speed-up unlocked by poking
  * D_8121E908 to 2); called from GbEmu_DrawStatusBar.
  */
 void GbEmu_DrawSpeedIndicator(s32 fb);
@@ -1556,8 +1553,8 @@ extern u16 D_81221158[];
 /**
  * Draws the ロードちゅう ("Loading") Transfer Pak access banner into the status bar, with the access icon facing
  * `direction`.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 void GbEmu_DrawAccessOverlay(s32 direction) {
     s32 pos;
@@ -1598,7 +1595,7 @@ extern s32 sGbEmu;
 /**
  * Draws the status bar below the GB screen: the tinted bar, the ▲でメニュー ("▲: Menu") hint and, when a speed-up
  * level is unlocked (D_8121E908), the speed indicator.
- * Seen in play (2026-11-14) ran while Green's intro played in the GB Player; called from
+ * Seen in play in pokestadium0 (2026-11-14) ran while Green's intro played in the GB Player; called from
  * GbEmu_UpdateFrame.
  */
 void GbEmu_DrawStatusBar(void) {
@@ -1647,8 +1644,8 @@ extern s32 D_812599F0;
  * Clears the 16 RGBA5551 GB palette colors at GB memory +0x12D00 (4 palettes of 4), so the GB
  * screen turns black before the fade out. Seen in RAM (2026-11-14): the 0x20 bytes held F7FA DDB0
  * ABEE 1884 ... before the quit.
- * Seen in play (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the GB Player; called from
- * GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the
+ * GB Player; called from GbEmu_RunFrame.
  */
 void GbEmu_ClearPalettes(void) {
     bzero(D_812599F0 + 0x12D00, 0x20);
@@ -1659,10 +1656,10 @@ extern u32 D_81259A54;
 /**
  * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
  * runs out.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
 {
@@ -1697,10 +1694,10 @@ void GbPak_RequestBankLoadCurrentPort(s32 bank) {
 
 /**
  * Blocks on an OS timer for the given number of milliseconds.
- * Seen in play (2026-11-13) ran when quitting the GB Player (C-Up menu, Quit game, Yes) and when it
+ * Seen in play in pokestadium0 (2026-11-13) ran when quitting the GB Player (C-Up menu, Quit game, Yes) and when it
  * started again.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbEmu_Delay(OSTime arg0) {
   OSMesgQueue sp68;
@@ -1718,11 +1715,11 @@ extern u8 D_81223550[];
 /**
  * Compares the cartridge header title and version bytes with the four known cartridges in
  * D_81223550 and returns 4..1 for a match, 0 for none.
- * Seen in play (2026-11-12): the table D_81223550 holds YELLOW, BLUE, GREEN and RED with
+ * Seen in play in pokestadium0 (2026-11-12): the table D_81223550 holds YELLOW, BLUE, GREEN and RED with
  * destination 0 (Japan) and licensee 01, so it returns 4 Yellow, 3 Blue, 2 Green, 1 Red; Pocket
  * Monsters Green got 2 and went on to load. The version byte is not compared.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_LoadCartridge.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_IdentifyCartridge(u8* arg0) {
     u8 buf[8];
@@ -1743,11 +1740,11 @@ s32 GbPak_IdentifyCartridge(u8* arg0) {
  * For a cartridge with RAM bank 1 loaded, checks the Gen 1 main save: the player name at 0x598
  * must end in 0x50 within 6 bytes (else 11), and the byte after 0x598-0x1593 must be the inverted
  * sum (else 10). Returns 0 when the save is valid.
- * Seen in play (2026-11-12): starting GB from the main menu with a valid Pocket Monsters Green
+ * Seen in play in pokestadium0 (2026-11-12): starting GB from the main menu with a valid Pocket Monsters Green
  * save ran this right after the cartridge RAM was read, and it returned 0. The game then booted
  * (GAME FREAK logo).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPak_IoThreadMain.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckGen1SaveChecksum(s8* arg0) {
     s32 i;
@@ -1778,7 +1775,7 @@ extern s32 D_812580E8;
 /**
  * Blacks out the screen, resets the VI X scale, stores the error code in D_812580E8 and returns
  * -1.
- * Seen in play (2026-11-12): error 1 after a failed bank checksum blacked out the screen and led
+ * Seen in play in pokestadium0 (2026-11-12): error 1 after a failed bank checksum blacked out the screen and led
  * to the 「64GBパックが ただしくセットされていません」 ("The Transfer Pak is not inserted correctly") screen.
  */
 s32 GbEmu_BlackScreenAndFail(s32 arg0) {
@@ -2068,8 +2065,7 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
 #endif
 
 /* Fixed-layout split at GbEmu_UpdateFrame so its jump table lands at 0x81154258. */
-/* Stadium Zero fragment000_80C00. */
-/* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
+/* The US and PAL builds have this code in src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c. */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -2519,7 +2515,7 @@ extern u8 D_81259A40;
 /**
  * Asks the I/O thread for a connector check (request 8) and spins until it is done. Returns -1
  * when the channel reports an error.
- * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
  */
 s32 GbPak_CheckConnectionBlocking(void) {
     volatile u8* chan = (volatile u8*)&D_81259668[D_81259A40];
@@ -2544,8 +2540,8 @@ extern u8 D_81259A40;
  * Asks the I/O thread to re-init the pak and read the cartridge ID into the channel (request
  * 0x80), waits, and then checks the RAM probe block. Returns the error, or 0 when it is the same
  * cartridge.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
- * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow
+ * (state forced to 20, cartridge removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_ReidentifyCartridge(void) {
     GbPakChannel* ch = &D_81259668[D_81259A40];
@@ -2568,8 +2564,8 @@ s32 GbPak_ReidentifyCartridge(void) {
 /**
  * Asks the I/O thread for a status check (request 8), waits, and returns the GB cartridge-present
  * bit (0x80) of the pak status.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
- * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow
+ * (state forced to 20, cartridge removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_IsCartridgeInserted(void) {
     u8 idx = D_81259A40;
@@ -2612,8 +2608,8 @@ extern volatile u8 D_81259915;
 
 /**
  * Asks the I/O thread to power the Transfer Pak off (request 4) and waits.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
- * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow
+ * (state forced to 20, cartridge removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 void GbPak_PowerOff(void) {
     D_81259701[D_81259A40 * 0xA4] = 4;
@@ -2626,8 +2622,8 @@ extern s8 D_812599E6;
 
 /**
  * Sets D_812599E6, which stops the per-frame GB audio update.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbEmu_PauseEmulation(void) {
     D_812599E6 = 1;
@@ -2644,9 +2640,9 @@ void GbAudio_UpdateFrame();
  * Per-frame tail of the GB Player emulator: unless emulation is paused (D_812599E6) or
  * the screen is being blanked (D_800AD928_jp), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AD928_jp is set it blanks video.
- * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB Player.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPlayer_OutputThreadEntry.
+ * Seen in play in pokestadium0 (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB Player.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbPlayer_OutputThreadEntry.
  */
 void GbEmu_AudioVideoTick(UNUSED s32 arg0) {
     if ((*(u8*)&D_812599E6 == 0) && (D_800AD928_jp == 0)) {

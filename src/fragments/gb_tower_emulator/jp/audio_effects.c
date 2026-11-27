@@ -1,7 +1,7 @@
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching OoT src/audio/internal/effects.c in function order. The driver is
  * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
 
 #include "global.h"
 #include "m2c_macros.h"

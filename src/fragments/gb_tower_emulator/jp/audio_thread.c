@@ -1,8 +1,9 @@
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching OoT src/audio/internal/thread.c in function order. The driver is
  * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
-/* C ported from the Stadium 1 decomp: src/audio_sound_state.c, src/fragments/battle_engine/battle_engine_2FA4D0.c, src/fragments/battle_engine/battle_engine_317E70.c. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
+/* C ported from the Stadium 1 decomp: src/audio_sound_state.c, src/fragments/battle_engine/battle_engine_2FA4D0.c,
+ * src/fragments/battle_engine/battle_engine_317E70.c. */
 
 #include "gb_tower_emulator_jp.h"
 
@@ -69,10 +70,10 @@ extern M2C_UNK *D_812896F0;
 /**
  * Corresponds to OoT AudioThread_InitMesgQueuesImpl (original name Nap_AudioPortInit). Same three
  * queues of 1, 4 and 1 messages. Stadium 1's name BattleAnim_DisableEffectSpawning did not fit.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioThread_InitMesgQueues.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioThread_InitMesgQueues.
  */
 void AudioThread_InitMesgQueuesImpl(void) {
     D_8128967A = 0;
@@ -372,8 +373,8 @@ void AudioThread_Unused5(void) {
  * Sets up the audio thread message queues.
  * Corresponds to OoT AudioThread_InitMesgQueues (original name Nas_InitGAudio). Stadium 1's name
  * BattleAnim_DisableEffectSpawningAlias did not fit.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_Init.
  */
 void AudioThread_InitMesgQueues(void) {
     AudioThread_InitMesgQueuesImpl();

@@ -1,4 +1,5 @@
-/* Declarations for the audio_and_gb_emulator fragment (src/fragments/audio_and_gb_emulator/). */
+/* Declarations for the JP-only GB Tower emulator and GB audio driver TUs in this directory, ported
+ * from pokestadium0 src/fragments/audio_and_gb_emulator/. */
 #ifndef FRAGMENT_AUDIO_AND_GB_EMULATOR_H
 #define FRAGMENT_AUDIO_AND_GB_EMULATOR_H
 

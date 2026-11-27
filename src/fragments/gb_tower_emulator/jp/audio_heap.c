@@ -1,8 +1,8 @@
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching OoT src/audio/internal/heap.c in function order. The driver is Nintendo's
- * "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and OoT. See
+ * "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and OoT. See pokestadium0's
  * docs/annotation/audio-driver.md for the per-function mapping. */
-/* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
+/* The US and PAL builds have this code in src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -29,10 +29,10 @@ extern u8 D_81287AF6[1];
 /**
  * Marks the fonts that are not permanently loaded (status 5) as unloaded.
  * Corresponds to OoT AudioHeap_ResetLoadStatus (original name Nas_ResetIDtable).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_ResetLoadStatus(void) {
     s32 i;
@@ -129,10 +129,10 @@ void AudioHeap_DiscardSequence(s32 arg0) {
  * Corresponds to OoT GbApu_AllocZeroed (original name Nas_HeapAlloc_CL). Zero clears the block
  * in its own loop; OoT calls GbApu_Alloc and then clears. Stadium 1's name GbApu_AllocZeroed
  * did not fit.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_v0;
@@ -157,10 +157,10 @@ u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
  * GbApu_AllocZeroed without the clear.
  * Corresponds to OoT GbApu_Alloc (original name Nas_HeapAlloc). Same 16-byte alignment, bounds
  * test and entry count. Stadium 1's name GbApu_Alloc did not fit.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_Init.
  */
 s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_a2;
@@ -181,10 +181,10 @@ s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1) {
  * Like alHeapInit.
  * Corresponds to OoT AudioHeap_InitPool (original name Nas_HeapInit). Stadium 1's name
  * GbApu_InitAllocator did not fit.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_InitMainPools.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_InitMainPools.
  */
 void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
   arg0->startRamAddr = ALIGN16(arg1);
@@ -197,10 +197,10 @@ void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
  * Empties a persistent cache and rewinds its pool.
  * Corresponds to OoT AudioHeap_InitPersistentCache (original name Nas_SzStayClear). This was
  * AudioHeap_PersistentCacheClear; OoT and MM use AudioHeap_InitPersistentCache for this reset.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_InitPersistentPoolsAndCaches.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_InitPersistentPoolsAndCaches.
  */
 void AudioHeap_InitPersistentCache(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x10) = 0;
@@ -218,10 +218,10 @@ void AudioHeap_InitPersistentCache(s8 *arg0) {
  * addu differently otherwise.
  * Corresponds to OoT AudioHeap_InitTemporaryCache (original name Nas_SzAutoClear). This was
  * AudioHeap_TemporaryCacheClear; OoT and MM use AudioHeap_InitTemporaryCache for this reset.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_InitTemporaryPoolsAndCaches.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_InitTemporaryPoolsAndCaches.
  */
 void AudioHeap_InitTemporaryCache(s32* arg0) {
     arg0[4] = 0;
@@ -258,10 +258,10 @@ extern s32 D_81287740;
  * AudioHeap_InitPool is AudioHeap_InitPool and GbApu_Alloc is GbApu_Alloc; this file still calls
  * them by address.
  * Corresponds to OoT AudioHeap_InitMainPools (original name Nas_SzHeapReset).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_Init.
  */
 void AudioHeap_InitMainPools(s32 arg0) {
     AudioHeap_InitPool(&D_81287750, (s32)D_81289710, arg0);
@@ -278,10 +278,10 @@ extern M2C_UNK D_81287790;
 /**
  * Splits the session pool into the misc and cache pools.
  * Corresponds to OoT AudioHeap_InitSessionPools (original name Nas_SzHeapDivide).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSessionPools(s8 *arg0) {
     M2C_FIELD(&D_81287730, s32 *, 4) = (s32) M2C_FIELD(&D_81287730, s32 *, 0);
@@ -298,10 +298,10 @@ extern M2C_UNK D_812877B0;
 /**
  * Splits the cache pool into the persistent and temporary pools.
  * Corresponds to OoT AudioHeap_InitCachePools (original name Nas_SzDataDivide).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitCachePools(s8 *arg0) {
     M2C_FIELD(&D_81287790, s32 *, 4) = (s32) M2C_FIELD(&D_81287790, s32 *, 0);
@@ -323,10 +323,10 @@ extern M2C_UNK D_81287884;
  * Splits the persistent pool between the sequence, font and sample caches.
  * Corresponds to OoT AudioHeap_InitPersistentPoolsAndCaches (original name Nas_SzStayDivide). This
  * was AudioHeap_InitPersistentCache, which OoT uses for the reset above.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitPersistentPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_812877A0, s32 *, 4) = (s32) M2C_FIELD(&D_812877A0, s32 *, 0);
@@ -352,10 +352,10 @@ extern M2C_UNK D_812878A4;
  * Splits the temporary pool between the sequence, font and sample caches.
  * Corresponds to OoT AudioHeap_InitTemporaryPoolsAndCaches (original name Nas_SzAutoDivide). This
  * was AudioHeap_InitTemporaryCache, which OoT uses for the reset above.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitTemporaryPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_812877B0, s32 *, 4) = (s32) M2C_FIELD(&D_812877B0, s32 *, 0);
@@ -854,10 +854,10 @@ void AudioHeap_DiscardSampleCaches(void);
  * Corresponds to OoT AudioHeap_ResetStep (original name Nas_SpecChange). Zero calls
  * AudioSeq_SequencePlayerDisable where OoT calls AudioSeq_SequencePlayerDisableAsFinished, and has
  * no sample-bank discard.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioLoad_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioLoad_Init.
  */
 s32 AudioHeap_ResetStep(void) {
     s32 i;
@@ -969,10 +969,10 @@ void AudioSeq_InitSequencePlayers(void);
  * Lays out the audio heap and reverbs for the current audio spec.
  * Corresponds to OoT AudioHeap_Init (original name __Nas_MemoryReconfig). OoT adds the external
  * pool, ADSR decay table and the slow/async/script load initializers.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_ResetStep.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_ResetStep.
  */
 void AudioHeap_Init(void) {
     UNUSED s32 pad[5]; // FAKE: stack pad of unknown origin; only reserves frame space

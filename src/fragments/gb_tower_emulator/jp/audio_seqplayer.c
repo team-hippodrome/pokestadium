@@ -1,6 +1,7 @@
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching OoT src/audio/internal/seqplayer.c in function order. The driver is
  * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_jp.h"
 
@@ -200,10 +201,10 @@ extern u8 D_81239E08[];
 /**
  * Resets a sequence channel to its defaults.
  * Corresponds to OoT AudioSeq_InitSequenceChannel (original name Nas_InitSubTrack).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
     SequenceChannel* channel = obj;
@@ -325,10 +326,10 @@ void AudioSeq_SeqLayerDisable(SequenceLayer* arg0) {
 /**
  * Returns layer slot `arg1` of a channel to the free list.
  * Corresponds to OoT AudioSeq_SeqLayerFree (original name Nas_CloseNoteTrack).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequenceChannelDisable.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequenceChannelDisable.
  */
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
     s8* temp = arg0[arg1 + 0x14];
@@ -344,8 +345,8 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
  * Turns a sequence channel off and frees its layers and notes.
  * Corresponds to OoT AudioSeq_SequenceChannelDisable (original name Nas_ReleaseSubTrack). Stadium
  * 1's name Particle31_ResetAllSlots did not fit.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequencePlayerDisableChannels.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequencePlayerDisableChannels.
  */
 void AudioSeq_SequenceChannelDisable(SequenceChannel* channel) {
     s32 i;
@@ -385,10 +386,10 @@ void AudioSeq_SequenceChannelDisable(SequenceChannel*);
 /**
  * Disables each channel selected in `channel_bits`.
  * Corresponds to OoT AudioSeq_SequencePlayerDisableChannels (original name Nas_DeAllocSub).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seq_player, s32 channel_bits) {
     SequenceChannel* channel;
@@ -429,10 +430,10 @@ void AudioSeq_SequenceChannelEnable(SequencePlayer* seq_player, u8 channel_index
  * Stops a sequence player: disables its channels, clears its note pool and marks its data discardable.
  * Corresponds to OoT AudioSeq_SequencePlayerDisable (original name Nas_ReleaseGroup). OoT also
  * releases the notes of the player's fonts (AudioHeap_ReleaseNotesForFont).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
     AudioSeq_SequencePlayerDisableChannels(arg0, 0xFFFF);
@@ -455,10 +456,10 @@ void AudioSeq_SequencePlayerDisable(u8* arg0) {
 /**
  * Appends an item to the end of a list if it is on no list.
  * Corresponds to OoT AudioSeq_AudioListPushBack (original name Nas_AddList).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
 {
@@ -497,10 +498,10 @@ s32 AudioSeq_AudioListPopBack(AudioListItem* list) {
 /**
  * Puts every sequence layer on the free list.
  * Corresponds to OoT AudioSeq_InitLayerFreelist (original name Nas_InitNoteList).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_InitSequencePlayers.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_InitLayerFreelist(void) {
     s32 i;
@@ -949,7 +950,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) 
 
 /* Audio driver, matching OoT src/audio/internal/seqplayer.c (continued) in function order. The
  * driver is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64
- * Shindou and OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+ * Shindou and OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_jp.h"
 
@@ -1590,7 +1591,7 @@ exit_loop:
 /* Audio driver, matching the end of OoT src/audio/internal/seqplayer.c in function order, then
  * (from Audio_ScheduleProcessCmds) Zero's own game-side wrappers that queue audio thread commands. The driver
  * is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "gb_tower_emulator_jp.h"
 
@@ -1872,8 +1873,8 @@ void AudioSeq_InitSequenceChannel(void* obj);
 /**
  * Stops sequence player `arg0` and restores its tempo, volumes and channels to their defaults.
  * Corresponds to OoT AudioSeq_ResetSequencePlayer (original name Nas_InitMySeq).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_InitSequencePlayers.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_ResetSequencePlayer(s32 arg0) {
     SequencePlayer* chan = (SequencePlayer*)&D_81287B08[arg0];
@@ -1909,8 +1910,8 @@ void* GbApu_AllocZeroed(void*, s32);
 /**
  * Allocates sequence player `arg0`'s 16 channels, falling back to the shared dummy channel.
  * Corresponds to OoT AudioSeq_InitSequencePlayerChannels (original name Nas_AssignSubTrack).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
     SequencePlayer* rec = (SequencePlayer*)&D_81287B08[arg0];
@@ -1938,8 +1939,8 @@ void AudioPlayback_InitNoteLists(void*);
  * Sets up the layer free list, the sequence layers and the one sequence player.
  * Corresponds to OoT AudioSeq_InitSequencePlayers (original name Nas_InitPlayer). Zero has OoT's
  * AudioSeq_InitSequencePlayer (__InitGroup) inlined for its single player.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayers(void) {
     s32 i;

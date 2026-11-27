@@ -1,4 +1,4 @@
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -17,8 +17,8 @@ extern s32 sGbEmuExitCode;
 /**
  * Stops the menu sounds, pauses emulation, blanks the display, waits 20 ms, resets the X scale,
  * shows the current framebuffer and clears it to black.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbEmu_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from GbEmu_Init.
  */
 void GbEmu_PauseAndBlankScreen(void) {
     GbAudio_SetMenuSoundMode(0);
@@ -47,7 +47,7 @@ extern s32 D_8121CB68_jp;
  * Draws the GB Player menu (メニュー, "Menu") over the GB screen: ゲームをつづける ("Continue game"),
  * ゲームをやめる ("Quit game") and せつめい・コンフィグ ("Help/Config") with the pointer on item `cursor`
  * and that item's help text; `cursor` 5 draws the menu behind the ゲームをやめる prompt.
- * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
  */
 void GbEmu_DrawPauseMenu(s8* fb, u8 cursor) {
     s32 i;
@@ -90,8 +90,8 @@ extern s32 D_8121DE28_jp[];
 /**
  * Returns the icon of N64 button choice `index` for the START/SELECT bindings: 0 START, 1 L, 2 R,
  * 3 C-Left, 4 C-Down.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
- * called from GbEmu_DrawButtonConfig.
+ * Seen in play in pokestadium0 (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START
+ * binding was changed; called from GbEmu_DrawButtonConfig.
  */
 s32* GbEmu_GetButtonIcon(s32 index) {
     index &= 7;
@@ -103,9 +103,8 @@ s32 GbEmu_BlitWithPixelOp(s32, s32*, s32, s32, s32);
 extern s32 D_8121E5A8;
 
 /*
- * Draws the row of five N64 button icons on the せつめい・コンフィグ ("Help/Config") screen with the frame on choice `cursor
- * & 7`.
- * GbEmu_DrawButtonChoices
+ * Draws the row of five N64 button icons on the せつめい・コンフィグ ("Help/Config") screen with the frame on choice
+ * `cursor & 7`. GbEmu_DrawButtonChoices
  *
  * arg0 is treated as a plain address and offsets are added to it in bytes.
  * Calls GbEmu_BlitWithPixelOp once with (arg0 + (arg1 & 7) * 0x24, &D_8121E5A8, 0,
@@ -118,8 +117,8 @@ extern s32 D_8121E5A8;
  * decomp-permuter): the extra use of `i` makes IDO keep `arg1 & 7` in s0 and
  * reuse s0 as the loop counter, as the retail code does. Without it the mask is
  * computed in a temporary and the output differs.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
- * called from GbEmu_DrawButtonConfig.
+ * Seen in play in pokestadium0 (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START
+ * binding was changed; called from GbEmu_DrawButtonConfig.
  */
 void GbEmu_DrawButtonChoices(s32 fb, s32 cursor) {
     s32 i;
@@ -157,14 +156,13 @@ extern u8 D_8121EA7C[];
 extern u8 D_8121EAA0[];
 extern u8 D_8121EAAC[];
 /*
- * Draws the せつめい・コンフィグ ("Help/Config") screen into `screen`: the START and SELECT bindings, the B ボタンでもどる ("B Button: Back") hint and, while
- * `slide` animates the row open, the button choices for the binding picked by bit 3 of `cursor`.
- * GB Player option screen. Draws the panel frame tiles into the framebuffer
- * (three loops), then the two cursors and the selected options.
- * Register allocation depends on reusing the same few locals: one IDO live
- * range per local, so i, j, q and r each carry several roles on purpose.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
- * called from GbEmu_RunFrame.
+ * Draws the せつめい・コンフィグ ("Help/Config") screen into `screen`: the START and SELECT bindings, the B
+ * ボタンでもどる ("B Button: Back") hint and, while `slide` animates the row open, the button choices for the binding
+ * picked by bit 3 of `cursor`. GB Player option screen. Draws the panel frame tiles into the framebuffer (three loops),
+ * then the two cursors and the selected options. Register allocation depends on reusing the same few locals: one IDO
+ * live range per local, so i, j, q and r each carry several roles on purpose. Seen in play in pokestadium0 (2026-11-14)
+ * ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed; called from
+ * GbEmu_RunFrame.
  */
 void GbEmu_DrawButtonConfig(s32 screen, s32 cursor, s32 slide) {
     s32 fb;
@@ -258,10 +256,11 @@ extern u8 D_8121EABC[];
 extern s32 D_8121CB68_jp;
 
 /**
- * Draws the ゲームをやめる prompt (「レポート」した? ホントに おわってもいい?, "Did you save? Really quit?") with the pointer on はい
+ * Draws the ゲームをやめる prompt (「レポート」した? ホントに おわってもいい?, "Did you save? Really quit?") with the
+ * pointer on はい
  * ("Yes", `no` = 0) or いいえ ("No").
- * Seen in play (2026-11-14) ran when ゲームをやめる ("Quit game") showed its 「レポート」した? ("Did you save?") prompt; called from
- * GbEmu_RunFrame.
+ * Seen in play in pokestadium0 (2026-11-14) ran when ゲームをやめる ("Quit game") showed its 「レポート」した? ("Did
+ * you save?") prompt; called from GbEmu_RunFrame.
  */
 void GbEmu_DrawQuitConfirm(s8* fb, s32 no) {
     GbEmu_DrawPauseMenu(fb, 5);
@@ -410,13 +409,16 @@ void GbPak_StopIoThread(s32);
 
 /**
  * GB Player per-frame state machine: runs the emulator, fades in, and drives the menu (4), the
- * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 ("Couldn't save") cartridge recovery (20-26) and
- * the shutdown, which writes the bindings back to the save.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
+ * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 ("Couldn't save") cartridge recovery
+ * (20-26) and the shutdown, which writes the bindings back to the save. Seen in play in pokestadium0 (2026-11-14) ran
+ * when the GB Player started (main menu GB, はい "Yes") with JP Green in the Transfer Pak; called from
+ * GbPlayer_EmulatorThreadEntry.
  */
 void GbEmu_RunFrame(s8* params);
 #ifdef NON_MATCHING
+// TODO: this is still the pokestadium0 version, with JP symbol names. The JP function differs
+// from it (GbEmu_Init, for one, reads the save fields 4 bytes later) and has not been compared
+// against this C yet.
 void GbEmu_RunFrame(s8* params) {
     s32 sel;
     u8* fade;

@@ -1,7 +1,7 @@
-/* Stadium Zero fragment000_80C00. */
+/* JP-only TU, ported from pokestadium0 (Stadium Zero, fragment000_80C00). */
 /* Audio driver, matching OoT src/audio/internal/playback.c in function order. The driver is
  * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
- * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+ * OoT. pokestadium0's docs/annotation/audio-driver.md has the per-function mapping. */
 
 #include "global.h"
 #include "gb_tower_emulator_jp.h"
@@ -589,10 +589,10 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
 /**
  * Makes an empty circular note list.
  * Corresponds to OoT Audio_InitNoteList (original name __Nas_InitList).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioPlayback_InitNoteLists.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioPlayback_InitNoteLists.
  */
 void AudioPlayback_InitNoteList(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0) = arg0;
@@ -605,10 +605,10 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * 0x10, 0x20 and 0x30) with AudioPlayback_InitNoteList and points each list head's pool field
  * (+0xC) at the pool.
  * Corresponds to OoT Audio_InitNoteLists (original name Nas_InitChNode).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioPlayback_InitNoteLists(s8 *arg0) {
     AudioPlayback_InitNoteList(arg0);
@@ -631,10 +631,10 @@ extern s32 D_81288D88;
  * disabled list: each note's listItem gets the note as its value and is marked as on no list
  * before it is pushed.
  * Corresponds to OoT Audio_InitNoteFreeList (original name Nas_InitChannelList).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_InitNoteFreeList(void) {
     s32 i;
@@ -657,10 +657,10 @@ void AudioPlayback_AudioListRemove(s8* arg0);
  * global free list (D_81287DD8, D_81287DE8, D_81287DF8, D_81287E08). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
  * Corresponds to OoT Audio_NotePoolClear (original name Nas_DeAllocAllVoices).
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 void AudioPlayback_NotePoolClear(NotePool* pool) {
     s32 i;
@@ -1034,10 +1034,10 @@ s32 GbApu_Alloc(s8 *, s32);
  * Resets every note's state and sample buffers.
  * Corresponds to OoT Audio_NoteInitAll (original name Nas_ChannelInit). Zero allocates with
  * GbApu_Alloc; OoT uses AudioHeap_AllocDmaMemory.
- * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * Seen in play in pokestadium0 (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
- * Transfer Pak; called from AudioHeap_Init.
+ * Seen in play in pokestadium0 (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in
+ * the Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_NoteInitAll(void) {
     s32 i;
