@@ -1959,8 +1959,10 @@
     vram: 0x84800000
     subsegments:
     - [0x3AFA90, textbin,   fragments/battle_order_select/battle_order_select_header]
-    - [0x3AFAB0, asm, fragment64_3AFAB0]
-    - {vram: 0x84803660, type:  bss, name: fragments/battle_order_select/battle_order_select}
+    - [0x3AFAB0, c, fragments/battle_order_select/battle_order_select]
+    - [0x3B2CB0, .data, fragments/battle_order_select/battle_order_select]
+    - [0x3B2E60, .rodata, fragments/battle_order_select/battle_order_select]
+    - {vram: 0x84803660, type:  .bss, name: fragments/battle_order_select/battle_order_select}
   - name: fragment64_relocs
     type: code
     bss_size: 0x0
