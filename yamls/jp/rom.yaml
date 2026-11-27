@@ -835,7 +835,7 @@
     subsegments:
     - [0x16CFD0, rodatabin,    fragments/14/fragment14_reloc]
 
-# gallery camera code
+# gallery camera code (a debug parade scene in the Japanese release)
   - name: fragment15
     type: code
     bss_size: 0xFE0
@@ -843,8 +843,13 @@
     vram: 0x86900000
     subsegments:
     - [0x16E240, textbin,   fragments/gallery_camera/gallery_camera_header]
-    - [0x16E260, asm, fragment15_16E260]
-    - {vram: 0x86900CF0, type:  bss, name: fragments/gallery_camera/gallery_camera_14CA70}
+    - [0x16E260, c, fragments/parade_debug/parade_debug_actors]
+    - [0x16E790, c, fragments/parade_debug/parade_debug]
+    - [0x16EDB0, .data, fragments/parade_debug/parade_debug_actors]
+    - [0x16EE50, .data, fragments/parade_debug/parade_debug]
+    - [0x16EEF0, .rodata, fragments/parade_debug/parade_debug]
+    - {vram: 0x86900CF0, type: .bss, name: fragments/parade_debug/parade_debug_actors}
+    - {vram: 0x86901CC0, type: .bss, name: fragments/parade_debug/parade_debug}
   - name: fragment15_relocs
     type: code
     bss_size: 0x0
