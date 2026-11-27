@@ -149,7 +149,12 @@ Gfx* SushiGame_DrawPlateStack(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4)
 void SushiGame_DrawAllPlateStacks(void);
 void SushiGame_InterpolateColorCycle(Color_RGB8* arg0, Color_RGB8* arg1, s32 arg2, s32 arg3, s32 arg4);
 void SushiGame_DrawDishIcon(s32 arg0, s16 arg1, s16 arg2, f32 arg3);
+#if defined(VERSION_JP)
+// No prototype: the JP definition has an unused K&R parameter (see sushi_game_144300.c).
+void func_86800B38();
+#else
 void func_86800B38(void);
+#endif
 void SushiGame_DrawFrame(void);
 void SushiGame_UpdateWaitForStart(void);
 s32 SushiGame_IsRoundTimeUp(void);

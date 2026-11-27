@@ -266,18 +266,21 @@ void SushiGame_DrawDishIcon(s32 arg0, s16 arg1, s16 arg2, f32 arg3) {
 
 // JP: the stack frame is 8 bytes smaller and a few instructions are scheduled differently; the C below
 // is otherwise equivalent.
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/sushi_game/sushi_game_144300/func_86800B38.s")
-#else
-void func_86800B38(void) {
+#if defined(VERSION_JP)
+// FAKE: the unused K&R parameter stands in for a switch local without a stack home,
+// and the s16 local fits in the padding below spD8.
+void func_86800B38(arg0) s32 arg0;
+{
     s32 pad1;
     s32 pad2;
     s32 i;
     Color_RGB8 spD8[4];
+    s16 var_v0;
     Color_RGB8 spD0[2];
     Color_RGB8 spB8[8];
     Color_RGB8 spB4 = D_86806F40;
-    s32 var_v0;
+
+    if (arg0) {}
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -307,17 +310,12 @@ void func_86800B38(void) {
     if (D_8680753C & 1) {
         Ui_DrawBorderedPanel(0x18, 0x16, 0x110, 0x90, 0x15);
         Ui_DrawBorderedPanel(0x18, 0xA5, 0x110, 0x36, 0x14B);
-#if !defined(VERSION_JP)
-        Widget_FillRect(0x17, 0x16, 2, 0x90);
-        Widget_FillRect(0x127, 0x16, 2, 0x90);
-#endif
     }
 
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
 
     if (D_8680753C & 1) {
-#if defined(VERSION_JP)
         Font_SetActive(2, -2);
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
         Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
@@ -359,7 +357,157 @@ void func_86800B38(void) {
             // "%d yen"
             Font_Printf((((i % 4) >= 2 ? 0x3C : 0x40) * (i % 4)) + 0x3C, ((i / 4) << 5) + 0x72, "%dえん", D_86807180[D_86807160[i]].unk_00);
         }
+    }
+
+    switch (D_8680750C) {
+        unk_D_86807558* ptr;
+
+        case 2:
+        case 3:
+            if (D_8680753E == 0) {
+                Font_SetActive(4, SUSHI_LETTER_SPACING);
+                for (i = 0, ptr = D_86807558; i < 4; i++, ptr++) {
+                    if ((ptr->unk_040.unk_00 != 0) && (ptr->unk_040.unk_00 != 1)) {
+                        if ((i / 2) != 0) {
+                            arg0 = -0x1E;
+                        } else {
+                            arg0 = 0x1E;
+                        }
+
+                        if ((i == 0) || (i == 3)) {
+                            pad1 = -0x16;
+                        } else {
+                            pad1 = 0x1E;
+                        }
+
+                        if (ptr->unk_03E < 5) {
+                            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, ptr->unk_040.unk_18);
+                            Gfx_SetPrimColor(D_86806F44[i].r, D_86806F44[i].g, D_86806F44[i].b, ptr->unk_040.unk_18);
+                        } else {
+                            SushiGame_InterpolateColorCycle(spD8, D_86806F68, 4, 4, 0);
+                            Gfx_SetEnvColor(spD8[0].r, spD8[0].g, spD8[0].b, ptr->unk_040.unk_18);
+                            Gfx_SetPrimColor(spD8[0].r, spD8[0].g, spD8[0].b, ptr->unk_040.unk_18);
+                        }
+
+                        Font_Printf((s16)ptr->unk_040.unk_08 + (D_86806D78[i] + arg0),
+                                    (D_86806D80[i] + pad1) - (s16)ptr->unk_040.unk_0C, "x%d", ptr->unk_03E);
+                    }
+                }
+            }
+            break;
+
+        case 5:
+        case 6:
+            Font_SetActive(4, SUSHI_LETTER_SPACING);
+
+            for (i = 0, ptr = D_86807558; i < 4; i++, ptr++) {
+
+                spD0[0] = spB4;
+                spD0[1] = D_86806F44[i];
+
+                SushiGame_InterpolateColorCycle(&spB8[i], spD0, 2, NTSC_PAL(30, 25), 0);
+                SushiGame_InterpolateColorCycle(&spB8[i + 4], spD0, 2, NTSC_PAL(30, 25), 1);
+
+                if ((i / 2) != 0) {
+                    arg0 = -0x64;
+                } else {
+                    arg0 = 0x1C;
+                }
+
+                if ((i == 0) || (i == 3)) {
+                    pad1 = -0x16;
+                } else {
+                    pad1 = 0x1E;
+                }
+
+                if ((ptr->unk_028 == 1) && (ptr->unk_018 == ptr->unk_01C) && (ptr->unk_018 > 0)) {
+                    SushiGame_InterpolateColorCycle(&spD8, &D_86806F50, 3, 4, 0);
+                    Gfx_SetEnvColor(spD8[0].r, spD8[0].g, spD8[0].b, 0xFF);
+                    SushiGame_InterpolateColorCycle(&spD8, &D_86806F5C, 3, 4, 0);
+                    Gfx_SetPrimColor(spD8[0].r, spD8[0].g, spD8[0].b, 0xFF);
+                } else {
+                    Gfx_SetEnvColor(spB8[i].r, spB8[i].g, spB8[i].b, 0xFF);
+                    Gfx_SetPrimColor(spB8[i + 4].r, spB8[i + 4].g, spB8[i + 4].b, 0xFF);
+                }
+
+                // "%5d yen"
+                Font_Printf(D_86806D78[i] + arg0, D_86806D80[i] + pad1, "%5dえん", ptr->unk_01C);
+            }
+            break;
+
+        case 4:
+            break;
+    }
+
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+
+    if (D_8680753C & 1) {
+        gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+
+        for (i = 0; i < 8; i++) {
+            if ((i % 4) >= 2) {
+                pad2 = 0x3C;
+            } else {
+                pad2 = 0x40;
+            }
+            pad1 = i % 4;
+            SushiGame_DrawDishIcon(D_86807160[i], (pad2 * pad1) + 0x28, ((i / 4) << 5) + 0x68, 0.75f);
+        }
+
+        Widget_DrawAnimIcon28(0, 0x5A, 0xA8, D_86806E88);
+        Widget_DrawAnimIcon16(0xC8, 0xB0, D_86806E38);
+        Widget_DrawAnimIcon16C(0x74, 0xC6, D_86806E60);
+        Widget_DrawSplitBanner(0, 0x19, 0xA6);
+    }
+}
 #else
+void func_86800B38(void) {
+    s32 pad1;
+    s32 pad2;
+    s32 i;
+    Color_RGB8 spD8[4];
+    Color_RGB8 spD0[2];
+    Color_RGB8 spB8[8];
+    Color_RGB8 spB4 = D_86806F40;
+    s32 var_v0;
+
+    gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
+
+    if (D_8680753C & 2) {
+        SushiGame_DrawAllPlateStacks();
+        for (i = 0; i < 4; i++) {
+            if ((i == 0) || (i == 3)) {
+                var_v0 = -0x18;
+            } else {
+                var_v0 = 0x1C;
+            }
+
+            if (!(D_86807558[i].unk_002 & 4)) {
+                Widget_DrawPlayerIcon(i, D_86806D78[i], D_86806D80[i] + var_v0, 0.75f);
+            } else {
+                Widget_DrawPlayerIcon(-1 - i, D_86806D78[i], D_86806D80[i] + var_v0, 0.75f);
+            }
+        }
+    }
+
+    if (D_8680753E != 0) {
+        Widget_DrawStripedBar(0x1E, 0x17);
+    }
+
+    gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
+
+    if (D_8680753C & 1) {
+        Ui_DrawBorderedPanel(0x18, 0x16, 0x110, 0x90, 0x15);
+        Ui_DrawBorderedPanel(0x18, 0xA5, 0x110, 0x36, 0x14B);
+        Widget_FillRect(0x17, 0x16, 2, 0x90);
+        Widget_FillRect(0x127, 0x16, 2, 0x90);
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+
+    if (D_8680753C & 1) {
         s32 spA4;
         s32 spA0;
         s32 sp9C;
@@ -408,7 +556,6 @@ void func_86800B38(void) {
             Font_Printf((((var_v0 * pad1) + sp9C) - sp98) + 0x46, ((i / 4) << 5) + 0x72,
                         Text_GetString(NULL, 0, gMinigameText, i + 0x36));
         }
-#endif
     }
 
     switch (D_8680750C) {
@@ -426,11 +573,7 @@ void func_86800B38(void) {
                 for (i = 0, ptr = D_86807558; i < 4; i++, ptr++) {
                     if ((ptr->unk_040.unk_00 != 0) && (ptr->unk_040.unk_00 != 1)) {
                         if ((i / 2) != 0) {
-#if defined(VERSION_JP)
-                            var_s7 = -0x1E;
-#else
                             var_s7 = -0x14;
-#endif
                         } else {
                             var_s7 = 0x1E;
                         }
@@ -462,9 +605,7 @@ void func_86800B38(void) {
             Font_SetActive(4, SUSHI_LETTER_SPACING);
 
             for (i = 0, ptr = D_86807558; i < 4; i++, ptr++) {
-#if !defined(VERSION_JP)
                 char sp78[16];
-#endif
 
                 spD0[0] = spB4;
                 spD0[1] = D_86806F44[i];
@@ -473,11 +614,7 @@ void func_86800B38(void) {
                 SushiGame_InterpolateColorCycle(&spB8[i + 4], spD0, 2, NTSC_PAL(30, 25), 1);
 
                 if ((i / 2) != 0) {
-#if defined(VERSION_JP)
-                    var_s7 = -0x64;
-#else
                     var_s7 = -0x32;
-#endif
                 } else {
                     var_s7 = 0x1C;
                 }
@@ -498,14 +635,9 @@ void func_86800B38(void) {
                     Gfx_SetPrimColor(spB8[i + 4].r, spB8[i + 4].g, spB8[i + 4].b, 0xFF);
                 }
 
-#if defined(VERSION_JP)
-                // "%5d yen"
-                Font_Printf(D_86806D78[i] + var_s7, D_86806D80[i] + var_s4, "%5dえん", ptr->unk_01C);
-#else
                 Text_SetNumberToken(6, ptr->unk_01C);
                 Font_Printf(D_86806D78[i] + var_s7, D_86806D80[i] + var_s4,
                             Text_GetString(&sp78, 0x20, gMinigameText, 0x5E));
-#endif
             }
             break;
     }
@@ -517,10 +649,6 @@ void func_86800B38(void) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
         for (i = 0; i < 8; i++) {
-#if defined(VERSION_JP)
-            if ((i % 4) >= 2) { pad2 = 0x3C; } else { pad2 = 0x40; } pad1 = i % 4;
-            SushiGame_DrawDishIcon(D_86807160[i], (pad2 * pad1) + 0x28, ((i / 4) << 5) + 0x68, 0.75f);
-#else
             if ((i % 4) >= 2) {
                 var_v0 = 0x3C;
             } else {
@@ -529,7 +657,6 @@ void func_86800B38(void) {
 
             pad1 = i % 4;
             SushiGame_DrawDishIcon(D_86807160[i], (var_v0 * pad1) + 0x28, ((i / 4) << 5) + 0x68, 0.75f);
-#endif
         }
 
         Widget_DrawAnimIcon28(0, 0x5A, 0xA8, D_86806E88);
