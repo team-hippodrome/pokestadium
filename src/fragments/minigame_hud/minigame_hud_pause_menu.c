@@ -1280,7 +1280,7 @@ static u8 D_8780FDF8;
 static u8 D_8780FDFC[4];
 static s8 D_8780FE00;
 static u8 D_8780FE01;
-#if !defined(VERSION_JP) || defined(NON_MATCHING)
+#if !defined(VERSION_JP)
 static char* D_8780FE08[4];
 static char* D_8780FE18[4];
 static char* D_8780FE28[2];
@@ -1947,22 +1947,6 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
 #endif
 }
 
-#if defined(VERSION_JP)
-// Data of the JP Widget_PauseMenuUpdate, which is still assembly: its three statics, its two local
-// byte arrays and the menu labels (JP has them in the ROM instead of the message bank).
-s32 D_8780F628_jp;
-s32 D_8780F62C_jp;
-s32 D_8780F630_jp;
-u8 D_8780F070_jp[] = { 0, 0, 30, 0, 0, 250 };
-u8 D_8780F078_jp[] = { 0x35, 0x34, 0x00, 0x7A, 0x78, 0x00 };
-char* D_8780F080_jp[] = { "もういちどする", "べつのゲームをする", "やめる" };
-char* D_8780F08C_jp[] = { "つづける", "やりなおす", "やめる" };
-char* D_8780F098_jp[] = { "もういちどする", "やめる" };
-#endif
-
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/Widget_PauseMenuUpdate.s")
-#else
 s32 Widget_PauseMenuUpdate(void) {
     static s32 D_8780FE3C;
     static s32 D_8780FE40;
@@ -1974,10 +1958,17 @@ s32 Widget_PauseMenuUpdate(void) {
     u8 sp68[] = {
         0x35, 0x34, 0x00, 0x7A, 0x78, 0x00,
     };
+#if defined(VERSION_JP)
+    // JP has the menu labels in the ROM instead of the message bank.
+    static char* D_8780FE08[] = { "もういちどする", "べつのゲームをする", "やめる" };
+    static char* D_8780FE18[] = { "つづける", "やりなおす", "やめる" };
+    static char* D_8780FE28[] = { "もういちどする", "やめる" };
+#endif
     u8 sp67;
     u8 sp66;
     u8 temp_t0;
     u8 i;
+#if !defined(VERSION_JP)
     char* sp60;
     char* sp5C;
     s32 tmp;
@@ -1985,6 +1976,7 @@ s32 Widget_PauseMenuUpdate(void) {
     UNUSED u8 pad2;
     u8 sp55;
     u8 sp44;
+#endif
 
     sp67 = 0;
     sp66 = 0;
@@ -2218,9 +2210,15 @@ s32 Widget_PauseMenuUpdate(void) {
     }
 
     if (D_8780FC94 != 0) {
+#if defined(VERSION_JP)
+        Ui_DrawGradientPanel(0x7A, 0x61, 0x4C, 0x30, &sp70[0], &sp70[3]);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(4, -2);
+#else
         Widget_DrawPanel(((0x140 - D_8780FE30) / 2) - 0xA, 0x61, D_8780FE30 + 0x14, 0x30, &sp70[0], &sp70[3]);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
+#endif
 
         for (i = 0; i < D_8780FC5D; i++) {
             if (D_8780FC5C == i) {
@@ -2235,7 +2233,11 @@ s32 Widget_PauseMenuUpdate(void) {
                 temp_t0 = i;
             }
 
+#if defined(VERSION_JP)
+            Font_Printf(0x84, (i * 0x12) + 0x68, "%s", D_8780FE18[temp_t0]);
+#else
             Font_Printf((0x140 - D_8780FE30) / 2, (i * 0x12) + 0x68, "%s", D_8780FE18[temp_t0]);
+#endif
         }
 
         Font_EndTexturedTextRendering();
@@ -2313,6 +2315,20 @@ s32 Widget_PauseMenuUpdate(void) {
         }
 
         if (D_8780FC6C != 0) {
+#if defined(VERSION_JP)
+            Ui_DrawGradientPanel(0x18, 0x4F, 0x110, 0x54, &sp68[0], &sp68[3]);
+            Font_BeginTranslucentTextRendering();
+            Font_EnableTwoCycleTexturing();
+            Font_SetActive(4, -2);
+            Gfx_SetEnvColor(0xFF, 0xFD, 0xD4, 0xFF);
+            Gfx_SetPrimColor(0xBA, 0xB7, 0, 0xFF);
+            Font_Printf(0x22, 0x56, "「つよい」で %dれんしょう たっせい", 5); // "5 wins in a row on Strong!"
+            Font_Printf(0x22, 0x68, "おめでとう！");                          // "Congratulations!"
+            Font_Printf(0x22, 0x7A, "コンピュータのつよさに 「すごい」が");   // "Super has been added to the"
+            Font_Printf(0x22, 0x8C, "ついかされました。");                    // "computer strength levels."
+            Font_DisableTwoCycleTexturing();
+            Font_EndTexturedTextRendering();
+#else
             sp60 = Text_GetString(0, 0, gMinigameText, 0x57);
             sp5C = Text_GetString(0, 0, gMinigameText, 0x58);
             sp44 = Text_CountLines(sp60);
@@ -2334,9 +2350,23 @@ s32 Widget_PauseMenuUpdate(void) {
             Font_Printf(0x28, sp55 & 0xFF, sp5C);
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
+#endif
         }
 
         if (D_8780FC70 != 0) {
+#if defined(VERSION_JP)
+            if (D_8780FC4C == 0) {
+                if (D_8780FA2A == 0) {
+                    Ui_DrawGradientPanel(0x57, 0x58, 0x92, 0x42, &sp70[0], &sp70[3]);
+                } else {
+                    Ui_DrawGradientPanel(0x73, 0x58, 0x5A, 0x42, &sp70[0], &sp70[3]);
+                }
+            } else {
+                Ui_DrawGradientPanel(0x65, 0x61, 0x76, 0x30, &sp70[0], &sp70[3]);
+            }
+            Font_BeginTranslucentTextRendering();
+            Font_SetActive(4, -2);
+#else
             if (D_8780FC4C == 0) {
                 if (D_8780FA2A == 0) {
                     Widget_DrawPanel(((0x140 - D_8780FE32) / 2) - 0xA, 0x58, D_8780FE32 + 0x14, 0x42, &sp70[0],
@@ -2350,6 +2380,7 @@ s32 Widget_PauseMenuUpdate(void) {
             }
             Font_BeginTranslucentTextRendering();
             Font_SetActive(4, 0);
+#endif
 
             for (i = 0; i < D_8780FC5D; i++) {
                 if (D_8780FC5C == i) {
@@ -2358,6 +2389,17 @@ s32 Widget_PauseMenuUpdate(void) {
                     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
                 }
 
+#if defined(VERSION_JP)
+                if (D_8780FC4C == 0) {
+                    if (D_8780FA2A == 0) {
+                        Font_Printf(0x61, (i * 0x12) + 0x5F, "%s", D_8780FE08[i]);
+                    } else {
+                        Font_Printf(0x7D, (i * 0x12) + 0x5F, "%s", D_8780FE18[i]);
+                    }
+                } else {
+                    Font_Printf(0x6F, (i * 0x12) + 0x68, "%s", D_8780FE28[i]);
+                }
+#else
                 if (D_8780FC4C == 0) {
                     if (D_8780FA2A == 0) {
                         Font_Printf((0x140 - D_8780FE32) / 2, (i * 0x12) + 0x5F, "%s", D_8780FE08[i]);
@@ -2367,6 +2409,7 @@ s32 Widget_PauseMenuUpdate(void) {
                 } else {
                     Font_Printf((0x140 - D_8780FE36) / 2, (i * 0x12) + 0x68, "%s", D_8780FE28[i]);
                 }
+#endif
             }
 
             Font_EndTexturedTextRendering();
@@ -2378,8 +2421,13 @@ s32 Widget_PauseMenuUpdate(void) {
             Font_SetActive(0x10, 0);
             Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+#if defined(VERSION_JP)
+            Font_Printf(0x4D, 0x68, "つぎのゲームを"); // "The one who picks"
+            Font_Printf(0x59, 0x80, "えらぶひとは");   // "the next game is"
+#else
             Font_Printf(0xA0 - (Text_MeasureStringWidth(NULL, Text_GetString(0, 0, gMinigameText, 0x56)) / 2), 0x6C,
                         Text_GetString(0, 0, gMinigameText, 0x56));
+#endif
             Font_DisableTwoCycleTexturing();
             Font_EndTexturedTextRendering();
         }
@@ -2391,4 +2439,3 @@ s32 Widget_PauseMenuUpdate(void) {
 
     return 0;
 }
-#endif
