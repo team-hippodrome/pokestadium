@@ -128,7 +128,11 @@ static BattlePrepRuleWindowLayout gBattlePrepRuleWindowLayouts[] = {
 // Width in pixels of an EUC-JP string drawn with 14-pixel-wide characters.
 #define BATTLE_PREP_TEXT_WIDTH(str) (strlen(str) * 14 / 2)
 
-static char* sBattlePrepStrings[] = {
+// JP draws rule-window names from these tables instead of BattlePrep_GetString(0..40).
+// They are five separate arrays, laid out back to back: each function loads every
+// element from its own array symbol (e.g. sCupNames - 4 for `mode - 1`), which a
+// single 41-entry table does not reproduce under IDO.
+static char* sCupNames[] = {
     "ニンテンドウカップ‘９７", // Nintendo Cup '97
     "ニンテンドウカップ‘９８", // Nintendo Cup '98
     "ニンテンドウカップ‘９９", // Nintendo Cup '99
@@ -136,10 +140,16 @@ static char* sBattlePrepStrings[] = {
     "イエローカップ",           // Yellow Cup
     "ウルトラカップ",           // Ultra Cup
     "ジムリーダーのしろ",       // Gym Leader Castle
+};
+
+static char* sBallNames[] = {
     "モンスターボール",         // Poké Ball
     "スーパーボール",           // Great Ball
     "ハイパーボール",           // Ultra Ball
     "マスターボール",           // Master Ball
+};
+
+static char* sRoundNames[] = {
     "バトル１",                 // Battle 1
     "バトル２",                 // Battle 2
     "バトル３",                 // Battle 3
@@ -148,6 +158,9 @@ static char* sBattlePrepStrings[] = {
     "バトル６",                 // Battle 6
     "セミファイナル",           // Semifinal
     "ファイナルバトル",         // Final Battle
+};
+
+static char* sGymNames[] = {
     "ニビジム",                 // Pewter Gym
     "ハナダジム",               // Cerulean Gym
     "クチバジム",               // Vermilion Gym
@@ -158,6 +171,9 @@ static char* sBattlePrepStrings[] = {
     "トキワジム",               // Viridian Gym
     "してんのう",               // Elite Four
     "ライバル",                 // Rival
+};
+
+static char* sLeaderNames[] = {
     "タケシ",                   // Brock
     "カスミ",                   // Misty
     "マチス",                   // Lt. Surge
@@ -406,17 +422,17 @@ void BattlePrep_DrawCupProgressHeader(BattlePrepRuleWindow* text_window, BattleP
     Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
 
     if ((gSessionContext.mode == RULE_CATEGORY_NINTENDO_CUP_99) || (gSessionContext.mode == RULE_CATEGORY_PRIME_CUP)) {
-        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.mode - 1]) / 2)) + 100,
-                    window_layout->y + 6, sBattlePrepStrings[gSessionContext.mode - 1]);
-        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.modeSelection + 7]) / 2)) + 100,
-                    window_layout->y + 24, sBattlePrepStrings[gSessionContext.modeSelection + 7]);
-        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.roundOrDemoId + 10]) / 2)) + 100,
-                    window_layout->y + 42, sBattlePrepStrings[gSessionContext.roundOrDemoId + 10]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sCupNames[gSessionContext.mode - 1]) / 2)) + 100,
+                    window_layout->y + 6, sCupNames[gSessionContext.mode - 1]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBallNames[gSessionContext.modeSelection]) / 2)) + 100,
+                    window_layout->y + 24, sBallNames[gSessionContext.modeSelection]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sRoundNames[gSessionContext.roundOrDemoId - 1]) / 2)) + 100,
+                    window_layout->y + 42, sRoundNames[gSessionContext.roundOrDemoId - 1]);
     } else {
-        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.mode - 1]) / 2)) + 100,
-                    window_layout->y + 10, sBattlePrepStrings[gSessionContext.mode - 1]);
-        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.roundOrDemoId + 10]) / 2)) + 100,
-                    window_layout->y + 38, sBattlePrepStrings[gSessionContext.roundOrDemoId + 10]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sCupNames[gSessionContext.mode - 1]) / 2)) + 100,
+                    window_layout->y + 10, sCupNames[gSessionContext.mode - 1]);
+        Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sRoundNames[gSessionContext.roundOrDemoId - 1]) / 2)) + 100,
+                    window_layout->y + 38, sRoundNames[gSessionContext.roundOrDemoId - 1]);
     }
 
     Font_DisableTwoCycleTexturing();
@@ -462,8 +478,8 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, Batt
     Gfx_SetPrimColor(0x32, 0xFF, 0x64, 0xFF); // #32ff64
 
     // "%s Battle", centered with the 42-pixel width of "バトル"
-    Font_Printf((window_layout->x - ((s32)(BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.modeSelection + 19]) + 42) / 2)) + 100,
-                window_layout->y + 10, "%sバトル", sBattlePrepStrings[gSessionContext.modeSelection + 19]);
+    Font_Printf((window_layout->x - ((s32)(BATTLE_PREP_TEXT_WIDTH(sGymNames[gSessionContext.modeSelection]) + 42) / 2)) + 100,
+                window_layout->y + 10, "%sバトル", sGymNames[gSessionContext.modeSelection]);
 
     if (gSessionContext.modeSelection < SESSION_MODE_BATTLE_NOW) {
         if (gSessionContext.modeSelection == SESSION_MODE_VS_MEWTWO) {
@@ -473,8 +489,8 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, Batt
             // Trainer %d
             Font_Printf(window_layout->x + 58, window_layout->y + 38, "トレーナー%d", gSessionContext.roundOrDemoId);
         } else {
-            Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sBattlePrepStrings[gSessionContext.modeSelection + 29]) / 2)) + 100,
-                        window_layout->y + 38, sBattlePrepStrings[gSessionContext.modeSelection + 29]);
+            Font_Printf((window_layout->x - ((s32)BATTLE_PREP_TEXT_WIDTH(sLeaderNames[gSessionContext.modeSelection]) / 2)) + 100,
+                        window_layout->y + 38, sLeaderNames[gSessionContext.modeSelection]);
         }
     }
 
@@ -651,8 +667,8 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
     Gfx_SetEnvColor(0xFF, 0x64, 0x64, 0xFF); // #ff6464
 
     if (suspend_record.sessionMode == SESSION_MODE_GYM_LEADER_CASTLE) {
-        Font_Printf(window_layout->x + 30, window_layout->y + 23, sBattlePrepStrings[suspend_record.sessionMode - 1]);
-        Font_Printf(window_layout->x + 30, window_layout->y + 38, sBattlePrepStrings[suspend_record.cupOrGymIndex + 19]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sGymNames[suspend_record.cupOrGymIndex]);
         if (suspend_record.cupOrGymIndex < 8) {
             if (suspend_record.trainerIndex < 4) {
                 // Trainer %d
@@ -665,12 +681,12 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
             Font_Printf(window_layout->x + 30, window_layout->y + 53, "してんのう%d", suspend_record.trainerIndex);
         }
     } else if ((suspend_record.sessionMode == SESSION_MODE_NINTENDO_CUP_99) || (suspend_record.sessionMode == SESSION_MODE_PRIME_CUP)) {
-        Font_Printf(window_layout->x + 30, window_layout->y + 23, sBattlePrepStrings[suspend_record.sessionMode - 1]);
-        Font_Printf(window_layout->x + 30, window_layout->y + 38, sBattlePrepStrings[suspend_record.cupOrGymIndex + 7]);
-        Font_Printf(window_layout->x + 30, window_layout->y + 53, sBattlePrepStrings[suspend_record.trainerIndex + 10]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sBallNames[suspend_record.cupOrGymIndex]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 53, sRoundNames[suspend_record.trainerIndex - 1]);
     } else {
-        Font_Printf(window_layout->x + 30, window_layout->y + 23, sBattlePrepStrings[suspend_record.sessionMode - 1]);
-        Font_Printf(window_layout->x + 30, window_layout->y + 38, sBattlePrepStrings[suspend_record.trainerIndex + 10]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 23, sCupNames[suspend_record.sessionMode - 1]);
+        Font_Printf(window_layout->x + 30, window_layout->y + 38, sRoundNames[suspend_record.trainerIndex - 1]);
     }
 
     if (suspend_record.sessionMode != SESSION_MODE_GYM_LEADER_CASTLE) {
@@ -688,9 +704,11 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
     Font_EndTexturedTextRendering();
 
     if (suspend_record.inRound2 == 1) {
+        u32 len = strlen(sCupNames[suspend_record.sessionMode - 1]);
+
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-        Gfx_DrawTextureRgba16(window_layout->x + (strlen(sBattlePrepStrings[suspend_record.sessionMode - 1]) / 2) * 10 + 32,
+        Gfx_DrawTextureRgba16(window_layout->x + (len / 2) * 10 + 32,
                               window_layout->y + 21, 16, 16, gSmallRound2Icon, 0x10, 0);
 
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
