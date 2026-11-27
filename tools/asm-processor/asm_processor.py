@@ -523,7 +523,7 @@ class GlobalAsmBlock:
         raise Failure(message + "\nwithin " + context)
 
     def count_quoted_size(self, line, z, real_line, output_enc):
-        line = line.encode(output_enc).decode('utf8')
+        line = line.encode(output_enc).decode('latin1')  # one char per output byte
         in_quote = False
         has_comma = True
         num_parts = 0
@@ -875,7 +875,7 @@ float_regexpr = re.compile(r"[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?f")
 def repl_float_hex(m):
     return str(struct.unpack(">I", struct.pack(">f", float(m.group(0).strip().rstrip("f"))))[0])
 
-Opts = namedtuple('Opts', ['opt', 'framepointer', 'mips1', 'kpic', 'pascal', 'input_enc', 'output_enc'])
+Opts = namedtuple('Opts', ['opt', 'framepointer', 'mips1', 'kpic', 'pascal', 'input_enc', 'output_enc', 'asm_input_enc'])
 
 def parse_source(f, opts, out_dependencies, print_source=None):
     if opts.opt in ['O1', 'O2']:
@@ -960,7 +960,7 @@ def parse_source(f, opts, out_dependencies, print_source=None):
             fname = line[line.index('(') + 2 : -2]
             out_dependencies.append(fname)
             global_asm = GlobalAsmBlock(fname)
-            with open(fname, encoding=opts.input_enc) as f:
+            with open(fname, encoding=opts.asm_input_enc or opts.input_enc) as f:
                 for line2 in f:
                     global_asm.process_line(line2.rstrip(), output_enc)
             src, fn = global_asm.finish(state)
@@ -1428,6 +1428,7 @@ def run_wrapped(argv, outfile, functions):
     parser.add_argument('--asm-prelude', dest='asm_prelude', help="path to a file containing a prelude to the assembly file (with .set and .macro directives, e.g.)")
     parser.add_argument('--input-enc', default='utf8', help="input encoding (default: %(default)s)")
     parser.add_argument('--output-enc', default='utf8', help="output encoding (default: %(default)s)")
+    parser.add_argument('--asm-input-enc', default=None, help="encoding of GLOBAL_ASM .s files (default: same as --input-enc)")
     parser.add_argument('--drop-mdebug-gptab', dest='drop_mdebug_gptab', action='store_true', help="drop mdebug and gptab sections")
     parser.add_argument('--convert-statics', dest='convert_statics', choices=["no", "local", "global", "global-with-filename"], default="local", help="change static symbol visibility (default: %(default)s)")
     parser.add_argument('--force', dest='force', action='store_true', help="force processing of files without GLOBAL_ASM blocks")
@@ -1451,7 +1452,7 @@ def run_wrapped(argv, outfile, functions):
         raise Failure("-mips1 is only supported together with -O1 or -O2")
     if pascal and opt not in ('O1', 'O2', 'g3'):
         raise Failure("Pascal is only supported together with -O1, -O2 or -O2 -g3")
-    opts = Opts(opt, args.framepointer, args.mips1, args.kpic, pascal, args.input_enc, args.output_enc)
+    opts = Opts(opt, args.framepointer, args.mips1, args.kpic, pascal, args.input_enc, args.output_enc, args.asm_input_enc)
 
     if args.objfile is None:
         with open(args.filename, encoding=args.input_enc) as f:

@@ -813,16 +813,16 @@
     vram: 0x86800000
     subsegments:
     - [0x165B70, textbin,   fragments/sushi_game/sushi_game_header]
-    - [0x165B90, asm, fragments/sushi_game/sushi_game_144300]
+    - [0x165B90, c, fragments/sushi_game/sushi_game_144300]
     - [0x167990, c, fragments/sushi_game/sushi_game_1462A0]
     - [0x16B720, c,      fragments/sushi_game/sushi_game_14A030]
-    - [0x16C6A0, data, fragments/sushi_game/sushi_game_144300]
+    - [0x16C6A0, .data, fragments/sushi_game/sushi_game_144300]
     - [0x16C960, .data, fragments/sushi_game/sushi_game_1462A0]
     - [0x16CB10, .data,   fragments/sushi_game/sushi_game_14A030]
-    - [0x16CD50, data, fragment14_16CD50]
+    - [0x16CD50, .rodata, fragments/sushi_game/sushi_game_144300]
     - [0x16CEA0, .rodata, fragments/sushi_game/sushi_game_1462A0]
     - [0x16CF80, .rodata, fragments/sushi_game/sushi_game_14A030]
-    - {vram: 0x86807460, type:  bss, name: fragments/sushi_game/sushi_game_144300}
+    - {vram: 0x86807460, type: .bss, name: fragments/sushi_game/sushi_game_144300}
     - {vram: 0x868074B0, type:  .bss, name: fragments/sushi_game/sushi_game_1462A0}
     - {vram: 0x86808430, type:  .bss, name: fragments/sushi_game/sushi_game_14A030}
   - name: fragment14_relocs
