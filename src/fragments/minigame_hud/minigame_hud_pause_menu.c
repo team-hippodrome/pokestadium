@@ -1216,12 +1216,14 @@ static s32 D_8780F990[] = { 3, 1, 0 };
 static s32 D_8780F99C[] = { 1, 4, 0 };
 static s32 D_8780F9A8[] = { 4, 0 };
 
+#if !defined(VERSION_JP)
 static u8 D_8780F9B0[] = {
     6,
     5,
     4,
     3,
 };
+#endif
 
 static s32 D_8780FC40;
 static u8 D_8780FC44;
@@ -1278,6 +1280,7 @@ static u8 D_8780FDF8;
 static u8 D_8780FDFC[4];
 static s8 D_8780FE00;
 static u8 D_8780FE01;
+#if !defined(VERSION_JP) || defined(NON_MATCHING)
 static char* D_8780FE08[4];
 static char* D_8780FE18[4];
 static char* D_8780FE28[2];
@@ -1285,6 +1288,7 @@ static u16 D_8780FE30;
 static u16 D_8780FE32;
 static u16 D_8780FE34;
 static u16 D_8780FE36;
+#endif
 
 void Widget_PauseMenuInit(void) {
     u8 i;
@@ -1323,6 +1327,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FE01 = 0;
     D_8780FE00 = NTSC_PAL(12, 10);
 
+#if !defined(VERSION_JP)
     D_8780FE08[0] = D_8780FE28[0] = Text_GetString(NULL, 0, gMinigameText, 0x51);
 
     D_8780FE08[1] = Text_GetString(NULL, 0, gMinigameText, 0x52);
@@ -1341,6 +1346,7 @@ void Widget_PauseMenuInit(void) {
     D_8780FE36 = MAX(Font_MeasureTextExtent(0, 0, D_8780FE28[0]), Font_MeasureTextExtent(0, 0, D_8780FE28[1]));
 
     if (D_8780FE32) {}
+#endif
 
     Save_EnsureBankLoaded(2);
 }
@@ -1465,10 +1471,12 @@ s32 Widget_PauseMenuGetResult(void) {
     return sp1C;
 }
 
+#if !defined(VERSION_JP)
 void Widget_DrawPanel(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4, u8* arg5) {
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, arg4, arg5);
     Widget_FillRect(arg0 - 1, arg1 - 1, arg2 + 2, arg3 + 2);
 }
+#endif
 
 void MathUtil_BuildTransformMtx(Mtx* arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7,
                                 f32 arg8, f32 arg9, f32 argA) {
@@ -1508,6 +1516,9 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     spC8 = (Mtx*)Gfx_AllocDisplayList(sizeof(Mtx) * 36);
     temp_s2 = (LookAt*)Gfx_AllocDisplayList(sizeof(LookAt) * 1);
 
+#if defined(VERSION_JP)
+    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+#else
     if (arg0 == 0) {
         for (x = 0; x < 4; x++) {
             GfxImage_ClearDepthRectangle(&gDisplayListHead, (x * 0x36) + 0x44, 0, 0x16, 0xC0);
@@ -1515,6 +1526,7 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     } else {
         GfxImage_ClearDepthRectangle(&gDisplayListHead, 0x44, 0, 0xFC, 0xC0);
     }
+#endif
 
     guLookAtReflect(&spD0, temp_s2, 0.0f, 0.0f, 320.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
@@ -1581,6 +1593,9 @@ void Widget_PauseMenuDrawWinIcons(s16 arg0) {
     }
 }
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/Widget_PauseMenuDrawIconQuad.s")
+#else
 void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7,
                                   f32 arg8, f32 arg9, f32 argA, f32 argB, f32 argC, f32 argD, f32 argE) {
     u8 i;
@@ -1627,6 +1642,7 @@ void Widget_PauseMenuDrawIconQuad(s32 arg0, u32* arg1, u8 arg2, u8 arg3, s16 arg
         gSP2Triangles(gDisplayListHead++, 0, 2, 3, 0, 0, 3, 1, 0);
     }
 }
+#endif
 
 void func_87803EAC(u32* arg0, u16 arg1, UNUSED u16 arg2, u16 arg3, u16 arg4, u8 arg5, u8 arg6) {
     u8 j;
@@ -1674,6 +1690,9 @@ typedef struct Vtx4 {
     /* 0x30 */ Vtx vtx4;
 } Vtx4; // size = 0x40
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/func_87804320.s")
+#else
 void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
     u8 i;
     Mtx* temp_v0;
@@ -1815,6 +1834,13 @@ void func_87804320(u8 arg0, s8 arg1, s8 arg2, s8 arg3, s8 arg4) {
         }
     }
 }
+#endif
+
+#if defined(VERSION_JP)
+#define PAUSE_MENU_SCORE_X 0x49
+#else
+#define PAUSE_MENU_SCORE_X 0x4C
+#endif
 
 void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
     s32 var_a0;
@@ -1873,12 +1899,29 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
         }
 
         if (D_8780FDFC[i] == 1) {
-            Font_Printf((i * 0x36) + arg0 + 0x4C, 0xD8, "%d", D_8780FA40[i] - 1);
+            Font_Printf((i * 0x36) + arg0 + PAUSE_MENU_SCORE_X, 0xD8, "%d", D_8780FA40[i] - 1);
         } else {
-            Font_Printf((i * 0x36) + arg0 + 0x4C, 0xD8, "%d", D_8780FA40[i]);
+            Font_Printf((i * 0x36) + arg0 + PAUSE_MENU_SCORE_X, 0xD8, "%d", D_8780FA40[i]);
         }
     }
 
+#if defined(VERSION_JP)
+    Font_SetActive(4, -2);
+    Font_EnableTwoCycleTexturing();
+    Gfx_SetEnvColor(0xF0, 0xF0, 0xF0, 0xFF);
+    Gfx_SetPrimColor(0x8C, 0x8C, 0x8C, 0xFF);
+
+    if ((D_8780FA30[0] + D_8780FA30[1] + D_8780FA30[2] + D_8780FA30[3]) == 0) {
+        Font_Printf(arg0 + 0x3F, 0x10, "%dかい かったらチャンピオン", D_8780FA3A);
+    } else {
+        static char* D_8780F9B0[] = { "よわい", "ふつう", "つよい", "すごい" };
+
+        Font_Printf(arg0 + 0x1C, 0x10, "%dかい かったらチャンピオン ／%s", D_8780FA3A, D_8780F9B0[D_8780FA38]);
+    }
+
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+#else
     Font_SetActive(4, 0);
     Font_EnableTwoCycleTexturing();
     Gfx_SetEnvColor(0xF0, 0xF0, 0xF0, 0xFF);
@@ -1900,8 +1943,25 @@ void Widget_PauseMenuDrawPlayerIcons(s16 arg0) {
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
+#endif
 }
 
+#if defined(VERSION_JP)
+// Data of the JP Widget_PauseMenuUpdate, which is still assembly: its three statics, its two local
+// byte arrays and the menu labels (JP has them in the ROM instead of the message bank).
+s32 D_8780F628_jp;
+s32 D_8780F62C_jp;
+s32 D_8780F630_jp;
+u8 D_8780F070_jp[] = { 0, 0, 30, 0, 0, 250 };
+u8 D_8780F078_jp[] = { 0x35, 0x34, 0x00, 0x7A, 0x78, 0x00 };
+char* D_8780F080_jp[] = { "もういちどする", "べつのゲームをする", "やめる" };
+char* D_8780F08C_jp[] = { "つづける", "やりなおす", "やめる" };
+char* D_8780F098_jp[] = { "もういちどする", "やめる" };
+#endif
+
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/minigame_hud/minigame_hud_pause_menu/Widget_PauseMenuUpdate.s")
+#else
 s32 Widget_PauseMenuUpdate(void) {
     static s32 D_8780FE3C;
     static s32 D_8780FE40;
@@ -2330,3 +2390,4 @@ s32 Widget_PauseMenuUpdate(void) {
 
     return 0;
 }
+#endif
