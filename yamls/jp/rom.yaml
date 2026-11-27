@@ -1772,7 +1772,7 @@
     - [0x358EF0, c,      fragments/battle_engine/battle_engine_3597B0]
     - [0x3596C0, c,      fragments/battle_engine/battle_engine_debug_strings]
     - [0x3596D0, c,      fragments/battle_engine/battle_engine_mechanics]
-    - [0x35D660, asm, fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x35D660, c,      fragments/battle_engine/battle_engine_move_mechanics]
     - [0x360910, c, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x36E4B0, .data, fragments/battle_engine/battle_engine_main]
     - [0x36E6D0, data, fragments/battle_engine/battle_engine_move_animation]
@@ -1803,7 +1803,7 @@
     - [0x374E70, .data,   fragments/battle_engine/battle_engine_3591E0]
     - [0x375960, .data,   fragments/battle_engine/battle_engine_3597B0]
     - [0x375D70, .data, fragments/battle_engine/battle_engine_mechanics]
-    - [0x375F60, data, fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x375F60, .data, fragments/battle_engine/battle_engine_move_mechanics]
     - [0x3760C0, .data, fragments/battle_engine/battle_engine_com_decision_logic]
     - [0x376210, rodata, fragments/battle_engine/battle_engine_move_animation]
     - [0x3762B0, .rodata, fragments/battle_engine/battle_engine_move_model_transforms]
@@ -1843,7 +1843,7 @@
     - [0x378A60, .rodata, fragments/battle_engine/battle_engine_hyper_beam_ice_beam_trails]
     - [0x378A80, .rodata, fragments/battle_engine/battle_engine_3591E0]
     - [0x378A90, .rodata, fragments/battle_engine/battle_engine_mechanics]
-    - [0x378DE0, rodata, fragments/battle_engine/battle_engine_move_mechanics]
+    - [0x378DE0, .rodata, fragments/battle_engine/battle_engine_move_mechanics]
     - [0x378F50, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
     - {vram: 0x8438F730, type: .bss, name: fragments/battle_engine/battle_engine_main}
     - {vram: 0x8438FAA0, type:  bss, name: fragments/battle_engine/battle_engine_move_animation}

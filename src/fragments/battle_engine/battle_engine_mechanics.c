@@ -1509,12 +1509,7 @@ s32 Battle_CheckMonCanAct(void) {
             return 4;
         }
 
-#if defined(VERSION_JP)
-        // Thrashing ended: "Became confused!" (the message id does not match its text index here).
-        Battle_QueueMessage(sBattleMessageQueues->buffer[5], -0x45, gBattleQueuedMessageTexts[105]);
-#else
-        Battle_QueueMessage(sBattleMessageQueues->buffer[5], -0x45);
-#endif
+        BATTLE_QUEUE_MESSAGE0(sBattleMessageQueues->buffer[5], -0x45);
         sBattleUser->immobilizedReason &= 0xFFFD;
         sBattleUser->immobilizedReason |= 0x80;
         sBattleUser->confusionTurnsLeft = (Battle_Random() & 3) + 2;
