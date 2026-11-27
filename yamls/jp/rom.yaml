@@ -1097,8 +1097,10 @@
     vram: 0x88500000
     subsegments:
     - [0x201D70, textbin,   fragments/lab_widget_tree/lab_widget_tree_header]
-    - [0x201D90, asm, fragments/lab_widget_tree/lab_widget_tree]
-    - [0x20E7F0, data, fragments/lab_widget_tree/lab_widget_tree]
+    - [0x201D90, c,         fragments/lab_widget_tree/lab_widget_tree]
+    - [0x20D5B0, c,         fragments/lab_widget_tree/lab_widget_tree_menu]
+    - [0x20E7F0, .data,     fragments/lab_widget_tree/lab_widget_tree]
+    - [0x20E820, .rodata,   fragments/lab_widget_tree/lab_widget_tree]
   - name: fragment26_relocs
     type: code
     bss_size: 0x0
