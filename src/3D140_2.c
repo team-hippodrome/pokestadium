@@ -881,12 +881,15 @@ u8 sMusicSeqTables[0x134] = {
 };
 #endif
 u32 D_80078544 = 0x00000000;
+#if defined(VERSION_JP)
+// JP scans this as one flat list of move IDs.
+u8 D_80078548[12] = {
+    0x03, 0x29, 0x8C, 0x83, 0x18, 0x1F, 0x9A, 0x04, 0x9B, 0x2A, 0x00, 0x00,
+};
+#else
 unk_D_80078548 D_80078548[6] = {
     { 0x03, 0x29 }, { 0x8C, 0x83 }, { 0x18, 0x1F }, { 0x9A, 0x04 }, { 0x9B, 0x2A }, { 0x00, 0x00 },
 };
-#if defined(VERSION_JP)
-// JP scans D_80078548 as one flat list of move IDs; this is its last entry (undefined_syms.ld).
-extern u8 D_8007C1A2_jp[];
 #endif
 u8 D_80078554[20] = {
     0x0E, 0x36, 0x4A, 0x60, 0x61, 0x68, 0x6A, 0x6B, 0x6E, 0x6F,
@@ -2353,10 +2356,6 @@ void ProcessAudioCommandQueue(s32 arg0) {
     }
 }
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// One instruction is scheduled differently on JP.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/3D140_2/HandleMoveEvent.s")
-#else
 void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 i;
     s32 sp40;
@@ -2365,9 +2364,6 @@ void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 sp34;
     u32 tmp;
     OSIntMask sp2C;
-#if defined(VERSION_JP)
-    u8* ptr;
-#endif
 
     if (arg0 == NULL) {
         return;
@@ -2392,10 +2388,9 @@ void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3) {
             D_800FCCB7 = 0;
             Audio_RemoveLastQueuedSequenceId();
 #if defined(VERSION_JP)
-            ptr = (u8*)D_80078548;
             sp40 ^= 1;
-            do {
-                if (arg1 == *ptr) {
+            for (i = 0; i < 10; i++) {
+                if (arg1 == D_80078548[i]) {
                     if (D_800FCB18[sp40]->displayHp < D_800FCB48[sp40].unk_00[D_800FCB48[sp40].unk_24 & 0xF]) {
                         tmp = D_800FCB48[sp40].unk_00[D_800FCB48[sp40].unk_24 & 0xF] - D_800FCB18[sp40]->displayHp;
                         D_800FCCA4 = (tmp * 0x64) / D_800FCB18[sp40]->maxHp;
@@ -2405,8 +2400,7 @@ void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3) {
                     D_800FCCAD = arg2;
                     return;
                 }
-                ptr++;
-            } while (ptr != D_8007C1A2_jp);
+            }
 #else
             sp40 ^= 1;
 
@@ -2641,7 +2635,6 @@ void HandleMoveEvent(BattleMonRuntime* arg0, s32 arg1, s32 arg2, s32 arg3) {
             break;
     }
 }
-#endif
 
 void QueuePlayerDefeatMessage(s32 arg0) {
     u8 temp_v0;

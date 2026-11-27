@@ -664,7 +664,6 @@ D_800780B3 = 0x8007BD03;
 D_80078410 = 0x8007C060;
 D_80078446 = 0x8007C096;
 D_800784EA = 0x8007C13A;
-D_8007C1A2_jp = 0x8007C1A2;
 
 // Interior aliases into gb_audio_render.c's loop-point tables.
 D_80078E80 = 0x8007CAC0;
