@@ -1489,6 +1489,37 @@ static u32 ekansShadowTexture[] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
 
+#if defined(VERSION_JP)
+// Tutorial body text. The runs of ideographic spaces leave room for the control names drawn over them.
+static char* sTutorialLines[] = {
+    // "Pick a direction with right/left on the [Control Pad], then pull the [Control Stick]
+    // toward you and let it go with a snap to toss the ring. The player with the most points wins."
+    "　　　　　　の　みぎ／ひだり　で　ほうこうを",
+    "きめたら　こんどは　　　　　　　　を　てまえに",
+    "ひっぱって　パチンとはじいて　わなげを　しよう。",
+    "とくてんの　おおいひとが　かち。",
+    "",
+    // "Pull it all the way back and flick it to throw far; flick it lightly to throw close by."
+    "めいっぱい　ひっぱって　はじくと　とおくまで、",
+    "ちょこんと　はじくと　すぐちかくに　なげることが",
+    "できるよ。",
+    "",
+};
+
+// HUD labels.
+static char* sHudStrings[] = {
+    "のこり",     // "Remaining"
+    "びよう",     // "seconds"
+    "はじめ",     // "Begin"
+    "おわり",     // "End"
+    "１Ｐのかち", // "1P wins"
+    "２Ｐのかち", // "2P wins"
+    "３Ｐのかち", // "3P wins"
+    "４Ｐのかち", // "4P wins"
+    "ひきわけ",   // "Draw"
+};
+#endif
+
 static MiniActor* miniDiglettPtr = &miniDigletts[0];
 static MiniActor* miniDiglettHolePtr = &miniDiglettHoles[0];
 static MiniActor* miniEkansPtr = &miniEkanses[0];
@@ -1567,6 +1598,16 @@ static unk_func_87801684 D_86C0E33C[] = {
     { D_03041FC0, 4 },   { D_030426E0, 8 }, { D_03041FC0, 4 }, { NULL, 0 },
 };
 static s16 playerGUIScoreXPositions[] = { 0x32, 0x6E, 0xAA, 0xE6 };
+#if defined(VERSION_JP)
+static Color_RGB8 playerColors[] = {
+    { 0, 0, 0xB4 },    //  player 1 skans shadow color
+    { 0, 0x82, 0 },    //  player 2 skans shadow color
+    { 0xA0, 0, 0 },    //  player 3 skans shadow color
+    { 0x8C, 0x8C, 0 }, //  player 4 skans shadow color
+};
+// Unreferenced. The other versions hold the same values plus two zeros in the tail of playerColors.
+static s32 D_86C0E240_jp[] = { -6, 40, -30, 17 };
+#else
 static Color_RGB8 playerColors[] = {
     { 0, 0, 0xB4 },    //  player 1 skans shadow color
     { 0, 0x82, 0 },    //  player 2 skans shadow color
@@ -1575,6 +1616,7 @@ static Color_RGB8 playerColors[] = {
     { 0xFF, 0xFF, 0xFF }, { 0xFA, 0, 0 }, { 0, 0x28, 0xFF }, { 0xFF, 0xFF, 0xE2 },
     { 0, 0, 0 },          { 0x11, 0, 0 }, { 0, 0, 0 },       { 0, 0, 0 },
 };
+#endif
 
 s32 EkansGame_GetLaunchForceTier(MiniActor* ekans) {
     f32 tmp = ekans->launchForce;
@@ -3158,6 +3200,44 @@ void EkansGame_CameraControls(void) {
     miniUpdateCamera();
 }
 
+#if defined(VERSION_JP)
+void EkansGame_DrawTutorialText(void) {
+    s32 i;
+
+    Ui_DrawBorderedPanel(0x18, 0x16, 0x110, 0x90, 0x15);
+    Ui_DrawBorderedPanel(0x18, 0xA5, 0x110, 0x36, 0x14B);
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Font_SetActive(2, -2);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+    Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86C12000, gMinigameStrings[MINIGAME_STR_EKANS_TITLE]) / 2), 0x20,
+                gMinigameStrings[MINIGAME_STR_EKANS_TITLE]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+    for (i = 0; i < ARRAY_COUNT(sTutorialLines); i++) {
+        Font_Printf(0x28, 0x34 + (i * 12), "%s", sTutorialLines[i]);
+    }
+    Font_Printf(0x84, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Font_Printf(0x6E, 0xB0, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Font_Printf(0xDE, 0xB0, "%s", gMinigameStrings[MINIGAME_STR_ELLIPSIS]);
+    Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+    Font_Printf(0x28, 0x34, "%s", gMinigameStrings[MINIGAME_STR_CONTROL_PAD]);
+    Font_Printf(0x8C, 0x40, "%s", gMinigameStrings[MINIGAME_STR_CONTROL_STICK]);
+    Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+    Font_Printf(0x8C, 0xB0, "%s", gMinigameStrings[MINIGAME_STR_SHAKE_HEAD]);
+    Gfx_SetEnvColor(0xE6, 0xD2, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0x82, 0x50, 0xD2, 0xFF);
+    Font_Printf(0xFC, 0xB0, "%s", gMinigameStrings[MINIGAME_STR_THROW]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+    Font_Printf(0xA2, 0xC8, "%s", gMinigameStrings[MINIGAME_STR_START_GAME]);
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
+}
+#else
 void EkansGame_DrawTutorialText(void) {
     UNUSED s32 pad;
     s32 sp38;
@@ -3206,6 +3286,7 @@ void EkansGame_DrawTutorialText(void) {
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void EkansGame_DrawTutorialScreen(void) {
     switch (D_87903DCC) {
@@ -3233,19 +3314,38 @@ void EkansGame_DrawTutorialScreen(void) {
 
     if (miniTutoScreenState == -2) {
         Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+        switch (D_87903DD0) {
+            case 0x11:
+                Font_Printf(0x82, 0x6E, "%s", gMinigameStrings[MINIGAME_STR_END]);
+                break;
+
+            case 0x18:
+                miniDrawResultIcons(miniEkanses);
+                break;
+        }
+        Font_SetActive(4, -2);
+#endif
         Font_EndTexturedTextRendering();
     }
 }
 
 void miniEkansDrawCountdown(void) {
-#if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV1) || defined(VERSION_US_REV2) || defined(VERSION_PAL)
     char countdownText[0x40];
     UNUSED s32 pad;
     s32 textPosition;
 #endif
+#if defined(VERSION_JP)
+    Font_Printf(0x78, 0x14, "%s", sHudStrings[0]);
+    Font_Printf(0xAA, 0x14, "%d", miniEkansCountdown);
+#else
     Gfx_SetEnvColor(0xFF, 0xC8, 0x32, 0xFF); // set color
     Font_SetActive(8, 0);                    // set style
-#if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
+#endif
+#if defined(VERSION_JP)
+#elif defined(VERSION_US_REV1) || defined(VERSION_US_REV2) || defined(VERSION_PAL)
     sprintf(countdownText, "%s99", Text_GetString(NULL, 0, gMinigameText, 0x5D));
     textPosition = (320 - Font_MeasureTextExtent(0, 0, countdownText)) / 2;
     Font_Printf(textPosition, 0x14, "%s%2d", Text_GetString(NULL, 0, gMinigameText, 0x5D), miniEkansCountdown);
@@ -3261,6 +3361,10 @@ void miniEkansDrawHub(void) {
 
     Font_BeginTranslucentTextRendering();
     if (ekansMinigameCountdownStarted == false) {
+#if defined(VERSION_JP)
+        Font_SetActive(4, -2);
+        Gfx_SetEnvColor(0xFF, 0xC8, 0x32, 0xFF);
+#endif
         miniEkansDrawCountdown();
     }
     Font_EndTexturedTextRendering();
@@ -3284,7 +3388,11 @@ void miniEkansDrawHub(void) {
         } else {
             Widget_DrawPlayerIcon(i, tmp, 0xCC, 0.75f);
         }
+#if defined(VERSION_JP)
+        Font_Printf(tmp - 4, 0xCC, "  %d", miniEkanses[i].ekansScore);
+#else
         Font_Printf(tmp + 0x14, 0xCC, "  %d", miniEkanses[i].ekansScore);
+#endif
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -3361,9 +3469,11 @@ void EkansGame_DrawFrame(s32 arg0) {
         showDebuggJoystickInfo();
     }
 
+#if !defined(VERSION_JP)
     if (ekansMinigameCountdownStarted) {
         Widget_DrawControllerDisconnectBanner();
     }
+#endif
 
     BgStage_AdvanceFrame();
 }
@@ -3517,7 +3627,11 @@ s32 ekansMinigameLoad(s32 arg0, UNUSED s32 arg1) {
 
     Gfx_InitDisplayListBuffers(0x20000, 0);
     sp24 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
+#if defined(VERSION_JP)
+    D_86C12000 = Font_Init(0x16, 0);
+#else
     D_86C12000 = Font_Init(0x1E, 0);
+#endif
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     FRAGMENT_LOAD(FRAGMENT_MODEL_CALLBACK_LIBRARY);

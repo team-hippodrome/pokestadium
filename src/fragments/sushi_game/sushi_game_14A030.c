@@ -296,7 +296,7 @@ void SushiGame_InitPlate(s32 arg0, unk_D_868084D8* arg1, s32 arg2, unk_D_868084D
         arg1->unk_40->node.flags |= 1;
 
         if (arg3->unk_006 >= 2) {
-            if ((D_86807180[arg1->unk_0C].unk_18 != 0) && (D_86807510 >= 0x3D)) {
+            if ((D_86807180[arg1->unk_0C].unk_18 != 0) && (D_86807510 >= NTSC_PAL(61, 51))) {
                 Audio_DispatchSoundBankCommand(D_86807180[arg1->unk_0C].unk_14, 0, 0);
             }
         }
@@ -454,7 +454,7 @@ void SushiGame_SetPlateState(unk_D_868084D8* arg0, s32 arg1, unk_D_86807558* arg
         case 3:
             temp_v0 = arg0->unk_38;
             temp_v0->unk_008 = 0;
-            temp_v0->unk_002 = 0x78;
+            temp_v0->unk_002 = NTSC_PAL(120, 100);
             arg0->unk_38 = arg2;
             arg0->unk_04 = arg0->unk_06 = arg2->unk_0CC;
             break;

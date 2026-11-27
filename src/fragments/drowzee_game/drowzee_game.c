@@ -159,11 +159,11 @@ void DrowzeeGame_UpdatePlayerAnimations(void) {
 
             if ((ModelAnim_IsFinished(&D_864052C8->unk_028) != 0) ||
                 ((D_864052C8->unk_010 == 0) && (D_864052C8->unk_012 > 0)) ||
-                ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 == 0x3C) && (D_87B000D4 == 1))) {
+                ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 == NTSC_PAL(60, 50)) && (D_87B000D4 == 1))) {
                 temp_s1 = D_864052C8->unk_004;
 
                 if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) &&
-                    ((D_86402840 == 0x3C) || (D_864052C8->unk_004 == 6))) {
+                    ((D_86402840 == NTSC_PAL(60, 50)) || (D_864052C8->unk_004 == 6))) {
                     D_864052C8->unk_004 = 6;
                 } else {
                     temp_fv0 = (D_864052C8->unk_010 * 100.0f) / D_864052C8->unk_00E;
@@ -248,7 +248,7 @@ void DrowzeeGame_ProcessElimination(u8 arg0) {
         D_864052CC->unk_004.transformAnim.speedFixed = 0;
         D_87B000C8 = 1;
 
-        Audio_FadeOutAll(0xA);
+        Audio_FadeOutAll(NTSC_PAL(10, 8));
 
         for (i = 0; i < 4; i++) {
             D_864052C8 = &D_86404778[i];
@@ -328,18 +328,18 @@ void DrowzeeGame_DrawPlayerOverlay(UNUSED s32 arg0) {
                         D_864052C8->unk_190->unk_28 = 0.5f;
                         break;
 
-                    case 20:
+                    case NTSC_PAL(20, 17):
                         D_864052C8->unk_190->unk_28 = temp_fs0;
                         if ((D_8780FC92 == 0) && (D_8780FC94 == 0)) {
                             Audio_DispatchSoundBankCommand(0x70004, i + 1, 0);
                         }
                         break;
 
-                    case 19:
+                    case NTSC_PAL(19, 16):
                         D_864052C8->unk_190->unk_28 = 0.2f;
                         break;
 
-                    case 18:
+                    case NTSC_PAL(18, 15):
                         D_864052C8->unk_190->unk_28 = 0.3f;
                         break;
                 }
@@ -357,10 +357,10 @@ void DrowzeeGame_DrawPlayerOverlay(UNUSED s32 arg0) {
 void DrowzeeGame_UpdateRoundTick(s32 arg0) {
     s32 temp;
     s16 sp24[] = {
-        0xFB1E,
-        0xFED4,
-        0x0120,
-        0x04B0,
+        NTSC_PAL(0xFB1E, 0xF9FE),
+        NTSC_PAL(0xFED4, 0xFE8F),
+        NTSC_PAL(0x0120, 0x0162),
+        NTSC_PAL(0x04B0, 0x05C5),
     };
     u8 i;
 
@@ -398,25 +398,25 @@ void DrowzeeGame_UpdateRoundTick(s32 arg0) {
 
                 D_864052C8->unk_012 = D_864052C8->unk_010;
 
-                if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 >= 0x3C) && (D_87B000D4 == 1) &&
-                    (D_864029C0 < 0x10)) {
+                if ((D_87B000C8 != 0) && (D_864052C8->unk_00C == 1) && (D_86402840 >= NTSC_PAL(60, 50)) && (D_87B000D4 == 1) &&
+                    (D_864029C0 < NTSC_PAL(16, 13))) {
                     D_864052C8->unk_028.rotation.y += sp24[i];
                 }
             }
 
             if (D_87B000C8 != 0) {
-                if (D_86402840 < 0x3C) {
+                if (D_86402840 < NTSC_PAL(60, 50)) {
                     D_86402840++;
                 } else {
-                    if (D_86402840 < 0x6A) {
-                        if (D_86402840 == 0x69) {
+                    if (D_86402840 < NTSC_PAL(106, 88)) {
+                        if (D_86402840 == NTSC_PAL(105, 87)) {
                             D_87B000CC = 1;
                             Widget_PauseMenuTrigger(1);
                         }
                         D_86402840++;
                     }
 
-                    if (D_864029C0 < 0x10) {
+                    if (D_864029C0 < NTSC_PAL(16, 13)) {
                         D_864029C0++;
                     }
                 }
@@ -426,7 +426,7 @@ void DrowzeeGame_UpdateRoundTick(s32 arg0) {
         if (D_87B000C8 != 0) {
             static f32 D_864029C4 = 1.0f;
 
-            D_864029C4 -= 0.06f;
+            D_864029C4 -= NTSC_PAL(0.06f, 0.072f);
             if (D_864029C4 < 0.0f) {
                 D_864029C4 = 0.0f;
             }
@@ -504,17 +504,17 @@ void DrowzeeGame_JudgePlayerTiming(void) {
                             }
 
                             if (D_864052C8->unk_018 == 0) {
-                                DrowzeeGame_SetPlayerState(D_864052C8, 1, 0x14, 0, 0);
+                                DrowzeeGame_SetPlayerState(D_864052C8, 1, NTSC_PAL(20, 17), 0, 0);
                             } else {
-                                DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 1, 0x14);
+                                DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 1, NTSC_PAL(20, 17));
                             }
                         }
                     } else {
                         D_864052C8->unk_010 -= 1;
                         if (D_864052C8->unk_018 == 0) {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 2, 0x14, 0, 0);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 2, NTSC_PAL(20, 17), 0, 0);
                         } else {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, 0x14);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, NTSC_PAL(20, 17));
                         }
                     }
 
@@ -547,9 +547,9 @@ void DrowzeeGame_JudgePlayerTiming(void) {
                     if (D_864052C8->unk_014 == 0) {
                         D_864052C8->unk_010--;
                         if (D_864052C8->unk_018 == 0) {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 2, 0x14, 0, 0);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 2, NTSC_PAL(20, 17), 0, 0);
                         } else {
-                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, 0x14);
+                            DrowzeeGame_SetPlayerState(D_864052C8, 0, 1, 2, NTSC_PAL(20, 17));
                         }
                     } else {
                         D_864052C8->unk_014 = 0;
@@ -620,6 +620,35 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
 
+#if defined(VERSION_JP)
+    if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
+        Font_SetActive(2, -2);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+        // "Drowzee's Hypnosis Battle"
+        Font_Printf(0xA0 - (Text_MeasureStringWidth(D_87B000E0, "スリープのさいみんがっせん") / 2), 0x20,
+                    "スリープのさいみんがっせん");
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+        // "When the pendulum reaches the red needle in the middle, press [A Button] to cast
+        // hypnosis on the other Drowzee. The last one who doesn't fall asleep wins."
+        Font_Printf(0x28, 0x34, "ふりこが まんなかの あかいハリのところに きた");
+        Font_Printf(0x28, 0x40, "ときに     をおすと ほかのスリープたちに");
+        Font_Printf(0x28, 0x4C, "さいみんじゅつを かけることができるよ。");
+        Font_Printf(0x28, 0x64, "さいごまで ねむらなかったひとが かち。");
+        Font_Printf(0x84, 0xB2, "・・・");
+        Font_Printf(0x84, 0xC8, "・・・");
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0x28, 0x40, "    Ａボタン"); // "A Button", filling the gap in the second line
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+        Font_Printf(0xA2, 0xB2, "さいみんじゅつ"); // "Hypnosis"
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+        Font_Printf(0xA2, 0xC8, "ゲームをはじめる"); // "Start the game"
+    }
+#else
     if ((arg0 == 0) || ((arg0 == 3) && (D_87B000D0 == 1))) {
         char* temp_s2 = Text_GetString(NULL, 0, gMinigameText, 0x29);
         s32 sp58;
@@ -651,6 +680,7 @@ void DrowzeeGame_DrawTutorialScreen(s32 arg0) {
         Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
         Font_Printf(0xA2, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x14));
     }
+#endif
 
     Font_DisableTwoCycleTexturing();
     Font_EndTexturedTextRendering();
@@ -686,10 +716,10 @@ void DrowzeeGame_WaitForStart(void) {
     var_s1 = 0;
     var_s2 = 1;
     StageLoader_RunFrames(5);
-    StageFade_StartFromOpaque(0x10);
+    StageFade_StartFromOpaque(NTSC_PAL(16, 13));
 
     while (var_s2 != 0) {
-        if (var_s1 >= 0x11) {
+        if (var_s1 >= NTSC_PAL(17, 14)) {
             if (gPlayer1Controller->buttonPressed & 0x1000) {
                 var_s2 = 0;
             } else if ((D_8780FA2A == 0) && (gPlayer1Controller->buttonPressed & 0x4000)) {
@@ -707,12 +737,12 @@ void DrowzeeGame_WaitForStart(void) {
         DrowzeeGame_LoopDrowzeeIdleAnim();
         DrowzeeGame_DrawFrame(0);
 
-        if (var_s1 < 0x11) {
+        if (var_s1 < NTSC_PAL(17, 14)) {
             var_s1++;
         }
     }
 
-    Audio_FadeOutAll(0x3C);
+    Audio_FadeOutAll(NTSC_PAL(60, 50));
     if (D_8780FC92 == 0) {
         while (true) {
             if (D_87B000C4 <= 0) {
@@ -720,7 +750,7 @@ void DrowzeeGame_WaitForStart(void) {
             }
 
             for (i = 3; i > 0; i--) {
-                if (D_87B000C4 == ((i * 0x3C) / 2)) {
+                if (D_87B000C4 == ((i * NTSC_PAL(60, 50)) / 2)) {
                     if (i == 3) {
                         Widget_CountdownStart(1);
                     }
@@ -769,11 +799,11 @@ void DrowzeeGame_MainLoop(void) {
             DrowzeeGame_UpdateRoundTick(2);
 
             if (D_87B000C8 == 0) {
-                if (D_864029E0 < 0x1E) {
+                if (D_864029E0 < NTSC_PAL(30, 25)) {
                     if (D_8780FC94 == 0) {
                         D_864029E0++;
                     }
-                } else if (D_864029E0 == 0x1E) {
+                } else if (D_864029E0 == NTSC_PAL(30, 25)) {
                     if (D_8780FC94 == 0) {
                         Audio_DispatchSoundBankCommand(0x70003, 1, 0);
                         D_864029E0++;
@@ -798,11 +828,11 @@ void DrowzeeGame_MainLoop(void) {
 void DrowzeeGame_ShowResultText(void) {
     u8 i;
 
-    Audio_FadeCategories(1, 0x1E);
-    Audio_FadeCategories(2, 0x1E);
-    StageFade_StartFromTransparent(0x1E);
+    Audio_FadeCategories(1, NTSC_PAL(30, 25));
+    Audio_FadeCategories(2, NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         MiniGame_ReadInputs();
         DrowzeeGame_UpdateRoundTick(3);
         DrowzeeGame_DrawPlayerOverlay(3);
@@ -949,7 +979,11 @@ s32 DrowzeeGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_push_state('MINI');
 
+#if defined(VERSION_JP)
+    Gfx_InitDisplayListBuffers(0x10000, 0);
+#else
     Gfx_InitDisplayListBuffers(0x18000, 0);
+#endif
     sp24 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_87B000E0 = Font_Init(0x16, 0);
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);

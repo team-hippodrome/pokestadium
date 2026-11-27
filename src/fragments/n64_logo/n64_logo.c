@@ -106,6 +106,10 @@ s32 N64Logo_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     Save_EnsureBankLoaded(2);
     StageContext_Activate(stage_context);
+#if defined(VERSION_PAL)
+    // PAL waits 12 frames on the blank stage before the logo fades in.
+    StageLoader_RunFrames(12);
+#endif
     StageFade_Start(1);
     BgStage_RunUntilCondition(3, N64Logo_DrawFrame);
 #if !defined(VERSION_JP)

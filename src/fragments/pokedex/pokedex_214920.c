@@ -28,11 +28,13 @@ s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040*, Controller*);
 s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C*, s32, s32);
 s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C*, s32, s32);
 
+#if !defined(VERSION_JP)
 static char** sPokedexMenuText;
 static char** sPokemonNameTable;
 static char** sPokedexEntryText;
 static char** sSpeciesCategoryTable;
 static char** sPokedexAreaText;
+#endif
 static DisplayObject D_888267B8;
 static unk_func_8001B1FC* D_88826920;
 static StageContext* D_88826924;
@@ -47,10 +49,44 @@ static u8 pad_D_88826948[0x58];
 static s32 D_888269A0;
 static u32 pad_D_888269A4;
 static unk_func_8002D860 D_888269A8;
+#if defined(VERSION_JP)
+// JP reserves more bss here, which nothing references.
+static u8 pad_D_888269B4[0x10];
+#endif
 
 extern u8 D_88808248[];
 
+// Species in the alphabetical order of their names, which differs per language.
+#if !defined(VERSION_JP)
 static u8 gPokedexAlphabeticalOrder[] = {
+#if defined(VERSION_FR)
+    0x0D, 0x30, 0x29, 0x81, 0x77, 0x1B, 0x11, 0x10, 0x92, 0x12, 0x14, 0x62, 0x0B, 0x15, 0x18, 0x7D, 0x7E, 0x7C, 0x75,
+    0x76, 0x66, 0x74, 0x00, 0x08, 0x67, 0x72, 0x7F, 0x80, 0x56, 0x57, 0x54, 0x55, 0x58, 0x53, 0x4A, 0x49, 0x2B, 0x27,
+    0x7A, 0x2D, 0x5C, 0x5B, 0x51, 0x5E, 0x71, 0x63, 0x64, 0x4F, 0x02, 0x8D, 0x93, 0x4E, 0x65, 0x6C, 0x03, 0x26, 0x16,
+    0x0F, 0x09, 0x6E, 0x91, 0x8C, 0x01, 0x37, 0x04, 0x42, 0x43, 0x44, 0x13, 0x0C, 0x22, 0x8F, 0x90, 0x70, 0x2C, 0x2E,
+    0x6A, 0x2A, 0x73, 0x28, 0x47, 0x48, 0x0E, 0x1A, 0x19, 0x61, 0x3D, 0x8B, 0x2F, 0x3A, 0x17, 0x25, 0x87, 0x1E, 0x5D,
+    0x86, 0x31, 0x3C, 0x3B, 0x96, 0x20, 0x5A, 0x59, 0x60, 0x5F, 0x39, 0x94, 0x24, 0x84, 0x85, 0x78, 0x79, 0x3E, 0x82,
+    0x38, 0x33, 0x32, 0x68, 0x69, 0x88, 0x89, 0x52, 0x34, 0x40, 0x21, 0x46, 0x83, 0x8E, 0x45, 0x3F, 0x41, 0x4B, 0x23,
+    0x07, 0x95, 0x6F, 0x6B, 0x06, 0x05, 0x35, 0x36, 0x6D, 0x7B, 0x0A, 0x1F, 0x8A, 0x50, 0x1C, 0x1D, 0x4D, 0x4C,
+#elif defined(VERSION_DE)
+    0x0D, 0x0C, 0x0B, 0x27, 0x29, 0x28, 0x78, 0x79, 0x90, 0x6E, 0x74, 0x81, 0x2E, 0x3F, 0x0A, 0x8A, 0x88, 0x89, 0x6C,
+    0x6D, 0x2D, 0x30, 0x70, 0x06, 0x60, 0x6A, 0x76, 0x75, 0x55, 0x56, 0x53, 0x54, 0x57, 0x52, 0x5F, 0x62, 0x94, 0x93,
+    0x66, 0x3D, 0x96, 0x2A, 0x50, 0x19, 0x26, 0x5D, 0x5E, 0x0F, 0x59, 0x11, 0x12, 0x4B, 0x84, 0x1B, 0x1C, 0x4C, 0x6B,
+    0x20, 0x07, 0x68, 0x69, 0x67, 0x00, 0x35, 0x7E, 0x45, 0x4A, 0x46, 0x3B, 0x91, 0x77, 0x8C, 0x8D, 0x3A, 0x24, 0x25,
+    0x63, 0x21, 0x1F, 0x41, 0x48, 0x49, 0x64, 0x15, 0x14, 0x32, 0x31, 0x7F, 0x80, 0x4F, 0x09, 0x51, 0x02, 0x23, 0x5A,
+    0x8F, 0x2F, 0x40, 0x39, 0x92, 0x44, 0x5B, 0x3E, 0x8E, 0x3C, 0x38, 0x58, 0x7A, 0x83, 0x82, 0x71, 0x72, 0x10, 0x87,
+    0x36, 0x7C, 0x7B, 0x2B, 0x2C, 0x86, 0x85, 0x5C, 0x7D, 0x73, 0x1A, 0x47, 0x61, 0x8B, 0x37, 0x22, 0x42, 0x13, 0x1D,
+    0x05, 0x0E, 0x1E, 0x65, 0x03, 0x04, 0x33, 0x34, 0x01, 0x6F, 0x08, 0x95, 0x43, 0x18, 0x16, 0x17, 0x4E, 0x4D,
+#elif defined(VERSION_ES) || defined(VERSION_IT)
+    0x09, 0x38, 0x8B, 0x0E, 0x0F, 0x0D, 0x81, 0x90, 0x08, 0x0B, 0x50, 0x0A, 0x91, 0x3F, 0x06, 0x66, 0x65, 0x64, 0x73,
+    0x72, 0x80, 0x25, 0x1F, 0x03, 0x67, 0x70, 0x76, 0x77, 0x59, 0x5A, 0x57, 0x58, 0x5B, 0x56, 0x11, 0x10, 0x8F, 0x5C,
+    0x39, 0x94, 0x96, 0x2B, 0x5D, 0x2A, 0x8D, 0x61, 0x62, 0x8A, 0x89, 0x15, 0x1D, 0x4F, 0x63, 0x6F, 0x2D, 0x4D, 0x6E,
+    0x31, 0x04, 0x69, 0x6A, 0x6B, 0x00, 0x3E, 0x02, 0x48, 0x47, 0x46, 0x07, 0x92, 0x8C, 0x86, 0x87, 0x29, 0x2F, 0x2E,
+    0x6C, 0x71, 0x7E, 0x7D, 0x4B, 0x4C, 0x24, 0x18, 0x17, 0x7B, 0x14, 0x30, 0x55, 0x7C, 0x12, 0x27, 0x33, 0x28, 0x60,
+    0x1C, 0x37, 0x43, 0x41, 0x8E, 0x21, 0x22, 0x23, 0x13, 0x4E, 0x35, 0x34, 0x45, 0x42, 0x93, 0x75, 0x74, 0x0C, 0x84,
+    0x40, 0x36, 0x79, 0x2C, 0x7A, 0x83, 0x82, 0x54, 0x78, 0x3B, 0x20, 0x4A, 0x68, 0x85, 0x49, 0x32, 0x44, 0x16, 0x1E,
+    0x88, 0x3A, 0x26, 0x6D, 0x5E, 0x5F, 0x3C, 0x3D, 0x01, 0x7F, 0x05, 0x95, 0x53, 0x1B, 0x19, 0x1A, 0x52, 0x51,
+#else
     0x09, 0x38, 0x8B, 0x0E, 0x0F, 0x0D, 0x81, 0x90, 0x08, 0x0B, 0x50, 0x0A, 0x91, 0x3F, 0x06, 0x66, 0x65, 0x64, 0x73,
     0x72, 0x80, 0x25, 0x1F, 0x03, 0x67, 0x70, 0x76, 0x77, 0x58, 0x5A, 0x57, 0x59, 0x5B, 0x56, 0x11, 0x10, 0x8F, 0x5C,
     0x39, 0x94, 0x96, 0x2B, 0x5D, 0x2A, 0x8D, 0x61, 0x62, 0x8A, 0x89, 0x15, 0x1D, 0x4F, 0x63, 0x6F, 0x2D, 0x4D, 0x6E,
@@ -59,7 +95,10 @@ static u8 gPokedexAlphabeticalOrder[] = {
     0x1C, 0x37, 0x43, 0x41, 0x8E, 0x21, 0x22, 0x23, 0x13, 0x4E, 0x35, 0x34, 0x45, 0x42, 0x93, 0x75, 0x74, 0x0C, 0x84,
     0x40, 0x36, 0x79, 0x2C, 0x7A, 0x83, 0x82, 0x54, 0x78, 0x3B, 0x20, 0x4A, 0x68, 0x85, 0x49, 0x32, 0x44, 0x16, 0x1E,
     0x88, 0x3A, 0x26, 0x6D, 0x5E, 0x5F, 0x3C, 0x3D, 0x01, 0x7F, 0x05, 0x95, 0x53, 0x1B, 0x19, 0x1A, 0x52, 0x51
+
+#endif
 };
+#endif
 
 void Pokedex_DrawCheckboxIcon(s32 arg0, s32 arg1, s32 arg2) {
     gDPPipeSync(gDisplayListHead++);
@@ -146,13 +185,16 @@ s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2
     return 0;
 }
 
-void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4,
-                                unk_func_888044BC_038_02C* arg5) {
+void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, unk_func_888044BC_038_02C* arg5) {
     static Color_RGBA8 D_888081E8 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_888081EC[] = { { 0x1E, 0x1E, 0x64, 0xFF }, { 0x3C, 0x50, 0xA0, 0xFF } };
     static Color_RGBA8 D_888081F4 = { 0x46, 0x46, 0xAA, 0xFF };
 
+#if defined(VERSION_JP)
+    UNUSED s32 pad;
+#else
     UNUSED s32 pad[2];
+#endif
     u32 sp74;
     s32 sp70;
     UNUSED s32 pad2;
@@ -160,8 +202,19 @@ void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3,
     s32 var_ra;
     s32 var_t2;
     s32 var_t3;
+#if defined(VERSION_JP)
+    UNUSED s32 pad3;
+#endif
 
+#if defined(VERSION_JP)
+    if (arg5->unk_8C != 0) {
+        sp74 = func_80022A88(arg3 + 1) - 1;
+    } else {
+        sp74 = arg3;
+    }
+#else
     sp74 = *arg2 - 1;
+#endif
     sp70 = GbSave_GetSpeciesProgressLevel(arg5->unk_88, sp74 + 1);
 
     gDPPipeSync(gDisplayListHead++);
@@ -214,12 +267,21 @@ void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3,
 
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(D_888081E8.r, D_888081E8.g, D_888081E8.b, D_888081E8.a);
+#if defined(VERSION_JP)
+    Font_SetActive(8, -2);
+#else
     Font_SetActive(8, 0);
+#endif
     Font_Printf(arg0 + 0x10, arg1 + 6, "%03d", sp74 + 1);
 
     if (sp70 != 0) {
+#if defined(VERSION_JP)
+        Font_SetActive(0x10, -2);
+        Font_Printf(arg0 + 0x76, arg1 + 4, D_8006FF00[sp74].name);
+#else
         Font_SetActive(0x10, 0);
         Font_Printf(arg0 + 0x76, arg1 + 4, Text_GetString(NULL, 0, sPokemonNameTable, sp74));
+#endif
     }
 
     Font_EndTexturedTextRendering();
@@ -227,9 +289,11 @@ void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3,
 
 void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4,
                                     MemoryPool* arg5) {
+#if !defined(VERSION_JP)
     s32 i;
     unk_D_8006FF00** sp40;
     unk_D_8006FF00** sp3C;
+#endif
 
     ((func88506DCC)Memmap_GetFragmentVaddr(WidgetTree_InitScrollableGrid))(arg0, arg1, arg2, Pokedex_DrawSpeciesListRow,
                                                                            0xF8, 0x20, arg3, arg5);
@@ -239,6 +303,11 @@ void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s
     arg0->unk_00.unk_44->unk_00.unk_14.unk_00 = 0xF6;
     arg0->unk_00.unk_44->unk_00.unk_14.unk_02 = 0x1E;
 
+#if defined(VERSION_JP)
+    TableView_Initialize(&arg0->unk_70, (unk_func_88201DA0_034*)D_8006FF00, sizeof(unk_D_8006FF00), 151, 151);
+    ((func88506F8C)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridStridedPage))(&arg0->unk_00, &arg0->unk_70,
+                                                                                      arg5);
+#else
     sp40 = mem_pool_alloc(arg5, sizeof(unk_D_8006FF00*) * 151);
     for (i = 0; i < 151; i++) {
         sp40[i] = &D_8006FF00[i];
@@ -255,23 +324,45 @@ void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s
 
     ((func88506F1C)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridPage))(&arg0->unk_00, &arg0->unk_70, arg5);
 
+#endif
+
     arg0->unk_88 = arg4;
     arg0->unk_8C = 0;
 }
 
 s32 Pokedex_GetSelectedSpeciesIndex(unk_func_888044BC_038_02C* arg0) {
+#if defined(VERSION_JP)
+    s32 index;
+
+    if (arg0->unk_8C != 0) {
+        index = func_80022A88(arg0->unk_00.unk_38 + 1) - 1;
+    } else {
+        index = arg0->unk_00.unk_38;
+    }
+    return index;
+#else
     return arg0->unk_00.unk_2C->unk_00[arg0->unk_00.unk_38]->unk_00 - 1;
+#endif
 }
 
 void Pokedex_ToggleListSortOrder(unk_func_888044BC_038_02C* arg0) {
     s32 sp24;
     s32 tmp = arg0->unk_00.unk_34[arg0->unk_00.unk_38] & 2;
+#if !defined(VERSION_JP)
     unk_func_888044BC_038_02C_02C_000* ptr;
+#endif
 
     if (tmp) {
         arg0->unk_00.unk_34[arg0->unk_00.unk_38] &= ~2;
     }
 
+#if defined(VERSION_JP)
+    if (arg0->unk_8C != 0) {
+        sp24 = func_80022A88(arg0->unk_00.unk_38 + 1) - 1;
+    } else {
+        sp24 = func_80022A98(arg0->unk_00.unk_38 + 1) - 1;
+    }
+#else
     ptr = arg0->unk_00.unk_2C->unk_00[arg0->unk_00.unk_38];
     if (arg0->unk_8C != 0) {
         sp24 = ptr->unk_00 - 1;
@@ -280,6 +371,7 @@ void Pokedex_ToggleListSortOrder(unk_func_888044BC_038_02C* arg0) {
         sp24 = gPokedexAlphabeticalOrder[ptr->unk_00 - 1];
         ((func88506EE4)Memmap_GetFragmentVaddr(WidgetTree_BindScrollableGridData))(arg0, &arg0->unk_7C);
     }
+#endif
 
     ((func88507B80)Memmap_GetFragmentVaddr(WidgetTree_SetScrollableGridIndexPreserveScroll))(arg0, sp24);
 
@@ -306,6 +398,8 @@ s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1
     return arg0->unk_2C->unk_00.unk_00.unk_20(&arg0->unk_2C->unk_00.unk_00, arg1);
 }
 
+// JP draws the panel text without frames.
+#if !defined(VERSION_JP)
 void Pokedex_DrawListSelectionFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4) {
     gDPPipeSync(gDisplayListHead++);
 
@@ -336,6 +430,7 @@ void Pokedex_DrawListSelectionFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Colo
     gSPTextureRectangle(gDisplayListHead++, arg0 << 2, ((arg1 + arg3) - 8) << 2, (arg0 + 8) << 2, (arg1 + arg3) << 2,
                         G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
 }
+#endif
 
 void Pokedex_InitTrainerInfoWidget(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_888044BC_03C_02C));
@@ -352,6 +447,35 @@ void Pokedex_LoadTrainerInfo(unk_func_888044BC_03C_02C* arg0, s32 arg1) {
     arg0->unk_44 = GbSave_CountSpeciesProgressField06(arg1);
 }
 
+#if defined(VERSION_JP)
+void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2) {
+    static Color_RGBA8 D_888081F8 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xCC, 0x80, 0x80, 0xFF);
+    Font_SetActive(0x10, -2);
+    Font_Printf(arg1 + 8, arg2 + 6, arg0->unk_30);
+    Font_SetActive(0x10, -2);
+    Font_Printf(arg1 + 8, arg2 + 0x24, "ID/%05d", arg0->unk_2C);
+    Font_SetActive(8, -1);
+    Gfx_SetPrimColor(0x80, 0xFF, 0x80, 0xFF);
+    // "Seen"
+    Font_Printf(arg1 + 8, arg2 + 0x4C, "みつけたかず");
+    // "Caught"
+    Font_Printf(arg1 + 8, arg2 + 0x64, "つかまえたかず");
+    // "Owned"
+    Font_Printf(arg1 + 8, arg2 + 0x7C, "もっているかず");
+    Font_DisableTwoCycleTexturing();
+    Gfx_SetEnvColor(D_888081F8.r, D_888081F8.g, D_888081F8.b, D_888081F8.a);
+    Font_SetActive(8, -2);
+    Font_Printf(arg1 + 0x9A, arg2 + 0x4C, "%3d", arg0->unk_3C);
+    Font_Printf(arg1 + 0x9A, arg2 + 0x64, "%3d", arg0->unk_40);
+    Font_Printf(arg1 + 0x9A, arg2 + 0x7C, "%3d", arg0->unk_44);
+    Font_EndTexturedTextRendering();
+}
+#else
 void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_888081F8 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_888081FC = { 0x00, 0x00, 0x00, 0xFF };
@@ -385,6 +509,7 @@ void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 
     Font_Printf((arg1 - Font_MeasureTextExtent(0, 0, sp38)) + 0xB4, arg2 + 0x7C, sp38);
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void Pokedex_BuildTrainerInfoPanel(unk_func_888044BC_03C* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4) {
     static Color_RGBA8 D_88808200 = { 0x1E, 0x1E, 0x64, 0xFF };
@@ -416,6 +541,42 @@ void Pokedex_InitSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 a
     arg0->unk_2C = 0;
 }
 
+#if defined(VERSION_JP)
+s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2) {
+    static Color_RGBA8 D_88808204 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, 0);
+    Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF);
+    // "List order"
+    Font_Printf(arg1 + 0x48, arg2 + 0xA, "もくじのならび");
+    Font_SetActive(0x10, 0);
+
+    Gfx_SetEnvColor(D_88808204.r, D_88808204.g, D_88808204.b, (arg0->unk_2C != 0) ? 0xFF : 0x4D);
+    // "Kana order"
+    Font_Printf(arg1 + 0x3A, arg2 + 0x24, "アイウエオじゅん");
+
+    Gfx_SetEnvColor(D_88808204.r, D_88808204.g, D_88808204.b, (arg0->unk_2C != 0) ? 0x4D : 0xFF);
+    // "Number order"
+    Font_Printf(arg1 + 0x3A, arg2 + 0x40, "ばんごうじゅん");
+    Font_EndTexturedTextRendering();
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+
+    gDPLoadTextureBlock(gDisplayListHead++, D_4003AD0, G_IM_FMT_RGBA, G_IM_SIZ_16b, 20, 20, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
+                        G_TX_NOLOD);
+    gSPTextureRectangle(gDisplayListHead++, (arg1 + 0x1C) << 2, (arg2 + 0x32) << 2, (arg1 + 0x2F) << 2,
+                        (arg2 + 0x45) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+
+    gDPPipeSync(gDisplayListHead++);
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+}
+#else
 s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88808204 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
@@ -463,6 +624,8 @@ s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 ar
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 }
 
+#endif
+
 void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0) {
     arg0->unk_2C = !arg0->unk_2C;
 }
@@ -470,8 +633,16 @@ void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0) {
 void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4,
                                unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88808208 = { 0xF0, 0xF0, 0xF0, 0xFF };
+#if !defined(VERSION_JP)
     static Color_RGBA8 D_8880820C = { 0x00, 0x00, 0x00, 0xFF };
+#endif
 
+#if defined(VERSION_JP)
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(D_88808208.r, D_88808208.g, D_88808208.b, D_88808208.a);
+    Font_SetActive(8, 0);
+    Font_Printf(arg0 + 8, arg1 + 2, arg2);
+#else
     UNUSED s32 pad;
 
     Pokedex_DrawListSelectionFrame(arg0 + 8, arg1 + 2, arg5->unk_3C - 0x10, arg5->unk_3E - 4, D_8880820C);
@@ -479,13 +650,28 @@ void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, 
     Gfx_SetEnvColor(D_88808208.r, D_88808208.g, D_88808208.b, D_88808208.a);
     Font_SetActive(8, 0);
     Font_Printf(((arg5->unk_3C - Font_MeasureTextExtent(0, 0, arg2)) / 2) + arg0, arg1 + 2, arg2);
+#endif
     Font_EndTexturedTextRendering();
 }
 
 void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
     static Color_RGBA8 D_88808210 = { 0x1E, 0x1E, 0x64, 0xFF };
+#if defined(VERSION_JP)
+    static char* sEntryMenuItems[] = {
+        // "View data"
+        "データをみる",
+        // "Cry"
+        "なきごえ",
+        // "View habitat"
+        "ぶんぷをみる",
+        // "Quit"
+        "やめる",
+    };
+#endif
 
+#if !defined(VERSION_JP)
     UNUSED s32 pad;
+#endif
     unk_func_885012A4* sp58;
     UNUSED s32 pad2[4];
 
@@ -501,6 +687,17 @@ void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg
     arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_888044BC_040_030));
     Pokedex_InitSortOrderLabel(arg0->unk_30, 0, 0);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp58->unk_00.unk_00, &arg0->unk_30->unk_00.unk_00);
+#if defined(VERSION_JP)
+    PointerList_Initialize(&arg0->unk_38, (void**)sEntryMenuItems, ARRAY_COUNT(sEntryMenuItems),
+                           ARRAY_COUNT(sEntryMenuItems));
+
+    arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_88200FA0_030_030));
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_34, 0x120, 4, Pokedex_DrawEntryMenuItem,
+                                                                      0x88, 0x18, 4, 1, arg3);
+    arg0->unk_34->unk_50 = -4;
+    arg0->unk_34->unk_52 = -2;
+    arg0->unk_34->unk_44->unk_00.unk_14.unk_00 = 0x90;
+#else
     PointerList_Allocate(&arg0->unk_38, 4, arg3);
     PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 3), 0);
     PointerList_Insert(&arg0->unk_38, Text_GetString(NULL, 0, sPokedexMenuText, 4), 1);
@@ -513,6 +710,7 @@ void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg
     arg0->unk_34->unk_50 = -4;
     arg0->unk_34->unk_52 = -2;
     arg0->unk_34->unk_44->unk_00.unk_14.unk_00 = 0x78;
+#endif
     arg0->unk_34->unk_44->unk_00.unk_14.unk_02 = 0x1C;
     ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_34, &arg0->unk_38, arg3);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp58->unk_00.unk_00, &arg0->unk_34->unk_00.unk_00);
@@ -533,6 +731,53 @@ void Pokedex_SetDataPanelSpecies(unk_func_888044BC_044_02C* arg0, s32 arg1) {
     arg0->unk_2C = arg1;
 }
 
+#if defined(VERSION_JP)
+// Draws a value stored in tenths, such as a height in decimeters, as "12.3".
+void Pokedex_DrawTenthsValue(s32 arg0, s32 arg1, s32 arg2) {
+    Font_Printf(arg0, arg1, "%3d.", arg2 / 10);
+    Font_DrawCharAt(arg0 + 0x43, arg1, (arg2 % 10) + '0');
+}
+
+s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
+    static Color_RGBA8 D_88808214 = { 0xF0, 0xF0, 0xF0, 0xFF };
+
+    unk_D_8006FF00* sp54 = &D_8006FF00[arg0->unk_2C];
+
+    Font_BeginTranslucentTextRendering();
+    Font_EnableTwoCycleTexturing();
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
+    Font_SetActive(0x10, -2);
+    Font_Printf(arg1 + 8, arg2 + 6, "No.");
+    Font_Printf(arg1 + 0x40, arg2 + 6, "%03d", sp54->unk_00);
+    Font_SetActive(0x10, -1);
+    Font_Printf(arg1 + 8, arg2 + 0x24, sp54->name);
+    Font_SetActive(8, -1);
+    Gfx_SetPrimColor(0x80, 0xFF, 0x80, 0xFF);
+    // "%s Pokémon", where %s is the species category.
+    Font_Printf(arg1 + 8, arg2 + 0x4C, "%sポケモン", sp54->unk_08);
+    // "Height"
+    Font_Printf(arg1 + 8, arg2 + 0x64, "たかさ");
+    // "Weight"
+    Font_Printf(arg1 + 8, arg2 + 0x7C, "おもさ");
+    Font_DisableTwoCycleTexturing();
+    Font_SetActive(8, -1);
+    Gfx_SetEnvColor(D_88808214.r, D_88808214.g, D_88808214.b, D_88808214.a);
+    if (GbSave_GetSpeciesProgressLevel(D_88826938, sp54->unk_00) >= 2) {
+        Pokedex_DrawTenthsValue(arg1 + 0x54, arg2 + 0x64, sp54->unk_0D);
+        Pokedex_DrawTenthsValue(arg1 + 0x54, arg2 + 0x7C, sp54->unk_0E);
+    } else {
+        Font_Printf(arg1 + 0x54, arg2 + 0x64, "???");
+        Font_Printf(arg1 + 0x54, arg2 + 0x7C, "???");
+    }
+    Font_Printf(arg1 + 0xAA, arg2 + 0x64, "m");
+    Font_Printf(arg1 + 0xAA, arg2 + 0x7C, "kg");
+    Font_EndTexturedTextRendering();
+    return 0;
+}
+#else
+// The translated releases show metric heights and weights, both with one decimal place.
+#if !(defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT))
 void Pokedex_FormatHeightString(s32 arg0, s32 arg1, s32 arg2) {
     char sp2C[12];
     UNUSED s32 pad[2];
@@ -540,6 +785,7 @@ void Pokedex_FormatHeightString(s32 arg0, s32 arg1, s32 arg2) {
     sprintf(sp2C, "%d%s%02d", arg2 / 100, Text_GetString(NULL, 0, sPokedexMenuText, 0x11), arg2 % 100);
     Font_Printf(arg0 - Font_MeasureTextExtent(0, 0, sp2C), arg1, sp2C);
 }
+#endif
 
 void Pokedex_FormatWeightString(s32 arg0, s32 arg1, s32 arg2) {
     char sp1C[12];
@@ -557,7 +803,11 @@ s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
     char* sp4C;
     char* sp48;
     s32 sp44;
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    UNUSED s32 pad;
+#else
     char sp34[16];
+#endif
 
     Pokedex_DrawListSelectionFrame(arg1 + 0xC, arg2 + 0x4C, 0xC0, 0x14, D_88808218);
     Pokedex_DrawListSelectionFrame(arg1 + 0xC, arg2 + 0x64, 0xC0, 0x14, D_88808218);
@@ -591,6 +841,16 @@ s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
     Font_Printf(arg1 + sp44, arg2 + 0x64, sp4C);
     Font_Printf(arg1 + sp44, arg2 + 0x7C, sp48);
     if (GbSave_GetSpeciesProgressLevel(D_88826938, sp54->unk_00) >= 2) {
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+        Pokedex_FormatWeightString(arg1 + sp44, arg2 + 0x64, sp54->unk_0D);
+        Pokedex_FormatWeightString(arg1 + sp44, arg2 + 0x7C, sp54->unk_0E);
+    } else {
+        sp4C = "???";
+        Font_Printf((arg1 + sp44) - Font_MeasureTextExtent(0, 0, sp4C), arg2 + 0x64, sp4C);
+        sp48 = "???";
+        Font_Printf((arg1 + sp44) - Font_MeasureTextExtent(0, 0, sp48), arg2 + 0x7C, sp48);
+    }
+#else
         Pokedex_FormatHeightString(arg1 + sp44, arg2 + 0x64, D_8007596C[sp54->unk_00].unk_00);
         Pokedex_FormatWeightString(arg1 + sp44, arg2 + 0x7C, D_8007596C[sp54->unk_00].unk_02);
     } else {
@@ -599,9 +859,12 @@ s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2) {
         sp48 = "???";
         Font_Printf((arg1 + sp44) - Font_MeasureTextExtent(0, 0, sp48), arg2 + 0x7C, sp48);
     }
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
+
+#endif
 
 void Pokedex_BuildDataPanel(unk_func_888044BC_044* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
     static Color_RGBA8 D_8880821C = { 0x1E, 0x1E, 0x64, 0xFF };
@@ -631,9 +894,11 @@ void Pokedex_BuildFlavorTextPanel(unk_func_888044BC_048* arg0, s32 arg1, s32 arg
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(&arg0->unk_00, sizeof(unk_func_888044BC_048));
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
+#if !defined(VERSION_JP)
     // clang-format off
     arg0->unk_00.unk_14.unk_00 = 0x1D8; arg0->unk_00.unk_14.unk_02 = 0x68;
     // clang-format on
+#endif
 
     sp34 = mem_pool_alloc(arg3, sizeof(unk_func_885012A4));
     ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(sp34, 0, 0, 0x1D8, 0x68, D_88808220);
@@ -641,11 +906,23 @@ void Pokedex_BuildFlavorTextPanel(unk_func_888044BC_048* arg0, s32 arg1, s32 arg
 
     arg0->unk_2C = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_2C, 0x11, 0xC, 0, 0x10);
+#if defined(VERSION_JP)
+    arg0->unk_2C->unk_38 = -1;
+#endif
     arg0->unk_2C->unk_3C = 0x1C;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(&sp34->unk_00.unk_00, &arg0->unk_2C->unk_00.unk_00);
 }
 
 void Pokedex_SetFlavorText(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2) {
+#if defined(VERSION_JP)
+    UNUSED s32 pad;
+
+    if (GbSave_GetSpeciesProgressLevel(arg1, D_8006FF00[arg2].unk_00) >= 2) {
+        arg0->unk_2C->unk_40 = (char*)D_8006FF00[arg2].unk_18;
+    } else {
+        arg0->unk_2C->unk_40 = "\n        ???";
+    }
+#else
     UNUSED s32 pad;
     char* sp18;
 
@@ -657,6 +934,7 @@ void Pokedex_SetFlavorText(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2) {
     arg0->unk_2C->unk_00.unk_10.unk_00 = (arg0->unk_00.unk_14.unk_00 - Font_MeasureTextExtent(0x10, 0, sp18)) / 2;
     arg0->unk_2C->unk_00.unk_10.unk_02 = 0xC;
     arg0->unk_2C->unk_40 = sp18;
+#endif
 }
 
 void Pokedex_InitPreviewWidget(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2) {
@@ -673,7 +951,9 @@ void Pokedex_SetPreviewSpecies(unk_func_888044BC_04C_02C* arg0, s32 arg1) {
 
 s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2) {
     static unk_func_88500020 D_88808224 = { 256, 192, 248, D_88808248 };
+#if !defined(VERSION_JP)
     UNUSED static u32 D_88808234[] = { 0, 0, 0 };
+#endif
     UNUSED static Gfx D_88808240[] = {
         gsSPEndDisplayList(),
     };
@@ -6180,7 +6460,9 @@ s32 Pokedex_RedrawAreaMapTransition(u8 arg0) {
 }
 
 void Pokedex_EnterAreaMapScreen(void) {
+#if !defined(VERSION_JP)
     s32 sp2C;
+#endif
 
     D_88826940->unk_38->unk_00.unk_24(&D_88826940->unk_38->unk_00, 0x100);
     D_88826940->unk_40->unk_00.unk_24(&D_88826940->unk_40->unk_00, 0x100);
@@ -6189,9 +6471,14 @@ void Pokedex_EnterAreaMapScreen(void) {
     StageLoader_RunFrames(2);
     StageContext_SaveAndSwitch(D_88826928);
     StageLoader_RunFrames(2);
+#if defined(VERSION_JP)
+    func_88807D04(Pokedex_GetSelectedSpeciesIndex(D_88826940->unk_38->unk_2C) + 1, D_88826930, 0x70800, D_88826934,
+                  0x4B000);
+#else
     sp2C = Pokedex_GetSelectedSpeciesIndex(D_88826940->unk_38->unk_2C) + 1;
     func_88807D04(sp2C, D_88826930, 0x70800, D_88826934, 0x4B000, Text_GetString(NULL, 0, sPokemonNameTable, sp2C - 1),
                   sPokedexAreaText);
+#endif
     StageFade_Start(8);
     BgStage_RunUntilCondition(0xA, Pokedex_DrawAreaMapFrame);
 }
@@ -6327,12 +6614,14 @@ s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     sp28 = ASSET_LOAD(0, fragment29_misc_3, 0);
 
     sp2C = mem_pool_try_init(0x8000, 0);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sPokedexMenuText = Text_GetStringTable(8);
     sPokemonNameTable = Text_GetStringTable(0x24);
     sPokedexEntryText = Text_GetStringTable(0xA);
     sSpeciesCategoryTable = Text_GetStringTable(0x28);
     sPokedexAreaText = Text_GetStringTable(9);
+#endif
     D_888269A0 = GbSave_GetActivePort();
 
     if (D_888269A0 != -1) {

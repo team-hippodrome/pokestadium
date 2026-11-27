@@ -3,6 +3,21 @@
 #include "src/libnumus/player.h"
 #include "src/3D140.h"
 
+// JP still defines these in gb_audio_render.
+#if !defined(VERSION_JP)
+s32 D_80078E60 = 0;
+s32 D_80078E64 = 0;
+s32 D_80078E68 = 0;
+s32 D_80078E6C = 0; // unreferenced
+#endif
+
+// The translated releases play every volume step 0x1000 quieter.
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+#define VOLUME_STEP_DROP 0x1000
+#else
+#define VOLUME_STEP_DROP 0
+#endif
+
 void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
     s32 var_a1;
 
@@ -12,27 +27,27 @@ void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
             break;
 
         case 1:
-            var_a1 = 0x3FFF;
+            var_a1 = 0x3FFF - VOLUME_STEP_DROP;
             break;
 
         case 2:
-            var_a1 = 0x4FFF;
+            var_a1 = 0x4FFF - VOLUME_STEP_DROP;
             break;
 
         case 3:
-            var_a1 = 0x5FFF;
+            var_a1 = 0x5FFF - VOLUME_STEP_DROP;
             break;
 
         case 4:
-            var_a1 = 0x6FFF;
+            var_a1 = 0x6FFF - VOLUME_STEP_DROP;
             break;
 
         case 5:
-            var_a1 = 0x7FFF;
+            var_a1 = 0x7FFF - VOLUME_STEP_DROP;
             break;
 
         default:
-            var_a1 = 0x6FFF;
+            var_a1 = 0x6FFF - VOLUME_STEP_DROP;
             break;
     }
 

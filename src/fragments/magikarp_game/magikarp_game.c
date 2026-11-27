@@ -38,21 +38,28 @@ static unk_D_86002920 D_86002920[] = {
 };
 
 static s16 D_86002950[][6] = {
-    { 0xFFFF, 0xFFE2, 0xFFFF, 0xFFF5, 0x0000, 0x0007 }, { 0x0000, 0x0019, 0x000D, 0x000D, 0x000B, 0x000C },
-    { 0x000F, 0x000F, 0x000D, 0x000E, 0x0011, 0x0011 }, { 0x000F, 0x0010, 0x0013, 0x0013, 0x0011, 0x0012 },
-    { 0xA5B3, 0xA5A4, 0xA5AD, 0xA5F3, 0xA5B0, 0xA4CE }, { 0xA4CF, 0xA4CD, 0xA4EB, 0xA4C7, 0xA5DD, 0xA5F3 },
-    { 0x0000, 0x0000, 0xA1A1, 0xA1A1, 0xA1A1, 0xA1A1 }, { 0xA4C7, 0xA1A1, 0xA5B8, 0xA5E3, 0xA5F3, 0xA5D7 },
-    { 0xA4B7, 0xA4C6, 0xA1A1, 0xA4A6, 0xA4A8, 0xA4CE }, { 0xA5AB, 0xA5A6, 0xA5F3, 0xA5BF, 0xA1BC, 0xA4F2 },
-    { 0x0000, 0x0000, 0xA4BF, 0xA4AF, 0xA4B5, 0xA4F3 }, { 0xA1A1, 0xA4BF, 0xA4BF, 0xA4A4, 0xA4BF, 0xA4D2 },
-    { 0xA4C8, 0xA4AC, 0xA1A1, 0xA4AB, 0xA4C1, 0xA1A3 }, { 0x0000, 0x0000, 0xA1A1, 0xA1A1, 0xA1A1, 0xA1A1 },
-    { 0xA4F2, 0xA1A1, 0xA4CA, 0xA4AC, 0xA4AF, 0xA1A1 }, { 0xA4AA, 0xA4B5, 0xA4CA, 0xA4A4, 0xA4C8, 0xA1A1 },
-    { 0xA5AB, 0xA5A6, 0xA5F3, 0xA5BF, 0xA1BC, 0xA4DE }, { 0xA4C7, 0x0000, 0xA4C8, 0xA4C9, 0xA4AB, 0xA4CA },
-    { 0xA4A4, 0xA4E8, 0xA1A3, 0x0000, 0xA4C1, 0xA4E3 }, { 0xA4AF, 0xA4C1, 0xA4B9, 0xA4EB, 0xA1A1, 0xA5BF },
-    { 0xA5A4, 0xA5DF, 0xA5F3, 0xA5B0, 0xA4CB, 0xA4A2 }, { 0xA4EF, 0xA4BB, 0xA4C6, 0xA1A1, 0xA5C6, 0xA5F3 },
-    { 0xA5DD, 0xA4E8, 0xA4AF, 0x0000, 0xA5DC, 0xA5BF }, { 0xA5F3, 0xA4F2, 0xA4AA, 0xA4B9, 0xA4CE, 0xA4AC },
-    { 0xA1A1, 0xA4B8, 0xA4E7, 0xA4A6, 0xA4BA, 0xA4CB }, { 0xA5B8, 0xA5E3, 0xA5F3, 0xA5D7, 0xA4B9, 0xA4EB },
-    { 0xA5B3, 0xA5C4, 0xA4C0, 0xA1A3, 0x0000, 0x0000 },
+    { 0xFFFF, 0xFFE2, 0xFFFF, 0xFFF5, 0x0000, 0x0007 },
+    { 0x0000, 0x0019, 0x000D, 0x000D, 0x000B, 0x000C },
+    { 0x000F, 0x000F, 0x000D, 0x000E, 0x0011, 0x0011 },
+    { 0x000F, 0x0010, 0x0013, 0x0013, 0x0011, 0x0012 },
 };
+
+// The Japanese tutorial text. Only the JP build prints it, but every version keeps it in data.
+
+// "Magikarp's Splash Jump"
+static char sTitleText[] = "コイキングのはねるでポン";
+// "Jump with [A Button] and hit the counter above."
+static char sTutorialLine0[] = "　　　　で　ジャンプして　うえのカウンターを";
+// "The one who hits it the most wins."
+static char sTutorialLine1[] = "たくさん　たたいたひとが　かち。";
+// "If you don't hold [A Button] long enough,"
+static char sTutorialLine2[] = "　　　　を　ながく　おさないと　カウンターまで";
+// "you won't reach the counter."
+static char sTutorialLine3[] = "とどかないよ。";
+// "Pressing the button in time with your landing"
+static char sTutorialLine4[] = "ちゃくちする　タイミングにあわせて　テンポよく";
+// "is the trick to jumping well."
+static char sTutorialLine5[] = "ボタンをおすのが　じょうずにジャンプするコツだ。";
 
 static f32 D_86002A94 = 50.0f;
 
@@ -355,8 +362,10 @@ void MagikarpGame_DrawOverlay(s32 arg0) {
     Font_BeginTranslucentTextRendering();
 
     switch (arg0) {
+#if !defined(VERSION_JP)
         s32 sp50;
         s32 sp4C;
+#endif
         char* temp_s0_2;
 
         case 1:
@@ -365,6 +374,37 @@ void MagikarpGame_DrawOverlay(s32 arg0) {
             break;
 
         case 0:
+#if defined(VERSION_JP)
+            Font_EnableTwoCycleTexturing();
+            Font_SetActive(2, -2);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xF9, 0xF4, 0, 0xFF);
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, sTitleText) / 2), 0x20, sTitleText);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x28, 0x34, sTutorialLine0);
+            Font_Printf(0x28, 0x40, sTutorialLine1);
+            Font_Printf(0x28, 0x58, sTutorialLine2);
+            Font_Printf(0x28, 0x64, sTutorialLine3);
+            Font_Printf(0x28, 0x7C, sTutorialLine4);
+            Font_Printf(0x28, 0x88, sTutorialLine5);
+            Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+            Font_Printf(0x28, 0x34, MINIGAME_SHARED_TEXT_A_BUTTON);
+            Font_Printf(0x28, 0x58, MINIGAME_SHARED_TEXT_A_BUTTON);
+            Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0x50, 0x50, 0xFF, 0xFF);
+            Font_Printf(0xA2, 0xB2, MINIGAME_SHARED_TEXT_JUMP);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0x80, 0x80, 0xFF);
+            Font_Printf(0xA2, 0xC8, MINIGAME_SHARED_TEXT_START_GAME);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetPrimColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Font_Printf(0x84, 0xB2, MINIGAME_SHARED_TEXT_ELLIPSIS);
+            Font_Printf(0x84, 0xC8, MINIGAME_SHARED_TEXT_ELLIPSIS);
+            Font_DisableTwoCycleTexturing();
+            break;
+#else
             Font_EnableTwoCycleTexturing();
             Font_SetActive(2, 0);
             Font_SetLineHeight(0xC);
@@ -409,14 +449,20 @@ void MagikarpGame_DrawOverlay(s32 arg0) {
             Font_Printf(0x8B, 0xC8, Text_GetString(NULL, 0, gMinigameText, 0x5C));
             Font_DisableTwoCycleTexturing();
             break;
+#endif
 
         case 4:
             Font_EnableTwoCycleTexturing();
             Font_SetActive(0x20, -2);
             Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
             Gfx_SetPrimColor(0x1E, 0x1E, 0xFF, 0xFF);
+#if defined(VERSION_JP)
+            Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, MINIGAME_SHARED_TEXT_DRAW) / 2), 0x64,
+                        MINIGAME_SHARED_TEXT_DRAW);
+#else
             Font_Printf(0xA0 - (Text_MeasureStringWidth(D_86003B7C, Text_GetString(NULL, 0, gMinigameText, 0x5A)) / 2),
                         0x64, Text_GetString(NULL, 0, gMinigameText, 0x5A));
+#endif
             Font_DisableTwoCycleTexturing();
             break;
     }
@@ -903,13 +949,13 @@ void MagikarpGame_Play(void) {
             MagikarpGame_UpdateSplashRipple();
 
             D_86003B58++;
-            if (D_86003B58 >= 0x258) {
+            if (D_86003B58 >= NTSC_PAL(600, 500)) {
                 MiniSound_DispatchCommand(0x20009, 0, 0);
                 var_s6 = 0;
             } else {
-                temp_v1 = 0x258 - D_86003B58;
-                if ((temp_v1 % 30) == 0) {
-                    temp_lo = temp_v1 / 30;
+                temp_v1 = NTSC_PAL(600, 500) - D_86003B58;
+                if ((temp_v1 % NTSC_PAL(30, 25)) == 0) {
+                    temp_lo = temp_v1 / NTSC_PAL(30, 25);
                     if ((temp_lo < 6) && (temp_lo > 0)) {
                         MiniSound_DispatchCommand(0x2000A, 0, 0);
                         if (1) {}
@@ -1069,10 +1115,10 @@ void MagikarpGame_FadeOutLoop(void) {
     s32 i;
     s32 j;
 
-    Audio_FadeOutAll(30);
-    StageFade_StartFromTransparent(30);
+    Audio_FadeOutAll(NTSC_PAL(30, 25));
+    StageFade_StartFromTransparent(NTSC_PAL(30, 25));
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < NTSC_PAL(30, 25); i++) {
         MagikarpGame_ReadInputs();
 
         for (j = 0; j < 4; j++) {
@@ -1195,7 +1241,11 @@ s32 MagikarpGame_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
 
     main_pool_push_state('MINI');
 
+#if defined(VERSION_JP)
+    Gfx_InitDisplayListBuffers(0x10000, 0);
+#else
     Gfx_InitDisplayListBuffers(0x20000, 0);
+#endif
     sp24 = (StageContext*)StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_86003B7C = Font_Init(0x36, 0);
 

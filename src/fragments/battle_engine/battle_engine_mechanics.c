@@ -1428,7 +1428,11 @@ s32 Battle_CheckMonCanAct(void) {
 
     if ((sBattleUser->disabledMove != 0) && (sBattleUser->disabledMove == sBattleUser->usedMove)) {
         sBattleUser->immobilizedReason &= 0xFFEF;
+#if defined(VERSION_ES) || defined(VERSION_IT)
+        Text_SetStringToken(0x1D, Text_GetString(NULL, 0, sMoveNameTable, sBattleUser->usedMove - 1));
+#else
         Text_SetStringToken(0x1D, gMoveDisplayInfo[sBattleUser->usedMove - 1].unk_04);
+#endif
         Battle_QueueMessage(sBattleMessageQueues->buffer[1], 0xF);
         sBattleScene.scene->moveEffectKind = MOVE_PRESENTATION_UNABLE_TO_ACT;
         return 0;

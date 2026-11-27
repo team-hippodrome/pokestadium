@@ -249,8 +249,9 @@ void DisplayList_InitColorCycleBoxSegment(s32 arg0, DisplayListState* state) {
 
 /**
  * Writes the setup for the digit/name glyph plate: calls D_810041D0, sets the primitive alpha
- * from D_800AF770[5], the environment color, and loads the 4-bit texture at D_3008000. Resets
- * sDigitGlyphIndex so the following glyph callbacks start at the first digit.
+ * from D_800AF770[5], the environment color, and loads the 4-bit texture at D_3008000 (D_3000008
+ * in the Japanese segment 3 data). Resets sDigitGlyphIndex so the following glyph callbacks start
+ * at the first digit.
  */
 void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
     s32 temp_a3;
@@ -265,7 +266,11 @@ void DisplayList_BuildDigitDisplayBackground(Gfx* gfx) {
 #else
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xFB000000;    _gfx->words.w1 = 0x501E0AFF;    }
 #endif
+#if defined(VERSION_JP)
+    {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xFD700000;    _gfx->words.w1 = Util_ConvertAddrToVirtAddr(&D_3000008);    }
+#else
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xFD700000;    _gfx->words.w1 = Util_ConvertAddrToVirtAddr(&D_3008000);    }
+#endif
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xF5700000;    _gfx->words.w1 = 0x07094260;    }
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xE6000000;    _gfx->words.w1 = 0;    }
     {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xF3000000;    _gfx->words.w1 = 0x070FF200;    }
@@ -328,7 +333,7 @@ void DisplayList_BuildDigitOrGlyphSegment(Gfx* gfx) {
 #else
             sp34 = Text_GetString(0, 0, gVictoryPokemonNames, temp_t0);
 #endif
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             bzero(sNameBuffer, 0x1E);
             sprintf(sNameBuffer, "%s", sp34);
 #else

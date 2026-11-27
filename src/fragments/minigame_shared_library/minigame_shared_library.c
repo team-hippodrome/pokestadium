@@ -3,7 +3,7 @@
 #include "src/controller.h"
 
 u16 D_87B000C0 = 0;
-u16 D_87B000C4 = 0x0069;
+u16 D_87B000C4 = NTSC_PAL(0x0069, 0x0057);
 u8 D_87B000C8 = 0;
 u8 D_87B000CC = 0;
 u8 D_87B000D0 = 0;

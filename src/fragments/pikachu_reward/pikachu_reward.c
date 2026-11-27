@@ -608,7 +608,7 @@ s32 PikachuReward_ResolveMoveSlot(void) {
 }
 
 void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     s32 x;
 
 #endif
@@ -629,7 +629,7 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
     if (arg0 == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         x = (0xA8 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x12))) / 2;
         Font_Printf(x + 0x4C, 0x70, Text_GetString(NULL, 0, sPikachuSurfText, 0x12));
 #else
@@ -638,7 +638,7 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
         Font_EndTexturedTextRendering();
     } else {
         Font_SetLineHeight(0x10);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         Font_Printf(0x40, 0x8C, Text_GetString(NULL, 0, sPikachuSurfText, 0x13));
 #else
         Font_Printf(0x40, 0x84, Text_GetString(NULL, 0, sPikachuSurfText, 0x13));
@@ -647,7 +647,7 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
 
         if (arg0 == 2) {
             Font_SetActive(4, 0);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             x = (0xE0 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x14))) / 2;
             Font_Printf(x + 0x30, 0x64, Text_GetString(NULL, 0, sPikachuSurfText, 0x14));
 #else
@@ -655,7 +655,7 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
 #endif
         } else if (arg0 == 3) {
             Font_SetLineHeight(0x10);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             x = (0xE0 - Font_MeasureTextExtent(0, 0, Text_GetString(NULL, 0, sPikachuSurfText, 0x15))) / 2;
             Font_Printf(x + 0x30, 0x5C, Text_GetString(NULL, 0, sPikachuSurfText, 0x15));
 #else

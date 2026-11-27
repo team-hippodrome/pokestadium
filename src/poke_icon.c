@@ -433,8 +433,12 @@ s32 PokeIcon_AreSlotsIdle(unk_func_8001A024* arg0) {
 }
 
 void PokeIcon_OpenModelArchive(void) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_PAL_LATE)
+    D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x7FE000, NULL, 1, 1);
+#elif defined(VERSION_US_REV2)
     D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x81D000, NULL, 1, 1);
+#elif defined(VERSION_JP)
+    D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x818000, NULL, 1, 1);
 #else
     D_800ABE10.unk_A04.unk_10 = BinArchive_Open(0x820000, NULL, 1, 1);
 #endif

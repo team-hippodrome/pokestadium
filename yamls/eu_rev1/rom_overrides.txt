@@ -1,0 +1,665 @@
+# Reviewed rom.yaml lines that tools/port_version.py cannot generate: files built from
+# version-specific C. Each line is one generated line; the lines after "->" replace it.
+# The porter stops if a generated line is missing, so check overrides after US changes.
+
+# n64_logo: N64Logo_Main waits 12 frames before the fade-in (VERSION_PAL); the fragment's
+# sizes are those of US, so its .bss starts at the US address.
+- [0x271590, asm, fragments/n64_logo/n64_logo]
+-> - [0x271590, c, fragments/n64_logo/n64_logo]
+-> - {vram: 0x82000560, type: .bss, name: fragments/n64_logo/n64_logo}
+
+# clefairy_game: PAL frame counts and animation speed (NTSC_PAL).
+- [0x127B80, asm, fragments/clefairy_game/clefairy_game]
+-> - [0x127B80, c, fragments/clefairy_game/clefairy_game]
+- [0x12C1A0, data, fragments/clefairy_game/clefairy_game]
+-> - [0x12C1A0, .data, fragments/clefairy_game/clefairy_game]
+- [0x12CF20, rodata, fragments/clefairy_game/clefairy_game]
+-> - [0x12CF20, .rodata, fragments/clefairy_game/clefairy_game]
+- {vram: 0x86105480, type:  bss, name: fragments/clefairy_game/clefairy_game}
+-> - {vram: 0x86105480, type: .bss, name: fragments/clefairy_game/clefairy_game}
+
+# magikarp_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x120CC0, asm, fragments/magikarp_game/magikarp_game]
+-> - [0x120CC0, c, fragments/magikarp_game/magikarp_game]
+- [0x1235C0, data, fragments/magikarp_game/magikarp_game]
+-> - [0x1235C0, .data, fragments/magikarp_game/magikarp_game]
+- [0x123B20, rodata, fragments/magikarp_game/magikarp_game]
+-> - [0x123B20, .rodata, fragments/magikarp_game/magikarp_game]
+- {vram: 0x86002F30, type:  bss, name: fragments/magikarp_game/magikarp_game}
+-> - {vram: 0x86002F30, type: .bss, name: fragments/magikarp_game/magikarp_game}
+
+# rattata_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x12E1F0, asm, fragments/rattata_game/rattata_game]
+-> - [0x12E1F0, c, fragments/rattata_game/rattata_game]
+- [0x131A90, data, fragments/rattata_game/rattata_game]
+-> - [0x131A90, .data, fragments/rattata_game/rattata_game]
+- [0x131F90, rodata, fragments/rattata_game/rattata_game]
+-> - [0x131F90, .rodata, fragments/rattata_game/rattata_game]
+- {vram: 0x86203E30, type:  bss, name: fragments/rattata_game/rattata_game}
+-> - {vram: 0x86203E30, type: .bss, name: fragments/rattata_game/rattata_game}
+
+# drowzee_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x134930, asm, fragments/drowzee_game/drowzee_game]
+-> - [0x134930, c, fragments/drowzee_game/drowzee_game]
+- [0x1370D0, data, fragments/drowzee_game/drowzee_game]
+-> - [0x1370D0, .data, fragments/drowzee_game/drowzee_game]
+- {vram: 0x86404070, type:  bss, name: fragments/drowzee_game/drowzee_game}
+-> - {vram: 0x86404070, type: .bss, name: fragments/drowzee_game/drowzee_game}
+
+# dynamo_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x1391D0, asm, fragments/dynamo_game/dynamo_game]
+-> - [0x1391D0, c, fragments/dynamo_game/dynamo_game]
+- [0x13BDE0, data, fragments/dynamo_game/dynamo_game]
+-> - [0x13BDE0, .data, fragments/dynamo_game/dynamo_game]
+- [0x142430, rodata, fragments/dynamo_game/dynamo_game]
+-> - [0x142430, .rodata, fragments/dynamo_game/dynamo_game]
+- {vram: 0x865092F0, type:  bss, name: fragments/dynamo_game/dynamo_game}
+-> - {vram: 0x865092F0, type: .bss, name: fragments/dynamo_game/dynamo_game}
+
+# ekans_game: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x170B50, asm, fragments/ekans_game/ekans_game]
+-> - [0x170B50, c, fragments/ekans_game/ekans_game]
+- [0x1753C0, data, fragments/ekans_game/ekans_game]
+-> - [0x1753C0, .data, fragments/ekans_game/ekans_game]
+- {vram: 0x86C0E4E0, type:  bss, name: fragments/ekans_game/ekans_game}
+-> - {vram: 0x86C0E4E0, type: .bss, name: fragments/ekans_game/ekans_game}
+
+# sushi_game_144300: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x1445A0, asm, fragments/sushi_game/sushi_game_144300]
+-> - [0x1445A0, c, fragments/sushi_game/sushi_game_144300]
+- [0x14B250, data, fragments/sushi_game/sushi_game_144300]
+-> - [0x14B250, .data, fragments/sushi_game/sushi_game_144300]
+- [0x14B900, rodata, fragments/sushi_game/sushi_game_144300]
+-> - [0x14B900, .rodata, fragments/sushi_game/sushi_game_144300]
+- {vram: 0x868074F0, type:  bss, name: fragments/sushi_game/sushi_game_144300}
+-> - {vram: 0x868074F0, type: .bss, name: fragments/sushi_game/sushi_game_144300}
+
+# sushi_game_1462A0: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x146540, asm, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x146540, c, fragments/sushi_game/sushi_game_1462A0]
+- [0x14B510, data, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x14B510, .data, fragments/sushi_game/sushi_game_1462A0]
+- [0x14B940, rodata, fragments/sushi_game/sushi_game_1462A0]
+-> - [0x14B940, .rodata, fragments/sushi_game/sushi_game_1462A0]
+- {vram: 0x86807540, type:  bss, name: fragments/sushi_game/sushi_game_1462A0}
+-> - {vram: 0x86807540, type: .bss, name: fragments/sushi_game/sushi_game_1462A0}
+
+# sushi_game_14A030: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x14A2D0, asm, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14A2D0, c, fragments/sushi_game/sushi_game_14A030]
+- [0x14B6C0, data, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14B6C0, .data, fragments/sushi_game/sushi_game_14A030]
+- [0x14BA20, rodata, fragments/sushi_game/sushi_game_14A030]
+-> - [0x14BA20, .rodata, fragments/sushi_game/sushi_game_14A030]
+- {vram: 0x868084C0, type:  bss, name: fragments/sushi_game/sushi_game_14A030}
+-> - {vram: 0x868084C0, type: .bss, name: fragments/sushi_game/sushi_game_14A030}
+
+# rental_team_selection_2E4040: PAL timing and US Rev. 1 fixes (VERSION_PAL / NTSC_PAL).
+- [0x2D66E0, asm, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2D66E0, c, fragments/rental_team_selection/rental_team_selection_2E4040]
+- [0x2DB640, data, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2DB640, .data, fragments/rental_team_selection/rental_team_selection_2E4040]
+- [0x2DB990, rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
+-> - [0x2DB990, .rodata, fragments/rental_team_selection/rental_team_selection_2E4040]
+- {vram: 0x8423E5B0, type:  bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
+-> - {vram: 0x8423E5B0, type: .bss, name: fragments/rental_team_selection/rental_team_selection_2E4040}
+
+# drowzee_game's .rodata, which the porter leaves as an unnamed blob.
+- [0x138970, data, fragment10_138970]
+-> - [0x138970, .rodata, fragments/drowzee_game/drowzee_game]
+
+# battle_engine_hud: PAL timing and layout (VERSION_PAL / NTSC_PAL).
+- [0x2ECBA0, asm, fragments/battle_engine/battle_engine_hud]
+-> - [0x2ECBA0, c, fragments/battle_engine/battle_engine_hud]
+- [0x3627B0, data, fragments/battle_engine/battle_engine_hud]
+-> - [0x3627B0, .data, fragments/battle_engine/battle_engine_hud]
+- [0x368300, rodata, fragments/battle_engine/battle_engine_hud]
+-> - [0x368300, .rodata, fragments/battle_engine/battle_engine_hud]
+- {vram: 0x84390220, type:  bss, name: fragments/battle_engine/battle_engine_hud}
+-> - {vram: 0x84390220, type: .bss, name: fragments/battle_engine/battle_engine_hud}
+
+# gym_leader_castle: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A5250, asm, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A5250, c, fragments/gym_leader_castle/gym_leader_castle]
+- [0x3A8130, data, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A8130, .data, fragments/gym_leader_castle/gym_leader_castle]
+- [0x3A8330, rodata, fragments/gym_leader_castle/gym_leader_castle]
+-> - [0x3A8330, .rodata, fragments/gym_leader_castle/gym_leader_castle]
+- {vram: 0x84A03130, type:  bss, name: fragments/gym_leader_castle/gym_leader_castle}
+-> - {vram: 0x84A03130, type: .bss, name: fragments/gym_leader_castle/gym_leader_castle}
+
+# demo_scenes_165640 (its .data is 0x2E0 bytes; demo_scenes_168110's .data follows): US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x1658C0, asm, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x1658C0, c, fragments/demo_scenes/demo_scenes_165640]
+- [0x16D8F0, data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16D8F0, .data, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16DBD0, data, fragments/demo_scenes/demo_scenes_168110]
+- [0x16E120, rodata, fragments/demo_scenes/demo_scenes_165640]
+-> - [0x16E120, .rodata, fragments/demo_scenes/demo_scenes_165640]
+- {vram: 0x86B0F9D0, type: bss, name: fragments/demo_scenes/demo_scenes_165640}
+-> - {vram: 0x86B0F9D0, type: .bss, name: fragments/demo_scenes/demo_scenes_165640}
+
+# pikachu_reward: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A88A0, asm, fragments/pikachu_reward/pikachu_reward]
+-> - [0x3A88A0, c, fragments/pikachu_reward/pikachu_reward]
+- [0x3AA8B0, data, fragments/pikachu_reward/pikachu_reward]
+-> - [0x3AA8B0, .data, fragments/pikachu_reward/pikachu_reward]
+- {vram: 0x832020F0, type:  bss, name: fragments/pikachu_reward/pikachu_reward}
+-> - {vram: 0x832020F0, type: .bss, name: fragments/pikachu_reward/pikachu_reward}
+
+# model_callback_library_258080: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x258370, asm, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x258370, c, fragments/model_callback_library/model_callback_library_258080]
+- [0x259750, data, fragments/model_callback_library/model_callback_library_258080]
+-> - [0x259750, .data, fragments/model_callback_library/model_callback_library_258080]
+- {vram: 0x81004B80, type: bss, name: fragments/model_callback_library/model_callback_library_258080}
+-> - {vram: 0x81004B80, type: .bss, name: fragments/model_callback_library/model_callback_library_258080}
+
+# battle_prep_3A1C30: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3943A0, asm, fragments/battle_prep/battle_prep_3A1C30]
+-> - [0x3943A0, c, fragments/battle_prep/battle_prep_3A1C30]
+- [0x39DDB0, data, fragments/battle_prep/battle_prep_3A1C30]
+-> - [0x39DDB0, .data, fragments/battle_prep/battle_prep_3A1C30]
+
+# battle_order_select: US Rev. 2 code in the later PAL releases (VERSION_PAL_LATE), PAL timing (NTSC_PAL).
+- [0x3A15B0, asm, fragments/battle_order_select/battle_order_select]
+-> - [0x3A15B0, c, fragments/battle_order_select/battle_order_select]
+- [0x3A4AE0, data, fragments/battle_order_select/battle_order_select]
+-> - [0x3A4AE0, .data, fragments/battle_order_select/battle_order_select]
+- [0x3A4C80, rodata, fragments/battle_order_select/battle_order_select]
+-> - [0x3A4C80, .rodata, fragments/battle_order_select/battle_order_select]
+- {vram: 0x84803770, type:  bss, name: fragments/battle_order_select/battle_order_select}
+-> - {vram: 0x84803770, type: .bss, name: fragments/battle_order_select/battle_order_select}
+
+# battle_prep_3A1C30's .rodata (jump tables), which the porter leaves as an unnamed blob.
+- [0x3A00E0, rodata, fragment63_3A00E0]
+-> - [0x3A00E0, .rodata, fragments/battle_prep/battle_prep_3A1C30]
+
+# model_callback_library_258080's .rodata, which the porter leaves as an unnamed blob.
+- [0x259D90, rodata, fragment31_259D90]
+-> - [0x259D90, .rodata, fragments/model_callback_library/model_callback_library_258080]
+
+# demo_scenes_15FA60 (0x1250 bytes of text and 0x30 of .rodata, each followed by demo_scenes_160CB0's): PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x15FCE0, asm, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x15FCE0, c, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x160F30, c, fragments/demo_scenes/demo_scenes_160CB0]
+- [0x16B800, data, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16B800, .data, fragments/demo_scenes/demo_scenes_15FA60]
+- [0x16E020, rodata, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16E020, .rodata, fragments/demo_scenes/demo_scenes_15FA60]
+-> - [0x16E050, .rodata, fragments/demo_scenes/demo_scenes_160CB0]
+- {vram: 0x86B0E5D0, type: bss, name: fragments/demo_scenes/demo_scenes_15FA60}
+-> - {vram: 0x86B0E5D0, type: .bss, name: fragments/demo_scenes/demo_scenes_15FA60}
+
+# demo_scenes_168110: PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x168390, asm, fragments/demo_scenes/demo_scenes_168110]
+-> - [0x168390, c, fragments/demo_scenes/demo_scenes_168110]
+- [0x16DBD0, data, fragments/demo_scenes/demo_scenes_168110]
+-> - [0x16DBD0, .data, fragments/demo_scenes/demo_scenes_168110]
+
+# battle_prep_394120: PAL timing (NTSC_PAL) and the PAL trainer data offset (TRAINER_DATA_ROM_START).
+- [0x386890, asm, fragments/battle_prep/battle_prep_394120]
+-> - [0x386890, c, fragments/battle_prep/battle_prep_394120]
+- [0x396370, data, fragments/battle_prep/battle_prep_394120]
+-> - [0x396370, .data, fragments/battle_prep/battle_prep_394120]
+- [0x39FFC0, rodata, fragments/battle_prep/battle_prep_394120]
+-> - [0x39FFC0, .rodata, fragments/battle_prep/battle_prep_394120]
+- {vram: 0x84B198F0, type:  bss, name: fragments/battle_prep/battle_prep_394120}
+-> - {vram: 0x84B198F0, type: .bss, name: fragments/battle_prep/battle_prep_394120}
+
+# minigame_hud_countdown: PAL countdown timing (NTSC_PAL); US Rev. 2's texture filter in the later PAL releases except German.
+- [0x10A570, asm, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10A570, c, fragments/minigame_hud/minigame_hud_countdown]
+- [0x10E5B0, data, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x10E5B0, .data, fragments/minigame_hud/minigame_hud_countdown]
+- [0x117BF0, rodata, fragments/minigame_hud/minigame_hud_countdown]
+-> - [0x117BF0, .rodata, fragments/minigame_hud/minigame_hud_countdown]
+- {vram: 0x8780FAD0, type:  bss, name: fragments/minigame_hud/minigame_hud_countdown}
+-> - {vram: 0x8780FAD0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}
+
+# minigame_hud_pause_menu: PAL blink, menu and result timers (NTSC_PAL).
+- [0x10ABE0, asm, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10ABE0, c, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x10E710, data, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x10E710, .data, fragments/minigame_hud/minigame_hud_pause_menu]
+- [0x117C00, rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+-> - [0x117C00, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
+- {vram: 0x8780FC50, type:  bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+-> - {vram: 0x8780FC50, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
+
+# minigame_actor_framework_1189B0: built from the shared C (its .bss goes before 1193E0's).
+- [0x118C30, asm, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+-> - [0x118C30, c, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# minigame_actor_framework_1189B0 .bss, in vram order.
+- {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
+-> - {vram: 0x87906040, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1189B0}
+-> - {vram: 0x87906050, type:  .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_1193E0}
+
+# minigame_actor_framework_1189B0 .data (0x40 bytes) sits at the end of the merged 11BF90 text blob.
+- [0x11C210, asm, fragment3_11C210]
+-> - [0x11C210, asm, fragment3_11C210]
+-> - [0x11C9C0, .data, fragments/minigame_actor_framework/minigame_actor_framework_1189B0]
+
+# matrix: built from the shared C.
+- [0xF420, asm, matrix]
+-> - [0xF420, c, matrix]
+- [0x6FE10, data, matrix]
+-> - [0x6FE10, .data, matrix]
+
+# leo: built from the shared C.
+- [0xE890, asm, leo]
+-> - [0xE890, c, leo]
+- [0x6FE00, data, leo]
+-> - [0x6FE00, .data, leo]
+- {vram: 0x800AA880, type: bss, name: leo}
+-> - {vram: 0x800AA880, type: .bss, name: leo}
+
+# leo and matrix .rodata: merged into the gb_tower rodata by the porter.
+- [0x7C1E0, rodata, gb_tower]
+-> - [0x7C1E0, .rodata, gb_tower]
+-> - [0x7C220, .rodata, leo]
+-> - [0x7C3A0, .rodata, matrix]
+
+# poke_icon: built from the shared C.
+- [0x1AB70, asm, poke_icon]
+-> - [0x1AB70, c, poke_icon]
+- [0x70150, data, poke_icon]
+-> - [0x70150, .data, poke_icon]
+
+# session: built from the shared C.
+- [0x2C1C0, asm, session]
+-> - [0x2C1C0, c, session]
+- [0x76480, data, session]
+-> - [0x76480, .data, session]
+- [0x7D1E0, rodata, session]
+-> - [0x7D1E0, .rodata, session]
+
+# display_object_textures: built from the shared C.
+- [0x19840, asm, display_object_textures]
+-> - [0x19840, c, display_object_textures]
+- {vram: 0x800AC010, type: bss, name: display_object_textures}
+-> - {vram: 0x800AC010, type: .bss, name: display_object_textures}
+
+# ui_graphics: built from the shared C, with status_icons, gb_data, pokemon_stats and
+# save_data, which the porter merged into it.
+- [0x20480, asm, ui_graphics]
+-> - [0x20480, c, ui_graphics]
+-> - [0x225B0, c, status_icons]
+-> - [0x22640, c, gb_data]
+-> - [0x232D0, c, pokemon_stats]
+-> - [0x26830, c, save_data]
+- [0x70270, data, ui_graphics]
+-> - [0x70270, .data, ui_graphics]
+
+# status_icons, gb_data, pokemon_stats and save_data sections (see ui_graphics above).
+- [0x705E0, data, status_icons]
+-> - [0x705E0, .data, status_icons]
+- [0x7C3E0, rodata, status_icons]
+-> - [0x7C3E0, .rodata, status_icons]
+- [0x71DA0, data, gb_data]
+-> - [0x71DA0, .data, gb_data]
+- [0x7CEC0, rodata, gb_data]
+-> - [0x7CEC0, .rodata, gb_data]
+- [0x74030, data, pokemon_stats]
+-> - [0x74030, .data, pokemon_stats]
+- [0x7CF30, rodata, pokemon_stats]
+-> - [0x7CF30, .rodata, pokemon_stats]
+-> - [0x7CF60, .rodata, save_data]
+- {vram: 0x800ACA90, type: bss, name: pokemon_stats}
+-> - {vram: 0x800ACA90, type: .bss, name: pokemon_stats}
+- [0x74450, data, save_data]
+-> - [0x74450, .data, save_data]
+- {vram: 0x800AE6E0, type: bss, name: save_data}
+-> - {vram: 0x800AE6E0, type: .bss, name: save_data}
+
+# trade_machine_291D60: built from the shared C (US Rev. 2 code).
+- [0x291FC0, asm, fragments/trade_machine/trade_machine_291D60]
+-> - [0x291FC0, c, fragments/trade_machine/trade_machine_291D60]
+-> - [0x294600, c, fragments/trade_machine/trade_machine_2942C0]
+- [0x29C160, data, fragments/trade_machine/trade_machine_291D60]
+-> - [0x29C160, .data, fragments/trade_machine/trade_machine_291D60]
+- {vram: 0x82F211C0, type:  bss, name: fragments/trade_machine/trade_machine_291D60}
+-> - {vram: 0x82F211C0, type: .bss, name: fragments/trade_machine/trade_machine_291D60}
+
+# trade_machine_2942C0 (merged into 291D60 by the porter) and 291D60's .rodata blob.
+- [0x29C180, data, fragments/trade_machine/trade_machine_2942C0]
+-> - [0x29C180, .data, fragments/trade_machine/trade_machine_2942C0]
+- [0x29C480, rodata, fragment41_29C480]
+-> - [0x29C480, .rodata, fragments/trade_machine/trade_machine_291D60]
+- [0x29C4C0, rodata, fragments/trade_machine/trade_machine_2942C0]
+-> - [0x29C4C0, .rodata, fragments/trade_machine/trade_machine_2942C0]
+- {vram: 0x82F21220, type:  bss, name: fragments/trade_machine/trade_machine_2942C0}
+-> - {vram: 0x82F21220, type: .bss, name: fragments/trade_machine/trade_machine_2942C0}
+
+# free_battle_rules: built from the shared C.
+- [0x2C1990, asm, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C1990, c, fragments/free_battle_rules/free_battle_rules]
+- [0x2C45C0, data, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C45C0, .data, fragments/free_battle_rules/free_battle_rules]
+- [0x2C4690, rodata, fragments/free_battle_rules/free_battle_rules]
+-> - [0x2C4690, .rodata, fragments/free_battle_rules/free_battle_rules]
+- {vram: 0x84002D60, type:  bss, name: fragments/free_battle_rules/free_battle_rules}
+-> - {vram: 0x84002D60, type: .bss, name: fragments/free_battle_rules/free_battle_rules}
+
+# battle_engine_lingering_fall_particles: built from the shared C.
+- [0x31CD10, asm, fragments/battle_engine/battle_engine_lingering_fall_particles]
+-> - [0x31CD10, c, fragments/battle_engine/battle_engine_lingering_fall_particles]
+- [0x369230, rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
+-> - [0x369230, .rodata, fragments/battle_engine/battle_engine_lingering_fall_particles]
+
+# battle_engine_move_model_transforms: built from the shared C.
+- [0x2E6370, asm, fragments/battle_engine/battle_engine_move_model_transforms]
+-> - [0x2E6370, c, fragments/battle_engine/battle_engine_move_model_transforms]
+- [0x361620, data, fragments/battle_engine/battle_engine_move_model_transforms]
+-> - [0x361620, .data, fragments/battle_engine/battle_engine_move_model_transforms]
+- [0x3681C0, rodata, fragments/battle_engine/battle_engine_move_model_transforms]
+-> - [0x3681C0, .rodata, fragments/battle_engine/battle_engine_move_model_transforms]
+
+# minigame_shared_library: built from the shared C; its .data was merged into the text.
+- [0x120BD0, asm, fragments/minigame_shared_library/minigame_shared_library]
+-> - [0x120BD0, c, fragments/minigame_shared_library/minigame_shared_library]
+-> - [0x120C70, .data, fragments/minigame_shared_library/minigame_shared_library]
+- {vram: 0x87B000E0, type:  bss, name: fragments/minigame_shared_library/minigame_shared_library}
+-> - {vram: 0x87B000E0, type: .bss, name: fragments/minigame_shared_library/minigame_shared_library}
+
+# gallery_backgrounds_2A1B50: built from the shared C (four drawing functions are empty in PAL).
+- [0x29E0E0, asm, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+-> - [0x29E0E0, c, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+- [0x2A01E0, data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+-> - [0x2A01E0, .data, fragments/gallery_backgrounds/gallery_backgrounds_2A1B50]
+- {vram: 0x834021E0, type:  bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+-> - {vram: 0x834021E0, type: .bss, name: fragments/gallery_backgrounds/gallery_backgrounds_2A1B50}
+
+# credits_158A00 and credits_159A00: built from the shared C.
+- [0x158C80, asm, fragments/credits/credits_158A00]
+-> - [0x158C80, c, fragments/credits/credits_158A00]
+- [0x15B200, data, fragments/credits/credits_158A00]
+-> - [0x15B200, .data, fragments/credits/credits_158A00]
+- {vram: 0x86A06170, type:  bss, name: fragments/credits/credits_158A00}
+-> - {vram: 0x86A06170, type: .bss, name: fragments/credits/credits_158A00}
+- [0x159C80, asm, fragments/credits/credits_159A00]
+-> - [0x159C80, c, fragments/credits/credits_159A00]
+- [0x15B360, data, fragments/credits/credits_159A00]
+-> - [0x15B360, .data, fragments/credits/credits_159A00]
+- {vram: 0x86A06210, type:  bss, name: fragments/credits/credits_159A00}
+-> - {vram: 0x86A06210, type: .bss, name: fragments/credits/credits_159A00}
+
+# credits_15AD80: built from the shared C.
+- [0x15B000, asm, fragments/credits/credits_15AD80]
+-> - [0x15B000, c, fragments/credits/credits_15AD80]
+- [0x15E7B0, data, fragments/credits/credits_15AD80]
+-> - [0x15E7B0, .data, fragments/credits/credits_15AD80]
+
+# transfer_pak_check: built from the shared C.
+- [0x2B6FE0, asm, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2B6FE0, c, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2BDF80, data, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2BDF80, .data, fragments/transfer_pak_check/transfer_pak_check]
+- [0x2C0F60, rodata, fragments/transfer_pak_check/transfer_pak_check]
+-> - [0x2C0F60, .rodata, fragments/transfer_pak_check/transfer_pak_check]
+- {vram: 0x82D0A010, type:  bss, name: fragments/transfer_pak_check/transfer_pak_check}
+-> - {vram: 0x82D0A010, type: .bss, name: fragments/transfer_pak_check/transfer_pak_check}
+
+# gb_tower_emulator: built from the shared C. The porter merges 86920, 86C30, 86CB0 and
+# fragment1_89010 into one text blob, the 86C30 .data into the 7F9A0 .data and the 86920
+# .rodata into the 7F9A0 .rodata.
+- [0x7FBA0, asm, fragment1_7FBA0]
+-> - [0x7FBA0, c, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+- [0x86BB0, asm, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+-> - [0x86BB0, c, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+-> - [0x86EC0, c, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
+-> - [0x86F40, c, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0x89260, c, fragments/1/fragment1_89010]
+- [0x8D3F0, data, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0x8D3F0, .data, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0x8E620, .data, fragments/gb_tower_emulator/gb_tower_emulator_86C30]
+- [0x8E630, data, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0x8E630, .data, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+- [0xA8270, data, fragments/1/fragment1_89010]
+-> - [0xA8270, .data, fragments/1/fragment1_89010]
+- [0xA9390, rodata, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0xA9390, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_7F9A0]
+-> - [0xAAB40, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_86920]
+- [0xAAB50, rodata, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+-> - [0xAAB50, .rodata, fragments/gb_tower_emulator/gb_tower_emulator_86CB0]
+- {vram: 0x8122B230, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_7F9A0}
+-> - {vram: 0x8122B230, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_7F9A0}
+- {vram: 0x8122C7E0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
+-> - {vram: 0x8122C7E0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86CB0}
+- {vram: 0x812314A0, type: bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+-> - {vram: 0x812314A0, type: .bss, name: fragments/gb_tower_emulator/gb_tower_emulator_86920}
+
+# fragments/dynamo_game/dynamo_game_2: built from the shared C.
+- [0x13BB70, asm, fragment11_13BB70]
+-> - [0x13BB70, c, fragments/dynamo_game/dynamo_game_2]
+- [0x142390, data, fragments/dynamo_game/dynamo_game_2]
+-> - [0x142390, .data, fragments/dynamo_game/dynamo_game_2]
+- [0x142480, rodata, fragments/dynamo_game/dynamo_game_2]
+-> - [0x142480, .rodata, fragments/dynamo_game/dynamo_game_2]
+- {vram: 0x8650AD90, type:  bss, name: fragments/dynamo_game/dynamo_game_2}
+-> - {vram: 0x8650AD90, type: .bss, name: fragments/dynamo_game/dynamo_game_2}
+
+# fragments/battle_engine/battle_engine_action_selection: built from the shared C.
+- [0x2E9BA0, asm, fragment62_2E9BA0]
+-> - [0x2E9BA0, c, fragments/battle_engine/battle_engine_action_selection]
+- [0x362770, data, fragments/battle_engine/battle_engine_action_selection]
+-> - [0x362770, .data, fragments/battle_engine/battle_engine_action_selection]
+- {vram: 0x843901B0, type:  bss, name: fragments/battle_engine/battle_engine_action_selection}
+-> - {vram: 0x843901B0, type: .bss, name: fragments/battle_engine/battle_engine_action_selection}
+
+# fragments/minigame_actor_framework/minigame_actor_framework_11BF90: built from the shared C.
+- [0x11C210, asm, fragment3_11C210]
+-> - [0x11C210, c, fragments/minigame_actor_framework/minigame_actor_framework_11BF90]
+- {vram: 0x87906130, type:  bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
+-> - {vram: 0x87906130, type: .bss, name: fragments/minigame_actor_framework/minigame_actor_framework_11BF90}
+
+# fragments/61/fragment61_2D78B0: built from the shared C.
+- [0x2C9F30, asm, fragment61_2C9F30]
+-> - [0x2C9F30, c, fragments/61/fragment61_2D78B0]
+- [0x2DAC80, data, fragments/61/fragment61_2D78B0]
+-> - [0x2DAC80, .data, fragments/61/fragment61_2D78B0]
+- [0x2DB7D0, rodata, fragments/61/fragment61_2D78B0]
+-> - [0x2DB7D0, .rodata, fragments/61/fragment61_2D78B0]
+- {vram: 0x84211B60, type:  bss, name: fragments/61/fragment61_2D78B0}
+-> - {vram: 0x84211B60, type: .bss, name: fragments/61/fragment61_2D78B0}
+
+# fragments/minigame_select/minigame_select_27BCC0: built from the shared C.
+- [0x27BFD0, asm, fragment39_27BFD0]
+-> - [0x27BFD0, c, fragments/minigame_select/minigame_select_27BCC0]
+- [0x2820B0, data, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x2820B0, .data, fragments/minigame_select/minigame_select_27BCC0]
+- [0x284920, rodata, fragments/minigame_select/minigame_select_27BCC0]
+-> - [0x284920, .rodata, fragments/minigame_select/minigame_select_27BCC0]
+- {vram: 0x82508A40, type:  bss, name: fragments/minigame_select/minigame_select_27BCC0}
+-> - {vram: 0x82508A40, type: .bss, name: fragments/minigame_select/minigame_select_27BCC0}
+
+- [0x1AE970, asm, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1AE970, c, fragments/lab_pc/lab_pc_1AE680]
+- [0x1C0570, data, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1C0570, .data, fragments/lab_pc/lab_pc_1AE680]
+- [0x1CD6F0, rodata, fragments/lab_pc/lab_pc_1AE680]
+-> - [0x1CD6F0, .rodata, fragments/lab_pc/lab_pc_1AE680]
+- {vram: 0x88224FB0, type: bss, name: fragments/lab_pc/lab_pc_1AE680}
+-> - {vram: 0x88224FB0, type: .bss, name: fragments/lab_pc/lab_pc_1AE680}
+
+# fragments/battle_engine/battle_engine_mesh_effect_callbacks: built from the shared C.
+- [0x336270, asm, fragment62_336270]
+-> - [0x336270, c, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- [0x364FE0, data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+-> - [0x364FE0, .data, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- [0x36A3E0, rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+-> - [0x36A3E0, .rodata, fragments/battle_engine/battle_engine_mesh_effect_callbacks]
+- {vram: 0x84392150, type:  bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+-> - {vram: 0x84392150, type: .bss, name: fragments/battle_engine/battle_engine_mesh_effect_callbacks}
+
+- [0x2DEA80, asm, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x2DEA80, c, fragments/battle_engine/battle_engine_move_animation]
+- [0x361590, data, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x361590, .data, fragments/battle_engine/battle_engine_move_animation]
+- [0x368120, rodata, fragments/battle_engine/battle_engine_move_animation]
+-> - [0x368120, .rodata, fragments/battle_engine/battle_engine_move_animation]
+- {vram: 0x8438E840, type:  bss, name: fragments/battle_engine/battle_engine_move_animation}
+-> - {vram: 0x8438E840, type: .bss, name: fragments/battle_engine/battle_engine_move_animation}
+
+- [0x353780, asm, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x353780, c, fragments/battle_engine/battle_engine_com_decision_logic]
+- [0x367FD0, data, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x367FD0, .data, fragments/battle_engine/battle_engine_com_decision_logic]
+- [0x36AE00, rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+-> - [0x36AE00, .rodata, fragments/battle_engine/battle_engine_com_decision_logic]
+- {vram: 0x843C53A0, type:  bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+-> - {vram: 0x843C53A0, type: .bss, name: fragments/battle_engine/battle_engine_com_decision_logic}
+
+- [0x34C6C0, asm, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x34C6C0, c, fragments/battle_engine/battle_engine_mechanics]
+- [0x367C80, data, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x367C80, .data, fragments/battle_engine/battle_engine_mechanics]
+- [0x36AC10, rodata, fragments/battle_engine/battle_engine_mechanics]
+-> - [0x36AC10, .rodata, fragments/battle_engine/battle_engine_mechanics]
+- {vram: 0x843C4E30, type:  bss, name: fragments/battle_engine/battle_engine_mechanics}
+-> - {vram: 0x843C4E30, type: .bss, name: fragments/battle_engine/battle_engine_mechanics}
+
+- [0x4F180, asm, audio_stream]
+-> - [0x4F180, c, audio_stream]
+- [0x7A320, data, audio_stream]
+-> - [0x7A320, .data, audio_stream]
+-> - [0x7A330, data, libleo/leofunc]
+- {vram: 0x800FFB20, type: bss, name: audio_stream}
+-> - {vram: 0x800FFB20, type: .bss, name: audio_stream}
+
+- [0x39FC0, asm, audio_channel]
+-> - [0x39FC0, c, audio_channel]
+
+- [0x517A0, asm, audio_stream_channel]
+-> - [0x517A0, c, audio_stream_channel]
+
+# audio_channel .rodata is merged into the audio_commands .rodata, and the audio_stream and
+# libleo/leofunc .rodata into the libnaudio/n_env .rodata by the porter.
+- [0x7D470, rodata, audio_commands]
+-> - [0x7D470, .rodata, audio_commands]
+-> - [0x7D580, .rodata, audio_loop_point]
+-> - [0x7D760, .rodata, cry]
+-> - [0x7D7D0, .rodata, audio_channel]
+- [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E810, .rodata, audio_stream]
+-> - [0x7E830, rodata, libleo/leofunc]
+
+# 33E30: Rev. 2 debug matrix printers.
+- [0x339C0, asm, text_339C0]
+-> - [0x339C0, c, 33E30]
+- [0x770F0, data, 33E30]
+-> - [0x770F0, .data, 33E30]
+- [0x7D370, rodata, 33E30]
+-> - [0x7D370, .rodata, 33E30]
+
+# gb_tower: built from the shared C (Rev. 2 cartridge check).
+- [0xB210, asm, text_B210]
+-> - [0xB210, c, gb_tower]
+- [0x6A5D0, data, gb_tower]
+-> - [0x6A5D0, .data, gb_tower]
+- {vram: 0x800A8300, type: bss, name: gb_tower}
+-> - {vram: 0x800A8300, type: .bss, name: gb_tower}
+
+# audio_fade and 3D140_2: built from the shared C (PAL move sound bank reload and battle music
+# volume). The porter merges them into one text blob and merges the 3D140 .rodata into the
+# 3D140_2 .rodata.
+- [0x3D250, asm, text_3D250]
+-> - [0x3D250, c, audio_fade]
+-> - [0x3D970, c, 3D140_2]
+- [0x79300, data, 3D140_2]
+-> - [0x79300, .data, 3D140_2]
+- [0x7E210, rodata, 3D140_2]
+-> - [0x7E210, .rodata, 3D140_2]
+-> - [0x7E630, rodata, 3D140]
+
+# audio_fade .data and .rodata: merged into the audio_commands_category2 blobs by the porter.
+- [0x78E30, data, audio_commands_category2]
+-> - [0x78E30, data, audio_commands_category2]
+-> - [0x78FF0, .data, audio_fade]
+- [0x7D800, rodata, audio_commands_category2]
+-> - [0x7D800, rodata, audio_commands_category2]
+-> - [0x7DB60, .rodata, audio_fade]
+
+# audio_stored_fade, audio_commands, audio_loop_point, cry and audio_bank_init: built from the
+# shared C. PAL links audio_loop_point and cry between the two halves of audio_commands, and the
+# porter merges all five files (plus audio_channel's .data) into one blob per section.
+- [0x37030, asm, audio_stored_fade]
+-> - [0x37030, c, audio_stored_fade]
+-> - [0x37480, c, audio_commands]
+-> - [0x38030, c, audio_loop_point]
+-> - [0x38E50, c, cry]
+-> - [0x39260, c, audio_bank_init]
+- [0x78770, data, audio_stored_fade]
+-> - [0x78770, .data, audio_stored_fade]
+-> - [0x78790, .data, audio_commands]
+-> - [0x78AA0, .data, audio_loop_point]
+-> - [0x78B10, .data, cry]
+-> - [0x78E10, .data, audio_bank_init]
+-> - [0x78E20, .data, audio_channel]
+- [0x7D420, rodata, text_7D420]
+-> - [0x7D420, .rodata, audio_stored_fade]
+
+# audio_loop_point and audio_bank_init .bss: built from the shared C. The porter merges them under
+# the audio_bank_init name, and names the libleo/leofunc .bss after audio_loop_point.
+- {vram: 0x800B34A0, type: bss, name: audio_bank_init}
+-> - {vram: 0x800B34A0, type: .bss, name: audio_loop_point}
+-> - {vram: 0x800B34B0, type: .bss, name: audio_bank_init}
+- {vram: 0x800FFBD0, type: bss, name: audio_loop_point}
+-> - {vram: 0x800FFBD0, type: bss, name: libleo/leofunc}
+
+# 3D140 and libnumus/player: built from the shared C. PAL links player after 3D140 (US links it
+# before), and the porter merges the two into one blob per section. The 3D140 .bss holds only
+# 3D140.c's own variables in PAL; the rest belong to 3D140_2.c, which PAL links first.
+- [0x42D20, asm, 3D140]
+-> - [0x42D20, c, 3D140]
+-> - [0x43E10, c, libnumus/player]
+- [0x79A90, data, 3D140]
+-> - [0x79A90, .data, 3D140]
+-> - [0x79B10, .data, libnumus/player]
+-> - [0x79C10, data, libnaudio/n_drvrNew]
+- [0x7E630, rodata, 3D140]
+-> - [0x7E630, .rodata, 3D140]
+- [0x7E650, rodata, libnumus/player]
+-> - [0x7E650, .rodata, libnumus/player]
+-> - [0x7E6D0, rodata, libnaudio/n_drvrNew]
+- {vram: 0x800FC9C0, type: bss, name: 3D140}
+-> - {vram: 0x800FC9C0, type: .bss, name: 3D140_2}
+- {vram: 0x800FCBF0, type: bss, name: gb_audio}
+-> - {vram: 0x800FCBF0, type: .bss, name: 3D140}
+- {vram: 0x800FCEE0, type: bss, name: libnumus/player}
+-> - {vram: 0x800FCEE0, type: .bss, name: libnumus/player}
+
+# audio_commands_category2 and audio_sfx: built from the shared C. The porter merges the
+# audio_sfx .data and .rodata into the audio_commands_category2 blobs.
+- [0x3A2F0, asm, audio_commands_category2]
+-> - [0x3A2F0, c, audio_commands_category2]
+- [0x3CCD0, asm, text_3CCD0]
+-> - [0x3CCD0, c, audio_sfx]
+- [0x78E30, data, audio_commands_category2]
+-> - [0x78E30, .data, audio_commands_category2]
+-> - [0x78FC0, .data, audio_sfx]
+- [0x7D800, rodata, audio_commands_category2]
+-> - [0x7D800, .rodata, audio_commands_category2]
+-> - [0x7DA70, .rodata, audio_sfx]
+
+# n_synthesizer, gb_audio_render and gb_audio: built from the shared C. PAL links the GB
+# synth and music player right after n_synthesizer, and the porter merges all three texts and
+# the n_resample, n_reverb, n_synthesizer, gb_audio_render and gb_audio .rodata into n_env's.
+- [0x4B480, asm, libnaudio/n_synthesizer]
+-> - [0x4B480, c, libnaudio/n_synthesizer]
+-> - [0x4BA20, c, gb_audio_render]
+-> - [0x4CF80, c, gb_audio]
+- [0x79EC0, data, gb_audio_render]
+-> - [0x79EC0, .data, gb_audio_render]
+- [0x7A2C0, data, gb_audio]
+-> - [0x7A2C0, .data, gb_audio]
+- [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E6F0, rodata, libnaudio/n_env]
+-> - [0x7E780, .rodata, libnaudio/n_synthesizer]
+-> - [0x7E790, .rodata, gb_audio_render]
+-> - [0x7E7A0, .rodata, gb_audio]
+- {vram: 0x800FCF60, type: bss, name: gb_audio_render}
+-> - {vram: 0x800FCF60, type: .bss, name: gb_audio_render}
+-> - {vram: 0x800FF990, type: .bss, name: gb_audio}

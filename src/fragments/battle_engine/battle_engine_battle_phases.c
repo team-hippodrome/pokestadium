@@ -1995,7 +1995,9 @@ void BattleScene_PresentDisable(CameraNode* camera) {
 
 void BattleScene_RunActionEffectHpTransition(CameraNode* camera) {
     BattleMonRuntime* target_runtime = &sNonActingPokemon->state.runtime;
+#if !defined(VERSION_JP)
     UNUSED s32 pad;
+#endif
     s32 camera_settled;
     s32 framing_settled;
     s32 hold_frames;
@@ -3011,7 +3013,9 @@ void BattleScene_PhaseConfusionSelfHit(CameraNode* camera) {
 
         case CONFUSION_HIT_STEP_START_HIT:
             BattleScene_ResetModelReloadStep();
+#if !defined(VERSION_JP)
             BattleScene_ClearStateTickCallbacks();
+#endif
             BattleScene_EnterStateRow(sActingPokemon, 0xF);
             BattleScene_SelectCameraShot(sActingPokemon, camera, TARGET_CAMERA_CLOSE);
             BattleScene_SetDamageShakeAmplitude(sActingPokemon);

@@ -244,7 +244,7 @@ u8 sGbApuRegsFF20[0x40] = {
 // time span GbApu_RenderBuffer spreads over one buffer. The Japanese build has no
 // GbApu_SetKey1Speed and uses the constants 1500.0f and 17784.0f instead.
 f32 sGbApuStepDivisor = 1500.0f;
-s32 sGbApuBufferTimeSpan = 17784;
+s32 sGbApuBufferTimeSpan = NTSC_PAL(17784, 0x524B);
 #endif
 // Noise playback position wraps from sGbApuNoiseLoopEnd back to sGbApuNoiseLoopStart.
 s32 sGbApuNoiseLoopStart = 2048;
@@ -414,11 +414,11 @@ void func_81207354(void) {
  */
 void GbApu_SetKey1Speed(s32 double_speed) {
     if (double_speed == 0) {
-        sGbApuBufferTimeSpan = 0x4578;
+        sGbApuBufferTimeSpan = NTSC_PAL(0x4578, 0x524B);
         sGbApuStepDivisor = 1500.0f;
         return;
     }
-    sGbApuBufferTimeSpan = 0x8AF0;
+    sGbApuBufferTimeSpan = NTSC_PAL(0x8AF0, 0xA496);
     sGbApuStepDivisor = 1500.0f;
 }
 #endif
@@ -6429,6 +6429,24 @@ u8 sGbMenuSoundData[0x24] = {
 #elif defined(VERSION_JP)
     0x81, 0x25, 0x5A, 0xC4, 0x81, 0x25, 0x5A, 0xC4, 0x81, 0x23, 0xC0, 0x0C, 0x81, 0x24, 0x2B, 0x4C, 0x81, 0x24,
     0x86, 0x3C, 0x81, 0x24, 0xAF, 0x0C, 0x81, 0x24, 0xC9, 0xEC, 0x81, 0x25, 0x0B, 0x7C, 0x81, 0x25, 0x3D, 0xDC,
+#elif defined(VERSION_DE)
+    0x81, 0x22, 0x86, 0xCC, 0x81, 0x22, 0x86, 0xCC, 0x81, 0x20, 0xEC, 0x14, 0x81, 0x21, 0x57, 0x54, 0x81, 0x21,
+    0xB2, 0x44, 0x81, 0x21, 0xDB, 0x14, 0x81, 0x21, 0xF5, 0xF4, 0x81, 0x22, 0x37, 0x84, 0x81, 0x22, 0x69, 0xE4,
+#elif defined(VERSION_EU_REV1)
+    0x81, 0x22, 0x86, 0x9C, 0x81, 0x22, 0x86, 0x9C, 0x81, 0x20, 0xEB, 0xE4, 0x81, 0x21, 0x57, 0x24, 0x81, 0x21,
+    0xB2, 0x14, 0x81, 0x21, 0xDA, 0xE4, 0x81, 0x21, 0xF5, 0xC4, 0x81, 0x22, 0x37, 0x54, 0x81, 0x22, 0x69, 0xB4,
+#elif defined(VERSION_EU)
+    0x81, 0x22, 0x86, 0x2C, 0x81, 0x22, 0x86, 0x2C, 0x81, 0x20, 0xEB, 0x74, 0x81, 0x21, 0x56, 0xB4, 0x81, 0x21,
+    0xB1, 0xA4, 0x81, 0x21, 0xDA, 0x74, 0x81, 0x21, 0xF5, 0x54, 0x81, 0x22, 0x36, 0xE4, 0x81, 0x22, 0x69, 0x44,
+#elif defined(VERSION_ES)
+    0x81, 0x22, 0x86, 0xDC, 0x81, 0x22, 0x86, 0xDC, 0x81, 0x20, 0xEC, 0x24, 0x81, 0x21, 0x57, 0x64, 0x81, 0x21,
+    0xB2, 0x54, 0x81, 0x21, 0xDB, 0x24, 0x81, 0x21, 0xF6, 0x04, 0x81, 0x22, 0x37, 0x94, 0x81, 0x22, 0x69, 0xF4,
+#elif defined(VERSION_FR)
+    0x81, 0x22, 0x86, 0x6C, 0x81, 0x22, 0x86, 0x6C, 0x81, 0x20, 0xEB, 0xB4, 0x81, 0x21, 0x56, 0xF4, 0x81, 0x21,
+    0xB1, 0xE4, 0x81, 0x21, 0xDA, 0xB4, 0x81, 0x21, 0xF5, 0x94, 0x81, 0x22, 0x37, 0x24, 0x81, 0x22, 0x69, 0x84,
+#elif defined(VERSION_IT)
+    0x81, 0x22, 0x86, 0x5C, 0x81, 0x22, 0x86, 0x5C, 0x81, 0x20, 0xEB, 0xA4, 0x81, 0x21, 0x56, 0xE4, 0x81, 0x21,
+    0xB1, 0xD4, 0x81, 0x21, 0xDA, 0xA4, 0x81, 0x21, 0xF5, 0x84, 0x81, 0x22, 0x37, 0x14, 0x81, 0x22, 0x69, 0x74,
 #else
     0x81, 0x22, 0x86, 0x4C, 0x81, 0x22, 0x86, 0x4C, 0x81, 0x20, 0xEB, 0x94, 0x81, 0x21, 0x56, 0xD4, 0x81, 0x21,
     0xB1, 0xC4, 0x81, 0x21, 0xDA, 0x94, 0x81, 0x21, 0xF5, 0x74, 0x81, 0x22, 0x37, 0x04, 0x81, 0x22, 0x69, 0x64,
@@ -6465,7 +6483,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
 
     switch (reg) {
         case 0x10:
-            gGbApuSquare1.sweepPeriod = GB_APU_REGS.sweepTime * 400;
+            gGbApuSquare1.sweepPeriod = GB_APU_REGS.sweepTime * NTSC_PAL(400, 480);
             gGbApuSquare1.sweepDirection = GB_APU_REGS.sweepDir;
             gGbApuSquare1.sweepShift = GB_APU_REGS.sweepShift;
             if (gGbApuSquare1.sweepEnabled == 0) {
@@ -6496,12 +6514,12 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
             gGbApuSquare1.period = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
             gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.period);
             if ((s32)GB_APU_REGS.trigger1 == 1) {
-                gGbApuSquare1.lengthTimer = gGbApuSquare1.length * 200;
+                gGbApuSquare1.lengthTimer = gGbApuSquare1.length * NTSC_PAL(200, 240);
                 gGbApuSquare1.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare1.initialVolume];
                 gGbApuSquare1.envelopeCounter = 0;
                 gGbApuSquare1.sweepCounter = 0;
                 gGbApuSquare1.envelopeDirection = GB_APU_REGS.envDir1;
-                gGbApuSquare1.envelopePeriod = GB_APU_REGS.envSweep1 * 800;
+                gGbApuSquare1.envelopePeriod = GB_APU_REGS.envSweep1 * NTSC_PAL(800, 960);
                 gGbApuSquare1.envelopeVolume = gGbApuSquare1.initialVolume;
                 if (GB_APU_REGS.power) {
                     gGbApuSquare1.enabled = 1;
@@ -6532,12 +6550,12 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
             gGbApuSquare2.period = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
             gGbApuSquare2.step = GbApu_FreqToStep2x(gGbApuSquare2.period);
             if ((s32)GB_APU_REGS.trigger2 == 1) {
-                gGbApuSquare2.lengthTimer = gGbApuSquare2.length * 200;
+                gGbApuSquare2.lengthTimer = gGbApuSquare2.length * NTSC_PAL(200, 240);
                 gGbApuSquare2.phase.fixed = 0;
                 gGbApuSquare2.amplitude = sGbApuSquareVolumeLevels[gGbApuSquare2.initialVolume];
                 gGbApuSquare2.envelopeCounter = 0;
                 gGbApuSquare2.envelopeDirection = GB_APU_REGS.envDir2;
-                gGbApuSquare2.envelopePeriod = GB_APU_REGS.envSweep2 * 800;
+                gGbApuSquare2.envelopePeriod = GB_APU_REGS.envSweep2 * NTSC_PAL(800, 960);
                 gGbApuSquare2.envelopeVolume = gGbApuSquare2.initialVolume;
                 if (GB_APU_REGS.power) {
                     gGbApuSquare2.enabled = 1;
@@ -6565,7 +6583,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
             gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.period);
             gGbApuWave.lengthEnabled = GB_APU_REGS.counter3;
             if ((s32)GB_APU_REGS.trigger3 == 1) {
-                gGbApuWave.lengthTimer = gGbApuWave.length * 200;
+                gGbApuWave.lengthTimer = gGbApuWave.length * NTSC_PAL(200, 240);
                 gGbApuWave.retriggerTimer = 0x140;
                 if (GB_APU_REGS.power && ((s32)GB_APU_REGS.waveOn == 1)) {
                     gGbApuWave.enabled = 1;
@@ -6619,7 +6637,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
         case 0x23:
             gGbApuNoise.lengthEnabled = GB_APU_REGS.counter4;
             if ((s32)GB_APU_REGS.trigger4 == 1) {
-                gGbApuNoise.lengthTimer = gGbApuNoise.length * 200;
+                gGbApuNoise.lengthTimer = gGbApuNoise.length * NTSC_PAL(200, 240);
                 if (gGbApuNoise.enabled == 0) {
                     gGbApuNoise.phase.fixed = 0;
                 }
@@ -6637,7 +6655,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
                 }
                 gGbApuNoise.envelopeCounter = 0;
                 gGbApuNoise.envelopeDirection = GB_APU_REGS.envDir4;
-                gGbApuNoise.envelopePeriod = GB_APU_REGS.envSweep4 * 800;
+                gGbApuNoise.envelopePeriod = GB_APU_REGS.envSweep4 * NTSC_PAL(800, 960);
                 if (GB_APU_REGS.power) {
                     gGbApuNoise.enabled = 1;
                 }

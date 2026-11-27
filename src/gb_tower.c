@@ -132,13 +132,13 @@ void GbTower_PowerOffAllPaks(void) {
  * cartridge for this region.
  */
 s32 GbPak_IsPokemonCartridge(OSGbpakId* header) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     char titleCopy[16];
 #endif
 
     header->game_title[15] = '\0';
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     HAL_Strcpy(titleCopy, (char*)header->game_title);
     titleCopy[9] = '\0';
 #endif
@@ -157,7 +157,7 @@ s32 GbPak_IsPokemonCartridge(OSGbpakId* header) {
         if (HAL_Strcmp((char*)header->game_title, "POKEMON BLUE") == 0) {
             return 1;
         }
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         if (HAL_Strcmp(titleCopy, "POKEMON Y") == 0) {
             return 1;
         }

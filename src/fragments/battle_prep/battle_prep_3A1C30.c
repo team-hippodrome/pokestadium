@@ -312,7 +312,7 @@ void BattlePrep_DrawCastleProgressHeader(BattlePrepRuleWindow* text_window, Batt
     if (gSessionContext.modeSelection < SESSION_MODE_BATTLE_NOW) {
         // It is impossible to suspend the game on Vs Mewtwo so this never happens
         if (gSessionContext.modeSelection == SESSION_MODE_VS_MEWTWO) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Text_SetNumberToken(1, gSessionContext.roundOrDemoId);
             BattlePrep_FormatString(buffer, 256, 64);
 #else
@@ -423,7 +423,7 @@ void BattlePrep_DrawWinRecord(BattlePrepRuleWindow* text_window, BattlePrepRuleW
 // better name: BattlePrep_DrawOverwriteSuspendDataPrompt
 void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, BattlePrepRuleWindowLayout* window_layout) {
     SessionContinueData suspend_record;
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     char buffer[128];
 #endif
     UNUSED s32 pad;
@@ -452,7 +452,7 @@ void BattlePrep_DrawOverwriteSavePrompt(BattlePrepRuleWindow* text_window, Battl
                 Font_Printf(window_layout->x + 30, window_layout->y + 53, BattlePrep_GetString(62));
             }
         } else {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Text_SetNumberToken(1, suspend_record.trainerIndex);
             BattlePrep_FormatString(buffer, 128, 64);
             Font_Printf(window_layout->x + 30, window_layout->y + 53, buffer);

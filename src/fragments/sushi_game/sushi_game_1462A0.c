@@ -1088,7 +1088,7 @@ void func_86803C6C(unk_D_86807558* arg0) {
             }
         } else {
             arg0->unk_0C0 = 1;
-            arg0->unk_0C8 = 1.0f;
+            arg0->unk_0C8 = NTSC_PAL(1.0f, 1.5f);
         }
     }
 
@@ -1252,7 +1252,7 @@ void SushiGame_UpdateEatingState(unk_D_86807558* arg0) {
             if (arg0->unk_0DC == NULL) {
                 arg0->unk_0DC = func_86804634(arg0);
                 if (arg0->unk_0DC != NULL) {
-                    arg0->unk_0CC = SushiGame_FindCrossedAnimEvent(&arg0->unk_0E4, 0xD);
+                    arg0->unk_0CC = SushiGame_FindCrossedAnimEvent(&arg0->unk_0E4, NTSC_PAL(13, 9));
                     SushiGame_SetPlateState(arg0->unk_0DC, 3, arg0);
                 }
             }
@@ -1265,7 +1265,7 @@ void SushiGame_UpdateEatingState(unk_D_86807558* arg0) {
                         break;
 
                     case 3:
-                        if (SushiGame_FindCrossedAnimEvent(&arg0->unk_0E4, 0xD) < 3) {
+                        if (SushiGame_FindCrossedAnimEvent(&arg0->unk_0E4, NTSC_PAL(13, 9)) < 3) {
                             arg0->unk_0C0 = 4;
                         } else {
                             arg0->unk_0C8 = -1.0f;
@@ -1757,7 +1757,7 @@ void SushiGame_InitCamera(void) {
 
     D_86808498.unk_00.x = 0.0f;
     D_86808498.unk_00.y = 0.0f;
-#if defined(VERSION_US_REV1) || defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV1) || defined(VERSION_US_REV2) || defined(VERSION_PAL)
     D_86808498.unk_00.z = -10.0f;
 #elif defined(VERSION_JP)
     // The Japanese release pulls the camera back 1.3 units less; -6.5 is exactly representable in

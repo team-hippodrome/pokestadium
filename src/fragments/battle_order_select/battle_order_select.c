@@ -1335,7 +1335,7 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {
 
     main_pool_push_state('MSEL');
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     Gfx_InitDisplayListBuffers(0x18000, 0);
 #else
     Gfx_InitDisplayListBuffers(0x10000, 0);

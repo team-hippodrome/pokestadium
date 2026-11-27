@@ -18,7 +18,7 @@ void miniRankingActorsInit(void) {
         ptr->unk_168 = Model_LoadByArchiveIndex(0xAB);
         Model_InitDisplayObject(&ptr->unk_000, 0, ptr->unk_23C, ptr->unk_168->nodes[0]);
         ModelAnim_SetAnimation(&ptr->unk_000, 0);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         ptr->unk_000.effectSlot = 0xFF;
 #endif
         ptr->unk_000.node.flags &= ~1;

@@ -2,6 +2,10 @@
 #include "src/rom_device.h"
 #include "src/audio_commands.h"
 
+#if defined(VERSION_PAL)
+extern u8 sMoveSoundBankStale;
+#endif
+
 typedef struct unk_D_800FD008 {
     /* 0x00 */ u16 unk_00[20];
     /* 0x28 */ u8 unk_28;
@@ -147,6 +151,9 @@ u32 D_80078A60[0x100] = {
     0x3FE00000, 0x0D000000, 0x3FE00000, 0x0D000000, 0x40600000, 0x0D000000, 0x40E00000, 0x0D000000, 0x41600000,
     0xFF000000, 0x3F800000, 0xFF000000, 0x3F800000,
 };
+
+// audio_channel and audio_loop_point data. JP still defines them here until its layout is checked.
+#if defined(VERSION_JP)
 s32 D_80078E60 = 0;
 s32 D_80078E64 = 0;
 s32 D_80078E68 = 0;
@@ -156,15 +163,12 @@ s32 D_80078E74 = 112;
 u8 D_80078E78 = 0x00;
 u8 D_80078E7C = 0x00;
 
-// D_80078E80 and D_80078E83/8B/93/9B/A3/AB/B3 are interior aliases
-// (undefined_syms.ld); variables.h already declares D_80078E80 as a u8.
 u8 sLoopPointTable[0x3C] = {
     0x00, 0x00, 0x00, 0x00, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x05, 0x23, 0x23, 0x23,
     0x25, 0x25, 0x25, 0x25, 0x0E, 0x23, 0x23, 0x23, 0x25, 0x25, 0x25, 0x0E, 0x0D, 0x06, 0x06,
     0x06, 0x37, 0x37, 0x37, 0x3B, 0x39, 0x34, 0x34, 0x34, 0x2F, 0x2F, 0x2F, 0x2E, 0x35, 0x0B,
     0x0B, 0x0B, 0x0C, 0x0C, 0x0C, 0x0C, 0x12, 0x0B, 0x0B, 0x0B, 0x0C, 0x0C, 0x0C, 0x12, 0x36,
 };
-// D_80078EBF is an interior alias.
 u8 D_80078EBC[0xC] = {
     0x22, 0x22, 0x22, 0x24, 0x24, 0x24, 0x24, 0x24, 0x26, 0x00, 0x00, 0x00,
 };
@@ -174,6 +178,7 @@ u8 D_80078ED0 = 0x00;
 s32 D_80078ED4 = 0;
 s32 D_80078ED8 = 0;
 s32 D_80078EDC = 0;
+#endif
 
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3) {
     func_80049A60(arg2);
@@ -715,6 +720,10 @@ s16 func_8004A89C(void) {
             D_800FCFD8.unk_04 = sampleId;
             ent = (unk_D_800FC6CC*)((u32*)D_800FC6CC + (D_800FCFD8.unk_04 << 1));
             Rom_DmaRead(ent->unk_00, (u32)D_800FC6D0, ent->unk_04);
+#if defined(VERSION_PAL)
+            // PAL loads noise samples into the move sound bank's buffer, so the bank must be reloaded.
+            sMoveSoundBankStale = 1;
+#endif
         }
 
         D_800FCFD8.unk_08 = 0;

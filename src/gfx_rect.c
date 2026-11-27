@@ -109,10 +109,15 @@ DepthBuffer* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 sid
 
     // header + image size + rounding up to 64
     sp34 = main_pool_alloc(sizeof(DepthBuffer) + size_bytes + 64, side);
+#if defined(VERSION_JP)
+    // The Japanese release initializes the header without checking the allocation.
+    GfxImage_Initialize(sp34, fmt, size, width, height, (u8*)sp34 + sizeof(DepthBuffer));
+#else
     if (sp34 != NULL) {
         // image data follows the header struct
         GfxImage_Initialize(sp34, fmt, size, width, height, (u8*)sp34 + sizeof(DepthBuffer));
     }
+#endif
 
     return sp34;
 }

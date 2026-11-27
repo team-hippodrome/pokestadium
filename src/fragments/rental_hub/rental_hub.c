@@ -11,7 +11,9 @@
 #include "src/stage_loader.h"
 #include "variables.h"
 
+#if !defined(VERSION_JP)
 static char** sMenuStringArray;
+#endif
 static BinArchive* sBackgroundArchive;
 static void* D_82B01148;
 static s16 sHoveredMenuItem;
@@ -20,9 +22,24 @@ static u8 D_82B01120[] = {
     6, 0x07, 0x08, 9, 10, 11, 12, 13, 0x0F, 0x00, 0x00,
 };
 
+#if defined(VERSION_JP)
+// Header title for each session mode.
+static char* sRentalHubTitles[] = {
+    "フリーバトル",       // "Free Battle"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ポケモンスタジアム", // "Pokemon Stadium"
+    "ジムリーダーのしろ", // "Gym Leader Castle"
+    "ミュウツーをたおせ", // "Defeat Mewtwo"
+};
+#else
 static s8 sRentalHubTextOffsets[] = {
     0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x03,
 };
+#endif
 
 void RentalHub_DrawHeaderIcon(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -55,11 +72,19 @@ void RentalHub_DrawHeader(void) {
     RentalHub_DrawHeaderBar(72, 40, 520, &banner_fill, &banner_border);
     RentalHub_DrawHeaderIcon(48, 32);
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+    Gfx_SetEnvColor(0, 0, 0, 0xFF);
+    Font_Printf(106, 44, sRentalHubTitles[gSessionContext.mode]);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
+    Font_Printf(104, 42, sRentalHubTitles[gSessionContext.mode]);
+#else
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF);
     Font_Printf(106, 44, Text_GetString(NULL, 0, sMenuStringArray, sRentalHubTextOffsets[gSessionContext.mode]));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF);
     Font_Printf(104, 42, Text_GetString(NULL, 0, sMenuStringArray, sRentalHubTextOffsets[gSessionContext.mode]));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -113,8 +138,14 @@ void RentalHub_DrawMenuItemBox(s16 x, s16 y, s16 height, char* text) {
 
         if ((height - 8) == 40) {
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            // 20-pixel-wide characters, centered.
+            Font_SetActive(0x10, -4);
+            Font_Printf((x - ((strlen(text) * 20) / 4)) + 76, y + 11, text);
+#else
             Font_SetActive(0x10, 0);
             Font_Printf((x - (Font_MeasureTextExtent(16, 0, text) / 2)) + 76, y + 11, text);
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -123,9 +154,15 @@ void RentalHub_DrawMenuItemBox(s16 x, s16 y, s16 height, char* text) {
 void RentalHub_DrawMenuItems(s16 height) {
     UNUSED s32 pad;
 
+#if defined(VERSION_JP)
+    RentalHub_DrawMenuItemBox(80, 384, height * 6, "バトルする");    // "Battle"
+    RentalHub_DrawMenuItemBox(244, 384, height * 6, "ルールをみる"); // "View rules"
+    RentalHub_DrawMenuItemBox(408, 384, height * 6, "とうろく");     // "Register"
+#else
     RentalHub_DrawMenuItemBox(80, 384, height * 6, Text_GetString(NULL, 0, sMenuStringArray, 4));
     RentalHub_DrawMenuItemBox(244, 384, height * 6, Text_GetString(NULL, 0, sMenuStringArray, 5));
     RentalHub_DrawMenuItemBox(408, 384, height * 6, Text_GetString(NULL, 0, sMenuStringArray, 6));
+#endif
 }
 
 s32 RentalHub_HandleInput(void) {
@@ -260,9 +297,11 @@ s32 RentalHub_MenuMain(void) {
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
 
     RentalHub_LoadBackgroundImage(&var_sp1C);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
 
     sMenuStringArray = Text_GetStringTable(24);
+#endif
     sHoveredMenuItem = 0;
 
     if (gSessionContext.mode == 7) {

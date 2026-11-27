@@ -3,7 +3,9 @@
 
 #include "global.h"
 
+#if !defined(VERSION_JP)
 extern char** gVictoryPokemonNames;
+#endif
 
 void VictoryPalace_CheckAllCaught(void);
 s32 VictoryPalace_StringsEqual(s8* arg0, s8* arg1);

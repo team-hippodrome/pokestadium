@@ -481,7 +481,7 @@ void Trade_DrawSaveSeqBoxPanels(unk_D_82F210E0* arg0) {
             temp_s3 = D_82F21120[i];
             var_s0 = &arg0->unk_14[i];
             Font_SetActive(4, 0);
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_Printf(var_s0->unk_00 + 0xA, var_s0->unk_02 + 0x4A, "%s%03d",
                         Text_GetString(NULL, 0, sTradePokemonDetailText, 0x16), temp_s3->unk_00);
 #else
@@ -640,7 +640,7 @@ void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
 // which this function needs to match.
 #define U64_NOP(x) ((u32)((u64)(x) | 0ULL))
 
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
 // Rev 2 centres each message. As in the US version below, the U64_NOP casts only spend IDO temp
 // registers: case 2 needs four extra, and the longer chains in case 3 and the last block put the
 // temp-register ring back in the order the later code expects.

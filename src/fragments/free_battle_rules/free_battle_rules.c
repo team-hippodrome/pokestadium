@@ -45,9 +45,25 @@ typedef struct TagTeamOption {
 #define FB_STATE_CONFIRM 7
 #define FB_STATE_EXIT 8
 
+#if defined(VERSION_JP)
+#define FB_RULESET_COUNT 7
+#define FB_PANEL_HEIGHT 364
+// "Trainer"
+#define FB_TRAINER_LABEL "トレーナー"
+// "Computer"
+#define FB_COM_LABEL "コンピュータ"
+#else
+#define FB_RULESET_COUNT 5
+#define FB_PANEL_HEIGHT 336
+#define FB_TRAINER_LABEL Text_GetPlayerLabel(1)
+#define FB_COM_LABEL Text_GetPlayerLabel(3)
+#endif
+
+#if !defined(VERSION_JP)
 static char** sRuleSelectText;
 static char** sPokemonDetailText;
-#if defined(VERSION_US_REV2)
+#endif
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
 static char** sPlayerLabelText;
 #endif
 static BinArchive* D_84002D08;
@@ -55,7 +71,7 @@ static u8* D_84002D0C;
 static s32 pad_D_84002D10;
 static s16 sConnectedControllers;
 static s16 sSettingsState;
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
 static s32 pad_D_84002D18_us_rev2;
 #endif
 static TagTeamSelection sTagTeamSelection;
@@ -155,7 +171,12 @@ static TagTeamOption sTagTeamOptions[11] = {
         0x0300A5C0,
     },
 };
+#if defined(VERSION_JP)
+// Anything Goes, Nintendo Cup '99, '98 and '97, Fancy (Petit) Cup, Yellow (Pika) Cup, Ultra (Prime) Cup.
+static s16 sRulesetCategories[] = { 0, 3, 2, 1, 4, 5, 6, 0 };
+#else
 static s16 sRulesetCategories[] = { 0, 3, 4, 5, 6, 0 };
+#endif
 
 void FreeBattle_DrawPokeBallIcon(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -197,11 +218,20 @@ void FreeBattle_DrawTitleBar(void) {
     FreeBattle_DrawTintedBar(72, 40, 520, &fill_color, &border_color);
     FreeBattle_DrawPokeBallIcon(48, 32);
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(0x10, -2);
+    Gfx_SetEnvColor(0, 0, 0, 0xFF); // #000000
+    // "Free Battle Rule Settings"
+    Font_Printf(106, 44, "フリーバトル　ルールせってい");
+    Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF); // #FFFF77
+    Font_Printf(104, 42, "フリーバトル　ルールせってい");
+#else
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(0, 0, 0, 0xFF); // #000000
     Font_Printf(106, 44, Text_GetString(NULL, 0, sRuleSelectText, 0));
     Gfx_SetEnvColor(0xFF, 0xFF, 0x77, 0xFF); // #FFFF77
     Font_Printf(104, 42, Text_GetString(NULL, 0, sRuleSelectText, 0));
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -373,6 +403,17 @@ void FreeBattle_DrawTagTeamWindow(void) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+    Font_SetActive(8, -4);
+
+    for (i = 0; i < 11; i++) {
+        if (sTagTeamOptions[i].secondPlayerIcon != NULL) {
+            FreeBattle_DrawTeamAmpersand(sTagTeamOptions[i].x + 132, sTagTeamOptions[i].y + 117, i);
+        }
+    }
+
+    Font_SetActive(0x10, -4);
+#else
     Font_SetActive(0x10, 0);
 
     for (i = 0; i < 11; i++) {
@@ -382,6 +423,7 @@ void FreeBattle_DrawTagTeamWindow(void) {
     }
 
     Font_SetActive(0x10, 0);
+#endif
 
     if ((sSettingsState == 1) || (sSettingsState == 2)) {
         Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
@@ -389,7 +431,12 @@ void FreeBattle_DrawTagTeamWindow(void) {
         Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF); // #7878C8
     }
 
+#if defined(VERSION_JP)
+    // "Choose the matchup"
+    Font_Printf(100, 90, "くみあわせをきめてください");
+#else
     Font_Printf(100, 90, Text_GetString(NULL, 0, sRuleSelectText, 1));
+#endif
     Font_EndTexturedTextRendering();
 
     if (sSettingsState == FB_STATE_SELECT_LEFT_SIDE) {
@@ -528,6 +575,50 @@ void func_84001AD8(void) {
 }
 
 // Lower window: cup rules and their corresponding Pokemon level ranges.
+#if defined(VERSION_JP)
+void FreeBattle_DrawRulesetWindow(void) {
+    FreeBattle_DrawRoundedPanel(100, 268, 432, 168, 0, 0, 0, 0xFF);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, -4);
+    // "Anything Goes"
+    FreeBattle_DrawRulesetOptionText(148, 270, 0, "なんでもあり");
+    // "Nintendo Cup '99 rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 1, "ニンテンドウカップ‘９９のルール");
+    // "Nintendo Cup '98 rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 2, "ニンテンドウカップ‘９８のルール");
+    // "Nintendo Cup '97 rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 3, "ニンテンドウカップ‘９７のルール");
+    // "Fancy Cup rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 4, "ファンシーカップのルール");
+    // "Yellow Cup rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 5, "イエローカップのルール");
+    // "Ultra Cup rules"
+    FreeBattle_DrawRulesetOptionText(148, 270, 6, "ウルトラカップのルール");
+    Font_SetActive(4, -4);
+    FreeBattle_DrawRulesetOptionText(430, 274, 0, "L1〜100");
+    FreeBattle_DrawRulesetOptionText(430, 274, 1, "L1〜50");
+    FreeBattle_DrawRulesetOptionText(430, 274, 2, "L1〜30");
+    FreeBattle_DrawRulesetOptionText(430, 274, 3, "L50〜55");
+    FreeBattle_DrawRulesetOptionText(430, 274, 4, "L25〜30");
+    FreeBattle_DrawRulesetOptionText(430, 274, 5, "L15〜20");
+    FreeBattle_DrawRulesetOptionText(430, 274, 6, "L1〜100");
+    Font_SetActive(0x10, -4);
+
+    if (sSettingsState == FB_STATE_SELECT_RULESET) {
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #ffffff
+    } else {
+        Gfx_SetEnvColor(0x78, 0x78, 0xC8, 0xFF); // #7878c8
+    }
+
+    // "Choose the rules"
+    Font_Printf(100, 244, "ルールをきめてください");
+    Font_EndTexturedTextRendering();
+
+    if (sSettingsState == 3) {
+        Ui_DrawAnimatedTextureMarker(108, (sHoveredRuleset * 24) + 270);
+    }
+}
+#else
 void FreeBattle_DrawRulesetWindow(void) {
     UNUSED s32 pad;
     char buffer[128];
@@ -568,6 +659,7 @@ void FreeBattle_DrawRulesetWindow(void) {
         Ui_DrawAnimatedTextureMarker(108, (sHoveredRuleset * 24) + 276);
     }
 }
+#endif
 
 void FreeBattle_UpdateRulesetSelection(void) {
     if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
@@ -580,10 +672,10 @@ void FreeBattle_UpdateRulesetSelection(void) {
     } else if (FreeBattle_SelectionHasTagTeam() == 0) {
         if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            sHoveredRuleset = (sHoveredRuleset + 4) % 5;
+            sHoveredRuleset = (sHoveredRuleset + FB_RULESET_COUNT - 1) % FB_RULESET_COUNT;
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            sHoveredRuleset = (sHoveredRuleset + 1) % 5;
+            sHoveredRuleset = (sHoveredRuleset + 1) % FB_RULESET_COUNT;
         }
     }
 }
@@ -602,29 +694,52 @@ void FreeBattle_DrawComDifficultyText(s16 position, char* text) {
 }
 
 // Popup shown when the right-side option is COM
+#if defined(VERSION_ES) || defined(VERSION_IT)
+#define COM_ICON_X (sComDifficultyWindow.x + width + 12)
+#define COM_TITLE_X (sComDifficultyWindow.x + 12)
+#else
+#define COM_ICON_X (sComDifficultyWindow.x + 12)
+#define COM_TITLE_X (sComDifficultyWindow.x + 48)
+#endif
+
 void FreeBattle_DrawComDifficultyWindow(void) {
     if (sComDifficultyWindow.openTicks > 0) {
         s16 opening_progress = sComDifficultyWindow.openTicks * 17;
 
         Ui_DrawBorderedPanel(sComDifficultyWindow.x, sComDifficultyWindow.y + (s16)((136 - opening_progress) / 2), 152, opening_progress, 0x2121); // #212100
         if (sComDifficultyWindow.openTicks == 8) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_ES) || defined(VERSION_IT)
+            // Spanish and Italian print the title first and puts the COM icon after it.
+            s32 width = Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
+#elif defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Font_MeasureTextExtent(0x10, 0, Text_GetString(NULL, 0, sRuleSelectText, 10));
 #endif
             gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
-            Gfx_DrawTextureRgba16(sComDifficultyWindow.x + 12, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
+            Gfx_DrawTextureRgba16(COM_ICON_X, sComDifficultyWindow.y + 10, 36, 26, gComPlayerLabelIcon, 36, 0);
 
             gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
             Ui_DrawAnimatedTextureMarker(sComDifficultyWindow.x + 12,
                                          sComDifficultyWindow.y + (sComDifficultyWindow.hoveredDifficulty * 28) + 43);
             Font_BeginTranslucentTextRendering();
+#if defined(VERSION_JP)
+            Font_SetActive(0x10, -2);
+            // "strength"
+            Font_Printf(sComDifficultyWindow.x + 48, sComDifficultyWindow.y + 11, "のつよさ");
+            // "Strong"
+            FreeBattle_DrawComDifficultyText(0, "つよい");
+            // "Normal"
+            FreeBattle_DrawComDifficultyText(1, "ふつう");
+            // "Weak"
+            FreeBattle_DrawComDifficultyText(2, "よわい");
+#else
             Font_SetActive(0x10, 0);
-            Font_Printf(sComDifficultyWindow.x + 48, sComDifficultyWindow.y + 11, Text_GetString(NULL, 0, sRuleSelectText, 10));
+            Font_Printf(COM_TITLE_X, sComDifficultyWindow.y + 11, Text_GetString(NULL, 0, sRuleSelectText, 10));
             FreeBattle_DrawComDifficultyText(0, Text_GetString(NULL, 0, sRuleSelectText, 11));
             FreeBattle_DrawComDifficultyText(1, Text_GetString(NULL, 0, sRuleSelectText, 12));
             FreeBattle_DrawComDifficultyText(2, Text_GetString(NULL, 0, sRuleSelectText, 13));
+#endif
             Font_EndTexturedTextRendering();
         }
     }
@@ -682,7 +797,7 @@ void FreeBattle_PollInputs(void) {
 void FreeBattle_DrawFrame(void) {
     BgStage_DrawFrame();
     if (sPanelDrawBudget > 0) {
-        FreeBattle_DrawPanelFrame(76, 84, 488, 336);
+        FreeBattle_DrawPanelFrame(76, 84, 488, FB_PANEL_HEIGHT);
         sPanelDrawBudget -= 1;
     }
     FreeBattle_DrawTagTeamWindow();
@@ -727,13 +842,17 @@ void FreeBattle_SlideInPanel(void) {
 
     Audio_PlaySoundEffectById(SFX_PANEL_OPEN);
 
+#if defined(VERSION_JP)
+    for (i = 14; i < 399; i += 35) {
+#else
     for (i = 16; i < 368; i += 32) {
+#endif
         FreeBattle_PollInputs();
         BgStage_DrawFrame();
         Gfx_DrawTiledRgba16Image(D_84002D0C);
         FreeBattle_DrawTitleBar();
         tmp = i;
-        tmp = (336 - tmp) / 2;
+        tmp = (FB_PANEL_HEIGHT - tmp) / 2;
         FreeBattle_DrawPanelFrame(76, tmp + 84, 488, i);
         BgStage_AdvanceFrame();
     }
@@ -760,9 +879,12 @@ void FreeBattle_SlideOutPanel(void) {
 
 /** Applies player/COM settings and creates trainers for both sides. */
 void FreeBattle_ApplySettings(void) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     char port_player_name[20];
     char* name;
+    UNUSED s32 pad[2];
+#elif defined(VERSION_JP)
+    char port_player_name[12];
     UNUSED s32 pad[2];
 #else
     char port_player_name[12];
@@ -774,23 +896,23 @@ void FreeBattle_ApplySettings(void) {
 
     for (i = 0; i < 4; i++) {
         if (sTagTeamOptions[sTagTeamSelection.leftSideTeam].controllerMask & (1 << i)) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
             Text_SetNumberToken(1, i + 1);
             name = Text_GetString(port_player_name, 0x10, sPlayerLabelText, 4);
             Team_AddTrainer(0, Trainer_Create(i, 0, name, Text_GetPlayerLabel(1)));
 #else
             sprintf(port_player_name, "%dP", i + 1);
-            Team_AddTrainer(0, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
+            Team_AddTrainer(0, Trainer_Create(i, 0, port_player_name, FB_TRAINER_LABEL));
 #endif
         }
     }
 
     if (sTagTeamSelection.rightSideTeam == 3) {
         gSessionContext.aiDifficulty = sComDifficulty;
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
         temp_v0 = Trainer_Create(-1, 0, Text_GetString(NULL, 0, sPlayerLabelText, 3), Text_GetPlayerLabel(3));
 #else
-        temp_v0 = Trainer_Create(-1, 0, "COM", Text_GetPlayerLabel(3));
+        temp_v0 = Trainer_Create(-1, 0, "COM", FB_COM_LABEL);
 #endif
         Team_AddTrainer(1, temp_v0);
         if (sTagTeamSelection.leftSideTeam == 3) {
@@ -801,13 +923,13 @@ void FreeBattle_ApplySettings(void) {
     } else {
         for (i = 0; i < 4; i++) {
             if (sTagTeamOptions[sTagTeamSelection.rightSideTeam + 4].controllerMask & (1 << i)) {
-#if defined(VERSION_US_REV2)
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
                 Text_SetNumberToken(1, i + 1);
                 name = Text_GetString(port_player_name, 0x10, sPlayerLabelText, 4);
                 Team_AddTrainer(1, Trainer_Create(i, 0, name, Text_GetPlayerLabel(1)));
 #else
                 sprintf(port_player_name, "%dP", i + 1);
-                Team_AddTrainer(1, Trainer_Create(i, 0, port_player_name, Text_GetPlayerLabel(1)));
+                Team_AddTrainer(1, Trainer_Create(i, 0, port_player_name, FB_TRAINER_LABEL));
 #endif
             }
         }
@@ -880,10 +1002,12 @@ s32 FreeBattle_SettingsMain(UNUSED s32 arg0, UNUSED s32 arg1) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, common_menu2_ui, 0);
     ASSET_LOAD(D_3000000, order_select_ui, 0);
+#if !defined(VERSION_JP)
     Text_InitStringTables();
     sRuleSelectText = Text_GetStringTable(15);
     sPokemonDetailText = Text_GetStringTable(6);
-#if defined(VERSION_US_REV2)
+#endif
+#if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     sPlayerLabelText = Text_GetStringTable(0x11);
 #endif
     D_84002D08 = ASSET_LOAD2(backgrounds, 1, 1);

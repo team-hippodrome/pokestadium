@@ -27,6 +27,9 @@ extern s32 D_4006A08;
 
 static char** sIdLabelText;
 static char** sPcBoxText;
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+static char** sLevelLabelText;
+#endif
 
 void LabPC_MarkBoxSeen(unk_func_88205880_00D0* arg0) {
     s32 i;
@@ -106,6 +109,25 @@ s32 LabPC_AllBoxesEmpty(unk_func_88205880_A030* arg0) {
     return 1;
 }
 
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+// The translated releases print the level with the font and a translated label instead of
+// the "Lv" texture and Gfx_DrawNumber.
+void LabPC_DrawLevelLabel(unk_func_88201488_arg2* arg0, s32 x, s32 y) {
+    static Color_RGBA8 sLevelLabelColor = { 0xF0, 0xF0, 0xF0, 0xFF };
+    char* label = Text_GetString(NULL, 0, sLevelLabelText, 0x15);
+
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(sLevelLabelColor.r, sLevelLabelColor.g, sLevelLabelColor.b, sLevelLabelColor.a);
+    Font_SetActive(4, 0);
+    if ((arg0->unk_00 <= 0) || (arg0->unk_00 >= 0x98)) {
+        Font_Printf(x, y, "%s?", label);
+    } else {
+        Font_Printf(x, y, "%s%d", label, arg0->unk_24);
+    }
+    Font_EndTexturedTextRendering();
+}
+#endif
+
 void func_88201488(s32 arg0, s32 arg1, unk_func_88201488_arg2** arg2, s32 arg3, s32 arg4,
                    unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88217C20 = { 0xF0, 0xF0, 0xF0, 0xFF };
@@ -178,12 +200,16 @@ void func_88201488(s32 arg0, s32 arg1, unk_func_88201488_arg2** arg2, s32 arg3, 
             gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
             gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
             gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+            LabPC_DrawLevelLabel(*arg2, arg0 + 0xA, arg1 + 0x1F);
+#else
             gDPLoadTextureBlock(gDisplayListHead++, &D_4006A08, G_IM_FMT_IA, G_IM_SIZ_8b, 8, 10, 0,
                                 G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             gSPTextureRectangle(gDisplayListHead++, (arg0 + 0xA) << 2, (arg1 + 0x1F) << 2, (arg0 + 0x12) << 2,
                                 (arg1 + 0x29) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
             Gfx_DrawNumber(arg0 + 0x14, arg1 + 0x1D, (*arg2)->unk_24);
+#endif
         }
 
         Font_BeginTranslucentTextRendering();
@@ -1647,7 +1673,9 @@ void LabPC_ShowBoxes(FontContext* arg0) {
     u8* sp64;
     func_88002628_sp38* sp60;
     char** sp5C;
+#if !(defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT))
     char** sp58;
+#endif
     char** sp54;
     char** sp50;
     char** sp4C;
@@ -1666,7 +1694,11 @@ void LabPC_ShowBoxes(FontContext* arg0) {
     sIdLabelText = Text_GetStringTable(0x2A);
     sPcBoxText = Text_GetStringTable(4);
     sp5C = Text_GetStringTable(7);
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    sLevelLabelText = Text_GetStringTable(6);
+#else
     sp58 = Text_GetStringTable(6);
+#endif
     sp54 = Text_GetStringTable(0x24);
     sp50 = Text_GetStringTable(0x25);
     sp4C = Text_GetStringTable(0x26);
@@ -1675,7 +1707,11 @@ void LabPC_ShowBoxes(FontContext* arg0) {
     sp40 = Text_GetStringTable(0xB);
 
     sp68 = mem_pool_alloc(sp6C, sizeof(unk_func_88205880));
+#if defined(VERSION_FR) || defined(VERSION_DE) || defined(VERSION_ES) || defined(VERSION_IT)
+    LabPC_BuildBoxScreenWidget(sp68, 0, 0, arg0, sp6C, sp5C, sLevelLabelText, sp54, sp50, sp4C, sp48, sp44, sp40);
+#else
     LabPC_BuildBoxScreenWidget(sp68, 0, 0, arg0, sp6C, sp5C, sp58, sp54, sp50, sp4C, sp48, sp44, sp40);
+#endif
 
     sp60 = ALIGN16((u32)mem_pool_alloc(sp6C, sizeof(func_88002628_sp38)));
 
