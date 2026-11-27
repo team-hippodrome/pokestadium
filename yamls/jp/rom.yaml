@@ -1126,8 +1126,9 @@
     vram: 0x88600000
     subsegments:
     - [0x20EC90, textbin,   fragments/lab_pc_icons/lab_pc_icons_header]
-    - [0x20ECB0, asm, fragment27_20ECB0]
-    - [0x214120, data, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x20ECB0, c, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x214120, .data, fragments/lab_pc_icons/lab_pc_icons]
+    - [0x22AA30, .rodata, fragments/lab_pc_icons/lab_pc_icons]
   - name: fragment27_relocs
     type: code
     bss_size: 0x0
