@@ -5,19 +5,12 @@
 #include "src/audio_commands.h"
 #include "src/audio_data.h"
 
-// JP builds Audio_PlaySoundEffectById from assembly, which needs these as global symbols.
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-#define STATIC_JP_ASM
-#else
-#define STATIC_JP_ASM static
-#endif
-
-STATIC_JP_ASM s32 D_80078A30 = 0;
-STATIC_JP_ASM s32 scroll_sfx = 0;
-STATIC_JP_ASM s32 back_sfx = 0;
-STATIC_JP_ASM s32 confirm_sfx = 0;
-STATIC_JP_ASM s32 D_80078A40 = 0;
-STATIC_JP_ASM s32 D_80078A44 = 0;
+static s32 D_80078A30 = 0;
+static s32 scroll_sfx = 0;
+static s32 back_sfx = 0;
+static s32 confirm_sfx = 0;
+static s32 D_80078A40 = 0;
+static s32 D_80078A44 = 0;
 #if !defined(VERSION_JP)
 // JP has no Snap camera sounds to track.
 static s32 D_80078A48 = 0;
@@ -25,10 +18,8 @@ static s32 D_80078A4C = 0;
 static u8 D_80078A50 = 0;
 #endif
 
-#if defined(VERSION_JP) && !defined(NON_MATCHING)
-// JP lays out the two switches differently (the store cases come last); not matched yet.
-#pragma GLOBAL_ASM("asm/jp/nonmatchings/audio_sfx/Audio_PlaySoundEffectById.s")
-#elif defined(VERSION_JP)
+#if defined(VERSION_JP)
+// JP stores the new voice handle in a second switch placed after the first.
 s32 Audio_PlaySoundEffectById(u32 sfx) {
     u32 temp_v0_3;
     s32 sp28;
@@ -87,28 +78,7 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
         case 0x29:
         play:
             D_80078A30 = Audio_PlaySoundEffect(D_800FC68C, D_800FC688, sfx, sp28, 0x80, -1);
-            switch (sfx) {
-                case SFX_MENU_SCROLL:
-                    scroll_sfx = D_80078A30;
-                    break;
-
-                case SFX_MENU_CONFIRM:
-                    confirm_sfx = D_80078A30;
-                    break;
-
-                case SFX_MENU_BACK:
-                    back_sfx = D_80078A30;
-                    break;
-
-                case SFX_PANEL_OPEN:
-                    D_80078A40 = D_80078A30;
-                    break;
-
-                case SFX_MENU_ERROR:
-                    D_80078A44 = D_80078A30;
-                    break;
-            }
-            return D_80078A30;
+            break;
 
         case SFX_MENU_CONFIRM:
             Audio_QueueFadeSoundCommand(confirm_sfx, 1);
@@ -151,6 +121,29 @@ s32 Audio_PlaySoundEffectById(u32 sfx) {
         default:
             return 0;
     }
+
+    switch (sfx) {
+        case SFX_MENU_SCROLL:
+            scroll_sfx = D_80078A30;
+            break;
+
+        case SFX_MENU_CONFIRM:
+            confirm_sfx = D_80078A30;
+            break;
+
+        case SFX_MENU_BACK:
+            back_sfx = D_80078A30;
+            break;
+
+        case SFX_PANEL_OPEN:
+            D_80078A40 = D_80078A30;
+            break;
+
+        case SFX_MENU_ERROR:
+            D_80078A44 = D_80078A30;
+            break;
+    }
+    return D_80078A30;
 }
 #else
 s32 Audio_PlaySoundEffectById(u32 sfx) {
