@@ -81,6 +81,14 @@ with tempfile.TemporaryDirectory(prefix="asm_processor") as tmpdirname:
         version_bytes,
         flags=re.M,
     )
+    # A pragma that names another version's asm directory directly (asm/jp/... for a
+    # function only one version takes from assembly) is blanked the same way.
+    version_bytes = re.sub(
+        rb'^#pragma GLOBAL_ASM\("asm/(' + b"|".join(v.encode() for v in other_versions) + rb')/[^"]*"\)$',
+        b"",
+        version_bytes,
+        flags=re.M,
+    )
     if version_bytes != source:
         version_source = tmpdir_path / in_file.name
         version_source.write_bytes(version_bytes)
