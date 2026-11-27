@@ -21,4 +21,12 @@
 #define NTSC_PAL(ntsc, pal) (ntsc)
 #endif
 
+// Values the Japanese release changes from the international ones. Gives `jp` in the
+// VERSION_JP build and `intl` otherwise.
+#if defined(VERSION_JP)
+#define JP_INTL(jp, intl) (jp)
+#else
+#define JP_INTL(jp, intl) (intl)
+#endif
+
 #endif
