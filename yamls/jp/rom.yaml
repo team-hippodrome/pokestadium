@@ -542,15 +542,15 @@
     vram: 0x87800000
     subsegments:
     - [0x12A4F0, textbin, fragments/minigame_hud/minigame_hud_header]
-    - [0x12A510, asm, fragment2_12A510]
+    - [0x12A510, c, fragments/minigame_hud/minigame_hud]
     - [0x12C470, c, fragments/minigame_hud/minigame_hud_countdown]
     - [0x12CAD0, c, fragments/minigame_hud/minigame_hud_pause_menu]
-    - [0x12FED0, data, fragments/minigame_hud/minigame_hud]
+    - [0x12FED0, .data, fragments/minigame_hud/minigame_hud]
     - [0x12FF30, .data, fragments/minigame_hud/minigame_hud_countdown]
     - [0x130090, .data, fragments/minigame_hud/minigame_hud_pause_menu]
     - [0x139590, .rodata, fragments/minigame_hud/minigame_hud_countdown]
     - [0x1395A0, .rodata, fragments/minigame_hud/minigame_hud_pause_menu]
-    - {vram: 0x8780F240, type:  bss, name: fragments/minigame_hud/minigame_hud}
+    - {vram: 0x8780F240, type:  .bss, name: fragments/minigame_hud/minigame_hud}
     - {vram: 0x8780F2E0, type: .bss, name: fragments/minigame_hud/minigame_hud_countdown}
     - {vram: 0x8780F460, type: .bss, name: fragments/minigame_hud/minigame_hud_pause_menu}
   - name: fragment2_relocs
