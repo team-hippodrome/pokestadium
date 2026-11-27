@@ -15,7 +15,11 @@
 #include "src/stage_loader.h"
 
 typedef struct unk_D_88218060 {
+#if defined(VERSION_JP)
+    /* 0x00 */ char* unk_00;
+#else
     /* 0x00 */ s32 unk_00;
+#endif
     /* 0x04 */ Color_RGBA8* unk_04;
 } unk_D_88218060; // size = 0x8
 
@@ -29,10 +33,12 @@ typedef struct unk_D_88218070 {
     /* 0x10 */ Color_RGBA8* unk_10;
 } unk_D_88218070; // size = 0x14
 
+#if !defined(VERSION_JP)
 static char** sIdLabelText;
 static char** sPcItemText;
 static char** sItemNameTable;
 static char** sItemDescriptionText;
+#endif
 
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 0);
@@ -102,6 +108,54 @@ void LabItem_InitBoxLocationWidget(unk_func_8821421C_02C_030* arg0, unk_func_885
     arg0->unk_38 = arg2;
 }
 
+#if defined(VERSION_JP)
+s32 LabItem_DrawBoxLocationLabel(unk_func_8821421C_02C_030* arg0, s32 arg1, s32 arg2) {
+    static Color_RGBA8 D_88217FD0 = { 0xF0, 0xF0, 0xF0, 0xFF };
+    static Color_RGBA8 D_88217FD4 = { 0x7F, 0x7F, 0x7F, 0xFF };
+
+    if (arg0->unk_34 == -1) {
+        return 1;
+    }
+
+    gDPPipeSync(gDisplayListHead++);
+
+    gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
+    gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
+    gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+
+    switch (arg0->unk_34) {
+        case 0:
+        case 1:
+            gDPLoadTextureBlock(gDisplayListHead++, D_88223470[arg0->unk_30], G_IM_FMT_RGBA, G_IM_SIZ_16b, 24, 26, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gDisplayListHead++, (arg1 + 5) << 2, (arg2 + 2) << 2, (arg1 + 0x1C) << 2,
+                                (arg2 + 0x1B) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+            break;
+
+        case 2:
+            gDPLoadTextureBlock(gDisplayListHead++, D_88223488, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 26, 0,
+                                G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK,
+                                G_TX_NOLOD, G_TX_NOLOD);
+            gSPTextureRectangle(gDisplayListHead++, (arg1 + 5) << 2, (arg2 + 2) << 2, (arg1 + 0x2C) << 2,
+                                (arg2 + 0x1B) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+            break;
+    }
+
+    gDPPipeSync(gDisplayListHead++);
+
+    gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(D_88217FD0.r, D_88217FD0.g, D_88217FD0.b, D_88217FD0.a);
+    Font_SetActive(8, 0);
+    Font_Printf(arg1 + 0x21, arg2 + 4, arg0->unk_38->unk_00[arg0->unk_34]);
+    Font_EndTexturedTextRendering();
+
+    return 0;
+}
+#else
 s32 LabItem_DrawBoxLocationLabel(unk_func_8821421C_02C_030* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_88217FD0 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_88217FD4 = { 0x7F, 0x7F, 0x7F, 0xFF };
@@ -152,6 +206,7 @@ s32 LabItem_DrawBoxLocationLabel(unk_func_8821421C_02C_030* arg0, s32 arg1, s32 
 
     return 0;
 }
+#endif
 
 s32 LabItem_BoxLocationWidget_GetSelection(unk_func_8821421C_02C_030* arg0) {
     return arg0->unk_34;
@@ -199,7 +254,8 @@ void LabItem_InitConfirmDialog(unk_func_8821421C_034* arg0, s32 arg1, s32 arg2, 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp60);
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_34, 8, 0, "Do?", 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_34, 8, 0, LABPC_JP("どうする？", "Do?"),
+                                                                      8);
     arg0->unk_34->unk_3C = 0x18;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_34);
 
@@ -218,7 +274,10 @@ void LabItem_InitConfirmDialog(unk_func_8821421C_034* arg0, s32 arg1, s32 arg2, 
 
     sp50 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp50, 0xA, 2,
-                                                                      Text_GetString(NULL, 0, sPcItemText, 0x17), 8);
+                                                                      LABPC_TEXT(sPcItemText, 0x17, "はい"), 8);
+#if defined(VERSION_JP)
+    sp50->unk_38 = 0xC;
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp54, sp50);
 
     sp58 = mem_pool_alloc(arg3, sizeof(WidgetNode));
@@ -229,7 +288,7 @@ void LabItem_InitConfirmDialog(unk_func_8821421C_034* arg0, s32 arg1, s32 arg2, 
 
     sp4C = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
     ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp4C, 6, 2,
-                                                                      Text_GetString(NULL, 0, sPcItemText, 0x18), 8);
+                                                                      LABPC_TEXT(sPcItemText, 0x18, "いいえ"), 8);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp58, sp4C);
     ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_30);
 
@@ -305,6 +364,7 @@ s32 LabItem_RunConfirmDialog(unk_func_8821421C_034* arg0, Controller* arg1) {
     return var_s1 - 1;
 }
 
+#if !defined(VERSION_JP)
 s32 LabItem_MeasureMenuWidth(spE8_func_882121E0* arg0, s32 arg1) {
     s32 temp_v0;
     s32 var_s1 = 0;
@@ -319,6 +379,7 @@ s32 LabItem_MeasureMenuWidth(spE8_func_882121E0* arg0, s32 arg1) {
 
     return var_s1;
 }
+#endif
 
 void LabItem_DrawMenuCell(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4, unk_func_88200FA0_030_030* arg5) {
     static Color_RGBA8 D_88217FE8[] = {
@@ -358,23 +419,42 @@ void LabItem_DrawMenuCell(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4, unk_
     Font_EndTexturedTextRendering();
 }
 
-void LabItem_InitDropdownMenu(unk_func_8821421C_02C_070* arg0, s32 arg1, s32 arg2, s32 arg3, spE8_func_882121E0* arg4,
-                              s32 arg5, s32 arg6, MemoryPool* arg7) {
+// JP menus use a fixed width.
+#if defined(VERSION_JP)
+#define DROPDOWN_MENU_WIDTH 0xD8
+#define DROPDOWN_MENU_WIDTH_ARG(width)
+#else
+#define DROPDOWN_MENU_WIDTH sp4C
+#define DROPDOWN_MENU_WIDTH_ARG(width) width,
+#endif
+
+void LabItem_InitDropdownMenu(unk_func_8821421C_02C_070* arg0, s32 arg1, s32 arg2,
+                              DROPDOWN_MENU_WIDTH_ARG(s32 arg3) spE8_func_882121E0* arg4, s32 arg5, s32 arg6,
+                              MemoryPool* arg7) {
+#if defined(VERSION_JP)
+    UNUSED s32 pad[2];
+#else
     s32 sp4C = LabItem_MeasureMenuWidth(arg4, arg5) + 0x10;
     UNUSED s32 pad;
+#endif
 
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8821421C_02C_070));
 
     arg0->unk_00.unk_20 = LabItem_DropdownMenu_HandleInput;
     arg0->unk_00.unk_24 = LabItem_DropdownMenu_SetSelectedIndex;
+#if defined(VERSION_JP)
+    arg0->unk_00.unk_10.unk_00 = arg1;
+#else
     arg0->unk_00.unk_10.unk_00 = ((arg3 - sp4C) / 2) + arg1;
+#endif
     arg0->unk_00.unk_10.unk_02 = arg2;
     arg0->unk_40 = arg6;
 
     PointerList_Initialize(&arg0->unk_34, arg4, arg5, arg5);
 
     arg0->unk_2C = mem_pool_alloc(arg7, sizeof(WidgetAnimatedPanel));
-    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, sp4C, arg5 * 0x1C);
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, DROPDOWN_MENU_WIDTH,
+                                                                          arg5 * 0x1C);
 
     arg0->unk_2C->unk_00.unk_28 |= 0x200;
     arg0->unk_2C->unk_00.unk_28 |= 0x400;
@@ -383,8 +463,8 @@ void LabItem_InitDropdownMenu(unk_func_8821421C_02C_070* arg0, s32 arg1, s32 arg
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
 
     arg0->unk_30 = mem_pool_alloc(arg7, sizeof(unk_func_88200FA0_030_030));
-    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabItem_DrawMenuCell, sp4C,
-                                                                      0x1C, arg5, 1, arg7);
+    ((func885060BC)Memmap_GetFragmentVaddr(WidgetTree_InitPagedGrid))(arg0->unk_30, 0, 0, LabItem_DrawMenuCell,
+                                                                      DROPDOWN_MENU_WIDTH, 0x1C, arg5, 1, arg7);
     ((func88506384)Memmap_GetFragmentVaddr(WidgetTree_BindPagedGridPage))(arg0->unk_30, &arg0->unk_34, arg7);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_30);
 }
@@ -460,6 +540,37 @@ void LabItem_DropdownMenu_SetDisabledIndex(unk_func_8821421C_02C_070* arg0, s32 
     arg0->unk_30->unk_34[arg1] |= 4;
 }
 
+#if defined(VERSION_JP)
+s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2) {
+    static Color_RGBA8 D_88218000 = { 0xF0, 0xF0, 0xF0, 0xFF };
+    static Color_RGBA8 D_88218004[] = {
+        { 0xFF, 0xCB, 0xDE, 0xFF },
+        { 0xFF, 0xBF, 0xD6, 0xFF },
+        { 0x5A, 0x5A, 0xA6, 0xFF },
+    };
+
+    char sp24[0x2C];
+    Color_RGBA8 sp34;
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, 0);
+
+    if (LabItem_IsQuantitylessItem(arg0[0]) != 0) {
+        sp34 = D_88218004[0];
+    } else {
+        sp34 = D_88218000;
+    }
+
+    Gfx_SetEnvColor(sp34.r, sp34.g, sp34.b, sp34.a);
+    Font_Printf(arg1 + 8, arg2 + 4, Text_GetTmHmName(arg0[0], sp24));
+
+    if (LabItem_IsQuantitylessItemForOperation(arg0[0]) == 0) {
+        Font_SetActive(4, 0);
+        Font_Printf(arg1 + 0xB4, arg2 + 8, "×%02d", arg0[1]);
+    }
+    Font_EndTexturedTextRendering();
+}
+#else
 s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     static Color_RGBA8 D_88218000 = { 0xF0, 0xF0, 0xF0, 0xFF };
     static Color_RGBA8 D_88218004[] = {
@@ -493,6 +604,7 @@ s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
     Font_EndTexturedTextRendering();
 }
+#endif
 
 void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, unk_func_8820BE14_02C_038* arg5) {
     static Color_RGBA8 D_88218010[] = { 0x40, 0x40, 0x74, 0xFF };
@@ -544,7 +656,7 @@ void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, 
         gDPFillRectangle(gDisplayListHead++, arg0, arg1 + 0x1B, arg0 + 0xEB, arg1 + 0x1B);
 
         if (!(arg4 & 0x100)) {
-            LabItem_DrawItemRow(arg2, arg0, arg1, arg5->unk_00.unk_3C);
+            LabItem_DrawItemRow(arg2, arg0, arg1 ITEM_ROW_WIDTH(arg5->unk_00.unk_3C));
         }
     } else {
         s32 temp_t1;
@@ -600,14 +712,16 @@ void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, 
     }
 }
 
-void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2 ITEM_ROW_WIDTH(s32 arg3)) {
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8821421C_02C_06C_02C_060));
 
     arg0->unk_00.unk_18 = LabItem_ItemRowWidget_Draw;
     arg0->unk_00.unk_10.unk_00 = arg1;
     arg0->unk_00.unk_10.unk_02 = arg2;
+#if !defined(VERSION_JP)
     arg0->unk_00.unk_14.unk_00 = arg3;
     arg0->unk_00.unk_14.unk_02 = 0;
+#endif
     arg0->unk_2C.unk_00.unk_00 = 1;
     arg0->unk_2C.unk_00.unk_01 = 1;
 }
@@ -618,7 +732,7 @@ void LabItem_ItemRowWidget_SetItem(unk_func_8821421C_02C_06C_02C_060* arg0,
 }
 
 s32 LabItem_ItemRowWidget_Draw(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2) {
-    return LabItem_DrawItemRow(&arg0->unk_2C, arg1, arg2, arg0->unk_00.unk_14.unk_00);
+    return LabItem_DrawItemRow(&arg0->unk_2C, arg1, arg2 ITEM_ROW_WIDTH(arg0->unk_00.unk_14.unk_00));
 }
 
 void LabItem_QuantitySpinner_Init(unk_func_8820E99C_030* arg0, s32 arg1) {
@@ -630,7 +744,11 @@ void LabItem_QuantitySpinner_Init(unk_func_8820E99C_030* arg0, s32 arg1) {
 }
 
 void LabItem_InitQuantitySpinnerDigits(unk_func_8820E99C_030* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
+#if defined(VERSION_JP)
+    static Color_RGBA8 D_8821762C = { 0xFF, 0xFF, 0x00, 0xFF };
+#else
     s32 sp2C;
+#endif
 
     ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8820E99C_030));
 
@@ -642,10 +760,16 @@ void LabItem_InitQuantitySpinnerDigits(unk_func_8820E99C_030* arg0, s32 arg1, s3
     arg0->unk_00.unk_10.unk_02 = arg2;
 
     LabItem_QuantitySpinner_Init(arg0, 0);
+#if defined(VERSION_JP)
+    arg0->unk_44 = mem_pool_alloc(arg3, sizeof(WidgetAnimatedFrame));
+    ((func88503BAC)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantB))((WidgetAnimatedFrame*)arg0->unk_44, 0,
+                                                                                  7, 24, 26, D_8821762C);
+#else
     sp2C = Font_MeasureTextExtent(8, 0, "0");
 
     arg0->unk_44 = mem_pool_alloc(arg3, sizeof(unk_func_8820E99C_030_044));
     ((func88504F98)Memmap_GetFragmentVaddr(WidgetTree_InitDirectionalIndicator))(arg0->unk_44, -1, 0, sp2C + 2, 0x14);
+#endif
     arg0->unk_44->unk_00.unk_28 &= ~1;
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_44);
 }
@@ -660,7 +784,11 @@ void LabItem_QuantitySpinnerDigits_SetSelected(unk_func_8820E99C_030* arg0, s32 
 }
 
 s32 LabItem_QuantitySpinnerDigits_PositionArrow(unk_func_8820E99C_030* arg0) {
+#if defined(VERSION_JP)
+    s32 tmp = 46 - arg0->unk_30.unk_10 * 22;
+#else
     s32 tmp = ((arg0->unk_30.unk_0C - arg0->unk_30.unk_10) - 1) * arg0->unk_44->unk_00.unk_14.unk_00;
+#endif
 
     arg0->unk_44->unk_00.unk_10.unk_00 = tmp;
     arg0->unk_44->unk_00.unk_10.unk_02 = arg0->unk_44->unk_00.unk_10.unk_02;
@@ -669,12 +797,47 @@ s32 LabItem_QuantitySpinnerDigits_PositionArrow(unk_func_8820E99C_030* arg0) {
 
 s32 LabItem_DrawQuantitySpinnerDigits(unk_func_8820E99C_030* arg0, s32 arg1, s32 arg2) {
     static Color_RGBA8 D_8821801C = { 0xF0, 0xF0, 0xF0, 0xFF };
+#if defined(VERSION_JP)
+    s32 x;
+
+    if (arg0->unk_00.unk_2A & 1) {
+        x = (arg1 - arg0->unk_30.unk_10 * 22) + 48;
+
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
+        gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_THRESHOLD);
+        gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
+
+        gDPLoadTextureBlock(gDisplayListHead++, (gPlayer1Controller->buttonDown & 0x800) ? D_4001428 : D_4001218,
+                            G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, (x + 3) << 2, arg2 << 2, (x + 16) << 2, (arg2 + 7) << 2,
+                            G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+
+        gDPLoadTextureBlock(gDisplayListHead++, (gPlayer1Controller->buttonDown & 0x400) ? D_4001530 : D_4001320,
+                            G_IM_FMT_RGBA, G_IM_SIZ_16b, 16, 8, 0, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP,
+                            G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
+        gSPTextureRectangle(gDisplayListHead++, (x + 3) << 2, (arg2 + 32) << 2, (x + 16) << 2, (arg2 + 39) << 2,
+                            G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+
+        gDPPipeSync(gDisplayListHead++);
+        gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
+    }
+
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(8, 0);
+    Gfx_SetEnvColor(D_8821801C.r, D_8821801C.g, D_8821801C.b, D_8821801C.a);
+    Font_DrawCharAt(arg1 + 26, arg2 + 10, (arg0->unk_30.unk_00 / 10) + 0x30);
+    Font_DrawCharAt(arg1 + 48, arg2 + 10, (arg0->unk_30.unk_00 % 10) + 0x30);
+#else
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
     Gfx_SetEnvColor(D_8821801C.r, D_8821801C.g, D_8821801C.b, D_8821801C.a);
     Font_DrawCharAt(arg1, arg2, (arg0->unk_30.unk_00 / 10) + 0x30);
     Font_DrawCharAt(arg0->unk_44->unk_00.unk_14.unk_00 + arg1, arg2, (arg0->unk_30.unk_00 % 10) + 0x30);
+#endif
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -699,6 +862,44 @@ void LabItem_QuantitySpinner_SetMax(unk_func_8820E99C* arg0, s32 arg1, s32 arg2)
     LabItem_QuantitySpinner_Init(arg0->unk_30, arg1);
 }
 
+#if defined(VERSION_JP)
+void LabItem_InitQuantitySpinner(unk_func_8820E99C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
+    static Color_RGBA8 D_88218020 = { 0x6C, 0x6C, 0x7E, 0xFF };
+
+    UNUSED s32 pad[2];
+    unk_func_885012A4* sp38;
+    unk_func_8850878C* sp34;
+
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8820E99C));
+
+    arg0->unk_00.unk_20 = LabItem_QuantitySpinner_HandleInput;
+    arg0->unk_00.unk_24 = LabItem_QuantitySpinner_SetSelected;
+    arg0->unk_00.unk_10.unk_00 = arg1;
+    arg0->unk_00.unk_10.unk_02 = arg2;
+
+    arg0->unk_2C = mem_pool_alloc(arg3, sizeof(WidgetAnimatedPanel));
+    ((func88502274)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedPanel))(arg0->unk_2C, 0, 0, 0x48, 0x28);
+
+    arg0->unk_2C->unk_00.unk_28 |= 0x200;
+    arg0->unk_2C->unk_00.unk_28 |= 0x400;
+    arg0->unk_2C->unk_00.unk_28 &= ~1;
+
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_2C);
+
+    sp38 = mem_pool_alloc(arg3, sizeof(unk_func_885012A4));
+    ((func885012A4)Memmap_GetFragmentVaddr(WidgetTree_InitSolidColor))(sp38, 0, 0, 0x48, 0x28, D_88218020);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, sp38);
+
+    sp34 = mem_pool_alloc(arg3, sizeof(unk_func_8850878C));
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(sp34, 4, 0xA, "×", 8);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp38, sp34);
+
+    arg0->unk_30 = mem_pool_alloc(arg3, sizeof(unk_func_8820E99C_030));
+    LabItem_InitQuantitySpinnerDigits(arg0->unk_30, 0, 0, arg3);
+    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp38, arg0->unk_30);
+    LabItem_QuantitySpinner_SetMax(arg0, 0, 0);
+}
+#else
 void LabItem_InitQuantitySpinner(unk_func_8820E99C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3) {
     static Color_RGBA8 D_88218020 = { 0x6C, 0x6C, 0x7E, 0xFF };
 
@@ -740,6 +941,7 @@ void LabItem_InitQuantitySpinner(unk_func_8820E99C* arg0, s32 arg1, s32 arg2, Me
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp38, arg0->unk_30);
     LabItem_QuantitySpinner_SetMax(arg0, 0, 0);
 }
+#endif
 
 void LabItem_QuantitySpinner_SetSelected(unk_func_8820E99C* arg0, s32 arg1) {
     arg0->unk_00.unk_2A = arg1;
@@ -841,7 +1043,9 @@ void LabItem_DrawGamePakInfoCard(s32 arg0, s32 arg1, unk_func_8820EFD8* arg2, s3
 
     Color_RGBA8 sp6C;
     UNUSED s32 pad;
+#if !defined(VERSION_JP)
     char* sp64;
+#endif
     UNUSED s32 pad2;
     s32 temp_a3;
     s32 temp_t4;
@@ -884,6 +1088,12 @@ void LabItem_DrawGamePakInfoCard(s32 arg0, s32 arg1, unk_func_8820EFD8* arg2, s3
     Gfx_SetEnvColor(D_88218028.r, D_88218028.g, D_88218028.b, D_88218028.a);
     Font_SetActive(0x10, 0);
 
+#if defined(VERSION_JP)
+    Font_Printf(arg0 + 8, arg1 + 6, "なまえ/%s", &arg2->unk_08);
+    Font_SetActive(8, 0);
+
+    Font_Printf(arg0 + 0xD, arg1 + 0x24, "ID No/%05d", arg2->unk_04);
+#else
     sp64 = Text_GetString(NULL, 0, sPcItemText, 0x14);
     Font_Printf(arg0 + 8, arg1 + 6, sp64);
     Font_Printf(Font_MeasureTextExtent(0, 0, sp64) + arg0 + 8, arg1 + 6, "%s", &arg2->unk_08);
@@ -892,6 +1102,7 @@ void LabItem_DrawGamePakInfoCard(s32 arg0, s32 arg1, unk_func_8820EFD8* arg2, s3
     sp64 = Text_GetString(NULL, 0, sPcItemText, 0x15);
     Font_Printf(arg0 + 0xD, arg1 + 0x24, sp64);
     Font_Printf(Font_MeasureTextExtent(0, 0, sp64) + arg0 + 0xD, arg1 + 0x24, "%05d", arg2->unk_04);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -904,31 +1115,6 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     static Color_RGBA8 D_88218054 = { 0x6A, 0x6A, 0xB2, 0xFF };
     static Color_RGBA8 D_88218058 = { 0x2D, 0x1A, 0x41, 0xFF };
     static Color_RGBA8 D_8821805C = { 0x6F, 0x5F, 0x7F, 0xFF };
-    static unk_D_88218060 D_88218060[] = {
-        { 17, D_88218210 },
-        { 18, D_88218218 },
-    };
-    static unk_D_88218070 D_88218070[] = {
-        {
-            249,
-            110,
-            54,
-            42,
-            D_8821B868,
-            48,
-            D_882181D0,
-        },
-        {
-            249,
-            168,
-            54,
-            42,
-            D_8821C5F0,
-            48,
-            D_882181D8,
-        },
-    };
-    static Color_RGBA8 D_88218098 = { 0xFF, 0xFF, 0x00, 0xFF };
 
     unk_func_8850BD40* temp_s0_7;
     unk_func_88503298* temp_s0_8;
@@ -948,7 +1134,9 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     WidgetAnimatedPanel* temp_v0_2;
     WidgetAnimatedPanel* temp_v0_3;
     WidgetAnimatedPanel* temp_v0_4;
+#if !defined(VERSION_JP)
     char* sp7C;
+#endif
     unk_func_8820BE14_02C_038* temp_v0_8;
     s32 i;
     unk_func_882149A0* temp_v0_6;
@@ -959,7 +1147,7 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     unk_func_8850143C* temp_s0_2;
     s32 j;
 
-    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, 0x78);
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8821421C_038));
 
     arg0->unk_00.unk_1C = LabItem_BoxScreen_UpdatePageSelection;
     arg0->unk_00.unk_20 = LabItem_BoxScreen_HandleInput;
@@ -1039,8 +1227,9 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(temp_s0_2, arg0->unk_38);
 
     temp_s0_3 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(temp_s0_3, 0x60, 4,
-                                                                      Text_GetString(NULL, 0, sPcItemText, 0x13), 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+        temp_s0_3, 0x60, 4, LABPC_TEXT(sPcItemText, 0x13, "ボックスは４つぶんだけです\nけすボックスをえらんでください"),
+        8);
     temp_s0_3->unk_3C = 0x1C;
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_38, temp_s0_3);
 
@@ -1058,23 +1247,36 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     if (spB0) {}
     if (spB4) {}
 
-    for (j = 0; j < 2; j++) {
-        temp_s0_4 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-        sp7C = Text_GetString(NULL, 0, sPcItemText, D_88218060[j].unk_00);
+    {
+        static unk_D_88218060 D_88218060[] = {
+            { LABPC_JP("どうぐをかくにんする", 17), D_88218210 },
+            { LABPC_JP("このボックスをすてる", 18), D_88218218 },
+        };
 
-        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
-            temp_s0_4, (0x228 - Font_MeasureTextExtent(0x10, 0, sp7C)) / 2, 0x10, sp7C, 0x10);
+        for (j = 0; j < 2; j++) {
+            temp_s0_4 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
+#if defined(VERSION_JP)
+            ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+                temp_s0_4, (0x228 - (strlen(D_88218060[j].unk_00) * 24) / 2) / 2, 0x10, D_88218060[j].unk_00, 0x10);
+#else
+            sp7C = Text_GetString(NULL, 0, sPcItemText, D_88218060[j].unk_00);
 
-        temp_s0_4->unk_30 = D_88218060[j].unk_04[0];
-        temp_s0_4->unk_44 = temp_s0_4->unk_44;
-        temp_s0_4->unk_34 = D_88218060[j].unk_04[1];
-        temp_s0_4->unk_44 = 1;
+            ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+                temp_s0_4, (0x228 - Font_MeasureTextExtent(0x10, 0, sp7C)) / 2, 0x10, sp7C, 0x10);
+#endif
 
-        ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_3C, temp_s0_4);
+            temp_s0_4->unk_30 = D_88218060[j].unk_04[0];
+            temp_s0_4->unk_44 = temp_s0_4->unk_44;
+            temp_s0_4->unk_34 = D_88218060[j].unk_04[1];
+            temp_s0_4->unk_44 = 1;
+
+            ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_3C, temp_s0_4);
+        }
     }
 
     arg0->unk_40 = mem_pool_alloc(arg5, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_40, 0x60, 4, "ERROR", 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_40, 0x60, 4,
+                                                                      LABPC_JP("えらーどす", "ERROR"), 8);
     arg0->unk_40->unk_3C = 0x1C;
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_38, arg0->unk_40);
 
@@ -1092,24 +1294,48 @@ void LabItem_InitBoxScreen(unk_func_8821421C_038* arg0, s32 arg1, s32 arg2, Widg
     ((func8850C284)Memmap_GetFragmentVaddr(WidgetTree_InitGridMenu))(arg0->unk_4C->unk_28, 3, 1, arg5);
     ((func8850BF80)Memmap_GetFragmentVaddr(WidgetTree_AppendVerticalMenuItem))(arg0->unk_4C, arg0->unk_4C->unk_28);
 
-    for (i = 0; i < 2; i++) {
-        temp_v0_6 = mem_pool_alloc(arg5, sizeof(unk_func_882149A0));
-        LabPC_InitTabWidget(temp_v0_6, D_88218070[i].unk_00, D_88218070[i].unk_02, D_88218070[i].unk_04,
-                            D_88218070[i].unk_06, D_88218070[i].unk_08, D_88218070[i].unk_0C, D_88218070[i].unk_10[0],
-                            D_88218070[i].unk_10[1], D_88218044);
+    {
+        static unk_D_88218070 D_88218070[] = {
+            {
+                249,
+                110,
+                54,
+                42,
+                D_8821B868,
+                48,
+                D_882181D0,
+            },
+            {
+                249,
+                168,
+                54,
+                42,
+                D_8821C5F0,
+                48,
+                D_882181D8,
+            },
+        };
+        static Color_RGBA8 D_88218098 = { 0xFF, 0xFF, 0x00, 0xFF };
 
-        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_44, temp_v0_6);
+        for (i = 0; i < 2; i++) {
+            temp_v0_6 = mem_pool_alloc(arg5, sizeof(unk_func_882149A0));
+            LabPC_InitTabWidget(temp_v0_6, D_88218070[i].unk_00, D_88218070[i].unk_02, D_88218070[i].unk_04,
+                                D_88218070[i].unk_06, D_88218070[i].unk_08, D_88218070[i].unk_0C,
+                                D_88218070[i].unk_10[0], D_88218070[i].unk_10[1], D_88218044);
 
-        arg0->unk_4C->unk_28->unk_18[i * arg0->unk_4C->unk_28->unk_2C] = &temp_v0_6->unk_00;
+            ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_44, temp_v0_6);
+
+            arg0->unk_4C->unk_28->unk_18[i * arg0->unk_4C->unk_28->unk_2C] = &temp_v0_6->unk_00;
+        }
+
+        ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_4C->unk_28);
+
+        temp_s0_6 = mem_pool_alloc(arg5, sizeof(WidgetAnimatedFrame));
+        ((func88503340)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantA))(temp_s0_6, 0, 0, 0x10, 0x10,
+                                                                                      D_88218098);
+        ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_44, temp_s0_6);
+        arg0->unk_4C->unk_28->unk_1C = temp_s0_6;
     }
-
-    ((func8850CAB4)Memmap_GetFragmentVaddr(WidgetTree_SelectFirstEnabledGridItem))(arg0->unk_4C->unk_28);
-
-    temp_s0_6 = mem_pool_alloc(arg5, sizeof(WidgetAnimatedFrame));
-    ((func88503340)Memmap_GetFragmentVaddr(WidgetTree_InitAnimatedFrameVariantA))(temp_s0_6, 0, 0, 0x10, 0x10,
-                                                                                  D_88218098);
-    ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_44, temp_s0_6);
-    arg0->unk_4C->unk_28->unk_1C = temp_s0_6;
 
     arg0->unk_30 = mem_pool_alloc(arg5, sizeof(unk_func_8820BE14_02C_038));
     LabPC_InitScrollableBoxGrid(arg0->unk_30, 0x136, 0x34, 8, LabItem_DrawItemGridCell, 0xEC, 0x1C, arg5);
@@ -1173,7 +1399,11 @@ s32 LabItem_BoxScreen_UpdatePageSelection(unk_func_8821421C_038* arg0) {
             temp_t0 = &((u8*)arg0->unk_30->unk_00.unk_2C
                             ->unk_00)[arg0->unk_30->unk_00.unk_2C->unk_0C * arg0->unk_30->unk_00.unk_38];
             if (temp_t0 != NULL) {
+#if defined(VERSION_JP)
+                sp2C = func_8002E160_jp(temp_t0[0], arg0->unk_74_jp);
+#else
                 sp2C = Text_GetString(NULL, 0, sItemDescriptionText, temp_t0[0] - 1);
+#endif
             }
             arg0->unk_40->unk_40 = sp2C;
             break;
@@ -1293,7 +1523,7 @@ s32 func_88210380(unk_func_8821421C_038_04C* arg0, Controller* arg1) {
                         break;
                     case 1:
                         LabItem_SetConfirmDialogText(arg0->unk_00.unk_24->unk_48,
-                                                     Text_GetString(NULL, 0, sPcItemText, 0x16));
+                                                     LABPC_TEXT(sPcItemText, 0x16, "このボックスをすてる？"));
                         ((func8850CB48)Memmap_GetFragmentVaddr(WidgetTree_SetGridMenuSelection))(
                             arg0->unk_00.unk_24->unk_48->unk_30, 1);
                         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
@@ -1317,7 +1547,17 @@ s32 func_88210380(unk_func_8821421C_038_04C* arg0, Controller* arg1) {
 void LabItem_InitOperationController(unk_func_8821421C_02C_06C_02C* arg0, unk_func_8820BE14_02C_038* arg1,
                                      unk_func_8820BE14_02C_038* arg2, unk_func_8820E99C* arg3, unk_func_88217740* arg4,
                                      unk_func_88509F48* arg5, MemoryPool* arg6) {
+#if defined(VERSION_JP)
+    static char* D_8821809C[] = {
+        "いどうするどうぐがありません",
+        "ならべかえるどうぐがありません",
+        "いれかえるどうぐがありません",
+        "いどうさきには　どうぐがいっぱいです",
+        "ゲームボーイのポケモンで\nひつようなどうぐです",
+    };
+#else
     static u16 D_8821809C[] = { 8, 9, 0xA, 0xB, 0xC };
+#endif
     static Color_RGBA8 D_882180A8 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
     s32 i;
@@ -1343,13 +1583,18 @@ void LabItem_InitOperationController(unk_func_8821421C_02C_06C_02C* arg0, unk_fu
     for (i = 0; i < 5; i++) {
         arg0->unk_78[i].unk_00 = mem_pool_alloc(arg6, sizeof(unk_func_8850878C));
         ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
-            arg0->unk_78[i].unk_00, 0, 0, Text_GetString(NULL, 0, sPcItemText, D_8821809C[i]), 0x10);
+            arg0->unk_78[i].unk_00, 0, 0, LABPC_TEXT(sPcItemText, D_8821809C[i], D_8821809C[i]), 0x10);
 
         arg0->unk_78[i].unk_00->unk_30 = D_882180A8;
         arg0->unk_78[i].unk_00->unk_44 = arg0->unk_78[i].unk_00->unk_44;
         arg0->unk_78[i].unk_08 = 0;
         arg0->unk_78[i].unk_04 = 0;
     }
+#if defined(VERSION_JP)
+    // clang-format off
+    arg0->unk_78[4].unk_04 = 2; arg0->unk_78[4].unk_08 = 12; // must stay on one line to match
+    // clang-format on
+#endif
 }
 
 void LabItem_OperationController_SetSelectMode(unk_func_8821421C_02C_06C_02C* arg0, s32 arg1) {
@@ -1463,6 +1708,10 @@ void LabItem_GetSelectedSlotPositions(unk_func_8821421C_02C_06C_02C* arg0, Widge
     }
 }
 
+#if defined(VERSION_JP) && !defined(NON_MATCHING)
+// Matches except that IDO computes the final y sum in t0 instead of t9.
+#pragma GLOBAL_ASM("asm/jp/nonmatchings/fragments/lab_pc/lab_pc_1B4EA0/LabItem_OpenQuantitySpinnerForSelection.s")
+#else
 void LabItem_OpenQuantitySpinnerForSelection(unk_func_8821421C_02C_06C_02C* arg0, s32 arg1) {
     s32 temp_v1_2;
     s32 var_v1;
@@ -1483,12 +1732,18 @@ void LabItem_OpenQuantitySpinnerForSelection(unk_func_8821421C_02C_06C_02C* arg0
         var_v1 += 0x20;
     }
 
+#if defined(VERSION_JP)
+    arg0->unk_34->unk_00.unk_10.unk_00 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_00 + 0x98;
+    arg0->unk_34->unk_00.unk_10.unk_02 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_02 + var_v1 & 0xFFFF;
+#else
     arg0->unk_34->unk_00.unk_10.unk_00 =
         0xD3 + (arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_00 - arg0->unk_34->unk_2C->unk_00.unk_14.unk_00);
     arg0->unk_34->unk_00.unk_10.unk_02 = arg0->unk_2C[0]->unk_00.unk_00.unk_10.unk_02 + var_v1 & 0xFFFF;
+#endif
 
     LabItem_QuantitySpinner_Open(arg0->unk_34);
 }
+#endif
 
 void LabItem_SetOperationState(unk_func_8821421C_02C_06C_02C* arg0, s32 arg1) {
     switch (arg1) {
@@ -2085,7 +2340,12 @@ u8* LabItem_GetHighlightedEntry(unk_func_8821421C_02C_06C_02C* arg0) {
 
 void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2, unk_func_8821421C_03C* arg3, s32* arg4,
                                 unk_func_8821421C_07C* arg5, WidgetNode* arg6, unk_func_8821421C_038* arg7,
-                                unk_func_8821421C_034* arg8, unk_func_88509F48* arg9, s8** argA, MemoryPool* argB) {
+                                unk_func_8821421C_034* arg8, unk_func_88509F48* arg9,
+                                LAB_PC_TEXT_PARAM(s8** argA) MemoryPool* argB) {
+#if defined(VERSION_JP)
+    static char D_88225000[0x20];
+    static spE8_func_882121E0 D_882176C8 = { { " てもちの どうぐ ", D_88225000, " ６４の カセット " } };
+#endif
     static Color_RGBA8 D_882180AC = { 0x6C, 0x6C, 0x7E, 0xFF };
     static Color_RGBA8 D_882180B0 = { 0x50, 0x50, 0x86, 0xFF };
     static Color_RGBA8 D_882180B4 = { 0x79, 0x79, 0xCB, 0xFF };
@@ -2095,37 +2355,37 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     static Color_RGBA8 D_882180C4 = { 0x6F, 0x5F, 0x7F, 0xFF };
     static unk_D_88218060 D_882180C8[] = {
         {
-            0x00000001,
+            LABPC_JP("ひだりのボックスをえらぶ", 0x00000001),
             D_88218228,
         },
         {
-            0x00000002,
+            LABPC_JP("みぎのボックスをえらぶ", 0x00000002),
             D_88218228,
         },
         {
-            0x00000003,
+            LABPC_JP("どうぐをいどうする", 0x00000003),
             D_882181F0,
         },
         {
-            0x00000004,
+            LABPC_JP("どうぐをならべかえる", 0x00000004),
             D_88218208,
         },
         {
-            0x00000005,
+            LABPC_JP("どうぐをいれかえる", 0x00000005),
             D_88218200,
         },
         {
-            0x00000006,
+            LABPC_JP("メニューへもどる", 0x00000006),
             D_882181F8,
         },
     };
     static unk_D_88218060 D_882180F8[] = {
         {
-            0x00000007,
+            LABPC_JP("どのボックスをえらぶ？", 0x00000007),
             D_882181F8,
         },
         {
-            0x00000007,
+            LABPC_JP("どのボックスをえらぶ？", 0x00000007),
             D_882181F8,
         },
     };
@@ -2192,13 +2452,18 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
         },
     };
     static Color_RGBA8 D_88218198 = { 0xFF, 0xFF, 0x00, 0xFF };
-    static u16 D_8821819C[] = { 0xD };
-    static Color_RGBA8 D_882181A0 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
+#if defined(VERSION_JP)
+    s32 temp_s0;
+    char spDC[11];
+    s32 i;
+    UNUSED s32 padDC[2];
+#else
     UNUSED s32 pad[6];
     s32 i;
     spE8_func_882121E0* spE8;
     char spDC[11];
+#endif
     unk_func_885012A4* spD8;
     unk_func_885012A4* spD4;
     unk_func_885012A4* spD0;
@@ -2211,25 +2476,40 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     unk_func_882170A8* temp_v0_11;
     unk_func_882170A8* temp_v0_9;
     unk_func_8850143C* temp_s0_2;
+#if !defined(VERSION_JP)
     char* spA8;
+#endif
     unk_func_8850878C* temp_s0_3;
     unk_func_8850878C* temp_s0_4;
+#if !defined(VERSION_JP)
     char* sp9C;
+#endif
+#if defined(VERSION_JP)
+    s32 x;
+    WidgetAnimatedFrame* temp_s0_5;
+#else
     WidgetAnimatedFrame* temp_s0_5;
     unk_func_88503298* temp_s0_6;
+#endif
     unk_func_88507D4C* sp90;
     unk_func_88507D4C* sp8C;
     unk_func_8820E99C* temp_v0_12;
     unk_func_88507D4C* sp84;
     unk_func_88507D4C* sp80;
     s32 j;
+#if defined(VERSION_JP)
+    unk_func_88503298* temp_s0_6;
+    UNUSED s32 padEnd[2];
+#else
     s32 x;
     s32 temp_s0;
     char* temp_s1;
     char* sp6C;
+#endif
 
     temp_s0 = GbSave_GetActivePort();
 
+#if !defined(VERSION_JP)
     spE8 = mem_pool_alloc(argB, sizeof(spE8_func_882121E0));
     temp_s1 = mem_pool_alloc(argB, sizeof(char) * 40);
 
@@ -2238,8 +2518,9 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     spE8->unk_00[1] = Text_GetString(temp_s1, sizeof(char) * 40, sPcItemText, 0xF);
     spE8->unk_00[0] = Text_GetString(NULL, 0, sPcItemText, 0xE);
     spE8->unk_00[2] = Text_GetString(NULL, 0, sPcItemText, 0x10);
+#endif
 
-    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, 0xA4);
+    ((func885007CC)Memmap_GetFragmentVaddr(WidgetTree_InitWidget))(arg0, sizeof(unk_func_8821421C_02C));
 
     arg0->unk_00.unk_1C = LabItem_RefreshDescriptionPanel;
     arg0->unk_00.unk_20 = LabPC_ItemMenu_HandleInput;
@@ -2301,12 +2582,12 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, spBC);
 
     arg0->unk_30[0] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_030));
-    LabItem_InitBoxLocationWidget(arg0->unk_30[0], spB8, spE8);
+    LabItem_InitBoxLocationWidget(arg0->unk_30[0], spB8, LABPC_JP(&D_882176C8, spE8));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spB8, arg0->unk_30[0]);
     LabItem_BoxLocationWidget_SetSelection(arg0->unk_30[0], 0);
 
     arg0->unk_30[1] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_030));
-    LabItem_InitBoxLocationWidget(arg0->unk_30[1], spBC, spE8);
+    LabItem_InitBoxLocationWidget(arg0->unk_30[1], spBC, LABPC_JP(&D_882176C8, spE8));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(spBC, arg0->unk_30[1]);
     LabItem_BoxLocationWidget_SetSelection(arg0->unk_30[1], 1);
 
@@ -2325,9 +2606,14 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
 
     for (i = 0; i < 6; i++) {
         temp_s0_3 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
+#if defined(VERSION_JP)
+        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+            temp_s0_3, (0x228 - (strlen(D_882180C8[i].unk_00) * 24) / 2) / 2, 0x10, D_882180C8[i].unk_00, 0x10);
+#else
         spA8 = Text_GetString(NULL, 0, sPcItemText, D_882180C8[i].unk_00);
         ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
             temp_s0_3, (0x228 - Font_MeasureTextExtent(0x10, 0, spA8)) / 2, 0x10, spA8, 0x10);
+#endif
 
         temp_s0_3->unk_30 = D_882180C8[i].unk_04[0];
         temp_s0_3->unk_44 = temp_s0_3->unk_44;
@@ -2343,9 +2629,14 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
 
     for (j = 0; j < 2; j++) {
         temp_s0_4 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
+#if defined(VERSION_JP)
+        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
+            temp_s0_4, (0x228 - (strlen(D_882180F8[j].unk_00) * 24) / 2) / 2, 0x10, D_882180F8[j].unk_00, 0x10);
+#else
         sp9C = Text_GetString(NULL, 0, sPcItemText, D_882180F8[j].unk_00);
         ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(
             temp_s0_4, (0x228 - Font_MeasureTextExtent(0x10, 0, sp9C)) / 2, 0x10, sp9C, 0x10);
+#endif
 
         temp_s0_4->unk_30 = D_882180F8[j].unk_04[0];
         temp_s0_4->unk_44 = temp_s0_4->unk_44;
@@ -2356,7 +2647,8 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     }
 
     arg0->unk_68 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
-    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_68, 0x60, 4, "ERROR", 8);
+    ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_68, 0x60, 4,
+                                                                      LABPC_JP("えらーどす", "ERROR"), 8);
     arg0->unk_68->unk_3C = 0x1C;
     ((func88500A3C)Memmap_GetFragmentVaddr(WidgetTree_AddPage))(arg0->unk_5C, arg0->unk_68);
 
@@ -2452,7 +2744,7 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_6C->unk_2C->unk_58[j]);
 
         arg0->unk_6C->unk_2C->unk_60[j] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_06C_02C_060));
-        LabItem_InitItemRowWidget(arg0->unk_6C->unk_2C->unk_60[j], 0, 0, 0xEC);
+        LabItem_InitItemRowWidget(arg0->unk_6C->unk_2C->unk_60[j], 0, 0 ITEM_ROW_WIDTH(0xEC));
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_6C->unk_2C->unk_58[j],
                                                                         arg0->unk_6C->unk_2C->unk_60[j]);
         arg0->unk_6C->unk_2C->unk_50->unk_1C[j] = arg0->unk_6C->unk_2C->unk_58[j];
@@ -2462,7 +2754,7 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_6C->unk_2C->unk_68[j]);
 
         arg0->unk_6C->unk_2C->unk_70[j] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_06C_02C_060));
-        LabItem_InitItemRowWidget(arg0->unk_6C->unk_2C->unk_70[j], 0, 0, 0xEC);
+        LabItem_InitItemRowWidget(arg0->unk_6C->unk_2C->unk_70[j], 0, 0 ITEM_ROW_WIDTH(0xEC));
         ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_6C->unk_2C->unk_68[j],
                                                                         arg0->unk_6C->unk_2C->unk_70[j]);
 
@@ -2470,31 +2762,64 @@ void LabItem_BuildOperationNode(unk_func_8821421C_02C* arg0, s32 arg1, s32 arg2,
     }
 
     arg0->unk_70[0] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_070));
-    LabItem_InitDropdownMenu(arg0->unk_70[0], 6, 0x28, 0xEC, spE8, 3, 0, argB);
+    LabItem_InitDropdownMenu(arg0->unk_70[0], LABPC_JP(0x10, 6), 0x28,
+                             DROPDOWN_MENU_WIDTH_ARG(0xEC) LABPC_JP(&D_882176C8, spE8), 3, 0, argB);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_70[0]);
 
     arg0->unk_70[1] = mem_pool_alloc(argB, sizeof(unk_func_8821421C_02C_070));
-    LabItem_InitDropdownMenu(arg0->unk_70[1], 0x136, 0x28, 0xEC, spE8, 3, 1, argB);
+    LabItem_InitDropdownMenu(arg0->unk_70[1], LABPC_JP(0x140, 0x136), 0x28,
+                             DROPDOWN_MENU_WIDTH_ARG(0xEC) LABPC_JP(&D_882176C8, spE8), 3, 1, argB);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0->unk_2C, arg0->unk_70[1]);
+
+#if defined(VERSION_JP)
+    sprintf(D_88225000, "%sのパソコン", GbSave_GetPlayerName(temp_s0, spDC));
+#endif
 
     temp_s0_6 = mem_pool_alloc(argB, sizeof(unk_func_88503298));
     ((func88503298)Memmap_GetFragmentVaddr(WidgetTree_InitVisibilityGateBridge))(temp_s0_6, arg0->unk_2C, arg6);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, temp_s0_6);
 
-    for (i = 0; i < 1; i++) {
-        sp6C = Text_GetString(NULL, 0, sPcItemText, D_8821819C[i]);
+    {
+#if defined(VERSION_JP)
+        static char* D_8821819C[] = {
+            "６４カセットに　あきがありません\nいどうできるどうぐのボックスは\nＧＢカートリッジ４つぶんだけです",
+        };
+#else
+        static u16 D_8821819C[] = { 0xD };
+#endif
+        static Color_RGBA8 D_882181A0 = { 0xF0, 0xF0, 0xF0, 0xFF };
 
-        arg0->unk_94[i].unk_00 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
-        ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_94[i].unk_00, 0, 0, sp6C, 0x10);
+        for (i = 0; i < 1; i++) {
+#if defined(VERSION_JP)
+            arg0->unk_94[i].unk_00 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
+            ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_94[i].unk_00, 0, 0,
+                                                                              D_8821819C[i], 0x10);
+#else
+            sp6C = Text_GetString(NULL, 0, sPcItemText, D_8821819C[i]);
 
-        arg0->unk_94[i].unk_00->unk_30 = D_882181A0;
-        arg0->unk_94[i].unk_00->unk_44 = arg0->unk_94[i].unk_00->unk_44;
-        arg0->unk_94[i].unk_08 = 0;
-        arg0->unk_94[i].unk_04 = 0;
+            arg0->unk_94[i].unk_00 = mem_pool_alloc(argB, sizeof(unk_func_8850878C));
+            ((func8850878C)Memmap_GetFragmentVaddr(WidgetTree_InitTextLabel))(arg0->unk_94[i].unk_00, 0, 0, sp6C, 0x10);
+#endif
+
+            arg0->unk_94[i].unk_00->unk_30 = D_882181A0;
+            arg0->unk_94[i].unk_00->unk_44 = arg0->unk_94[i].unk_00->unk_44;
+            arg0->unk_94[i].unk_08 = 0;
+            arg0->unk_94[i].unk_04 = 0;
+        }
     }
+#if defined(VERSION_JP)
+    // clang-format off
+    arg0->unk_94[0].unk_04 = 3; arg0->unk_94[0].unk_08 = 16; // must stay on one line to match
+    // clang-format on
+#endif
 
     arg0->unk_A0 = mem_pool_alloc(argB, sizeof(unk_func_889000C4));
+#if defined(VERSION_JP)
+    ((func889000C4)Memmap_GetFragmentVaddr(LabUI_BuildConfirmDialog))(arg0->unk_A0, 0xCA - arg0->unk_00.unk_10.unk_00,
+                                                                      0xAD - arg0->unk_00.unk_10.unk_02, 0, NULL, argB);
+#else
     ((func889000C4)Memmap_GetFragmentVaddr(LabUI_BuildConfirmDialog))(arg0->unk_A0, 0, arg0->unk_2C, 0, argA, argB);
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_A0);
 
     if (sp80) {}
@@ -2541,7 +2866,11 @@ s32 LabItem_RefreshDescriptionPanel(unk_func_8821421C_02C* arg0) {
             ((func88500A6C)Memmap_GetFragmentVaddr(WidgetTree_SelectPage))(arg0->unk_5C, 2);
             temp_v0_2 = LabItem_GetHighlightedEntry(arg0->unk_6C->unk_2C);
             if (temp_v0_2 != NULL) {
+#if defined(VERSION_JP)
+                sp2C = func_8002E160_jp(temp_v0_2[0], arg0->unk_7C_jp);
+#else
                 sp2C = Text_GetString(NULL, 0, sItemDescriptionText, temp_v0_2[0] - 1);
+#endif
             }
             arg0->unk_68->unk_40 = sp2C;
             break;
@@ -2907,7 +3236,8 @@ s32 LabItem_BoxPairMenu_HandleInput(unk_func_8821421C_02C_06C* arg0, Controller*
     return var_s0;
 }
 
-void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3, s32 arg4, char** arg5) {
+void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3,
+                                 s32 arg4 LAB_PC_TEXT_PARAM_LAST(char** arg5)) {
     static Color_RGBA8 D_882181A4 = { 0x1E, 0x50, 0x50, 0xFF };
     static Color_RGBA8 D_882181A8 = { 0x00, 0x0A, 0x0A, 0xFF };
 
@@ -2961,13 +3291,17 @@ void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, Me
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp8C, sp64);
 
     sp60 = mem_pool_alloc(arg3, sizeof(unk_func_88509A2C));
+#if defined(VERSION_JP)
+    ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp60, 0x38, 0x22, GbSave_GetActivePort());
+#else
     ((func88509A2C)Memmap_GetFragmentVaddr(WidgetTree_InitSaveSlotLabel))(sp60, 0x38, 0x22, GbSave_GetActivePort(),
                                                                           Text_GetString(NULL, 0, sIdLabelText, 0));
+#endif
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp60);
 
     sp5C = mem_pool_alloc(arg3, sizeof(unk_func_88509E34));
     ((func88509E34)Memmap_GetFragmentVaddr(WidgetTree_InitTextMessage))(sp5C, 0, 0,
-                                                                        Text_GetString(NULL, 0, sPcItemText, 0));
+                                                                        LABPC_TEXT(sPcItemText, 0, "どうぐのせいり"));
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp64, sp5C);
 
     arg0->unk_34 = mem_pool_alloc(arg3, sizeof(unk_func_8821421C_034));
@@ -2987,7 +3321,7 @@ void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, Me
 
     arg0->unk_2C = mem_pool_alloc(arg3, sizeof(unk_func_8821421C_02C));
     LabItem_BuildOperationNode(arg0->unk_2C, 0x2C, 0x4B, arg0->unk_3C, &arg0->unk_78, arg0->unk_7C, sp8C, arg0->unk_38,
-                               arg0->unk_34, arg0->unk_30, arg5, arg3);
+                               arg0->unk_34, arg0->unk_30, LAB_PC_TEXT_ARG(arg5) arg3);
 
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(sp88, arg0->unk_2C);
     ((func8850068C)Memmap_GetFragmentVaddr(WidgetTree_AppendChild))(arg0, arg0->unk_38);
@@ -3018,7 +3352,9 @@ void LabPC_ItemScreen_InputThread(unk_func_8821421C* arg0) {
 
     Ui_SendMessageAndPollInput(sp24);
 
+#if !defined(VERSION_JP)
     osStopThread(NULL);
+#endif
 }
 
 void LabPC_ShowItems(UNUSED FontContext* arg0) {
@@ -3026,13 +3362,16 @@ void LabPC_ShowItems(UNUSED FontContext* arg0) {
     void* sp30;
     u8* sp2C;
     func_88002628_sp38* sp28;
+#if !defined(VERSION_JP)
     char** sp24;
+#endif
 
     main_pool_push_state('OTPC');
 
     sp2C = main_pool_alloc(0x10000, 0);
     sp34 = mem_pool_try_init(0x10000, 0);
 
+#if !defined(VERSION_JP)
     Text_InitStringTables();
 
     sIdLabelText = Text_GetStringTable(0x2A);
@@ -3040,9 +3379,10 @@ void LabPC_ShowItems(UNUSED FontContext* arg0) {
     sItemNameTable = Text_GetStringTable(0x27);
     sItemDescriptionText = Text_GetStringTable(0xC);
     sp24 = Text_GetStringTable(7);
+#endif
 
     sp30 = mem_pool_alloc(sp34, sizeof(unk_func_8821421C));
-    LabPC_BuildItemScreenWidget(sp30, 0, 0, sp34, arg0, sp24);
+    LabPC_BuildItemScreenWidget(sp30, 0, 0, sp34, arg0 LAB_PC_TEXT_ARG_LAST(sp24));
 
     sp28 = ALIGN16((u32)mem_pool_alloc(sp34, sizeof(func_88002628_sp38)));
 

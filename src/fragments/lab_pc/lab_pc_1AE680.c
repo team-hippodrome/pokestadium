@@ -2438,7 +2438,7 @@ s32 LabPC_RunConfirmSaveFlow(unk_func_8820BE14_02C* arg0, Controller* arg1) {
 s32 LabPC_SwapControllerInput(unk_func_8820B12C* arg0, Controller* arg1) {
 #if defined(VERSION_US_REV2) || defined(VERSION_PAL_LATE)
     static u8 D_88217FBC[] = { 0x18, 0x42, 0x43 };
-#else
+#elif !defined(VERSION_JP)
     static u8 D_88217FBC[] = { 0x18, 0x19, 0x1A };
 #endif
 

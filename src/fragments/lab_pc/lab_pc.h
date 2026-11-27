@@ -30,12 +30,17 @@
 #endif
 
 // A text-table argument that JP functions don't take.
+// The _LAST forms are for a trailing parameter.
 #if defined(VERSION_JP)
 #define LAB_PC_TEXT_PARAM(param)
 #define LAB_PC_TEXT_ARG(arg)
+#define LAB_PC_TEXT_PARAM_LAST(param)
+#define LAB_PC_TEXT_ARG_LAST(arg)
 #else
 #define LAB_PC_TEXT_PARAM(param) param,
 #define LAB_PC_TEXT_ARG(arg) arg,
+#define LAB_PC_TEXT_PARAM_LAST(param) , param
+#define LAB_PC_TEXT_ARG_LAST(arg) , arg
 #endif
 
 struct unk_func_8821421C_038_04C_000;
@@ -396,6 +401,9 @@ typedef struct unk_func_8821421C_02C {
     /* 0x6C */ unk_func_8821421C_02C_06C* unk_6C;
     /* 0x70 */ unk_func_8821421C_02C_070* unk_70[2];
     /* 0x78 */ struct unk_func_8821421C_03C* unk_78;
+#if defined(VERSION_JP)
+    /* 0x7C */ char unk_7C_jp[0x54]; // item description
+#endif
     /* 0x7C */ struct unk_func_8821421C_03C* unk_7C;
     /* 0x80 */ s32 unk_80;
     /* 0x84 */ struct unk_func_8821421C_038* unk_84;
@@ -404,7 +412,7 @@ typedef struct unk_func_8821421C_02C {
     /* 0x90 */ struct unk_func_8821421C_07C* unk_90;
     /* 0x94 */ unk_func_882025E0_03C unk_94[1];
     /* 0xA0 */ unk_func_889000C4* unk_A0;
-} unk_func_8821421C_02C; // size = 0xA4
+} unk_func_8821421C_02C; // size = 0xA4 (0xF8 on JP)
 
 typedef void (*unk_func_8821421C_038_04C_000_014)(struct unk_func_8821421C_038_04C_000*, Controller*);
 
@@ -453,8 +461,11 @@ typedef struct unk_func_8821421C_038 {
     /* 0x54 */ char unk54[0xC];
     /* 0x60 */ s32 unk_60;
     /* 0x64 */ unk_func_8820BE14_06C unk_64;
+#if defined(VERSION_JP)
+    /* 0x74 */ char unk_74_jp[0x54]; // item description
+#endif
     /* 0x74 */ char unk74[0x4];
-} unk_func_8821421C_038; // size = 0x78
+} unk_func_8821421C_038; // size = 0x78 (0xCC on JP)
 
 typedef struct unk_func_8821421C {
     /* 0x00 */ WidgetNode unk_00;
@@ -685,9 +696,16 @@ void LabItem_DropdownMenu_Open(unk_func_8821421C_02C_070* arg0);
 void LabItem_DropdownMenu_Close(unk_func_8821421C_02C_070* arg0);
 s32 LabItem_RunDropdownMenuModal(unk_func_8821421C_02C_070* arg0, Controller* arg1);
 void LabItem_DropdownMenu_SetDisabledIndex(unk_func_8821421C_02C_070* arg0, s32 arg1);
+// JP draws the quantity at a fixed x, so it takes no width.
+#if defined(VERSION_JP)
+#define ITEM_ROW_WIDTH(width)
+s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2);
+#else
+#define ITEM_ROW_WIDTH(width) , width
 s32 LabItem_DrawItemRow(u8* arg0, s32 arg1, s32 arg2, s32 arg3);
+#endif
 void LabItem_DrawItemGridCell(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4, unk_func_8820BE14_02C_038* arg5);
-void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2, s32 arg3);
+void LabItem_InitItemRowWidget(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2 ITEM_ROW_WIDTH(s32 arg3));
 void LabItem_ItemRowWidget_SetItem(unk_func_8821421C_02C_06C_02C_060* arg0,
                                    unk_func_8821421C_02C_06C_02C_060_02C_000 arg1);
 s32 LabItem_ItemRowWidget_Draw(unk_func_8821421C_02C_06C_02C_060* arg0, s32 arg1, s32 arg2);
@@ -755,7 +773,8 @@ s32 LabItem_CheckDirtyDecks(unk_func_8821421C_02C* arg0);
 void LabItem_CommitChanges(unk_func_8821421C_02C* arg0, s32 arg1);
 s32 LabItem_RunConfirmSaveFlow(unk_func_8821421C_02C* arg0, Controller* arg1);
 s32 LabItem_BoxPairMenu_HandleInput(unk_func_8821421C_02C_06C* arg0, Controller* arg1);
-void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3, s32 arg4, char** arg5);
+void LabPC_BuildItemScreenWidget(unk_func_8821421C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3,
+                                 s32 arg4 LAB_PC_TEXT_PARAM_LAST(char** arg5));
 void LabPC_ItemScreen_DrawLoop(unk_func_8821421C* arg0);
 void LabPC_ItemScreen_InputThread(unk_func_8821421C* arg0);
 void LabPC_ShowItems(FontContext* arg0);

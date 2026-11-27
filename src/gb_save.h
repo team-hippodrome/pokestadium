@@ -98,6 +98,9 @@ void Ui_SendMessageAndPollInput(OSMesg arg0);
 void Ui_SendNullMessage(void);
 void Ui_ReceiveMessage(OSMesg arg0);
 void State_PokemonLab(void);
+#if defined(VERSION_JP)
+char* func_8002E160_jp(s32 item_id, char* dest);
+#endif
 s32 LabItem_IsQuantitylessItem(s32 arg0);
 s32 LabItem_IsQuantitylessItemForOperation(s32 arg0);
 
