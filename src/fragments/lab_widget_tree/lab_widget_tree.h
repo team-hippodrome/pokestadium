@@ -869,7 +869,12 @@ s32 WidgetTree_DrawAnimatedPanelVariantB(WidgetAnimatedPanelVariantB*, s32, s32)
 void WidgetTree_InitTextList(WidgetTextList*, s32, s32, s32, s32, s32, Color_RGBA8, FontContext*);
 s32 WidgetTree_UpdateTextList(WidgetTextList*);
 s32 WidgetTree_DrawTextList(WidgetTextList*, s32, s32);
+#if defined(VERSION_JP)
+// No prototype: the JP definition has two extra unused parameters (see lab_widget_tree.c).
+void WidgetTree_SetTextList();
+#else
 void WidgetTree_SetTextList(WidgetTextList* arg0, u8* arg1);
+#endif
 void WidgetTree_InitPagedGrid(unk_func_88200FA0_030_030*, s32, s32, unk_func_88200FA0_030_030_040, s32, s32, s32, s32,
                               MemoryPool*);
 void WidgetTree_AllocateEntryFlags(unk_func_88200FA0_030_030*, s32, MemoryPool*);
