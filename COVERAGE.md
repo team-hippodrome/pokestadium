@@ -4,17 +4,17 @@
 
 <!-- AUTO_COVERAGE:START -->
 - Functions with C implementations: **7,437 / 7,437 (100.0%)**
-- Remaining decompilable `GLOBAL_ASM` owners: **0** (across 0 source files)
+- Remaining decompilable `GLOBAL_ASM` owners: **1** (across 1 source files; 0 in the US build, 1 version-only `asm/<version>/` pragmas)
 - Separately managed `hasm` assembly segments: **10**
-- `de`: **243 / 343** shared C files built, **2,637** functions open across 100 files
-- `es`: **239 / 343** shared C files built, **3,022** functions open across 104 files
-- `eu`: **278 / 343** shared C files built, **1,340** functions open across 65 files
-- `eu_rev1`: **246 / 343** shared C files built, **2,554** functions open across 97 files
-- `fr`: **239 / 343** shared C files built, **3,022** functions open across 104 files
-- `it`: **237 / 343** shared C files built, **3,044** functions open across 106 files
-- `jp`: **211 / 343** shared C files built, **4,319** functions open across 132 files
-- `us_rev1`: **343 / 343** shared C files built, **0** functions open across 0 files
-- `us_rev2`: **343 / 343** shared C files built, **0** functions open across 0 files
+- `de`: **332 / 349** shared C files built, **196** functions open across 17 files
+- `es`: **331 / 349** shared C files built, **206** functions open across 18 files
+- `eu`: **333 / 349** shared C files built, **196** functions open across 16 files
+- `eu_rev1`: **331 / 349** shared C files built, **206** functions open across 18 files
+- `fr`: **331 / 349** shared C files built, **206** functions open across 18 files
+- `it`: **331 / 349** shared C files built, **206** functions open across 18 files
+- `jp`: **324 / 349** shared C files built, **405** functions open across 25 files
+- `us_rev1`: **349 / 349** shared C files built, **0** functions open across 0 files
+- `us_rev2`: **349 / 349** shared C files built, **0** functions open across 0 files
 <!-- AUTO_COVERAGE:END -->
 
 The function denominator covers C source owners and `GLOBAL_ASM` stubs. `hasm` entries are deliberately managed assembly segments, not unported C-function owners, so they are reported separately and excluded from the decompilation backlog. Total function count is derived from the retail linker map and retained from the trusted baseline. Regenerate with:
@@ -24,624 +24,154 @@ The function denominator covers C source owners and `GLOBAL_ASM` stubs. `hasm` e
 
 | File | Remaining owners | Functions |
 | --- | ---: | --- |
+| `src/fragments/gb_tower_emulator/jp/gb_emu_pak.c` | 1 | `GbEmu_LoadCartridge (jp)` |
 
 ## Open candidates for `de`
 
-Shared C files the US build compiles that `de` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `de` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/display_object_textures.c` | 31 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
-| `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/demo_scenes/demo_scenes_168110.c` | 12 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1A9780.c` | 55 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/lab_pc_icons/lab_pc_icons.c` | 61 |
-| `src/fragments/lab_pc_list/lab_pc_list_1D7B40.c` | 148 |
-| `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_11BF90.c` | 9 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 |
-| `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/pokedex/pokedex_214920.c` | 47 |
-| `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/stadium_select/stadium_select.c` | 17 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/gb_data.c` | 27 |
-| `src/gb_tower.c` | 21 |
-| `src/leo.c` | 16 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
-| `src/matrix.c` | 50 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/pokemon_stats.c` | 101 |
-| `src/save_data.c` | 64 |
-| `src/session.c` | 19 |
-| `src/status_icons.c` | 2 |
-| `src/ui_graphics.c` | 17 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/battle_prep/battle_prep_data.c` | 0 |  |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
 
 ## Open candidates for `es`
 
-Shared C files the US build compiles that `es` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `es` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/display_object_textures.c` | 31 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c` | 126 |
-| `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
-| `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/demo_scenes/demo_scenes_168110.c` | 12 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1A9780.c` | 55 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/lab_pc_icons/lab_pc_icons.c` | 61 |
-| `src/fragments/lab_pc_list/lab_pc_list_1D7B40.c` | 148 |
-| `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_11BF90.c` | 9 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 |
-| `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/pokedex/pokedex_214920.c` | 47 |
-| `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/gb_data.c` | 27 |
-| `src/gb_tower.c` | 21 |
-| `src/leo.c` | 16 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
-| `src/matrix.c` | 50 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/pokemon_stats.c` | 101 |
-| `src/save_data.c` | 64 |
-| `src/session.c` | 19 |
-| `src/status_icons.c` | 2 |
-| `src/ui_graphics.c` | 17 |
-| `src/vector_math.c` | 10 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/battle_prep/battle_prep_data.c` | 0 |  |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
+| `src/vector_math.c` | 10 | `Mtx_BuildDirectionRotation`, `Math_AbsF32`, `Vec3f_CrossProductComponents`, `Vec3f_NormalizeComponents`, `Vec3f_CrossProductArrays`, `Vec3f_NormalizeSafe`, `Mtx_BuildTranslatedDirectionRotation`, `Math_ProjectPointOntoLine`, `MtxF_ExtractScale`, `MtxF_GetScaleVector` |
 
 ## Open candidates for `eu`
 
-Shared C files the US build compiles that `eu` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `eu` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
 
 ## Open candidates for `eu_rev1`
 
-Shared C files the US build compiles that `eu_rev1` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `eu_rev1` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/display_object_textures.c` | 31 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c` | 126 |
-| `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
-| `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/demo_scenes/demo_scenes_168110.c` | 12 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_11BF90.c` | 9 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 |
-| `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/gb_data.c` | 27 |
-| `src/gb_tower.c` | 21 |
-| `src/leo.c` | 16 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
-| `src/matrix.c` | 50 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/pokemon_stats.c` | 101 |
-| `src/save_data.c` | 64 |
-| `src/session.c` | 19 |
-| `src/status_icons.c` | 2 |
-| `src/ui_graphics.c` | 17 |
-| `src/vector_math.c` | 10 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/battle_prep/battle_prep_data.c` | 0 |  |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
+| `src/vector_math.c` | 10 | `Mtx_BuildDirectionRotation`, `Math_AbsF32`, `Vec3f_CrossProductComponents`, `Vec3f_NormalizeComponents`, `Vec3f_CrossProductArrays`, `Vec3f_NormalizeSafe`, `Mtx_BuildTranslatedDirectionRotation`, `Math_ProjectPointOntoLine`, `MtxF_ExtractScale`, `MtxF_GetScaleVector` |
 
 ## Open candidates for `fr`
 
-Shared C files the US build compiles that `fr` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `fr` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/display_object_textures.c` | 31 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c` | 126 |
-| `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
-| `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/demo_scenes/demo_scenes_168110.c` | 12 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1A9780.c` | 55 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/lab_pc_icons/lab_pc_icons.c` | 61 |
-| `src/fragments/lab_pc_list/lab_pc_list_1D7B40.c` | 148 |
-| `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_11BF90.c` | 9 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 |
-| `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/pokedex/pokedex_214920.c` | 47 |
-| `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/gb_data.c` | 27 |
-| `src/gb_tower.c` | 21 |
-| `src/leo.c` | 16 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
-| `src/matrix.c` | 50 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/pokemon_stats.c` | 101 |
-| `src/save_data.c` | 64 |
-| `src/session.c` | 19 |
-| `src/status_icons.c` | 2 |
-| `src/ui_graphics.c` | 17 |
-| `src/vector_math.c` | 10 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/battle_prep/battle_prep_data.c` | 0 |  |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
+| `src/vector_math.c` | 10 | `Mtx_BuildDirectionRotation`, `Math_AbsF32`, `Vec3f_CrossProductComponents`, `Vec3f_NormalizeComponents`, `Vec3f_CrossProductArrays`, `Vec3f_NormalizeSafe`, `Mtx_BuildTranslatedDirectionRotation`, `Math_ProjectPointOntoLine`, `MtxF_ExtractScale`, `MtxF_GetScaleVector` |
 
 ## Open candidates for `it`
 
-Shared C files the US build compiles that `it` still builds from its own disassembly. Function counts are read from the source and are approximate. Function names are listed once fewer than 300 remain open.
+Shared C files the US build compiles that `it` still builds from its own disassembly. Function counts are read from the source and are approximate.
 
-| File | Open functions |
-| --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_channel.c` | 5 |
-| `src/audio_commands.c` | 6 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_fade.c` | 2 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
-| `src/audio_stored_fade.c` | 2 |
-| `src/audio_stream.c` | 7 |
-| `src/audio_stream_channel.c` | 5 |
-| `src/cry.c` | 2 |
-| `src/display_object_textures.c` | 31 |
-| `src/dp_intro.c` | 20 |
-| `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_lingering_fall_particles.c` | 14 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c` | 126 |
-| `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
-| `src/fragments/battle_engine/battle_engine_move_model_transforms.c` | 74 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
-| `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
-| `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15A2B0.c` | 5 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_15FA60.c` | 30 |
-| `src/fragments/demo_scenes/demo_scenes_160CB0.c` | 7 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/demo_scenes/demo_scenes_168110.c` | 12 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/dynamo_game/dynamo_game_2.c` | 3 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
-| `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
-| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 |
-| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 |
-| `src/fragments/gallery_snap/gallery_snap.c` | 27 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86C30.c` | 1 |
-| `src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c` | 40 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1A9780.c` | 55 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 |
-| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/lab_pc_icons/lab_pc_icons.c` | 61 |
-| `src/fragments/lab_pc_list/lab_pc_list_1D7B40.c` | 148 |
-| `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_11BF90.c` | 9 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_shared_library/minigame_shared_library.c` | 2 |
-| `src/fragments/n64_logo/n64_logo.c` | 5 |
-| `src/fragments/model_callback_library/model_callback_library_258080.c` | 15 |
-| `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/pokedex/pokedex_214920.c` | 47 |
-| `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/stadium_select/stadium_select.c` | 17 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/sushi_game/sushi_game_1462A0.c` | 41 |
-| `src/fragments/sushi_game/sushi_game_14A030.c` | 17 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_check/transfer_pak_check.c` | 57 |
-| `src/gallery.c` | 29 |
-| `src/gb_audio.c` | 44 |
-| `src/gb_audio_render.c` | 12 |
-| `src/gb_data.c` | 27 |
-| `src/gb_tower.c` | 21 |
-| `src/leo.c` | 16 |
-| `src/libleo/bootdisk.c` | 2 |
-| `src/libleo/leofunc.c` | 5 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/libnaudio/n_env.c` | 7 |
-| `src/libnaudio/n_resample.c` | 2 |
-| `src/libnaudio/n_reverb.c` | 6 |
-| `src/libnaudio/n_sl.c` | 2 |
-| `src/libnaudio/n_syndelete.c` | 1 |
-| `src/libnaudio/n_synthesizer.c` | 9 |
-| `src/libnumus/player.c` | 104 |
-| `src/matrix.c` | 50 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/pokemon_stats.c` | 101 |
-| `src/save_data.c` | 64 |
-| `src/session.c` | 19 |
-| `src/status_icons.c` | 2 |
-| `src/ui_graphics.c` | 17 |
-| `src/vector_math.c` | 10 |
+| File | Open functions | Functions |
+| --- | ---: | --- |
+| `src/dp_intro.c` | 20 | `DisplayTask_Initialize`, `DisplayTask_Submit`, `Video_SetMode`, `DisplayWorker_SetBufferConfig`, `DisplayWorker_ProcessFrame`, `DisplayWorker_DrainEvents`, `DisplayWorker_ThreadMain`, `DisplayWorker_Initialize`, `Display_ClearFramebufferLine`, `Display_GetFramebufferClearColor`, `Display_IsCurrentFramebuffer`, `Display_WaitForCompletion`, `Display_QueueFramebufferRequest`, `Display_WaitForFrames`, `Display_SetBufferConfig`, `Display_GetWorkerStatus`, `Display_ApplyPendingVideoMode`, `Display_IsFrameReady`, `Display_EnableBlackout`, `Display_DisableBlackout` |
+| `src/fragments/battle_prep/battle_prep_data.c` | 0 |  |
+| `src/fragments/gallery_album/gallery_album.c` | 30 | `Gallery_AlbumHandleGridInput`, `Gallery_AlbumInit`, `Gallery_AlbumDrawTileColumn`, `Gallery_AlbumDrawFilledPanel`, `Gallery_AlbumDrawEdgeBand`, `Gallery_AlbumDrawCornerMarkers`, `func_83500FE8`, `Gallery_AlbumDrawThumbnailFrame`, `Gallery_AlbumDrawStickerBadge`, `Gallery_AlbumComputeEnlargeMotion`, `func_83501718`, `Gallery_AlbumDrawThumbnails`, `Gallery_AlbumDrawTitleBar`, `Gallery_AlbumDrawEnlargeHint`, `Gallery_AlbumDrawGridPanel`, `Gallery_AlbumDrawGradientBackground`, `Gallery_AlbumDrawAnimatedOverlay`, `Gallery_AlbumDrawExitButton`, `Gallery_AlbumGetStatusText`, `Gallery_AlbumDrawStatusText`, `Gallery_AlbumPulseAlpha`, `Gallery_AlbumDrawCursor`, `Gallery_AlbumDraw`, `Gallery_AlbumAdvanceDeleteAnimation`, `Gallery_AlbumConfirmAndExit`, `Gallery_AlbumUpdate`, `Gallery_AlbumReadInput`, `Gallery_AlbumLoop`, `Gallery_AlbumGetResult`, `Gallery_AlbumMain` |
+| `src/fragments/gallery_film_select/gallery_film_select.c` | 26 | `Gallery_FilmSelectCommitPhotos`, `Gallery_FilmSelectHasUnsavedPhoto`, `Gallery_FilmSelectUpdatePageAvailability`, `Gallery_FilmSelectHandleInput`, `Gallery_FilmSelectInit`, `Gallery_FilmSelectDrawBandedStrip`, `Gallery_FilmSelectFillRectSolid`, `Gallery_FilmSelectDrawPhotoBadge`, `Gallery_FilmSelectDrawCounterBadge`, `Gallery_FilmSelectDrawPhotoGrid`, `Gallery_FilmSelectDrawSelectionCursor`, `Gallery_FilmSelectDrawBanner`, `Gallery_FilmSelectDrawActionPanel`, `Gallery_FilmSelectDrawBackgroundGradient`, `Gallery_FilmSelectGetHelpText`, `Gallery_FilmSelectDrawHelpText`, `Gallery_FilmSelectDrawPhotoCounter`, `Gallery_FilmSelectDrawIconLabel`, `Gallery_FilmSelectComputeScalePulse`, `Gallery_FilmSelectDraw`, `Gallery_FilmSelectHandleCancelInput`, `Gallery_FilmSelectUpdate`, `Gallery_FilmSelectReadInputs`, `Gallery_FilmSelectRunLoop`, `Gallery_FilmSelectFinalize`, `Gallery_FilmSelectMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AD910.c` | 12 | `Gallery_RentalViewerInit`, `Gallery_RentalViewerSetFadeCounter`, `Gallery_RentalViewerDrawIcon`, `Gallery_RentalViewerDrawTitleBar`, `Gallery_RentalViewerDrawFrame`, `Gallery_RentalViewerLoadPort`, `Gallery_RentalViewerUpdateLoadConfirm`, `Gallery_RentalViewerHandleInput`, `Gallery_RentalViewerPollInput`, `Gallery_RentalViewerLoop`, `Gallery_RentalViewerGetResult`, `Gallery_RentalViewerMain` |
+| `src/fragments/gallery_rental_viewer/gallery_rental_viewer_2AE1F0.c` | 25 | `Gallery_RentalViewerNodePostCallback`, `Gallery_RentalViewerAnimateSlotScale`, `Gallery_RentalViewerAnimateSlotBob`, `Gallery_RentalViewerRefreshPortStatus`, `Gallery_RentalViewerUpdatePortIcons`, `Gallery_RentalViewerInitScene`, `Gallery_RentalViewerInitSlotModels`, `Gallery_RentalViewerBeginZoomIntro`, `Gallery_RentalViewerUpdateZoomIntro`, `Gallery_RentalViewerMoveCursorUp`, `Gallery_RentalViewerMoveCursorDown`, `Gallery_RentalViewerMoveCursorLeft`, `Gallery_RentalViewerMoveCursorRight`, `Gallery_RentalViewerUpdateSlotSelect`, `Gallery_RentalViewerBeginConfirmZoom`, `Gallery_RentalViewerFinishConfirmZoom`, `Gallery_RentalViewerCancelSelection`, `Gallery_RentalViewerUpdateBusyConfirm`, `Gallery_RentalViewerUpdate`, `Gallery_RentalViewerDrawCursorMarker`, `Gallery_RentalViewerDrawSlotFrame`, `Gallery_RentalViewerDrawSlotLabel`, `Gallery_RentalViewerDrawLabels`, `Gallery_RentalViewerDrawTeamList`, `Gallery_RentalViewerGetSelectedSlot` |
+| `src/fragments/gallery_snap/gallery_snap.c` | 27 | `Gallery_SnapDrawRoundedFrame`, `Gallery_SnapGetActiveGrid`, `Gallery_SnapUpdateMenuIconStates`, `Gallery_SnapConfirmSaveBackgrounds`, `Gallery_SnapUpdateMenuInput`, `Gallery_SnapResetToMenu`, `Gallery_SnapUpdateGridInput`, `Gallery_SnapDrawScaledImage`, `func_83301090`, `Gallery_SnapDrawTitleBar`, `Gallery_SnapDrawHintBox`, `Gallery_SnapInit`, `Gallery_SnapDrawGradientQuad`, `Gallery_SnapDrawBackgroundWipe`, `func_83302068`, `Gallery_SnapDrawCursor`, `Gallery_SnapDrawBackPrompt`, `Gallery_SnapDrawFrame`, `Gallery_SnapUpdatePasteConfirm`, `Gallery_SnapUpdateSaveConfirm`, `Gallery_SnapUpdateExitConfirm`, `Gallery_SnapUpdateExitDelay`, `Gallery_SnapUpdate`, `Gallery_SnapReadInput`, `Gallery_SnapLoop`, `Gallery_SnapGetResult`, `Gallery_SnapMain` |
+| `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |  |
+| `src/gallery.c` | 29 | `Gallery_Dispatch`, `Gallery_ResetActiveScene`, `Gallery_ClearPhotoRenderTarget`, `Gallery_GetPhotoPoseIndex`, `Gallery_GetPhotoScaleIndex`, `Gallery_GetPhotoVariantIndex`, `Gallery_GetScenePoseIndex`, `Gallery_ConfigurePhotoCamera`, `Gallery_SetScenePoseCamera`, `Gallery_SetCameraAngleOffsets`, `Gallery_SetCameraAngleOffsetsAlternate`, `Gallery_SetSceneModelNode`, `Gallery_SetSceneRenderState`, `Gallery_SetSceneGraphNode`, `Gallery_InitializePhotoGrid`, `func_800303C8`, `Gallery_CopyPhotoMonFromBattleMon`, `Gallery_CopyBattleMonFromPhotoMon`, `Geo_LoadSceneGraphNode`, `Geo_CreateSceneInstance`, `Gallery_InitializePhotoModel`, `Gallery_LoadPhotoSceneGraph`, `Gallery_ProcessSceneInstance`, `Gallery_IsSceneReady`, `Gallery_FindReadyScene`, `Gallery_GetActiveScene`, `Gallery_ClearActiveScene`, `Gallery_IsPhotoSpeciesValid`, `func_800318F0` |
+| `src/libleo/bootdisk.c` | 2 | `LeoBootGame`, `__LeoBootGame2` |
+| `src/libleo/leofunc.c` | 5 | `leoInitialize`, `leoCommand`, `LeoReset`, `__leoSetReset`, `LeoResetClear` |
+| `src/libnaudio/n_drvrNew.c` | 2 | `n_alFxNew`, `alN_PVoiceNew` |
+| `src/libnaudio/n_env.c` | 7 | `n_alEnvmixerPull`, `n_alEnvmixerParam`, `_pullSubFrame`, `_getRate`, `_getRate`, `_getVol`, `_getVol` |
+| `src/libnaudio/n_resample.c` | 2 | `n_alResamplePull`, `n_alResampleParam` |
+| `src/libnaudio/n_reverb.c` | 6 | `n_alFxPull`, `n_alFxParamHdl`, `_n_loadOutputBuffer`, `_n_loadBuffer`, `_n_saveBuffer`, `_n_filterBuffer` |
+| `src/libnaudio/n_sl.c` | 2 | `n_alInit`, `n_alClose` |
+| `src/libnaudio/n_syndelete.c` | 1 | `n_alSynDelete` |
+| `src/vector_math.c` | 10 | `Mtx_BuildDirectionRotation`, `Math_AbsF32`, `Vec3f_CrossProductComponents`, `Vec3f_NormalizeComponents`, `Vec3f_CrossProductArrays`, `Vec3f_NormalizeSafe`, `Mtx_BuildTranslatedDirectionRotation`, `Math_ProjectPointOntoLine`, `MtxF_ExtractScale`, `MtxF_GetScaleVector` |
 
 ## Open candidates for `jp`
 
@@ -649,58 +179,12 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 
 | File | Open functions |
 | --- | ---: |
-| `src/3D140_2.c` | 32 |
-| `src/audio_commands_category2.c` | 28 |
-| `src/audio_loop_point.c` | 6 |
-| `src/audio_sfx.c` | 1 |
 | `src/controller_ram.c` | 4 |
-| `src/cry.c` | 2 |
-| `src/dp_intro.c` | 20 |
 | `src/fragments/1/fragment1_89010.c` | 1 |
-| `src/fragments/61/fragment61_2D78B0.c` | 43 |
-| `src/fragments/61/fragment61_2DD710.c` | 39 |
-| `src/fragments/61/fragment61_2DFB60.c` | 41 |
-| `src/fragments/area_select/area_select.c` | 31 |
-| `src/fragments/battle_engine/battle_engine_action_selection.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_animation_system.c` | 69 |
-| `src/fragments/battle_engine/battle_engine_battle_phases.c` | 118 |
-| `src/fragments/battle_engine/battle_engine_camera.c` | 81 |
-| `src/fragments/battle_engine/battle_engine_com_decision_logic.c` | 91 |
-| `src/fragments/battle_engine/battle_engine_debug_strings.c` | 1 |
-| `src/fragments/battle_engine/battle_engine_helper.c` | 59 |
-| `src/fragments/battle_engine/battle_engine_hud.c` | 56 |
-| `src/fragments/battle_engine/battle_engine_main.c` | 26 |
-| `src/fragments/battle_engine/battle_engine_mechanics.c` | 54 |
-| `src/fragments/battle_engine/battle_engine_mesh_effect_callbacks.c` | 126 |
-| `src/fragments/battle_engine/battle_engine_messages.c` | 23 |
-| `src/fragments/battle_engine/battle_engine_move_animation.c` | 121 |
-| `src/fragments/battle_engine/battle_engine_move_mechanics.c` | 38 |
-| `src/fragments/battle_engine/battle_engine_shared_move_effects.c` | 153 |
-| `src/fragments/battle_engine/battle_engine_status_animation.c` | 8 |
-| `src/fragments/battle_order_select/battle_order_select.c` | 36 |
-| `src/fragments/battle_prep/battle_prep_394120.c` | 41 |
-| `src/fragments/battle_prep/battle_prep_397B10.c` | 44 |
-| `src/fragments/battle_prep/battle_prep_39AC50.c` | 18 |
-| `src/fragments/battle_prep/battle_prep_39BFB0.c` | 31 |
-| `src/fragments/battle_prep/battle_prep_39ED60.c` | 14 |
-| `src/fragments/battle_prep/battle_prep_3A0010.c` | 25 |
-| `src/fragments/battle_prep/battle_prep_3A1970.c` | 7 |
-| `src/fragments/battle_prep/battle_prep_3A1C30.c` | 21 |
 | `src/fragments/battle_prep/battle_prep_data.c` | 0 |
-| `src/fragments/clefairy_game/clefairy_game.c` | 58 |
-| `src/fragments/credits/credits_158A00.c` | 18 |
 | `src/fragments/credits/credits_15A2A0.c` | 1 |
-| `src/fragments/credits/credits_15A2B0.c` | 5 |
-| `src/fragments/credits/credits_15AD80.c` | 2 |
-| `src/fragments/demo_scenes/demo_scenes_161E60.c` | 38 |
-| `src/fragments/demo_scenes/demo_scenes_165640.c` | 35 |
-| `src/fragments/drowzee_game/drowzee_game.c` | 20 |
-| `src/fragments/dynamo_game/dynamo_game.c` | 17 |
-| `src/fragments/ekans_game/ekans_game.c` | 68 |
-| `src/fragments/event_battle/event_battle.c` | 56 |
-| `src/fragments/free_battle_rules/free_battle_rules.c` | 34 |
 | `src/fragments/gallery_album/gallery_album.c` | 30 |
-| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 38 |
+| `src/fragments/gallery_backgrounds/gallery_backgrounds_2A1B50.c` | 42 |
 | `src/fragments/gallery_backgrounds/gallery_backgrounds_2A3E70.c` | 5 |
 | `src/fragments/gallery_backgrounds/gallery_backgrounds_2A3F60.c` | 13 |
 | `src/fragments/gallery_camera/gallery_camera_14CA70.c` | 35 |
@@ -715,71 +199,10 @@ Shared C files the US build compiles that `jp` still builds from its own disasse
 | `src/fragments/gallery_snap/gallery_snap.c` | 27 |
 | `src/fragments/gb_tower_emulator/gb_tower_emulator_7F9A0.c` | 43 |
 | `src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c` | 4 |
-| `src/fragments/gym_leader_castle/gym_leader_castle.c` | 24 |
-| `src/fragments/lab_pc/lab_pc_1A8800.c` | 13 |
-| `src/fragments/lab_pc/lab_pc_1A9780.c` | 55 |
-| `src/fragments/lab_pc/lab_pc_1AE680.c` | 70 |
-| `src/fragments/lab_pc/lab_pc_1B4EA0.c` | 99 |
 | `src/fragments/lab_pc/lab_pc_882181B0.c` | 0 |
-| `src/fragments/lab_pc_icons/lab_pc_icons.c` | 61 |
-| `src/fragments/lab_pc_list/lab_pc_list_1CEA00.c` | 92 |
-| `src/fragments/lab_pc_list/lab_pc_list_1D7B40.c` | 148 |
-| `src/fragments/lab_pc_list/lab_pc_list_1E46B0.c` | 41 |
-| `src/fragments/lab_ui_support/lab_ui_support.c` | 11 |
-| `src/fragments/lab_widget_tree/lab_widget_tree.c` | 148 |
-| `src/fragments/magikarp_game/magikarp_game.c` | 30 |
-| `src/fragments/metapod_game/metapod_game.c` | 58 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1189B0.c` | 23 |
-| `src/fragments/minigame_actor_framework/minigame_actor_framework_1193E0.c` | 6 |
-| `src/fragments/minigame_hud/minigame_hud.c` | 21 |
-| `src/fragments/minigame_hud/minigame_hud_countdown.c` | 5 |
-| `src/fragments/minigame_hud/minigame_hud_pause_menu.c` | 17 |
-| `src/fragments/minigame_sample2_viewer/minigame_sample2_viewer.c` | 6 |
-| `src/fragments/minigame_select/minigame_select_27BCC0.c` | 49 |
-| `src/fragments/minigame_select/minigame_select_2804C0.c` | 19 |
-| `src/fragments/options/options.c` | 14 |
-| `src/fragments/model_callback_library/model_callback_library_2558B0.c` | 10 |
-| `src/fragments/particle_math/particle_math_261F90.c` | 83 |
-| `src/fragments/particle_math/particle_math_26E540.c` | 2 |
 | `src/fragments/pikachu_reward/pikachu_reward.c` | 29 |
-| `src/fragments/pokedex/pokedex_214920.c` | 47 |
-| `src/fragments/pokedex/pokedex_2190D0.c` | 17 |
-| `src/fragments/pokemon_lab/pokemon_lab.c` | 24 |
-| `src/fragments/rattata_game/rattata_game.c` | 30 |
-| `src/fragments/rental_hub/rental_hub.c` | 17 |
-| `src/fragments/rental_rules/rental_rules_2BED40.c` | 26 |
-| `src/fragments/rental_rules/rental_rules_2C13F0.c` | 19 |
-| `src/fragments/rental_team_selection/rental_team_selection_2DB900.c` | 25 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E2C20.c` | 15 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E4040.c` | 22 |
-| `src/fragments/rental_team_selection/rental_team_selection_2E5430.c` | 43 |
-| `src/fragments/sandshrew_game/sandshrew_game.c` | 41 |
 | `src/fragments/snap_print_club_background_select/snap_print_club_background_select.c` | 10 |
 | `src/fragments/snap_print_club_print_seals/snap_print_club_print_seals.c` | 4 |
-| `src/fragments/stadium_select/stadium_select.c` | 17 |
-| `src/fragments/sushi_game/sushi_game_144300.c` | 14 |
-| `src/fragments/title_screen/title_screen.c` | 19 |
-| `src/fragments/trade_machine/trade_machine_287ED0.c` | 31 |
-| `src/fragments/trade_machine/trade_machine_289240.c` | 29 |
-| `src/fragments/trade_machine/trade_machine_28D1A0.c` | 14 |
-| `src/fragments/trade_machine/trade_machine_28ED00.c` | 36 |
-| `src/fragments/trade_machine/trade_machine_291D60.c` | 1 |
-| `src/fragments/trade_machine/trade_machine_2942C0.c` | 75 |
-| `src/fragments/transfer_pak_error/transfer_pak_error.c` | 6 |
-| `src/fragments/victory_palace/victory_palace.c` | 44 |
-| `src/gallery.c` | 29 |
-| `src/game_state.c` | 38 |
-| `src/gfx_rect.c` | 13 |
-| `src/graphics_textures.c` | 46 |
-| `src/input.c` | 3 |
-| `src/libnaudio/n_drvrNew.c` | 2 |
-| `src/model_renderer.c` | 18 |
-| `src/poke_icon.c` | 20 |
-| `src/poke_icon_preview.c` | 11 |
-| `src/reset.c` | 5 |
-| `src/save_data.c` | 64 |
-| `src/scheduler.c` | 24 |
-| `src/session.c` | 19 |
 | `src/text_system.c` | 7 |
 
 ## Open candidates for `us_rev1`
