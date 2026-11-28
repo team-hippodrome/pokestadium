@@ -1841,7 +1841,8 @@ void func_81218120_jp(GbEmuState*);
  */
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4);
 #ifdef NON_MATCHING
-// Same code as retail except for register allocation.
+// Matches retail except for register allocation in the Yellow XOR-patch loop (the *q count
+// and q[2] land in a2/a1 instead of a1/t2) and the stack slot of q.
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     GbPakChannel* cur;
     GbPakChannel* slot;
@@ -1850,13 +1851,12 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     u32 j;
     u8* p;
     GbYellowBank* bank;
-    u8* tmp;
     u8* dst;
     u8* q;
     s32 off;
     s32 n;
     s32 cnt;
-    s32 pad[2]; // FAKE
+    s32 k;
 
     D_81259A58 = 0;
     D_81259A50 = arg1;
@@ -1902,9 +1902,9 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         slot->verifyBuf = buf;
         slot->blockDirty = buf + 0x100;
         slot->ramSize = D_812599E0.sramSize;
-        for (j = 0; j < (D_812599E0.sramSize >> 8); j++) {
-            slot->blockDirty[j] = 0xFF;
-            slot->blockState[j] = 0xFF;
+        for (k = 0; k < (D_812599E0.sramSize >> 8); k++) {
+            slot->blockDirty[k] = 0xFF;
+            slot->blockState[k] = 0xFF;
         }
         slot->gameIndex = GbPak_IdentifyCartridge((u8*)slot);
         slot->romBuf = D_812599E0.rom;
@@ -2000,25 +2000,27 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
                     break;
                 }
                 osWritebackDCacheAll();
-                tmp = D_812599E0.rom + 0x84000;
+                q = D_812599E0.rom + 0x84000;
                 dst = D_812599E0.rom + (bank->bank << 14);
-                Dma_WriteChunks((u32)tmp, off + 0x7B8000, bank->size + off + 0x7B8000, 0);
+                Dma_WriteChunks((u32)q, off + 0x7B8000, bank->size + off + 0x7B8000U, 0);
                 off += bank->size;
-                Yay0_Decompress(tmp, dst);
-                p = dst + 0x4000;
+                Yay0_Decompress(q, dst);
+                q = dst + 0x4000;
                 for (cnt = cur->maskRomVersion; cnt != 0; cnt--) {
-                    while ((j = *p) != 0) {
-                        q = (p[2] << 8) + p[1] + dst;
-                        p += 3;
-                        for (; j != 0; j--) {
-                            *q++ ^= *p++;
+                    while (*q != 0) {
+                        j = q[2];
+                        p = (j << 8) + q[1] + dst;
+                        k = *q;
+                        q += 3;
+                        for (; k != 0; k--) {
+                            *p++ ^= *q++;
                         }
                     }
-                    p++;
+                    q++;
                 }
                 cur->bankState[bank->bank] = 0;
-                for (i = 0; i < 0x4000; i++) {
-                    cur->sum += (D_812599E0.rom + (bank->bank << 14))[i];
+                for (k = 0; k < 0x4000; k++) {
+                    cur->sum += (D_812599E0.rom + (bank->bank << 14))[k];
                 }
             }
         }
